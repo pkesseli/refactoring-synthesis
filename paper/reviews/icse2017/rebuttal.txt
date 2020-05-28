@@ -1,0 +1,128 @@
+We thank the reviewers for their insightful comments. 
+
+1.Benchmarks (R1+R3)
+
+We compared Kayak against NetBeans as you suggested.  NetBeans'
+performance was comparable to IntelliJ (NetBeans: 11, IntelliJ: 10).
+IntelliJ/NetBeans combined find 15 refactorings (30%), compared
+to Kayak with 38 (76%). All tools together find 43 (86%).  Kayak
+refactored 28 benchmarks that neither NetBeans nor IntelliJ found, while
+IntelliJ/NetBeans combined refactored 5 benchmarks for which Kayak
+timed out.  The full experimental table will be added to the final
+paper after trimming the motivating examples as suggestested by R1.
+
+For benchmark selection we searched GitHub with multiple queries matching
+remove, set and add operations on Integer lists.  We have provided these
+queries in the extended version and will include them in the final paper. 
+The restriction to Integer lists is due to our limited Java front-end, not
+the stream theory itself, which we have now addressed by migrating to CBMC's
+most recent Java front-end.  While experiments with Kayak are fully
+automated, IntelliJ and NetBeans require manual evaluation of each
+benchmark, limiting our experiments.  We're currently addressing this by
+creating plug-ins for each IDE to automate this process, which will enable
+larger benchmark sets.
+
+2.GA details (R1+R2)
+Fitness in the GA is determined by the number of passed tests. We use
+a biased crossover operation, selecting parents that solve distinct
+counterexample sets for reproduction. Population size and mutation
+rate are configurable and will be added to the final version.
+
+3.Memory usage (R2+R3)
+We measured the maximum memory usage of Kayak with valgrind massif
+(heap+stack) as 125MB.  This requirement is trivial given
+contemporary machine specifications, allowing execution as
+background process.
+
+4.Goal of the paper (R3) 
+While there is an active trend of extracting limited semantic
+information from metadata like identifier names and comments (see
+point 7), the goal of our paper is to show the feasibility of sound
+refactorings based solely on formally interpreting the actual program
+semantics.
+
+5.Semantics-driven vs syntax-driven refactoring (R3)
+We agree with R3 that syntax-based approaches are extensible by adding
+new patterns.  However, enumerating every possible pattern is more
+laborious than using our Stream Theory with an off-the-shelf Java
+model checker. Our experiments suggest that Kayak with
+its formal models of program semantics exceeds the
+capabilities of syntax-driven tools.
+
+6.Limitations
+The limitation of the current research prototype to integers is not
+conceptual, but rather due to the used Java front-end (see point 1).
+
+7.Related work
+We will add the suggested related works to the final paper.
+"Extract class reference": The semantic information Bavota
+use for refactoring decisions is limited to identifiers and
+comments, which may differ from the actual semantics (e.g. due to
+bugs).
+"A survey of software refactoring": Kataoka interpret
+program semantics to apply refactorings. They use dynamic test
+execution rather than formal verification, and hence their
+transformation lacks soundness guarantees.
+"Crossing the gap from imperative to functional programming through
+refactoring": Gyori present a similar refactoring to ours but
+performed in a conventional syntax-driven manner.
+
+
+
+Benchmarks:
+	Tool				
+Benchmark	JSA	IntelliJ	NetBeans	LambdaFicator	IntelliJ + NetBeans	All
+0	FALSE	FALSE	FALSE	FALSE	FALSE	FALSE
+1	2577	FALSE	FALSE	FALSE	FALSE	TRUE
+2	1864	FALSE	FALSE	FALSE	FALSE	TRUE
+3	2546	FALSE	FALSE	FALSE	FALSE	TRUE
+4	2539	FALSE	FALSE	FALSE	FALSE	TRUE
+5	FALSE	FALSE	FALSE	FALSE	FALSE	FALSE
+6	1314	FALSE	FALSE	FALSE	FALSE	TRUE
+7	1833	FALSE	FALSE	FALSE	FALSE	TRUE
+8	2626	FALSE	FALSE	FALSE	FALSE	TRUE
+9	1914	FALSE	FALSE	FALSE	FALSE	TRUE
+10	1922	FALSE	FALSE	FALSE	FALSE	TRUE
+11	1880	FALSE	FALSE	FALSE	FALSE	TRUE
+12	1819	FALSE	FALSE	FALSE	FALSE	TRUE
+13	FALSE	FALSE	FALSE	FALSE	FALSE	FALSE
+14	2463	FALSE	FALSE	FALSE	FALSE	TRUE
+15	1815	TRUE	FALSE	FALSE	TRUE	TRUE
+16	1989	TRUE	FALSE	FALSE	TRUE	TRUE
+17	1876	FALSE	FALSE	FALSE	FALSE	TRUE
+18	16163	FALSE	TRUE	TRUE	TRUE	TRUE
+18_02	FALSE	FALSE	TRUE	TRUE	TRUE	TRUE
+19	1234	FALSE	FALSE	FALSE	FALSE	TRUE
+20	6121	FALSE	FALSE	FALSE	FALSE	TRUE
+21	1500	FALSE	FALSE	FALSE	FALSE	TRUE
+22	1045	FALSE	FALSE	FALSE	FALSE	TRUE
+23	1433	FALSE	FALSE	FALSE	FALSE	TRUE
+24	FALSE	TRUE	FALSE	FALSE	TRUE	TRUE
+25	3601	FALSE	TRUE	TRUE	TRUE	TRUE
+26	3071	FALSE	FALSE	FALSE	FALSE	TRUE
+27	2972	FALSE	FALSE	FALSE	FALSE	TRUE
+28	3056	TRUE	FALSE	FALSE	TRUE	TRUE
+29	3195	FALSE	FALSE	FALSE	FALSE	TRUE
+30	1937	FALSE	FALSE	FALSE	FALSE	TRUE
+31	176593	FALSE	TRUE	TRUE	TRUE	TRUE
+32	FALSE	FALSE	FALSE	FALSE	FALSE	FALSE
+33	2663	FALSE	FALSE	FALSE	FALSE	TRUE
+34	10639	FALSE	FALSE	FALSE	FALSE	TRUE
+35	FALSE	FALSE	FALSE	FALSE	FALSE	FALSE
+36	FALSE	FALSE	FALSE	FALSE	FALSE	FALSE
+37	6529	TRUE	TRUE	TRUE	TRUE	TRUE
+38	3733	TRUE	TRUE	TRUE	TRUE	TRUE
+39	32719	TRUE	TRUE	TRUE	TRUE	TRUE
+40	3442	TRUE	TRUE	TRUE	TRUE	TRUE
+41	FALSE	TRUE	TRUE	TRUE	TRUE	TRUE
+42	2619	FALSE	FALSE	FALSE	FALSE	TRUE
+43	2852	FALSE	FALSE	FALSE	FALSE	TRUE
+44	FALSE	FALSE	FALSE	FALSE	FALSE	FALSE
+45	3996	FALSE	FALSE	FALSE	FALSE	TRUE
+46	FALSE	TRUE	TRUE	TRUE	TRUE	TRUE
+47	FALSE	FALSE	TRUE	TRUE	TRUE	TRUE
+48	4021	FALSE	FALSE	FALSE	FALSE	TRUE
+					
+	8581.868421				
+	38	10	11	11	15	43
+	76.00%	20.00%	22.00%	22.00%	30.00%	86.00%

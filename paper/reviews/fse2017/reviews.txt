@@ -1,0 +1,239 @@
+
+
+Dear Daniel,
+ 
+We regret to inform you that your submission
+ 
+PAPER ID: 250: 
+TITLE: Kayak: Safe Semantic Refactoring to Java Streams
+ 
+ 
+was not accepted for inclusion in the ESEC FSE 2017 technical program. 
+ 
+The competition was strong. ESEC FSE 2017 received 295 high-quality
+submissions. Each submission went through a thorough reviewing
+process, with each paper receiving at least three reviews. The program
+committee met on May 27-28, 2017 in Buenos Aires, Argentina and considered the submitted papers.  At the conclusion of the PC meeting, 72 submissions were accepted or conditionally accepted.
+ 
+We enclose below the reviews on your paper, which may have been
+updated to provide additional feedback to you and to reflect the
+program committee discussions. We hope that they will be a source of
+useful feedback and will help you revise the paper for a successful
+future resubmission.
+ 
+We hope that you consider submitting to the many other tracks
+available at ESEC FSE 2017. For more information, please visit 
+http://esec-fse17.uni-paderborn.de.
+ 
+ 
+You may also follow ESEC FSE 2017 on social media:
+- Facebook: https://www.facebook.com/fseconference
+- Twitter: https://twitter.com/FSEconf (use tag #FSEConf)
+ 
+Thank you for contributing to the ESEC FSE technical program. We hope to
+see you at ESEC FSE 2017 in Paderborn in September.
+ 
+Best Regards,
+ 
+Andrea Zisman and Arie van Deursen
+ESEC FSE 2017 PC Co-Chairs
+
+
+----------------------- REVIEW 1 ---------------------
+PAPER: 250
+TITLE: Kayak: Safe Semantic Refactoring to Java Streams
+AUTHORS: Cristina David, Pascal Kesseli and Daniel Kroening
+
+
+----------- Summary -----------
+The paper suggests a new way to derive refactorings, based on statically identifying the semantics of a piece of code and synthesizing/searching an alternative implementation that has the same semantics but uses different abstractions in the implementation. The equivalence of both implementation is established through a verification tool. The entire analysis is performed on an intermediate representation tailored to the refactoring task. The paper demonstrates the approach for refactorings from loops to Java streams.
+
+----------- Detailed Evaluation -----------
+I very much like the core idea of the paper of synthesizing refactoring targets (where correctness is guaranteed through the synthesis mechanism) rather than providing low-level semantic-preserving rules that then can be combined into larger rules. This notion of semantic refactoring might open the door for many new kinds of refactorings. Beyond the work on synthesizing SQL queries (cited as [8]), I am not aware of any work in this area. The problem of how to identify good synthesized solutions is still open (here only a simple heuristic of size was used and never evaluated), but there might be lots of interesting refactoring-specific ideas. In this context, demonstrating the feasibility of the idea with a rather constricted, but still far from trivial example with collections of integers (which often also feels fairly contrived) is perfectly acceptable. This paper has a significant potential to trigger future work.
+
+As much as I like the idea of the paper, I was frustrated by how it is written. It was very difficult to read and often inconsistent. The current presentation requires way too much guessing to really understand what is happening. For example, on page 8 the need for test cases to judge fitness in the synthesis process is suddenly mentioned but never explained and the relevance of (user-provided or generated) test cases for the approach to work is unclear. Several parts of the approach are more sketched than explained. There are lots of handwaivy formalisms and low-level inconsistencies; for example, I assume in Sec 3.1, variables l and p are supposed to be the same name.
+
+There are lots of questions that the paper does not answer and that I cannot answer from the formalism due to the presentation problems. All those limitations might be perfectly okay for a paper introducing the idea, if acknowledged appropriately. For example: (1) Parallel collections are mentioned, but it seems much much more analysis would be needed to identify where parallel collections can be used (there is a huge amount of work on loop parallelization); (2) how are local non-final variables handled in the lifting toward closures in stream methods?; (3) what guarantees can be made with regarding to side effects when the elements inside the collections are not immutable values as in the current implementation; for example, how is guaranteed that the order is preserved, especially when (4) the collection interface does not guarantee the order of the traversal with an iterator and the concrete class of the collection may not be known until runtime and is certainly not close!
+ d to implementations provided in the JDK.
+
+I fear that the delta required to improve the presentation is larger than reasonable for a camera ready version.
+
+Specifics:
+
+Examples of inconsistencies:
+- Sec 1: “pattern-based approaches” are used but not introduced (synonym for syntax-driven?); iterator and collection seems to be used interchangeably? “This bars” -- what is “this”: ordering? “support more complex code scenarios” -- that’s only true in a very limited interpretation where complexity refers to complexity in short code snippets with loops on collections containing integers.
+- Sec 2: loop invariants and safety invariants are synonyms?
+- Sec 3: It’s difficult to follow the scoping of variables and macros in the formulas in the text. For examples terms like S_i show up in some formula and seem to refer to constructs introduced much earlier (eg Eq 4) without any clear connection; “l” and “p” refer to the same list; “a refactoring for removeNeg” seems to refer to replacing the call to removeNeg not to modify the body of that function?
+
+The distinction of semantics-driven refactorings seems artificial. All refactorings consider semantics to some degree, even if it is just when arguing for correctness of simpler transformations. The use of  type and data-flow analysis to establish preconditions is common. What I perceive as the key innovation here is the use of synthesis techniques.
+
+There are lots of strong claims about streams that seem overblown, seem to have little support, and seem unnecessary for the contribution of the paper. Stream methods may abstract part of the recipe for the computation and may indicate some of the intended semantics, but they are certainly only building blocks (replacing very few lines of a loop) not complete implementations; I would at most argue that they can help to understand what is intended by a computation in a somewhat easier way than with loops. There is actually research on benefits and fallacies of such more functional style of computation, that might be worth to acknowledge, such as Kathi Fisler’s recent work with the Rainfall problem.
+
+It might be worth to focus more on the key idea of using synthesis for refactorings (barely explained) in the introduction rather than to focus on the application area of refactoring streams.
+
+The paper shows lots of examples that seem mostly fairly similar. It is difficult to see why all those examples are needed and what the respective points are. For this reader it was tedious to constantly look up the examples.
+
+The notation of “general refactoring” is vague. Doesn’t this simply mean that refactorings are intraprocedural but that the semantics of methods should be preserved (open world assumption)? For Fig 5, would it be within scope to remove the method call?
+
+The overview in Sec 3 is difficult to understand, since the basic idea is not really clear yet and obfuscated behind jargon and notation that is difficult to follow. This reviewer could only understand this second on a second reading after having seen the later sections of the paper.
+
+What is the purpose of Sec 4? It is difficult to understand examples when the actual approach has not been introduced beyond a short sketch and the notation is not introduced. The entire heap encoding and the kind of code shown here is unclear, seemingly mixing Java code with unknown library functions (e.g. `iterator(_, _)` and `next`) that somehow encode heap changes, but are not part of the JST description on the next page.
+
+The theory description could be improved by giving an intuition, for example what the meaning of a vertex could be. In its current form it is tedious to follow a formal description to try to reverse engineer the meaning.
+
+Given my unclear understanding of the mechanism here, Definition 5.2 seems broken. A transformation that would simply remove all variables would be a valid solution because PV_\cap is empty?
+
+What kind of tests are used to evaluate fitness in the synthesis step? The paper mentions that the “number of passed tests” is used twice (Sec 6 and 7) but never explains this any further.
+
+It is surprising that the limitation for collections *of integers* (that is collections of immutable values) is only mentioned in the experimental section.
+
+How were the 50 code snippets selected? The search is described, but not whether candidates were discarded in the process? How frequent are possible code snippets that could be refactored in the first place? How restrictive are the assumptions (e.g., only integers in collections)? How different are those snippets? It would be great if the snippets could be shared with the paper (the provided supplementary material in footnote 3 is difficult to explore; it’s just a huge dump of what seems mostly code of the model checker and this reviewer was unable to find the snippets in there).
+
+It would be nice to comment on the quality of the produced refactorings and the time required. Waiting 5 minutes for a refactoring seems rarely practical. The discussion in threats to validity about refactoring quality is fine, but it is disappointing that the paper never shows any refactored code (apart from two examples in 4, where it is not clear that this is really the code the tool would produce or just an approach of the example) and that there is no indication that the produced refactorings were ever shown to any developers. Also a qualitative discussion about what kind of programs can be refactored and not refactored by the proposed solution and the existing approaches might be useful.
+
+----------- Strengths and Weaknesses -----------
++ Great idea to use synthesis for nontrivial refactorings
++ Interesting application for refactoring to streams
++ Technique implemented and demonstrated on nontrivial example
+- Technical approach fairly difficult to understand
+- Many inconsistencies in the description of the approach leave reader guessing important details
+- Limitations of the approach barely discussed
+
+----------- Questions to the authors -----------
+What kind of tests are used in the synthesis process and how?
+
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 250
+TITLE: Kayak: Safe Semantic Refactoring to Java Streams
+AUTHORS: Cristina David, Pascal Kesseli and Daniel Kroening
+
+
+----------- Summary -----------
+This paper presents an automatic tool to refactor Java code to use the Java Stream interface. This tool uses symbolic execution to generate post conditions for refactorable code snippets and uses program synthesis to generate the Stream rewrites.
+
+----------- Detailed Evaluation -----------
+Overall I found this paper interesting. The approach, which drives the search for an equivalent Stream programs with a random condidate was surprising and novel.
+
+However, I don't think the paper gives nearly enough information to judge the real utility of this tool. I would have liked to see some examples of real code that this technique worked on where the other tools did not (instead of just the statistics on how often each tool was able to refactor).
+
+I also wonder if the Stream rewrites produced, although correct, are always efficient. For example, 3.1 discusses a scenario where an array copy is added. Java Streams can also sometimes have a negative impact on readability. For the 50 stream refactorings produced for GitHub projects, did you try and contribute those refactorings to the projects (e.g. as pull requests)? Were they accepted? If not, why not?
+
+On a related note, what is the possible positive impact of Kayak for Java Stream rewrites? How many opportunities for rewrite are in a typcial project? Do developers actually want to rewrite in all cases? Is this technique extensible to other types of semantic refactorings? With how much work?
+
+Smaller notes:
+* "help finding bugs" => help find bugs
+* An example of a syntax-dirven refactoring would make the second paragraph more clear
+* I am not sure what is meant by a research hypothesis that semantics-driven refactorings are "more precise". The term precise is often tied in with the false positive rate, but I don't think that is what is meant here.
+* In Figure 3, i thin the name of the list should be "data" not "newList" to match figure 2. )will also need to change the reference on teh following line)
+* Make the first sentence in the bullet points describing external iteration complete sentences.
+* On some printers, this paper consistently crashes the printer and stops printing when trying to print Page 7.
+
+
+***** Meta Review *********
+
+We have agreed to reject this paper. Although we all appreciated the novel technique presented, we feel the delta required to improve the presentation is larger than reasonable for a camera ready version. The presentation needs work -- the approach is difficult to understand and there are some issues with the examples given. In addition, the limitations of Kayak are not given enough discussion. We also feel the work would be improved by validation of the quality of the refactorings produced, or whether developers want to (and should be) making all refactorings proposed.
+
+----------- Strengths and Weaknesses -----------
+(+) interesting paper
+(-) limited focus
+
+----------- Questions to the authors -----------
+For the 50 stream refactorings produced for GitHub projects, did you try and contribute those refactorings to the projects (e.g. as pull requests)? Were they accepted? If not, why not?
+
+How many opportunities for rewrite are in a typcial project? Do developers actually want to rewrite in all cases?
+
+Is this technique extensible to other types of semantic refactorings? With how much work?
+
+
+----------------------- REVIEW 3 ---------------------
+PAPER: 250
+TITLE: Kayak: Safe Semantic Refactoring to Java Streams
+AUTHORS: Cristina David, Pascal Kesseli and Daniel Kroening
+
+
+----------- Summary -----------
+The paper proposes the refactoring of iterator code to Java streams through the random synthesis of candidate solutions and their subsequent verification through bounded model checking.  The method is evaluated on 50 code examples collected from GitHub and is found to outperform existing tools in terms of the number of refactorings that can be achieved.
+
+----------- Detailed Evaluation -----------
+The paper uses an interesting approach. Sadly, the corresponding research goal is unclear and the evaluation problematic on several fronts, while some technical flaws undermine the trustworthiness of the reported research.
+
+Consider the research goal.  According to the title, the authors propose a method to perform semantic refactoring into Java streams.  However, in the introduction, the authors make a much broader claim: "Our research hypothesis is that semantics-driven refactorings are more precise and can handle more complex code scenarios in comparison with syntax-driven refactorings." Similar unfounded generalization claims are made in the conclusions.
+
+The code examples listed have glaring errors that would have been detected if the authors tried to compile them or indeed generated them using the proposed method and tool.  This casts doubt regarding the work's technical quality.  Specifically, the program in Figure 3 fails to compile, because the  argument passed to filter() is not a Boolean value.
+
+import java.util.List;
+import java.util.Optional;
+
+class Test {
+    static void main(int argc, String []args) {
+        List <Integer> list;
+        Optional <Integer> result = list.stream()
+            .filter(el -> el % 2)
+            .findFirst();
+    }
+}
+
+
+Test.java:8: error: incompatible types: bad return type in lambda expression
+            .filter(el -> el % 2)
+                             ^
+    int cannot be converted to boolean
+
+Moreover, Figure 4 contains a syntax error (a semicolon at the end of map), which prematurely terminates the expression, and a missing class name (Collectors) before the toList() method.
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+class Test2 {
+    static void main(int argc, String []args) {
+        List <Integer> list = null;
+        List <Integer> newList;
+        newList = list.stream()
+            .filter(el -> el > 0)
+            .map(el -> new Integer(2 * el));
+            .collect(toList());
+    }
+}
+
+Test2.java:12: error: illegal start of expression
+            .collect(toList());
+            ^
+1 error
+
+Test2.java:12: error: cannot find symbol
+            .collect(toList());
+                     ^
+  symbol:   method toList()
+  location: class Test2
+1 error
+
+
+Introduction: "semantics driven refactorings are more precise".  More precise compared to what?  How do you measure precision?
+
+Figure 1: The variable named "copy" is not a copy of "org", but a subset.
+
+In the introduction you write that a "call to Java 8 find using a predicate immediately conveys the code’s intent, whereas an externally iterating for loop implementing the same semantics is more difficult to understand."  Can you substantiate this claim?  Judging from the three errors in the two examples you provided the corresponding code is definitely more difficult to get right, and consequently to maintain.
+
+In the evaluation you write that "queries were specified conservatively as to not exceed the CBMC front-end capabilities and we manually ruled out search results which cannot be implemented
+using the Java 8 Stream specification".  This selection artificially inflates your reported success figures.  This evaluation is by no means representative of a real-world use case, where the developers have no knowledge of the CBMC front-end capabilities, and may find it difficult to judge whether a part code to be refactored can or cannot be implemented using the Java 8 Stream specification.
+
+Finally, the resultant code has not been evaluated e.g. in terms of readability or performance.
+
+Minor issues
+
+In the abstract and conclusions: The plural of "scheme" is "schemes", not "schemata" (the plural of schema)
+
+In three places you write "exemplar" (which means an ideal model) whereas you probably want to write "example" (one that is representative of all of a group or type).
+
+----------- Strengths and Weaknesses -----------
++ Novel technique
+- Incorrect examples
+- Unclear research goal
+- Problematic selection of evaluation subjects
+- No validation of the refactorings' quality
+- Code to aid reproducibility is not provided
+
+----------- Questions to the authors -----------
+Do you plan to make the tool's code publicly available in order to aid reproducibility?
+

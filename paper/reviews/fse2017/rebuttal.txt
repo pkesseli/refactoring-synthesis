@@ -1,0 +1,26 @@
+We thank the reviewers for their helpful comments.  Next, we address their questions and points raised in the review text.
+
+Reviewer 1:
+ Question 1: No tests are used in the synthesis procedure.  "Tests" in our paper is a synonym for counterexample, since in the synthesis phase the counterexamples obtained from the verification phase are used as "test cases" which new candidates need to satisfy.  We will change all references to "test" to "counterexample" to avoid confusion.
+ Other points:
+ * We only mention concurrency when discussing the advantages of using internal iteration in the introduction. Our current implementation does not parallelise, but CBMC supports it and we consider it future work.
+ * We identify effectively final variables syntactically and only consider these in lambda expressions.
+ * Limitation to immutable integers is due to CBMC's prototype Java front-end.  JST's heap equivalence (Section 5) includes objects within Lists and guarantees equivalent modifications to the same heap objects.
+ * JST does not assume a particular iteration order (or rather assumes a nondeterministic order): refactorings are equivalent with respect to any nondeterministic iteration order.  In cases of mutable objects in Lists where mutations depend on previously mutated objects, the synthesiser won't find a solution.
+ * The examples in section 4 are written in a mixed Java/JST syntax.  We will highlight this more clearly in the section.
+ * The JST "iterator" and "next" operations are currently only in the extended version.  We will add them to the paper, as well as all other operators used in the examples.
+
+Reviewer 2:
+ Question 1: We did not create pull requests for our refactorings, since almost all linked repositories are no longer under development.  We will consider this for future experiments with an expanded benchmark base.
+ Question 2: We did not evaluate the demand for this refactoring among developers as a research question.  The refactoring exists in IntelliJ and NetBeans as a syntax-based implementation, so there appears to be a demand for it in their respective user base.  Our paper improves an existing refactoring implemented in these IDEs.
+ Question 3: See "Real-world applicability / extensibility" below.
+ Other points:
+ * The package linked in the experimental section includes the source code, all benchmarks, "fse-2017-instructions.txt" for compilation and benchmark running instructions, and "fse-2017-benchmark-results.xlsx" with the full experimental results of all tools.
+ * Arraycopy is only necessary if we cannot exclude aliasing through a prior aliasing analysis.  We have our own analysis, but any off-the-shelf tool can be used for this purpose.
+
+Reviewer 3:
+ Question 1: The tool's code is included in the benchmarks package linked in the paper.
+ * Thank you for pointing out the typos in the code listings.  We will correct them as advised.
+
+Reviewer1+Reviewer2+Reviewer3 - Real-world applicability / extensibility:
+The technique is extensible by configuring the synthesis grammar and equivalence constraint.  We are currently collaborating with the start-up DiffBlue to create commercial versions of this refactoring, as well as "Replace deprecated function calls", "Remove redundant code" and "Introduce null object".

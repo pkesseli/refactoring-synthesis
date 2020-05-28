@@ -1,0 +1,11 @@
+.classpath
+.metadata
+.project
+.settings
+.texlipse
+
+/paper/tmp/
+/paper/paper.pdf
+/paper/paper.synctex.gz
+
+target/

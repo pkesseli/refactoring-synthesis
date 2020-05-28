@@ -1,0 +1,520 @@
+
+
+Dear Daniel,
+
+We regret to inform you that your submission entitled:
+
+Kayak: Safe Semantic Refactoring to Java Streams
+
+was not accepted for presentation at ICSE 2017.
+
+We received 415 submissions, of which 398 were considered for
+review. Each paper under consideration received between three and five
+independent reviews. Following extensive on-line discussion and a
+final selection at the program board meeting, we selected 68 papers
+for presentation at the conference.
+
+The reviews for your paper are included below. We hope you find them
+informative and helpful.
+
+Note that ICSE 2017 offers a number of other events/tracks that you
+might consider participating in: http://icse2017.gatech.edu/?q=all_calls
+
+Thank you for considering the ICSE 2017 technical track. 
+
+Sincerely,
+
+Alessandro Orso and Martin Robillard
+ICSE 2017 PC Chairs
+
+
+----------------------- REVIEW 1 ---------------------
+PAPER: 317
+TITLE: Kayak: Safe Semantic Refactoring to Java Streams
+AUTHORS: Cristina David, Pascal Kesseli and Daniel Kroening
+
+
+----------- Review -----------
+*Summary*
+
+The paper presents a technique based on synthesis to automatically refactor Java code accessing collections using iterators into semantically-equivalent code using streams. The technique is based on reasoning about code snippets using JST, a logic that captures operations on collections in the heap. Synthesis follows the CEGIS (counter-example guided inductive synthesis) paradigm, where verification is done using a bounded model checker and synthesis of new solutions uses genetic algorithms. Experiments on 50 code snippets from open-source code show that the technique is applicable to 76% of the examples, clearly outperforming syntax-based refactoring techniques in terms of applicability.
+
+
+*Overall evaluation*
+
+The paper presents a powerful refactoring technique, which is widely applicable to Java collection operations, fully automated, and guaranteed to only produce sound refactorings. Since it is semantic and based on synthesis, it is heavyweight in terms of performance, but this is an inevitable price to pay for such a flexibility. The combination of techniques used is interesting, and the domain of application novel to a large extent. The main shortcomings of the papers are in verifiability and, related to this, presentation. Since some crucial aspects of the refactoring technique (especially the usage of genetic algorithms) are not presented, and the experiments are described very succinctly, it is difficult to fully assess the performance of the technique and how it works in practice. I recommend to improve these aspects, since I believe the work has good potential.
+
+
+*Soundness*
+
+The synthesis procedure discussed in the paper is based on well-understood techniques, in particular bounded model-checking of C programs, using program logics (JSL) that are sufficiently expressive yet support automated reasoning, and the CEGIS feedback-based synthesis framework. The logic and several aspects of the synthesis technique are rigorously introduced. The paper also discusses the impact of certain theoretical limitations of these ingredients (e.g. the undecidability of JSL, or the way in which heaps are abstracted) on the practical usability of the synthesis technique. For example, it is observed that JSL is undecidable but still works well for automated reasoning in practice. Several practical examples of the kinds of refactorings that are not supported are also explicitly discussed.
+
+The example in figure 7, where an implementation of selection sort is refactored into a call to stream method sorted(), is impressive but also triggers some questions. Would every sorting algorithm become a call to sorted() on streams? This would certainly help readability, but one can think of cases when this would be too much refactoring (for example if the sorting algorithm is carefully tuned to the kind of data that has to be sorted). More generally, can you mention cases in which the refactoring technique would refactor "too much", or the refactoring could be inappropriate in some ways?
+
+
+*Significance*
+
+The synthesis technique is interesting and novel in its own domain. The paper does a good job at comparing it with syntax-based refactoring techniques, which are much more lightweight and also much less robust in their applicability.
+
+The significance of the paper's contributions should be explained better with respect to the numerous works on synthesis and specification inference that have been developed in the last decade or so. One line of work that seem particularly relevant is also based on using genetic algorithms for synthesis; see e.g. Katz and Peled, "Synthesizing, Correcting and Improving Code, Using Model Checking-Based Genetic Programming", LNCS 8244, 2013. Since the paper barely mentions the role of genetic algorithms (see comments elsewhere in this review), this explains why this significant aspect is not justified.
+
+There has also been a significant amount in software engineering research about the semantic _detection_ of refactoring or refactoring opportunities. For example:
+
+* Bavota et al., "Identifying Extract Class refactoring opportunities using structural and semantic cohesion measures", JSS 84(3), 2011
+* Section 4 of Mens and Tourwe, "A survey of software refactoring", IEEE TSE 30(2), 2004
+
+
+*Verifiability*
+
+Verifiability is the main weak point of the paper. This largely is a consequence of the lack of fundamental details in the description of the experiments and their results (section 6):
+
+* There are no details about the experimental subjects (size, features such as number of loops and nesting, how they were extracted from complete applications, domain of the applications they come from, ...)
+* There is no mention of how many examples are successfully refactored by each technique (Kayak only, IntelliJ only, both)
+* There is no intuition about when Kayak works better, and the few cases when IntelliJ does
+* There are no details about the characteristics of the refactoring (size, time distribution, ...)
+
+The paper provides links to the raw code used in the example and to an extended version, but both still miss many details (and, regardless, the paper should be self-contained).
+
+Another point that significantly affects verifiability is the near absolute lack of details about how genetic algorithms are used for synthesis. All the technical details are focused on the verification part of the synthesis loop (figure 8, right). However, using genetic algorithms for synthesis requires a number of choices that should be documented in the paper, and their the impact should feature in the experiments. In particular, the paper does not even mention what the _fitness function_ is, or how many generations of evolution are normally used. Without these details, it is quite hard to assess several characteristics of the paper, and verification and replication are severely hampered.
+
+
+*Presentation*
+
+The presentation is generally adequate; in particular, the introductory examples and the informal description of the synthesis technique are clear and provide a good motivation.
+
+Other parts of the paper could be improved in terms of clarity. First, as I mentioned in a different context, there are too few details on the usage of genetic algorithms and on the experiments. The bulk of the paper is devoted to presenting the running examples. These are very readable, but perhaps they could be trimmed a bit to make room for other fundamental content.
+
+Related to this, the introduction makes a good job of providing the work's motivation, but I would expect also a short overview of the paper's results, and possibly of the technique itself (how it works, end to end). The latter is in fact missing from pretty much the whole paper.
+
+The fact that details of the technique are revealed incrementally without giving the big picture makes some passages hard to fully understand if one reads the paper sequentially (indeed, there are many forward references in the text). For instance, the Hoare triple on page 3:
+  { C_i = * } Code { configEquiv }
+is supposed to encode observational equivalence between the original program and the refactored one. However, since only the original program Code appears there explicitly, it is hard to understand how configEquiv encodes the semantics of the refactored program.
+
+I don't think Figure 7(b) is "refactored code" (as the caption says), but the same code as 7(a) encoded using the JST logic.
+
+Beginning of page 6: I think checking the inductiveness of Inv_out is encoded by all terms 6--9, not just 7--9.
+
+> "at the address provided in the footnote" 
+It's actually listed as reference.
+
+Section 6:
+> "for which cannot be implemented" 
+does not have a subject.
+
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 317
+TITLE: Kayak: Safe Semantic Refactoring to Java Streams
+AUTHORS: Cristina David, Pascal Kesseli and Daniel Kroening
+
+
+----------- Review -----------
+The paper explores the intuition that semantic transformations are more powerful than syntactic transformations. This idea is exemplified with one use case consisting in a semantic transformation that converts Java loops to Java Streams. The paper introduces the Java Stream Theory and uses it along with a genetic algorithm to  transform loops into streams.
+
+Strengths:
++ A transformation that is stronger than the industry standard IntelliJ IDEA in some cases .
+
+Limitations:
+- Applicability of the approach, can only work with integer collections
+- Lack of details about the representativeness of the evaluation
+- Hastily edited.
+
+
+Section 2.2 describes the approach. However, the current organization is confusing and prevents understanding the exact scope of the approach. What are the inputs to Kayak? Code and Ci? Code and {Ci = *}?  What are the outputs? Stream, Inv, configEquiv? What are the intermediate data produced by Kayak? Inv, {Ci = *}, configEquiv?
+Additional details about the  synthesis of Inv and configEquiv would be nice (step iii).
+
+The order of the steps performed by Kayak is not clear. Currently it is a mix between steps toward a conclusion and an algorithm, which is  confusing:
+- In step ii, how the postcondition Post(Ci , Code) is computed if Inv and configEquiv are computed in step iii?
+- Why are steps i and ii  separated  if the partial correctness {Ci = ∗} Code {configEquiv } can be reduced into the implication Post(Ci , Code) ⇒ configEquiv?.
+
+Also, the section expends too much space formalizing rather simple ideas like observational equivalence, that could be better employed explaining other topics, such as the relationship between the Java Stream Theory and the Bounded Model Checking of section 5.
+
+In section 3 I miss details about how the heap variables are introduced and by whom (the user, Kayak?). This  seems important for the process and they are vaguely introduced in Section 2, while the motivation examples rely on them to produce configEquiv and Inv in each case. 
+
+Section 5. What is the fitness function of the G.A.? Are there any transformation in which the G.A. returned first?
+
+Section 6.When Kayak can actually transform the loop, the results are better than those provided by IntelliJ IDEA. However, I am missing the relevance of the 50 snippets of code used in the evaluation. How are they  selected? They could be very similar between each others, biasing the experiment.
+Also, a 12-core Intel Xeon with 96GB of RAM is well beyond the standard developer's machine these days. Hence,  this evaluation does not give a good idea of the applicability of this technique in a standard code editor, which seems to be the target use for this kind of fine grained refactoring
+
+Minor comments:
+The sentence “We illustrate JST through the graphical representation given in Figure 6, where the circles denote the nodes in the list with their associated values” makes reference to figure 6, which is a description of the Java Stream Theory that is nowhere to be found in the paper.
+
+I believe the selected naming conventions do not ease the readability:
+- The original code should have more distinct name than 'Code' or a much more distinct font. It is currently easy to get lost while reading, confusing 'code' with 'Code'.
+- the notation Code(C, C') looks too much like a function taking two parameters, instead of a function taking one and producing a result. Perhaps Code(C) → C' would be better? Is also very similar to Post(C, Code)
+
+
+----------------------- REVIEW 3 ---------------------
+PAPER: 317
+TITLE: Kayak: Safe Semantic Refactoring to Java Streams
+AUTHORS: Cristina David, Pascal Kesseli and Daniel Kroening
+
+
+----------- Review -----------
+This paper presents a tool for refactoring Java external iterators into
+Java 8 Streams (also called internal iterators). Rather than
+implementing the refactoring logic directly, the paper employs a
+sophysticated logic that defines the semantics of Java collections and
+Java Streams, and reasons about equivalence of configurations between
+(i) state after executing code before the refactoring and (ii) state
+after executing the code after refactoring. Then the authors employ a
+program synthesis technique (CEGIS) to generate Streams-based code that
+is semantically-equivalent to the input code that uses external
+iterators. The authors evaluate their implementation, Kayak, against
+Intellij Idea 2016 refactoring to Streams, both refactorings having a
+similar purpose.
+
+
+STRENGTHS:
+
+- The paper argues for the need of semantic based refactorings (as is
+the presented one) versus traditional syntax-based refactorings, and
+presents refactoring to Stream as just one example of such refactoring.
+As far as I know, this idea based on program synthesis is a novel
+approach to implementing refactorings. The potential applicability of
+this approach expands beyond refactorings, to other program
+transformations that have well defined semantics and for which it is
+possible to model and reason about the program states. 
+
+- The paper uses several specific code examples that illustrate the
+challenges that the approach has to deal with. For example, I appreciate
+the discussion about aliasing in 2.3. and how the refactoring is copying
+the collection with the modified elements back into the aliased list. 
+
+WEAKNESSES
+
+It is not clear what is the main contribution of the paper: is it to
+introduce the concept of semantics-based refactoring or is to propose a
+specific refactoring (convert external iterators into internal iterators
+via Streams in Java 8). The paper goes back and forth between the two
+goals. If the paper leaned on the first goal (present the synthesis of
+semantics-driven refactorings) I would expect the paper will present
+some guidelines that others can use to implement such approaches. I
+would also expect that the paper compares what it takes to implement a
+refactoring tool within the semantics-driven approach as opposed to a
+tool on syntax-driven patterns. I would expect the authors to present
+why the synthesized tool should be one that has clear advantages over
+syntax-based tools. In this case the paper should clearly argue and
+evaluate such advantages. Since the paper does not do these, I assume
+the paper is best classified as a specific refactoring from External
+Iterators to Streams.
+
+There are several complexities imposed by the semantics-driven approach
+for refactoring. For example, IDE plugin developers now have to write
+Theories: for Streams, Collections, (and others for Strings or whatever
+programming structure is the target of the refactoring). Does this
+offset the cost of writing syntax-driven patterns? The paper does not
+present any compelling advantages of the tool it produces versus a
+similar tool that could potentially be coded directly (e.g.
+syntax-based). 
+
+I have several issues with the evaluation of the paper:
+1) comparison with IntelliJ IDEA seems biased as IntelliJ just recently
+added support for this refactoring. Their implementation is not the
+state-of-the-practice in this domain. I recommend the authors to compare
+their work against the implementation in the NetBeans IDE: this refactoring
+has been there since 2013, so it is much more robust and covers many
+more cases and functional operators than IntelliJ. 
+
+Despite the issues present in the evaluation (see below), it is quite
+clear that Intellij refactoring has no conceptual limitations over the
+one presented in the paper, and in fact is more applicable in practice,
+for the following reasons:
+-   Kayak (refactoring in tne paper) only works for integer collections.
+-   Cases that Kayak could refactor but Intellij could not are due to
+Intellij lacking specific transformation patterns to support those
+refactorings, rather than lacking generality (there is no
+argumentation that Intellij's limitations can be handled by Kayak
+without extra coding due to Kayak being defined at a higher level).
+-   In multiple cases Kayak cannot produce the refactoring while
+Intellij can, either due to performance limitations or due to Kayak
+implementation issues.
+-   In all the cases when Intellij can perform the refactoring, it is
+performed correctly, so there’s no soudness issue with syntax-based
+refactoring either.
+
+2) the scale of the empirical evaluation does not create confidence (for
+this reviewer) that the authors approach is ready for prime time. First,
+there are 50 refactorings that the authors applied. From how many
+projects are these refactorings originating? How diverse is the set of
+these projects? To evaluate the expressivity of their approach, I would
+recommend that the authors apply their refactoring on ALL loops from a
+given open-source program and then report in how many cases Kayak was
+able to synthesize the refactored code. This will instill in reviewers a
+much higher confidence that the authors did their best to avoid
+cherry-picking the inputs to Kayak, and it will convey that Kayak can
+handle the extra complexities associated with real codes.
+
+3) the authors mention that they had to filter the input for Kayak to
+“fit these restrictions” but they never mentioned what are the
+restrictions. Are the restrictions related to only modeling collections
+that contain integer primitive types? What are other “restrictions”? The
+reader is sent to read a tech report. Again, this leaves the impression
+of cherry-picking (see my suggestions above on how to elegantly solve
+this problem). Thus, we cannot get a general idea of Kayak applicability
+and the percentages presented in section 6 are likely of limited
+relevance.
+ 
+-   Even after all the filters, authors do not count in the statistics
+the cases when Intellij performs the refactoring, whike Kayak freezes.
+The evaluation mentions that sometimes IntelliJ was able to apply a
+refactoring when Kayak was not able to synthesize the code in the
+allocated 5 minutes time bound. Can the authors explain how often did
+this happen?
+
+4) The machine on which the authors have done the experiment is not a
+typical developer machine (it contains 96GB of RAM). Is this demand on
+RAM imposed by the CEGIS synthesizer? Would typical developers have
+access to such powerful machines? I encourage the authors to envision
+scenarios where this breed of refactoring tools (or program analyzers)
+that require very sophisticated analyses that consume lots of resources
+be done in the cloud.
+
+
+PRESENTATION issues:
+-   Terminology introduced in section 2.1 adds needless confusion. I
+recommend the authors to use standard Java terminology.
+
+-   Nowhere the paper provides a concise description of what exactly
+are the capabilities of Kayak. Instead, we are given examples
+transformations throughout the paper (this is good, but not comprehensive).
+
+-   Although section 5 suggests some portions of the refactoring were
+synthesized through CEGIS, the paper does not describe  what exactly is
+the synthesized part and what is the part that required manual coding.
+
+
+- The discussion about handling Set collections leaves the impression that
+the presented approach might miss some refactorings. Which refactorings
+are not handled? How frequent do these limitations appear in practice?
+
+- The discussion about exceptional behavior mentions that if the input
+code throws a caught exception, this will be modeled too by Kayak, which
+will fail to find a suitable refactoring. In practice, developers expect
+that the order of exceptions will be preserved between the
+original/refactored code. 
+
+The paper is missing a very related work by Gyori et al. "Crossing the
+gap from imperative to functional programming through refactoring" in
+FSE 2013. This paper is a syntax-based refactoring which converts from
+External Iterators to Functional Operators, which overlaps with the
+scope of the current paper.
+
+
+----------------------- REVIEW 4 ---------------------
+PAPER: 317
+TITLE: Kayak: Safe Semantic Refactoring to Java Streams
+AUTHORS: Cristina David, Pascal Kesseli and Daniel Kroening
+
+
+----------- Review -----------
+This paper presents a framework for refactoring Java programs that use
+collections to use the new stream APIs that were introduced in Java 8.
+The approach taken in this paper differs from most refactoring work
+in the sense that it relies on logic and formal reasoning to determine
+the correctness of program transformations. This is done by encoding 
+the program's state using logic, and identifying preconditions, loop
+invariant conditions, and postconditions of code fragments that operate
+on collections. Then, counterexample-guided inductive synthesis (CEGIS)
+is applied to determine how to transform the code fragment being refactored
+into equivalent code that relies on the streams API. The approach relies
+on a formal theory called the Java Stream Theory (JST), which specifies
+the behavior of various collection and stream related operations (as well
+as basic program analysis facts such as alias information) in terms of
+queries that the synthesizer can employ in its reasoning. The refactored
+code is derived from the solution.  The approach is illustrated using
+several small example code snippets, and evaluated on 50 code snippets
+found using GitHub code search. The results are not presented in detail,
+but the authors mention that their Kayak tool is significantly more
+effective than a similar refactoring that is available in the IntelliJ IDEA
+IDE.
+
+I really like the idea of refactoring collection-related operations to use
+the stream API instead, because the resulting code is likely to be more
+declarative and easier to understand and maintain. The adopted approach
+based on synthesis seems promising as well.  Unfortunately, the paper has
+several significant problems:
+
+1. The paper is not self-contained. It presents the basic idea and illustrates
+   it on several small code examples, but key aspects of the technique are
+   missing completely:
+   - the paper does not present a constructive technique for deriving
+     pre-conditions, post-conditions and invariants. Only examples are
+     presented, but an exposition of the algorithm is required, in my
+     opinion.
+   - the paper also does not present how to derive the refactored code
+     from the solution computed by the synthesizer. Again, only examples
+     are presented but an algorithm is required.
+   - the paper does not present in sufficient detail how the CEGIS step
+     works. Related to that, the JST theory is missing completely (Fig 6.
+     only informally explains the operations in prose)
+
+2. The evaluation is inadequate. The paper does not present details about
+   the code snippets being used in the evaluation, and I'm concerned about
+   the exclusion of code fragments as mentioned in Section 6. In my
+   opinion, it is not acceptable to omit all details of an evaluation and
+   refer to an extended version for the details. 
+
+3. Key related work is missing (see references below). This includes 
+   work on refactorings that target specific APIs and language features,
+   and recent work by Raychev et al. in which synthesis is used for refactoring.
+
+4. The presentation of this work is very suboptimal with far too much space
+   being taken up by detailed examples and informal discussions so that
+   not space remains for an exposition of essential technical details
+   about the algorithms used and for the evaluation.
+
+For these reasons, I think that the paper cannot be accepted. In my opinion,
+a complete rewrite of the paper is needed in which motivating examples are
+reduced to make space for details about algorithms and details about the
+evaluation. 
+
+Minor comments:
+
+  - in several places, it is confusing that the code examples shown are
+    not self-contained. For example, Fig.5 shows a method followed by 
+    some inline code that was presumably extracted from another method.
+    As another example, the code at the bottom of page 4 shows the body
+    of the refactored code of a method. The authors should make an
+    effort to make their examples syntactically consistent and self-contained.
+
+  - the transformation of code to manipulate the heap as an explicit
+    parameter needs to be expressed more precisely since the resulting code
+    is not Java. Some of the syntax used is not clearly explained. E.g., how
+    should the declaration "int (e1, h_0) = ..." on page 4 by read?  
+
+  - page 5: the formula for configEquiv refers to functions such as 
+    \lambda v.v that are apparently derived from binary operators in the 
+    source code. This step needs to be presented precisely (in the context
+    of a complete presentation of the algorithm for deriving such a formula)
+
+  - page 6: the examples presented here seem to make sense, but I cannot
+    be sure without seeing the algorithm for deriving such equations.
+
+  - section 4: I was very disappointed, after reading all the detailed
+    examples presented thus far, that basically no details are presented
+    in the paper itself about JST. 
+
+  - section 5: are there any situations where the solver cannot find a
+    solution and where it cannot find a counterexample either, so that you
+    get stuck?
+
+  - section 6: the evaluation needs to clearly identify on what subject
+    programs the technique is evaluated. I find the use of code snippets
+    found through code search to be significantly below the usual standard
+    of evaluation in papers about refactoring. In most papers, it is
+    typical to rely on some benchmark suite or complete open-source
+    programs and identify refactoring opportunities in those programs.
+    I think the authors do the same for this work.
+
+  - page 9: typo "airses"
+
+  - page 10: I think that manually inspecting refactored code is too weak
+    for evaluation purposes. Ideally, you'd be using subject programs
+    that have an associated test suite, so that you could run the tests
+    before and after the refactoring and check that there are no regressions.
+
+Related work:
+
+@inproceedings{DBLP:conf/oopsla/RaychevSSV13,
+  author    = {Veselin Raychev and
+               Max Sch{\"{a}}fer and
+               Manu Sridharan and
+               Martin T. Vechev},
+  title     = {Refactoring with synthesis},
+  booktitle = {Proceedings of the 2013 {ACM} {SIGPLAN} International Conference on
+               Object Oriented Programming Systems Languages {\&} Applications,
+               {OOPSLA} 2013, part of {SPLASH} 2013, Indianapolis, IN, USA, October
+               26-31, 2013},
+  pages     = {339--354},
+  year      = {2013},
+  crossref  = {DBLP:conf/oopsla/2013},
+  url       = {http://doi.acm.org/10.1145/2509136.2509544},
+  doi       = {10.1145/2509136.2509544},
+  timestamp = {Fri, 25 Oct 2013 08:46:39 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/oopsla/RaychevSSV13},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{DBLP:conf/icse/KiezunETF07,
+  author    = {Adam Kiezun and
+               Michael D. Ernst and
+               Frank Tip and
+               Robert M. Fuhrer},
+  title     = {Refactoring for Parameterizing Java Classes},
+  booktitle = {29th International Conference on Software Engineering {(ICSE} 2007),
+               Minneapolis, MN, USA, May 20-26, 2007},
+  pages     = {437--446},
+  year      = {2007},
+  crossref  = {DBLP:conf/icse/2007},
+  url       = {http://dx.doi.org/10.1109/ICSE.2007.70},
+  doi       = {10.1109/ICSE.2007.70},
+  timestamp = {Tue, 08 Sep 2015 16:21:53 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icse/KiezunETF07},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{DBLP:conf/ecoop/FuhrerTKDK05,
+  author    = {Robert M. Fuhrer and
+               Frank Tip and
+               Adam Kiezun and
+               Julian Dolby and
+               Markus Keller},
+  title     = {Efficiently Refactoring Java Applications to Use Generic Libraries},
+  booktitle = {{ECOOP} 2005 - Object-Oriented Programming, 19th European Conference,
+               Glasgow, UK, July 25-29, 2005, Proceedings},
+  pages     = {71--96},
+  year      = {2005},
+  crossref  = {DBLP:conf/ecoop/2005},
+  url       = {http://dx.doi.org/10.1007/11531142_4},
+  doi       = {10.1007/11531142_4},
+  timestamp = {Wed, 05 Oct 2005 13:27:37 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/ecoop/FuhrerTKDK05},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{DBLP:conf/icse/FranklinGLD04,
+  author    = {Lyle Franklin and
+               Alex Gyori and
+               Jan Lahoda and
+               Danny Dig},
+  title     = {{LAMBDAFICATOR:} from imperative to functional programming through
+               automated refactoring},
+  booktitle = {35th International Conference on Software Engineering, {ICSE} '13,
+               San Francisco, CA, USA, May 18-26, 2013},
+  pages     = {1287--1290},
+  year      = {2013},
+  crossref  = {DBLP:conf/icse/2013},
+  url       = {http://dx.doi.org/10.1109/ICSE.2013.6606699},
+  doi       = {10.1109/ICSE.2013.6606699},
+  timestamp = {Wed, 04 May 2016 09:04:15 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/icse/FranklinGLD04},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+
+-------------------------  METAREVIEW  ------------------------
+PAPER: 317
+TITLE: Kayak: Safe Semantic Refactoring to Java Streams
+
+Positives:
+
++ Sound refactorings produced ("the feasibility of sound 
+refactorings based solely on formally interpreting the actual program 
+semantics. " is the goal of the paper)
+
++Another strong point of this paper is the logical encoding of refactorings (particularly, the introduction and use of JST) 
+
+
+Negatives:
+
+-Opaque presentation of GA details (e.g, fitness function and other parameters of search) and the experiments ("representativeness of the evaluation", i.e., choice of subjects, numbers of instances solved by each technique, etc.)
+
+AFTER rebuttal
+
+R1:
+It hints at some aspects of the GA component, but the experimental section remains pretty sketchy (experimental design superficially presented and justified).
+R2, R3: no change
+
+Positives do not compensate the negatives because verifiability is put in doubt by reviewers
+
