@@ -19,7 +19,7 @@ import uk.ac.ox.cs.refactoring.benchmarks.resources.CopyPackage;
 public class ParserTest {
   @Test
   public void testParseCompilationUnit(
-      @Benchmark("uk.ac.ox.cs.refactoring.benchmarks.stream.simplefilter") final Path benchmark)
+      @Benchmark("uk.ac.ox.cs.refactoring.benchmarks.stream.collect") final Path benchmark)
       throws IOException {
     final SourceRoot source = new SourceRoot(benchmark);
     source.tryToParse();
@@ -29,5 +29,7 @@ public class ParserTest {
         compilationUnits.get(0).getType(0).getName().toString());
     assertEquals("Refactored",
         compilationUnits.get(1).getType(0).getName().toString());
+
+    System.err.println(null + "asdf");
   }
 }

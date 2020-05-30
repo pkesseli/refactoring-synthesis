@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class Refactored {
 
-  public static Collection<String> filter(final Collection<String> collection) {
+  public static Collection<String> method(final Collection<String> collection) {
     final Collection<String> filtered = collection.stream()
         .filter(item -> !item.isEmpty()).collect(Collectors.toList());
 
