@@ -11,5 +11,11 @@ public interface IRefactoring {
    * @param node
    * @return
    */
+  boolean isApplicable(Node node);
+
+  /**
+   * @param node
+   * @return
+   */
   Node transform(Node node);
 }
