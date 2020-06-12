@@ -178,6 +178,72 @@ Daniel Kroening\inst{2}}
 
 \section{Introduction}
 
+\todo{Stuff from our latest discussion:}
+My understanding is that we aim to use a hybrid approach that combines
+syntax and semantics based code generation. Things that still need to
+be clarified:
+
+\begin{itemize}
+\item Do we still use streams as the target refactoring?
+  I don't know if it's the best refactoring to showcase
+  the need for a semantics based approach. 
+  
+\item If we do stick with streams, I think we need some clear examples where such a
+  refactoring requires a semantics based approach. While I expect/hope that
+  most of the examples will be solved by only using the syntax based
+  rules, we need to convince the readers that that's not enough.
+
+\item If we do have both syntax and semantics based approaches, how
+  do we combine them?  I guess we could run them in parallel or, start
+  by trying the syntax based approach and if we fail to find a
+  refactoring within a certain timeout, move on to the semantics based
+  one.
+
+\item When the syntax based approach fails, can we still make use of
+  its results to help the semantics based search?  One potential
+  heuristic could be to use the syntax based rules that were applied
+  during the syntactic phase in order to generate the search space for
+  the semantics based approach.  The intuition would be that, if such
+  a rule was triggered, the target code might indeed be useful in the
+  refactored program so let's try to use it with the semantics based
+  approach as well. However, given that that was not enough, what do
+  we add?
+
+\item We discussed about using random testing to generate
+  counterexamples from the programs obtained through the rule based
+  refactoring. Thinking about it, I'm not sure I can fit it into the
+  picture. The programs generated through the rule based approach will
+  be observationally equivalent to the original one but not fully
+  refactored. Then, what counterexamples can we get from them?
+  
+\end{itemize}
+
+
+Our refactoring technique is based on a combination between a syntax based
+approach and a semantics based one:
+\begin{itemize}
+\item {\bf Syntax-based phase:} We first apply a syntax-guided
+  approach based on equivalence preserving transformations that work
+  at the AST level.  If we manage to find a sequence of
+  transformations that produce a program with the desired form, then
+  we are done.  Otherwise, we learn from it. In particular, we
+  remember the rules that were applied in the syntax-guided phase and
+  try to incorporate their target code in the program search happening
+  during the next phase.
+\item {\bf Semantics-based phase:} This phase is based on program
+  synthesis where the search space is generated based on the
+  rules applied at the previous phase.  
+\end{itemize}  
+
+
+%% I liked Ofer's approach bacause he has a more natural way of combining
+%% syntax and semantics based approaches. However, that's not well suited
+%% for streams because he's first replacing loops with recursive
+%% functions and calls.
+
+\todo{Old stuff:}
+
+
 Refactorings are structured changes to existing software which leave its
 externally observable behaviour unchanged.  They improve non-functional
 properties of the program code, such as testability, maintainability and
