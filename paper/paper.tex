@@ -314,6 +314,33 @@ while (it.hasNext()) {
 \label{ex:syntax-limits}
 \end{figure}
 
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+List<Integer> org = getData();
+List<Integer> copy = new ArrayList<>();
+for(final String item : org)
+  copy.add(item.trim().length());
+\end{lstlisting}
+\caption{Ambiguous code with multiple applicable refactorings}
+\label{ex:syntax-limits-ambiguous}
+\end{figure}
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+List<Integer> copy = org.stream().map(item -> item.trim().length());
+\end{lstlisting}
+\caption{Refactoring applied by IntelliJ}
+\label{ex:syntax-limits-intellij}
+\end{figure}
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+List<Integer> copy = org.stream().map(String::trim).map(String::length());
+\end{lstlisting}
+\caption{Preferred refactoring}
+\label{ex:syntax-limits-preferred}
+\end{figure}
+
 In this paper, we take a step further in this direction by proposing a
 fully semantic refactoring approach.  There is a very broad space of
 methods that are able to reason about program semantics.  The desire
