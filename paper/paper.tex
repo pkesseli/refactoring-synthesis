@@ -184,9 +184,13 @@ equivalence of refactorings proposed by user (for embeded SQL
 programming). For this purpose, they use FOL to model the semantics of
 the program/queries. The equivalence conditions are proved using SMT.
 
-\cite{DBLP:conf/scam/KhatchadourianT18} they optimize code
-that uses streams. 
-
+\cite{DBLP:conf/scam/KhatchadourianT18} they optimize code that uses
+streams. Works by building a call graph and running a typestate
+analysis for determining the state of a stream, e.g., parallel,
+unordered.  This refactoring does things such as inserting a call to
+unordered() immediately prior to a call to distinct() for a parallel
+stream.  This allows distinct() to work more efficiently under
+parallel computation.
 
 \todo{Stuff from our latest discussion:}
 My understanding is that we aim to use a hybrid approach that combines
