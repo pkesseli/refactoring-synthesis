@@ -177,8 +177,94 @@ Daniel Kroening\inst{2}}
 %% Maintenance and reuse
 
 
+
 \section{New papers to consider}
 
+\subsection{Equivalence checking}
+
+While, in general, checking program equivalence is undecidable,
+restricted version of the problem have been extensively studied in the
+context of compiler optimizations.  The most common approach to
+proving that two programs are equivalent relies the construction of a
+simulation relation between them.
+
+If we are trying to prove equivalence between $Prog_A$ and $Prog_B$, a
+simulation relation is represented by a set of elements of the form
+($l_A$,$l_B$,$I$), where $l_{A}$ and $l_{B}$ are program locations in
+$Prog_A$ and $Prog_B$, respectively, and $I$ represents the invariant
+that holds across the two programs at program locations $l_{A}$ and
+$l_{B}$, respectively.  If we can inductively prove the equivalence of
+return values at the exit location, we establish the equivalence of
+the two programs.
+
+
+An example of building such a simulation relation is given in \cite{DBLP:conf/pldi/Necula00},
+where Necula describes describe a
+translation validation infrastructure for the GNU C compiler. %% This is
+%% based on the inference of the simulation relation by observing the
+%% compilation.
+The main limitation of the inference algorithm of the simulation
+relation is that all branches in the target program must correspond to
+branches in the source program.  In a more general setting, in
+\cite{DBLP:conf/sat/GuptaSMB18}, the authors make use of
+invariant-sketching, that allows the incremental inference of the
+required invariants through the generation of counterexamples using
+SMT solvers.
+
+In \cite{DBLP:journals/fmsd/ZuckPGBFH05}, Zuck et al present an
+approach to the validation of loop optimizations.  For this purpose,
+they present a set of permutation rules whih establish that the
+transformed code satisfies all the implied data dependenies necessary
+for the validity of the considered transformation.
+
+
+
+%% =============
+%% Static approaches to equivalence checking attempt to construct a
+%% simulation relation purely through static analysis. On the other hand,
+%% data-driven approaches [7,8] extract information from the program
+%% execution traces to infer a simulation relation. In either case, the
+%% construction of a simulation relation involves the inference of the
+%% correlation between program locations (i.e., the first column of the
+%% simulation relation table) and the invariants at each correlated pair
+%% of locations (i.e., the second column of the simulation relation
+%% table).
+
+%% A data-driven approach to inferring a correlation involves identifying
+%% program locations in the two programs where the control-flow is
+%% correlated across multiple execution runs, and where the number and
+%% values of the live variables in the two programs are most
+%% similar. Also, the inference of invariants in these data-driven
+%% approaches is aided by the availability of actual runtime values of
+%% the live program variables.
+
+%=========================
+%In \cite{DBLP:conf/aplas/DahiyaB17}, black-box equivalence checking
+
+
+
+%=======================
+
+\cite{DBLP:conf/pldi/KunduTL09} is concerned with parameterized
+equivalence checking, a generalization of translation validation that
+can prove the equivalence of parameterized programs.  In this paper,
+Kundu et al adapt two approaches from traditional translation
+validation to the parametrized setting, namely the relational approach
+of Necula \cite{DBLP:conf/pldi/Necula00}, and the permute approach of
+Zuck et al. \cite{DBLP:journals/fmsd/ZuckPGBFH05}.
+
+
+%% %=======================
+%% Questions for our approach:
+%% - what do we do about recursive functions?
+%% - Can we use some runtime tests as well in combination with static methods?
+
+%% Notions:
+%% - structure preserving transformations; examples of transformations that
+%% are not structure preserving: loop distribution and loop tiling
+
+
+%===================
 ``Verification supported refactoring of embedded SQL'' - they prove
 equivalence of refactorings proposed by user (for embeded SQL
 programming). For this purpose, they use FOL to model the semantics of
