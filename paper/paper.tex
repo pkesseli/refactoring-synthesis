@@ -354,6 +354,120 @@ approach and a semantics based one:
 %% for streams because he's first replacing loops with recursive
 %% functions and calls.
 
+\subsection{Examples}
+
+\subsubsection{Substitute algorithm}
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+String foundPerson(String[] people) {
+  List<String> candidates = Arrays.asList(
+    "Don", "John", "Kent");
+  return Arrays.stream(people)
+               .filter(candidates::contains(p))
+               .findAndy().orElse("");
+}
+
+// ...
+
+void main(String[] args) {
+  // Redundant snippet:
+  String person = "";
+  for(int i = 0; i < people.length; i++) {
+    if (people[i].equals("Don")) {
+      person = "Don";
+    }
+    if (people[i].equals("John")) {
+      person = "John";
+    }
+    if (people[i].equals("Kent")) {
+      person = "Kent";
+    }
+  }
+
+  // Should have been:
+  String person = foundPerson(people);
+}
+\end{lstlisting}
+\caption{Substitute algorithm example.}
+\label{ex:substitute-algorithm}
+\end{figure}
+
+\subsection{Deprecated}
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+@Deprecated
+public String toString() {
+    // make explicit the use of the default charset
+    return new String(toByteArray(),
+      Charset.defaultCharset());
+}
+
+// ...
+
+void main(String[] args) {
+  ByteArrayOutputStream bos = ...;
+  // Deprecated:
+  String content = bos.toString();
+
+  // Should have been:
+  String content = bos.toString(Charset.defaultCharset());
+}
+\end{lstlisting}
+\caption{Deprecated method example.}
+\label{ex:deprecated-method}
+\end{figure}
+
+\subsection{Extract method}
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+// Redundant snippet:
+class CoinView extends ElementView {
+  void draw(Coin model, TextGraphics graphics) {
+    graphics.setForegroundColor("#FFFF33");
+    graphics.enableModifiers(SGR.BOLD);
+    graphics.put(model.getX(), model.getY(), "C");
+  }
+}
+class DestinationView extends ElementView {
+  void draw(Destination model, TextGraphics graphics) {
+    graphics.setForegroundColor("#e64c4c");
+    graphics.enableModifiers(SGR.BOLD);
+    graphics.put(model.getX(), model.getY(), "D");
+  }
+}
+
+// Extract method:
+class ElementView {
+  void draw(ElementModel model,
+            String color,
+            String image,
+            TextGraphics graphics) {
+    graphics.setForegroundColor(color);
+    graphics.enableModifiers(SGR.BOLD);
+    graphics.put(model.getX(), model.getY(), image);
+  }
+}
+class CoinView extends ElementView {
+  void draw(Coin model, TextGraphics graphics) {
+    super.draw(model, "#FFFF33", "C", graphics);
+  }
+}
+class DestinationView extends ElementView {
+  void draw(Destination model, TextGraphics graphics) {
+    super.draw(model, "#e64c4c", "D", graphics);
+  }
+}
+\end{lstlisting}
+\caption{Extract method example.}
+\label{ex:extract-method}
+\end{figure}
+
+\subsection{Challenges}
+\todo{Parameterisation, side-effects}
+
 \todo{Old stuff:}
 
 
