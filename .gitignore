@@ -4,7 +4,12 @@
 .settings
 .texlipse
 
-/paper/tmp/
+/paper/*.aux
+/paper/*.bbl
+/paper/*.blg
+/paper/*.fdb_latexmk
+/paper/*.fls
+/paper/*.log
 /paper/paper.pdf
 /paper/paper.synctex.gz
 
