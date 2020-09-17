@@ -358,6 +358,25 @@ approach and a semantics based one:
 
 \subsubsection{Substitute algorithm}
 
+The substitute algorithm refactoring replaces an existing code snippet by an
+alternative, equivalent one. The reasons to prefer this alternative over the
+existing one is to remove code smells or adhere to other coding guidelines.
+
+The code smell intended to be amendd by the refactoring implies a set of
+constraints under which we synthesise the new algorithm. Examples of such
+constraints are listed in table~\ref{constraints-per-code-smell}.
+
+\begin{table}[]
+\begin{tabular}{|l|l|}
+Code smell        & Synthesis Constraints             \\\hline 
+Duplicate Code    & Only invocations and declarations \\
+Long method       & $|p_{new}|<|p_{old}|$             \\
+Deprecated method & Exclude method in grammar         \\
+\end{tabular}
+\caption{Synthesis constraints per code smell.}
+\label{constraints-per-code-smell}
+\end{table}
+
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 String foundPerson(String[] people) {
@@ -393,9 +412,6 @@ void main(String[] args) {
 \label{ex:substitute-algorithm}
 \end{figure}
 
-\todo{Pascal: Document: We don't synthesise arbitrary programs, but restricted
-e.g. at most n statements, only method invocations and declarations,
-and so on.}
 \todo{Pascal: Issue of finding correct snippet to replace.}
 \todo{Pascal: Talk about smell detection.}
 
