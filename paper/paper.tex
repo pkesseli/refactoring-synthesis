@@ -412,36 +412,53 @@ void main(String[] args) {
 \label{ex:substitute-algorithm}
 \end{figure}
 
+IntelliJ IDEA and Eclipse identify duplicate code by syntactic similarity, and
+suggest extract method refactorings accordingly.
+
 \todo{Pascal: Issue of finding correct snippet to replace.}
 \todo{Pascal: Talk about smell detection.}
 
 \subsection{Deprecated}
 
+The \em{Deprecated} annotation in Java is used to mark program elements which
+programmers are discouraged from using for various reasons such as future API
+changes or security problems in the method. Usually API designers provide
+programmers with recommendations about what they should use instead. However,
+transformation of existing code to the recommended format is not always
+straightforward, as illustrated in Fig.~\ref{ex:deprecated-method}. In the
+example, the deprecated \em{Date} constructor should be replaced by use of the
+\em{Calendar} class. However, the \em{Date} constructor expects its year
+parameter to be an offset from 1900, i.e. the year 2020 is expressed as 120.
+This needs to be transformed to 2020 when using \em{Calendar} API, as shown in
+the example.
+
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
-@Deprecated
-public String toString() {
-    // make explicit the use of the default charset
-    return new String(toByteArray(),
-      Charset.defaultCharset());
-}
-
-// ...
-
 void main(String[] args) {
   ByteArrayOutputStream bos = ...;
   // Deprecated:
-  String content = bos.toString();
+  Date date = new Date(120, 12, 30);
 
   // Should have been:
-  String content = bos.toString(Charset.defaultCharset());
+  final Calendar calendar = Calendar.getInstance();
+  calendar.set(2020, 12, 30);
+  final Date date = calendar.getTime();
+
+  // Or:
+  final Date date = new GregorianCalendar(2020, 12, 30)
+                      .getTime();
 }
 \end{lstlisting}
 \caption{Deprecated method example.}
 \label{ex:deprecated-method}
 \end{figure}
 
-\todo{Pascal: Check with Eclipse/IntelliJ: Do they handle this?}
+While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to recognise the
+use of deprecated APIs and warn the programmer about it, refactoring the code to
+a preferred API is significantly more complex. Indeed neither Eclipse 4.15.0 nor
+IntelliJ IDEA 2020.2.2 make any attempt to suggest a better alternative to the
+user.
+
 \todo{Pascal,Cristina: Search for existing tools which handle
 `Deprecated'}
 \todo{Pascal: Document constraint: Equivalent for all inputs (not just
