@@ -432,6 +432,13 @@ void main(String[] args) {
 existing e.g. unit tests), limit size and statements used in
 synthesised programs.}
 
+Related paper: in \cite{DBLP:conf/paste/Perkins05}, the authors
+replace calls to deprecated methods by their bodies.
+
+Questions: In our approach, how do we decide what statements to allow
+when synthesising the refactoring? Do we assume we have access to the
+body of the deprecated method?
+
 \subsection{Extract method}
 
 \begin{figure}
