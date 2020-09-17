@@ -364,8 +364,8 @@ String foundPerson(String[] people) {
   List<String> candidates = Arrays.asList(
     "Don", "John", "Kent");
   return Arrays.stream(people)
-               .filter(candidates::contains(p))
-               .findAndy().orElse("");
+               .filter(candidates::contains)
+               .findAny().orElse("");
 }
 
 // ...
@@ -393,6 +393,12 @@ void main(String[] args) {
 \label{ex:substitute-algorithm}
 \end{figure}
 
+\todo{Pascal: Document: We don't synthesise arbitrary programs, but restricted
+e.g. at most n statements, only method invocations and declarations,
+and so on.}
+\todo{Pascal: Issue of finding correct snippet to replace.}
+\todo{Pascal: Talk about smell detection.}
+
 \subsection{Deprecated}
 
 \begin{figure}
@@ -418,6 +424,13 @@ void main(String[] args) {
 \caption{Deprecated method example.}
 \label{ex:deprecated-method}
 \end{figure}
+
+\todo{Pascal: Check with Eclipse/IntelliJ: Do they handle this?}
+\todo{Pascal,Cristina: Search for existing tools which handle
+`Deprecated'}
+\todo{Pascal: Document constraint: Equivalent for all inputs (not just
+existing e.g. unit tests), limit size and statements used in
+synthesised programs.}
 
 \subsection{Extract method}
 
@@ -464,6 +477,9 @@ class DestinationView extends ElementView {
 \caption{Extract method example.}
 \label{ex:extract-method}
 \end{figure}
+
+\todo{Pascal: Synthesisis goal: Fewest parameters}
+\todo{Pascal: Describe Eclipse features}
 
 \subsection{Challenges}
 \todo{Parameterisation, side-effects}
