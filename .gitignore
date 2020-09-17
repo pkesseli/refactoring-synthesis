@@ -3,6 +3,7 @@
 .project
 .settings
 .texlipse
+*.code-workspace
 
 /paper/*.aux
 /paper/*.bbl
