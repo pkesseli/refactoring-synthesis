@@ -426,16 +426,16 @@ output. But how do we find suspect code?
 
 \subsection{Deprecated}
 
-The \em{Deprecated} annotation in Java is used to mark program elements which
+The {\em Deprecated} annotation in Java is used to mark program elements which
 programmers are discouraged from using for various reasons such as future API
 changes or security problems in the method. Usually API designers provide
 programmers with recommendations about what they should use instead. However,
 transformation of existing code to the recommended format is not always
 straightforward, as illustrated in Fig.~\ref{ex:deprecated-method}. In the
-example, the deprecated \em{Date} constructor should be replaced by use of the
-\em{Calendar} class. However, the \em{Date} constructor expects its year
+example, the deprecated {\em Date} constructor should be replaced by use of the
+{\em Calendar} class. However, the {\em Date} constructor expects its year
 parameter to be an offset from 1900, i.e. the year 2020 is expressed as 120.
-This needs to be transformed to 2020 when using \em{Calendar} API, as shown in
+This needs to be transformed to 2020 when using {\em Calendar} API, as shown in
 the example.
 
 \begin{figure}
