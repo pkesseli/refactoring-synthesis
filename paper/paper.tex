@@ -399,6 +399,12 @@ and so on.}
 \todo{Pascal: Issue of finding correct snippet to replace.}
 \todo{Pascal: Talk about smell detection.}
 
+Questions: How do we detect such situations? What triggers us to check
+equivalence? Can we use some data driven approach? For instance, run
+suspect code with the same inputs and see whether it returns the same
+output. But how do we find suspect code?
+
+
 \subsection{Deprecated}
 
 \begin{figure}
@@ -435,9 +441,13 @@ synthesised programs.}
 Related paper: in \cite{DBLP:conf/paste/Perkins05}, the authors
 replace calls to deprecated methods by their bodies.
 
-Questions: In our approach, how do we decide what statements to allow
+Questions:
+In our approach, how do we decide what statements to allow
 when synthesising the refactoring? Do we assume we have access to the
 body of the deprecated method?
+
+BTW, I guess we moved away from code duplication here?
+
 
 \subsection{Extract method}
 
@@ -486,6 +496,13 @@ class DestinationView extends ElementView {
 \end{figure}
 
 \todo{Pascal: Synthesisis goal: Fewest parameters}
+
+Question: But then, wouldn't a method that doesn't do e full extraction
+end up being the preferred solution? For instance, in your example,
+won't a method
+\texttt{void draw(ElementModel model, String image,
+TextGraphics graphics)} be preferred in that case?
+
 \todo{Pascal: Describe Eclipse features}
 
 \subsection{Challenges}
