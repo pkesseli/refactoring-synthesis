@@ -423,6 +423,8 @@ equivalence? Can we use some data driven approach? For instance, run
 suspect code with the same inputs and see whether it returns the same
 output. But how do we find suspect code?
 
+- Code duplication is very general as it potentially covers all possible
+refactorings.
 
 \subsection{Deprecated}
 
@@ -474,12 +476,40 @@ synthesised programs.}
 Related paper: in \cite{DBLP:conf/paste/Perkins05}, the authors
 replace calls to deprecated methods by their bodies.
 
-Questions:
-In our approach, how do we decide what statements to allow
-when synthesising the refactoring? Do we assume we have access to the
-body of the deprecated method?
 
-BTW, I guess we moved away from code duplication here?
+The synthesis process for refactoring deprecated instances (e.g. fields, methods, classes) proceeds as follows:
+\begin{enumerate}
+\item We seed the templates/snippets for the synthesis library using the following two strategies:
+  \begin{itemize}
+\item Use deprecated block messages.
+\item Use the unit tests for the new library. As opposed to the comments in libraries,
+  the unit tests are syntactically valid.
+  \end{itemize}
+
+\item Use the seeded templates to generate the refactoring.
+  \begin{itemize}
+\item Look at checking equivalence in the presence of loops.
+  \end{itemize}
+  \end{enumerate}
+
+For experimental evaluation:
+\begin{itemize}
+\item Pick libraries that have deprecated instances.
+\item Pick users of these libraries (i.e. open source projects that are actively maintained).
+\item Make pull requests and see how many get merged.
+\end{itemize}  
+
+\todo{Cristina:}
+\begin{itemize}
+\item Discuss the steps
+  \item Think about the actual synthesis/equivalence checking process
+\end{itemize}
+
+%% Possible follow-up:
+%% - if we have a sizeable codebase, the user might have to do 1,2 deprecated
+%% refactorings and then the synthesisers can use the PRs done by the user
+%% to seed the synthesiser and do the other thousands of refactorings
+%% automatically.
 
 
 \subsection{Extract method}
