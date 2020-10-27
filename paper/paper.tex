@@ -505,6 +505,21 @@ For experimental evaluation:
   \item Think about the actual synthesis/equivalence checking process
 \end{itemize}
 
+Steps:
+- Seeding the library (from comments and unit tests)
+Sources of seeding:
+-- Comments in the library
+-- Unit tests for the updated library
+-- Other github projects that have been already ported
+- Performing the synthesis. Complex bit: synthesising method invocations for methods that contain loops.
+
+Research questions:
+- What do we seed with?
+- What if the new method doesn't maintain observational equivalence?
+TODO: Check existing projects to see how many do preserve equivalence.
+For the rest, is there a notion of partial equivalence that ensures the equivalence
+for the new projects minus the differences introduced by the new function.
+
 %% Possible follow-up:
 %% - if we have a sizeable codebase, the user might have to do 1,2 deprecated
 %% refactorings and then the synthesisers can use the PRs done by the user

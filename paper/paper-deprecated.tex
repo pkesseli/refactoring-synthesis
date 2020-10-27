@@ -1,0 +1,565 @@
+%-----------------------------------------------------------------------------
+%               Template for OOPSLA
+%               based on:
+%               Template for sigplanconf LaTeX Class
+%
+% Name:         sigplanconf-template.tex
+%
+% Purpose:      A template for sigplanconf.cls, which is a LaTeX 2e class
+%               file for SIGPLAN conference proceedings.
+%
+% Guide:        Refer to "Author's Guide to the ACM SIGPLAN Class,"
+%               sigplanconf-guide.pdf
+%
+% Author:       Paul C. Anagnostopoulos
+%               Windfall Software
+%               978 371-2316
+%               paul@windfall.com
+%
+% Created:      15 February 2005
+%
+%-----------------------------------------------------------------------------
+\documentclass[runningheads,a4paper]{llncs}
+%\documentclass[sigconf,authordraft]{acmart}
+%\acmConference[ESEC/FSE 2017]{11th Joint Meeting of the European Software Engineering Conference and the ACM SIGSOFT Symposium on the Foundations of Software Engineering}{4--8 September, 2017}{Paderborn, Germany}
+%\documentclass[10pt,numbers]{sigplanconf}
+%\usepackage[1stsubmission]{oopsla2016}
+%\usepackage[2ndsubmission]{oopsla2016}
+
+%\usepackage[scaled]{helvet} % see www.ctan.org/get/macros/latex/required/psnfss/psnfss2e.pdf
+
+\usepackage{microtype}
+\usepackage{url}                  % format URLs
+\usepackage{listings}          % format code
+\lstset{
+  mathescape, 
+  language={Java},
+  basicstyle=\footnotesize
+}
+\usepackage{enumitem}      % adjust spacing in enums
+%\usepackage[colorlinks=true,allcolors=blue,breaklinks,draft=false]{hyperref}   % hyperlinks, including DOIs and URLs in bibliography
+% known bug: http://tex.stackexchange.com/questions/1522/pdfendlink-ended-up-in-different-nesting-level-than-pdfstartlink
+
+\usepackage{graphicx}
+\usepackage{float,subfig}
+\usepackage{xspace,framed}
+\usepackage{colortbl}
+\usepackage{calc}
+ 
+\usepackage{algorithm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage[justification=centering]{caption}
+\usepackage{stmaryrd}
+\usetikzlibrary{positioning, arrows, automata, shapes}
+\usepackage{hhline}
+\usepackage{pifont}
+\usepackage{cite}
+\usepackage{pdflscape} % Experiments table is landscape
+\usepackage{longtable}
+\usepackage{afterpage}
+\usepackage{wasysym}
+
+\usepackage[justification=centering]{caption}
+\input{macros}
+
+%\setlength{\belowcaptionskip}{-10pt}
+\setlength{\textfloatsep}{1em}
+\setlength{\dbltextfloatsep}{1em}
+\setlength{\abovecaptionskip}{0.1em}
+% \floatsep: space left between floats (12.0pt plus 2.0pt minus 2.0pt).
+% \textfloatsep: space between last top float or first bottom float and the text (20.0pt plus 2.0pt minus 4.0pt).
+% \intextsep : space left on top and bottom of an in-text float (12.0pt plus 2.0pt minus 2.0pt).
+% \dbltextfloatsep is \textfloatsep for 2 column output (20.0pt plus 2.0pt minus 4.0pt).
+% \dblfloatsep is \floatsep for 2 column output (12.0pt plus 2.0pt minus 2.0pt).
+% \abovecaptionskip: space above caption (10.0pt).
+% \belowcaptionskip: space below caption (0.0pt).
+
+\allowdisplaybreaks
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% uncomment for extended version 
+\newcommand*{\extended}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% The following oopsla2016 options are available:
+%
+% 1stsubmission   For the initial submission
+% 2ndsubmission   For the 2nd submission
+% final           For camera-ready
+
+\begin{document}
+
+%\copyrightdata{978-1-nnnn-nnnn-n/yy/mm} 
+%\doi{nnnnnnn.nnnnnnn}
+
+% Uncomment one of the following two, if you are not going for the 
+% traditional copyright transfer agreement.
+
+%\exclusivelicense                % ACM gets exclusive license to publish, 
+                                  % you retain copyright
+
+%\permissiontopublish             % ACM gets nonexclusive license to publish
+                                  % (paid open-access papers, 
+                                  % short abstracts)
+
+\title{Deprecated elimination with program synthesis}
+%\subtitle{Subtitle Text, if any}
+% double-blind submission
+% single-blind only for Technical Research: http://icse2017.gatech.edu/technical-research-cfp
+ % \authorinfo{Cristina David}
+ %            {University of Oxford}
+ %            {cristina.david@cs.ox.ac.uk}
+ % \authorinfo{Pascal Kesseli}
+ %            {University of Oxford}
+ %            {pascal.kesseli@cs.ox.ac.uk}
+ % \authorinfo{Daniel Kroening}
+ %            {University of Oxford}
+ %            {kroening@cs.ox.ac.uk}
+
+\author{
+\mbox{Cristina David}\inst{1} \and
+Pascal Kesseli\inst{2} \and
+Daniel Kroening\inst{2}}
+
+\institute{University of Bristol, UK 
+\and
+  University of Oxford, UK}
+
+%% \author{Cristina David}
+%% \affiliation{University of Oxford}
+%% \email{cristina.david@cs.ox.ac.uk}
+
+%% \author{Pascal Kesseli}
+%% \affiliation{University of Oxford}
+%% \email{pascal.kesseli@cs.ox.ac.uk}
+
+%% \author{Daniel Kroening}
+%% \affiliation{University of Oxford}
+%% \email{kroening@cs.ox.ac.uk}
+
+\maketitle
+
+\begin{abstract}
+%
+  Refactorings are structured changes to existing software that leave its
+  externally observable behaviour unchanged.  Their intent is to improve
+  readability, performance or other non-behavioural properties. 
+  State-of-the-art automatic refactoring tools are {\em syntax}-driven and,
+  therefore, overly conservative.  In this paper we explore {\em
+  semantics}-driven refactoring, which enables much more sophisticated
+  refactoring schemata.  As~an exemplar of this broader idea, we present
+  an automatic refactoring tool that replaces uses of deprecated legacy APIs/libraries
+  with the latest ones.
+  Our refactoring procedure performs
+  semantic reasoning and search in the space of possible refactorings using
+  automated program synthesis.  Our experimental results support the
+  conjecture that semantics-driven refactorings are more precise and are
+  able to rewrite more complex code scenarios when compared to syntax-driven
+  refactorings.
+%
+\end{abstract}
+
+%\keywords{program refactoring, program synthesis, program verification}
+
+%\category{CR-number}{subcategory}{third-level}
+
+% general terms are not compulsory anymore, 
+% you may leave them out
+%\terms
+%term1, term2
+
+%% \keywords
+%% Maintenance and reuse
+
+
+
+\section{Introduction}
+
+\subsection{Deprecated example}
+
+The {\em Deprecated} annotation in Java is used to mark program elements which
+programmers are discouraged from using for various reasons such as future API
+changes or security problems in the method. Usually API designers provide
+programmers with recommendations about what they should use instead. However,
+transformation of existing code to the recommended format is not always
+straightforward, as illustrated in Fig.~\ref{ex:deprecated-method}. In the
+example, the deprecated {\em Date} constructor should be replaced by use of the
+{\em Calendar} class. However, the {\em Date} constructor expects its year
+parameter to be an offset from 1900, i.e. the year 2020 is expressed as 120.
+This needs to be transformed to 2020 when using {\em Calendar} API, as shown in
+the example.
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+void main(String[] args) {
+  ByteArrayOutputStream bos = ...;
+  // Deprecated:
+  Date date = new Date(120, 12, 30);
+
+  // Should have been:
+  final Calendar calendar = Calendar.getInstance();
+  calendar.set(2020, 12, 30);
+  final Date date = calendar.getTime();
+
+  // Or:
+  final Date date = new GregorianCalendar(2020, 12, 30)
+                      .getTime();
+}
+\end{lstlisting}
+\caption{Deprecated method example.}
+\label{ex:deprecated-method}
+\end{figure}
+
+While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to recognise the
+use of deprecated APIs and warn the programmer about it, refactoring the code to
+a preferred API is significantly more complex. Indeed neither Eclipse 4.15.0 nor
+IntelliJ IDEA 2020.2.2 make any attempt to suggest a better alternative to the
+user.
+
+\todo{ limit size and statements used in
+synthesised programs.}
+
+\subsection{From the previous introduction:}
+Refactorings are structured changes to existing software which leave its
+externally observable behaviour unchanged.  They improve non-functional
+properties of the program code, such as testability, maintainability and
+extensibility while retaining the semantics of the program.  Ultimately,
+refactorings can improve the design of code, help finding bugs as well
+as increase development speed and are therefore seen as an integral part
+of agile software engineering processes~\cite{DBLP:conf/xpu/Kerievsky04b,
+Fowler1999}.
+
+However, manual refactorings are a costly, time-intensive, and not least
+error-prone process.  This has motivated work on automating specific
+refactorings, which promises safe application to large code bases at low
+cost.  We differentiate in this context between {\em syntax-driven} and {\em
+semantics-driven} refactorings.  While the former address structural changes
+to the program requiring only limited information about a program's
+semantics, the latter require detailed understanding of the program
+semantics in order to be applied soundly.  An example of a refactoring that
+requires a semantics-driven approach is {\em Substitute Algorithm}, where an
+algorithm is replaced by a clearer, but equivalent
+version~\cite{Fowler1999}.
+%
+%AST-based constraints 
+%
+A syntax-driven approach is insufficient to perform such substantial
+transformations.  Figure~\ref{ex:syntax-limits} illustrates this using an
+example: Both loops in the code implement the same behaviour.  In order to
+recognise this and apply {\em Substitute Algorithm}, pattern-based
+approaches need explicit patterns for vastly different syntaxes implementing
+the same semantics, which is infeasible for practical applications.
+
+%% \todo{I've removed the reference to Move Field as it's a bit controversial given that
+%% Steinmann uses it to explain that purely syntactic approaches are not enough.}
+
+Notably, the limitations of syntax-driven refactorings have been observed
+in several works, resulting in an emerging trend to incorporate more {\em semantic}
+information into refactoring decisions, such as Abstract Syntax Tree (AST) 
+type information,
+further preventing compilation errors and behaviour changes
+\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
+%% use constraints involving the abstract syntax tree type 
+%% information in order to handle the {\em Move Field} (when a field
+%% is used by another class more than the class on which it is defined)
+%% of syntax-driven, e.g.  
+%% An example 
+%% of a refactoring that is well handled by the syntax-driven approach 
+%% implemented using constraints over the program's abstract syntax tree
+%% There is an emerging trend to incorporate more {\em semantic}
+%% information into refactoring decisions, such as AST type information,
+%% further preventing compilation errors and behaviour changes
+%% \cite{Steimann2011}.
+
+
+In this paper, we take a step further in this direction by proposing a
+fully semantic refactoring approach.  There is a very broad space of
+methods that are able to reason about program semantics.  The desire
+to perform refactorings safely suggests the use of techniques that
+overapproximate program behaviours.  As~one possible embodiment of
+semantics-driven refactoring, we leverage software verification
+technologies with the goal of reliably automating refactoring
+decisions based on program semantics, as in the case of the {\em
+  Substitute Algorithm} refactoring. Our research hypothesis is that
+semantics-driven refactorings are more precise and can handle more
+complex code scenarios in comparison with syntax-driven refactorings.
+
+
+
+\paragraph{Demonstrator: Deprecated}
+
+We use a particular refactoring as demonstrator for our idea.
+
+\paragraph{Goal of the paper} 
+%% In this paper, we are interested in refactoring Java code handing
+%% collections through external iteration to use streams. Our refactoring
+%% procedure is based on the program semantics and makes use of program
+%% synthesis.
+
+\paragraph{Contributions:}
+
+\begin{itemize}
+\item Use a semantics based approach to eliminate uses of deprecated APIs.
+  
+\item Encode the refactoring problem as a program verification problem that can be solved
+  by fuzzing.
+  
+\end{itemize}  
+
+%
+%% \begin{itemize}
+%% %
+%% \item We present a program synthesis based refactoring procedure for Java
+%% code that handles collections through external loop iteration.
+%% %
+%% \item We have implemented our refactoring method in the tool \tool. Our
+%% experimental results support our conjecture that semantics-driven
+%% refactorings are more precise and can handle more complex code scenarios
+%% than syntax-driven refactorings.
+%% %
+%% \end{itemize}
+
+
+
+\section{Overview of our approach} \label{sec:approach}
+
+
+
+The synthesis process for refactoring deprecated instances (e.g. fields, methods, classes) proceeds as follows:
+\begin{itemize}
+\item Seed the synthesis library.
+\item Encode the synthesis problem as a verification problem that can be solved by fuzzing.
+\end{itemize}
+  
+Sources for seeding:
+\begin{itemize}
+\item Comments in the library.
+\item Unit tests for the updated library (as opposed to the comments in libraries,
+  the unit tests are syntactically valid).
+\item Other github projects that have already been ported.
+\end{itemize}  
+
+
+\subsection{Problem encoding}
+We encode the refactoring problem as a verification problem that can be solved by
+fuzzing. We next describe the verification and synthesis phases in a CEGIS module,
+where \texttt{Orig} and \texttt{Refactor} denote the original and refactored code,
+respectively.
+
+\paragraph{The verification phase} We construct the following program, where the input
+\texttt{x} is used to test that the original and refactored programs return
+the same output:
+
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+Verify(x) {
+
+assert(Orig(x) == Refactor(x));
+
+}
+\end{lstlisting}
+
+The fuzzer will find an input for which the original and refactored code
+produce a different result.
+
+\paragraph{The synthesis phase} We construct the following program, which
+takes the refactored code \texttt{Refactor} as input.
+
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+Synthesise (Refactor) {
+
+if (Orig(x1)=Refactor(x1) && ... && Orig(xn)=Refactor(xn))
+   assert(false);
+}
+\end{lstlisting}
+
+The fuzzer will find an input \texttt{Refactor} that fails the assertion,
+meaning that it returns the same output as \texttt{Orig}
+on the finite set of inputs \texttt{$x_1, \cdots, x_n$}.
+
+
+%% - Performing the synthesis. Complex bit: synthesising method invocations for methods that contain loops.
+
+%% \begin{enumerate}
+%% \item We seed the templates/snippets for the synthesis library using the following two strategies:
+%%   \begin{itemize}
+%% \item Use deprecated block messages.
+%% \item Use the unit tests for the new library. As opposed to the comments in libraries,
+%%   the unit tests are syntactically valid.
+%%   \end{itemize}
+
+%% \item Use the seeded templates to generate the refactoring.
+%%   \begin{itemize}
+%% \item Look at checking equivalence in the presence of loops.
+%%   \end{itemize}
+%%   \end{enumerate}
+
+\subsection{Research questions}
+
+What if the new method doesn't maintain observational equivalence?
+TODO: Check existing projects to see how many do preserve equivalence.
+For the rest, is there a notion of partial equivalence that ensures the equivalence
+for the new projects minus the differences introduced by the new function.
+
+How easy is for the fuzzer to handle such structured inputs as we need in the
+synthesis phase?
+
+
+\subsection{For the experimental evaluation}
+\begin{itemize}
+\item Pick libraries that have deprecated instances.
+\item Pick users of these libraries (i.e. open source projects that are actively maintained).
+\item Make pull requests and see how many get merged.
+\end{itemize}  
+
+
+
+%% Possible follow-up:
+%% - if we have a sizeable codebase, the user might have to do 1,2 deprecated
+%% refactorings and then the synthesisers can use the PRs done by the user
+%% to seed the synthesiser and do the other thousands of refactorings
+%% automatically.
+
+
+\section{Related Work}
+
+Related paper: in \cite{DBLP:conf/paste/Perkins05}, the authors
+replace calls to deprecated methods by their bodies.
+
+\paragraph{Program refactoring}
+
+Cheung et al.~describe a system that automatically transforms fragments of
+application logic into SQL queries~\cite{DBLP:conf/pldi/CheungSM13}. 
+Moreover, similar to our approach, the authors rely on synthesis technology
+to generate invariants and postconditions that validate their
+transformations (a~similar approach is presented
+in~\cite{DBLP:conf/cc/IuCZ10}).  The main difference (besides the actual
+goal of the work, which is different from ours) to our work is that the
+lists they operate on are immutable and do not support operations such as
+remove.  Capturing the potential side effects caused by such operations is
+one of our work's main challenges.
+
+Syntax-driven refactoring base program transformation decisions
+on observations on the program's syntax tree.  Visser
+presents a purely syntax-driven framework~\cite{stratego}.  The
+presented method is intended to be configurable for specific
+refactoring tasks, but cannot provide guarantees about semantics
+preservation.  The same holds for~\cite{txl} by Cordy et al.,
+\cite{sawin} by Sawin et al., \cite{bae} by Bae et al.~and
+\cite{chris} by Christopoulou et al.  In contrast to these approaches,
+our procedure constructs an equivalence proof before transforming the
+program. In \cite{conf/sigsoft/GyoriFDL13}, Gyori et al. present a
+similar refactoring to ours but performed in a syntax-driven manner.
+%
+Steimann et al.~present Constraint-Based Refactoring in \cite{Steimann2011},
+\cite{Steimann2012Pilgrim} and \cite{Steimann2011KollePilgrim}. Their approach
+generates explicit constraints over the program's abstract syntax tree to
+prevent compilation errors or behaviour changes by automated refactorings.
+% This gives rise to a flexible framework of customisable refactorings,
+% implementable through a refactoring constraint specification language
+% (cf. \cite{Steimann2011KollePilgrim}).
+The approach is limited by the information
+a program's AST provides and thus favours conservative implementations of
+syntax-focused refactorings such as \emph{Pull Up Field}.
+%
+Fuhrer et al.~implement a type constraint system to introduce missing type
+parameters in uses of generic classes (cf. \cite{DBLP:conf/ecoop/FuhrerTKDK05})
+and to introduce generic type parameters into classes which do not provide
+a generic interfaces despite being used in multiple type contexts
+(cf. \cite{DBLP:conf/icse/KiezunETF07}).
+%
+% Raychev et al.~present a semi-automatic approach where users perform
+% incomplete refactorings manually and then employ a constraint solver
+% to find a sequence of default refactorings such as move or rename
+% which include the users' changes. The engine is limited to syntactic
+% matching with the users' partial changes and does not consider program
+% semantics~\cite{DBLP:conf/oopsla/RaychevSSV13}.
+%
+% Weissgerber and Diehl rely on meta information to classify changes
+% between software versions as refactorings~\cite{weiss}.  The technique
+% aims to identify past refactorings performed by programmers, but is
+% not a decision procedure for automated refactorings.
+%
+O'Keffe and Cinn{\'{e}}ide present search-based
+refactoring~\cite{search1, search2}, which is similar to syntax-driven
+refactoring.  They rephrase refactoring as an optimisation problem,
+using code metrics as fitness measure.  As such, the method optimises
+syntactical constraints and does not take program semantics into
+account.
+%
+% Bavota et al. implement refactoring decisions in \cite{Bavota:2011:IEC}
+% using semantic information limited to identifiers and comments,
+% which may differ from the actual semantics (e.g. due to bugs).
+%
+Kataoka et al. interpret program semantics to apply refactorings
+\cite{Kataoka:2001:ASP:846228.848644}, but use dynamic test execution
+rather than formal verification, and hence their transformation lacks
+soundness guarantees.
+%
+Franklin et al. implement a pattern-based refactoring approach
+transforming statements to stream queries~\cite{Gyori:2013:CGI:2491411.2491461}.
+Their tool LambdaFicator~\cite{DBLP:conf/icse/FranklinGLD04} is available as a
+NetBeans branch. We compared \tool against it in our experimental evaluation
+in Sec.~\ref{experiments-results}.
+%
+%% \paragraph{Heap Logics}
+%
+%% While many decidable heap logics have been developed recently, none are
+%% expressive enough to capture operations allowed by the Java Collection
+%% interface, operations allowed by the Java Stream interface as well as
+%% equality between collections (for lists this implies that we must be able to
+%% reason about both content of lists and the order of
+%% elements)~\cite{DBLP:conf/cav/ItzhakyBINS13, DBLP:conf/cav/PiskacWZ13,
+%% DBLP:conf/esop/BrainDKS14, DBLP:conf/popl/MadhusudanPQ11,
+%% DBLP:conf/atva/BouajjaniDES12, DBLP:conf/lpar/DavidKL15}.  On the other
+%% hand, very expressive transitive closure
+%% logics~\cite{DBLP:conf/csl/ImmermanRRSY04} are not concise and easily
+%% translatable to stream code.
+
+\paragraph{Program synthesis}
+
+An approach to program synthesis very similar to ours is Syntax Guided
+Synthesis (SyGuS)~\cite{sygus}.  SyGuS synthesisers supplement the logical
+specification with a syntactic template that constrains the space of allowed
+implementations.  Thus, each semantic specification is accompanied by a
+syntactic specification in the form of a grammar.  Other second-order
+solvers are introduced in~\cite{DBLP:conf/pldi/GrebenshchikovLPR12,
+DBLP:conf/cav/BeyenePR13}.  As opposed to ours, these focus on
+Horn clauses.
+
+\section{Conclusion}
+
+We conjecture that refactorings driven by the semantics of programs have
+broader applicability and are able to address more complex refactoring
+schemata in comparison to conventional syntax-driven refactorings, thereby
+increasing the benefits of automated refactoring.  The space of possible
+semantic refactoring methods is enormous; as an instance, we have presented
+a method for refactoring iteration over Java collection classes based on
+program synthesis methods.  Our experiments indicate that refactoring using
+this specific instance is feasible, sound and sufficiently performant. 
+Future research must broaden the evidence for our general hypothesis by
+considering other programming languages, further, ideally more complex
+refactoring schemata, and other semantics-based analysis techniques.
+
+%\acks
+
+% We recommend abbrvnat bibliography style.
+
+\bibliographystyle{abbrv}
+\bibliography{document}{}
+
+
+
+\end{document}
+
+%                       Revision History
+%                       -------- -------
+%  Date         Person  Ver.    Change
+%  ----         ------  ----    ------
+
+%  2013.06.29   TU      0.1--4  comments on permission/copyright notices
+
