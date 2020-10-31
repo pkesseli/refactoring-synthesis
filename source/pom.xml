@@ -9,14 +9,15 @@
 
   <modules>
     <module>benchmarks</module>
+    <module>fuzzer-experiments</module>
     <module>parser</module>
     <module>rewrite</module>
     <module>solver</module>
   </modules>
 
   <properties>
-    <maven.compiler.source>14</maven.compiler.source>
-    <maven.compiler.target>14</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
   <build>
