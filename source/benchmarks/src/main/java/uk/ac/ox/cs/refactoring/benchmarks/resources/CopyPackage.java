@@ -125,7 +125,7 @@ public class CopyPackage
 
     final String resourceName = annotation.value().replace('.', '/');
     final ClassGraph classGraph = new ClassGraph();
-    classGraph.whitelistPaths(resourceName);
+    classGraph.acceptPaths(resourceName);
     try(final ScanResult scanResult = classGraph.scan();
         final ResourceList resources = scanResult.getAllResources()) {
       return copyDirectory(directory, resourceName, resources);
