@@ -443,7 +443,6 @@ the example.
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 void main(String[] args) {
-  ByteArrayOutputStream bos = ...;
   // Deprecated:
   Date date = new Date(120, 12, 30);
 
@@ -582,6 +581,67 @@ won't a method
 TextGraphics graphics)} be preferred in that case?
 
 \todo{Pascal: Describe Eclipse features}
+
+\section{Implementation}
+
+\subsection{Instrumentation}
+
+The goal of our instrumentation is to execute a program candidate in
+the same context as the original, deprecated method. The original
+method can affect the program state by virtue of its return value,
+field assignments in the case of instance methods, and static field
+assignments. In order to account for these effects, our
+instrumentation passes a reference to the original method's object
+instance, if present, as an argument to the program candidate.
+An example of this is presented in
+Fig.~\ref{ex:side-effects-instrumentation}.
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+// Redundant snippet:
+Date today;
+Date tomorrow;
+  
+void init(int year, int month, int day) {
+  // Original:
+  this.setDates(year, month, day);
+
+  // Instrumented:
+  Program.of(0xabcd).execute(year, month, day, this);
+}
+  
+@Deprecated
+private void setDates(int year, int month, int day) {
+  final Calendar calendar = Calendar.getInstance();
+  calendar.set(year, month, day);
+  this.today = calendar.getTime();
+  calendar.add(Calendar.DAY_OF_MONTH, 1);
+  this.tomorrow = calendar.getTime();
+}
+\end{lstlisting}
+\caption{Deprecated side-effects instrumentation.}
+\label{ex:side-effects-instrumentation}
+\end{figure}
+
+Fig.~\ref{ex:date-instrumentation} illustrates an example where no
+such relevant instance object exists and thus only the original
+arguments are passed as arguments into the program candidate.
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+// Redundant snippet:
+static void main(String[] args) {
+  // Original:
+  Date date = new Date(120, 12, 30);
+
+  // Instrumented:
+  Date date = Program.of(0xabcd).execute(120, 12, 30);
+}
+\end{lstlisting}
+\caption{Deprecated `Date' instrumentation.}
+\label{ex:date-instrumentation}
+\end{figure}
+
 
 \subsection{Challenges}
 \todo{Parameterisation, side-effects}
