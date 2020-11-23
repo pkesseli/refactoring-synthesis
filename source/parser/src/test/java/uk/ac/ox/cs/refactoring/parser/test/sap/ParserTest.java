@@ -19,17 +19,12 @@ import uk.ac.ox.cs.refactoring.benchmarks.resources.CopyPackage;
 public class ParserTest {
   @Test
   public void testParseCompilationUnit(
-      @Benchmark("uk.ac.ox.cs.refactoring.benchmarks.stream.collect") final Path benchmark)
-      throws IOException {
+      @Benchmark("uk.ac.ox.cs.refactoring.benchmarks.stream.collect") final Path benchmark) throws IOException {
     final SourceRoot source = new SourceRoot(benchmark);
     source.tryToParse();
     final List<CompilationUnit> compilationUnits = source.getCompilationUnits();
     assertEquals(2, compilationUnits.size());
-    assertEquals("Original",
-        compilationUnits.get(0).getType(0).getName().toString());
-    assertEquals("Refactored",
-        compilationUnits.get(1).getType(0).getName().toString());
-
-    System.err.println(null + "asdf");
+    assertEquals("Original", compilationUnits.get(0).getType(0).getName().toString());
+    assertEquals("Refactored", compilationUnits.get(1).getType(0).getName().toString());
   }
 }
