@@ -14,8 +14,11 @@ import edu.berkeley.cs.jqf.fuzz.JQF;
 
 @RunWith(JQF.class)
 public class StringTest {
+  private static final boolean isEnabled = Boolean.getBoolean("enableFuzzerExperiments");
+
   @Fuzz
   public void strings(@From(StringGenerator.class) String value) {
+    assumeTrue(isEnabled);
     assumeTrue(value.length() > 3);
 
     assertThat(value, not(containsString("a")));
