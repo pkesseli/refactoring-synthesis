@@ -12,6 +12,7 @@
     <module>instrument</module>
     <module>parser</module>
     <module>rewrite</module>
+    <module>synthesis</module>
   </modules>
 
   <properties>
