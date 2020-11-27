@@ -416,13 +416,141 @@ synthesis phase?
 \item Make pull requests and see how many get merged.
 \end{itemize}  
 
+\section{Context-sensitive vs. context-insensitive refactoring}
 
+\paragraph{Context-insensitive refactoring}
+We consider different refactoring options. The first and most simple
+one is the so called ``context-insensitive'' refactoring, where we
+find a refactoring for the deprecated code that works irespective of
+context. This means that, once such a refactoring is found, it can be
+used to replace all the uses of the deprecated code, e.g. a deprecated
+method invocation will be replaced with the same refactored code
+irespective of the actual parameters or rest of the state at the call
+site.
+
+For instance, if we want to refactor the call to method
+\texttt{toRefactor} in the code below, then we search for a refactoring that is
+observationally equivalent to the given method irrespective of the
+context of the call.
+
+\begin{lstlisting}[mathescape=true]
+class NoContext {
+  int x;
+
+  public double toRefactor(int y, int z) {
+    return (double) x + y + z;
+  }
+}
+\end{lstlisting}
+ 
+This means that the state that we can vary in order to check for
+observational equivalence includes \texttt{x, y} and \texttt{z}.
+
+\paragraph{Context-sensitive refactoring}
+The other option is to find a refactoring that takes into consideration
+the calling context. For instance, in the code below we have two
+calls to \texttt{toRefactor}, one in method \texttt{foo} and one in
+method \texttt{bar}. When considering the calling context, we have to
+find two different refactorings, one for each of the method calls.
+For the call in \texttt{foo}, the state that we need to consider for observational
+equivalence contains \texttt{ctx} and \texttt{a}, whereas for the call in method
+\texttt{bar} it contains \texttt{ctx, a, b, c, d} and \texttt{e}.
+
+\begin{lstlisting}[mathescape=true]
+  class Context1 {
+    NoContext ctx = new NoContext();
+
+    public double foo(int a) {
+      return ctx.toRefactor(a, a);
+    }
+  }
+
+ 
+
+  class Context2 {
+    NoContext ctx = new NoContext();
+
+    int d;
+    int e;
+
+    public double bar(int a, int b, int c) {
+      return ctx.toRefactor(a, b + c + d + e);
+    }
+  }
+\end{lstlisting}
+
+
+%% Fuzzing:
+
+%% someNoContext.x = x_*;
+
+%% someNoContext.toRefactor(y_*, z_*);
 
 %% Possible follow-up:
 %% - if we have a sizeable codebase, the user might have to do 1,2 deprecated
 %% refactorings and then the synthesisers can use the PRs done by the user
 %% to seed the synthesiser and do the other thousands of refactorings
 %% automatically.
+
+\section{Implementation}
+
+\subsection{Instrumentation}
+
+The goal of our instrumentation is to execute a program candidate in
+the same context as the original, deprecated method. The original
+method can affect the program state by virtue of its return value,
+field assignments in the case of instance methods, and static field
+assignments. In order to account for these effects, our
+instrumentation passes a reference to the original method's object
+instance, if present, as an argument to the program candidate.
+An example of this is presented in
+Fig.~\ref{ex:side-effects-instrumentation}.
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+// Redundant snippet:
+Date today;
+Date tomorrow;
+  
+void init(int year, int month, int day) {
+  // Original:
+  this.setDates(year, month, day);
+
+  // Instrumented:
+  Program.of(0xabcd).execute(year, month, day, this);
+}
+  
+@Deprecated
+private void setDates(int year, int month, int day) {
+  final Calendar calendar = Calendar.getInstance();
+  calendar.set(year, month, day);
+  this.today = calendar.getTime();
+  calendar.add(Calendar.DAY_OF_MONTH, 1);
+  this.tomorrow = calendar.getTime();
+}
+\end{lstlisting}
+\caption{Deprecated side-effects instrumentation.}
+\label{ex:side-effects-instrumentation}
+\end{figure}
+
+Fig.~\ref{ex:date-instrumentation} illustrates an example where no
+such relevant instance object exists and thus only the original
+arguments are passed as arguments into the program candidate.
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+// Redundant snippet:
+static void main(String[] args) {
+  // Original:
+  Date date = new Date(120, 12, 30);
+
+  // Instrumented:
+  Date date = Program.of(0xabcd).execute(120, 12, 30);
+}
+\end{lstlisting}
+\caption{Deprecated `Date' instrumentation.}
+\label{ex:date-instrumentation}
+\end{figure}
 
 
 \section{Related Work}
