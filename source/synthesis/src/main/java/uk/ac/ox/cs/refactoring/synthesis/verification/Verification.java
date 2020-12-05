@@ -2,8 +2,8 @@ package uk.ac.ox.cs.refactoring.synthesis.verification;
 
 import java.util.Set;
 
-import uk.ac.ox.cs.refactoring.synthesis.entity.Candidate;
-import uk.ac.ox.cs.refactoring.synthesis.entity.Counterexample;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.Candidate;
+import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 
 /**
  * 
