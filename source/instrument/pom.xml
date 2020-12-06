@@ -11,8 +11,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
+      <groupId>uk.ac.ox.cs.refactoring</groupId>
+      <artifactId>classloader</artifactId>
     </dependency>
     <dependency>
       <groupId>org.javassist</groupId>

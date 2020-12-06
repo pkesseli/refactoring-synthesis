@@ -8,6 +8,7 @@
 
   <modules>
     <module>benchmarks</module>
+    <module>classloader</module>
     <module>fuzzer-experiments</module>
     <module>instrument</module>
     <module>parser</module>
@@ -39,14 +40,20 @@
     <dependencies>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>parser</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
         <artifactId>benchmarks</artifactId>
         <version>${project.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>classloader</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>parser</artifactId>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>

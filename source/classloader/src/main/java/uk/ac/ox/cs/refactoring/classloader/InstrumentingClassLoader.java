@@ -1,4 +1,4 @@
-package uk.ac.ox.cs.refactoring.instrument.classloader;
+package uk.ac.ox.cs.refactoring.classloader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +15,10 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Decorates a wrapped {@link ClassLoader}, applying a
- * {@link ClassFileTransformer} to every class loaded.
+ * {@link ClassFileTransformer} to every class loaded. No classes will be loaded
+ * by the wrapped class loader directly, which means different instances of this
+ * class are isolated from each other with respect to the classes provided by
+ * their respective wrapped {@link ClassLoader}s.
  */
 public class InstrumentingClassLoader extends SecureClassLoader {
   /**

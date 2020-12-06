@@ -15,7 +15,7 @@ import javassist.CtMethod;
 import uk.ac.ox.cs.refactoring.instrument.benchmark.replace.Candidate;
 import uk.ac.ox.cs.refactoring.instrument.benchmark.replace.Original;
 import uk.ac.ox.cs.refactoring.instrument.benchmark.replace.ToRefactor;
-import uk.ac.ox.cs.refactoring.instrument.classloader.InstrumentingClassLoader;
+import uk.ac.ox.cs.refactoring.classloader.InstrumentingClassLoader;
 
 public class ReplaceMethodInvocationTransformerTest {
   @Test
