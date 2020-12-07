@@ -8,6 +8,14 @@ public final class ClassLoaders {
   }
 
   /**
+   * Equivalent to calling {@link #createIsolated(ClassLoader)} using the class
+   * loader which loaded {@link ClassLoaders}.
+   */
+  public static ClassLoader createIsolated() {
+    return createIsolated(ClassLoaders.class.getClassLoader());
+  }
+
+  /**
    * Creates an isolated version of the given {@link ClassLoader}. No classes are
    * loaded on the given class loder itself, and all classes which would normally
    * be provided by the given class loader are instead provided by the create one.

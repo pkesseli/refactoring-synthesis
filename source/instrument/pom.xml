@@ -11,12 +11,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>uk.ac.ox.cs.refactoring</groupId>
-      <artifactId>classloader</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>uk.ac.ox.cs.refactoring</groupId>
+      <artifactId>classloader</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

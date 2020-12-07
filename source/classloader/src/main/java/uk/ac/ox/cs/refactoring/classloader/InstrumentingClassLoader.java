@@ -22,11 +22,6 @@ import org.apache.commons.io.IOUtils;
  */
 public class InstrumentingClassLoader extends SecureClassLoader {
   /**
-   * Separator character for packages and classes in Java.
-   */
-  private static final char PACKAGE_SEPARATOR = '.';
-
-  /**
    * {@link ClassFileTransformer} to apply to all loaded classes.
    */
   private final ClassFileTransformer transformer;
@@ -53,7 +48,7 @@ public class InstrumentingClassLoader extends SecureClassLoader {
    * @return Expected class file name from which the respective class can be read.
    */
   private static String getClassFileName(final String name) {
-    return name.replace(PACKAGE_SEPARATOR, '/').concat(".class");
+    return name.replace(JavaLanguage.PACKAGE_SEPARATOR, JavaLanguage.RESOURCE_SEPARATOR).concat(".class");
   }
 
   /**
@@ -63,7 +58,7 @@ public class InstrumentingClassLoader extends SecureClassLoader {
    * @return Fully qualified package name of the given class.
    */
   private static String getPackageName(final String className) {
-    final int index = className.lastIndexOf(PACKAGE_SEPARATOR);
+    final int index = className.lastIndexOf(JavaLanguage.PACKAGE_SEPARATOR);
     if (index == -1) {
       return "";
     }
