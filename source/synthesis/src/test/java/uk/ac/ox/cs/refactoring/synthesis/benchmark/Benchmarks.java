@@ -10,6 +10,8 @@ public final class Benchmarks {
 
   public static final String INTEGER_WRAPPER = getFullyQualifiedBenchmarkName("IntegerWrapper");
 
+  public static final String SUM = getFullyQualifiedBenchmarkName("Sum");
+
   private static String getFullyQualifiedBenchmarkName(final String name) {
     return Benchmarks.class.getPackageName() + JavaLanguage.PACKAGE_SEPARATOR + name;
   }
