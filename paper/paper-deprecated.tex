@@ -304,7 +304,12 @@ We use a particular refactoring as demonstrator for our idea.
 \paragraph{Contributions:}
 
 \begin{itemize}
+
 \item Use a semantics based approach to eliminate uses of deprecated APIs.
+
+\item Introduce the concept of refactoring context. This allows us to start
+  with no context and gradually increase the amount of context we take into consideration
+  until we find a desirable refactoring.
   
 \item Encode the refactoring problem as a program verification problem that can be solved
   by fuzzing.
@@ -421,11 +426,11 @@ synthesis phase?
 \paragraph{Context-insensitive refactoring}
 We consider different refactoring options. The first and most simple
 one is the so called ``context-insensitive'' refactoring, where we
-find a refactoring for the deprecated code that works irespective of
+find a refactoring for the deprecated code that works irrespective of
 context. This means that, once such a refactoring is found, it can be
 used to replace all the uses of the deprecated code, e.g. a deprecated
 method invocation will be replaced with the same refactored code
-irespective of the actual parameters or rest of the state at the call
+irrespective of the actual parameters or rest of the state at the call
 site.
 
 For instance, if we want to refactor the call to method
@@ -447,6 +452,11 @@ This means that the state that we can vary in order to check for
 observational equivalence includes \texttt{x, y} and \texttt{z}.
 
 \paragraph{Context-sensitive refactoring}
+We now look at the possibility of considering the refactoring context
+when searching for a refactoring. This gives us the option of starting
+with very little context and gradually increasing it until finding a
+refactoring. \todo{Adjust this based on what the experiments do.}
+
 The other option is to find a refactoring that takes into consideration
 the calling context. For instance, in the code below we have two
 calls to \texttt{toRefactor}, one in method \texttt{foo} and one in
@@ -557,6 +567,13 @@ static void main(String[] args) {
 
 Related paper: in \cite{DBLP:conf/paste/Perkins05}, the authors
 replace calls to deprecated methods by their bodies.
+
+Often, genetic improvement
+\cite{DBLP:journals/dagstuhl-reports/PetkeGFL18} is used for the
+purpose of code refactoring. Due to the manner in which such works measure
+the fitness of potential refactorings, genetic improvement cannot vary
+the refactoring context.  Conversely, our technique allows varying this
+context until a refactoring is being found.
 
 \paragraph{Program refactoring}
 
