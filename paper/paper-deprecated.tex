@@ -350,7 +350,7 @@ Sources for seeding:
 \end{itemize}  
 
 
-\subsection{Problem encoding}
+\subsection{Problem encoding}\label{sec:encoding}
 We encode the refactoring problem as a verification problem that can be solved by
 fuzzing. We next describe the verification and synthesis phases in a CEGIS module,
 where \texttt{Orig} and \texttt{Refactor} denote the original and refactored code,
@@ -402,6 +402,46 @@ on the finite set of inputs \texttt{$x_1, \cdots, x_n$}.
 %% \item Look at checking equivalence in the presence of loops.
 %%   \end{itemize}
 %%   \end{enumerate}
+
+\subsection{Checking program equivalence for a certain input}
+
+\paragraph{Checking heap equivalence}
+
+In Section~\ref{sec:encoding}, we simplified the property checked by
+the fuzzer to \texttt{Orig(x)=Refactor(x)}, which essentially tests
+whether, for input \texttt{x}, the outputs of the original and
+refactored programs are the same.  However, any realistic Java program
+makes modifications to the heap. Consequently, we need to check that
+heap is being handled in the same manner in both programs.
+
+Given the potential use of aliases, we will use a Hash table to
+associate a symbolic id to each pointer variable such that two
+variable share the same id if and only if they are aliases.
+%% Then, we can check whether the set of aliases is preserved in the
+%% refactored program. For instance, if \texttt{obj1} and \texttt{obj2}
+%% are aliases in the original program, then they must be aliases also
+%% in the second program.
+\todo{check exactly what this is used for.}
+
+\subsubsection{Loaded classes}
+
+One of the potential issues when checking equivalence of two program
+is the treatment of loaded classes. In particular, one program might
+load more classes than the other, but still have the exact same effect
+as the other one. This can happen for instance if one program calls a
+helper method from a class that needs to be loaded, whereas the other
+program inlines the same method, thus avoiding loading the class.  Our
+assumption is that loadeding and initialization don't perform any
+changes outside of the observable state already checked by the
+existing equivalence check.  While this assumption is generally safe
+to make, there might be some cases when this is not the case, e.g. the
+class initializer might print something on the screen. For now, we
+don't handle these cases.
+
+%% A class is initialized when a symbol in the class is first used. When
+%% a class is loaded it is not initialized.
+
+\todo{give example}
 
 \subsection{Research questions}
 
