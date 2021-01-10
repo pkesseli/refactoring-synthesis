@@ -30,7 +30,7 @@ public class InvokerTest {
 
     final Invoker invoker = new Invoker(Benchmarks.SUM, "max",
         Arrays.asList(Benchmarks.INTEGER_WRAPPER, Benchmarks.INTEGER_WRAPPER));
-    final int result = (int) invoker.invoke(classLoader, counterexample);
+    final int result = (int) invoker.invoke(classLoader, counterexample).Value;
     assertEquals(33, result);
   }
 }

@@ -9,7 +9,6 @@ import java.security.CodeSigner;
 import java.security.CodeSource;
 import java.security.PermissionCollection;
 import java.security.ProtectionDomain;
-import java.security.SecureClassLoader;
 
 import org.apache.commons.io.IOUtils;
 
@@ -20,7 +19,8 @@ import org.apache.commons.io.IOUtils;
  * class are isolated from each other with respect to the classes provided by
  * their respective wrapped {@link ClassLoader}s.
  */
-public class InstrumentingClassLoader extends SecureClassLoader {
+public class InstrumentingClassLoader extends IsolatedClassLoader {
+
   /**
    * {@link ClassFileTransformer} to apply to all loaded classes.
    */
@@ -90,6 +90,8 @@ public class InstrumentingClassLoader extends SecureClassLoader {
     if (getDefinedPackage(packageName) == null) {
       definePackage(packageName, null, null, null, null, null, null, null);
     }
-    return defineClass(name, transformed, 0, transformed.length, codeSource);
+    final Class<?> cls = defineClass(name, transformed, 0, transformed.length, codeSource);
+    loadedClasses.add(name);
+    return cls;
   }
 }

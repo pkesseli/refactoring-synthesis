@@ -54,7 +54,7 @@ public class Invoker {
    * @param counterexample {@link Counterexample} modelling the state in which to
    *                       invoke the configured method.
    */
-  public Object invoke(final ClassLoader classLoader, final Counterexample counterexample)
+  public ExecutionResult invoke(final ClassLoader classLoader, final Counterexample counterexample)
       throws ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, IllegalAccessException,
       InvocationTargetException {
     final Class<?> cls = classLoader.loadClass(fullyQualifiedClassName);
@@ -66,6 +66,12 @@ public class Invoker {
     final Method method = cls.getDeclaredMethod(methodName, parameterTypes);
     final State state = stateFactory.create(classLoader, counterexample);
     method.setAccessible(true);
-    return method.invoke(state.Instance, state.Arguments);
+    final Object result;
+    try {
+      result = method.invoke(state.Instance, state.Arguments);
+    } catch (final Throwable e) {
+      return new ExecutionResult(e);
+    }
+    return new ExecutionResult(result);
   }
 }

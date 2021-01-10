@@ -11,7 +11,7 @@ public final class ClassLoaders {
    * Equivalent to calling {@link #createIsolated(ClassLoader)} using the class
    * loader which loaded {@link ClassLoaders}.
    */
-  public static ClassLoader createIsolated() {
+  public static IsolatedClassLoader createIsolated() {
     return createIsolated(ClassLoaders.class.getClassLoader());
   }
 
@@ -25,7 +25,7 @@ public final class ClassLoaders {
    * @param classLoader {@link ClassLoader} whose classes to isolate.
    * @return Isolated version of the given class loader.
    */
-  public static ClassLoader createIsolated(final ClassLoader classLoader) {
+  public static IsolatedClassLoader createIsolated(final ClassLoader classLoader) {
     return new InstrumentingClassLoader(NullClassFileTransformer.NULL, classLoader);
   }
 }
