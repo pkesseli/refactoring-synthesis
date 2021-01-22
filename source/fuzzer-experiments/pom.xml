@@ -3,10 +3,6 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fuzzer-experiments</artifactId>
 
-  <properties>
-    <jqf.version>1.6</jqf.version>
-  </properties>
-
   <parent>
     <artifactId>parent</artifactId>
     <groupId>uk.ac.ox.cs.refactoring</groupId>
@@ -17,7 +13,6 @@
     <dependency>
       <groupId>edu.berkeley.cs.jqf</groupId>
       <artifactId>jqf-fuzz</artifactId>
-      <version>${jqf.version}</version>
     </dependency>
   </dependencies>
 
@@ -26,7 +21,6 @@
       <plugin>
         <groupId>edu.berkeley.cs.jqf</groupId>
         <artifactId>jqf-maven-plugin</artifactId>
-        <version>${jqf.version}</version>
       </plugin>
     </plugins>
   </build>
