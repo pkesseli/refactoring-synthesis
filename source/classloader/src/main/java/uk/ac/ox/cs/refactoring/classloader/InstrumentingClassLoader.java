@@ -51,20 +51,6 @@ public class InstrumentingClassLoader extends IsolatedClassLoader {
     return name.replace(JavaLanguage.PACKAGE_SEPARATOR, JavaLanguage.RESOURCE_SEPARATOR).concat(".class");
   }
 
-  /**
-   * Provides the name of the package the given class is in.
-   * 
-   * @param className Fully qualified class name.
-   * @return Fully qualified package name of the given class.
-   */
-  private static String getPackageName(final String className) {
-    final int index = className.lastIndexOf(JavaLanguage.PACKAGE_SEPARATOR);
-    if (index == -1) {
-      return "";
-    }
-    return className.substring(0, index);
-  }
-
   @Override
   protected Class<?> findClass(final String name) throws ClassNotFoundException {
     final String classFileName = getClassFileName(name);
@@ -86,10 +72,6 @@ public class InstrumentingClassLoader extends IsolatedClassLoader {
       throw new ClassNotFoundException(name, e);
     }
 
-    final String packageName = getPackageName(name);
-    if (getDefinedPackage(packageName) == null) {
-      definePackage(packageName, null, null, null, null, null, null, null);
-    }
     final Class<?> cls = defineClass(name, transformed, 0, transformed.length, codeSource);
     loadedClasses.add(name);
     return cls;
