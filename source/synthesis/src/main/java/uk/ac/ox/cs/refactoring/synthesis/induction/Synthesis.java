@@ -2,7 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.induction;
 
 import java.util.Set;
 
-import uk.ac.ox.cs.refactoring.synthesis.candidate.Candidate;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.api.Candidate;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 
 /**
