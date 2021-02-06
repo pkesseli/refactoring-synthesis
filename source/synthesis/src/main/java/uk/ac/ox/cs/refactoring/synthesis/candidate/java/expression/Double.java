@@ -74,7 +74,7 @@ public final class Double {
     }
   }
 
-  private static class Plus extends BinaryExpression {
+  static class Plus extends BinaryExpression {
     public Plus(final IExpression lhs, final IExpression rhs) {
       super(lhs, Operator.PLUS, rhs);
     }
@@ -85,7 +85,7 @@ public final class Double {
     }
   }
 
-  private static class Minus extends BinaryExpression {
+  static class Minus extends BinaryExpression {
     public Minus(final IExpression lhs, final IExpression rhs) {
       super(lhs, Operator.MINUS, rhs);
     }
