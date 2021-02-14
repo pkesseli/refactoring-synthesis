@@ -1,14 +1,13 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.api;
 
-import java.util.ArrayList;
-import java.util.List;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.BlockStatement;
 
 /**
- * 
+ * Java synthesis candidate representing a snippet.
  */
 public class SnippetCandidate {
   /**
-   * 
+   * Block of statements synthesised.
    */
-  public final List<IStatement> Statements = new ArrayList<>();
+  public final BlockStatement Block = new BlockStatement();
 }

@@ -4,35 +4,34 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 
+ * Component without arguments constructing a pre-determined value.
  */
-public class NullaryComponent<T> implements Component<T> {
+public class NullaryComponent<K, V> implements Component<K, V> {
 
   /**
-   * 
+   * Component to be provided.
    */
-  private final T component;
+  private final V component;
 
   /**
-   * 
-   * @param component
+   * @param component {@link #component}
    */
-  public NullaryComponent(final T component) {
+  public NullaryComponent(final V component) {
     this.component = component;
   }
 
   @Override
   public int size() {
-    return 1;
+    return 0;
   }
 
   @Override
-  public List<Class<?>> getArgumentTypes() {
+  public List<K> getParameterKeys() {
     return Collections.emptyList();
   }
 
   @Override
-  public T construct(final Object[] arguments) {
+  public V construct(final Object[] arguments) {
     return component;
   }
 }

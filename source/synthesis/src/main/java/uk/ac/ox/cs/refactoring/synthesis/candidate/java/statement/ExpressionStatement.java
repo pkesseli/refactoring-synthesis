@@ -7,18 +7,17 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IStatement;
 
 /**
- * 
+ * Expression statement in the Java language.
  */
-public class ExpressionStatement implements IStatement, Runnable {
+public class ExpressionStatement implements IStatement {
 
   /**
-   * 
+   * Wrapped expression.
    */
   private final IExpression expression;
 
   /**
-   * 
-   * @param expression
+   * @param expression {@link #expression}
    */
   public ExpressionStatement(final IExpression expression) {
     this.expression = expression;

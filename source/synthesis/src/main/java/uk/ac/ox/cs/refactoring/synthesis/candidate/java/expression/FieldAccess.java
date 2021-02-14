@@ -11,21 +11,21 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.LeftHandSideExpressi
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
 /**
- * 
+ * Models a Java field access expression.
  */
 public class FieldAccess implements LeftHandSideExpression {
 
   /**
-   * 
+   * Reflective field being accessed.
    */
   private final Field field;
 
   /**
-   * 
-   * @param field
+   * @param field {@link #field}
    */
   public FieldAccess(final Field field) {
     this.field = field;
+    field.setAccessible(true);
   }
 
   @Override

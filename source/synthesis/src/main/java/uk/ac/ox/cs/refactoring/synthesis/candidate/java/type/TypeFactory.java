@@ -1,15 +1,16 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.type;
 
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 
 /**
- * 
+ * Helper to construct {@link Type}s.
  */
 public final class TypeFactory {
 
   /**
-   * 
+   * Regular expression for Java scope separators.
    */
   private static final String SCOPE_SEPARATOR = "\\.";
 
@@ -17,11 +18,26 @@ public final class TypeFactory {
   }
 
   /**
+   * Converts a Java {@link Class} to an equivalent {@link Type}.
    * 
-   * @param cls
-   * @return
+   * @param cls Java {@link Class} to convert.
+   * @return AST {@link Type}.
    */
   public static Type create(final Class<?> cls) {
+    if (cls.isPrimitive()) {
+      return PrimitiveType.doubleType();
+    }
+
+    return createClassType(cls);
+  }
+
+  /**
+   * Converts a non-primitive {@link Class} to a {@link Type}.
+   * 
+   * @param cls Java {@link Class} to convert.
+   * @return AST {@link Type}.
+   */
+  private static ClassOrInterfaceType createClassType(final Class<?> cls) {
     final Class<?> declaringClass = cls.getDeclaringClass();
     final ClassOrInterfaceType scope;
     if (declaringClass != null) {
@@ -33,18 +49,10 @@ public final class TypeFactory {
   }
 
   /**
+   * Creates a package scope.
    * 
-   * @param cls
-   * @return
-   */
-  private static ClassOrInterfaceType createClassType(final Class<?> cls) {
-    return null;
-  }
-
-  /**
-   * 
-   * @param pkg
-   * @return
+   * @param pkg {@link Package} to convert.
+   * @return AST package scope.
    */
   private static ClassOrInterfaceType createPackage(final Package pkg) {
     if (pkg == null) {
