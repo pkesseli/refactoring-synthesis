@@ -1,18 +1,18 @@
 package uk.ac.ox.cs.refactoring.synthesis.verification;
 
-import java.util.Set;
+import java.util.Map;
 
-import uk.ac.ox.cs.refactoring.synthesis.candidate.api.Candidate;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
+import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 
 /**
  * 
  */
-public class Verification {
+public class Verification<Candidate> {
   /**
    * 
    */
-  public Set<Counterexample> verify(final Candidate candidate) {
+  public Map<Counterexample, ExecutionResult> verify(final Candidate candidate) {
     return null;
   }
 }

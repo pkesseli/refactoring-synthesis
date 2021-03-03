@@ -57,6 +57,7 @@ public class Invoker {
   public ExecutionResult invoke(final ClassLoader classLoader, final Counterexample counterexample)
       throws ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, IllegalAccessException,
       InvocationTargetException {
+    final State state = stateFactory.create(classLoader, counterexample);
     final Class<?> cls = classLoader.loadClass(fullyQualifiedClassName);
     final Class<?>[] parameterTypes = new Class<?>[fullyQualifiedParameterTypeNames.size()];
     for (int i = 0; i < parameterTypes.length; ++i) {
@@ -64,7 +65,6 @@ public class Invoker {
       parameterTypes[i] = classLoader.loadClass(parameterType);
     }
     final Method method = cls.getDeclaredMethod(methodName, parameterTypes);
-    final State state = stateFactory.create(classLoader, counterexample);
     method.setAccessible(true);
     final Object result;
     try {

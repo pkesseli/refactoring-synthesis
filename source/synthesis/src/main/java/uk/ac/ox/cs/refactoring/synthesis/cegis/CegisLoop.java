@@ -1,32 +1,32 @@
 package uk.ac.ox.cs.refactoring.synthesis.cegis;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
-import uk.ac.ox.cs.refactoring.synthesis.candidate.api.Candidate;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
-import uk.ac.ox.cs.refactoring.synthesis.induction.Synthesis;
+import uk.ac.ox.cs.refactoring.synthesis.induction.FuzzingSynthesis;
+import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.verification.Verification;
 
 /**
  * 
  */
-public class CegisLoop {
+public class CegisLoop<Candidate> {
   /**
    * 
    */
-  private final Set<Counterexample> counterexamples = new HashSet<>();
+  private final Map<Counterexample, ExecutionResult> counterexamples = new HashMap<>();
 
   /**
    * 
    */
-  private final Verification verification = new Verification();
+  private final Verification<Candidate> verification = new Verification<Candidate>();
 
   /**
    * @return
    */
   public Candidate synthesise() {
-    final Synthesis synthesis = new Synthesis();
+    final FuzzingSynthesis<Candidate> synthesis = new FuzzingSynthesis<Candidate>(null, null);
     Candidate candidate = synthesis.getDefault();
     while (needsRefinement(candidate)) {
       candidate = synthesis.synthesise(counterexamples);
@@ -39,8 +39,8 @@ public class CegisLoop {
    * @return
    */
   private boolean needsRefinement(final Candidate candidate) {
-    final Set<Counterexample> newCounterexamples = verification.verify(candidate);
-    counterexamples.addAll(newCounterexamples);
+    final Map<Counterexample, ExecutionResult> newCounterexamples = verification.verify(candidate);
+    counterexamples.putAll(newCounterexamples);
     return !newCounterexamples.isEmpty();
   }
 }
