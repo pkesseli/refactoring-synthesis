@@ -205,7 +205,10 @@ recommendation to use \code{Calendar} instead.  However, the
 \code{Date} constructor expects its year parameter to be an offset
 from 1900, i.e. the year 2020 is expressed as 120.  This needs to be
 transformed to 2020 when using \code{Calendar} API, as shown in the
-example.
+example. Moreover, the \code{Calendar} constructor is protected,
+meaning that instead we must use \code{getInstance} to obtain a
+\code{Calendar} object, followed by setting the date using \code{set}
+and returning a Date object by invoking \code{getTime}.
 
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -213,7 +216,7 @@ void main(String[] args) {
   ByteArrayOutputStream bos = ...;
   // Deprecated:
   Date date = new Date(120, 12, 30);
-
+ 
   // Should have been:
   final Calendar calendar = Calendar.getInstance();
   calendar.set(2020, 12, 30);
@@ -228,45 +231,71 @@ void main(String[] args) {
 \label{ex:deprecated-method}
 \end{figure}
 
-While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to recognise the
-use of deprecated APIs and warn the programmer about it, refactoring the code to
-a preferred API is significantly more complex. Indeed neither Eclipse 4.15.0 nor
-IntelliJ IDEA 2020.2.2 make any attempt to suggest a better alternative to the
-user.
 
-\todo{ limit size and statements used in
-synthesised programs.}
+While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to
+recognise the use of deprecated APIs and warn the programmer about it,
+refactoring the code to a preferred API is significantly more
+complex. Indeed neither Eclipse 4.15.0 nor IntelliJ IDEA 2020.2.2 make
+any attempt to suggest a better alternative to the user. There is also
+very limited support offered by the research community, mainly
+focusing on replacing calls to deprecated methods by their
+bodies~\cite{DBLP:conf/paste/Perkins05}. Consequently, the majority of
+such refactorings are done manually, which is a costly,
+time-intensive, and not least error-prone process.  This situation is
+also a real issue for legacy code that makes use of deprecated APIs
+that need to be replaced with latest APIs/libraries.
 
-\subsection{From the previous introduction:}
-Refactorings are structured changes to existing software which leave its
-externally observable behaviour unchanged.  They improve non-functional
-properties of the program code, such as testability, maintainability and
-extensibility while retaining the semantics of the program.  Ultimately,
-refactorings can improve the design of code, help finding bugs as well
-as increase development speed and are therefore seen as an integral part
-of agile software engineering processes~\cite{DBLP:conf/xpu/Kerievsky04b,
-Fowler1999}.
+The main cause of difficulty when replacing deprecated instances lies
+with the fact that such refactorings are based on semantics rather
+than syntax. For illustration, let's refer back to the example in
+Figure~\ref{ex:deprecated-method}.  A {\em syntax-driven refactoring}
+would have simply looked at the code syntax and replaced the call to
+the \code{Date} constructor with a call to the \code{Calendar}
+constructor, which is not correct as explained above. Instead, in a
+{\em semantics-driven refactoring}, the goal is to replace the
+original code with some new code that is semantically equivalent to
+the original one and has some desired property (in the case of the
+deprecated refactoring, it must not make use of the deprecated
+elements).
 
-However, manual refactorings are a costly, time-intensive, and not least
-error-prone process.  This has motivated work on automating specific
-refactorings, which promises safe application to large code bases at low
-cost.  We differentiate in this context between {\em syntax-driven} and {\em
-semantics-driven} refactorings.  While the former address structural changes
+While the former address structural changes
 to the program requiring only limited information about a program's
 semantics, the latter require detailed understanding of the program
-semantics in order to be applied soundly.  An example of a refactoring that
-requires a semantics-driven approach is {\em Substitute Algorithm}, where an
-algorithm is replaced by a clearer, but equivalent
-version~\cite{Fowler1999}.
+semantics in order to be applied soundly.
+
+%% \todo{ limit size and statements used in
+%% synthesised programs.}
+
+%\subsection{From the previous introduction:}
+%% Refactorings are structured changes to existing software which leave its
+%% externally observable behaviour unchanged.  They improve non-functional
+%% properties of the program code, such as testability, maintainability and
+%% extensibility while retaining the semantics of the program.  Ultimately,
+%% refactorings can improve the design of code, help finding bugs as well
+%% as increase development speed and are therefore seen as an integral part
+%% of agile software engineering processes~\cite{DBLP:conf/xpu/Kerievsky04b,
+%% Fowler1999}.
+
+%% However, manual refactorings are a costly, time-intensive, and not least
+%% error-prone process.  This has motivated work on automating specific
+%% refactorings, which promises safe application to large code bases at low
+%% cost.  We differentiate in this context between {\em syntax-driven} and {\em
+%% semantics-driven} refactorings.  While the former address structural changes
+%% to the program requiring only limited information about a program's
+%% semantics, the latter require detailed understanding of the program
+%% semantics in order to be applied soundly.  An example of a refactoring that
+%% requires a semantics-driven approach is {\em Substitute Algorithm}, where an
+%% algorithm is replaced by a clearer, but equivalent
+%% version~\cite{Fowler1999}.
 %
 %AST-based constraints 
 %
-A syntax-driven approach is insufficient to perform such substantial
-transformations.  Figure~\ref{ex:syntax-limits} illustrates this using an
-example: Both loops in the code implement the same behaviour.  In order to
-recognise this and apply {\em Substitute Algorithm}, pattern-based
-approaches need explicit patterns for vastly different syntaxes implementing
-the same semantics, which is infeasible for practical applications.
+%% A syntax-driven approach is insufficient to perform such substantial
+%% transformations.  Figure~\ref{ex:syntax-limits} illustrates this using an
+%% example: Both loops in the code implement the same behaviour.  In order to
+%% recognise this and apply {\em Substitute Algorithm}, pattern-based
+%% approaches need explicit patterns for vastly different syntaxes implementing
+%% the same semantics, which is infeasible for practical applications.
 
 %% \todo{I've removed the reference to Move Field as it's a bit controversial given that
 %% Steinmann uses it to explain that purely syntactic approaches are not enough.}
