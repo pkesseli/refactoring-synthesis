@@ -310,26 +310,33 @@ further preventing compilation errors and behaviour changes
 %% further preventing compilation errors and behaviour changes
 %% \cite{Steimann2011}.
 
-
 In this paper, we take a step further in this direction by proposing a
-fully semantic refactoring approach.  There is a very broad space of
-methods that are able to reason about program semantics.  The desire
-to perform refactorings safely suggests the use of techniques that
-overapproximate program behaviours.  As~one possible embodiment of
-semantics-driven refactoring, we leverage software verification
-technologies with the goal of reliably automating refactoring
-decisions based on program semantics, as in the case of the {\em
-  Substitute Algorithm} refactoring. Our research hypothesis is that
-semantics-driven refactorings are more precise and can handle more
-complex code scenarios in comparison with syntax-driven refactorings.
+fully semantic refactoring approach for removing deprecated elements.
+There is a very broad space of methods that are able to reason about
+program semantics.  The desire to perform refactorings safely suggests
+the use of techniques that overapproximate program behaviours.  As one
+possible embodiment of semantics-driven refactoring, we leverage
+software verification technologies with the goal of reliably
+automating refactoring decisions based on program semantics.
+%% , as in the
+%% case of the {\em Substitute Algorithm} refactoring.
+Our research
+hypothesis is that semantics-driven refactorings are more precise and
+can handle more complex code scenarios in comparison with
+syntax-driven refactorings.
 
+%% \paragraph{Demonstrator: Deprecated}
 
-
-\paragraph{Demonstrator: Deprecated}
-
-We use a particular refactoring as demonstrator for our idea.
+%% We use a particular refactoring as demonstrator for our idea.
 
 \paragraph{Goal of the paper} 
+Our goal in this paper is to design a fully automated refactoring
+technique for eliminating deprecated fields, methods and classes. Our
+technique will make use of Java library comments to find components
+for seeding the refactoring. Then, it will use program synthesis to
+generate code that is semantically equivalent to the original but does not use
+the deprecated elements. 
+
 %% In this paper, we are interested in refactoring Java code handing
 %% collections through external iteration to use streams. Our refactoring
 %% procedure is based on the program semantics and makes use of program
