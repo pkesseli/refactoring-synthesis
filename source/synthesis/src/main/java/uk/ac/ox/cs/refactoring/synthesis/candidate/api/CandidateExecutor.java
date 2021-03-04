@@ -13,5 +13,5 @@ public interface CandidateExecutor<Candidate> {
    * @param counterexample
    * @return
    */
-  ExecutionResult execute(Candidate candidate, ClassLoader classLoader, Counterexample counterexample);
+  ExecutionResult execute(Candidate candidate, Counterexample counterexample) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException;
 }

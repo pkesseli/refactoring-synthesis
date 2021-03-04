@@ -26,8 +26,9 @@ public class CegisLoop<Candidate> {
    * @return
    * @throws IllegalAccessException
    * @throws ClassNotFoundException
+   * @throws NoSuchFieldException
    */
-  public Candidate synthesise() throws ClassNotFoundException, IllegalAccessException {
+  public Candidate synthesise() throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
     final FuzzingSynthesis<Candidate> synthesis = new FuzzingSynthesis<Candidate>(null, null);
     Candidate candidate = synthesis.getDefault();
     while (needsRefinement(candidate)) {
