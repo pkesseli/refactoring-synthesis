@@ -209,6 +209,8 @@ example. Moreover, the \code{Calendar} constructor is protected,
 meaning that instead we must use \code{getInstance} to obtain a
 \code{Calendar} object, followed by setting the date using \code{set}
 and returning a Date object by invoking \code{getTime}.
+Alternatively, the \code{GregorianCalendar} class may be used with
+similar difficulties.
 
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -249,22 +251,12 @@ The main cause of difficulty when replacing deprecated instances lies
 with the fact that such refactorings are based on semantics rather
 than syntax. For illustration, let's refer back to the example in
 Figure~\ref{ex:deprecated-method}.  A {\em syntax-driven refactoring}
-would have simply looked at the code syntax and replaced the call to
-the \code{Date} constructor with a call to the \code{Calendar}
-constructor, which is not correct as explained above. Instead, in a
-{\em semantics-driven refactoring}, the goal is to replace the
-original code with some new code that is semantically equivalent to
-the original one and has some desired property (in the case of the
-deprecated refactoring, it must not make use of the deprecated
-elements).
-
-While the former address structural changes
-to the program requiring only limited information about a program's
-semantics, the latter require detailed understanding of the program
-semantics in order to be applied soundly.
-
-%% \todo{ limit size and statements used in
-%% synthesised programs.}
+addresses structural changes to the program requiring only limited
+information about a program's semantics, whereas a {\em
+  semantics-driven refactoring} requires detailed understanding of the
+program semantics in order to be applied soundly.  Clearly, the
+refactoring of the call to the deprecated \code{Date} constructor
+falls into the latter category. %%, as we need to understand exactly
 
 %\subsection{From the previous introduction:}
 %% Refactorings are structured changes to existing software which leave its
