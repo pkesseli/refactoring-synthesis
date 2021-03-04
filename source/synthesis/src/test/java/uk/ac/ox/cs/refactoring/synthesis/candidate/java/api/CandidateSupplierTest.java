@@ -9,7 +9,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Collections;
 
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
 import org.junit.Test;
@@ -22,11 +24,13 @@ public class CandidateSupplierTest {
 
   @Test
   public void field() throws Exception {
-    final FieldAccess field = new FieldAccess(CandidateSupplierTest.class.getDeclaredField("actual"));
+    final FieldAccess field = new FieldAccess("actual", CandidateSupplierTest.class.getName(),
+        PrimitiveType.doubleType());
     final SourceOfRandomness sourceOfRandomness = mock(SourceOfRandomness.class);
     when(sourceOfRandomness.nextByte(anyByte(), anyByte())).thenReturn((byte) 1);
     when(sourceOfRandomness.nextInt(anyInt(), anyInt())).thenAnswer(i -> i.getArgument(0));
-    final CandidateSupplier candidateSupplier = new CandidateSupplier(Arrays.asList(field), sourceOfRandomness);
+    final CandidateSupplier candidateSupplier = new CandidateSupplier(null, Collections.emptyList(),
+        Arrays.asList(field), sourceOfRandomness);
     final SnippetCandidate snippetCandidate = candidateSupplier.get();
     assertThat(snippetCandidate.Block.Statements, hasItems(isA(ExpressionStatement.class)));
   }

@@ -17,6 +17,8 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Assign;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Double;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Parameter;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.This;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 
 /**
@@ -54,7 +56,14 @@ public class CandidateSupplier implements Supplier<SnippetCandidate> {
    *                           constructing Java snippets.
    * @param sourceOfRandomness {@link #sourceOfRandomness}
    */
-  public CandidateSupplier(final List<FieldAccess> fields, final SourceOfRandomness sourceOfRandomness) {
+  public CandidateSupplier(final This instance, final List<Parameter> parameters, final List<FieldAccess> fields,
+      final SourceOfRandomness sourceOfRandomness) {
+    if (instance != null) {
+      components.put(new JavaLanguageKey(IExpression.class, instance.getType()), new NullaryComponent<>(instance));
+    }
+    for (final Parameter parameter : parameters) {
+      components.put(new JavaLanguageKey(IExpression.class, parameter.getType()), new NullaryComponent<>(parameter));
+    }
     for (final FieldAccess field : fields) {
       final Type type = field.getType();
       final Component<JavaLanguageKey, FieldAccess> component = new NullaryComponent<>(field);

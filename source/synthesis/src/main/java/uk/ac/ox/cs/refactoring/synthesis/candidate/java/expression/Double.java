@@ -9,6 +9,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 
+import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ConstructorComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
@@ -54,17 +55,27 @@ public final class Double {
     }
 
     /**
+     * @param context {@link IExpression#evaluate(ExecutionContext)}
      * @return Left-hand-side double value.
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws NoSuchFieldException
      */
-    public double getLhs() {
-      return (double) lhs.evaluate();
+    public double getLhs(final ExecutionContext context)
+        throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+      return (double) lhs.evaluate(context);
     }
 
     /**
+     * @param context {@link IExpression#evaluate(ExecutionContext)}
      * @return Right-hand-side double value.
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws NoSuchFieldException
      */
-    public double getRhs() {
-      return (double) rhs.evaluate();
+    public double getRhs(final ExecutionContext context)
+        throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+      return (double) rhs.evaluate(context);
     }
 
     @Override
@@ -84,8 +95,9 @@ public final class Double {
     }
 
     @Override
-    public java.lang.Double evaluate() {
-      return getLhs() + getRhs();
+    public java.lang.Double evaluate(final ExecutionContext context)
+        throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+      return getLhs(context) + getRhs(context);
     }
   }
 
@@ -95,8 +107,9 @@ public final class Double {
     }
 
     @Override
-    public java.lang.Double evaluate() {
-      return getLhs() - getRhs();
+    public java.lang.Double evaluate(final ExecutionContext context)
+        throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+      return getLhs(context) - getRhs(context);
     }
   }
 

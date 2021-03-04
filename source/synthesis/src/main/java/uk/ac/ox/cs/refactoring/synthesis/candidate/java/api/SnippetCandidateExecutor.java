@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.api;
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.state.IStateFactory;
@@ -21,9 +22,14 @@ public class SnippetCandidateExecutor implements CandidateExecutor<SnippetCandid
       throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
     final IsolatedClassLoader classLoader = ClassLoaders.createIsolated();
     final State state = stateFactory.create(classLoader, counterexample);
-
-    // TODO Auto-generated method stub
-    return null;
+    final ExecutionContext context = new ExecutionContext(classLoader, state);
+    final Object value;
+    try {
+      value = candidate.Block.execute(context);
+    } catch (final Exception e) {
+      return new ExecutionResult(classLoader, e);
+    }
+    return new ExecutionResult(classLoader, value);
   }
 
 }

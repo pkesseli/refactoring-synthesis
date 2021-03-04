@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
+import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IStatement;
 
@@ -29,7 +30,8 @@ public class ExpressionStatement implements IStatement {
   }
 
   @Override
-  public void run() {
-    expression.evaluate();
+  public Object execute(final ExecutionContext context)
+      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+    return expression.evaluate(context);
   }
 }

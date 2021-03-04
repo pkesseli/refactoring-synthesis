@@ -8,6 +8,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
+import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IStatement;
 
 /**
@@ -27,9 +28,16 @@ public class BlockStatement implements IStatement {
   }
 
   @Override
-  public void run() {
-    for (final IStatement statement : Statements) {
-      statement.run();
+  public Object execute(final ExecutionContext context)
+      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+    if (Statements.isEmpty()) {
+      return null;
     }
+
+    final int lastIndex = Statements.size() - 1;
+    for (int i = 0; i < lastIndex - 1; ++i) {
+      Statements.get(i).execute(context);
+    }
+    return Statements.get(lastIndex).execute(context);
   }
 }

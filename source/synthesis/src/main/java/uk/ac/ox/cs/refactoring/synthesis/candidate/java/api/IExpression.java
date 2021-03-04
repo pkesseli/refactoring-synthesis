@@ -3,6 +3,8 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.api;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
 
+import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
+
 /**
  * Models a Java language expression in candidates.
  */
@@ -13,8 +15,12 @@ public interface IExpression extends INodeConvertible<Expression> {
   Type getType();
 
   /**
-   * Evaluates the modeled expression, usually in isolation by virtue of loading
-   * the class in an isolated class loader.
+   * Evaluates the modeled expression in the given {@link ExecutionContext}.
+   * 
+   * @param context {@link ExecutionContext} in which to evaluate the expression.
+   * @throws ClassNotFoundException
+   * @throws IllegalAccessException
+   * @throws NoSuchFieldException
    */
-  Object evaluate();
+  Object evaluate(ExecutionContext context) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException;
 }

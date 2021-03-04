@@ -8,6 +8,7 @@ import com.github.javaparser.ast.expr.AssignExpr.Operator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
 
+import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ConstructorComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
@@ -54,9 +55,10 @@ public final class Assign {
     }
 
     @Override
-    public Object evaluate() {
-      lhs.set(rhs.evaluate());
-      return lhs.evaluate();
+    public Object evaluate(final ExecutionContext context)
+        throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+      lhs.set(context, rhs.evaluate(context));
+      return lhs.evaluate(context);
     }
   }
 
