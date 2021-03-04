@@ -388,14 +388,39 @@ For illustration, for the refactoring in Figure~\ref{ex:deprecated-method}...
 
 \section{Overview of our approach} \label{sec:approach}
 
-Our objective is to refactor 
 
-The synthesis process for refactoring deprecated instances (e.g. fields, methods, classes) proceeds as follows:
+Our technique for refactoring deprecated instances (e.g. fields, methods, classes) has two big steps, as follows:
 \begin{enumerate}
 \item {\bf Seed the synthesis library}: In this phase, we build our components library for the actual synthesis process using the sources described below.  
-\item {\bf Encode the synthesis problem as a verification problem} that can be solved by fuzzing.
+\item {\bf Synthesise the desired refactoring} via a counterexample-guided refinement process.
+  \begin{itemize}
+  \item[a.] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode   
+    encode the synthesis problem as a verification problem that can be solved by fuzzing. The found refactoring
+    is called a candidate.
+  \item[b.] Given the candidate synthesised at the previous step, verify whether it is indeed a correct refactoring.
+    Again, we answer this question by encoding it as a software verification problem to be solved by fuzzing.
+    If an input for which the candidate isn't semantically equivalent to the original code is found, then
+    we return to the previous step and add this input to the set $In$. Otherwise we have found a correct refactoring and we are done.
+  \end{itemize}  
 \end{enumerate}
-  
+
+\paragraph{Note on the correctness of our solution} Given that we rely on fuzzing, we can't guarantee that the
+refactoring works for all possible input. However, it is well suited
+to the particular scenario for which we designed our technique, where
+continuous integration practices are in place. In particular, once our
+technique has found a possible refactoring, we sumit a pull request
+that needs to be approved by other developers.
+
+Discuss different types of suzzing and the one that we use.
+\todo{Double check with Pascal what he uses.}
+
+Discuss tradeoff: symbolic execution is expensive; programming
+languages evolve faster than verification techniques and therefore
+many new features are not supported by their front ends (and/or
+backends depending on how complex the new feature is); even after
+translating the code into a logical formula, calls to solvers are
+expensive.
+
 Sources for seeding:
 \begin{itemize}
 \item Comments in the library.
