@@ -335,7 +335,17 @@ technique for eliminating deprecated fields, methods and classes. Our
 technique will make use of Java library comments to find components
 for seeding the refactoring. Then, it will use program synthesis to
 generate code that is semantically equivalent to the original but does not use
-the deprecated elements. 
+the deprecated elements.
+
+One interesting aspect when using a fully semantics-driven approach is
+that it allows introducing the notion of {\em refactoring context}.
+The refactoring context is the context (of the code to be refactored)
+taken into consideration when looking for a refactoring. Varying the
+context enables the user to control the generality of the refactoring.
+
+
+For illustration, for the refactoring in Figure~\ref{ex:deprecated-method}...
+\todo{hmm, what context do we consider for the standard library?}
 
 %% In this paper, we are interested in refactoring Java code handing
 %% collections through external iteration to use streams. Our refactoring
@@ -346,16 +356,18 @@ the deprecated elements.
 
 \begin{itemize}
 
-\item Use a semantics based approach to eliminate uses of deprecated APIs.
+\item We proposed a semantics based approach to eliminate uses of deprecated APIs. Our approach
+  is iterative and counterexample based. One key insight is that, in each iteration, the refactoring problem can
+  be encoded as the problem of verifying the safety of a program, which is then solved by fuzzing.
 
-\item Introduce the concept of refactoring context. The refactoring context is different from the
-  actual code to be refactored.
-  We generally start
+\item We introduced the concept of refactoring context. %% The refactoring context is different from the
+  %% actual code to be refactored.
+  Our refactoring technique generally starts 
   with no context and gradually increase the amount of context we take into consideration
-  until we find a desirable refactoring.
-  
-\item Encode the refactoring problem as a program verification problem that can be solved
-  by fuzzing.
+  until a desirable refactoring is found.
+
+\item We Implemented our technique in the tool ?? and used it to
+  refactor deprecated instances in X open source projects.
   
 \end{itemize}  
 
