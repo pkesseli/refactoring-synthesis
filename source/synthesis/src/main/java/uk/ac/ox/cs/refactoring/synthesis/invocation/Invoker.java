@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.state.IStateFactory;
 import uk.ac.ox.cs.refactoring.synthesis.state.ObjenesisStateFactory;
@@ -49,12 +50,12 @@ public class Invoker {
    * Invokes the configured method using the given counterexample in the provided
    * {@link ClassLoader}.
    * 
-   * @param classLoader    {@link ClassLoader} in which to invoke the configured
-   *                       method.
+   * @param classLoader    {@link IsolatedClassLoader} in which to invoke the
+   *                       configured method.
    * @param counterexample {@link Counterexample} modelling the state in which to
    *                       invoke the configured method.
    */
-  public ExecutionResult invoke(final ClassLoader classLoader, final Counterexample counterexample)
+  public ExecutionResult invoke(final IsolatedClassLoader classLoader, final Counterexample counterexample)
       throws ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, IllegalAccessException,
       InvocationTargetException {
     final State state = stateFactory.create(classLoader, counterexample);
@@ -70,8 +71,8 @@ public class Invoker {
     try {
       result = method.invoke(state.Instance, state.Arguments);
     } catch (final Throwable e) {
-      return new ExecutionResult(e);
+      return new ExecutionResult(classLoader, e);
     }
-    return new ExecutionResult(result);
+    return new ExecutionResult(classLoader, result);
   }
 }

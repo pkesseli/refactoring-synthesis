@@ -23,24 +23,24 @@ public class HeapComparisonTest {
   void singleInt() throws Exception {
     final IntConsumer lhs = ObjectFactory.create(lhsClassLoader, Benchmarks.STATIC_INT_CONSUMER);
     final IntConsumer rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.STATIC_INT_CONSUMER);
-    final ExecutionResult lhsResult = new ExecutionResult(lhs);
-    final ExecutionResult rhsResult = new ExecutionResult(rhs);
+    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs);
+    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs);
 
     lhs.accept(10);
     rhs.accept(10);
-    assertTrue(HeapComparison.equals(lhsClassLoader, lhsResult, rhsClassLoader, rhsResult));
+    assertTrue(HeapComparison.equals(lhsResult, rhsResult));
     rhs.accept(11);
-    assertFalse(HeapComparison.equals(lhsClassLoader, lhsResult, rhsClassLoader, rhsResult));
+    assertFalse(HeapComparison.equals(lhsResult, rhsResult));
   }
 
   @Test
   void singleInteger() throws Exception {
     final Consumer<Integer> lhs = ObjectFactory.create(lhsClassLoader, Benchmarks.STATIC_INTEGER_CONSUMER);
     final Consumer<Integer> rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.STATIC_INTEGER_CONSUMER);
-    final ExecutionResult lhsResult = new ExecutionResult(lhs);
-    final ExecutionResult rhsResult = new ExecutionResult(rhs);
+    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs);
+    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs);
 
-    Callable<Boolean> evaluate = () -> HeapComparison.equals(lhsClassLoader, lhsResult, rhsClassLoader, rhsResult);
+    Callable<Boolean> evaluate = () -> HeapComparison.equals(lhsResult, rhsResult);
     lhs.accept(10);
     rhs.accept(10);
     assertTrue(evaluate.call());
@@ -58,12 +58,12 @@ public class HeapComparisonTest {
   void biIntegerAliasing() throws Exception {
     final BiConsumer<Integer, Integer> lhs = ObjectFactory.create(lhsClassLoader, Benchmarks.INTEGER_ALIASING);
     final BiConsumer<Integer, Integer> rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.INTEGER_ALIASING);
-    final ExecutionResult lhsResult = new ExecutionResult(lhs);
-    final ExecutionResult rhsResult = new ExecutionResult(rhs);
+    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs);
+    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs);
     final Integer first = 129;
     final Integer second = 129;
 
-    Callable<Boolean> evaluate = () -> HeapComparison.equals(lhsClassLoader, lhsResult, rhsClassLoader, rhsResult);
+    Callable<Boolean> evaluate = () -> HeapComparison.equals(lhsResult, rhsResult);
     lhs.accept(first, second);
     rhs.accept(first, first);
     assertFalse(evaluate.call());
@@ -79,10 +79,10 @@ public class HeapComparisonTest {
     final BiConsumer<Object, Object> rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.OBJECT_ALIASING);
     final Object rhsFirst = ObjectFactory.create(rhsClassLoader, Benchmarks.OBJECT_ALIASING);
     final Object rhsSecond = ObjectFactory.create(rhsClassLoader, Benchmarks.OBJECT_ALIASING);
-    final ExecutionResult lhsResult = new ExecutionResult(lhs);
-    final ExecutionResult rhsResult = new ExecutionResult(rhs);
+    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs);
+    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs);
 
-    Callable<Boolean> evaluate = () -> HeapComparison.equals(lhsClassLoader, lhsResult, rhsClassLoader, rhsResult);
+    Callable<Boolean> evaluate = () -> HeapComparison.equals(lhsResult, rhsResult);
     lhs.accept(lhsFirst, lhsSecond);
     rhs.accept(rhsFirst, rhsFirst);
     assertFalse(evaluate.call());

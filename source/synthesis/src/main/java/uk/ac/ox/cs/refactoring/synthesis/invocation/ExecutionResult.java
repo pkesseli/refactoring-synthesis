@@ -1,9 +1,17 @@
 package uk.ac.ox.cs.refactoring.synthesis.invocation;
 
+import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
+
 /**
  * Result of a method invocation, either exceptional or a return value.
  */
 public final class ExecutionResult {
+
+  /**
+   * Class loader in which the execution was performed.
+   */
+  public final IsolatedClassLoader ClassLoader;
+
   /**
    * <code>null</code> if method invocation completed successfully, otherwise the
    * thrown exception.
@@ -17,24 +25,28 @@ public final class ExecutionResult {
   public final Object Value;
 
   /**
-   * @param error {@lin #Error}
+   * @param classLoader {@link #ClassLoader}
+   * @param error       {@lin #Error}
    */
-  public ExecutionResult(final Throwable error) {
-    this(error, null);
+  public ExecutionResult(final IsolatedClassLoader classLoader, final Throwable error) {
+    this(classLoader, error, null);
   }
 
   /**
-   * @param value {@link #Value}
+   * @param classLoader {@link #ClassLoader}
+   * @param value       {@link #Value}
    */
-  public ExecutionResult(final Object value) {
-    this(null, value);
+  public ExecutionResult(final IsolatedClassLoader classLoader, final Object value) {
+    this(classLoader, null, value);
   }
 
   /**
-   * @param error {@link #Error}
-   * @param value {@link #Value}
+   * @param classLoader {@link #ClassLoader}
+   * @param error       {@link #Error}
+   * @param value       {@link #Value}
    */
-  private ExecutionResult(final Throwable error, final Object value) {
+  private ExecutionResult(final IsolatedClassLoader classLoader, final Throwable error, final Object value) {
+    ClassLoader = classLoader;
     Error = error;
     Value = value;
   }

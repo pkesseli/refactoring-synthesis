@@ -19,10 +19,8 @@ public final class HeapComparison {
    * Compares two {@link ExecutionResult} executed in two different
    * {@link IsolatedClassLoader}s for equivalence.
    * 
-   * @param lhsClassLoader {@link IsolatedClassLoader} for {@code lhs}.
-   * @param lhs            First {@link ExecutionResult} to compare.
-   * @param rhsClassLoader {@link IsolatedClassLoader} for {@code rhs}.
-   * @param rhs            Second {@link ExecutionResult} to compare.
+   * @param lhs First {@link ExecutionResult} to compare.
+   * @param rhs Second {@link ExecutionResult} to compare.
    * @return {@code true} if the two executions mark an equivalent result,
    *         {@code false}.
    * @throws ClassNotFoundException if a class loaded by one
@@ -31,13 +29,14 @@ public final class HeapComparison {
    * @throws IllegalAccessException if an object field cannot be read reflectively
    *                                for comparison
    */
-  public static boolean equals(final IsolatedClassLoader lhsClassLoader, final ExecutionResult lhs,
-      final IsolatedClassLoader rhsClassLoader, final ExecutionResult rhs)
+  public static boolean equals(final ExecutionResult lhs, final ExecutionResult rhs)
       throws ClassNotFoundException, IllegalAccessException {
     if (lhs.Error == null && rhs.Error != null) {
       return false;
     }
 
+    final IsolatedClassLoader lhsClassLoader = lhs.ClassLoader;
+    final IsolatedClassLoader rhsClassLoader = rhs.ClassLoader;
     loadMissingClasses(lhsClassLoader, rhsClassLoader);
     loadMissingClasses(rhsClassLoader, lhsClassLoader);
 

@@ -4,9 +4,11 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
+import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
+import uk.ac.ox.cs.refactoring.synthesis.invocation.HeapComparison;
 
 /**
  * Explores candidates in the order provided by a {@link Supplier}.
@@ -18,6 +20,9 @@ public class FuzzingSynthesis<Candidate> {
    */
   private final Supplier<Candidate> candidates;
 
+  /**
+   * 
+   */
   private final CandidateExecutor<Candidate> executor;
 
   /**
@@ -41,26 +46,33 @@ public class FuzzingSynthesis<Candidate> {
    * @param candidate
    * @param counterexamples
    * @return
+   * @throws IllegalAccessException
+   * @throws ClassNotFoundException
    */
-  private boolean satisfiesAll(final Candidate candidate, final Map<Counterexample, ExecutionResult> counterexamples) {
+  private boolean satisfiesAll(final Candidate candidate, final Map<Counterexample, ExecutionResult> counterexamples)
+      throws ClassNotFoundException, IllegalAccessException {
     for (final Map.Entry<Counterexample, ExecutionResult> counterexample : counterexamples.entrySet()) {
-      final ClassLoader classLoader = ClassLoaders.createIsolated();
+      final IsolatedClassLoader classLoader = ClassLoaders.createIsolated();
       final Counterexample input = counterexample.getKey();
       final ExecutionResult expected = counterexample.getValue();
       final ExecutionResult actual = executor.execute(candidate, classLoader, input);
-      if (!expected.equals(actual)) {
+      if (!HeapComparison.equals(expected, actual)) {
         return false;
       }
     }
     return true;
+
   }
 
   /**
    * 
    * @param counterexamples
    * @return
+   * @throws IllegalAccessException
+   * @throws ClassNotFoundException
    */
-  public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples) {
+  public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples)
+      throws ClassNotFoundException, IllegalAccessException {
     Candidate current;
     do {
       current = candidates.get();

@@ -7,12 +7,13 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
+import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.benchmark.Benchmarks;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.ObjectDescription;
 
 public class InvokerTest {
-  private final ClassLoader classLoader = ClassLoaders.createIsolated();
+  private final IsolatedClassLoader classLoader = ClassLoaders.createIsolated();
 
   @Test
   void max() throws Exception {
