@@ -180,19 +180,32 @@ Daniel Kroening\inst{2}}
 
 \section{Introduction}
 
-\subsection{Deprecated example}
+As a project evolves, there are certain fields, methods or classes
+that the developers are discouraged from using in the future as
+they've been superseded and may cease to exist in the future.
+However, removing them directly would break the backward compatibility
+of the project's API.  Instead, such elements can be tagged with the
+\code{@Deprecated} annotation.  In general, when deprecating a
+field/method/class, the \code{@deprecated} Javadoc tag is used in the
+comment section to inform the developer the reason of deprecation and
+what can be used in place.
 
-The {\em Deprecated} annotation in Java is used to mark program elements which
-programmers are discouraged from using for various reasons such as future API
-changes or security problems in the method. Usually API designers provide
-programmers with recommendations about what they should use instead. However,
-transformation of existing code to the recommended format is not always
-straightforward, as illustrated in Fig.~\ref{ex:deprecated-method}. In the
-example, the deprecated {\em Date} constructor should be replaced by use of the
-{\em Calendar} class. However, the {\em Date} constructor expects its year
-parameter to be an offset from 1900, i.e. the year 2020 is expressed as 120.
-This needs to be transformed to 2020 when using {\em Calendar} API, as shown in
-the example.
+%% \subsection{Deprecated example}
+
+%% The {\em Deprecated} annotation in Java is used to mark program elements which
+%% programmers are discouraged from using for various reasons such as future API
+%% changes or security problems in the method. Usually API designers provide
+%% programmers with recommendations about what they should use instead.
+
+Even in the presence of such recommendations, the transformation of
+existing code to the recommended format is not always straightforward,
+as illustrated in Fig.~\ref{ex:deprecated-method}. In the example, we
+make use of the \code{Date} class, which is deprecated with the
+recommendation to use \code{Calendar} instead.  However, the
+\code{Date} constructor expects its year parameter to be an offset
+from 1900, i.e. the year 2020 is expressed as 120.  This needs to be
+transformed to 2020 when using \code{Calendar} API, as shown in the
+example.
 
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -307,7 +320,9 @@ We use a particular refactoring as demonstrator for our idea.
 
 \item Use a semantics based approach to eliminate uses of deprecated APIs.
 
-\item Introduce the concept of refactoring context. This allows us to start
+\item Introduce the concept of refactoring context. The refactoring context is different from the
+  actual code to be refactored.
+  We generally start
   with no context and gradually increase the amount of context we take into consideration
   until we find a desirable refactoring.
   
@@ -333,13 +348,13 @@ We use a particular refactoring as demonstrator for our idea.
 
 \section{Overview of our approach} \label{sec:approach}
 
-
+Our objective is to refactor 
 
 The synthesis process for refactoring deprecated instances (e.g. fields, methods, classes) proceeds as follows:
-\begin{itemize}
-\item Seed the synthesis library.
-\item Encode the synthesis problem as a verification problem that can be solved by fuzzing.
-\end{itemize}
+\begin{enumerate}
+\item {\bf Seed the synthesis library}: In this phase, we build our components library for the actual synthesis process using the sources described below.  
+\item {\bf Encode the synthesis problem as a verification problem} that can be solved by fuzzing.
+\end{enumerate}
   
 Sources for seeding:
 \begin{itemize}
@@ -492,6 +507,17 @@ This means that the state that we can vary in order to check for
 observational equivalence includes \texttt{x, y} and \texttt{z}.
 
 \paragraph{Context-sensitive refactoring}
+The refactoring context consists of the context where the code to be refactored
+is placed. For instance, in the snippet below, if we are trying to refactor the call to the deprecated
+function \texttt{f}, then the context gives us the valuation $[\texttt{x}\mapsto 1]$ for the function's argument. 
+
+\begin{lstlisting}[mathescape=true]
+  int x = 1;
+  A a = new A();
+  
+  a.f(1)
+\end{lstlisting}
+    
 We now look at the possibility of considering the refactoring context
 when searching for a refactoring. This gives us the option of starting
 with very little context and gradually increasing it until finding a
