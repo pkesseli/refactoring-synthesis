@@ -6,15 +6,11 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
-import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.benchmark.Benchmarks;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.ObjectDescription;
 
 public class InvokerTest {
-  private final IsolatedClassLoader classLoader = ClassLoaders.createIsolated();
-
   @Test
   void max() throws Exception {
     final ObjectDescription max = new ObjectDescription(Benchmarks.SUM);
@@ -31,7 +27,7 @@ public class InvokerTest {
 
     final Invoker invoker = new Invoker(Benchmarks.SUM, "max",
         Arrays.asList(Benchmarks.INTEGER_WRAPPER, Benchmarks.INTEGER_WRAPPER));
-    final int result = (int) invoker.invoke(classLoader, counterexample).Value;
+    final int result = (int) invoker.invoke(counterexample).Value;
     assertEquals(33, result);
   }
 }

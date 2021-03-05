@@ -114,6 +114,11 @@
         <artifactId>objenesis</artifactId>
         <version>3.1</version>
       </dependency>
+      <dependency>
+        <groupId>org.opentest4j</groupId>
+        <artifactId>opentest4j</artifactId>
+        <version>1.2.0</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
