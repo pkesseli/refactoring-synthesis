@@ -19,19 +19,19 @@ import org.junit.Test;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 
-public class CandidateSupplierTest {
+public class SnippetCandidateGeneratorTest {
   static double actual = 31.5;
 
   @Test
   public void field() throws Exception {
-    final FieldAccess field = new FieldAccess("actual", CandidateSupplierTest.class.getName(),
+    final FieldAccess field = new FieldAccess("actual", SnippetCandidateGeneratorTest.class.getName(),
         PrimitiveType.doubleType());
     final SourceOfRandomness sourceOfRandomness = mock(SourceOfRandomness.class);
     when(sourceOfRandomness.nextByte(anyByte(), anyByte())).thenReturn((byte) 1);
     when(sourceOfRandomness.nextInt(anyInt(), anyInt())).thenAnswer(i -> i.getArgument(0));
-    final CandidateSupplier candidateSupplier = new CandidateSupplier(null, Collections.emptyList(),
-        Arrays.asList(field), sourceOfRandomness);
-    final SnippetCandidate snippetCandidate = candidateSupplier.get();
+    final SnippetCandidateGenerator candidateSupplier = new SnippetCandidateGenerator(null, Collections.emptyList(),
+        Arrays.asList(field));
+    final SnippetCandidate snippetCandidate = candidateSupplier.generate(sourceOfRandomness, null);
     assertThat(snippetCandidate.Block.Statements, hasItems(isA(ExpressionStatement.class)));
   }
 }

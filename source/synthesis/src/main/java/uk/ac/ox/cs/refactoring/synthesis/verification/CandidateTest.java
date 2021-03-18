@@ -45,7 +45,7 @@ public class CandidateTest<Candidate> extends FrameworkMethod {
   }
 
   @Override
-  public Object invokeExplosively(final Object target, final Object... params) throws Throwable {
+  public Object invokeExplosively(final Object target, final Object... params) throws Exception {
     final Counterexample counterexample = (Counterexample) params[0];
     final ExecutionResult expected = invoker.invoke(counterexample);
     final ExecutionResult actual = executor.execute(candidate, counterexample);
@@ -56,7 +56,7 @@ public class CandidateTest<Candidate> extends FrameworkMethod {
   }
 
   /**
-   * 
+   * @param counterexample
    * @return
    */
   @Fuzz

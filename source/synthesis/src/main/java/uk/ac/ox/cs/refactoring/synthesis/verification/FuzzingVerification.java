@@ -22,7 +22,7 @@ public class FuzzingVerification<Candidate> {
   /**
    * 
    */
-  final GeneratorRepository generatorRepository;
+  private final GeneratorRepository generatorRepository;
 
   /**
    * 
