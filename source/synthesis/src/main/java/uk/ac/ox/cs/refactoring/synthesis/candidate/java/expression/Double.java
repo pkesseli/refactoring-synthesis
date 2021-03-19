@@ -121,9 +121,11 @@ public final class Double {
   public static void register(final ComponentDirectory components) {
     final JavaLanguageKey doubleExpression = new JavaLanguageKey(IExpression.class, PrimitiveType.doubleType());
     final List<JavaLanguageKey> parameterKeys = Arrays.asList(doubleExpression, doubleExpression);
-    final Iterable<Class<?>> classes = Classes.getNonAbstractMemberClasses(Double.class)::iterator;
+    // TODO: Re-enable all options once fuzzing is smarter.
+    /*final Iterable<Class<?>> classes = Classes.getNonAbstractMemberClasses(Double.class)::iterator;
     for (final Class<?> cls : classes) {
       components.put(doubleExpression, new ConstructorComponent<>(parameterKeys, cls));
-    }
+    }*/
+    components.put(doubleExpression, new ConstructorComponent<>(parameterKeys, Plus.class));
   }
 }

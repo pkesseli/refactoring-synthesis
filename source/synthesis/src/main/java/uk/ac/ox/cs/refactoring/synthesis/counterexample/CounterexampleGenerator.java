@@ -8,20 +8,28 @@ import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
 /**
+ * JQF {@link Generator} for {@link Counterexample}. Used during verification
+ * using fuzzing.
+ * 
  * TODO: Implement {@code this} and fields
  */
 public class CounterexampleGenerator extends Generator<Counterexample> {
 
   /**
-   * 
+   * Repository of all available generators. Used to generate literal values.
    */
   private final GeneratorRepository repository;
 
   /**
-   * 
+   * Parameter types in the function to synthesise, and thus to be added to every
+   * counterexample.
    */
   private final List<Class<?>> parameterTypes;
 
+  /**
+   * @param repository     {@link #repository}
+   * @param parameterTypes {@link #parameterTypes}
+   */
   public CounterexampleGenerator(final GeneratorRepository repository, final List<Class<?>> parameterTypes) {
     super(Counterexample.class);
     this.repository = repository;
@@ -41,6 +49,11 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       }
     }
     return counterexample;
+  }
+
+  @Override
+  public Generator<Counterexample> copy() {
+    return new CounterexampleGenerator(repository, parameterTypes);
   }
 
 }

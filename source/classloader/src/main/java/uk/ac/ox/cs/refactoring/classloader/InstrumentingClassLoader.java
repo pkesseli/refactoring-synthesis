@@ -72,7 +72,12 @@ public class InstrumentingClassLoader extends IsolatedClassLoader {
       throw new ClassNotFoundException(name, e);
     }
 
-    final Class<?> cls = defineClass(name, transformed, 0, transformed.length, codeSource);
+    final Class<?> cls;
+    try {
+      cls = defineClass(name, transformed, 0, transformed.length, codeSource);
+    } catch (final ClassFormatError e) {
+      throw e;
+    }
     loadedClasses.add(name);
     return cls;
   }

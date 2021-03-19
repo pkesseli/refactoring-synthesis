@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.apache.commons.lang3.ClassUtils;
+
 import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Literals;
 
@@ -146,7 +148,7 @@ public final class HeapComparison {
    */
   private static boolean isAliasingEquivalent(final ObjectIdComparator comparator, final Object lhs, final Object rhs) {
     Class<?> lhsClass = lhs.getClass();
-    return lhsClass.isPrimitive() || comparator.hasSameId(lhs, rhs);
+    return ClassUtils.isPrimitiveOrWrapper(lhsClass) || comparator.hasSameId(lhs, rhs);
   }
 
   /**
