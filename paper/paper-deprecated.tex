@@ -417,23 +417,37 @@ As future work we aim to also collect components and sketches from the  unit tes
 \paragraph{{\bf Phase 2: Automatically generate the desired refactoring}} For this purpose, we use a counterexample-guided iterative process that enables us to keep refining a candidate refactoring until we are happy with it. 
   \begin{itemize}
   \item[a.] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode   
-    encode the synthesis problem as a verification problem that can be solved by fuzzing. The found refactoring
+    the synthesis problem as a verification problem that can be solved by fuzzing. The found refactoring
     is called a candidate.
   \item[b.] Given the candidate synthesised at the previous step, verify whether it is indeed a correct refactoring.
     Again, we answer this question by encoding it as a software verification problem to be solved by fuzzing.
-    If an input for which the candidate isn't semantically equivalent to the original code is found, then
+    If an input for which the candidate isn't observationally equivalent to the original code is found, then
     we return to the previous step and add this input to the set $In$. Otherwise we have found a correct refactoring and we are done.
   \end{itemize} 
 
 \paragraph{Note on the correctness of our solution} Given that we rely on fuzzing, we can't guarantee that the
-refactoring works for all possible input. However, it is well suited
-to the particular scenario for which we designed our technique, where
-continuous integration practices are in place. In particular, once our
-technique has found a possible refactoring, we sumit a pull request
-that needs to be approved by other developers.
+refactoring works for all possible inputs. However, it is well suited
+to the particular scenarios for which we designed our technique,
+IDE integration where the refactoring is presented as a suggestion to the programmer,
+or automated pull requests to be approved by the developers.
+%% where
+%% continuous integration practices are in place. In particular, once our
+%% technique has found a possible refactoring, we sumit a pull request
+%% that needs to be approved by other developers.
 
-Discuss different types of suzzing and the one that we use.
-\todo{Double check with Pascal what he uses.}
+In order to fully guarantee the soundness of the refactorings proposed
+by our technique, we would have to use a sound verification technique
+in the verification phase mentioned earlier. However, such a technique
+would require symbolic execution, which is notoriously difficult for
+real-world programs due to features such as loops, library functions,
+complex data structures. The most successful such verification
+techniques are either bounded (i.e. check that an erroneous state
+cannot be reached within a bounded number of loop unrollings) or
+require user input in the form of loop invariants. While the former
+class of techniques provides limited soundness guarantees, the latter
+requires intricate help from the user.  In fact, we are not aware of
+any sound and automatic symbolic verification method that can handle
+the kind of code we are interested in.
 
 Discuss tradeoff: symbolic execution is expensive; programming
 languages evolve faster than verification techniques and therefore
@@ -442,6 +456,8 @@ backends depending on how complex the new feature is); even after
 translating the code into a logical formula, calls to solvers are
 expensive.
 
+Discuss different types of fuzzing and the one that we use.
+\todo{Double check with Pascal what he uses.}
 
 
 \subsection{Problem encoding}\label{sec:encoding}
