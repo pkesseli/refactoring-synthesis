@@ -18,7 +18,6 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ConstructorComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.NullaryComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.SizedBuilder;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Assign;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Double;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Parameter;
@@ -32,13 +31,37 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
 
   /**
    * Maximum number of statements per candidate.
+   * 
+   * TODO: Increase once the fuzzer is smarter.
    */
-  private static final byte MAX_STATEMENTS = 10;
+  private static final byte MAX_STATEMENTS = 1;
+
+  /**
+   * Maximum length of one statement in a candidate.
+   * 
+   * TODO: Increase once the fuzzer is smarter.
+   */
+  private static final byte MAX_STATEMENT_LENGTH = 2;
 
   /**
    * Minimum number of statements per candidate.
    */
   private static final byte MIN_STATEMENTS = 1;
+
+  /**
+   * {@code this} expression to use in generated snippets.
+   */
+  private final This instance;
+
+  /**
+   * Method prameters to use in generated snippets.
+   */
+  private final List<Parameter> parameters;
+
+  /**
+   * Field access expressions to use in generaed snippets.
+   */
+  private final List<FieldAccess> fields;
 
   /**
    * Expressions and statements to be used to construct a candidate.
@@ -51,12 +74,17 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
   private final Function<SourceOfRandomness, IStatement> statements;
 
   /**
-   * @param fields             {@link FieldAccess Field expressions} to use when
-   *                           constructing Java snippets.
-   * @param sourceOfRandomness {@link #sourceOfRandomness}
+   * @param instance   {@link #instance}
+   * @param parameters {@link #parameters}
+   * @param fields     {@link #fields}
    */
-  public SnippetCandidateGenerator(final This instance, final List<Parameter> parameters, final List<FieldAccess> fields) {
+  public SnippetCandidateGenerator(final This instance, final List<Parameter> parameters,
+      final List<FieldAccess> fields) {
     super(SnippetCandidate.class);
+    this.instance = instance;
+    this.parameters = parameters;
+    this.fields = fields;
+
     if (instance != null) {
       components.put(new JavaLanguageKey(IExpression.class, instance.getType()), new NullaryComponent<>(instance));
     }
@@ -69,14 +97,15 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
       components.put(new JavaLanguageKey(IExpression.class, type), component);
       components.put(new JavaLanguageKey(LeftHandSideExpression.class, type), component);
     }
-    Assign.register(components, PrimitiveType.doubleType());
+    // TODO: Re-enable once fuzzing is smarter.
+    // Assign.register(components, PrimitiveType.doubleType());
     Double.register(components);
 
     final JavaLanguageKey expressionKey = new JavaLanguageKey(IExpression.class, PrimitiveType.doubleType());
     final JavaLanguageKey statementKey = new JavaLanguageKey(IStatement.class, PrimitiveType.doubleType());
     components.put(statementKey, new ConstructorComponent<>(Arrays.asList(expressionKey), ExpressionStatement.class));
 
-    statements = new SizedBuilder<>(components, MAX_STATEMENTS, statementKey);
+    statements = new SizedBuilder<>(components, MAX_STATEMENT_LENGTH, statementKey);
   }
 
   @Override
@@ -89,16 +118,23 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
     return result;
   }
 
-  /**
-   * @param candidate
-   * @return
-   */
-  @Fuzz
-  public static Method getFrameworkMethodPlaceholder(final SnippetCandidate candidate) {
-    try {
-      return SnippetCandidateGenerator.class.getDeclaredMethod("getFrameworkMethodPlaceholder", SnippetCandidate.class);
-    } catch (final NoSuchMethodException | SecurityException e) {
-      throw new IllegalStateException(e);
+  @Override
+  public Generator<SnippetCandidate> copy() {
+    return new SnippetCandidateGenerator(instance, parameters, fields);
+  }
+
+  public static class TestClass {
+    /**
+     * @param candidate
+     * @return
+     */
+    @Fuzz
+    public static Method getFrameworkMethodPlaceholder(final SnippetCandidate candidate) {
+      try {
+        return TestClass.class.getDeclaredMethod("getFrameworkMethodPlaceholder", SnippetCandidate.class);
+      } catch (final NoSuchMethodException | SecurityException e) {
+        throw new IllegalStateException(e);
+      }
     }
   }
 }

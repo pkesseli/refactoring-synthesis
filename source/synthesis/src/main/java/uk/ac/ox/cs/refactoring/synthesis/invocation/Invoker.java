@@ -62,7 +62,7 @@ public class Invoker {
     final Class<?>[] parameterTypes = new Class<?>[fullyQualifiedParameterTypeNames.size()];
     for (int i = 0; i < parameterTypes.length; ++i) {
       final String parameterType = fullyQualifiedParameterTypeNames.get(i);
-      parameterTypes[i] = classLoader.loadClass(parameterType);
+      parameterTypes[i] = loadClass(classLoader, parameterType);
     }
     final Method method = cls.getDeclaredMethod(methodName, parameterTypes);
     method.setAccessible(true);
@@ -74,4 +74,21 @@ public class Invoker {
     }
     return new ExecutionResult(classLoader, result);
   }
+
+  /**
+   * 
+   * @param classLoader
+   * @param typeName
+   * @return
+   * @throws ClassNotFoundException
+   */
+  private static Class<?> loadClass(final ClassLoader classLoader, final String typeName)
+      throws ClassNotFoundException {
+    switch (typeName) {
+    case "double":
+      return double.class;
+    }
+    return classLoader.loadClass(typeName);
+  }
+
 }

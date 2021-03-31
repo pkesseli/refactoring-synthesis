@@ -6,6 +6,8 @@ public final class Benchmarks {
   private Benchmarks() {
   }
 
+  public static final String DOUBLE_SUM = getFullyQualifiedBenchmarkName("DoubleSum");
+
   public static final String EMPTY = getFullyQualifiedBenchmarkName("Empty");
 
   public static final String INTEGER_ALIASING = getFullyQualifiedBenchmarkName("IntegerAliasing");

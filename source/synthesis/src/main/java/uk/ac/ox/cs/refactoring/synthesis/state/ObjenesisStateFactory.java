@@ -123,6 +123,9 @@ public class ObjenesisStateFactory implements IStateFactory {
     }
 
     final Object created = instantiate(objenesis, classLoader, objectDescription);
+    if (created == null)
+      return null;
+
     final Class<?> cls = created.getClass();
     for (final Map.Entry<String, Object> literalField : objectDescription.LiteralFields.entrySet()) {
       setField(cls, created, literalField.getKey(), literalField.getValue());
@@ -179,6 +182,9 @@ public class ObjenesisStateFactory implements IStateFactory {
    */
   private Object instantiate(final Function<Class<?>, Object> objenesis, final ClassLoader classLoader,
       final ObjectDescription objectDescription) throws ClassNotFoundException {
+    if (objectDescription == null)
+      return null;
+
     final Class<?> cls = classLoader.loadClass(objectDescription.FullyQualifiedClassName);
     final Thread currentThread = Thread.currentThread();
     final ClassLoader originalContextClassLoader = currentThread.getContextClassLoader();

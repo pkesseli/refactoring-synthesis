@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
@@ -24,28 +25,35 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
 import uk.ac.ox.cs.refactoring.synthesis.verification.FuzzingVerification;
 
 /**
- * 
+ * Implements a CEGIS loop based on JQF fuzzing for a configurable candidate
+ * type.
  */
 public class CegisLoop<Candidate> {
 
   /**
-   * 
+   * Inductive synthesis using fuzzing.
    */
   private final FuzzingSynthesis<Candidate> synthesis;
 
   /**
-   * 
+   * Verification using fuzzing.
    */
   private final FuzzingVerification<Candidate> verification;
 
   /**
-   * 
+   * All counterexamples to satisfy, including expeced output values.
    */
   private final Map<Counterexample, ExecutionResult> counterexamples = new HashMap<>();
 
   /**
-   * @param executor
-   * @param invoker
+   * @param executor       {@link CandidateExecutor} used to try candidates
+   *                       against inputs.
+   * @param invoker        {@link Invoker} used to run the original method to be
+   *                       replaced. Effectively models the specification of the
+   *                       synthesis.
+   * @param parameterTypes Types of parameters that bot {@code executor} and
+   *                       {@code invoker} accept.
+   * @param candidateType  Used to configure JQF candidate generators.
    */
   public CegisLoop(final CandidateExecutor<Candidate> executor, final Invoker invoker,
       final List<Class<?>> parameterTypes, final Class<Candidate> candidateType) {
@@ -59,20 +67,26 @@ public class CegisLoop<Candidate> {
       parameters.add(new Parameter(i, TypeFactory.create(parameterType)));
     }
     generatorRepository.register(new SnippetCandidateGenerator(null, parameters, Collections.emptyList()));
-    final Method fuzzingSynthesisFrameworkMethod = SnippetCandidateGenerator.getFrameworkMethodPlaceholder(null);
+    final Method fuzzingSynthesisFrameworkMethod = SnippetCandidateGenerator.TestClass
+        .getFrameworkMethodPlaceholder(null);
 
     synthesis = new FuzzingSynthesis<>(generatorRepository, sourceOfRandomness, candidateType,
-        fuzzingSynthesisFrameworkMethod, executor, invoker);
+        fuzzingSynthesisFrameworkMethod, executor);
     verification = new FuzzingVerification<>(generatorRepository, executor, invoker);
   }
 
   /**
-   * @return
-   * @throws IllegalAccessException
-   * @throws ClassNotFoundException
-   * @throws NoSuchFieldException
+   * Performs the actual CEGIS loop.
+   * 
+   * @return Candidate satisfying the given spec.
+   * @throws ClassNotFoundException if a necessary class could not be looked up.
+   * @throws IllegalAccessException if a reflective execution fails.
+   * @throws NoSuchFieldException   if a reflective field assignment fails.
+   * @throws NoSuchElementException if no candidate could be found in the alloted
+   *                                fuzzing time and trials.
    */
-  public Candidate synthesise() throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+  public Candidate synthesise()
+      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchElementException {
     Candidate candidate = synthesis.getDefault();
     while (needsRefinement(candidate)) {
       candidate = synthesis.synthesise(counterexamples);
@@ -81,8 +95,11 @@ public class CegisLoop<Candidate> {
   }
 
   /**
-   * @param candidate
-   * @return
+   * Indiciates whether the candidate needs to be refined.
+   * 
+   * @param candidate {@code Candidate} to check.
+   * @return {@code true} if verification found additional counterexamples,
+   *         {@code false} otherwise.
    */
   private boolean needsRefinement(final Candidate candidate) {
     final Map<Counterexample, ExecutionResult> newCounterexamples = verification.verify(candidate);

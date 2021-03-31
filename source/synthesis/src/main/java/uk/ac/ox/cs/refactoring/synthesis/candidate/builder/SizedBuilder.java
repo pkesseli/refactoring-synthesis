@@ -13,8 +13,10 @@ public class SizedBuilder<K, V> implements Function<SourceOfRandomness, V> {
 
   /**
    * Minimum size of a constructed component.
+   * 
+   * TODO: Relax to 1 once the fuzzer is smarter.
    */
-  private static final int MIN_SIZE = 1;
+  private static final int MIN_SIZE = 2;
 
   /**
    * Registered component buliding blocks.
@@ -53,7 +55,9 @@ public class SizedBuilder<K, V> implements Function<SourceOfRandomness, V> {
    */
   private Object generate(final SourceOfRandomness sourceOfRandomness, final K key, final int size) {
     final List<Component<K, ?>> candidates = components.get(key, size).collect(Collectors.toList());
-    final int selection = sourceOfRandomness.nextInt(0, candidates.size() - 1);
+    final int maxIndex = candidates.size() - 1;
+    // TODO: Replace this manual biasing by proper guidance and more fuzzing trials.
+    final int selection = maxIndex - sourceOfRandomness.nextInt(0, maxIndex);
     final Component<K, ?> component = candidates.get(selection);
     final List<K> argumentTypes = component.getParameterKeys();
     final Object[] arguments = new Object[argumentTypes.size()];
