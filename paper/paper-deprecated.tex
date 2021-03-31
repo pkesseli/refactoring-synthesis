@@ -533,6 +533,17 @@ variable share the same id if and only if they are aliases.
 %% in the second program.
 \todo{check exactly what this is used for.}
 
+Note on aliasing checking:
+Everything that is part of our comparison is in the isolated class loader.
+For instance user defined types will usually be located in the isolated
+class loader, enabling the comparison.
+However, what do we do about wrapper object aliasing?
+For anything outside the class loader, we use reference equality.
+\todo{example?}
+
+
+
+
 \subsubsection{Loaded classes}
 
 One of the potential issues when checking equivalence of two program
@@ -552,6 +563,9 @@ don't handle these cases.
 %% a class is loaded it is not initialized.
 
 \todo{give example}
+
+
+
 
 \subsection{Research questions}
 
