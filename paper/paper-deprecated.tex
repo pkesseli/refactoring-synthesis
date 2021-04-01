@@ -347,6 +347,8 @@ context enables the user to control the generality of the refactoring.
 For illustration, for the refactoring in Figure~\ref{ex:deprecated-method}...
 \todo{hmm, what context do we consider for the standard library?}
 
+\todo{Should we also discuss our choice of synthesis in the intro?}
+
 %% In this paper, we are interested in refactoring Java code handing
 %% collections through external iteration to use streams. Our refactoring
 %% procedure is based on the program semantics and makes use of program
@@ -388,12 +390,30 @@ For illustration, for the refactoring in Figure~\ref{ex:deprecated-method}...
 
 \section{Overview of our approach} \label{sec:approach}
 
+Our technique is semantics-based and makes use of advances in the field of program synthesis. In particular, we make use of the general structure of Counterexample Guided Inductive Synthesis (CEGIS),
+but instead of using symbolic execution to both generate and verify candidate refactorings, we use fuzzing, as described later in this section.
+Our synthesis method is also component based, meaning that it uses components from a given library to generate new code.
+In the rest of this section, we describe how we build the components library followed by presenting the actual refactoring synthesis.
+%%Our technique for refactoring deprecated instances (e.g. fields, methods, classes) has two big steps, as described next.
 
-Our technique for refactoring deprecated instances (e.g. fields, methods, classes) has two big steps, as described next.
+\paragraph{{\bf Input to our method}}
+We expect as input the original deprecated code \var{Orig} with inputs
+$\vec{x}$, as well as access to the library where the
+field/method/class has been deprecated. We need the latter to seed the
+components library.  Depending on the user's intention we may also
+take into consideration some amount of context (of the location where
+the deprecated element is found) when finding a refactoring.
 
-\paragraph{{\bf Phase 1: Seed the synthesis library}}
-In this phase, we build our components library for the actual synthesis process. 
-For this purpose, we pick hints from the library comments, which we use to seed the library.
+\paragraph{{\bf Seed the components library}}
+% Our synthesis engine is component based, meaning that, in order to generate new code, it makes use of a library of components.
+For each required refactoring, we start by building the components library.
+%Initially, we build our components library for the actual synthesis process. 
+In general, when deprecating a field/method/class, the
+\code{@deprecated} Javadoc tag is used in the comment section to
+inform the developer the reason of deprecation and what can be used in
+place. We pick hints from the comments accompanying the
+\code{@deprecated} tag.
+
 % Other github projects that have already been ported.
 \todo{Maybe we can also collect sketches as especially the unit tests will provide us with more than just the name of the replacement.}
 % As opposed to the comments in libraries, the unit tests are syntactically valid
@@ -412,55 +432,28 @@ As an example, the \code{Date} constructor used in Figure~\ref{ex:deprecated-met
  */
 \end{lstlisting}
 
+This will result in adding \code{``+''}, \code{``new GregorianCalendar($\cdots$)''} and constants 0, 11, 31 and 1900 to our library. 
 As future work we aim to also collect components and sketches from the  unit tests for the updated library.
  
-\paragraph{{\bf Phase 2: Automatically generate the desired refactoring}} For this purpose, we use a counterexample-guided iterative process that enables us to keep refining a candidate refactoring until we are happy with it. 
+\paragraph{{\bf Automatically generating the desired refactoring}} For this purpose, we use a counterexample-guided iterative process that enables us to keep refining a candidate refactoring until we are happy with it. This process consists of two phases, described next:
   \begin{itemize}
-  \item[a.] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode   
-    the synthesis problem as a verification problem that can be solved by fuzzing. The found refactoring
-    is called a candidate.
-  \item[b.] Given the candidate synthesised at the previous step, verify whether it is indeed a correct refactoring.
-    Again, we answer this question by encoding it as a software verification problem to be solved by fuzzing.
+  \item[{\bf Phase 1:}] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode   
+    the synthesis problem as a verification problem that can be solved by fuzzing. We discuss this problem encoding in
+    Section~\ref{sec:encoding}. The found refactoring is called a candidate.
+  \item[{\bf Phase 2:}] Given the candidate synthesised at the previous step, verify whether it is indeed a correct refactoring.
+    Again, we answer this question by encoding it as a software verification problem to be solved by fuzzing (see Section~\ref{sec:encoding}).
     If an input for which the candidate isn't observationally equivalent to the original code is found, then
     we return to the previous step and add this input to the set $In$. Otherwise we have found a correct refactoring and we are done.
-  \end{itemize} 
+  \end{itemize}
 
-\paragraph{Note on the correctness of our solution} Given that we rely on fuzzing, we can't guarantee that the
-refactoring works for all possible inputs. However, it is well suited
-to the particular scenarios for which we designed our technique,
-IDE integration where the refactoring is presented as a suggestion to the programmer,
-or automated pull requests to be approved by the developers.
-%% where
-%% continuous integration practices are in place. In particular, once our
-%% technique has found a possible refactoring, we sumit a pull request
-%% that needs to be approved by other developers.
+\todo{Run through the motivational example.}  
 
-In order to fully guarantee the soundness of the refactorings proposed
-by our technique, we would have to use a sound verification technique
-in the verification phase mentioned earlier. However, such a technique
-would require symbolic execution, which is notoriously difficult for
-real-world programs due to features such as loops, library functions,
-complex data structures. The most successful such verification
-techniques are either bounded (i.e. check that an erroneous state
-cannot be reached within a bounded number of loop unrollings) or
-require user input in the form of loop invariants. While the former
-class of techniques provides limited soundness guarantees, the latter
-requires intricate help from the user.  In fact, we are not aware of
-any sound and automatic symbolic verification method that can handle
-the kind of code we are interested in.
-
-Discuss tradeoff: symbolic execution is expensive; programming
-languages evolve faster than verification techniques and therefore
-many new features are not supported by their front ends (and/or
-backends depending on how complex the new feature is); even after
-translating the code into a logical formula, calls to solvers are
-expensive.
-
-Discuss different types of fuzzing and the one that we use.
-\todo{Double check with Pascal what he uses.}
 
 
 \subsection{Problem encoding}\label{sec:encoding}
+
+
+
 We encode the refactoring problem as a verification problem that can be solved by
 fuzzing. We next describe the verification and synthesis phases in a CEGIS module,
 where \texttt{Orig} and \texttt{Refactor} denote the original and refactored code,
@@ -565,6 +558,39 @@ don't handle these cases.
 \todo{give example}
 
 
+\paragraph{Note on the correctness of our solution} Given that we rely on fuzzing, we can't guarantee that the
+refactoring works for all possible inputs. However, it is well suited
+to the particular scenarios for which we designed our technique,
+IDE integration where the refactoring is presented as a suggestion to the programmer,
+or automated pull requests to be approved by the developers.
+%% where
+%% continuous integration practices are in place. In particular, once our
+%% technique has found a possible refactoring, we sumit a pull request
+%% that needs to be approved by other developers.
+
+In order to fully guarantee the soundness of the refactorings proposed
+by our technique, we would have to use a sound verification technique
+in the verification phase mentioned earlier. However, such a technique
+would require symbolic execution, which is notoriously difficult for
+real-world programs due to features such as loops, library functions,
+complex data structures. The most successful such verification
+techniques are either bounded (i.e. check that an erroneous state
+cannot be reached within a bounded number of loop unrollings) or
+require user input in the form of loop invariants. While the former
+class of techniques provides limited soundness guarantees, the latter
+requires intricate help from the user.  In fact, we are not aware of
+any sound and automatic symbolic verification method that can handle
+the kind of code we are interested in.
+
+Discuss tradeoff: symbolic execution is expensive; programming
+languages evolve faster than verification techniques and therefore
+many new features are not supported by their front ends (and/or
+backends depending on how complex the new feature is); even after
+translating the code into a logical formula, calls to solvers are
+expensive.
+
+Discuss different types of fuzzing and the one that we use.
+\todo{Double check with Pascal what he uses.}
 
 
 \subsection{Research questions}
