@@ -87,6 +87,8 @@ public class Invoker {
     switch (typeName) {
     case "double":
       return double.class;
+    case "int":
+      return int.class;
     }
     return classLoader.loadClass(typeName);
   }

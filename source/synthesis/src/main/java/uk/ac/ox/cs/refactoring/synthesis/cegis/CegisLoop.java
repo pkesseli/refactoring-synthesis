@@ -1,5 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.cegis;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,6 +80,7 @@ public class CegisLoop<Candidate> {
    * Performs the actual CEGIS loop.
    * 
    * @return Candidate satisfying the given spec.
+   * @throws IOException            if fuzzing guidance file I/O fails.
    * @throws ClassNotFoundException if a necessary class could not be looked up.
    * @throws IllegalAccessException if a reflective execution fails.
    * @throws NoSuchFieldException   if a reflective field assignment fails.
@@ -86,7 +88,7 @@ public class CegisLoop<Candidate> {
    *                                fuzzing time and trials.
    */
   public Candidate synthesise()
-      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchElementException {
+      throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchFieldException, NoSuchElementException {
     Candidate candidate = synthesis.getDefault();
     while (needsRefinement(candidate)) {
       candidate = synthesis.synthesise(counterexamples);

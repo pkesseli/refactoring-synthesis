@@ -31,17 +31,13 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
 
   /**
    * Maximum number of statements per candidate.
-   * 
-   * TODO: Increase once the fuzzer is smarter.
    */
-  private static final byte MAX_STATEMENTS = 1;
+  private static final byte MAX_STATEMENTS = 10;
 
   /**
    * Maximum length of one statement in a candidate.
-   * 
-   * TODO: Increase once the fuzzer is smarter.
    */
-  private static final byte MAX_STATEMENT_LENGTH = 2;
+  private static final byte MAX_STATEMENT_LENGTH = 10;
 
   /**
    * Minimum number of statements per candidate.

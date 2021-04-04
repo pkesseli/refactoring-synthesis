@@ -21,7 +21,7 @@ public class State {
    * @param instance  {@link #Instance}
    * @param arguments {@link #Arguments}
    */
-  public State(Object instance, Object[] arguments) {
+  public State(Object instance, Object... arguments) {
     Instance = instance;
     Arguments = arguments;
   }

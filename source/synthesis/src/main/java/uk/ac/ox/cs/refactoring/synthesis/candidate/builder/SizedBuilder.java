@@ -13,10 +13,8 @@ public class SizedBuilder<K, V> implements Function<SourceOfRandomness, V> {
 
   /**
    * Minimum size of a constructed component.
-   * 
-   * TODO: Relax to 1 once the fuzzer is smarter.
    */
-  private static final int MIN_SIZE = 2;
+  private static final int MIN_SIZE = 1;
 
   /**
    * Registered component buliding blocks.
@@ -24,7 +22,7 @@ public class SizedBuilder<K, V> implements Function<SourceOfRandomness, V> {
   private final ComponentDirectory components;
 
   /**
-   * Maximum size of a constructoed component.
+   * Maximum size of a constructed component.
    */
   private final int maxSize;
 
@@ -56,8 +54,7 @@ public class SizedBuilder<K, V> implements Function<SourceOfRandomness, V> {
   private Object generate(final SourceOfRandomness sourceOfRandomness, final K key, final int size) {
     final List<Component<K, ?>> candidates = components.get(key, size).collect(Collectors.toList());
     final int maxIndex = candidates.size() - 1;
-    // TODO: Replace this manual biasing by proper guidance and more fuzzing trials.
-    final int selection = maxIndex - sourceOfRandomness.nextInt(0, maxIndex);
+    final int selection = nextInt(sourceOfRandomness, maxIndex);
     final Component<K, ?> component = candidates.get(selection);
     final List<K> argumentTypes = component.getParameterKeys();
     final Object[] arguments = new Object[argumentTypes.size()];
@@ -69,9 +66,19 @@ public class SizedBuilder<K, V> implements Function<SourceOfRandomness, V> {
 
   @Override
   public V apply(final SourceOfRandomness sourceOfRandomness) {
-    final int size = sourceOfRandomness.nextInt(MIN_SIZE, maxSize);
+    final int size = MIN_SIZE + nextInt(sourceOfRandomness, maxSize);
     @SuppressWarnings("unchecked")
     final V result = (V) generate(sourceOfRandomness, resultKey, size);
     return result;
+  }
+
+  /**
+   * 
+   * @param sourceOfRandomness
+   * @param max
+   * @return
+   */
+  private static int nextInt(SourceOfRandomness sourceOfRandomness, int max) {
+    return Math.abs(sourceOfRandomness.nextInt()) % (max + 1);
   }
 }
