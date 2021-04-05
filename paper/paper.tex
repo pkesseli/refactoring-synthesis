@@ -468,7 +468,7 @@ we use \var{Candidate(\vec{x})} to refer to a candidate refactoring.
 refactoring and we must check whether there exists any input
 \var{\vec{x}} for which the original code and the candidate
 refactoring are not observationally equivalent.  To do this, we build
-the following \var{Verify} method, which given some input
+the following \code{Verify} method, which given some input
 \var{\vec{x}}, asserts that the two programs are equivalent for
 \var{\vec{x}}.
 
@@ -480,14 +480,14 @@ Verify(x) {
 
 In other words, answering the initial question posed by the verification
 phase is reduced to checking the safety of this method: if
-\var{Verify} is safe (i.e. the assertion is not violated) for any
+\code{Verify} is safe (i.e. the assertion is not violated) for any
 input \var{\vec{x}}, then there is no input that can distinguish
 between the original and the candidate refactoring meaning that this
-is indeed a sound refactoring. However, if \var{Verify} is not safe,
+is indeed a sound refactoring. However, if \code{Verify} is not safe,
 then we want to be able to obtain a counterexample input
 \var{\vec{x_{cex}}} for which the assertion fails. This counterexample
 will be provided to the synthesis phase and used to refine the current
-candidate. We check the safety of \var{Verify} with coverage-guided
+candidate. We check the safety of \code{Verify} with coverage-guided
 fuzz testing. While this means that we may fail to find a
 distinguishing input when one does exist, we discuss later in the
 paper our reasons for choosing to use fuzzing over other sound
@@ -509,20 +509,27 @@ Section~\ref{sec:equiv}.
 %% The fuzzer will find an input for which the original and refactored code
 %% produce a different result.
 
-\paragraph{The synthesis phase} We construct the following program, which
-takes the refactored code \texttt{Refactor} as input.
+\paragraph{The synthesis phase} For the synthesis phase, we are provided with a
+a finite set of input $\{x_1 \cdots x_n\}$ examples and we need to find a candidate refactoring
+that is observationally equivalent to the original program for these inputs.
+For this purpose, we construct the following \code{Synthesise} method, which
+takes the refactored code \var{Refactor} as input.
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 Synthesise (Refactor) {
 
-if (Orig(x1)=Refactor(x1) && ... && Orig(xn)=Refactor(xn))
+  if (equivalent(Orig($x_1$), Refactor($x_1$)) && ...
+  && equivalent(Orig($x_n$), Refactor($x_n$)))
    assert(false);
 }
 \end{lstlisting}
 
-The fuzzer will find an input \texttt{Refactor} that fails the assertion,
+Again, we reduce the problem to be solved in the synthesis phase to
+the problem of checking the safety of the \code{Synthesise} method,
+which we do by fuzzing.
+The fuzzer will find an input \var{Refactor} that fails the assertion,
 meaning that it returns the same output as \texttt{Orig}
-on the finite set of inputs \texttt{$x_1, \cdots, x_n$}.
+on the finite set of inputs \var{x_1, \cdots, x_n}.
 
 
 %% - Performing the synthesis. Complex bit: synthesising method invocations for methods that contain loops.
