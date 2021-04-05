@@ -510,16 +510,16 @@ Section~\ref{sec:equiv}.
 %% produce a different result.
 
 \paragraph{The synthesis phase} For the synthesis phase, we are provided with a
-a finite set of input $\{x_1 \cdots x_n\}$ examples and we need to find a candidate refactoring
+a finite set of input examples $\{x_1 \cdots x_n\}$ and we need to find a candidate refactoring
 that is observationally equivalent to the original program for these inputs.
 For this purpose, we construct the following \code{Synthesise} method, which
-takes the refactored code \var{Refactor} as input.
+takes the refactored code \var{Candidate} as input.
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
-Synthesise (Refactor) {
+Synthesise (Candidate) {
 
-  if (equivalent(Orig($x_1$), Refactor($x_1$)) && ...
-  && equivalent(Orig($x_n$), Refactor($x_n$)))
+  if (equivalent(Orig($x_1$), Candidate($x_1$)) && ...
+  && equivalent(Orig($x_n$), Candidate($x_n$)))
    assert(false);
 }
 \end{lstlisting}
@@ -527,7 +527,7 @@ Synthesise (Refactor) {
 Again, we reduce the problem to be solved in the synthesis phase to
 the problem of checking the safety of the \code{Synthesise} method,
 which we do by fuzzing.
-The fuzzer will find an input \var{Refactor} that fails the assertion,
+The fuzzer will find an input \var{Candidate} that fails the assertion,
 meaning that it returns the same output as \texttt{Orig}
 on the finite set of inputs \var{x_1, \cdots, x_n}.
 
@@ -552,12 +552,16 @@ on the finite set of inputs \var{x_1, \cdots, x_n}.
 
 \paragraph{Checking heap equivalence}
 
-In Section~\ref{sec:encoding}, we simplified the property checked by
-the fuzzer to \texttt{Orig(x)=Refactor(x)}, which essentially tests
-whether, for input \texttt{x}, the outputs of the original and
-refactored programs are the same.  However, any realistic Java program
-makes modifications to the heap. Consequently, we need to check that
-heap is being handled in the same manner in both programs.
+In Section~\ref{sec:encoding}, we use \var{equivalent(Orig(x),
+  Candidate(x))} to denote equivalence checking for \var{Orig} and
+\var{Candidate} on concrete input \var{x}. First, this function needs
+to check whether for input \var{x}, the outputs of the original and
+candidate refactored programs are the same.  Moreover, any realistic
+Java program makes modifications to the heap. Consequently,
+\var{equivalent} must check that heap is being handled in the same
+manner in both programs.
+
+\todo{Get an example from Pascal that explains exactly what's being compared}
 
 Given the potential use of aliases, we will use a Hash table to
 associate a symbolic id to each pointer variable such that two
