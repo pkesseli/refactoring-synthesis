@@ -677,7 +677,17 @@ don't handle these cases.
 \todo{give example}
 
 
-\paragraph{Note on the correctness of our solution} Given that we rely on fuzzing, we can't guarantee that the
+
+Discuss different types of fuzzing and the one that we use.
+\todo{Double check with Pascal what he uses.}
+
+\section{Algorithm}
+
+\todo{Write description of the algorithm}
+
+\section{Guarantees}
+
+\paragraph{Discussion on soundness} Given that we rely on fuzzing, we can't guarantee that the
 refactoring works for all possible inputs. However, it is well suited
 to the particular scenarios for which we designed our technique,
 IDE integration where the refactoring is presented as a suggestion to the programmer,
@@ -708,11 +718,11 @@ backends depending on how complex the new feature is); even after
 translating the code into a logical formula, calls to solvers are
 expensive.
 
-Discuss different types of fuzzing and the one that we use.
-\todo{Double check with Pascal what he uses.}
+\section{Discussion on completeness}
 
 
-\subsection{Research questions}
+
+\section{Some research questions}
 
 What if the new method doesn't maintain observational equivalence?
 TODO: Check existing projects to see how many do preserve equivalence.
