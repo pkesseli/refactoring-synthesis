@@ -1,5 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.api;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.github.javaparser.ast.stmt.Statement;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
@@ -19,5 +21,6 @@ public interface IStatement extends INodeConvertible<Statement> {
    * @throws IllegalAccessException
    * @throws NoSuchFieldException
    */
-  Object execute(ExecutionContext context) throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException;
+  Object execute(ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
+      InvocationTargetException, NoSuchFieldException, NoSuchMethodException;
 }

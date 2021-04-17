@@ -53,6 +53,13 @@ public class InstrumentingClassLoader extends IsolatedClassLoader {
 
   @Override
   protected Class<?> findClass(final String name) throws ClassNotFoundException {
+    switch (name) {
+    case "double":
+      return double.class;
+    case "int":
+      return int.class;
+    }
+
     final String classFileName = getClassFileName(name);
     final byte[] content;
     try (final InputStream is = wrapped.getResourceAsStream(classFileName)) {

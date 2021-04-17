@@ -1,5 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,8 +62,8 @@ public final class Double {
      * @throws IllegalAccessException
      * @throws NoSuchFieldException
      */
-    public double getLhs(final ExecutionContext context)
-        throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+    public double getLhs(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
+        InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return (double) lhs.evaluate(context);
     }
 
@@ -73,8 +74,8 @@ public final class Double {
      * @throws IllegalAccessException
      * @throws NoSuchFieldException
      */
-    public double getRhs(final ExecutionContext context)
-        throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+    public double getRhs(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
+        InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return (double) rhs.evaluate(context);
     }
 
@@ -95,8 +96,8 @@ public final class Double {
     }
 
     @Override
-    public java.lang.Double evaluate(final ExecutionContext context)
-        throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+    public java.lang.Double evaluate(final ExecutionContext context) throws ClassNotFoundException,
+        IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return getLhs(context) + getRhs(context);
     }
   }
@@ -107,8 +108,8 @@ public final class Double {
     }
 
     @Override
-    public java.lang.Double evaluate(final ExecutionContext context)
-        throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+    public java.lang.Double evaluate(final ExecutionContext context) throws ClassNotFoundException,
+        IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return getLhs(context) - getRhs(context);
     }
   }

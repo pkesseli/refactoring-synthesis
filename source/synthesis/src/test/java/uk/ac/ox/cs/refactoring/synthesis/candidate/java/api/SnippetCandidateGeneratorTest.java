@@ -30,7 +30,7 @@ public class SnippetCandidateGeneratorTest {
     when(sourceOfRandomness.nextByte(anyByte(), anyByte())).thenReturn((byte) 1);
     when(sourceOfRandomness.nextInt(anyInt(), anyInt())).thenAnswer(i -> i.getArgument(0));
     final SnippetCandidateGenerator candidateSupplier = new SnippetCandidateGenerator(null, Collections.emptyList(),
-        Arrays.asList(field));
+        Arrays.asList(field), Collections.emptyList());
     final SnippetCandidate snippetCandidate = candidateSupplier.generate(sourceOfRandomness, null);
     assertThat(snippetCandidate.Block.Statements, hasItems(isA(ExpressionStatement.class)));
   }

@@ -1,5 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,8 +29,8 @@ public class BlockStatement implements IStatement {
   }
 
   @Override
-  public Object execute(final ExecutionContext context)
-      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+  public Object execute(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
+      InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
     if (Statements.isEmpty()) {
       return null;
     }

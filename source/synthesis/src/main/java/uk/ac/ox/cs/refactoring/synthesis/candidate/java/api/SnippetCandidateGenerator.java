@@ -2,6 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.api;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
@@ -20,6 +21,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.SizedBuilder;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Double;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Parameter;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.This;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
@@ -60,6 +62,11 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
   private final List<FieldAccess> fields;
 
   /**
+   * Methods which should be part of the instruction set.
+   */
+  private final Iterable<Method> methods;
+
+  /**
    * Expressions and statements to be used to construct a candidate.
    */
   private final ComponentDirectory components = new ComponentDirectory();
@@ -73,13 +80,15 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
    * @param instance   {@link #instance}
    * @param parameters {@link #parameters}
    * @param fields     {@link #fields}
+   * @param methods
    */
   public SnippetCandidateGenerator(final This instance, final List<Parameter> parameters,
-      final List<FieldAccess> fields) {
+      final List<FieldAccess> fields, final Iterable<Method> methods) {
     super(SnippetCandidate.class);
     this.instance = instance;
     this.parameters = parameters;
     this.fields = fields;
+    this.methods = methods;
 
     if (instance != null) {
       components.put(new JavaLanguageKey(IExpression.class, instance.getType()), new NullaryComponent<>(instance));
@@ -96,6 +105,7 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
     // TODO: Re-enable once fuzzing is smarter.
     // Assign.register(components, PrimitiveType.doubleType());
     Double.register(components);
+    Invoke.register(components, methods);
 
     final JavaLanguageKey expressionKey = new JavaLanguageKey(IExpression.class, PrimitiveType.doubleType());
     final JavaLanguageKey statementKey = new JavaLanguageKey(IStatement.class, PrimitiveType.doubleType());
@@ -116,7 +126,7 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
 
   @Override
   public Generator<SnippetCandidate> copy() {
-    return new SnippetCandidateGenerator(instance, parameters, fields);
+    return new SnippetCandidateGenerator(instance, parameters, fields, methods);
   }
 
   public static class TestClass {

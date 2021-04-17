@@ -37,7 +37,7 @@ public final class TypeFactory {
    * @param cls Java {@link Class} to convert.
    * @return AST {@link Type}.
    */
-  private static ClassOrInterfaceType createClassType(final Class<?> cls) {
+  public static ClassOrInterfaceType createClassType(final Class<?> cls) {
     final Class<?> declaringClass = cls.getDeclaringClass();
     final ClassOrInterfaceType scope;
     if (declaringClass != null) {

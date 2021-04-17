@@ -1,5 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
@@ -30,8 +32,8 @@ public class ExpressionStatement implements IStatement {
   }
 
   @Override
-  public Object execute(final ExecutionContext context)
-      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+  public Object execute(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
+      InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
     return expression.evaluate(context);
   }
 }
