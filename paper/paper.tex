@@ -571,8 +571,7 @@ as \var{P_2}. We further use:
 \begin{itemize}
 \item \var{loadedClasses(P)} to obtain the set of classes loaded by the class loader
   in which the execution of \var{P} is performed.
-\item \var{liveVars(P)} returns the
-set of variables that have been assigned to in $P$ and are live
+\item \var{liveVars(P)} returns the set of variables that are live
 at the end of the $P$. %% Thus, \var{liveVars(P_1)} gives us the
 %% variables that have been updated in the original code \var{P_1} and are
 %% live at the end of \var{P_1}.
@@ -581,20 +580,79 @@ at the end of the $P$. %% Thus, \var{liveVars(P_1)} gives us the
 \end{itemize}  
 
 \begin{example}
-For our running example in Figure~\ref{ex:deprecated-method},
-we have:
+  For our running example in Figure~\ref{ex:deprecated-method},
+  \var{P_1} is represented by the following line of code:
+
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+  Date date = new Date(120, 12, 30);
+\end{lstlisting}
+
+Whereas \var{P_2} is denoted by:
+
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+  final Calendar calendar = Calendar.getInstance();
+  calendar.set(2020, 12, 30);
+  final Date date = calendar.getTime();
+\end{lstlisting}
+  
+Then, we have:
 \[
 \begin{aligned}[t]
   \var{liveVars(P_1)} &= \{date\}\\
-  \var{loadedClasses(P_1)} &= \{ByteArrayOutputStream, Date\} \\
-\var{staticFields(P_1)} &= \emptyset
+  \var{liveVars(P_2)} &= \{calendar, date\}\\  
+  \var{loadedClasses(P_1)} &= \{Date\} \\
+  \var{loadedClasses(P_2)} &= \{Calendar, Date\} \\  
+  \var{staticFields(Date)} &= \emptyset\\
+  \var{staticFields(Calendar)} &= \{DATE, YEAR, \cdots\}  
 \end{aligned}
 \]
 \end{example}
 
 
-\todo{revise the rest}
+Next, we define the notion of equivalence with respect to a concrete input \var{x}.
 
+\begin{definition}[Program equivalence with respect to a concrete input \var{x}]\label{def:prog-equiv}
+  Given two programs \var{P_1} and \var{P_2} and concrete input \var{x},
+  we say that \var{P_1} and \var{P_2} are equivalent
+  with respect to \var{x}, written as \var{equivalent(P_1(x), P_2(x))}
+  if and only if one of the following holds:
+
+  \begin{itemize}
+  \item $\forall v\in liveVar(P_1)\cap liveVar(P_2). equivalent(v/P_1, v/P_2)$
+  \item
+    \[
+    \begin{aligned}
+    & \forall C \in loadedClasses(P_1) \cap loadedClasses(P_2).\\
+    & equivalent(staticFields(C)/P_1, staticFields(C)/P_2)
+    \end{aligned}
+    \]
+    %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
+  %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
+   %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
+    \end{itemize}
+    
+  \end{definition}
+
+The above definition says that in order for \var{P_1} and
+\var{P_2} to be equivalent with respect to input \var{x}, any variable
+that is live at the end of both \var{P_1} and \var{P_2} must be
+assigned equivalent values by the executions of \var{P_1} and
+\var{P_2} on \var{x}, respectively. Additionally, for any class that
+is being loaded by the class loader of both \var{P_1} and \var{P_2},
+all the static fields must again be assigned equivalent values by the
+two executions.
+
+\begin{example}
+  We now apply Definition~\ref{def:prog-equiv} to the running example.
+  \todo{write the relations}
+\end{example}
+
+\todo{define $equivalent(v/P_1, v/P_2)$}.
+
+\todo{define $equivalent(staticFields(C)/P_1, staticFields(C)/P_2)$}
+
+\todo{revise the rest.}
+\todo{also add an example where static fields are changed.}
 
 Given the potential use of aliases, we will use a Hash table to
 associate a symbolic id to each pointer variable such that two
