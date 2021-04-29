@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.NodeList;
@@ -10,6 +11,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IStatement;
 
 /**
@@ -28,6 +30,16 @@ public class BlockStatement implements IStatement {
         new NodeList<>(Statements.stream().map(IStatement::toNode).collect(Collectors.toCollection(NodeList::new))));
   }
 
+  /**
+   * Provides the index of the last statement, which is treated as the return
+   * value of a block.
+   * 
+   * @return Index in {@link #Statements} indicating the last statement.
+   */
+  private int getLastIndex() {
+    return Statements.size() - 1;
+  }
+
   @Override
   public Object execute(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
       InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
@@ -35,10 +47,17 @@ public class BlockStatement implements IStatement {
       return null;
     }
 
-    final int lastIndex = Statements.size() - 1;
-    for (int i = 0; i < lastIndex - 1; ++i) {
+    final int lastIndex = getLastIndex();
+    for (int i = 0; i < lastIndex; ++i) {
       Statements.get(i).execute(context);
     }
     return Statements.get(lastIndex).execute(context);
+  }
+
+  @Override
+  public Optional<IExpression> getSymbolExpression() {
+    if (Statements.isEmpty())
+      return Optional.empty();
+    return Statements.get(getLastIndex()).getSymbolExpression();
   }
 }

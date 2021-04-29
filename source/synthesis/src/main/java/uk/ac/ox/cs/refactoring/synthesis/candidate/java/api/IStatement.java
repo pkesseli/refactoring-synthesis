@@ -1,6 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.api;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 import com.github.javaparser.ast.stmt.Statement;
 
@@ -23,4 +24,14 @@ public interface IStatement extends INodeConvertible<Statement> {
    */
   Object execute(ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
       InvocationTargetException, NoSuchFieldException, NoSuchMethodException;
+
+  /**
+   * If present, provides an expression using which the value of {@code this}
+   * statement can be reused. The typical example is a statement declaring a
+   * temporary variable to which we provide a symbol expression.
+   * 
+   * @return {@link Optional} symbol expression referring to a designated
+   *         statement value.
+   */
+  Optional<IExpression> getSymbolExpression();
 }

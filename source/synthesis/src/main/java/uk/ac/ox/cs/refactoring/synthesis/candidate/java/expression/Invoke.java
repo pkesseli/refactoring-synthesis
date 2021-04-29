@@ -31,7 +31,7 @@ public final class Invoke {
   private Invoke() {
   }
 
-  private static class InvokeMethod implements IExpression {
+  public static class InvokeMethod implements IExpression {
 
     /**
      * 

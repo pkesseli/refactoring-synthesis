@@ -44,11 +44,46 @@ public class ComponentDirectory {
    * @param component Component to register.
    */
   public <K> void put(final K key, final Component<K, ?> component) {
-    final SortedMap<Integer, List<? extends Component<?, ?>>> sizeBucket = components.computeIfAbsent(key,
-        k -> new TreeMap<Integer, List<? extends Component<?, ?>>>());
-    final List<? extends Component<?, ?>> bucket = sizeBucket.computeIfAbsent(component.size(), k -> new ArrayList<>());
+    final List<? extends Component<?, ?>> bucket = getOrCreate(key, component.size());
     @SuppressWarnings("unchecked")
     final List<Component<K, ?>> converted = (List<Component<K, ?>>) bucket;
     converted.add(component);
+  }
+
+  /**
+   * Adds all components to {@code this}.
+   * 
+   * TODO: This is inefficient and unnecessary. We should introduce a session
+   * object to which we just keep adding temporary variable components.
+   * 
+   * @param componentDirectory Components to add.
+   */
+  public void putAll(final ComponentDirectory componentDirectory) {
+    for (final Map.Entry<Object, SortedMap<Integer, List<? extends Component<?, ?>>>> entry : componentDirectory.components
+        .entrySet()) {
+      final Object key = entry.getKey();
+      for (final Map.Entry<Integer, List<? extends Component<?, ?>>> sizedEntry : entry.getValue().entrySet()) {
+        final int size = sizedEntry.getKey();
+        @SuppressWarnings("unchecked")
+        final List<Component<?, ?>> converted = (List<Component<?, ?>>) getOrCreate(key, size);
+        converted.addAll(sizedEntry.getValue());
+      }
+    }
+  }
+
+  /**
+   * Provides the existing container in {@code this} directory for components of
+   * the given type and size, or creates one for this category of components.
+   * 
+   * @param <K> Key type.
+   * @param <V> Component type.
+   * @param key Category of the desired component.
+   * @param size Maximum length of the desired component.
+   * @return Container for components with the specified properties.
+   */
+  private <K, V> List<? extends Component<?, ?>> getOrCreate(final K key, final int size) {
+    final SortedMap<Integer, List<? extends Component<?, ?>>> sizeBucket = components.computeIfAbsent(key,
+        k -> new TreeMap<Integer, List<? extends Component<?, ?>>>());
+    return sizeBucket.computeIfAbsent(size, k -> new ArrayList<>());
   }
 }

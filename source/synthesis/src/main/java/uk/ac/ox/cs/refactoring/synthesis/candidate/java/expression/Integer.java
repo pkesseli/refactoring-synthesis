@@ -15,47 +15,47 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.reflection.Classes;
 
 /**
- * Contains double type expression for use in a Java candidate builder.
+ * Contains int type expression for use in a Java candidate builder.
  */
-public final class Double {
-  private Double() {
+public final class Integer {
+  private Integer() {
   }
 
-  static class Plus extends BinaryExpression<java.lang.Double> {
+  public static class Plus extends BinaryExpression<java.lang.Integer> {
     public Plus(final IExpression lhs, final IExpression rhs) {
-      super(lhs, Operator.PLUS, rhs, PrimitiveType.doubleType());
+      super(lhs, Operator.PLUS, rhs, PrimitiveType.intType());
     }
 
     @Override
-    public java.lang.Double evaluate(final ExecutionContext context) throws ClassNotFoundException,
+    public java.lang.Integer evaluate(final ExecutionContext context) throws ClassNotFoundException,
         IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return getLhs(context) + getRhs(context);
     }
   }
 
-  static class Minus extends BinaryExpression<java.lang.Double> {
+  static class Minus extends BinaryExpression<java.lang.Integer> {
     public Minus(final IExpression lhs, final IExpression rhs) {
-      super(lhs, Operator.MINUS, rhs, PrimitiveType.doubleType());
+      super(lhs, Operator.MINUS, rhs, PrimitiveType.intType());
     }
 
     @Override
-    public java.lang.Double evaluate(final ExecutionContext context) throws ClassNotFoundException,
+    public java.lang.Integer evaluate(final ExecutionContext context) throws ClassNotFoundException,
         IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return getLhs(context) - getRhs(context);
     }
   }
 
   /**
-   * Helper to register double expressions in Java candidate builders.
+   * Helper to register int expressions in Java candidate builders.
    * 
-   * @param components Directory in which to register all double expressions.
+   * @param components Directory in which to register all int expressions.
    */
   public static void register(final ComponentDirectory components) {
-    final JavaLanguageKey doubleExpression = new JavaLanguageKey(IExpression.class, PrimitiveType.doubleType());
-    final List<JavaLanguageKey> parameterKeys = Arrays.asList(doubleExpression, doubleExpression);
-    final Iterable<Class<?>> classes = Classes.getNonAbstractMemberClasses(Double.class)::iterator;
+    final JavaLanguageKey intExpression = new JavaLanguageKey(IExpression.class, PrimitiveType.intType());
+    final List<JavaLanguageKey> parameterKeys = Arrays.asList(intExpression, intExpression);
+    final Iterable<Class<?>> classes = Classes.getNonAbstractMemberClasses(Integer.class)::iterator;
     for (final Class<?> cls : classes) {
-      components.put(doubleExpression, new ConstructorComponent<>(parameterKeys, cls));
+      components.put(intExpression, new ConstructorComponent<>(parameterKeys, cls));
     }
   }
 }
