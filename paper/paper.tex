@@ -550,18 +550,51 @@ on the finite set of inputs \var{x_1, \cdots, x_n}.
 
 \subsection{Checking program equivalence for a certain input}\label{sec:equiv}
 
-\paragraph{Checking heap equivalence}
+%\paragraph{Checking heap equivalence}
 
 In Section~\ref{sec:encoding}, we use \var{equivalent(Orig(x),
   Candidate(x))} to denote equivalence checking for \var{Orig} and
-\var{Candidate} on concrete input \var{x}. First, this function needs
-to check whether for input \var{x}, the outputs of the original and
-candidate refactored programs are the same.  Moreover, any realistic
-Java program makes modifications to the heap. Consequently,
-\var{equivalent} must check that heap is being handled in the same
-manner in both programs.
+\var{Candidate} on concrete input \var{x}.
+In this section, we provide details on how we check equivalence.
 
-\todo{Get an example from Pascal that explains exactly what's being compared}
+
+%% First, this function needs
+%% to check whether for input \var{x}, the outputs of the original and
+%% candidate refactored programs are the same.  Moreover, any realistic
+%% Java program makes modifications to the heap. Consequently,
+%% \var{equivalent} must check that heap is being handled in the same
+%% manner in both programs.
+
+
+We'll refer to the original code as \var{P_1} and the refactored one
+as \var{P_2}. We further use:
+\begin{itemize}
+\item \var{loadedClasses(P)} to obtain the set of classes loaded by the class loader
+  in which the execution of \var{P} is performed.
+\item \var{liveVars(P)} returns the
+set of variables that have been assigned to in $P$ and are live
+at the end of the $P$. %% Thus, \var{liveVars(P_1)} gives us the
+%% variables that have been updated in the original code \var{P_1} and are
+%% live at the end of \var{P_1}.
+\item \var{staticFields(C)} returns
+  the set of static fields of a class C.
+\end{itemize}  
+
+\begin{example}
+For our running example in Figure~\ref{ex:deprecated-method},
+we have:
+\[
+\begin{aligned}[t]
+  \var{liveVars(P_1)} &= \{date\}\\
+  \var{loadedClasses(P_1)} &= \{ByteArrayOutputStream, Date\} \\
+\var{staticFields(P_1)} &= \emptyset
+\end{aligned}
+\]
+\end{example}
+
+
+\todo{revise the rest}
+
 
 Given the potential use of aliases, we will use a Hash table to
 associate a symbolic id to each pointer variable such that two
@@ -632,8 +665,6 @@ refactored program.
 %% Equivalent objects
 %% - ObjectIdComparator
 %% - IsAliasingEquivalent
-
-%% When you compare two objects, how deep do you go?
 
 %% State: static fields of all classes, stack vars, follow object pointers, thread locals?, equivalence classes induced by the aliasing relation must be preserved
 %% - touch the same vars
