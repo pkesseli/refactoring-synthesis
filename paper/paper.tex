@@ -555,7 +555,7 @@ on the finite set of inputs \var{x_1, \cdots, x_n}.
 In Section~\ref{sec:encoding}, we use \var{equivalent(Orig(x),
   Candidate(x))} to denote equivalence checking for \var{Orig} and
 \var{Candidate} on concrete input \var{x}.
-In this section, we provide details on how we check equivalence.
+In this section, we provide details on how we check this equivalence.
 
 
 %% First, this function needs
@@ -566,7 +566,7 @@ In this section, we provide details on how we check equivalence.
 %% manner in both programs.
 
 
-We'll refer to the original code as \var{P_1} and the refactored one
+We'll generally refer to the original code as \var{P_1} and the refactored one
 as \var{P_2}. We further use:
 \begin{itemize}
 \item \var{loadedClasses(P)} to obtain the set of classes loaded by the class loader
@@ -576,10 +576,10 @@ at the end of the $P$. %% Thus, \var{liveVars(P_1)} gives us the
 %% variables that have been updated in the original code \var{P_1} and are
 %% live at the end of \var{P_1}.
 \item \var{staticFields(C)} returns
-  the set of static fields of a class C.
+  the set of static fields of a class \var{C}.
 \end{itemize}  
 
-\begin{example}
+\begin{example}\label{ex:defs}
   For our running example in Figure~\ref{ex:deprecated-method},
   \var{P_1} is represented by the following line of code:
 
@@ -615,36 +615,49 @@ Next, we define the notion of equivalence with respect to a concrete input \var{
   Given two programs \var{P_1} and \var{P_2} and concrete input \var{x},
   we say that \var{P_1} and \var{P_2} are equivalent
   with respect to \var{x}, written as \var{equivalent(P_1(x), P_2(x))}
-  if and only if one of the following holds:
+  if and only if the following conditions hold:
 
-  \begin{itemize}
-  \item $\forall v\in liveVar(P_1)\cap liveVar(P_2). equivalent(v/P_1, v/P_2)$
-  \item
-    \[
+\[
     \begin{aligned}
-    & \forall C \in loadedClasses(P_1) \cap loadedClasses(P_2).\\
-    & equivalent(staticFields(C)/P_1, staticFields(C)/P_2)
-    \end{aligned}
-    \]
+& (1)~ \forall v\in liveVar(P_1)\cap liveVar(P_2). equivalent(v/P_1(x), v/P_2(x))\\
+& (2)~  \forall C \in loadedClasses(P_1) \cap loadedClasses(P_2).\forall f \in staticFields(C).\\
+  &  ~~~~~ equivalent(f/P_1(x), f/P_2(x))
     %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
   %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
    %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
-    \end{itemize}
-    
+    \end{aligned}
+    \]
+   
   \end{definition}
 
 The above definition says that in order for \var{P_1} and
 \var{P_2} to be equivalent with respect to input \var{x}, any variable
 that is live at the end of both \var{P_1} and \var{P_2} must be
 assigned equivalent values by the executions of \var{P_1} and
-\var{P_2} on \var{x}, respectively. Additionally, for any class that
+\var{P_2} on \var{x}, respectively.
+Additionally, for any class that
 is being loaded by the class loader of both \var{P_1} and \var{P_2},
 all the static fields must again be assigned equivalent values by the
-two executions.
+two executions. Note that we use the notation \var{v/P(x)} to denote the
+value assigned to \var{x} by the execution of \var{P} on input \var{x}.
 
-\begin{example}
-  We now apply Definition~\ref{def:prog-equiv} to the running example.
-  \todo{write the relations}
+\begin{example}\label{ex:equiv}
+  When applying Definition~\ref{def:prog-equiv} to \var{P_1} and \var{P_2} given in Example~\ref{ex:defs},
+  the following conditions must hold:
+\[
+    \begin{aligned}
+& (1)~ \forall v\in \{date\}. equivalent(v/P_1(x), v/P_2(x))\\
+& (2)~  \forall C \in \{Date\}.\forall f \in staticFields(C).equivalent(f/P_1(x), f/P_2(x))
+    %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
+  %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
+   %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
+    \end{aligned}
+    \]
+
+    Given that class \var{Date} has no static fields, the second condition is trivially met. Then, in order for the two portions of code to be
+    equivalent with respect to an input \var{x}, the objects assigned to variable \var{date} by the execution of  \var{P_1(x)} and \var{P_2(x)}
+    must be equivalent. We will discuss checking equivalence of two objects in two distinct executions next.
+    
 \end{example}
 
 \todo{define $equivalent(v/P_1, v/P_2)$}.
