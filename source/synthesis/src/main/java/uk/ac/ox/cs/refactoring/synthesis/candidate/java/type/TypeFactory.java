@@ -32,7 +32,10 @@ public final class TypeFactory {
       if (int.class == cls) {
         return PrimitiveType.intType();
       }
-      return PrimitiveType.doubleType();
+      if (double.class == cls) {
+        return PrimitiveType.doubleType();
+      }
+      throw new IllegalArgumentException();
     }
 
     return createClassType(cls);

@@ -8,20 +8,30 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 
 /**
- * 
+ * Java {@code this} expression.
  */
 public class This implements IExpression {
 
   /**
-   * 
+   * Type of the instance.
    */
   private final Type type;
 
   /**
    * @param type {@link #type}
    */
-  public This(final Type type) {
+  private This(final Type type) {
     this.type = type;
+  }
+
+  /**
+   * @param type {@link This}
+   * @return {@link This}
+   */
+  public static This create(final Type type) {
+    if (type == null)
+      return null;
+    return new This(type);
   }
 
   @Override
