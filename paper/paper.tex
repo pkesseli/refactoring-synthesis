@@ -719,23 +719,26 @@ Thus, \var{P_3} and \var{P_4} are not semantically equivalent for input \var{x}.
 
 Intuitively, any aliases between live variables at the end of the original code should also
 be present at the end of the refactored code. For this purpose, we use the notation
-\var{aliasEquivClass(P)} which returns the set of all equivalence classes induced over the
-set of live variables at the end of \var{P} by the aliasing relation.
+\var{aliasEquivClass(V)} which returns the set of all equivalence classes induced over the
+set of variables \var{V} by the aliasing relation.  
+Notably, the same aliasing equivalence relation must also hold over the
+static fields of the classes loaded by both programs.
+
 
 \begin{example}
 For \var{P_1} and \var{P_2}, there are no aliases, therefore:
 \[
 \begin{aligned}[t]
-  \var{aliasEquivClass(P_1)} &= \emptyset\\
-  \var{aliasEquivClass(P_2)} &= \emptyset
+  \var{aliasEquivClass(liveVar(P_1))} &= \emptyset\\
+  \var{aliasEquivClass(liveVar(P_2))} &= \emptyset
 \end{aligned}
 \]
 %
 However, for \var{P_3} and \var{P_4} we have:
 \[
 \begin{aligned}[t]
-  \var{aliasEquivClass(P_3)} &= \emptyset\\
-  \var{aliasEquivClass(P_4)} &= \{\{date1, date2\}\}
+  \var{aliasEquivClass(liveVar(P_3))} &= \emptyset\\
+  \var{aliasEquivClass(liveVar(P_4))} &= \{\{date1, date2\}\}
 \end{aligned}
 \]
 In \var{P_4}, the alising relation induces one equivalence class, namely \var{\{date1, date2\}}.
@@ -753,9 +756,11 @@ Next, we adjust Definition~\ref{def:prog-equiv} to capture the aliasing aspect.
 \[
     \begin{aligned}
       & (1)~ \forall v\in liveVar(P_1)\cap liveVar(P_2). equivalent(E[P_1(x)](v), E[P_2(x)](v))\\
-& (2)~ \forall equivClass \in aliasEquivClass(liveVar(P_1)). \cdots\\      
+& (2)~ \forall v_1,v_2 \in liveVar(P_1) \cap liveVar(P_2). aliases(P_1, v_1, v_2) \Rightarrow aliases(P_2, v_1,v_2)\\      
 & (3)~  \forall C \in loadedClasses(P_1) \cap loadedClasses(P_2).\forall f \in staticFields(C).\\
-  &  ~~~~~ equivalent(E[P_1(x)](f), E[P_2(x)](f))
+      &  ~~~~~ equivalent(E[P_1(x)](f), E[P_2(x)](f))\\
+      & (4)~\forall f_1,f_2 \in staticFields(loadedClasses(P_1) \cap loadedClasses(P_2)).\\
+      & ~~~~~ aliases(P_1, f_1, f_2) \Rightarrow aliases(P_2, f_1,f_2)
     %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
   %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
    %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
@@ -764,9 +769,13 @@ Next, we adjust Definition~\ref{def:prog-equiv} to capture the aliasing aspect.
    
   \end{definition}
 
+where, given a program \var{P}, variables \var{v_1} and \var{v_2} are aliases, i.e. \var{aliases(P, v_1, v_2)} holds,
+if and only if they are in the same equivalence class induced by the aliasing relation,
+  i.e. \var{aliasEquivClass(\{v_1,v_2\}) = \{\{v_1,v_2\}\}}.
 
-
-
+  For the fourth condition, we abuse the notation to use \var{staticFields} over a set of classes, rather than just one class.
+  The objective is to return the set of all static fields defined in all the classes in the set of classes taken as argument.
+  
 \todo{revise the rest.}
 \todo{also add an example where static fields are changed.}
 
