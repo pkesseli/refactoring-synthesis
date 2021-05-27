@@ -7,6 +7,11 @@ import java.util.Objects;
 /**
  * Helper to generate and compare abstract reference IDs in order to compare
  * object aliasing from two different heaps.
+ * 
+ * TODO: We need to load more classes in the isolated class loaders for this to
+ * work reliably. For classes loaded by the parent (usually system) class
+ * loader, we resort to reference equality, which is far too strict if entity
+ * classes such as dates or strings are loaded by the system class loader.
  */
 public class ObjectIdComparator {
   /**
@@ -33,7 +38,7 @@ public class ObjectIdComparator {
     Objects.requireNonNull(lhs);
     Objects.requireNonNull(rhs);
     if (lhs.getClass() == rhs.getClass()) {
-      return lhs == rhs;
+      return true;
     }
     return getId(lhsIds, lhs) == getId(rhsIds, rhs);
   }

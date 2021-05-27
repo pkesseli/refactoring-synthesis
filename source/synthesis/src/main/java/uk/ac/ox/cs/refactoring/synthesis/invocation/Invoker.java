@@ -1,5 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.invocation;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -15,6 +17,12 @@ import uk.ac.ox.cs.refactoring.synthesis.state.State;
  * Helper to reflectively invoke a Java method based on a counterexample.
  */
 public class Invoker {
+
+  /**
+   * Name of constructor methods.
+   */
+  public static final String INIT = "<init>";
+
   /**
    * Fully qualified name of the class whose method to invoke.
    */
@@ -54,43 +62,38 @@ public class Invoker {
    * @param counterexample {@link Counterexample} modelling the state in which to
    *                       invoke the configured method.
    */
-  public ExecutionResult invoke(final Counterexample counterexample) throws ClassNotFoundException,
-      NoSuchFieldException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+  public ExecutionResult invoke(final Counterexample counterexample)
+      throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException,
+      NoSuchFieldException, NoSuchMethodException {
     final IsolatedClassLoader classLoader = ClassLoaders.createIsolated();
     final State state = stateFactory.create(classLoader, counterexample);
     final Class<?> cls = classLoader.loadClass(fullyQualifiedClassName);
     final Class<?>[] parameterTypes = new Class<?>[fullyQualifiedParameterTypeNames.size()];
     for (int i = 0; i < parameterTypes.length; ++i) {
       final String parameterType = fullyQualifiedParameterTypeNames.get(i);
-      parameterTypes[i] = loadClass(classLoader, parameterType);
+      parameterTypes[i] = classLoader.loadClass(parameterType);
     }
-    final Method method = cls.getDeclaredMethod(methodName, parameterTypes);
-    method.setAccessible(true);
+
+    final Executable executable;
+    final Invokable execute;
+    if (INIT.equals(methodName)) {
+      final Constructor<?> constructor = cls.getDeclaredConstructor(parameterTypes);
+      executable = constructor;
+      execute = constructor::newInstance;
+    } else {
+      final Method method = cls.getDeclaredMethod(methodName, parameterTypes);
+      executable = method;
+      execute = args -> method.invoke(state.Instance, args);
+    }
+
+    executable.setAccessible(true);
     final Object result;
     try {
-      result = method.invoke(state.Instance, state.Arguments);
+      result = execute.invoke(state.Arguments);
     } catch (final Throwable e) {
       return new ExecutionResult(classLoader, e);
     }
     return new ExecutionResult(classLoader, result);
-  }
-
-  /**
-   * 
-   * @param classLoader
-   * @param typeName
-   * @return
-   * @throws ClassNotFoundException
-   */
-  private static Class<?> loadClass(final ClassLoader classLoader, final String typeName)
-      throws ClassNotFoundException {
-    switch (typeName) {
-    case "double":
-      return double.class;
-    case "int":
-      return int.class;
-    }
-    return classLoader.loadClass(typeName);
   }
 
 }

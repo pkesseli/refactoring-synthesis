@@ -52,12 +52,13 @@ public class CegisLoop<Candidate> {
    * @param invoker        {@link Invoker} used to run the original method to be
    *                       replaced. Effectively models the specification of the
    *                       synthesis.
+   * @param resultType     Expected output type of the synthesised program.
    * @param parameterTypes Types of parameters that bot {@code executor} and
    *                       {@code invoker} accept.
    * @param candidateType  Used to configure JQF candidate generators.
    */
-  public CegisLoop(final CandidateExecutor<Candidate> executor, final Invoker invoker,
-      final List<Class<?>> parameterTypes, final Class<Candidate> candidateType) {
+  public CegisLoop(final CandidateExecutor<Candidate> executor, final Invoker invoker, final Class<?> resultType,
+      final List<Class<?>> parameterTypes, final Iterable<Method> methods, final Class<Candidate> candidateType) {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
     final GeneratorRepository generatorRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ServiceLoaderGeneratorSource());
@@ -67,7 +68,8 @@ public class CegisLoop<Candidate> {
       final Class<?> parameterType = parameterTypes.get(i);
       parameters.add(new Parameter(i, TypeFactory.create(parameterType)));
     }
-    generatorRepository.register(new SnippetCandidateGenerator(null, parameters, Collections.emptyList()));
+    generatorRepository
+        .register(new SnippetCandidateGenerator(null, resultType, parameters, Collections.emptyList(), methods));
     final Method fuzzingSynthesisFrameworkMethod = SnippetCandidateGenerator.TestClass
         .getFrameworkMethodPlaceholder(null);
 

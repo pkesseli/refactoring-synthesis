@@ -14,6 +14,10 @@ public final class Benchmarks {
 
   public static final String INTEGER_WRAPPER = getFullyQualifiedBenchmarkName("IntegerWrapper");
 
+  public static final String INTEGER_PLUS_1900 = getFullyQualifiedBenchmarkName("IntegerPlus1900");
+
+  public static final String INTEGER_SUM = getFullyQualifiedBenchmarkName("IntegerSum");
+
   public static final String OBJECT_ALIASING = getFullyQualifiedBenchmarkName("ObjectAliasing");
 
   public static final String STATIC_INT_CONSUMER = getFullyQualifiedBenchmarkName("StaticIntConsumer");

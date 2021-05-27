@@ -66,7 +66,7 @@ public class HeapComparisonTest {
     Callable<Boolean> evaluate = () -> HeapComparison.equals(lhsResult, rhsResult);
     lhs.accept(first, second);
     rhs.accept(first, first);
-    assertFalse(evaluate.call());
+    assertTrue(evaluate.call());
     rhs.accept(first, second);
     assertTrue(evaluate.call());
   }

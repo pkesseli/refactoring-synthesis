@@ -10,4 +10,9 @@ public class SnippetCandidate {
    * Block of statements synthesised.
    */
   public final BlockStatement Block = new BlockStatement();
+
+  @Override
+  public String toString() {
+    return Block.toNode().toString();
+  }
 }

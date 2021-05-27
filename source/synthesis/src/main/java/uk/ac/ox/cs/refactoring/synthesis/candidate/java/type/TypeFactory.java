@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.type;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.VoidType;
 
 /**
  * Helper to construct {@link Type}s.
@@ -25,6 +26,12 @@ public final class TypeFactory {
    */
   public static Type create(final Class<?> cls) {
     if (cls.isPrimitive()) {
+      if (void.class == cls) {
+        return new VoidType();
+      }
+      if (int.class == cls) {
+        return PrimitiveType.intType();
+      }
       return PrimitiveType.doubleType();
     }
 
@@ -37,7 +44,7 @@ public final class TypeFactory {
    * @param cls Java {@link Class} to convert.
    * @return AST {@link Type}.
    */
-  private static ClassOrInterfaceType createClassType(final Class<?> cls) {
+  public static ClassOrInterfaceType createClassType(final Class<?> cls) {
     final Class<?> declaringClass = cls.getDeclaringClass();
     final ClassOrInterfaceType scope;
     if (declaringClass != null) {

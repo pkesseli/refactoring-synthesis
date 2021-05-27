@@ -1,5 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,8 +56,8 @@ public final class Assign {
     }
 
     @Override
-    public Object evaluate(final ExecutionContext context)
-        throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException {
+    public Object evaluate(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
+        InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       lhs.set(context, rhs.evaluate(context));
       return lhs.evaluate(context);
     }
