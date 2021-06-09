@@ -197,11 +197,22 @@ what can be used in place.
 %% changes or security problems in the method. Usually API designers provide
 %% programmers with recommendations about what they should use instead.
 
+%% Even in the presence of such recommendations, the transformation of
+%% existing code to the recommended format is not always straightforward,
+%% as illustrated in Fig.~\ref{ex:deprecated-method}. In the example, we
+%% make use of the \code{Date} class and we set the hour of the \code{Date} object to $10$.
+%% However, the \code{getHours} method is deprecated and we must
+%% use \code{Calendar.set} instead.
+
+
 Even in the presence of such recommendations, the transformation of
 existing code to the recommended format is not always straightforward,
 as illustrated in Fig.~\ref{ex:deprecated-method}. In the example, we
-make use of the \code{Date} class, which is deprecated with the
-recommendation to use \code{Calendar} instead.  However, the
+make use of the \code{Date} class,
+which is deprecated with the 
+recommendation to use \code{Calendar} instead.
+In the example, we set the hour of the \code{Date} object to $10$.
+However, the 
 \code{Date} constructor expects its year parameter to be an offset
 from 1900, i.e. the year 2020 is expressed as 120.  This needs to be
 transformed to 2020 when using \code{Calendar} API, as shown in the
@@ -215,7 +226,6 @@ similar difficulties.
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 void main(String[] args) {
-  ByteArrayOutputStream bos = ...;
   // Deprecated:
   Date date = new Date(120, 12, 30);
  
@@ -231,6 +241,28 @@ void main(String[] args) {
 \end{lstlisting}
 \caption{Deprecated method example.}
 \label{ex:deprecated-method}
+\end{figure}
+
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+void main(String[] args) {
+  // Deprecated:
+  Date date = new Date();
+  date.setHours(10);
+  ...
+  int hour = date.getHours();
+  
+  // Should have been:
+  final Calendar calendar = Calendar.getInstance();
+  //calendar.setTime(date);
+  calendar.set(Calendar.HOUR\_OF\_DAY, 10);
+  ...
+  int hour = calendar.get(Calendar.HOUR\_OF\_DAY);
+}
+\end{lstlisting}
+\caption{Other deprecated method example.}
+\label{ex:deprecated-method-other}
 \end{figure}
 
 
