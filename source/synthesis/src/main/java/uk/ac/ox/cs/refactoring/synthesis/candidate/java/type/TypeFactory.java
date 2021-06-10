@@ -25,6 +25,10 @@ public final class TypeFactory {
    * @return AST {@link Type}.
    */
   public static Type create(final Class<?> cls) {
+    if (cls == null) {
+      return null;
+    }
+
     if (cls.isPrimitive()) {
       if (void.class == cls) {
         return new VoidType();

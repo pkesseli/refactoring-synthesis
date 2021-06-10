@@ -49,13 +49,18 @@ public class CegisLoopTest {
     assertEquals(32, (int) candidate.Block.execute(context));
   }
 
+  @Disabled // Currently takes about 300s
   @Test
-  void getHours() {
+  void getHours() throws Exception {
+    final Collection<Method> methods = Arrays.asList(Calendar.class.getDeclaredMethod("getInstance"),
+        Calendar.class.getDeclaredMethod("setTime", Date.class), Calendar.class.getDeclaredMethod("get", int.class));
+    final SnippetCandidate candidate = synthesise(Date.class.getName(), "getHours", methods, int.class, Date.class);
     Calendar calendar = Calendar.getInstance();
     Date date = calendar.getTime();
-    System.out.println(date.getHours());
-    System.out.println(calendar.get(Calendar.HOUR_OF_DAY));
-    System.out.println(date.getHours());
+    final int expected = calendar.get(Calendar.HOUR_OF_DAY);
+    final State state = new State(date);
+    final ExecutionContext context = new ExecutionContext(CegisLoopTest.class.getClassLoader(), state);
+    assertEquals(expected, candidate.Block.execute(context));
   }
 
   @Test

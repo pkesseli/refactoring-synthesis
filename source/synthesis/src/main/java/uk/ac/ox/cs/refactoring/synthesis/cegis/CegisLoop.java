@@ -66,7 +66,7 @@ public class CegisLoop<Candidate> {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
     final GeneratorRepository generatorRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ServiceLoaderGeneratorSource());
-    generatorRepository.register(new CounterexampleGenerator(generatorRepository, parameterTypes));
+    generatorRepository.register(new CounterexampleGenerator(generatorRepository, instanceType, parameterTypes));
     final This instance = This.create(TypeFactory.create(instanceType));
     final List<Parameter> parameters = new ArrayList<>();
     for (int i = 0; i < parameterTypes.size(); ++i) {
