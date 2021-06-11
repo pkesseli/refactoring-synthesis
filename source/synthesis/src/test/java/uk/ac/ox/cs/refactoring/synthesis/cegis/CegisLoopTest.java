@@ -33,7 +33,7 @@ public class CegisLoopTest {
 
   @Test
   void doublePlus() throws Exception {
-    final SnippetCandidate candidate = synthesise(Benchmarks.DOUBLE_SUM, "plus", double.class, double.class,
+    final SnippetCandidate candidate = synthesise(Benchmarks.DOUBLE_SUM, "plus", double.class, null, double.class,
         double.class);
     final State state = new State(null, 10.5, 22.5);
     final ExecutionContext context = new ExecutionContext(CegisLoopTest.class.getClassLoader(), state);
@@ -42,10 +42,25 @@ public class CegisLoopTest {
 
   @Test
   void intPlus() throws Exception {
-    final SnippetCandidate candidate = synthesise(Benchmarks.INTEGER_SUM, "plus", int.class, int.class, int.class);
+    final SnippetCandidate candidate = synthesise(Benchmarks.INTEGER_SUM, "plus", int.class, null, int.class,
+        int.class);
     final State state = new State(null, 10, 22);
     final ExecutionContext context = new ExecutionContext(CegisLoopTest.class.getClassLoader(), state);
     assertEquals(32, (int) candidate.Block.execute(context));
+  }
+
+  @Disabled // Currently takes about 300s
+  @Test
+  void getHours() throws Exception {
+    final Collection<Method> methods = Arrays.asList(Calendar.class.getDeclaredMethod("getInstance"),
+        Calendar.class.getDeclaredMethod("setTime", Date.class), Calendar.class.getDeclaredMethod("get", int.class));
+    final SnippetCandidate candidate = synthesise(Date.class.getName(), "getHours", methods, int.class, Date.class);
+    Calendar calendar = Calendar.getInstance();
+    Date date = calendar.getTime();
+    final int expected = calendar.get(Calendar.HOUR_OF_DAY);
+    final State state = new State(date);
+    final ExecutionContext context = new ExecutionContext(CegisLoopTest.class.getClassLoader(), state);
+    assertEquals(expected, candidate.Block.execute(context));
   }
 
   @Test
@@ -69,18 +84,20 @@ public class CegisLoopTest {
   }
 
   private SnippetCandidate synthesise(final String fullyQualifiedClassName, final String methodName,
-      final Class<?> resultType, final Class<?>... parameterTypes)
+      final Class<?> resultType, final Class<?> instanceType, final Class<?>... parameterTypes)
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, IOException {
-    return synthesise(fullyQualifiedClassName, methodName, Collections.emptyList(), resultType, parameterTypes);
+    return synthesise(fullyQualifiedClassName, methodName, Collections.emptyList(), resultType, instanceType,
+        parameterTypes);
   }
 
   private SnippetCandidate synthesise(final String fullyQualifiedClassName, final String methodName,
-      final Iterable<Method> methods, final Class<?> resultType, final Class<?>... parameterTypes)
+      final Iterable<Method> methods, final Class<?> resultType, final Class<?> instanceType,
+      final Class<?>... parameterTypes)
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, IOException {
     final List<String> fullyQualifiedParameterTypeNames = Arrays.stream(parameterTypes).map(Class::getName)
         .collect(Collectors.toList());
     final Invoker invoker = new Invoker(fullyQualifiedClassName, methodName, fullyQualifiedParameterTypeNames);
-    final CegisLoop<SnippetCandidate> cegis = new CegisLoop<>(executor, invoker, resultType,
+    final CegisLoop<SnippetCandidate> cegis = new CegisLoop<>(executor, invoker, resultType, instanceType,
         Arrays.asList(parameterTypes), methods, SnippetCandidate.class);
     return cegis.synthesise();
   }

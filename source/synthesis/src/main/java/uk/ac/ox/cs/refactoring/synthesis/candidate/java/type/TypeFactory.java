@@ -25,6 +25,10 @@ public final class TypeFactory {
    * @return AST {@link Type}.
    */
   public static Type create(final Class<?> cls) {
+    if (cls == null) {
+      return null;
+    }
+
     if (cls.isPrimitive()) {
       if (void.class == cls) {
         return new VoidType();
@@ -32,7 +36,10 @@ public final class TypeFactory {
       if (int.class == cls) {
         return PrimitiveType.intType();
       }
-      return PrimitiveType.doubleType();
+      if (double.class == cls) {
+        return PrimitiveType.doubleType();
+      }
+      throw new IllegalArgumentException();
     }
 
     return createClassType(cls);

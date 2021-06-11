@@ -1,6 +1,10 @@
 package uk.ac.ox.cs.refactoring.synthesis.induction;
 
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
 
 import org.junit.runners.model.FrameworkMethod;

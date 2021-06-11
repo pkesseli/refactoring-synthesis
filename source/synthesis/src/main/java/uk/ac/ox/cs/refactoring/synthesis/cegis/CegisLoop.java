@@ -17,6 +17,7 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidateGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Parameter;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.This;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.CounterexampleGenerator;
@@ -53,23 +54,27 @@ public class CegisLoop<Candidate> {
    *                       replaced. Effectively models the specification of the
    *                       synthesis.
    * @param resultType     Expected output type of the synthesised program.
-   * @param parameterTypes Types of parameters that bot {@code executor} and
+   * @param instanceType   Type of the {@code this} argument that both
+   *                       {@code executor} and {@code invoker} accept.
+   * @param parameterTypes Types of parameters that both {@code executor} and
    *                       {@code invoker} accept.
    * @param candidateType  Used to configure JQF candidate generators.
    */
   public CegisLoop(final CandidateExecutor<Candidate> executor, final Invoker invoker, final Class<?> resultType,
-      final List<Class<?>> parameterTypes, final Iterable<Method> methods, final Class<Candidate> candidateType) {
+      final Class<?> instanceType, final List<Class<?>> parameterTypes, final Iterable<Method> methods,
+      final Class<Candidate> candidateType) {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
     final GeneratorRepository generatorRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ServiceLoaderGeneratorSource());
-    generatorRepository.register(new CounterexampleGenerator(generatorRepository, parameterTypes));
+    generatorRepository.register(new CounterexampleGenerator(generatorRepository, instanceType, parameterTypes));
+    final This instance = This.create(TypeFactory.create(instanceType));
     final List<Parameter> parameters = new ArrayList<>();
     for (int i = 0; i < parameterTypes.size(); ++i) {
       final Class<?> parameterType = parameterTypes.get(i);
       parameters.add(new Parameter(i, TypeFactory.create(parameterType)));
     }
     generatorRepository
-        .register(new SnippetCandidateGenerator(null, resultType, parameters, Collections.emptyList(), methods));
+        .register(new SnippetCandidateGenerator(instance, resultType, parameters, Collections.emptyList(), methods));
     final Method fuzzingSynthesisFrameworkMethod = SnippetCandidateGenerator.TestClass
         .getFrameworkMethodPlaceholder(null);
 
