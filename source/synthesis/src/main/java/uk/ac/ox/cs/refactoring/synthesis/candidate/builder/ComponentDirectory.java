@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -14,10 +15,16 @@ import java.util.stream.Stream;
  * sizes. Used by builders to construct objects of limited size.
  */
 public class ComponentDirectory {
+
   /**
    * Contains all registered {@link Component}s.
    */
   private final Map<Object, SortedMap<Integer, List<? extends Component<?, ?>>>> components = new HashMap<>();
+
+  /**
+   * Maps component keys to the minimux size necessary to construct it.
+   */
+  private final Map<Object, Integer> minSizes = new HashMap<>();
 
   /**
    * Provides a component matching a given identifier (e.g. types) and size.
@@ -30,8 +37,9 @@ public class ComponentDirectory {
    */
   @SuppressWarnings("unchecked")
   public <K, V> Stream<Component<K, V>> get(final K key, final int size) {
+    final int maxSize = Math.max(size, minSizes.get(key));
     final SortedMap<Integer, List<? extends Component<?, ?>>> result = components.get(key);
-    return result.headMap(size + 1).values().stream().flatMap(Collection::stream)
+    return result.headMap(maxSize + 1).values().stream().flatMap(Collection::stream)
         .map(component -> (Component<K, V>) component);
   }
 
@@ -75,15 +83,30 @@ public class ComponentDirectory {
    * Provides the existing container in {@code this} directory for components of
    * the given type and size, or creates one for this category of components.
    * 
-   * @param <K> Key type.
-   * @param <V> Component type.
-   * @param key Category of the desired component.
+   * @param <K>  Key type.
+   * @param <V>  Component type.
+   * @param key  Category of the desired component.
    * @param size Maximum length of the desired component.
    * @return Container for components with the specified properties.
    */
   private <K, V> List<? extends Component<?, ?>> getOrCreate(final K key, final int size) {
+    minSizes.compute(key, (_1, previousSize) -> previousSize == null ? size : Math.min(size, previousSize));
     final SortedMap<Integer, List<? extends Component<?, ?>>> sizeBucket = components.computeIfAbsent(key,
         k -> new TreeMap<Integer, List<? extends Component<?, ?>>>());
     return sizeBucket.computeIfAbsent(size, k -> new ArrayList<>());
   }
+
+  /**
+   * Provides a filtered list of the provided keys, for which we can construct at
+   * least one component of {@code maxSize} or less.
+   * 
+   * @param <K>     Key type.
+   * @param allKeys All keys the synthesis phase is interested in.
+   * @param maxSize Size for which a component must be constructed.
+   * @return Filtered list with eligible keys.
+   */
+  public <K> List<K> getEligibleKeys(final List<K> allKeys, final int maxSize) {
+    return allKeys.stream().filter(key -> minSizes.get(key) <= maxSize).collect(Collectors.toList());
+  }
+
 }

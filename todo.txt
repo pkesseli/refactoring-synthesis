@@ -1,0 +1,7 @@
+- Executable and Java AST-convertible candidate type - done
+- Class-loader-independent counterexample type - done
+- Invoke method to replace in isolated class loader against counterexample - done
+- Generate Java candidates based on JQF `SourceOfRandomness` - done
+- Class-loader-independent parameter expressions for candidates
+- Invoke candidate in isolated class loader against counterexample
+- Compare execution results from two different class loaders - ok

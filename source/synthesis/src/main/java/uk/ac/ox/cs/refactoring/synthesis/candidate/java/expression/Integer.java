@@ -6,12 +6,14 @@ import java.util.List;
 
 import com.github.javaparser.ast.expr.BinaryExpr.Operator;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.Type;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ConstructorComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.reflection.Classes;
 
 /**
@@ -50,12 +52,12 @@ public final class Integer {
    * 
    * @param components Directory in which to register all int expressions.
    */
-  public static void register(final ComponentDirectory components) {
-    final JavaLanguageKey intExpression = new JavaLanguageKey(IExpression.class, PrimitiveType.intType());
+  public static void register(final JavaComponents components) {
+    final Type type = PrimitiveType.intType();
+    final JavaLanguageKey intExpression = JavaLanguageKeys.expression(type);
     final List<JavaLanguageKey> parameterKeys = Arrays.asList(intExpression, intExpression);
     final Iterable<Class<?>> classes = Classes.getNonAbstractMemberClasses(Integer.class)::iterator;
-    for (final Class<?> cls : classes) {
-      components.put(intExpression, new ConstructorComponent<>(parameterKeys, cls));
-    }
+    for (final Class<?> cls : classes)
+      components.expr(type, new ConstructorComponent<>(parameterKeys, cls));
   }
 }

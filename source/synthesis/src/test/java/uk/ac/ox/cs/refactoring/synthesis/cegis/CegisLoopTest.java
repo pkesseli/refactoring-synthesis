@@ -49,7 +49,6 @@ public class CegisLoopTest {
     assertEquals(32, (int) candidate.Block.execute(context));
   }
 
-  @Disabled // Currently takes about 300s
   @Test
   void getHours() throws Exception {
     final Collection<Method> methods = Arrays.asList(Calendar.class.getDeclaredMethod("getInstance"),

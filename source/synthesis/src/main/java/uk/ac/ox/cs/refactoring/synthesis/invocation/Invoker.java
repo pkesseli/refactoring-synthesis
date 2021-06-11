@@ -71,7 +71,7 @@ public class Invoker {
     final Class<?>[] parameterTypes = new Class<?>[fullyQualifiedParameterTypeNames.size()];
     for (int i = 0; i < parameterTypes.length; ++i) {
       final String parameterType = fullyQualifiedParameterTypeNames.get(i);
-      parameterTypes[i] = classLoader.loadClass(parameterType);
+      parameterTypes[i] = ClassLoaders.loadClass(classLoader, parameterType);
     }
 
     final Executable executable;

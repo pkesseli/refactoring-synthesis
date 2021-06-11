@@ -16,43 +16,48 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.type.Type;
 
+import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.FunctionComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
 /**
- * 
+ * Contains Java method invocation expressions for use in builders.
  */
 public final class Invoke {
 
   private Invoke() {
   }
 
+  /**
+   * Models a Java method invocation expression.
+   */
   public static class InvokeMethod implements IExpression {
 
     /**
-     * 
+     * {@code this} expression for the method invocation. {@code null} for static
+     * methods.
      */
     private final IExpression instance;
 
     /**
-     * 
+     * Method argument values.
      */
     private final List<IExpression> arguments;
 
     /**
-     * 
+     * Reflective method used for evaluation.
      */
     private final Method method;
 
     /**
-     * 
-     * @param instance
-     * @param arguments
-     * @param method
+     * @param instance  {@link #instance}
+     * @param arguments {@link #arguments}
+     * @param method    {@link #method}
      */
     public InvokeMethod(final IExpression instance, final List<IExpression> arguments, final Method method) {
       this.instance = instance;
@@ -97,7 +102,7 @@ public final class Invoke {
       final Class<?> cls = context.ClassLoader.loadClass(method.getDeclaringClass().getName());
       final Class<?>[] parameterTypes = new Class<?>[method.getParameterTypes().length];
       for (int i = 0; i < parameterTypes.length; ++i)
-        parameterTypes[i] = context.ClassLoader.loadClass(method.getParameterTypes()[i].getName());
+        parameterTypes[i] = ClassLoaders.loadClass(context.ClassLoader, method.getParameterTypes()[i].getName());
 
       final Method isolatedMethod = cls.getDeclaredMethod(method.getName(), parameterTypes);
       return isolatedMethod.invoke(obj, args);
@@ -105,10 +110,19 @@ public final class Invoke {
 
   }
 
+  /**
+   * Adapter from {@link Method#invoke(Object, Object...)} to {@link Function}.
+   */
   private static class InvokeFactory implements Function<Object[], InvokeMethod> {
 
+    /**
+     * Wrapped {@link Method}.
+     */
     private final Method method;
 
+    /**
+     * @param method {@link #method}
+     */
     InvokeFactory(final Method method) {
       this.method = method;
     }
@@ -136,37 +150,29 @@ public final class Invoke {
    *                   expressions.
    * @param methods
    */
-  public static void register(final ComponentDirectory components, final Iterable<Method> methods) {
+  public static void register(final JavaComponents components, final Iterable<Method> methods) {
     for (final Method method : methods) {
-      final JavaLanguageKey key = new JavaLanguageKey(IExpression.class, TypeFactory.create(method.getReturnType()));
+      final Type type = TypeFactory.create(method.getReturnType());
       final List<JavaLanguageKey> parameterKeys = getParameterKeys(method);
-      components.put(key, new FunctionComponent<>(parameterKeys, new InvokeFactory(method)));
+      components.nonnull(type, new FunctionComponent<>(parameterKeys, new InvokeFactory(method)));
     }
   }
 
   /**
+   * Component keys required in the builder, based on the methods parameters.
    * 
-   * @param method
-   * @return
+   * @param method {@link Method} for which to define required builder parameters.
+   * @return {@link List} of component parameter keys.
    */
   private static List<JavaLanguageKey> getParameterKeys(final Method method) {
     final List<JavaLanguageKey> parameterKeys = new ArrayList<>();
     if (!Modifier.isStatic(method.getModifiers()))
-      parameterKeys.add(toExpressionKey(method.getDeclaringClass()));
+      parameterKeys.add(JavaLanguageKeys.nonnull(TypeFactory.create(method.getDeclaringClass())));
 
     for (final Class<?> parameterType : method.getParameterTypes())
-      parameterKeys.add(toExpressionKey(parameterType));
+      parameterKeys.add(JavaLanguageKeys.expression(TypeFactory.create(parameterType)));
 
     return parameterKeys;
-  }
-
-  /**
-   * 
-   * @param type
-   * @return
-   */
-  private static JavaLanguageKey toExpressionKey(final Class<?> type) {
-    return new JavaLanguageKey(IExpression.class, TypeFactory.create(type));
   }
 
 }

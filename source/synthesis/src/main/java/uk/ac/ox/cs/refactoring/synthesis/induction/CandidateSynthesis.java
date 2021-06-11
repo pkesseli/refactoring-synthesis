@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.junit.runners.model.FrameworkMethod;
@@ -48,6 +49,7 @@ public class CandidateSynthesis<Candidate> extends FrameworkMethod {
   public Object invokeExplosively(final Object target, final Object... params) throws Throwable {
     @SuppressWarnings("unchecked")
     final Candidate candidate = (Candidate) params[0];
+    Files.write(Paths.get("D:/temp/candidates.txt"), Arrays.asList(candidate.toString().split("\\R")), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
     for (final Map.Entry<Counterexample, ExecutionResult> counterexample : counterexamples.entrySet()) {
       final Counterexample input = counterexample.getKey();
       final ExecutionResult expected = counterexample.getValue();
