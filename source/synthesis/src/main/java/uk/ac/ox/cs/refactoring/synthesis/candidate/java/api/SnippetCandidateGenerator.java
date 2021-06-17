@@ -113,17 +113,17 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
     // TODO: Re-enable once fuzzing is smarter.
     // Assign.register(components, PrimitiveType.doubleType());
     Integer.register(components);
-    // Double.register(components);
+    Double.register(components);
     Invoke.register(components, methods);
 
-    final Type[] types = { new VoidType(), /* PrimitiveType.doubleType(), */ PrimitiveType.intType(),
+    final Type[] types = { new VoidType(), PrimitiveType.doubleType(), PrimitiveType.intType(),
         TypeFactory.create(Calendar.class), TypeFactory.create(Date.class) };
     for (final Type type : types) {
       final JavaLanguageKey expressionKey = JavaLanguageKeys.expression(type);
       components.statement(type, new ConstructorComponent<>(Arrays.asList(expressionKey), ExpressionStatement.class));
     }
 
-    // components.literal(PrimitiveType.doubleType(), 0d);
+    components.literal(PrimitiveType.doubleType(), 0d);
     components.literal(PrimitiveType.intType(), 0);
     components.literal(PrimitiveType.intType(), 11);
     components.nullLiteral(new VoidType());
@@ -137,7 +137,7 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
   public SnippetCandidate generate(final SourceOfRandomness random, final GenerationStatus status) {
     final List<JavaLanguageKey> allTypes = Arrays.asList(JavaLanguageKeys.statement(new VoidType()),
         JavaLanguageKeys.statement(TypeFactory.create(int.class)),
-        // JavaLanguageKeys.statement(TypeFactory.create(double.class)),
+        JavaLanguageKeys.statement(TypeFactory.create(double.class)),
         JavaLanguageKeys.statement(TypeFactory.create(Calendar.class)),
         JavaLanguageKeys.statement(TypeFactory.create(Date.class)));
     final JavaLanguageKey resultKey = JavaLanguageKeys.statement(TypeFactory.create(resultType));

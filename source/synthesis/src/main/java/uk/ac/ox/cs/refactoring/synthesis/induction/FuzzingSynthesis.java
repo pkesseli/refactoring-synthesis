@@ -135,7 +135,6 @@ public class FuzzingSynthesis<Candidate> {
    * @throws IOException if access to {@code outputDirectory} fails.
    */
   private static Guidance getGuidance(final Path outputDirectory) throws IOException {
-    final Duration duration = Duration.ofSeconds(10);
     return new SynthesisGuidance(new ZestGuidance("inductive synthesis", null, outputDirectory.toFile()));
   }
 }
