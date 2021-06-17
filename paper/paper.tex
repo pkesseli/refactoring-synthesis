@@ -207,61 +207,42 @@ what can be used in place.
 
 Even in the presence of such recommendations, the transformation of
 existing code to the recommended format is not always straightforward,
-as illustrated in Fig.~\ref{ex:deprecated-method}. In the example, we
-make use of the \code{Date} class,
+as illustrated in Fig.~\ref{ex:deprecated-method-other}. In the example, we
+make use of the \code{getHours} method of the \code{Date} class,
 which is deprecated with the 
-recommendation to use \code{Calendar} instead.
-In the example, we set the hour of the \code{Date} object to $10$.
-However, the 
-\code{Date} constructor expects its year parameter to be an offset
-from 1900, i.e. the year 2020 is expressed as 120.  This needs to be
-transformed to 2020 when using \code{Calendar} API, as shown in the
-example. Moreover, the \code{Calendar} constructor is protected,
-meaning that instead we must use \code{getInstance} to obtain a
-\code{Calendar} object, followed by setting the date using \code{set}
-and returning a Date object by invoking \code{getTime}.
-Alternatively, the \code{GregorianCalendar} class may be used with
-similar difficulties.
+recommendation to use \code{Calendar.get(Calendar.HOUR\_OF\_DAY)} instead.
+%In the example, we set the hour of the \code{Date} object to $10$.
+However,
+%% the 
+%% \code{Date} constructor expects its year parameter to be an offset
+%% from 1900, i.e. the year 2020 is expressed as 120.  This needs to be
+%% transformed to 2020 when using \code{Calendar} API, as shown in the
+%% example. Moreover,
+the \code{Calendar} constructor is protected,
+meaning that we must use \code{getInstance} to obtain a
+\code{Calendar} object. Moreover, in order to be able to use this \code{Calendar} object for our purpose,
+we must first set its time using the existing \code{date}.
+We do this by calling \code{setTime} with \code{date} as argument.
+%% followed by setting the date using \code{set}
+%% and returning a Date object by invoking \code{getTime}.
+%% Alternatively, the \code{GregorianCalendar} class may be used with
+%% similar difficulties.
+Only after all this set up, we can finally make use of the recommendation
+\code{calendar.get(Calendar.HOUR\_OF\_DAY)}.
 
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 void main(String[] args) {
   // Deprecated:
-  Date date = new Date(120, 12, 30);
- 
-  // Should have been:
-  final Calendar calendar = Calendar.getInstance();
-  calendar.set(2020, 12, 30);
-  final Date date = calendar.getTime();
-
-  // Or:
-  final Date date = new GregorianCalendar(2020, 12, 30)
-                      .getTime();
-}
-\end{lstlisting}
-\caption{Deprecated method example.}
-\label{ex:deprecated-method}
-\end{figure}
-
-
-\begin{figure}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-void main(String[] args) {
-  // Deprecated:
-  Date date = new Date();
-  date.setHours(10);
-  ...
   int hour = date.getHours();
   
   // Should have been:
   final Calendar calendar = Calendar.getInstance();
-  //calendar.setTime(date);
-  calendar.set(Calendar.HOUR_OF_DAY, 10);
-  ...
+  calendar.setTime(date);
   int hour = calendar.get(Calendar.HOUR_OF_DAY);
 }
 \end{lstlisting}
-\caption{Other deprecated method example.}
+\caption{Deprecated method example.}
 \label{ex:deprecated-method-other}
 \end{figure}
 
@@ -1167,7 +1148,29 @@ static void main(String[] args) {
 \label{ex:date-instrumentation}
 \end{figure}
 
-\section{Future work: synthesising preconditions for semantically different refactorings}
+\section{Semantically different refactorings}
+
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+void main(String[] args) {
+  // Deprecated:
+  Date date = new Date(120, 12, 30);
+ 
+  // Should have been:
+  final Calendar calendar = Calendar.getInstance();
+  calendar.set(2020, 12, 30);
+  final Date date = calendar.getTime();
+
+  // Or:
+  final Date date = new GregorianCalendar(2020, 12, 30)
+                      .getTime();
+}
+\end{lstlisting}
+\caption{Deprecated method example.}
+\label{ex:deprecated-method}
+\end{figure}
+
 
 Sometimes, the deprecated and the new features are not semantically
 equivalent on the entire domain. Reasons for this might be that a bug
