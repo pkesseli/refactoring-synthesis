@@ -1178,9 +1178,26 @@ was fixed, a certain functionality was improved, or simply the fact
 that the deprecated feature is only expected to be used on restricted
 parts of the input domain. In such a case, the deprecated and the new
 feature may not be semantically equivalent on the entire input domain.
-For illustration, let's consider the three distinct ways of
-constructing a date captured in Figure~\ref{ex:three-dates} and
-denoted by \var{date1}, \var{date2} and \var{date3}.
+
+For illustration, let's consider the example in Figure~\ref{ex:three-dates}.
+In the example, we make use of the constructor \code{new Date(year, month, day)}, 
+which is deprecated with the 
+recommendation to use the \code{Calendar} class instead.
+The refactoring is not trivial given that the 
+\code{Date} constructor expects its year parameter to be an offset
+from 1900.  This needs to be
+transformed by adding 1900 when using \code{Calendar} API, as shown in the
+example. Moreover, as already seen in the motivational example in  Figure~\ref{ex:deprecated-method-other},
+the \code{Calendar} constructor is protected,
+meaning that we must use \code{getInstance} to obtain a
+\code{Calendar} object.
+Alternatively, the \code{GregorianCalendar} class may be used with
+similar difficulties.
+In the example, we use \var{date1}, \var{date2} and \var{date3} to denote the three distinct ways of constructing a date.
+
+%% For illustration, let's consider the three distinct ways of
+%% constructing a date captured in Figure~\ref{ex:three-dates} and
+%% denoted by \var{date1}, \var{date2} and \var{date3}.
 
 \begin{figure}
   \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -1196,14 +1213,14 @@ denoted by \var{date1}, \var{date2} and \var{date3}.
   // Or:
   Date date3=new GregorianCalendar(1900+year,month,day).getTime();
   \end{lstlisting}
-\caption{Constructing Deprecated `Date' instrumentation.}
+\caption{Deprecated `Date' example.}
 \label{ex:three-dates}
 \end{figure}
 
-In the example, \var{date1} uses the deprecated
-\var{Date(year, month, day)} constructor, whereas \var{date2} and
-\var{date3} make use of the recommended \var{Calendar} and
-\var{GregorianCalendar} classes.
+%% In the example, \var{date1} uses the deprecated
+%% \var{Date(year, month, day)} constructor, whereas \var{date2} and
+%% \var{date3} make use of the recommended \var{Calendar} and
+%% \var{GregorianCalendar} classes.
 Notably, the ways in which \var{date2} and \var{date3} are computed
 represent a valid refactoring for the piece of code computing
 \var{date1}. However, when we provide this example to our
