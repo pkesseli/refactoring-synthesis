@@ -10,11 +10,12 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ConstructorComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.LeftHandSideExpression;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 
 /**
  * Contains Java assignment expressions for use in builders.
@@ -66,13 +67,13 @@ public final class Assign {
   /**
    * Helper to register assignment expressions in candidate builders.
    * 
-   * @param components {@link ComponentDirectory} in which to register.
+   * @param components Directory in which to register.
    * @param type       {@link Type} of assignments to register.
    */
-  public static void register(final ComponentDirectory components, final Type type) {
-    final JavaLanguageKey lhsKey = new JavaLanguageKey(LeftHandSideExpression.class, type);
-    final JavaLanguageKey rhsKey = new JavaLanguageKey(IExpression.class, type);
+  public static void register(final JavaComponents components, final Type type) {
+    final JavaLanguageKey lhsKey = JavaLanguageKeys.lhs(type);
+    final JavaLanguageKey rhsKey = JavaLanguageKeys.expression(type);
     final List<JavaLanguageKey> parameterKeys = Arrays.asList(lhsKey, rhsKey);
-    components.put(rhsKey, new ConstructorComponent<>(parameterKeys, Value.class));
+    components.nonnull(type, new ConstructorComponent<>(parameterKeys, Value.class));
   }
 }

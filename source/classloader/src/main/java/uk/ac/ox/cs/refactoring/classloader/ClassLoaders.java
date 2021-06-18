@@ -28,4 +28,24 @@ public final class ClassLoaders {
   public static IsolatedClassLoader createIsolated(final ClassLoader classLoader) {
     return new InstrumentingClassLoader(NullClassFileTransformer.NULL, classLoader);
   }
+
+  /**
+   * Extension method for {@link ClassLoader#loadClass(String)} handling primitive
+   * type names correctly.
+   * 
+   * @param classLoader {@link} {@link ClassLoader} to which to delegate for
+   *                    non-primitive types.
+   * @param name        {@link String Name} of the type to load.
+   * @return {@link Class} representing the requested type.
+   * @throws ClassNotFoundException {@link ClassLoader#loadClass(String)}
+   */
+  public static Class<?> loadClass(final ClassLoader classLoader, final String name) throws ClassNotFoundException {
+    switch (name) {
+    case "double":
+      return double.class;
+    case "int":
+      return int.class;
+    }
+    return classLoader.loadClass(name);
+  }
 }

@@ -1,7 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.cegis;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -13,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import uk.ac.ox.cs.refactoring.synthesis.benchmark.Benchmarks;
@@ -49,7 +47,6 @@ public class CegisLoopTest {
     assertEquals(32, (int) candidate.Block.execute(context));
   }
 
-  @Disabled // Currently takes about 300s
   @Test
   void getHours() throws Exception {
     final Collection<Method> methods = Arrays.asList(Calendar.class.getDeclaredMethod("getInstance"),
@@ -61,26 +58,6 @@ public class CegisLoopTest {
     final State state = new State(date);
     final ExecutionContext context = new ExecutionContext(CegisLoopTest.class.getClassLoader(), state);
     assertEquals(expected, candidate.Block.execute(context));
-  }
-
-  @Test
-  @Disabled
-  void intPlus1900() throws Exception {
-    final SnippetCandidate candidate = synthesise(Benchmarks.INTEGER_PLUS_1900, "plus1900", int.class, int.class);
-    final State state = new State(null, 10);
-    final ExecutionContext context = new ExecutionContext(CegisLoopTest.class.getClassLoader(), state);
-    assertEquals(1910, (int) candidate.Block.execute(context));
-  }
-
-  @Test
-  @Disabled
-  void date() throws Exception {
-    final Collection<Method> methods = Arrays.asList(Calendar.class.getDeclaredMethod("getInstance"),
-        Calendar.class.getDeclaredMethod("set", int.class, int.class, int.class, int.class, int.class, int.class),
-        Calendar.class.getDeclaredMethod("getTime"), Calendar.class.getDeclaredMethod("set", int.class, int.class));
-    final SnippetCandidate candidate = synthesise(Date.class.getName(), "<init>", methods, Date.class, int.class,
-        int.class, int.class);
-    assertNotNull(candidate);
   }
 
   private SnippetCandidate synthesise(final String fullyQualifiedClassName, final String methodName,

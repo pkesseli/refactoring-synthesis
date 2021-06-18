@@ -1,10 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.induction;
 
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Map;
 
 import org.junit.runners.model.FrameworkMethod;
@@ -17,8 +13,6 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.HeapComparison;
 
 /**
  * Simulates a JUnit test method that JQF can fuzz to generate candidates.
- * 
- * TODO: Replace by {@code GuidedFuzzing}.
  */
 public class CandidateSynthesis<Candidate> extends FrameworkMethod {
 

@@ -16,17 +16,17 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
 import edu.berkeley.cs.jqf.fuzz.Fuzz;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.Builder;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.Component;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ConstructorComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.NullaryComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.SizedBuilder;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Double;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Literal;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Parameter;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.This;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
@@ -102,18 +102,14 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
     this.fields = fields;
     this.methods = methods;
 
-    if (instance != null) {
-      components.put(new JavaLanguageKey(IExpression.class, instance.getType()), new NullaryComponent<>(instance));
-    }
-    for (final Parameter parameter : parameters) {
-      components.put(new JavaLanguageKey(IExpression.class, parameter.getType()), new NullaryComponent<>(parameter));
-    }
-    for (final FieldAccess field : fields) {
-      final Type type = field.getType();
-      final Component<JavaLanguageKey, FieldAccess> component = new NullaryComponent<>(field);
-      components.put(new JavaLanguageKey(IExpression.class, type), component);
-      components.put(new JavaLanguageKey(LeftHandSideExpression.class, type), component);
-    }
+    final JavaComponents components = new JavaComponents(this.components);
+    if (instance != null)
+      components.nonnull(instance.getType(), new NullaryComponent<>(instance));
+    for (final Parameter parameter : parameters)
+      components.nonnull(parameter.getType(), new NullaryComponent<>(parameter));
+    for (final FieldAccess field : fields)
+      components.lhs(field.getType(), new NullaryComponent<>(field));
+
     // TODO: Re-enable once fuzzing is smarter.
     // Assign.register(components, PrimitiveType.doubleType());
     Integer.register(components);
@@ -123,34 +119,28 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
     final Type[] types = { new VoidType(), PrimitiveType.doubleType(), PrimitiveType.intType(),
         TypeFactory.create(Calendar.class), TypeFactory.create(Date.class) };
     for (final Type type : types) {
-      final JavaLanguageKey expressionKey = new JavaLanguageKey(IExpression.class, type);
-      final JavaLanguageKey statementKey = new JavaLanguageKey(IStatement.class, type);
-      components.put(statementKey, new ConstructorComponent<>(Arrays.asList(expressionKey), ExpressionStatement.class));
+      final JavaLanguageKey expressionKey = JavaLanguageKeys.expression(type);
+      components.statement(type, new ConstructorComponent<>(Arrays.asList(expressionKey), ExpressionStatement.class));
     }
-    components.put(new JavaLanguageKey(IExpression.class, PrimitiveType.doubleType()),
-        new NullaryComponent<>(new Literal(0d, PrimitiveType.doubleType())));
-    components.put(new JavaLanguageKey(IExpression.class, PrimitiveType.intType()),
-        new NullaryComponent<>(new Literal(0, PrimitiveType.intType())));
-    components.put(new JavaLanguageKey(IExpression.class, PrimitiveType.intType()),
-        new NullaryComponent<>(new Literal(11, PrimitiveType.intType())));
-    components.put(new JavaLanguageKey(IExpression.class, new VoidType()),
-        new NullaryComponent<>(new Literal(null, new VoidType())));
-    components.put(new JavaLanguageKey(IExpression.class, TypeFactory.create(Calendar.class)),
-        new NullaryComponent<>(new Literal(null, TypeFactory.create(Calendar.class))));
-    components.put(new JavaLanguageKey(IExpression.class, TypeFactory.create(Date.class)),
-        new NullaryComponent<>(new Literal(null, TypeFactory.create(Date.class))));
 
-    statements = new SizedBuilder<>(components, MAX_STATEMENT_LENGTH);
+    components.literal(PrimitiveType.doubleType(), 0d);
+    components.literal(PrimitiveType.intType(), 0);
+    components.literal(PrimitiveType.intType(), 11);
+    components.nullLiteral(new VoidType());
+    components.nullLiteral(TypeFactory.create(Calendar.class));
+    components.nullLiteral(TypeFactory.create(Date.class));
+
+    statements = new SizedBuilder<>(this.components, MAX_STATEMENT_LENGTH);
   }
 
   @Override
   public SnippetCandidate generate(final SourceOfRandomness random, final GenerationStatus status) {
-    final List<JavaLanguageKey> allTypes = Arrays.asList(new JavaLanguageKey(IStatement.class, new VoidType()),
-        new JavaLanguageKey(IStatement.class, TypeFactory.create(int.class)),
-        new JavaLanguageKey(IStatement.class, TypeFactory.create(double.class)),
-        new JavaLanguageKey(IStatement.class, TypeFactory.create(Calendar.class)),
-        new JavaLanguageKey(IStatement.class, TypeFactory.create(Date.class)));
-    final JavaLanguageKey resultKey = new JavaLanguageKey(IStatement.class, TypeFactory.create(resultType));
+    final List<JavaLanguageKey> allTypes = Arrays.asList(JavaLanguageKeys.statement(new VoidType()),
+        JavaLanguageKeys.statement(TypeFactory.create(int.class)),
+        JavaLanguageKeys.statement(TypeFactory.create(double.class)),
+        JavaLanguageKeys.statement(TypeFactory.create(Calendar.class)),
+        JavaLanguageKeys.statement(TypeFactory.create(Date.class)));
+    final JavaLanguageKey resultKey = JavaLanguageKeys.statement(TypeFactory.create(resultType));
     final ComponentDirectory temporaryVariables = new ComponentDirectory();
     final SnippetCandidate result = new SnippetCandidate();
     final byte size = random.nextByte(MIN_STATEMENTS, MAX_STATEMENTS);
@@ -167,7 +157,7 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
       final Optional<IExpression> symbol = statement.getSymbolExpression();
       if (symbol.isPresent()) {
         final IExpression expression = symbol.get();
-        final JavaLanguageKey key = new JavaLanguageKey(IExpression.class, expression.getType());
+        final JavaLanguageKey key = JavaLanguageKeys.nonnull(expression.getType());
         temporaryVariables.put(key, new NullaryComponent<>(expression));
       }
     }

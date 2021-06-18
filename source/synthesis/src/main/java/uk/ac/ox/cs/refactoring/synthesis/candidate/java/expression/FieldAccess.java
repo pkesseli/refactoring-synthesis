@@ -7,6 +7,7 @@ import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.type.Type;
 
+import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.LeftHandSideExpression;
 
@@ -16,17 +17,17 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.LeftHandSideExpressi
 public class FieldAccess implements LeftHandSideExpression {
 
   /**
-   * 
+   * Simple name of the field.
    */
   private final String fieldName;
 
   /**
-   * 
+   * Fully qualified name of the class containing the field.
    */
   private final String fullyQualifiedClassName;
 
   /**
-   * 
+   * {@link Type} of the field.
    */
   private final Type type;
 
@@ -42,14 +43,15 @@ public class FieldAccess implements LeftHandSideExpression {
   }
 
   /**
+   * Looks up the reflective field in the given class loader context.
    * 
-   * @param context
-   * @return
-   * @throws ClassNotFoundException
-   * @throws NoSuchFieldException
+   * @param context {@link ExecutionContext} with class loader.
+   * @return Reflective field for {@code this}.
+   * @throws ClassNotFoundException {@link ClassLoader#loadClass(String)}
+   * @throws NoSuchFieldException   {@link Class#getField(String)}
    */
   private Field getField(final ExecutionContext context) throws ClassNotFoundException, NoSuchFieldException {
-    final Class<?> cls = context.ClassLoader.loadClass(fullyQualifiedClassName);
+    final Class<?> cls = ClassLoaders.loadClass(context.ClassLoader, fullyQualifiedClassName);
     final Field field = cls.getDeclaredField(fieldName);
     field.setAccessible(true);
     return field;

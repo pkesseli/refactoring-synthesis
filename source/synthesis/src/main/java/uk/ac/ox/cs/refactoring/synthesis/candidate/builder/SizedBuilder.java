@@ -70,13 +70,13 @@ public class SizedBuilder<K, V> implements Builder<K, V> {
   @Override
   public V build(final SourceOfRandomness sourceOfRandomness, final List<K> resultKeys,
       final ComponentDirectory extraComponents) {
-    final int resultKeyIndex = nextInt(sourceOfRandomness, resultKeys.size() - 1);
-    final K resultKey = resultKeys.get(resultKeyIndex);
-
     final ComponentDirectory allComponents = new ComponentDirectory();
     allComponents.putAll(components);
     allComponents.putAll(extraComponents);
 
+    final List<K> eligibleKeys = allComponents.getEligibleKeys(resultKeys, maxSize);
+    final int resultKeyIndex = nextInt(sourceOfRandomness, eligibleKeys.size() - 1);
+    final K resultKey = eligibleKeys.get(resultKeyIndex);
     final int size = MIN_SIZE + nextInt(sourceOfRandomness, maxSize);
     @SuppressWarnings("unchecked")
     final V result = (V) generate(sourceOfRandomness, resultKey, size, allComponents);

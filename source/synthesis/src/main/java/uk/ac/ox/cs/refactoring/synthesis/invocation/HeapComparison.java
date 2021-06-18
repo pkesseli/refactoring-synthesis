@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.ClassUtils;
 
+import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Literals;
 
@@ -51,8 +52,8 @@ public final class HeapComparison {
     }
 
     for (final String className : lhsClassLoader.LoadedClasses) {
-      final Class<?> lhsClass = lhsClassLoader.loadClass(className);
-      final Class<?> rhsClass = rhsClassLoader.loadClass(className);
+      final Class<?> lhsClass = ClassLoaders.loadClass(lhsClassLoader, className);
+      final Class<?> rhsClass = ClassLoaders.loadClass(rhsClassLoader, className);
       if (!equals(comparator, null, Fields.getStatic(lhsClass), null, Fields.getStatic(rhsClass))) {
         return false;
       }

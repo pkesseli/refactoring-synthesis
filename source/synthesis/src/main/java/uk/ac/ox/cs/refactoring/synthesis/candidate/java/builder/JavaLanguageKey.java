@@ -12,25 +12,32 @@ public class JavaLanguageKey {
   /**
    * Kind of the language element (e.g. expression or statement).
    */
-  private Class<?> kind;
+  private final Class<?> kind;
 
   /**
    * Type of the Java language element if applicable.
    */
-  private Type type;
+  private final Type type;
 
   /**
-   * @param kind {@link #kind}
-   * @param type {@link #type}
+   * Indicate that the component type should be {@code @NonNull}.
    */
-  public JavaLanguageKey(final Class<?> kind, final Type type) {
+  private final boolean nonnull;
+
+  /**
+   * @param kind    {@link #kind}
+   * @param type    {@link #type}
+   * @param nonnull {@link #nonnull}
+   */
+  JavaLanguageKey(final Class<?> kind, final Type type, boolean nonnull) {
     this.kind = kind;
     this.type = type;
+    this.nonnull = nonnull;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kind, type);
+    return Objects.hash(kind, type, nonnull);
   }
 
   @Override
@@ -42,6 +49,6 @@ public class JavaLanguageKey {
     if (getClass() != obj.getClass())
       return false;
     JavaLanguageKey other = (JavaLanguageKey) obj;
-    return Objects.equals(kind, other.kind) && Objects.equals(type, other.type);
+    return Objects.equals(kind, other.kind) && Objects.equals(type, other.type) && nonnull == other.nonnull;
   }
 }
