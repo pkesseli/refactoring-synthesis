@@ -45,8 +45,9 @@
 \usepackage{xspace,framed}
 \usepackage{colortbl}
 \usepackage{calc}
- 
-\usepackage{algorithm}
+\usepackage[ruled,vlined]{algorithm2e}
+
+%\usepackage{algorithm}
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{multicol}
@@ -357,7 +358,7 @@ taken into consideration when looking for a refactoring. Varying the
 context enables the user to control the generality of the refactoring.
 
 
-For illustration, for the refactoring in Figure~\ref{ex:deprecated-method}...
+For illustration, for the refactoring in Figure~\ref{ex:deprecated-method-other}...
 \todo{hmm, what context do we consider for the standard library?}
 
 \todo{Should we also discuss our choice of synthesis in the intro?}
@@ -371,11 +372,11 @@ For illustration, for the refactoring in Figure~\ref{ex:deprecated-method}...
 
 \begin{itemize}
 
-\item We proposed a semantics based approach to eliminate uses of deprecated APIs. Our approach
+\item We propose a semantics based approach to eliminate uses of deprecated APIs. Our approach
   is iterative and counterexample based. One key insight is that, in each iteration, the refactoring problem can
   be encoded as the problem of verifying the safety of a program, which is then solved by fuzzing.
 
-\item We introduced the concept of refactoring context. %% The refactoring context is different from the
+\item We introduce the concept of refactoring context. %% The refactoring context is different from the
   %% actual code to be refactored.
   Our refactoring technique generally starts 
   with no context and gradually increase the amount of context we take into consideration
@@ -403,10 +404,15 @@ For illustration, for the refactoring in Figure~\ref{ex:deprecated-method}...
 
 \section{Overview of our approach} \label{sec:approach}
 
-Our technique is semantics-based and makes use of advances in the field of program synthesis. In particular, we make use of the general structure of Counterexample Guided Inductive Synthesis (CEGIS),
-but instead of using symbolic execution to both generate and verify candidate refactorings, we use fuzzing, as described later in this section.
-Our synthesis method is also component based, meaning that it uses components from a given library to generate new code.
-In the rest of this section, we describe how we build the components library followed by presenting the actual refactoring synthesis.
+Our technique is semantics-based and makes use of advances in the
+field of program synthesis. In particular, we make use of the general
+structure of Counterexample Guided Inductive Synthesis (CEGIS), but
+instead of using symbolic execution to both generate and verify
+candidate refactorings, we use fuzzing, as described later in this
+section.  Our synthesis method is also component based, meaning that
+it uses components from a given library to generate new code.  In the
+rest of this section, we describe how we build the components library
+followed by presenting the actual refactoring synthesis.
 %%Our technique for refactoring deprecated instances (e.g. fields, methods, classes) has two big steps, as described next.
 
 \paragraph{{\bf Input to our method}}
@@ -431,21 +437,56 @@ place. We pick hints from the comments accompanying the
 \todo{Maybe we can also collect sketches as especially the unit tests will provide us with more than just the name of the replacement.}
 % As opposed to the comments in libraries, the unit tests are syntactically valid
 
-As an example, the \code{Date} constructor used in Figure~\ref{ex:deprecated-method} is accompanied by the following comment:
+As an example, the \code{getHours} method in class \code{Date} used in Figure~\ref{ex:deprecated-method-other} is accompanied by the following comment:
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 /**
- * Creates a new Date Object representing the given time.
+ * Returns the hours represented by this <code>Date</code>
+ * object as an integer between 0 and 23.
  *
- * @deprecated use <code>new GregorianCalendar(year+1900, month,
- * day)</code> instead.
- * @param year the difference between the required year and 1900.
- * @param month the month as a value between 0 and 11.
- * @param day the day as a value between 0 and 31.
- */
+ * @return the hours represented by this date object.
+ * @deprecated Use Calendar instead of Date, and use get(Calendar.HOUR_OF_DAY)
+ * instead.
+ * @see Calendar
+ * @see #setHours(int)
+ */  
 \end{lstlisting}
 
-This will result in adding \code{``+''}, \code{``new GregorianCalendar($\cdots$)''} and constants 0, 11, 31 and 1900 to our library. 
+%% /**
+ %% * Creates a new Date Object representing the given time.
+ %% *
+ %% * @deprecated use <code>new GregorianCalendar(year+1900, month,
+ %% * day)</code> instead.
+ %% * @param year the difference between the required year and 1900.
+ %% * @param month the month as a value between 0 and 11.
+ %% * @param day the day as a value between 0 and 31.
+ %% */
+
+
+This will result in adding \code{``get(Calendar.HOR\_OF\_DAY)''} to our library.
+In certain situations, the seeding of the component library may require additional work.
+For instance, for the example in Figure~\ref{ex:deprecated-method-other}, we need to also provide a way of obtaining
+a \code{Calendar} object. Thus, we add \code{Calendar.getInstance()}. The seeding algorithm is provided in
+Figure~\ref{alg:seeding}.
+
+\begin{figure}
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwResult{Component library}
+ Add instructions suggested under the @deprecated tag\;
+ use-set = all classes suggested for use\;
+ \For{c $\in$ use-set}{
+   Add public constructors of c\;
+   Add public methods returning an object of class c\;
+   %%use-set = use-set $\cup$ classes suggested for use\;
+ }
+\end{algorithm}
+ \caption{Component library seeding algorithm}
+\label{alg:seeding}
+\end{figure}
+
+
+
 As future work we aim to also collect components and sketches from the  unit tests for the updated library.
  
 \paragraph{{\bf Automatically generating the desired refactoring}} For this purpose, we use a counterexample-guided iterative process that enables us to keep refining a candidate refactoring until we are happy with it. This process consists of two phases, described next:
