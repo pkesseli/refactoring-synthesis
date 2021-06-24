@@ -119,7 +119,7 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
     final Type[] types = { new VoidType(), PrimitiveType.doubleType(), PrimitiveType.intType(),
         TypeFactory.create(Calendar.class), TypeFactory.create(Date.class) };
     for (final Type type : types) {
-      final JavaLanguageKey expressionKey = JavaLanguageKeys.expression(type);
+      final JavaLanguageKey expressionKey = JavaLanguageKeys.nonnull(type);
       components.statement(type, new ConstructorComponent<>(Arrays.asList(expressionKey), ExpressionStatement.class));
     }
 
