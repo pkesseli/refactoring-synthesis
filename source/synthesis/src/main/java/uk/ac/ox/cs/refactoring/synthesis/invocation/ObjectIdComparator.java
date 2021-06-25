@@ -37,9 +37,6 @@ public class ObjectIdComparator {
   public boolean hasSameId(final Object lhs, final Object rhs) {
     Objects.requireNonNull(lhs);
     Objects.requireNonNull(rhs);
-    if (lhs.getClass() == rhs.getClass()) {
-      return true;
-    }
     return getId(lhsIds, lhs) == getId(rhsIds, rhs);
   }
 
