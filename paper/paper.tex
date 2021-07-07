@@ -262,15 +262,24 @@ also a real issue for legacy code that makes use of deprecated APIs
 that need to be replaced with latest APIs/libraries.
 
 The main cause of difficulty when replacing deprecated instances lies
-with the fact that such refactorings are based on semantics rather
-than syntax. For illustration, let's refer back to the example in
-Figure~\ref{ex:deprecated-method}.  A {\em syntax-driven refactoring}
-addresses structural changes to the program requiring only limited
-information about a program's semantics, whereas a {\em
-  semantics-driven refactoring} requires detailed understanding of the
-program semantics in order to be applied soundly.  Clearly, the
-refactoring of the call to the deprecated \code{Date} constructor
-falls into the latter category. %%, as we need to understand exactly
+with the fact that refactorings should not change the functionality of
+the code, i.e., they must preserve observational
+equivalence. Consequently, refactorings based solely on a program's syntax end up
+being overly conservative and mostly address structural changes
+to a program.  If we refer back to the example in
+Figure~\ref{ex:deprecated-method-other}, one must have some
+understanding of the semantics in order to conclude that the
+refactoring does maintain the same functionality.
+
+%% such refactorings are based on semantics rather
+%% than syntax. For illustration, let's refer back to the example in
+%% Figure~\ref{ex:deprecated-method}.  A {\em syntax-driven refactoring}
+%% addresses structural changes to the program requiring only limited
+%% information about a program's semantics, whereas a {\em
+%%   semantics-driven refactoring} requires detailed understanding of the
+%% program semantics in order to be applied soundly.  Clearly, the
+%% refactoring of the call to the deprecated \code{Date} constructor
+%% falls into the latter category. 
 
 %\subsection{From the previous introduction:}
 %% Refactorings are structured changes to existing software which leave its
@@ -356,11 +365,11 @@ that it allows introducing the notion of {\em refactoring context}.
 The refactoring context is the context (of the code to be refactored)
 taken into consideration when looking for a refactoring. Varying the
 context enables the user to control the generality of the refactoring.
-
-
-For illustration, for the refactoring in Figure~\ref{ex:deprecated-method-other}...
-\todo{hmm, what context do we consider for the standard library?}
-
+\todo{Are we going to cover context?}
+%
+%% For illustration, for the refactoring in Figure~\ref{ex:deprecated-method-other}...
+%% \todo{hmm, what context do we consider for the standard library?}
+%
 \todo{Should we also discuss our choice of synthesis in the intro?}
 
 %% In this paper, we are interested in refactoring Java code handing
