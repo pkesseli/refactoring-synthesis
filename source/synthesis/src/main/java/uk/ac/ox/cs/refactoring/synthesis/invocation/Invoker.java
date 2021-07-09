@@ -1,13 +1,11 @@
 package uk.ac.ox.cs.refactoring.synthesis.invocation;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.List;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.state.IStateFactory;
 import uk.ac.ox.cs.refactoring.synthesis.state.ObjenesisStateFactory;
@@ -24,19 +22,9 @@ public class Invoker {
   public static final String INIT = "<init>";
 
   /**
-   * Fully qualified name of the class whose method to invoke.
+   * Classloader-independent method identifier.
    */
-  private final String fullyQualifiedClassName;
-
-  /**
-   * Simple name of the method to invoke.
-   */
-  private final String methodName;
-
-  /**
-   * Fully qualified type names of the invoked method's parameters.
-   */
-  private final List<String> fullyQualifiedParameterTypeNames;
+  private final MethodIdentifier methodIdentifier;
 
   /**
    * Helper to prepare a Java program state based on a given counterexample.
@@ -44,15 +32,10 @@ public class Invoker {
   private final IStateFactory stateFactory = new ObjenesisStateFactory();
 
   /**
-   * @param fullyQualifiedClassName          {@link #fullyQualifiedClassName}
-   * @param methodName                       {@link #methodName}
-   * @param fullyQualifiedParameterTypeNames {@link #fullyQualifiedParameterTypeNames}
+   * @param methodIdentifier {@link #methodIdentifier}
    */
-  public Invoker(final String fullyQualifiedClassName, final String methodName,
-      final List<String> fullyQualifiedParameterTypeNames) {
-    this.fullyQualifiedClassName = fullyQualifiedClassName;
-    this.methodName = methodName;
-    this.fullyQualifiedParameterTypeNames = fullyQualifiedParameterTypeNames;
+  public Invoker(final MethodIdentifier methodIdentifier) {
+    this.methodIdentifier = methodIdentifier;
   }
 
   /**
@@ -67,29 +50,10 @@ public class Invoker {
       NoSuchFieldException, NoSuchMethodException {
     final IsolatedClassLoader classLoader = ClassLoaders.createIsolated();
     final State state = stateFactory.create(classLoader, counterexample);
-    final Class<?> cls = classLoader.loadClass(fullyQualifiedClassName);
-    final Class<?>[] parameterTypes = new Class<?>[fullyQualifiedParameterTypeNames.size()];
-    for (int i = 0; i < parameterTypes.length; ++i) {
-      final String parameterType = fullyQualifiedParameterTypeNames.get(i);
-      parameterTypes[i] = ClassLoaders.loadClass(classLoader, parameterType);
-    }
-
-    final Executable executable;
-    final Invokable execute;
-    if (INIT.equals(methodName)) {
-      final Constructor<?> constructor = cls.getDeclaredConstructor(parameterTypes);
-      executable = constructor;
-      execute = constructor::newInstance;
-    } else {
-      final Method method = cls.getDeclaredMethod(methodName, parameterTypes);
-      executable = method;
-      execute = args -> method.invoke(state.Instance, args);
-    }
-
-    executable.setAccessible(true);
+    final Invokable invokable = Methods.create(classLoader, methodIdentifier);
     final Object result;
     try {
-      result = execute.invoke(state.Arguments);
+      result = invokable.invoke(state.Instance, state.Arguments);
     } catch (final Throwable e) {
       return new ExecutionResult(classLoader, e);
     }

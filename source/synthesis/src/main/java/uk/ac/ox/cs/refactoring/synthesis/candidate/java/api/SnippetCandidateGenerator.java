@@ -29,6 +29,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Parameter;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.This;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.TypeSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
@@ -110,6 +111,7 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
     for (final FieldAccess field : fields)
       components.lhs(field.getType(), new NullaryComponent<>(field));
 
+    final TypeSeed typeSeed = new TypeSeed(methodToRefactor)
     // TODO: Re-enable once fuzzing is smarter.
     // Assign.register(components, PrimitiveType.doubleType());
     Integer.register(components);

@@ -22,9 +22,10 @@ public interface IExpression extends INodeConvertible<Expression> {
    * @param context {@link ExecutionContext} in which to evaluate the expression.
    * @throws ClassNotFoundException
    * @throws IllegalAccessException
+   * @throws InstantiationException
    * @throws InvocationTargetException
    * @throws NoSuchFieldException
    */
   Object evaluate(ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
-      InvocationTargetException, NoSuchFieldException, NoSuchMethodException;
+      InstantiationException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException;
 }
