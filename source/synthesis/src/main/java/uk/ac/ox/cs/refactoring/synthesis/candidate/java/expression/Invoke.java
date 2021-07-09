@@ -1,5 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -13,10 +14,11 @@ import java.util.stream.Stream;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
-import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.FunctionComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
@@ -24,6 +26,9 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
+import uk.ac.ox.cs.refactoring.synthesis.invocation.ConstructorInvokable;
+import uk.ac.ox.cs.refactoring.synthesis.invocation.Invokable;
+import uk.ac.ox.cs.refactoring.synthesis.invocation.MethodInvokable;
 
 /**
  * Contains Java method invocation expressions for use in builders.
@@ -33,62 +38,37 @@ public final class Invoke {
   private Invoke() {
   }
 
-  /**
-   * Models a Java method invocation expression.
-   */
-  public static class InvokeMethod implements IExpression {
+  public static abstract class InvokeInvokable implements IExpression {
 
     /**
      * {@code this} expression for the method invocation. {@code null} for static
      * methods.
      */
-    private final IExpression instance;
+    protected final IExpression instance;
 
     /**
      * Method argument values.
      */
     private final List<IExpression> arguments;
 
-    /**
-     * Reflective method used for evaluation.
-     */
-    private final Method method;
+    protected final Invokable invokable;
 
-    /**
-     * @param instance  {@link #instance}
-     * @param arguments {@link #arguments}
-     * @param method    {@link #method}
-     */
-    public InvokeMethod(final IExpression instance, final List<IExpression> arguments, final Method method) {
+    public InvokeInvokable(final IExpression instance, final List<IExpression> arguments, final Invokable invokable) {
       this.instance = instance;
       this.arguments = arguments;
-      this.method = method;
-    }
-
-    @Override
-    public Expression toNode() {
-      final NodeList<Expression> args = arguments.stream().map(IExpression::toNode)
-          .collect(Collectors.<Expression, NodeList<Expression>>toCollection(NodeList::new));
-      final String name = method.getName();
-      final Expression scope;
-      if (Modifier.isStatic(method.getModifiers())) {
-        scope = new TypeExpr(TypeFactory.createClassType(method.getDeclaringClass()));
-      } else {
-        scope = instance.toNode();
-      }
-      return new MethodCallExpr(scope, name, args);
+      this.invokable = invokable;
     }
 
     @Override
     public Type getType() {
-      return TypeFactory.create(method.getReturnType());
+      return TypeFactory.create(invokable.getReturnType());
     }
 
     @Override
-    public Object evaluate(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
-        InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+    public Object evaluate(ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
+        InstantiationException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       final Object obj;
-      if (Modifier.isStatic(method.getModifiers())) {
+      if (Invokable.hasInstance(invokable)) {
         obj = null;
       } else {
         obj = instance.evaluate(context);
@@ -99,13 +79,61 @@ public final class Invoke {
         args[i] = arguments.get(i).evaluate(context);
       }
 
-      final Class<?> cls = context.ClassLoader.loadClass(method.getDeclaringClass().getName());
-      final Class<?>[] parameterTypes = new Class<?>[method.getParameterTypes().length];
-      for (int i = 0; i < parameterTypes.length; ++i)
-        parameterTypes[i] = ClassLoaders.loadClass(context.ClassLoader, method.getParameterTypes()[i].getName());
+      return invokable.invoke(obj, args);
+    }
 
-      final Method isolatedMethod = cls.getDeclaredMethod(method.getName(), parameterTypes);
-      return isolatedMethod.invoke(obj, args);
+    public NodeList<Expression> getArguments() {
+      return arguments.stream().map(IExpression::toNode)
+          .collect(Collectors.<Expression, NodeList<Expression>>toCollection(NodeList::new));
+    }
+
+  }
+
+  /**
+   * Models a Java method invocation expression.
+   */
+  public static class InvokeMethod extends InvokeInvokable {
+
+    /**
+     * Reflective method used for evaluation.
+     */
+    private final Method method;
+
+    /**
+     * @param instance  {@link InvokeInvokable#InvokeInvokable(IExpression, List, Invokable)}
+     * @param arguments {@link InvokeInvokable#InvokeInvokable(IExpression, List, Invokable)}
+     * @param method    {@link #method}
+     */
+    public InvokeMethod(final IExpression instance, final List<IExpression> arguments, final Method method) {
+      super(instance, arguments, new MethodInvokable(method));
+      this.method = method;
+    }
+
+    @Override
+    public Expression toNode() {
+      final String name = method.getName();
+      final Expression scope;
+      if (Modifier.isStatic(method.getModifiers())) {
+        scope = new TypeExpr(TypeFactory.createClassType(method.getDeclaringClass()));
+      } else {
+        scope = instance.toNode();
+      }
+      return new MethodCallExpr(scope, name, getArguments());
+    }
+
+  }
+
+  private static class InvokeConstructor extends InvokeInvokable {
+
+    public InvokeConstructor(final IExpression instance, final List<IExpression> arguments,
+        final Constructor<?> constructor) {
+      super(instance, arguments, new ConstructorInvokable(constructor));
+    }
+
+    @Override
+    public Expression toNode() {
+      final ClassOrInterfaceType type = TypeFactory.createClassType(invokable.getReturnType());
+      return new ObjectCreationExpr(null, type, getArguments());
     }
 
   }
@@ -113,7 +141,33 @@ public final class Invoke {
   /**
    * Adapter from {@link Method#invoke(Object, Object...)} to {@link Function}.
    */
-  private static class InvokeFactory implements Function<Object[], InvokeMethod> {
+  private static abstract class InvokeFactory {
+
+    private final boolean hasInstance;
+
+    public InvokeFactory(final boolean hasInstance) {
+      this.hasInstance = hasInstance;
+    }
+
+    protected IExpression getInstance(final Object[] t) {
+      if (!hasInstance)
+        return null;
+      return (IExpression) t[0];
+    }
+
+    protected List<IExpression> getArguments(final Object[] t) {
+      Stream<IExpression> arguments = Arrays.stream(t).map(IExpression.class::cast);
+      if (hasInstance)
+        arguments = arguments.skip(1);
+      return arguments.collect(Collectors.toList());
+    }
+
+  }
+
+  /**
+   * Adapter from {@link Method#invoke(Object, Object...)} to {@link Function}.
+   */
+  private static class InvokeMethodFactory extends InvokeFactory implements Function<Object[], InvokeMethod> {
 
     /**
      * Wrapped {@link Method}.
@@ -123,22 +177,39 @@ public final class Invoke {
     /**
      * @param method {@link #method}
      */
-    InvokeFactory(final Method method) {
+    InvokeMethodFactory(final Method method) {
+      super(!Modifier.isStatic(method.getModifiers()));
       this.method = method;
     }
 
     @Override
     public InvokeMethod apply(final Object[] t) {
-      final IExpression instance;
-      Stream<IExpression> arguments = Arrays.stream(t).map(IExpression.class::cast);
-      if (Modifier.isStatic(method.getModifiers())) {
-        instance = null;
-      } else {
-        instance = (IExpression) t[0];
-        arguments = arguments.skip(1);
-      }
+      return new InvokeMethod(getInstance(t), getArguments(t), method);
+    }
 
-      return new InvokeMethod(instance, arguments.collect(Collectors.toList()), method);
+  }
+
+  /**
+   * Adapter from {@link Method#invoke(Object, Object...)} to {@link Function}.
+   */
+  private static class InvokeConstructorFactory extends InvokeFactory implements Function<Object[], InvokeConstructor> {
+
+    /**
+     * Wrapped {@link Constructor}.
+     */
+    private final Constructor<?> constructor;
+
+    /**
+     * @param constructor {@link #constructor}
+     */
+    InvokeConstructorFactory(final Constructor<?> constructor) {
+      super(false);
+      this.constructor = constructor;
+    }
+
+    @Override
+    public InvokeConstructor apply(final Object[] t) {
+      return new InvokeConstructor(getInstance(t), getArguments(t), constructor);
     }
 
   }
@@ -148,28 +219,39 @@ public final class Invoke {
    * 
    * @param components Directory in which to register all invoke method
    *                   expressions.
-   * @param methods
+   * @param method
    */
-  public static void register(final JavaComponents components, final Iterable<Method> methods) {
-    for (final Method method : methods) {
-      final Type type = TypeFactory.create(method.getReturnType());
-      final List<JavaLanguageKey> parameterKeys = getParameterKeys(method);
-      components.nonnull(type, new FunctionComponent<>(parameterKeys, new InvokeFactory(method)));
-    }
+  public static void register(final JavaComponents components, final Method method) {
+    final Type type = TypeFactory.create(method.getReturnType());
+    final List<JavaLanguageKey> parameterKeys = getParameterKeys(new MethodInvokable(method));
+    components.nonnull(type, new FunctionComponent<>(parameterKeys, new InvokeMethodFactory(method)));
+  }
+
+  /**
+   * Helper to register invoke constructor expressions in Java candidate builders.
+   * 
+   * @param components Directory in which to register all invoke constructor
+   *                   expressions.
+   * @param method
+   */
+  public static void register(final JavaComponents components, final Constructor<?> constructor) {
+    final Type type = TypeFactory.create(constructor.getDeclaringClass());
+    final List<JavaLanguageKey> parameterKeys = getParameterKeys(new ConstructorInvokable(constructor));
+    components.nonnull(type, new FunctionComponent<>(parameterKeys, new InvokeConstructorFactory(constructor)));
   }
 
   /**
    * Component keys required in the builder, based on the methods parameters.
    * 
-   * @param method {@link Method} for which to define required builder parameters.
+   * @param invokable {@link Invokable} for which to define required builder
+   *                  parameters.
    * @return {@link List} of component parameter keys.
    */
-  private static List<JavaLanguageKey> getParameterKeys(final Method method) {
+  private static List<JavaLanguageKey> getParameterKeys(final Invokable invokable) {
     final List<JavaLanguageKey> parameterKeys = new ArrayList<>();
-    if (!Modifier.isStatic(method.getModifiers()))
-      parameterKeys.add(JavaLanguageKeys.nonnull(TypeFactory.create(method.getDeclaringClass())));
-
-    for (final Class<?> parameterType : method.getParameterTypes())
+    if (Invokable.hasInstance(invokable))
+      parameterKeys.add(JavaLanguageKeys.nonnull(TypeFactory.create(invokable.getInstanceType())));
+    for (final Class<?> parameterType : invokable.getParameterTypes())
       parameterKeys.add(JavaLanguageKeys.expression(TypeFactory.create(parameterType)));
 
     return parameterKeys;

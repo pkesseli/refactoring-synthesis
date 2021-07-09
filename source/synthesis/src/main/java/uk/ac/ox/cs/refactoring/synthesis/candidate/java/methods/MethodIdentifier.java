@@ -23,30 +23,15 @@ public class MethodIdentifier {
   public final List<String> FullyQualifiedParameterTypeNames;
 
   /**
-   * 
-   */
-  public final String FullyQualifiedReturnTypeName;
-
-  /**
-   * 
-   */
-  public final boolean IsStatic;
-
-  /**
    * @param fullyQualifiedClassName
    * @param methodName
    * @param fullyQualifiedParameterClassNames
-   * @param fullyQualifiedReturnTypeName
-   * @param isStatic
    */
   public MethodIdentifier(final String fullyQualifiedClassName, final String methodName,
-      final List<String> fullyQualifiedParameterClassNames, final String fullyQualifiedReturnTypeName,
-      final boolean isStatic) {
+      final List<String> fullyQualifiedParameterClassNames) {
     FullyQualifiedClassName = fullyQualifiedClassName;
     MethodName = methodName;
     FullyQualifiedParameterTypeNames = fullyQualifiedParameterClassNames;
-    FullyQualifiedReturnTypeName = fullyQualifiedReturnTypeName;
-    IsStatic = isStatic;
   }
 
 }

@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
+import uk.ac.ox.cs.refactoring.synthesis.candidate.random.RandomnessAccessor;
+
 /**
  * Builder constructing {@link Component}s of limited size.
  */
@@ -47,7 +49,7 @@ public class SizedBuilder<K, V> implements Builder<K, V> {
       final ComponentDirectory components) {
     final List<Component<K, ?>> candidates = components.get(key, size).collect(Collectors.toList());
     final int maxIndex = candidates.size() - 1;
-    final int selection = nextInt(sourceOfRandomness, maxIndex);
+    final int selection = RandomnessAccessor.nextInt(sourceOfRandomness, maxIndex);
     final Component<K, ?> component = candidates.get(selection);
     final List<K> argumentTypes = component.getParameterKeys();
     final Object[] arguments = new Object[argumentTypes.size()];
@@ -55,16 +57,6 @@ public class SizedBuilder<K, V> implements Builder<K, V> {
       arguments[i] = generate(sourceOfRandomness, argumentTypes.get(i), size - 1, components);
     }
     return component.construct(arguments);
-  }
-
-  /**
-   * 
-   * @param sourceOfRandomness
-   * @param max
-   * @return
-   */
-  private static int nextInt(SourceOfRandomness sourceOfRandomness, int max) {
-    return Math.abs(sourceOfRandomness.nextInt()) % (max + 1);
   }
 
   @Override
@@ -75,9 +67,9 @@ public class SizedBuilder<K, V> implements Builder<K, V> {
     allComponents.putAll(extraComponents);
 
     final List<K> eligibleKeys = allComponents.getEligibleKeys(resultKeys, maxSize);
-    final int resultKeyIndex = nextInt(sourceOfRandomness, eligibleKeys.size() - 1);
+    final int resultKeyIndex = RandomnessAccessor.nextInt(sourceOfRandomness, eligibleKeys.size() - 1);
     final K resultKey = eligibleKeys.get(resultKeyIndex);
-    final int size = MIN_SIZE + nextInt(sourceOfRandomness, maxSize);
+    final int size = MIN_SIZE + RandomnessAccessor.nextInt(sourceOfRandomness, maxSize);
     @SuppressWarnings("unchecked")
     final V result = (V) generate(sourceOfRandomness, resultKey, size, allComponents);
     return result;

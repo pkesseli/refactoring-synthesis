@@ -30,7 +30,7 @@ public final class Integer {
 
     @Override
     public java.lang.Integer evaluate(final ExecutionContext context) throws ClassNotFoundException,
-        IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+        InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return getLhs(context) + getRhs(context);
     }
   }
@@ -42,7 +42,7 @@ public final class Integer {
 
     @Override
     public java.lang.Integer evaluate(final ExecutionContext context) throws ClassNotFoundException,
-        IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+        InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return getLhs(context) - getRhs(context);
     }
   }
@@ -58,6 +58,6 @@ public final class Integer {
     final List<JavaLanguageKey> parameterKeys = Arrays.asList(intExpression, intExpression);
     final Iterable<Class<?>> classes = Classes.getNonAbstractMemberClasses(Integer.class)::iterator;
     for (final Class<?> cls : classes)
-      components.expr(type, new ConstructorComponent<>(parameterKeys, cls));
+      components.nonnull(type, new ConstructorComponent<>(parameterKeys, cls));
   }
 }

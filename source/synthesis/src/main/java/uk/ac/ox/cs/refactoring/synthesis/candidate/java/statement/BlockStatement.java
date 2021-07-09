@@ -42,7 +42,7 @@ public class BlockStatement implements IStatement {
 
   @Override
   public Object execute(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
-      InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+      InstantiationException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
     if (Statements.isEmpty()) {
       return null;
     }

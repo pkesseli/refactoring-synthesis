@@ -14,9 +14,13 @@ import java.util.Collections;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.FieldSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.GeneratorConfiguration;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.StatementSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 
 public class SnippetCandidateGeneratorTest {
@@ -29,8 +33,15 @@ public class SnippetCandidateGeneratorTest {
     final SourceOfRandomness sourceOfRandomness = mock(SourceOfRandomness.class);
     when(sourceOfRandomness.nextByte(anyByte(), anyByte())).thenReturn((byte) 1);
     when(sourceOfRandomness.nextInt(anyInt(), anyInt())).thenAnswer(i -> i.getArgument(0));
-    final SnippetCandidateGenerator candidateSupplier = new SnippetCandidateGenerator(null, double.class,
-        Collections.emptyList(), Arrays.asList(field), Collections.emptyList());
+    final ComponentDirectory components = new ComponentDirectory();
+    new FieldSeed(Arrays.asList(field)).seed(components);
+    new StatementSeed().seed(components);
+    final byte minInstructions = 1;
+    final byte maxInstructions = 1;
+    final byte maxInstructionLength = 1;
+    final GeneratorConfiguration generatorConfiguration = new GeneratorConfiguration(components, minInstructions,
+        maxInstructions, maxInstructionLength, Void.class, Collections.emptyList(), double.class);
+    final SnippetCandidateGenerator candidateSupplier = new SnippetCandidateGenerator(generatorConfiguration);
     final SnippetCandidate snippetCandidate = candidateSupplier.generate(sourceOfRandomness, null);
     assertThat(snippetCandidate.Block.Statements, hasItems(isA(ExpressionStatement.class)));
   }

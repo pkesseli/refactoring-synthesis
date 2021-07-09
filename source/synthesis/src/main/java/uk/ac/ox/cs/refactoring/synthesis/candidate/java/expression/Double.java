@@ -30,7 +30,7 @@ public final class Double {
 
     @Override
     public java.lang.Double evaluate(final ExecutionContext context) throws ClassNotFoundException,
-        IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+        InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return getLhs(context) + getRhs(context);
     }
   }
@@ -42,7 +42,7 @@ public final class Double {
 
     @Override
     public java.lang.Double evaluate(final ExecutionContext context) throws ClassNotFoundException,
-        IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+        InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       return getLhs(context) - getRhs(context);
     }
   }
@@ -58,6 +58,6 @@ public final class Double {
     final List<JavaLanguageKey> parameterKeys = Arrays.asList(doubleExpression, doubleExpression);
     final Iterable<Class<?>> classes = Classes.getNonAbstractMemberClasses(Double.class)::iterator;
     for (final Class<?> cls : classes)
-      components.expr(type, new ConstructorComponent<>(parameterKeys, cls));
+      components.nonnull(type, new ConstructorComponent<>(parameterKeys, cls));
   }
 }

@@ -56,7 +56,7 @@ public abstract class BinaryExpression<T> implements IExpression {
    */
   @SuppressWarnings("unchecked")
   public T getLhs(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
-      InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+      InstantiationException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
     return (T) lhs.evaluate(context);
   }
 
@@ -69,7 +69,7 @@ public abstract class BinaryExpression<T> implements IExpression {
    */
   @SuppressWarnings("unchecked")
   public T getRhs(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
-      InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+      InstantiationException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
     return (T) rhs.evaluate(context);
   }
 

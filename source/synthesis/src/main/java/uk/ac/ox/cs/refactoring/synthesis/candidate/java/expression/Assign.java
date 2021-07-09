@@ -58,7 +58,7 @@ public final class Assign {
 
     @Override
     public Object evaluate(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
-        InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+        InstantiationException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
       lhs.set(context, rhs.evaluate(context));
       return lhs.evaluate(context);
     }

@@ -55,7 +55,7 @@ public class ExpressionStatement implements IStatement {
 
   @Override
   public Object execute(final ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
-      InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+      InstantiationException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
     return value = expression.evaluate(context);
   }
 

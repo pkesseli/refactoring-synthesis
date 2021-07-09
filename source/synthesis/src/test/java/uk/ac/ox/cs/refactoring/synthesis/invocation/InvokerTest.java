@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import uk.ac.ox.cs.refactoring.synthesis.benchmark.Benchmarks;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.ObjectDescription;
 
@@ -25,8 +26,8 @@ public class InvokerTest {
     counterexample.ObjectArguments.put(0, lhs);
     counterexample.ObjectArguments.put(1, rhs);
 
-    final Invoker invoker = new Invoker(Benchmarks.SUM, "max",
-        Arrays.asList(Benchmarks.INTEGER_WRAPPER, Benchmarks.INTEGER_WRAPPER));
+    final Invoker invoker = new Invoker(new MethodIdentifier(Benchmarks.SUM, "max",
+        Arrays.asList(Benchmarks.INTEGER_WRAPPER, Benchmarks.INTEGER_WRAPPER)));
     final int result = (int) invoker.invoke(counterexample).Value;
     assertEquals(33, result);
   }

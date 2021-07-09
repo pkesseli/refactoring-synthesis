@@ -18,12 +18,19 @@ public interface IStatement extends INodeConvertible<Statement> {
    * 
    * @return Return expression, if applicable. {@code null} otherwise.
    * 
-   * @throws ClassNotFoundException
-   * @throws IllegalAccessException
-   * @throws NoSuchFieldException
+   * @throws ClassNotFoundException    if class whose method to execute could not
+   *                                   be accessed.
+   * @throws IllegalAccessException    if reflecitve access was denied.
+   * @throws InstantiationException    if a {@code this} instance could not be
+   *                                   created.
+   * @throws InvocationTargetException if a reflective execution throws an error.
+   * @throws NoSuchFieldException      if a field could not be accessed
+   *                                   reflectively.
+   * @throws NoSuchMethodException     if a method to execute could not be
+   *                                   accessed reflectively.
    */
   Object execute(ExecutionContext context) throws ClassNotFoundException, IllegalAccessException,
-      InvocationTargetException, NoSuchFieldException, NoSuchMethodException;
+      InstantiationException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException;
 
   /**
    * If present, provides an expression using which the value of {@code this}

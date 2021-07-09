@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -107,6 +108,35 @@ public class ComponentDirectory {
    */
   public <K> List<K> getEligibleKeys(final List<K> allKeys, final int maxSize) {
     return allKeys.stream().filter(key -> minSizes.get(key) <= maxSize).collect(Collectors.toList());
+  }
+
+  /**
+   * Provides all available component keys.
+   * 
+   * TODO: Consider making K a class type parameter.
+   * 
+   * @param <K>      Key type.
+   * @param keyClass Key type class.
+   * @return All available component keys.
+   */
+  public <K> Set<K> keySet(final Class<K> keyClass) {
+    return components.entrySet().stream().map(Map.Entry::getKey).filter(keyClass::isInstance).map(keyClass::cast)
+        .collect(Collectors.toSet());
+  }
+
+  /**
+   * Provides all keys which are required to build the components in the library.
+   * 
+   * TODO: Consider making K a class type parameter.
+   * 
+   * @param <K>      Key type.
+   * @param keyClass Key type class.
+   * @return All parameter keys.
+   */
+  public <K> Set<K> parameterKeySet(final Class<K> keyClass) {
+    return components.entrySet().stream().filter(entry -> keyClass.isInstance(entry.getKey())).map(Map.Entry::getValue)
+        .map(Map::values).flatMap(Collection::stream).flatMap(List::stream).map(Component::getParameterKeys)
+        .flatMap(List::stream).filter(keyClass::isInstance).map(keyClass::cast).collect(Collectors.toSet());
   }
 
 }
