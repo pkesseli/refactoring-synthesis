@@ -398,9 +398,9 @@ context enables the user to control the generality of the refactoring.
 
 \begin{itemize}
 
-\item We propose a syntax and semantics based approach to eliminate uses of deprecated APIs. Our approach
-  is iterative and counterexample based. One key insight is that, in each iteration, the refactoring problem can
-  be encoded as the problem of verifying the safety of a program, which is then solved by fuzzing.
+\item We propose a syntax and semantics based approach to eliminate uses of deprecated APIs. Our approach is counterexample guided and type directed.
+
+\item We provide an encoding of the synthesis problem as the problem of verifying the safety of a program, which is then solved by fuzzing.
 
 \item We introduce the concept of refactoring context. %% The refactoring context is different from the
   %% actual code to be refactored.
@@ -430,7 +430,7 @@ context enables the user to control the generality of the refactoring.
 
 \section{Overview of our approach} \label{sec:approach}
 
-Our technique is semantics-based and makes use of advances in the
+Our technique relies on both syntax and semantics and makes use of advances in the
 field of program synthesis. In particular, we make use of the general
 structure of Counterexample Guided Inductive Synthesis (CEGIS), but
 instead of using symbolic execution to both generate and verify
@@ -441,7 +441,7 @@ rest of this section, we describe how we build the components library
 followed by presenting the actual refactoring synthesis.
 %%Our technique for refactoring deprecated instances (e.g. fields, methods, classes) has two big steps, as described next.
 
-\paragraph{{\bf Input to our method}}
+\subsection{{\bf Input to our method}}
 We expect as input the original deprecated code \var{Orig} with inputs
 $\vec{x}$, as well as access to the library where the
 field/method/class has been deprecated. We need the latter to seed the
@@ -449,14 +449,25 @@ components library.  Depending on the user's intention we may also
 take into consideration some amount of context (of the location where
 the deprecated element is found) when searching for a refactoring.
 
-\paragraph{{\bf Seed the components library}}
+\subsection{{\bf Type-directed seeding the components library}}
 % Our synthesis engine is component based, meaning that, in order to generate new code, it makes use of a library of components.
 For each required refactoring, we start by building the components library.
+This step is critical as the size of the component library has a direct impact
+on the size of the search space for the refactoring.
+If the component library is too small, meaning that we didn't add all
+the required components, then the synthesis will fail to find a refactoring.
+However, if we add too many components, then the search space becomes too vast and
+synthesis may not terminate within a reasonable amount of time.
+
+In order to increase our chances of finding a refactoring fast, we use two different
+component libraries: the {\em core library} and the {\em extended library}. 
+
+\paragraph{The core components library}
 %Initially, we build our components library for the actual synthesis process. 
 In general, when deprecating a field/method/class, the
 \code{@deprecated} Javadoc tag is used in the comment section to
 inform the developer the reason of deprecation and what can be used in
-place. We pick hints from the comments accompanying the
+place. This enables us to pick components directly from the comments accompanying the
 \code{@deprecated} tag.
 
 % Other github projects that have already been ported.
@@ -489,26 +500,99 @@ As an example, the \code{getHours} method in class \code{Date} used in Figure~\r
  %% */
 
 
-This will result in adding \code{``get(Calendar.HOR\_OF\_DAY)''} to our library.
-In certain situations, the seeding of the component library may require additional work.
-For instance, for the example in Figure~\ref{ex:deprecated-method-other}, we need to also provide a way of obtaining
-a \code{Calendar} object. Thus, we add \code{Calendar.getInstance()}. The seeding algorithm is provided in
-Figure~\ref{alg:seeding}.
+This will result in adding the method \code{``int get(int field)''} from class
+\code{Calendar} and constant \code{``Calendar.HOUR_OF_DAY''} to our library.
+Additionally, we add constant \code{date} from the original code to the library.
+The difficulty is that, in order to be able call method \code{get}, we require an object of
+type \code{Calendar} and our library doesn't contain any way of creating such an object.
+Thus, we scan all the public constructors of class \code{Calendar}
+and all the public methods from class \code{Calendar} that return an object of type \code{Calendar}. For this case, we find the following four options:
+
+\begin{enumerate}
+  \item \code{static Calendar	getInstance()} -- gets a calendar using the default time zone and locale.
+  \item \code{static Calendar getInstance(Locale aLocale)} -- gets a calendar using the default time zone and specified locale.
+  \item \code{static Calendar	getInstance(TimeZone zone)} -- gets a calendar using the specified time zone and default locale.
+  \item \code{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- gets a calendar with the specified time zone and locale.
+\end{enumerate}
+
+Out of these four options, we search for those for which our library already contains the means to generate objects whose types correspond to the types of the arguments. We call such
+instructions {\em realizable}.
+For instance, the first option is realizable because it can be used without adding anything else to the components library, whereas, in order to call the second method, we would need to generate an object of type \code{Locale}. It would therefore be useless to add the second method to the library without also
+adding components for creating objects of type \code{Locale}. The last two methods are in a similar situation as the second. For the core library, we only add the first method.
+
+%% Even though we add them, they are not going to be used by the synthesis engine
+%% as we use a type-directed approach to term generation...
+
+The seeding algorithm for the core library is provided in Figure~\ref{alg:seeding-core}.
+We start by adding all the constants contained in the Javadoc suggestion
+and in the original code to the library. Then, we also add all the instructions contained
+in the Javadoc suggestion. Next, we need to make sure that the Javadoc suggestions
+can be used (i.e. are realizable). For this purpose, we add ways of generating
+objects whose types match the types of the fields and callers used in the Javadoc suggestions. 
+In the algorithm, we use ``ensured-types'' to denote the types of the objects that can be
+generated using the instructions in the core library, and ``required-types'' to denote
+the types of the fields and callers in the Javadoc suggestions.
+For each required type that we have no way of generating, we add all the realizable
+public constructors and realizable public methods returning objects of that type to the
+core library.
+Notably, it may be the case that there is no realizable instruction for a required type.
+In such a case, the synthesiser won't be able to generate any useful programs.
+More details on this in Section~\ref{sec:synthesis}.
+
+We use  \code{ensured-types(library)} to return the types of objects that can be created using the instructions in the library, and \code{required-types(library)} to return the types of caller objects and fields for the instructions in the library.
+
+%% In certain situations, the seeding of the component library may require additional work.
+%% For instance, for the example in Figure~\ref{ex:deprecated-method-other}, we need to also provide a way of obtaining
+%% a \code{Calendar} object. Thus, we add \code{Calendar.getInstance()}. 
 
 \begin{figure}
 \begin{algorithm}[H]
 \SetAlgoLined
-\KwResult{Component library}
- Add instructions suggested under the @deprecated tag\;
- use-set = all classes suggested for use\;
- \For{c $\in$ use-set}{
-   Add public constructors of c\;
-   Add public methods returning an object of class c\;
-   %%use-set = use-set $\cup$ classes suggested for use\;
+\KwResult{Core component library}
+ Add constants suggested under the @deprecated tag\;
+ Add constants used in the original code\;
+ Add instructions suggested under the @deprecated tag to the library\;
+ \For{t $\in$ required-types(library)}{
+   \If{t $\not\in$ ensured-types(library)}{
+     generators = realizable-public-constructors(t) $\cup$ realizable-public-methods-returning-an-object-of-type(t)\;
+     Add ``generators'' to the library\;
+   }
  }
 \end{algorithm}
- \caption{Component library seeding algorithm}
-\label{alg:seeding}
+ \caption{Seeding algorithm for the core library}
+\label{alg:seeding-core}
+\end{figure}
+
+\paragraph{The extended components library}
+As opposed to the core library, here we go one level further by adding all ways of generating
+types in required-types(library). Then, for the updated library,
+we again add the realizable instructions able to produce the required types.
+
+\begin{figure}
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwResult{Core component library}
+ Add constants suggested under the @deprecated tag\;
+ Add constants used in the original code\;
+ %Add constants 0 and 1 to the library\;
+ %Add + to the library\;
+ Add instructions suggested under the @deprecated tag to the library\;
+; 
+ \For{t $\in$ required-types(library)}{
+   \If{t $\not\in$ ensured-types(library)}{
+     generators = public-constructors(t) $\cup$ public-methods-returning-an-object-of-type(t)\;
+     Add ``generators'' to the library\;
+     \For{t $\in$ required-types(generators)}{
+       \If{t $\not\in$ ensured-types(library)}{
+         new-generators = realizable-public-constructors(t) $\cup$ realizable-public-methods-returning-an-object-of-type(t)\;
+         Add ``new-generators'' to the library\;
+       }
+     }
+   }
+ }
+\end{algorithm}
+ \caption{Seeding algorithm for the extended library}
+\label{alg:seeding-extended}
 \end{figure}
 
 
