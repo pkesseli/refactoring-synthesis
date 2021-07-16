@@ -255,7 +255,9 @@ complex. Indeed neither Eclipse 4.15.0 nor IntelliJ IDEA 2020.2.2 make
 any attempt to suggest a better alternative to the user. There is also
 very limited support offered by the research community, mainly
 focusing on replacing calls to deprecated methods by their
-bodies~\cite{DBLP:conf/paste/Perkins05}. Consequently, the majority of
+bodies~\cite{DBLP:conf/paste/Perkins05}. 
+
+Consequently, the majority of
 such refactorings are done manually, which is a costly,
 time-intensive, and not least error-prone process.  This situation is
 also a real issue for legacy code that makes use of deprecated APIs
@@ -263,13 +265,24 @@ that need to be replaced with latest APIs/libraries.
 
 The main cause of difficulty when replacing deprecated instances lies
 with the fact that refactorings should not change the functionality of
-the code, i.e., they must preserve observational
-equivalence. Consequently, refactorings based solely on a program's syntax end up
+the code, i.e., they must preserve observational equivalence.
+Ensuring observational equivalence is far from trivial.  For instance,
+inlining calls to deprecated methods can break equivalence if the
+original function was synchronised.  While, it is not possible for two
+invocations of synchronized original method on the same object to
+interleave, this is not guaranteed after inlining the method's body.
+
+Another example of a refactoring that unintuitively breaks
+observational equivalence is given in Figure~\ref{}.
+\todo{add example here.}
+
+Consequently, refactorings based solely on a program's syntax end up
 being overly conservative and mostly address structural changes
-to a program.  If we refer back to the example in
+to a program.  Even when referring back to the example in
 Figure~\ref{ex:deprecated-method-other}, one must have some
 understanding of the semantics in order to conclude that the
 refactoring does maintain the same functionality.
+
 
 %% such refactorings are based on semantics rather
 %% than syntax. For illustration, let's refer back to the example in
@@ -334,24 +347,28 @@ further preventing compilation errors and behaviour changes
 %% \cite{Steimann2011}.
 
 In this paper, we take a step further in this direction by proposing a
-fully semantic refactoring approach for removing deprecated elements.
-There is a very broad space of methods that are able to reason about
-program semantics.  The desire to perform refactorings safely suggests
-the use of techniques that overapproximate program behaviours.  As one
-possible embodiment of semantics-driven refactoring, we leverage
-software verification technologies with the goal of reliably
-automating refactoring decisions based on program semantics.
-%% , as in the
-%% case of the {\em Substitute Algorithm} refactoring.
-Our research
-hypothesis is that semantics-driven refactorings are more precise and
-can handle more complex code scenarios in comparison with
-syntax-driven refactorings.
+combined syntax and semantics based approach based on program
+synthesis.  Essentially, we make use of syntactic information from the
+original code as well as the Javadoc comments to seed a components
+library, which is then used to automatically generate refactorings
+that are guaranteed to be semantically equivalent to the original
+code.  With respect to the actual program synthesis technique, we use
+a counterexammple guided type-directed synthesis.
 
-%% \paragraph{Demonstrator: Deprecated}
 
-%% We use a particular refactoring as demonstrator for our idea.
+%% fully semantic refactoring approach for removing deprecated elements.
+%% There is a very broad space of methods that are able to reason about
+%% program semantics.  The desire to perform refactorings safely suggests
+%% the use of techniques that overapproximate program behaviours.  As one
+%% possible embodiment of semantics-driven refactoring, we leverage
+%% software verification technologies with the goal of reliably
+%% automating refactoring decisions based on program semantics.
+%% Our research
+%% hypothesis is that semantics-driven refactorings are more precise and
+%% can handle more complex code scenarios in comparison with
+%% syntax-driven refactorings.
 
+\todo{revise the next two paragraphs}
 \paragraph{Goal of the paper} 
 Our goal in this paper is to design a fully automated refactoring
 technique for eliminating deprecated fields, methods and classes. Our
@@ -370,7 +387,7 @@ context enables the user to control the generality of the refactoring.
 %% For illustration, for the refactoring in Figure~\ref{ex:deprecated-method-other}...
 %% \todo{hmm, what context do we consider for the standard library?}
 %
-\todo{Should we also discuss our choice of synthesis in the intro?}
+%\todo{Should we also discuss our choice of synthesis in the intro?}
 
 %% In this paper, we are interested in refactoring Java code handing
 %% collections through external iteration to use streams. Our refactoring
@@ -381,7 +398,7 @@ context enables the user to control the generality of the refactoring.
 
 \begin{itemize}
 
-\item We propose a semantics based approach to eliminate uses of deprecated APIs. Our approach
+\item We propose a syntax and semantics based approach to eliminate uses of deprecated APIs. Our approach
   is iterative and counterexample based. One key insight is that, in each iteration, the refactoring problem can
   be encoded as the problem of verifying the safety of a program, which is then solved by fuzzing.
 
