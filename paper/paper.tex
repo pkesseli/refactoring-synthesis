@@ -515,7 +515,10 @@ Figure~\ref{alg:seeding}.
 
 As future work we aim to also collect components and sketches from the  unit tests for the updated library.
  
-\paragraph{{\bf Automatically generating the desired refactoring}} For this purpose, we use a counterexample-guided iterative process that enables us to keep refining a candidate refactoring until we are happy with it. This process consists of two phases, described next:
+\paragraph{{\bf Automatically generating the desired refactoring}}
+\todo{Counterexample guided type-directed synthesis?}
+
+For this purpose, we use a counterexample-guided iterative process that enables us to keep refining a candidate refactoring until we are happy with it. This process consists of two phases, described next:
   \begin{itemize}
   \item[{\bf Phase 1:}] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode   
     the synthesis problem as a verification problem that can be solved by fuzzing. We discuss this problem encoding in
