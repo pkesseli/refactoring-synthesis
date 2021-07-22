@@ -268,7 +268,7 @@ with the fact that refactorings should not change the functionality of
 the code, i.e., they must preserve observational equivalence.
 Ensuring observational equivalence is far from trivial.  For instance,
 inlining calls to deprecated methods can break equivalence if the
-original function was synchronised.  While, it is not possible for two
+original function was synchronised.  While it is not possible for two
 invocations of synchronized original method on the same object to
 interleave, this is not guaranteed after inlining the method's body.
 
@@ -616,7 +616,7 @@ The seeding algorithm for the core library is provided in Figure~\ref{alg:seedin
    }
  }
 \end{algorithm}
- \caption{Seeding algorithm for the core library}
+ \caption{Seeding algorithm for the extended library}
 \label{alg:seeding-extended}
 \end{figure}
 
