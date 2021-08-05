@@ -461,8 +461,9 @@ the required components, then the synthesis will fail to find a refactoring.
 However, if we add too many components, then the search space becomes too vast and
 synthesis may not terminate within a reasonable amount of time.
 
-In order to increase our chances of finding a refactoring fast, we use two different
-component libraries: the {\em core library} and the {\em extended library}. 
+
+In order to increase our chances of finding a refactoring fast, we start with a restricted code  {\em core library} and incrementally increase its size
+until we find a refactoring.
 
 \paragraph{The core components library}
 %Initially, we build our components library for the actual synthesis process. 
@@ -560,10 +561,13 @@ Note that we overload \var{ensured\_types} to take \var{library} as an argument,
 %% For instance, for the example in Figure~\ref{ex:deprecated-method-other}, we need to also provide a way of obtaining
 %% a \code{Calendar} object. Thus, we add \code{Calendar.getInstance()}. 
 
+\SetKwInOut{KwIn}{Input}
+\SetKwInOut{KwOut}{Output}
+
 \begin{figure}
 \begin{algorithm}[H]
 \SetAlgoLined
-\KwResult{Core component library}
+\KwOut{Core component library}
  Add constants suggested under the @deprecated tag to the $library$\;
  Add constants used in the original code to the $library$\;
  Add instructions suggested under the @deprecated tag to the library\;
@@ -580,43 +584,51 @@ Note that we overload \var{ensured\_types} to take \var{library} as an argument,
 \label{alg:seeding-core}
 \end{figure}
 
-\paragraph{The extended components library}
-Similarly to the core library, we start by adding all the constants contained in the Javadoc suggestion
-and in the original code, as well as all the instructions contained
-in the Javadoc suggestion to the library. Next, we need to make sure that the Javadoc suggestions
-are realizable. We add all the instructions generating
-objects whose types are required for this purpose to the library.
-This is contrary to the core library, where we were only adding realizable instructions.
-Moreover, in a second \code{for} loop, we attempt to make all the instructions currently in
-the library realizable by adding required (this time only realizable) instructions.
+\paragraph{Incremental expansion of the library}
+If we fail to find a refactoring within a certain amount of time,
+we start to incrementally increase the size of the library by adding additional components to be used during synthesis.
+The library expansion algorithm is provided in Figure~\ref{alg:seeding-extended}.
+Essentially, we go through all the instructions in the current library and add
+ways of generating objects that can be used as their arguments (i.e. whose types match that of their arguments).
+Note that, as opposed to the core library, here we look at all instructions, not just the realizable ones.
 
-The seeding algorithm for the core library is provided in Figure~\ref{alg:seeding-extended}.
+%% Similarly to the core library, we start by adding all the constants contained in the Javadoc suggestion
+%% and in the original code, as well as all the instructions contained
+%% in the Javadoc suggestion to the library. Next, we need to make sure that the Javadoc suggestions
+%% are realizable. We add all the instructions generating
+%% objects whose types are required for this purpose to the library.
+%% This is contrary to the core library, where we were only adding realizable instructions.
+%% Moreover, in a second \code{for} loop, we attempt to make all the instructions currently in
+%% the library realizable by adding required (this time only realizable) instructions.
+
+%% The seeding algorithm for the core library is provided in Figure~\ref{alg:seeding-extended}.
 
 \begin{figure}
 \begin{algorithm}[H]
 \SetAlgoLined
-\KwResult{Core component library}
- Add constants suggested under the @deprecated tag to the $library$\;
- Add constants used in the original code to the $library$\;
- Add instructions suggested under the @deprecated tag to the library\;
+\KwIn{Current library}
+\KwOut{Expanded component library}
+ %% Add constants suggested under the @deprecated tag to the $library$\;
+ %% Add constants used in the original code to the $library$\;
+ %% Add instructions suggested under the @deprecated tag to the library\;
  \For{instr $\in$ library}{
-   \If{$\neg$realizable(instr)}{
-     \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} ensured\_types(library)$}{
-       $generators = public\_constructors(type) \cup public\_methods\_returning\_object\_of\_type(type)$\;
-       Add $generators$ to the library\;
-     }
-   }
- }
- \For{instr $\in$ library}{
-   \If{$\neg$realizable(instr)}{
-     \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} ensured\_types(library)$}{
+   %% \If{$\neg$realizable(instr)}{
+     \For{$type {\in} required\_types(instr)$}{
        $generators = realizable\_public\_constructors(type) \cup realizable\_public\_methods\_returning\_object\_of\_type(type)$\;
        Add $generators$ to the library\;
      }
-   }
+   %% }
  }
+ %% \For{instr $\in$ library}{
+ %%   \If{$\neg$realizable(instr)}{
+ %%     \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} ensured\_types(library)$}{
+ %%       $generators = realizable\_public\_constructors(type) \cup realizable\_public\_methods\_returning\_object\_of\_type(type)$\;
+ %%       Add $generators$ to the library\;
+ %%     }
+ %%   }
+ %% }
 \end{algorithm}
- \caption{Seeding algorithm for the extended library}
+ \caption{Incremental expansion of the components library}
 \label{alg:seeding-extended}
 \end{figure}
 
