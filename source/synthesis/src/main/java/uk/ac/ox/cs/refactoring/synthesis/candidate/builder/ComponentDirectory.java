@@ -39,8 +39,9 @@ public class ComponentDirectory {
   @SuppressWarnings("unchecked")
   public <K, V> Stream<Component<K, V>> get(final K key, final int size) {
     final int maxSize = Math.max(size, minSizes.get(key));
+    final int limit = maxSize == Integer.MAX_VALUE ? Integer.MAX_VALUE : maxSize + 1;
     final SortedMap<Integer, List<? extends Component<?, ?>>> result = components.get(key);
-    return result.headMap(maxSize + 1).values().stream().flatMap(Collection::stream)
+    return result.headMap(limit).values().stream().flatMap(Collection::stream)
         .map(component -> (Component<K, V>) component);
   }
 

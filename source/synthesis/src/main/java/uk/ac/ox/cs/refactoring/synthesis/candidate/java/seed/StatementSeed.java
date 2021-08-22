@@ -24,6 +24,8 @@ public class StatementSeed implements InstructionSetSeed {
     final JavaComponents javaComponents = new JavaComponents(components);
     final Set<Type> insertedTypes = new HashSet<>();
     for (final JavaLanguageKey key : keys) {
+      if (!key.Nonnull)
+        continue;
       final Type type = key.Type;
       if (insertedTypes.contains(type))
         continue;

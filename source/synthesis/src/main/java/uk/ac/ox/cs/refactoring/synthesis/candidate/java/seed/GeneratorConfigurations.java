@@ -21,11 +21,17 @@ public final class GeneratorConfigurations {
    * @param methodToRefactor {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    * @return {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    * @throws ClassNotFoundException {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
+   * @throws IllegalAccessException {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
+   * @throws NoSuchFieldException   {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    * @throws NoSuchMethodException  {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    */
   public static GeneratorConfiguration deprecatedMethod(final MethodIdentifier methodToRefactor)
-      throws ClassNotFoundException, NoSuchMethodException {
-    return deprecatedMethod(methodToRefactor, ClassLoaders.createIsolated(), (byte) 1, new NullSeed());
+      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
+    final ClassLoader classLoader = ClassLoaders.createIsolated();
+    final ComponentDirectory components = new ComponentDirectory();
+    seed(components, new TypeSeed(classLoader, methodToRefactor), new SignatureSeed(classLoader, methodToRefactor),
+        new ConstantSeed(), new StatementSeed());
+    return deprecatedMethod(methodToRefactor, classLoader, components, (byte) 1);
   }
 
   /**
@@ -34,12 +40,17 @@ public final class GeneratorConfigurations {
    * @param methodToRefactor {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    * @return {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    * @throws ClassNotFoundException {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
+   * @throws IllegalAccessException {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
+   * @throws NoSuchFieldException   {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    * @throws NoSuchMethodException  {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    */
   public static GeneratorConfiguration deprecatedMethodWithJavaDoc(final MethodIdentifier methodToRefactor)
-      throws ClassNotFoundException, NoSuchMethodException {
+      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     final ClassLoader classLoader = ClassLoaders.createIsolated();
-    return deprecatedMethod(methodToRefactor, classLoader, (byte) 3, new JavaDocSeed(classLoader));
+    final ComponentDirectory components = new ComponentDirectory();
+    seed(components, new JavaDocSeed(classLoader), new SignatureSeed(classLoader, methodToRefactor),
+        new FactorySeed(classLoader), new ConsumerSeed(classLoader), new StatementSeed());
+    return deprecatedMethod(methodToRefactor, classLoader, components, (byte) 3);
   }
 
   /**
@@ -52,14 +63,13 @@ public final class GeneratorConfigurations {
    * @param extraSeed        Additional {@link InstructionSetSeed} to apply.
    * @return Candidate generator configuration.
    * @throws ClassNotFoundException {@link #seed(ComponentDirectory, InstructionSetSeed...)}
+   * @throws IllegalAccessException {@link #seed(ComponentDirectory, InstructionSetSeed...)}
+   * @throws NoSuchFieldException   {@link #seed(ComponentDirectory, InstructionSetSeed...)}
    * @throws NoSuchMethodException  {@link #seed(ComponentDirectory, InstructionSetSeed...)}
    */
   private static GeneratorConfiguration deprecatedMethod(final MethodIdentifier methodToRefactor,
-      final ClassLoader classLoader, final byte minInstructions, final InstructionSetSeed extraSeed)
-      throws ClassNotFoundException, NoSuchMethodException {
-    final ComponentDirectory components = new ComponentDirectory();
-    seed(components, new TypeSeed(classLoader, methodToRefactor), new SignatureSeed(classLoader, methodToRefactor),
-        extraSeed, new ConstantSeed(), new StatementSeed());
+      final ClassLoader classLoader, final ComponentDirectory components, final byte minInstructions)
+      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     final byte maxInstructions = 3;
     final byte maxInstructionLength = 3;
     final Invokable invokable = Methods.create(classLoader, methodToRefactor);
@@ -75,13 +85,13 @@ public final class GeneratorConfigurations {
    * 
    * @param components          {@link ComponentDirectory} to seed.
    * @param instructionSetSeeds All seeds to apply.
-   * @throws ClassNotFoundException if reflectively accessing a class for analysis
-   *                                fails.
-   * @throws NoSuchMethodException  if reflecitvely accessing a method for
-   *                                analysis fails.
+   * @throws ClassNotFoundException {@link InstructionSetSeed#seed(ComponentDirectory)}
+   * @throws IllegalAccessException {@link InstructionSetSeed#seed(ComponentDirectory)}
+   * @throws NoSuchFieldException   {@link InstructionSetSeed#seed(ComponentDirectory)}
+   * @throws NoSuchMethodException  {@link InstructionSetSeed#seed(ComponentDirectory)}
    */
   private static void seed(final ComponentDirectory components, final InstructionSetSeed... instructionSetSeeds)
-      throws ClassNotFoundException, NoSuchMethodException {
+      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     for (final InstructionSetSeed instructionSetSeed : instructionSetSeeds)
       instructionSetSeed.seed(components);
   }

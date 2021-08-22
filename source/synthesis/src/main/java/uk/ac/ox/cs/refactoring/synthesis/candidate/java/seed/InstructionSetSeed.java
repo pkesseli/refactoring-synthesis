@@ -10,10 +10,13 @@ public interface InstructionSetSeed {
    * Extends the given instruction set.
    * 
    * @param components Instruction set to extend.
-   * @throws ClassNotFoundException if a reflective class access fails during
+   * @throws ClassNotFoundException if class loading fails during analysis.
+   * @throws IllegalAccessException if accessing fields or methods fails.
+   * @throws NoSuchFieldException   if a reflective method access fails during
    *                                analysis.
    * @throws NoSuchMethodException  if a reflective method access fails during
    *                                analysis.
    */
-  void seed(ComponentDirectory components) throws ClassNotFoundException, NoSuchMethodException;
+  void seed(ComponentDirectory components)
+      throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException;
 }
