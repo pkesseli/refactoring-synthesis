@@ -23,7 +23,7 @@ public class ConsumerSeedTest {
     final MethodIdentifier methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, "getHours",
         Collections.emptyList());
     final ComponentDirectory components = new ComponentDirectory();
-    final JavaDocSeed javaDoc = new JavaDocSeed(classLoader);
+    final JavaDocSeed javaDoc = new JavaDocSeed(classLoader, methodToRefactor);
     javaDoc.seed(components);
     final SignatureSeed signature = new SignatureSeed(classLoader, methodToRefactor);
     signature.seed(components);

@@ -48,7 +48,7 @@ public final class GeneratorConfigurations {
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     final ClassLoader classLoader = ClassLoaders.createIsolated();
     final ComponentDirectory components = new ComponentDirectory();
-    seed(components, new JavaDocSeed(classLoader), new SignatureSeed(classLoader, methodToRefactor),
+    seed(components, new JavaDocSeed(classLoader, methodToRefactor), new SignatureSeed(classLoader, methodToRefactor),
         new FactorySeed(classLoader), new ConsumerSeed(classLoader), new StatementSeed());
     return deprecatedMethod(methodToRefactor, classLoader, components, (byte) 3);
   }
