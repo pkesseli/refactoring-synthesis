@@ -17,7 +17,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.NullaryComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.SizedBuilder;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.GeneratorConfiguration;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.random.RandomnessAccessor;
 

@@ -1,4 +1,4 @@
-package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed;
+package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context;
 
 import java.util.List;
 
@@ -16,7 +16,8 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.Invokable;
 
 /**
  * Adds instructions refering to parameters and instances available to the
- * original method.
+ * original method, i.e. the {@link This} and {@link Parameter} nullary
+ * components.
  */
 public class SignatureSeed implements InstructionSetSeed {
 

@@ -1,4 +1,4 @@
-package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed;
+package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +33,7 @@ import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
@@ -55,6 +56,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeMethod;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Literal;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.InstructionSetSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
 /**
@@ -127,8 +129,14 @@ public class JavaDocSeed implements InstructionSetSeed {
 
     final Expression expression = parseInMethodContext(typeSolver, javaParser, parseResult, method,
         deprecatedCodeExample);
+    final ResolvedType resolvedType = expression.calculateResolvedType();
+    final Type type = TypeFactory.create(javaParser, resolvedType);
 
-    final Class<?> calendar = classLoader.loadClass("java.util.Calendar");
+    final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, expression);
+    final JavaComponents javaComponents = new JavaComponents(components);
+    javaComponents.nonnull(type, snippetComponent);
+
+    /*final Class<?> calendar = classLoader.loadClass("java.util.Calendar");
     final Method get = calendar.getDeclaredMethod("get", int.class);
     final InvokeMethodFactory invokeFactory = new InvokeMethodFactory(get);
     final Map<Integer, IExpression> boundArguments = new HashMap<>();
@@ -142,7 +150,7 @@ public class JavaDocSeed implements InstructionSetSeed {
     final Type resultType = TypeFactory.create(get.getReturnType());
     final List<JavaLanguageKey> parameterKeys = Arrays
         .asList(JavaLanguageKeys.nonnull(TypeFactory.createClassType(calendar)));
-    javaComponents.nonnull(resultType, new FunctionComponent<>(parameterKeys, bound));
+    javaComponents.nonnull(resultType, new FunctionComponent<>(parameterKeys, bound));*/
   }
 
   private MethodDeclaration findMethod(final TypeSolver typeSolver, final ParseResult<CompilationUnit> parseResult) {

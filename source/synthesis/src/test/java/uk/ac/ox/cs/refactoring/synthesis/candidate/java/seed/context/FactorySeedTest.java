@@ -1,8 +1,9 @@
-package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed;
+package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Set;
 
@@ -13,28 +14,24 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.JavaDocSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
-public class ConsumerSeedTest {
+public class FactorySeedTest {
   @Test
   void seed() throws Exception {
     final ClassLoader classLoader = ClassLoaders.createIsolated();
     final String fullyQualifiedClassName = "java.util.Date";
     final MethodIdentifier methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, "getHours",
         Collections.emptyList());
-    final ComponentDirectory components = new ComponentDirectory();
     final JavaDocSeed javaDoc = new JavaDocSeed(classLoader, methodToRefactor);
+    final ComponentDirectory components = new ComponentDirectory();
     javaDoc.seed(components);
-    final SignatureSeed signature = new SignatureSeed(classLoader, methodToRefactor);
-    signature.seed(components);
+
     final FactorySeed factory = new FactorySeed(classLoader);
     factory.seed(components);
 
-    final ConsumerSeed consumer = new ConsumerSeed(classLoader);
-    consumer.seed(components);
-
-    final Set<JavaLanguageKey> actual = components.parameterKeySet(JavaLanguageKey.class);
-    final Class<?> cls = classLoader.loadClass(fullyQualifiedClassName);
-    assertThat(actual, hasItem(JavaLanguageKeys.expression(TypeFactory.createClassType(cls))));
+    final Set<JavaLanguageKey> actual = components.keySet(JavaLanguageKey.class);
+    assertThat(actual, hasItem(JavaLanguageKeys.nonnull(TypeFactory.createClassType(Calendar.class))));
   }
 }

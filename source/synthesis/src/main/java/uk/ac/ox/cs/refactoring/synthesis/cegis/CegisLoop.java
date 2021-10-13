@@ -13,7 +13,7 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidateGenerator;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.GeneratorConfiguration;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.CounterexampleGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.induction.FuzzingSynthesis;

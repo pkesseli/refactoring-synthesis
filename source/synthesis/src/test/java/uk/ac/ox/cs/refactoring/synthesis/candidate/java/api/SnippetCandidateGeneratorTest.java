@@ -18,9 +18,9 @@ import org.junit.jupiter.api.Test;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.FieldSeed;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.GeneratorConfiguration;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.StatementSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.FieldSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.StatementSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 
 public class SnippetCandidateGeneratorTest {

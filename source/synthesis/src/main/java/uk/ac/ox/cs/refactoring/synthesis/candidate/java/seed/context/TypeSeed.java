@@ -1,4 +1,4 @@
-package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed;
+package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;

@@ -1,4 +1,4 @@
-package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed;
+package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api;
 
 import java.util.List;
 
@@ -6,12 +6,21 @@ import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.ConstantSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.ConsumerSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.FactorySeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.InstructionSetSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.SignatureSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.StatementSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.TypeSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.JavaDocSeed;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invokable;
 
 /**
  * Factory for {@link GeneratorConfiguration}s.
  */
 public final class GeneratorConfigurations {
+
   private GeneratorConfigurations() {
   }
 

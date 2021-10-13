@@ -1,4 +1,4 @@
-package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed;
+package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -18,7 +18,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 /**
  * Helper for checks of dependencies between components.
  */
-public final class Dependencies {
+final class Dependencies {
 
   private Dependencies() {
   }

@@ -23,7 +23,7 @@ public class MethodInvokable extends ExecutableInvokable {
   }
 
   @Override
-  public Object invoke(Object instance, Object[] args)
+  public Object invoke(final Object instance, final Object[] args)
       throws IllegalAccessException, InstantiationException, InvocationTargetException {
     return method.invoke(instance, args);
   }

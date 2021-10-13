@@ -1,19 +1,21 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.type;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 
-/**
- * Helper to construct {@link Type}s.
- */
+import org.apache.commons.lang3.StringUtils;
+
+/** Helper to construct {@link Type}s. */
 public final class TypeFactory {
 
-  /**
-   * Regular expression for Java scope separators.
-   */
-  private static final String SCOPE_SEPARATOR = "\\.";
+  /** Regular expression for Java scope separators. */
+  private static final String SCOPE_SEPARATOR_PATTERN = "\\.";
 
   private TypeFactory() {
   }
@@ -66,21 +68,59 @@ public final class TypeFactory {
    * Creates a package scope.
    * 
    * @param pkg {@link Package} to convert.
-   * @return AST package scope.
+   * @return {@link #createPackage(String)}
    */
   private static ClassOrInterfaceType createPackage(final Package pkg) {
     if (pkg == null) {
       return null;
     }
-    final String name = pkg.getName();
-    if (name.isEmpty()) {
+    return createPackage(pkg.getName());
+  }
+
+  /**
+   * Creates a package scope from a package name.
+   * 
+   * @param name Package name.
+   * @return AST package scope.
+   */
+  private static ClassOrInterfaceType createPackage(final String name) {
+    if (StringUtils.isEmpty(name)) {
       return null;
     }
-    final String[] components = name.split(SCOPE_SEPARATOR);
+    final String[] components = name.split(SCOPE_SEPARATOR_PATTERN);
     ClassOrInterfaceType result = new ClassOrInterfaceType(null, components[0]);
     for (int i = 1; i < components.length; ++i) {
       result = new ClassOrInterfaceType(result, components[i]);
     }
     return result;
+  }
+
+  public static Type create(final JavaParser javaParser, final ResolvedType resolvedType) {
+    if (resolvedType instanceof ResolvedPrimitiveType) {
+      final ResolvedPrimitiveType primitiveType = (ResolvedPrimitiveType) resolvedType;
+      switch (primitiveType) {
+        case BOOLEAN:
+          return PrimitiveType.booleanType();
+        case BYTE:
+          return PrimitiveType.byteType();
+        case CHAR:
+          return PrimitiveType.charType();
+        case DOUBLE:
+          return PrimitiveType.doubleType();
+        case FLOAT:
+          return PrimitiveType.floatType();
+        case INT:
+          return PrimitiveType.intType();
+        case LONG:
+          return PrimitiveType.longType();
+        case SHORT:
+          return PrimitiveType.shortType();
+      }
+    } else if (resolvedType instanceof ResolvedReferenceType) {
+      final ResolvedReferenceType resolvedReferenceType = (ResolvedReferenceType) resolvedType;
+      final String name = resolvedReferenceType.getQualifiedName();
+      return javaParser.parseClassOrInterfaceType(name).getResult().get();
+    }
+    throw new UnsupportedOperationException();
   }
 }
