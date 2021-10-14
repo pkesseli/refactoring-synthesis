@@ -3,15 +3,9 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
-import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.Component;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.FunctionComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
@@ -40,8 +34,7 @@ public class ConsumerSeed implements InstructionSetSeed {
     final Set<JavaLanguageKey> parameters = components.parameterKeySet(JavaLanguageKey.class);
     unusedComponents.removeAll(parameters);
 
-    final Set<String> consumerTypes = getConsumerTypes(components, allComponents);
-    for (final String consumerType : consumerTypes)
+    for (final String consumerType : components.InvolvedClasses)
       addConsumerType(components, consumerType, allComponents, unusedComponents);
   }
 
@@ -65,27 +58,5 @@ public class ConsumerSeed implements InstructionSetSeed {
           && Dependencies.isUsable(allComponents, method) && Dependencies.usesAny(unusedComponents, method))
         Invoke.register(javaComponents, method);
     }
-  }
-
-  /**
-   * Extracts class names out of components which accept parameters. Effectively,
-   * the components involved are usually method invocations, and this helps us
-   * identifying other methods in the same classes which might consume unused
-   * parameters. The rationale is that we already found some methods of these
-   * classes useful, and assuming that our program arguments should not be
-   * ignored, adding methods from an already useful class which consumes them is
-   * deemed worthwhile.
-   * 
-   * @param components    All components in the instruction set.
-   * @param allComponents All components which we are allowed to consider at the
-   *                      current location (e.g. at the current statement).
-   * @return Fully qualified class names of components in {@code allComponents}.
-   */
-  private static Set<String> getConsumerTypes(final ComponentDirectory components,
-      final Set<JavaLanguageKey> allComponents) {
-    return allComponents.stream().flatMap(key -> components.get(key, Integer.MAX_VALUE))
-        .filter(FunctionComponent.class::isInstance).map(Component::getParameterKeys).filter(keys -> !keys.isEmpty())
-        .map(keys -> keys.get(0).Type.asClassOrInterfaceType()).filter(Objects::nonNull)
-        .map(ClassOrInterfaceType::getNameWithScope).collect(Collectors.toSet());
   }
 }

@@ -9,8 +9,12 @@ import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.TestClass;
 import org.opentest4j.AssertionFailedError;
 
+import edu.berkeley.cs.jqf.fuzz.guidance.Guidance;
+import edu.berkeley.cs.jqf.fuzz.junit.GuidedFuzzing;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.FuzzStatement;
+import edu.berkeley.cs.jqf.fuzz.random.NoGuidance;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
+import uk.ac.ox.cs.refactoring.synthesis.cegis.FuzzingConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
@@ -59,7 +63,8 @@ public class FuzzingVerification<Candidate> {
     final TestClass testClass = new TestClass(frameworkMethod.getDeclaringClass());
     final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository);
     final Map<Counterexample, ExecutionResult> counterexamples = new HashMap<>();
-    try {
+    final Guidance guidance = new NoGuidance(GuidedFuzzing.DEFAULT_MAX_TRIALS, null);
+    try (final FuzzingConfiguration config = new FuzzingConfiguration(guidance)) {
       fuzzStatement.evaluate();
     } catch (final AssertionFailedError e) {
       storeCounterexample(counterexamples, e);

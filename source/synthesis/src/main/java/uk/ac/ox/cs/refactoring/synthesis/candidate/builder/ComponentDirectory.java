@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.builder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +17,17 @@ import java.util.stream.Stream;
  * sizes. Used by builders to construct objects of limited size.
  */
 public class ComponentDirectory {
+
+  /**
+   * Provides information about which classes are involved in the component
+   * library, e.g. components which invoke methods of a class.
+   * 
+   * TODO: The fact that this meta-information is necessary suggests that the idea
+   * of a Java-agnostic component system is not precise enough. It would be best
+   * to drop this approach and assume that supporting other languages in the
+   * future will require language-specific instruction sets.
+   */
+  public final Set<String> InvolvedClasses = new HashSet<>();
 
   /**
    * Contains all registered {@link Component}s.

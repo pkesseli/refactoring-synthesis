@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import uk.ac.ox.cs.refactoring.synthesis.benchmark.Benchmarks;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
@@ -51,15 +53,16 @@ public class CegisLoopTest {
     assertEquals(32, (int) candidate.Block.execute(context));
   }
 
-  @Test
-  void getHours() throws Exception {
-    final MethodIdentifier methodToRefactor = new MethodIdentifier(Date.class.getName(), "getHours",
+  @ParameterizedTest
+  @CsvSource({ "getHours," + Calendar.HOUR_OF_DAY, "getMinutes," + Calendar.MINUTE, "getSeconds," + Calendar.SECOND })
+  void javaUtilDateGet(final String methodName, final int field) throws Exception {
+    final MethodIdentifier methodToRefactor = new MethodIdentifier(Date.class.getName(), methodName,
         Collections.emptyList());
     final SnippetCandidate candidate = synthesise(GeneratorConfigurations.deprecatedMethodWithJavaDoc(methodToRefactor),
         methodToRefactor);
     final Calendar calendar = Calendar.getInstance();
     final Date date = calendar.getTime();
-    final int expected = calendar.get(Calendar.HOUR_OF_DAY);
+    final int expected = calendar.get(field);
     final State state = new State(date);
     final ExecutionContext context = new ExecutionContext(CegisLoopTest.class.getClassLoader(), state);
     assertEquals(expected, candidate.Block.execute(context));

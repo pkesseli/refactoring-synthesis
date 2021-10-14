@@ -2,18 +2,13 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -27,7 +22,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
@@ -46,15 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.classloader.JavaLanguage;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.FunctionComponent;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.BoundInvokableFactory;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.InvokeMethodFactory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeMethod;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Literal;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.InstructionSetSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
@@ -132,25 +118,10 @@ public class JavaDocSeed implements InstructionSetSeed {
     final ResolvedType resolvedType = expression.calculateResolvedType();
     final Type type = TypeFactory.create(javaParser, resolvedType);
 
-    final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, expression);
+    final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, expression,
+        components.InvolvedClasses);
     final JavaComponents javaComponents = new JavaComponents(components);
     javaComponents.nonnull(type, snippetComponent);
-
-    /*final Class<?> calendar = classLoader.loadClass("java.util.Calendar");
-    final Method get = calendar.getDeclaredMethod("get", int.class);
-    final InvokeMethodFactory invokeFactory = new InvokeMethodFactory(get);
-    final Map<Integer, IExpression> boundArguments = new HashMap<>();
-    final Field hours = calendar.getDeclaredField("HOUR_OF_DAY");
-    final Object value = hours.get(null);
-    final Type type = PrimitiveType.intType();
-    boundArguments.put(1, new Literal(value, type));
-    final BoundInvokableFactory<InvokeMethod> bound = new BoundInvokableFactory<>(invokeFactory, boundArguments);
-
-    final JavaComponents javaComponents = new JavaComponents(components);
-    final Type resultType = TypeFactory.create(get.getReturnType());
-    final List<JavaLanguageKey> parameterKeys = Arrays
-        .asList(JavaLanguageKeys.nonnull(TypeFactory.createClassType(calendar)));
-    javaComponents.nonnull(resultType, new FunctionComponent<>(parameterKeys, bound));*/
   }
 
   private MethodDeclaration findMethod(final TypeSolver typeSolver, final ParseResult<CompilationUnit> parseResult) {

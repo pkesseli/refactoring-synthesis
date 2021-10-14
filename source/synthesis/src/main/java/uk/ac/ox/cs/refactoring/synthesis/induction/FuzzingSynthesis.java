@@ -2,26 +2,20 @@ package uk.ac.ox.cs.refactoring.synthesis.induction;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Duration;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.TestClass;
 import org.opentest4j.AssertionFailedError;
 
-import edu.berkeley.cs.jqf.fuzz.ei.ZestGuidance;
-import edu.berkeley.cs.jqf.fuzz.guidance.Guidance;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.FuzzStatement;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.NonTrackingGenerationStatus;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
-import uk.ac.ox.cs.refactoring.synthesis.cegis.FuzzingConfiguration;
+import uk.ac.ox.cs.refactoring.synthesis.cegis.ZestFuzzingConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 
@@ -105,8 +99,8 @@ public class FuzzingSynthesis<Candidate> {
     final TestClass testClass = new TestClass(frameworkMethodPlaceholder.getDeclaringClass());
     final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository);
 
-    final Path tempDirectory = Files.createTempDirectory("zest");
-    try (final FuzzingConfiguration configuration = new FuzzingConfiguration(getGuidance(tempDirectory))) {
+    final String name = "inductive synthesis";
+    try (final ZestFuzzingConfiguration configuration = new ZestFuzzingConfiguration(name, SynthesisGuidance::new)) {
       fuzzStatement.evaluate();
     } catch (final MultipleFailureException e) {
       return e.getFailures().stream().map(AssertionFailedError.class::cast).map(this::getCandidate).findAny().get();
@@ -114,8 +108,6 @@ public class FuzzingSynthesis<Candidate> {
       return getCandidate(e);
     } catch (final Throwable e) {
       throw new IllegalStateException(e);
-    } finally {
-      FileUtils.deleteDirectory(tempDirectory.toFile());
     }
     throw new NoSuchElementException();
   }
@@ -125,16 +117,5 @@ public class FuzzingSynthesis<Candidate> {
     @SuppressWarnings("unchecked")
     final Candidate candidate = (Candidate) result;
     return candidate;
-  }
-
-  /**
-   * Generates a {@link Guidance} suitable for program synthesis.
-   * 
-   * @param outputDirectory {@link ZestGuidance#ZestGuidance(String, Duration, java.io.File)}
-   * @return Default guidance for synthesis.
-   * @throws IOException if access to {@code outputDirectory} fails.
-   */
-  private static Guidance getGuidance(final Path outputDirectory) throws IOException {
-    return new SynthesisGuidance(new ZestGuidance("inductive synthesis", null, outputDirectory.toFile()));
   }
 }

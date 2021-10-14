@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
@@ -33,6 +34,8 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
 
   private final JavaParser javaParser;
 
+  private final Set<String> involvedClasses;
+
   IExpression expression;
 
   final List<Placeholder> Parameters = new ArrayList<>();
@@ -42,12 +45,15 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
   final LinkedList<IExpression> stack = new LinkedList<>();
 
   /**
-   * @param classLoader {@link #classLoader}
-   * @param javaParser  {@link #javaParser}
+   * @param classLoader     {@link #classLoader}
+   * @param javaParser      {@link #javaParser}
+   * @param involvedClasses {@link #involvedClasses}
    */
-  SnippetComponentVisitor(final ClassLoader classLoader, final JavaParser javaParser) {
+  SnippetComponentVisitor(final ClassLoader classLoader, final JavaParser javaParser,
+      final Set<String> involvedClasses) {
     this.classLoader = classLoader;
     this.javaParser = javaParser;
+    this.involvedClasses = involvedClasses;
   }
 
   @Override
@@ -66,8 +72,10 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
     for (int i = 0; i < method.getNumberOfParams(); ++i)
       parameterTypes.add(method.getParam(i).getType().describe());
 
-    final MethodIdentifier methodIdentifier = new MethodIdentifier(method.declaringType().getQualifiedName(),
-        method.getName(), parameterTypes);
+    final String fullyQualifiedClassName = method.declaringType().getQualifiedName();
+    involvedClasses.add(fullyQualifiedClassName);
+    final MethodIdentifier methodIdentifier = new MethodIdentifier(fullyQualifiedClassName, method.getName(),
+        parameterTypes);
     try {
       expression = new InvokeMethod(instance, arguments, Methods.getMethod(classLoader, methodIdentifier));
     } catch (final NoSuchMethodException | ClassNotFoundException e) {

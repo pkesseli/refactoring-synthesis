@@ -2,6 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
@@ -29,19 +30,29 @@ class SnippetComponent implements HierarchicalComponent<JavaLanguageKey, IExpres
   private final Expression javadocExpression;
 
   /**
+   * Used to keep track of classes whose methods we add. This used e.g. in
+   * subsequent seeds, in case their heuristics are affected by already used
+   * classes.
+   */
+  private final Set<String> involvedClasses;
+
+  /**
    * @param classLoader       {@link #classLoader}
    * @param javaParser        {@link #javaParser}
    * @param javadocExpression {@link SnippetComponentVisitor}
+   * @param involvedClasses   {@link #involvedClasses}
    */
-  SnippetComponent(final ClassLoader classLoader, final JavaParser javaParser, final Expression javadocExpression) {
+  SnippetComponent(final ClassLoader classLoader, final JavaParser javaParser, final Expression javadocExpression,
+      final Set<String> involvedClasses) {
     this.classLoader = classLoader;
     this.javaParser = javaParser;
     this.javadocExpression = javadocExpression;
+    this.involvedClasses = involvedClasses;
   }
 
   @Override
   public List<JavaLanguageKey> getParameterKeys() {
-    final SnippetComponentVisitor converter = new SnippetComponentVisitor(classLoader, javaParser);
+    final SnippetComponentVisitor converter = new SnippetComponentVisitor(classLoader, javaParser, involvedClasses);
     javadocExpression.accept(converter, null);
     return converter.ParameterKeys;
   }
@@ -49,7 +60,7 @@ class SnippetComponent implements HierarchicalComponent<JavaLanguageKey, IExpres
   @Override
   public IExpression construct(final Object[] arguments) {
     final IExpression[] args = Arrays.stream(arguments).map(IExpression.class::cast).toArray(IExpression[]::new);
-    final SnippetComponentVisitor converter = new SnippetComponentVisitor(classLoader, javaParser);
+    final SnippetComponentVisitor converter = new SnippetComponentVisitor(classLoader, javaParser, involvedClasses);
     javadocExpression.accept(converter, null);
     for (int i = 0; i < args.length; ++i) {
       converter.Parameters.get(i).expression = args[i];

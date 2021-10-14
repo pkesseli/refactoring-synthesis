@@ -26,7 +26,7 @@ public class SynthesisGuidance implements Guidance {
   /**
    * @param guidance {@link #guidance}
    */
-  public SynthesisGuidance(Guidance guidance) {
+  public SynthesisGuidance(final Guidance guidance) {
     this.guidance = guidance;
   }
 
