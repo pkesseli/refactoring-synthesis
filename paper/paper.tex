@@ -465,6 +465,7 @@ synthesis may not terminate within a reasonable amount of time.
 In order to increase our chances of finding a refactoring fast, we start with a restricted code  {\em core library} and incrementally increase its size
 until we find a refactoring.
 
+
 \paragraph{The core components library}
 %Initially, we build our components library for the actual synthesis process. 
 In general, when deprecating a field/method/class, the
@@ -503,13 +504,14 @@ As an example, the \code{getHours} method in class \code{Date} used in Figure~\r
  %% * @param day the day as a value between 0 and 31.
  %% */
 
-
 This will result in adding the method \code{``int get(int field)''} from class
 \code{Calendar} and constant \code{``Calendar.HOUR_OF_DAY''} to our library.
-Additionally, we add constant \code{date} from the original code to the library.
-The difficulty is that, in order to be able call method \code{get}, we require an object of
+The difficulty is that, in order to be able to call method \code{get}, we require an object of
 type \code{Calendar} and our library doesn't contain any way of creating such an object.
-Thus, we scan all the public constructors of class \code{Calendar}
+Therefore, we must seed our components library with ways of generating such an object.
+
+%Additionally, we add constant \code{date} from the original code to the library.
+Let's scan all the public constructors of class \code{Calendar}
 and all the public methods from class \code{Calendar} that return an object of type \code{Calendar}. For this case, we find the following four options:
 
 \begin{enumerate}
@@ -519,11 +521,17 @@ and all the public methods from class \code{Calendar} that return an object of t
   \item \code{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- gets a calendar with the specified time zone and locale.
 \end{enumerate}
 
-Out of these four options, we search for those for which we have the means to generate all their arguments and their receiver.
-Basically, the components library needs to contain constructors/methods for creating objects whose types
-match the types of the arguments and the receiver, or constants of those types.
+Seeding the library is crucial in obtaining an efficient synthesis technique. Thus,
+we want to only add instructions that can be used. For this purpose, we start by collecting the given types and the objects to consume from the deprecated code. %% Using these, we need to create an object of the required type.
+For our illustrating example, the only object used by the deprecated code is \code{Obj\_to\_consume}=\{\code{date}\} with given type \code{Type\_to\_consume}\{\code{Date}\}. Using these, we need to obtain an object of type \{\code{Calendar}\}, so that we can make use of the JavaDoc hint.  
+%
+Out of the four options above, we search for those for which we have the means to generate all their arguments and their receiver. This means that we are only interested in constructors/methods
+where the types of the arguments and receiver match the given types \code{Types\_to\_consume}.
+%% Basically, the components library needs to contain constructors/methods for creating objects whose types
+%% match the types of the arguments and the receiver, or constants of those types.
 
 We call such an instruction {\em realizable}, according to Definition~\ref{def:realizable}.
+--
 In the definition, we use \var{ensured\_types(i)} to denote the set of the types corresponding to the objects that can be
 generated using instruction \var{i}, and \var{required\_types(i)} to denote
 the set of the types of the parameters and receiver required to call instruction \var{i}.
@@ -533,6 +541,7 @@ the set of the types of the parameters and receiver required to call instruction
 Instruction \var{i_1} is {\em realizable} iff $\forall t \in required\_types(i_1). \exists i_2 \in library. t \in ensured\_types(i_2)$.
   
 \end{definition}
+--
 
 Regarding the four methods in our example, the first one is realizable. Conversely, in order to call the second method, we would need to generate an object of type \code{Locale},
 for which purpose we don't have an instruction in the library.
