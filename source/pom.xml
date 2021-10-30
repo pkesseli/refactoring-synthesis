@@ -10,7 +10,6 @@
     <module>classloader</module>
     <module>fuzzer-experiments</module>
     <module>instrument</module>
-    <module>parser</module>
     <module>rewrite</module>
     <module>synthesis</module>
   </modules>
