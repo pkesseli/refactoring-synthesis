@@ -60,6 +60,9 @@ public class InstrumentingClassLoader extends IsolatedClassLoader {
     } catch (final IOException e) {
       throw new ClassNotFoundException(name, e);
     }
+    if (content.length == 0) {
+      throw new ClassNotFoundException(name);
+    }
 
     final URL url = wrapped.getResource(classFileName);
     final CodeSource codeSource = new CodeSource(url, (CodeSigner[]) null);
