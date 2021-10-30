@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.stream.Collectors;
 import com.github.javaparser.ast.type.PrimitiveType;
 
 import org.hamcrest.MatcherAssert;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -50,6 +53,30 @@ public class JavaDocSeedTest {
     final Calendar calendar = Calendar.getInstance();
     final int expected = 10;
     calendar.set(field, expected);
+    final State state = new State(calendar);
+    final ExecutionContext context = new ExecutionContext(classLoader, state);
+    final Object actual = invokeMethod.evaluate(context);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  @Ignore
+  void javaUtilDateSet() throws Exception {
+    final MethodIdentifier methodIdentifier = new MethodIdentifier("java.util.Date", "setHours", Arrays.asList("int"));
+    final JavaDocSeed seed = new JavaDocSeed(classLoader, methodIdentifier);
+    final ComponentDirectory components = new ComponentDirectory();
+    seed.seed(components);
+
+    final List<Component<JavaLanguageKey, Object>> seeded = components
+        .get(JavaLanguageKeys.expression(PrimitiveType.intType()), 1).collect(Collectors.toList());
+    MatcherAssert.assertThat(seeded, hasItem(isA(SnippetComponent.class)));
+    final Component<JavaLanguageKey, Object> component = seeded.get(0);
+    final InvokeMethod invokeMethod = (InvokeMethod) component
+        .construct(new Object[] { This.create(TypeFactory.create(Calendar.class)) });
+
+    final Calendar calendar = Calendar.getInstance();
+    final int expected = 10;
+    calendar.set(Calendar.HOUR_OF_DAY, expected);
     final State state = new State(calendar);
     final ExecutionContext context = new ExecutionContext(classLoader, state);
     final Object actual = invokeMethod.evaluate(context);
