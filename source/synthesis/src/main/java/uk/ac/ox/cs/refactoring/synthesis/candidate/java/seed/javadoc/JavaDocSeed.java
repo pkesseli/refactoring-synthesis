@@ -65,7 +65,7 @@ public class JavaDocSeed implements InstructionSetSeed {
    */
   private final MethodIdentifier methodToRefactor;
 
-  /** */
+  /** Source directories and ZIP files. */
   private final List<Path> sourceContainers = new ArrayList<>();
 
   /**
@@ -118,7 +118,7 @@ public class JavaDocSeed implements InstructionSetSeed {
     final ResolvedType resolvedType = expression.calculateResolvedType();
     final Type type = TypeFactory.create(javaParser, resolvedType);
 
-    final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, expression,
+    final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, typeSolver, expression,
         components.InvolvedClasses);
     final JavaComponents javaComponents = new JavaComponents(components);
     javaComponents.nonnull(type, snippetComponent);
@@ -140,9 +140,10 @@ public class JavaDocSeed implements InstructionSetSeed {
   }
 
   private static String getDeprecatedCodeExample(final Javadoc javadoc) {
-    return javadoc.getBlockTags().stream().map(JavadocBlockTag::getContent).map(JavadocDescription::getElements)
-        .flatMap(Collection::stream).filter(JavadocInlineTag.class::isInstance).map(JavadocInlineTag.class::cast)
-        .map(JavadocInlineTag::getContent).findAny().orElse(null);
+    return javadoc.getBlockTags().stream().filter(b -> JavadocBlockTag.Type.DEPRECATED == b.getType())
+        .map(JavadocBlockTag::getContent).map(JavadocDescription::getElements).flatMap(Collection::stream)
+        .filter(JavadocInlineTag.class::isInstance).map(JavadocInlineTag.class::cast).map(JavadocInlineTag::getContent)
+        .findAny().orElse(null);
   }
 
   private ParseResult<CompilationUnit> findSource(final JavaParser javaParser, final String className)

@@ -1,0 +1,3 @@
+[submodule "source/lib/javaparser"]
+	path = source/lib/javaparser
+	url = https://github.com/pkesseli/javaparser.git

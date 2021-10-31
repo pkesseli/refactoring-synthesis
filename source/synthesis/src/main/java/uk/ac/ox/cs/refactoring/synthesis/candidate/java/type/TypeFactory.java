@@ -8,6 +8,7 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -95,31 +96,44 @@ public final class TypeFactory {
     return result;
   }
 
+  /**
+   * Create an unresolved {@link Type} from a {@link ResolvedType}. Resynth
+   * instructions in the synthesis phase are identified using {@link Type}, not
+   * {@link ResolvedType}, as it is assumed that types cannot be resolved in all
+   * synthesis environments.
+   * 
+   * @param javaParser   Parser which created the node resolving to
+   *                     {@code resolvedType}.
+   * @param resolvedType {@link ResolvedType} to convert.
+   * @return {@link Type} equivalent to {@code resolvedType}.
+   */
   public static Type create(final JavaParser javaParser, final ResolvedType resolvedType) {
     if (resolvedType instanceof ResolvedPrimitiveType) {
       final ResolvedPrimitiveType primitiveType = (ResolvedPrimitiveType) resolvedType;
       switch (primitiveType) {
-        case BOOLEAN:
-          return PrimitiveType.booleanType();
-        case BYTE:
-          return PrimitiveType.byteType();
-        case CHAR:
-          return PrimitiveType.charType();
-        case DOUBLE:
-          return PrimitiveType.doubleType();
-        case FLOAT:
-          return PrimitiveType.floatType();
-        case INT:
-          return PrimitiveType.intType();
-        case LONG:
-          return PrimitiveType.longType();
-        case SHORT:
-          return PrimitiveType.shortType();
+      case BOOLEAN:
+        return PrimitiveType.booleanType();
+      case BYTE:
+        return PrimitiveType.byteType();
+      case CHAR:
+        return PrimitiveType.charType();
+      case DOUBLE:
+        return PrimitiveType.doubleType();
+      case FLOAT:
+        return PrimitiveType.floatType();
+      case INT:
+        return PrimitiveType.intType();
+      case LONG:
+        return PrimitiveType.longType();
+      case SHORT:
+        return PrimitiveType.shortType();
       }
     } else if (resolvedType instanceof ResolvedReferenceType) {
       final ResolvedReferenceType resolvedReferenceType = (ResolvedReferenceType) resolvedType;
       final String name = resolvedReferenceType.getQualifiedName();
       return javaParser.parseClassOrInterfaceType(name).getResult().get();
+    } else if (resolvedType instanceof ResolvedVoidType) {
+      return new VoidType();
     }
     throw new UnsupportedOperationException();
   }

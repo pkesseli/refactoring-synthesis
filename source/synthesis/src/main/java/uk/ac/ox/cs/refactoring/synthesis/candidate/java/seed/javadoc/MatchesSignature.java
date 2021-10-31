@@ -60,16 +60,16 @@ class MatchesSignature implements Predicate<MethodDeclaration> {
   /**
    * Resolves a {@link ResolvedType} by its name.
    * 
-   * @param fullyQualifiedParameterName Fully qualified type name.
+   * @param fullyQualifiedParameterTypeName Fully qualified type name.
    * @return Type identified by given name.
    */
-  private ResolvedType resolve(final String fullyQualifiedParameterName) {
+  private ResolvedType resolve(final String fullyQualifiedParameterTypeName) {
     try {
-      return ResolvedPrimitiveType.byName(fullyQualifiedParameterName);
+      return ResolvedPrimitiveType.byName(fullyQualifiedParameterTypeName);
     } catch (final IllegalArgumentException ignored) {
     }
     final ResolvedReferenceTypeDeclaration identifierTypeDeclaration = typeSolver
-        .solveType(fullyQualifiedParameterName);
+        .solveType(fullyQualifiedParameterTypeName);
     return ReferenceTypeImpl.undeterminedParameters(identifierTypeDeclaration, typeSolver);
   }
 
