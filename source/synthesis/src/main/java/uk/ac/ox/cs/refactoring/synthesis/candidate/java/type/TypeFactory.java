@@ -33,15 +33,14 @@ public final class TypeFactory {
     }
 
     if (cls.isPrimitive()) {
-      if (void.class == cls) {
+      if (void.class == cls)
         return new VoidType();
-      }
-      if (int.class == cls) {
+      if (int.class == cls)
         return PrimitiveType.intType();
-      }
-      if (double.class == cls) {
+      if (double.class == cls)
         return PrimitiveType.doubleType();
-      }
+      if (boolean.class == cls)
+        return PrimitiveType.booleanType();
       throw new IllegalArgumentException();
     }
 

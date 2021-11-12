@@ -1,5 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.cegis;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -66,6 +68,16 @@ public class CegisLoopTest {
     final State state = new State(date);
     final ExecutionContext context = new ExecutionContext(CegisLoopTest.class.getClassLoader(), state);
     assertEquals(expected, candidate.Block.execute(context));
+  }
+
+  @Test
+  void javaAwtRectangle() throws Exception {
+    final MethodIdentifier methodToRefactor = new MethodIdentifier("java.awt.Rectangle", "inside",
+        Arrays.asList("int", "int"));
+    final SnippetCandidate candidate = synthesise(GeneratorConfigurations.deprecatedMethodWithJavaDoc(methodToRefactor),
+        methodToRefactor);
+
+    assertThat(candidate.toString(), containsString(".contains("));
   }
 
   private SnippetCandidate synthesise(final GeneratorConfiguration generatorConfiguration,
