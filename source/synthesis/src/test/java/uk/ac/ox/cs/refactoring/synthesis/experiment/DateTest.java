@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -34,7 +33,6 @@ public class DateTest {
   }
 
   @Test
-  @Disabled
   void getYear() throws Exception {
     final String methodName = "getYear";
     final int field = Calendar.YEAR;
@@ -43,7 +41,7 @@ public class DateTest {
     final SnippetCandidate candidate = Deprecation.synthesise(methodToRefactor);
     final Calendar calendar = Calendar.getInstance();
     final Date date = calendar.getTime();
-    final int expected = calendar.get(field);
+    final int expected = calendar.get(field) - 1900;
     final State state = new State(date);
     final ExecutionContext context = new ExecutionContext(DateTest.class.getClassLoader(), state);
     assertEquals(expected, candidate.Block.execute(context));

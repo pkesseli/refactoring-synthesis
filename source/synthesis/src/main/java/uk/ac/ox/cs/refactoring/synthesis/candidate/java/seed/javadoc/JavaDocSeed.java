@@ -27,6 +27,7 @@ import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
+import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -102,7 +103,7 @@ public class JavaDocSeed implements InstructionSetSeed {
       return;
     }
 
-    final MethodDeclaration method = findMethod(typeSolver, parseResult);
+    final MethodDeclaration method = findMethod(symbolResolver, typeSolver, parseResult);
     if (method == null)
       return;
     final Optional<Javadoc> javadoc = method.getJavadoc();
@@ -113,7 +114,7 @@ public class JavaDocSeed implements InstructionSetSeed {
     if (deprecatedCodeExample == null)
       return;
 
-    final Expression expression = parseInMethodContext(typeSolver, javaParser, parseResult, method,
+    final Expression expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, parseResult, method,
         deprecatedCodeExample);
     final ResolvedType resolvedType = expression.calculateResolvedType();
     final Type type = TypeFactory.create(javaParser, resolvedType);
@@ -124,19 +125,22 @@ public class JavaDocSeed implements InstructionSetSeed {
     javaComponents.nonnull(type, snippetComponent);
   }
 
-  private MethodDeclaration findMethod(final TypeSolver typeSolver, final ParseResult<CompilationUnit> parseResult) {
+  private MethodDeclaration findMethod(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
+      final ParseResult<CompilationUnit> parseResult) {
     return parseResult.getResult().stream().map(CompilationUnit::getTypes).flatMap(Collection::stream)
-        .filter(new MatchesMethodIdentifier(typeSolver, methodToRefactor)).map(TypeDeclaration::getMethods)
-        .flatMap(Collection::stream).filter(new MatchesSignature(typeSolver, methodToRefactor)).findAny().orElse(null);
+        .filter(new MatchesMethodIdentifier(symbolResolver, typeSolver, methodToRefactor))
+        .map(TypeDeclaration::getMethods).flatMap(Collection::stream)
+        .filter(new MatchesSignature(typeSolver, methodToRefactor)).findAny().orElse(null);
   }
 
-  private Expression parseInMethodContext(final TypeSolver typeSolver, final JavaParser javaParser,
-      final ParseResult<CompilationUnit> compilationUnit, final MethodDeclaration method, final String code) {
-    final ParseResult<Expression> textExpression = javaParser.parseExpression(code);
+  private Expression parseInMethodContext(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
+      final JavaParser javaParser, final ParseResult<CompilationUnit> compilationUnit, final MethodDeclaration method,
+      final String code) {
+    final ParseResult<Expression> textExpression = javaParser.parseExpression("__RESYNTH(" + code + ")");
     method.getBody().get().addStatement(0, textExpression.getResult().get());
     final ParseResult<CompilationUnit> parseResult = javaParser.parse(compilationUnit.getResult().get().toString());
-    final MethodDeclaration container = findMethod(typeSolver, parseResult);
-    return container.getBody().get().getStatement(0).asExpressionStmt().getExpression();
+    final MethodDeclaration container = findMethod(symbolResolver, typeSolver, parseResult);
+    return container.getBody().get().getStatement(0).asExpressionStmt().getExpression().asMethodCallExpr().getArgument(0);
   }
 
   private static String getDeprecatedCodeExample(final Javadoc javadoc) {

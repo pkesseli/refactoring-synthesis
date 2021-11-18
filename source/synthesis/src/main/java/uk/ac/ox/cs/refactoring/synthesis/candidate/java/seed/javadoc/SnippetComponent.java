@@ -73,6 +73,6 @@ class SnippetComponent implements HierarchicalComponent<JavaLanguageKey, IExpres
     for (int i = 0; i < args.length; ++i) {
       converter.Parameters.get(i).expression = args[i];
     }
-    return converter.expression;
+    return converter.getExpression();
   }
 }

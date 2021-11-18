@@ -1,6 +1,9 @@
 package uk.ac.ox.cs.refactoring.synthesis.induction;
 
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
 
 import org.junit.runners.model.FrameworkMethod;
@@ -42,6 +45,7 @@ public class CandidateSynthesis<Candidate> extends FrameworkMethod {
   public Object invokeExplosively(final Object target, final Object... params) throws Throwable {
     @SuppressWarnings("unchecked")
     final Candidate candidate = (Candidate) params[0];
+    Files.writeString(Paths.get("D:/temp/candidaets.txt"), candidate.toString(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
     for (final Map.Entry<Counterexample, ExecutionResult> counterexample : counterexamples.entrySet()) {
       final Counterexample input = counterexample.getKey();
       final ExecutionResult expected = counterexample.getValue();

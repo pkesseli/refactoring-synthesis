@@ -1,5 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,12 +9,15 @@ import java.util.Set;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -30,6 +34,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeMethod;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Literal;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
@@ -52,12 +57,6 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
 
   /** {@link SnippetComponent#involvedClasses} */
   private final Set<String> involvedClasses;
-
-  /**
-   * Expression for the synthesis instruction set constructed from the code
-   * examples.
-   */
-  IExpression expression;
 
   /** Placeholders for paramters in {@link #expression}. */
   final List<Placeholder> Parameters = new ArrayList<>();
@@ -85,6 +84,64 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
     this.involvedClasses = involvedClasses;
   }
 
+  /**
+   * Provides expression for the synthesis instruction set constructed from the
+   * code examples.
+   * 
+   * @return Instruction set expression.
+   */
+  IExpression getExpression() {
+    return stack.peek();
+  }
+
+  @Override
+  public void visit(final IntegerLiteralExpr n, final Void arg) {
+    stack.add(new Literal(n.asNumber(), getType(n)));
+  }
+
+  @Override
+  public void visit(final BinaryExpr n, final Void arg) {
+    super.visit(n, arg);
+    final Type type = getType(n);
+    if (!type.isPrimitiveType()) {
+      throw new UnsupportedOperationException();
+    }
+
+    final IExpression rhs = stack.removeLast();
+    final IExpression lhs = stack.removeLast();
+    final PrimitiveType primitiveType = type.asPrimitiveType();
+    switch (primitiveType.getType()) {
+    case INT:
+      visitIntBinaryExpression(n, lhs, rhs);
+      break;
+    default:
+      throw new UnsupportedOperationException();
+    }
+  }
+
+  /**
+   * Assumes that the type of {@code node} is {@code int} and puts an integer
+   * binary expression on {@link #stack}.
+   * 
+   * @param node {@link BinaryExpr} to convert.
+   * @param lhs  {@link IExpression} left-hand-side operand.
+   * @param rhs  {@link IExpression} right-hand-side operand.
+   */
+  private void visitIntBinaryExpression(final BinaryExpr node, final IExpression lhs, final IExpression rhs) {
+    final IExpression binaryExpression;
+    switch (node.getOperator()) {
+    case MINUS:
+      binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Minus(lhs, rhs);
+      break;
+    case PLUS:
+      binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Plus(lhs, rhs);
+      break;
+    default:
+      throw new UnsupportedOperationException();
+    }
+    stack.add(binaryExpression);
+  }
+
   @Override
   public void visit(final MethodCallExpr n, final Void unused) {
     super.visit(n, unused);
@@ -110,11 +167,13 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
     involvedClasses.add(fullyQualifiedClassName);
     final MethodIdentifier methodIdentifier = new MethodIdentifier(fullyQualifiedClassName, method.getName(),
         parameterTypes);
+    final Method invokedMethod;
     try {
-      expression = new InvokeMethod(instance, arguments, Methods.getMethod(classLoader, methodIdentifier));
+      invokedMethod = Methods.getMethod(classLoader, methodIdentifier);
     } catch (final NoSuchMethodException | ClassNotFoundException e) {
       throw new IllegalArgumentException(e);
     }
+    stack.add(new InvokeMethod(instance, arguments, invokedMethod));
   }
 
   @Override

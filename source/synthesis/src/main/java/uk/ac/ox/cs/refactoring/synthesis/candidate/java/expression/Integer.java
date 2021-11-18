@@ -35,7 +35,7 @@ public final class Integer {
     }
   }
 
-  static class Minus extends BinaryExpression<java.lang.Integer> {
+  public static class Minus extends BinaryExpression<java.lang.Integer> {
     public Minus(final IExpression lhs, final IExpression rhs) {
       super(lhs, Operator.MINUS, rhs, PrimitiveType.intType());
     }
