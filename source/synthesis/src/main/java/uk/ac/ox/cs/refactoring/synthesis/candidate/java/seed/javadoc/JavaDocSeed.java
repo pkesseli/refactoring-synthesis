@@ -21,6 +21,7 @@ import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
@@ -46,24 +47,16 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.InstructionSetSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
-/**
- * Adds instructions based on hints in JavaDoc.
- * 
- * TODO: Implement!
- */
+/** Adds instructions based on hints in JavaDoc. */
 public class JavaDocSeed implements InstructionSetSeed {
 
-  /** */
+  /** Sink for errors about accessing the source files. */
   private static final Logger logger = LoggerFactory.getLogger(JavaDocSeed.class);
 
-  /**
-   * Used to load pre-configured classes.
-   */
+  /** Used to load pre-configured classes. */
   private final ClassLoader classLoader;
 
-  /**
-   * Method to be replaced.
-   */
+  /** Method to be replaced. */
   private final MethodIdentifier methodToRefactor;
 
   /** Source directories and ZIP files. */
@@ -133,6 +126,19 @@ public class JavaDocSeed implements InstructionSetSeed {
         .filter(new MatchesSignature(typeSolver, methodToRefactor)).findAny().orElse(null);
   }
 
+  /**
+   * Parses a code snippet extracted from JavaDoc as if it were a satement in the
+   * documented method. This helps resolve unqualified names, as JavaDoc code
+   * examples are often written as though in the scope of the documented method.
+   * 
+   * @param symbolResolver  {@link #findMethod(SymbolResolver, TypeSolver, ParseResult)}
+   * @param typeSolver      {@link #findMethod(SymbolResolver, TypeSolver, ParseResult)}
+   * @param javaParser      {@link Typecheck}
+   * @param compilationUnit Compilation unit which is modified and parsed again.
+   * @param method          Method in whose context to parse {@code code}.
+   * @param code            Java code snippet to parse.
+   * @return JavaDoc AST expression.
+   */
   private Expression parseInMethodContext(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
       final JavaParser javaParser, final ParseResult<CompilationUnit> compilationUnit, final MethodDeclaration method,
       final String code) {
@@ -140,9 +146,18 @@ public class JavaDocSeed implements InstructionSetSeed {
     method.getBody().get().addStatement(0, textExpression.getResult().get());
     final ParseResult<CompilationUnit> parseResult = javaParser.parse(compilationUnit.getResult().get().toString());
     final MethodDeclaration container = findMethod(symbolResolver, typeSolver, parseResult);
-    return container.getBody().get().getStatement(0).asExpressionStmt().getExpression().asMethodCallExpr().getArgument(0);
+    final Expression result = container.getBody().get().getStatement(0).asExpressionStmt().getExpression()
+        .asMethodCallExpr().getArgument(0);
+    Typecheck.apply(javaParser, typeSolver, result);
+    return result;
   }
 
+  /**
+   * Extracts a code example in the context of a deprecated block tag.
+   * 
+   * @param javadoc Comment from which to extract the example.
+   * @return Code example to replace the method call.
+   */
   private static String getDeprecatedCodeExample(final Javadoc javadoc) {
     return javadoc.getBlockTags().stream().filter(b -> JavadocBlockTag.Type.DEPRECATED == b.getType())
         .map(JavadocBlockTag::getContent).map(JavadocDescription::getElements).flatMap(Collection::stream)
@@ -150,6 +165,14 @@ public class JavaDocSeed implements InstructionSetSeed {
         .findAny().orElse(null);
   }
 
+  /**
+   * Finds and parses the source file for the given class name.
+   * 
+   * @param javaParser Parser to use for parsing the source.
+   * @param className  Class whose source to locate.
+   * @return Parsed compilation unit, if available.
+   * @throws IOException if file access fails.
+   */
   private ParseResult<CompilationUnit> findSource(final JavaParser javaParser, final String className)
       throws IOException {
     final String relativePath = className.replace(String.valueOf(JavaLanguage.PACKAGE_SEPARATOR), "[\\/]");
@@ -167,7 +190,7 @@ public class JavaDocSeed implements InstructionSetSeed {
         }
       }
     }
-    return null;
+    return new ParseResult<CompilationUnit>(null, Collections.emptyList(), new CommentsCollection());
   }
 
 }
