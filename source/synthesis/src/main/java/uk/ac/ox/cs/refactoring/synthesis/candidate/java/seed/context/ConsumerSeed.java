@@ -4,10 +4,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
 
 /**
@@ -32,10 +34,25 @@ public class ConsumerSeed implements InstructionSetSeed {
     final Set<JavaLanguageKey> allComponents = components.keySet(JavaLanguageKey.class);
     final Set<JavaLanguageKey> unusedComponents = new HashSet<>(allComponents);
     final Set<JavaLanguageKey> parameters = components.parameterKeySet(JavaLanguageKey.class);
+    addNonNullTypes(parameters);
     unusedComponents.removeAll(parameters);
 
     for (final String consumerType : components.InvolvedClasses)
       addConsumerType(components, consumerType, allComponents, unusedComponents);
+  }
+
+  /**
+   * If a method accepts a nullable parameter, it implicitly also accepts a
+   * non-null parameter. This needs to be considered when deciding whether a
+   * certain type of parameter has been consumed yet and is thus added to the set.
+   * 
+   * @param parameters Used parameter set to expand.
+   */
+  private void addNonNullTypes(Set<JavaLanguageKey> parameters) {
+    final Set<JavaLanguageKey> toDuplicate = parameters.stream().filter(k -> !k.Nonnull).collect(Collectors.toSet());
+    for (final JavaLanguageKey javaLanguageKey : toDuplicate) {
+      parameters.add(JavaLanguageKeys.nonnull(javaLanguageKey.Type));
+    }
   }
 
   /**
