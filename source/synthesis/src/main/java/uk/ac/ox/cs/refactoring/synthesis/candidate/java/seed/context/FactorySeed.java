@@ -12,18 +12,18 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
 
 /**
- * Tries to add factory methods for unavailable parameter components.
+ * Tries to add factory methods for unavailable parameter components. Uses
+ * {@link ConstantSeed} as a fallback.
  */
 public class FactorySeed implements InstructionSetSeed {
 
-  /**
-   * Used to analyse class types reflectively.
-   */
+  /** Used as a fallback for primitive types. */
+  private final ConstantSeed constantSeed = new ConstantSeed();
+
+  /** Used to analyse class types reflectively. */
   private final ClassLoader classLoader;
 
-  /**
-   * @param classLoader {@link #classLoader}
-   */
+  /** @param classLoader {@link #classLoader} */
   public FactorySeed(final ClassLoader classLoader) {
     this.classLoader = classLoader;
   }
@@ -36,6 +36,10 @@ public class FactorySeed implements InstructionSetSeed {
 
     final JavaComponents javaComponents = new JavaComponents(components);
     for (final JavaLanguageKey javaLanguageKey : requiredComponents) {
+      if (javaLanguageKey.Type.isPrimitiveType()) {
+        constantSeed.seed(javaComponents, javaLanguageKey);
+        continue;
+      }
       final ClassOrInterfaceType type = javaLanguageKey.Type.asClassOrInterfaceType();
       if (type == null)
         continue;
