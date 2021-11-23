@@ -37,6 +37,9 @@ public final class HeapComparison {
     if (lhs.Error == null && rhs.Error != null) {
       return false;
     }
+    if (lhs.Error != null) {
+      return lhs.Error.getClass().getName().equals(rhs.Error.getClass().getName());
+    }
 
     final IsolatedClassLoader lhsClassLoader = lhs.ClassLoader;
     final IsolatedClassLoader rhsClassLoader = rhs.ClassLoader;
@@ -44,9 +47,6 @@ public final class HeapComparison {
     loadMissingClasses(rhsClassLoader, lhsClassLoader);
 
     final ObjectIdComparator comparator = new ObjectIdComparator();
-    if (!equals(comparator, lhs.Error, rhs.Error)) {
-      return false;
-    }
     if (!equals(comparator, lhs.Value, rhs.Value)) {
       return false;
     }
@@ -84,11 +84,14 @@ public final class HeapComparison {
       return false;
     }
 
-    Class<?> lhsClass = lhs.getClass();
+    if (comparator.hasSameExistingId(lhs, rhs)) {
+      return true;
+    }
     if (!isAliasingEquivalent(comparator, lhs, rhs)) {
       return false;
     }
 
+    Class<?> lhsClass = lhs.getClass();
     if (Literals.isLiteralType(lhsClass)) {
       return Objects.equals(lhs, rhs);
     }

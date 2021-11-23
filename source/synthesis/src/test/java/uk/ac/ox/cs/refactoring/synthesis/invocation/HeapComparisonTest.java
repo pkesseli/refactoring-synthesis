@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.invocation;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -88,5 +89,16 @@ public class HeapComparisonTest {
     assertFalse(evaluate.call());
     rhs.accept(rhsFirst, rhsSecond);
     assertTrue(evaluate.call());
+  }
+
+  @Test
+  void sameExceptionType() throws Exception {
+    final NullPointerException lhs = new NullPointerException();
+    try {
+      Paths.get(null);
+    } catch (final NullPointerException rhs) {
+      assertTrue(
+          HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs), new ExecutionResult(rhsClassLoader, rhs)));
+    }
   }
 }
