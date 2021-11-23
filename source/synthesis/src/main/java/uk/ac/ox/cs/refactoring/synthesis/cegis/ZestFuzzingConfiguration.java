@@ -23,6 +23,9 @@ public class ZestFuzzingConfiguration implements AutoCloseable {
   /** Wrapped {@link FuzzingConfiguration} */
   private final FuzzingConfiguration fuzzingConfiguration;
 
+  /** Configured fuzzing guidance. */
+  public final Guidance Guidance;
+
   /**
    * Equivalent to {@link #ZestFuzzingConfiguration(String, Function)} without
    * modifying the default zest guidance.
@@ -56,7 +59,8 @@ public class ZestFuzzingConfiguration implements AutoCloseable {
       final Function<Guidance, ? extends Guidance> modifyZestGuidance)
       throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
     final ZestGuidance zestGuidance = new ZestGuidance(phaseName, null, outputDirectory.toFile());
-    fuzzingConfiguration = new FuzzingConfiguration(modifyZestGuidance.apply(zestGuidance));
+    Guidance = modifyZestGuidance.apply(zestGuidance);
+    fuzzingConfiguration = new FuzzingConfiguration(Guidance);
   }
 
   @Override

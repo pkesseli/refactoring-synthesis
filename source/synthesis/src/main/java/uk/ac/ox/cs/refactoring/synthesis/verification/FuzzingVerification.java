@@ -61,9 +61,9 @@ public class FuzzingVerification<Candidate> {
   public Map<Counterexample, ExecutionResult> verify(final Candidate candidate) {
     final CandidateTest<Candidate> frameworkMethod = new CandidateTest<>(candidate, executor, invoker);
     final TestClass testClass = new TestClass(frameworkMethod.getDeclaringClass());
-    final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository);
     final Map<Counterexample, ExecutionResult> counterexamples = new HashMap<>();
     final Guidance guidance = new NoGuidance(GuidedFuzzing.DEFAULT_MAX_TRIALS, null);
+    final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository, guidance);
     try (final FuzzingConfiguration config = new FuzzingConfiguration(guidance)) {
       fuzzStatement.evaluate();
     } catch (final AssertionFailedError e) {

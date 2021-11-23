@@ -41,14 +41,47 @@ public class ObjectIdComparator {
   }
 
   /**
+   * Indicates that both objects have been seen before on the stack, and they
+   * evaluate to the same object id on the heap.
+   * 
+   * @param lhs Left hand side object to compare.
+   * @param rhs Right hand side object to compare.
+   * @return {@code true} if both objects were seen before and have the same id,
+   *         {@code false} othwerwise.
+   */
+  public boolean hasSameExistingId(final Object lhs, final Object rhs) {
+    Objects.requireNonNull(lhs);
+    Objects.requireNonNull(rhs);
+    final Integer lhsId = getExistingId(lhsIds, lhs);
+    if (lhsId == null)
+      return false;
+    final Integer rhsId = getExistingId(rhsIds, rhs);
+    if (rhsId == null)
+      return false;
+
+    return lhsId == rhsId;
+  }
+
+  /**
    * Provides an abstract, heap-neutral id for the given object.
    * 
-   * @param ids    {@link #lhsIds}
+   * @param ids    {@link #lhsIds} or {@link #rhsIds}.
    * @param object Object for which to provide an id.
    * @return Heap-neutral id associated with the given object.
    */
   private static int getId(final Map<Integer, Integer> ids, final Object object) {
     final int identityHash = System.identityHashCode(object);
     return ids.computeIfAbsent(identityHash, k -> ids.size());
+  }
+
+  /**
+   * Looks up an existing object ID from the given heap.
+   * 
+   * @param ids    {@link #lhsIds} or {@link #rhsIds}.
+   * @param object Object whose existing ID to look up.
+   * @return Heap-neutral id associated with the given object, if available.
+   */
+  private static Integer getExistingId(final Map<Integer, Integer> ids, final Object object) {
+    return ids.get(System.identityHashCode(object));
   }
 }

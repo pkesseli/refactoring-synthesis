@@ -97,10 +97,11 @@ public class FuzzingSynthesis<Candidate> {
     final CandidateSynthesis<Candidate> frameworkMethod = new CandidateSynthesis<>(counterexamples, executor,
         frameworkMethodPlaceholder);
     final TestClass testClass = new TestClass(frameworkMethodPlaceholder.getDeclaringClass());
-    final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository);
 
     final String name = "inductive synthesis";
     try (final ZestFuzzingConfiguration configuration = new ZestFuzzingConfiguration(name, SynthesisGuidance::new)) {
+      final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository,
+          configuration.Guidance);
       fuzzStatement.evaluate();
     } catch (final MultipleFailureException e) {
       return e.getFailures().stream().map(AssertionFailedError.class::cast).map(this::getCandidate).findAny().get();
