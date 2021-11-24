@@ -2,6 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.state;
 
 import java.util.function.Function;
 
+import org.mockito.Mockito;
 import org.objenesis.ObjenesisStd;
 
 /**
@@ -20,7 +21,10 @@ public class ObjenesisWrapper implements Function<Class<?>, Object> {
   private final ObjenesisStd objenesis = new ObjenesisStd();
 
   @Override
-  public Object apply(Class<?> clazz) {
-    return objenesis.newInstance(clazz);
+  public Object apply(final Class<?> clazz) {
+    if (Polymorphism.canBeInstantiated(clazz)) {
+      return objenesis.newInstance(clazz);
+    }
+    return Mockito.mock(clazz);
   }
 }

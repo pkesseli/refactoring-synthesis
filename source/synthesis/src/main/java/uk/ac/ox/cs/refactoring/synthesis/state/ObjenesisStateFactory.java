@@ -1,7 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.state;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +11,7 @@ import java.util.function.Function;
 import uk.ac.ox.cs.refactoring.classloader.JavaLanguage;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.ObjectDescription;
+import uk.ac.ox.cs.refactoring.synthesis.invocation.Fields;
 
 /**
  * Implements {@link IStateFactory} by creating all necessary objects using
@@ -126,13 +126,13 @@ public class ObjenesisStateFactory implements IStateFactory {
     if (created == null)
       return null;
 
-    final Class<?> cls = created.getClass();
+    final Class<?> cls = Polymorphism.getFactoryType(created);
     for (final Map.Entry<String, Object> literalField : objectDescription.LiteralFields.entrySet()) {
-      setField(cls, created, literalField.getKey(), literalField.getValue());
+      Fields.set(cls, created, literalField.getKey(), literalField.getValue());
     }
     for (final Map.Entry<String, ObjectDescription> objectField : objectDescription.ObjectFields.entrySet()) {
       final Object nested = getOrCreate(objenesis, classLoader, instances, objectField.getValue());
-      setField(cls, created, objectField.getKey(), nested);
+      Fields.set(cls, created, objectField.getKey(), nested);
     }
     instances.put(objectDescription, created);
     return created;
@@ -196,23 +196,6 @@ public class ObjenesisStateFactory implements IStateFactory {
   }
 
   /**
-   * Reflectively assigns a field.
-   * 
-   * @param cls   Class of object whose field to assign.
-   * @param obj   Object whose field to assign.
-   * @param name  {@link String Name} of the field to assign.
-   * @param value Value to assign.
-   * @throws NoSuchFieldException   {@link Class#getDeclaredField(String)}
-   * @throws IllegalAccessException {@link Field#set(Object, Object)}
-   */
-  private static void setField(final Class<?> cls, final Object obj, final String name, final Object value)
-      throws NoSuchFieldException, IllegalAccessException {
-    final Field field = cls.getDeclaredField(name);
-    field.setAccessible(true);
-    field.set(obj, value);
-  }
-
-  /**
    * Assigns a static field by name.
    * 
    * @param classLoader             Class loader in which to assign the static
@@ -241,7 +224,7 @@ public class ObjenesisStateFactory implements IStateFactory {
    */
   private static void setStaticField(final Class<?> cls, final String name, final Object value)
       throws NoSuchFieldException, IllegalAccessException {
-    setField(cls, null, name, value);
+    Fields.set(cls, null, name, value);
   }
 
   /**

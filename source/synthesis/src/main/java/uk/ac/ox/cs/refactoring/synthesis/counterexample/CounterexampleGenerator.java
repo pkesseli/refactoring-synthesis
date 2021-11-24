@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Fields;
+import uk.ac.ox.cs.refactoring.synthesis.state.Polymorphism;
 
 /**
  * JQF {@link Generator} for {@link Counterexample}. Used during verification
@@ -196,7 +197,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       return null;
     }
 
-    Class<?> cls = object.getClass();
+    Class<?> cls = Polymorphism.getFactoryType(object);
     final ObjectDescription description = new ObjectDescription(cls.getName());
     while (cls != null) {
       setFields(description, cls, object);

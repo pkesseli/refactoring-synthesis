@@ -9,7 +9,44 @@ import java.util.function.Predicate;
  * Hepler for reflective fields in Java.
  */
 public final class Fields {
-  private Fields() {
+
+  /**
+   * Assigns a field. If necessary, searches the parents of {@code cls} for
+   * matching fields.
+   * 
+   * @param cls       Fields is set in this type or its parent types.
+   * @param object    Instance on which to set the field, {@code null} for static
+   *                  fields.
+   * @param fieldName Name of the field to set.
+   * @param value     Value of the field to set.
+   * @throws NoSuchFieldException   if the field could not be found in {@code cls}
+   *                                or its parents.
+   * @throws IllegalAccessException {@link Field#set(Object, Object)}
+   */
+  public static void set(final Class<?> cls, final Object object, final String fieldName, final Object value)
+      throws NoSuchFieldException, IllegalAccessException {
+    Class<?> target = cls;
+    while (target != null && !hasField(target, fieldName))
+      target = target.getSuperclass();
+
+    if (target == null) {
+      throw new NoSuchFieldException(fieldName);
+    }
+    final Field field = target.getDeclaredField(fieldName);
+    field.setAccessible(true);
+    field.set(object, value);
+  }
+
+  /**
+   * Indicats whether {@code cls} has a certain field.
+   * 
+   * @param cls  Class to check.
+   * @param name Name of the field.
+   * @return {@code true} if {@code cls} has a field with {@code name},
+   *         {@code false} otherwise.
+   */
+  private static boolean hasField(final Class<?> cls, final String name) {
+    return getFields(cls, field -> name.equals(field.getName())).length > 0;
   }
 
   /**
@@ -62,5 +99,8 @@ public final class Fields {
    */
   private static boolean isStatic(final Field field) {
     return Modifier.isStatic(field.getModifiers());
+  }
+
+  private Fields() {
   }
 }
