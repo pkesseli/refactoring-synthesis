@@ -1,8 +1,8 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.api;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.isA;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.anyByte;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -23,11 +23,11 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.FieldSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.StatementSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 
-public class SnippetCandidateGeneratorTest {
+class SnippetCandidateGeneratorTest {
   static double actual = 31.5;
 
   @Test
-  public void field() throws Exception {
+  void field() throws Exception {
     final FieldAccess field = new FieldAccess("actual", SnippetCandidateGeneratorTest.class.getName(),
         PrimitiveType.doubleType());
     final SourceOfRandomness sourceOfRandomness = mock(SourceOfRandomness.class);

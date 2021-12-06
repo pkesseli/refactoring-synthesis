@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Hepler for reflective fields in Java.
@@ -46,17 +47,22 @@ public final class Fields {
    *         {@code false} otherwise.
    */
   private static boolean hasField(final Class<?> cls, final String name) {
-    return getFields(cls, field -> name.equals(field.getName())).length > 0;
+    return getFields(cls, field -> name.equals(field.getName())).findAny().isPresent();
   }
 
   /**
-   * Provides all declared instance fields of the given class.
+   * Provides all declared instance fields of the given class and its supertypes.
    * 
    * @param cls {@link Class} whose instance fields to retrieve.
    * @return All instance {@link Field}s of {@code cls}.
    */
-  public static Field[] getInstance(final Class<?> cls) {
-    return getFields(cls, Fields::isInstance);
+  public static Field[] getInstance(Class<?> cls) {
+    Stream<Field> allFields = Stream.empty();
+    while (cls != null) {
+      allFields = Stream.concat(allFields, getFields(cls, Fields::isInstance));
+      cls = cls.getSuperclass();
+    }
+    return allFields.toArray(Field[]::new);
   }
 
   /**
@@ -66,7 +72,7 @@ public final class Fields {
    * @return All static {@link Field}s of {@code cls}.
    */
   public static Field[] getStatic(final Class<?> cls) {
-    return getFields(cls, Fields::isStatic);
+    return getFields(cls, Fields::isStatic).toArray(Field[]::new);
   }
 
   /**
@@ -76,8 +82,8 @@ public final class Fields {
    * @param predicate {@link Predicate} of fields which we want to retrieve.
    * @return All {@link Field} which satisfy {@code predicate}.
    */
-  private static Field[] getFields(final Class<?> cls, final Predicate<Field> predicate) {
-    return Arrays.stream(cls.getDeclaredFields()).filter(predicate).toArray(Field[]::new);
+  private static Stream<Field> getFields(final Class<?> cls, final Predicate<Field> predicate) {
+    return Arrays.stream(cls.getDeclaredFields()).filter(predicate);
   }
 
   /**

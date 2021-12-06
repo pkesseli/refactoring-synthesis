@@ -96,18 +96,10 @@ public final class HeapComparison {
       return Objects.equals(lhs, rhs);
     }
     Class<?> rhsClass = rhs.getClass();
-    while (lhsClass != null) {
-      if (!lhsClass.getName().equals(rhsClass.getName())) {
-        return false;
-      }
-      if (!equals(comparator, lhs, Fields.getInstance(lhsClass), rhs, Fields.getInstance(rhsClass))) {
-        return false;
-      }
-      lhsClass = lhsClass.getSuperclass();
-      rhsClass = rhsClass.getSuperclass();
+    if (!lhsClass.getName().equals(rhsClass.getName())) {
+      return false;
     }
-
-    return true;
+    return equals(comparator, lhs, Fields.getInstance(lhsClass), rhs, Fields.getInstance(rhsClass));
   }
 
   /**

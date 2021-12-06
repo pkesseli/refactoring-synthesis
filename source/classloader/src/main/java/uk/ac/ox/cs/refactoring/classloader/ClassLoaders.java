@@ -1,5 +1,8 @@
 package uk.ac.ox.cs.refactoring.classloader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Helper to construct isolated class loaders.
  */
@@ -41,13 +44,64 @@ public final class ClassLoaders {
    */
   public static Class<?> loadClass(final ClassLoader classLoader, final String name) throws ClassNotFoundException {
     switch (name) {
-    case "boolean":
-      return boolean.class;
-    case "double":
-      return double.class;
-    case "int":
-      return int.class;
+      case "boolean":
+        return boolean.class;
+      case "double":
+        return double.class;
+      case "int":
+        return int.class;
     }
     return classLoader.loadClass(name);
+  }
+
+  /**
+   * Convenience operation for {@link #loadClass(ClassLoader, String)}, looking
+   * up {@code cls} using its {@link Class#getName() name}. Short-circuits
+   * classes loaded by the bootstrap class loader.
+   * 
+   * @param classLoader {@link #loadClass(ClassLoader, String)}
+   * @param cls         Class to look up in {@code classLoader}.
+   * @return {@link #loadClass(ClassLoader, String)}
+   * @throws ClassNotFoundException {@link #loadClass(ClassLoader, String)}
+   */
+  public static Class<?> loadClass(final ClassLoader classLoader, final Class<?> cls) throws ClassNotFoundException {
+    if (!isUserClass(classLoader, cls))
+      return cls;
+    return loadClass(classLoader, cls.getName());
+  }
+
+  /**
+   * Determines whether the given class should be loaded in isolation. As an
+   * example, classes loaded by a parent of {@code classLoader} do not need to be
+   * reloaded.
+   * 
+   * @param classLoader Isolated class loader.
+   * @param cls         Class to load.
+   * @return {@code true} if the clas should be reloaded in {@code classLoader},
+   *         {@code false} otherwise.
+   */
+  public static boolean isUserClass(final ClassLoader classLoader, final Class<?> cls) {
+    final ClassLoader clsClassLoader = cls.getClassLoader();
+    if (clsClassLoader == null)
+      return false;
+
+    final List<ClassLoader> parents = getClassLoaderHierarchy(classLoader.getParent());
+    parents.retainAll(getClassLoaderHierarchy(clsClassLoader));
+    return parents.isEmpty();
+  }
+
+  /**
+   * Provides the class loader hierarchy of the given loader as a list.
+   * 
+   * @param classLoader Class loader whose hierarchy to provide.
+   * @return List containing {@code classLoader} and its ancestors.
+   */
+  private static List<ClassLoader> getClassLoaderHierarchy(ClassLoader classLoader) {
+    final List<ClassLoader> result = new ArrayList<>();
+    while (classLoader != null) {
+      result.add(classLoader);
+      classLoader = classLoader.getParent();
+    }
+    return result;
   }
 }

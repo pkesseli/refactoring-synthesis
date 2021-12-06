@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Fields;
-import uk.ac.ox.cs.refactoring.synthesis.state.Polymorphism;
 
 /**
  * JQF {@link Generator} for {@link Counterexample}. Used during verification

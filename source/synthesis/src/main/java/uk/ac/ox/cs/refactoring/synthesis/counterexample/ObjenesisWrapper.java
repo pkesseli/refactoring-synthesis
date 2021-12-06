@@ -1,4 +1,4 @@
-package uk.ac.ox.cs.refactoring.synthesis.state;
+package uk.ac.ox.cs.refactoring.synthesis.counterexample;
 
 import java.util.function.Function;
 
