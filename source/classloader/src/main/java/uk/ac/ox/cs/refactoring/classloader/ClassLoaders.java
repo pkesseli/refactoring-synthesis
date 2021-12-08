@@ -1,8 +1,5 @@
 package uk.ac.ox.cs.refactoring.classloader;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Helper to construct isolated class loaders.
  */
@@ -85,23 +82,12 @@ public final class ClassLoaders {
     if (clsClassLoader == null)
       return false;
 
-    final List<ClassLoader> parents = getClassLoaderHierarchy(classLoader.getParent());
-    parents.retainAll(getClassLoaderHierarchy(clsClassLoader));
-    return parents.isEmpty();
-  }
-
-  /**
-   * Provides the class loader hierarchy of the given loader as a list.
-   * 
-   * @param classLoader Class loader whose hierarchy to provide.
-   * @return List containing {@code classLoader} and its ancestors.
-   */
-  private static List<ClassLoader> getClassLoaderHierarchy(ClassLoader classLoader) {
-    final List<ClassLoader> result = new ArrayList<>();
-    while (classLoader != null) {
-      result.add(classLoader);
-      classLoader = classLoader.getParent();
+    ClassLoader parent = classLoader.getParent();
+    while (parent != null) {
+      if (parent == clsClassLoader)
+        return false;
+      parent = parent.getParent();
     }
-    return result;
+    return true;
   }
 }

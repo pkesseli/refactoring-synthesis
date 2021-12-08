@@ -6,25 +6,27 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.benchmark.Benchmarks;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
-import uk.ac.ox.cs.refactoring.synthesis.counterexample.ObjectDescription;
+import uk.ac.ox.cs.refactoring.synthesis.counterexample.IsolatedObject;
 
 public class InvokerTest {
   @Test
   void max() throws Exception {
-    final ObjectDescription max = new ObjectDescription(Benchmarks.SUM);
-    final ObjectDescription min = new ObjectDescription(Benchmarks.INTEGER_WRAPPER);
-    min.LiteralFields.put("value", 3);
-    max.ObjectFields.put("base", min);
-    final Counterexample counterexample = new Counterexample(max);
-    final ObjectDescription lhs = new ObjectDescription(Benchmarks.INTEGER_WRAPPER);
-    lhs.LiteralFields.put("value", 10);
-    final ObjectDescription rhs = new ObjectDescription(Benchmarks.INTEGER_WRAPPER);
-    rhs.LiteralFields.put("value", 20);
-    counterexample.ObjectArguments.put(0, lhs);
-    counterexample.ObjectArguments.put(1, rhs);
+    final ClassLoader counterexampleClassLoader = ClassLoaders.createIsolated();
+    final IsolatedObject max = new IsolatedObject(counterexampleClassLoader, Benchmarks.SUM);
+    final IsolatedObject min = new IsolatedObject(counterexampleClassLoader, Benchmarks.INTEGER_WRAPPER);
+    min.setField("value", 3);
+    max.setField("base", min.Object);
+    final Counterexample counterexample = new Counterexample(max.Object);
+    final IsolatedObject lhs = new IsolatedObject(counterexampleClassLoader, Benchmarks.INTEGER_WRAPPER);
+    lhs.setField("value", 10);
+    final IsolatedObject rhs = new IsolatedObject(counterexampleClassLoader, Benchmarks.INTEGER_WRAPPER);
+    rhs.setField("value", 20);
+    counterexample.Arguments.add(lhs.Object);
+    counterexample.Arguments.add(rhs.Object);
 
     final Invoker invoker = new Invoker(new MethodIdentifier(Benchmarks.SUM, "max",
         Arrays.asList(Benchmarks.INTEGER_WRAPPER, Benchmarks.INTEGER_WRAPPER)));

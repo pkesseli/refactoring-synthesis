@@ -6,14 +6,14 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
-import uk.ac.ox.cs.refactoring.synthesis.state.IStateFactory;
+import uk.ac.ox.cs.refactoring.synthesis.state.StateFactory;
 import uk.ac.ox.cs.refactoring.synthesis.state.State;
 
 public class SnippetCandidateExecutor implements CandidateExecutor<SnippetCandidate> {
 
-  private final IStateFactory stateFactory;
+  private final StateFactory stateFactory;
 
-  public SnippetCandidateExecutor(final IStateFactory stateFactory) {
+  public SnippetCandidateExecutor(final StateFactory stateFactory) {
     this.stateFactory = stateFactory;
   }
 

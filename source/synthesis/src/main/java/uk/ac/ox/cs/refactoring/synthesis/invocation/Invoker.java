@@ -7,9 +7,9 @@ import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
-import uk.ac.ox.cs.refactoring.synthesis.state.IStateFactory;
-import uk.ac.ox.cs.refactoring.synthesis.state.ObjenesisStateFactory;
+import uk.ac.ox.cs.refactoring.synthesis.state.ClassLoaderClonerStateFactory;
 import uk.ac.ox.cs.refactoring.synthesis.state.State;
+import uk.ac.ox.cs.refactoring.synthesis.state.StateFactory;
 
 /**
  * Helper to reflectively invoke a Java method based on a counterexample.
@@ -29,7 +29,7 @@ public class Invoker {
   /**
    * Helper to prepare a Java program state based on a given counterexample.
    */
-  private final IStateFactory stateFactory = new ObjenesisStateFactory();
+  private final StateFactory stateFactory = new ClassLoaderClonerStateFactory();
 
   /**
    * @param methodIdentifier {@link #methodIdentifier}

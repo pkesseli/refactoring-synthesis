@@ -12,7 +12,7 @@ import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Fields;
 
 /** Helper to clone an object into the context of a class loader. */
-class ClassLoaderCloner {
+public class ClassLoaderCloner {
 
   /** Substring contained in lambda class names. */
   private static final String LAMBDA_MARKER = "$$Lambda";
@@ -26,8 +26,14 @@ class ClassLoaderCloner {
    */
   private final ClassLoader classLoader;
 
+  /**
+   * Stores all created objects so that aliasing references can be looked up
+   * instead of being recreated.
+   */
+  private final Map<Integer, Object> objectsToClones = new HashMap<>();
+
   /** @param classLoader {@link #classLoader} */
-  ClassLoaderCloner(final ClassLoader classLoader) {
+  public ClassLoaderCloner(final ClassLoader classLoader) {
     this.classLoader = classLoader;
   }
 
@@ -43,21 +49,7 @@ class ClassLoaderCloner {
    *                                {@link #classLoader} occurs.
    * @throws IllegalAccessException if a field could not be accessed reflectively.
    */
-  Object clone(final Object object) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-    return clone(object, new HashMap<>());
-  }
-
-  /**
-   * Recusive handler for {@link #clone(Object)} with shared heap.
-   * 
-   * @param object          {@link #clone(Object)}
-   * @param objectsToClones Already cloned objects, to be reused on aliasing.
-   * @return {@link #clone(Object)}
-   * @throws ClassNotFoundException {@link #clone(Object)}
-   * @throws NoSuchFieldException   {@link #clone(Object)}
-   * @throws IllegalAccessException {@link #clone(Object)}
-   */
-  private Object clone(final Object object, final Map<Integer, Object> objectsToClones)
+  public Object clone(final Object object)
       throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
     if (object == null)
       return null;
@@ -85,14 +77,21 @@ class ClassLoaderCloner {
       objectsToClones.put(identityHashCode, clone);
 
       for (int i = 0; i < length; ++i) {
-        Array.set(clone, i, clone(Array.get(object, i), objectsToClones));
+        Array.set(clone, i, clone(Array.get(object, i)));
       }
       return clone;
     }
 
     final Class<?> cloneClass = ClassLoaders.loadClass(classLoader, cls);
     final Function<Class<?>, Object> objenesis = ObjenesisFactory.createObjenesis(classLoader);
-    final Object clone = objenesis.apply(cloneClass);
+    final Thread currentThread = Thread.currentThread();
+    final ClassLoader originalContextClassLoader = currentThread.getContextClassLoader();
+    final Object clone;
+    try {
+      clone = objenesis.apply(cloneClass);
+    } finally {
+      currentThread.setContextClassLoader(originalContextClassLoader);
+    }
     objectsToClones.put(identityHashCode, clone);
 
     final Field[] cloneFields = Fields.getInstance(cloneClass);
@@ -108,7 +107,7 @@ class ClassLoaderCloner {
       final Object value = field.get(object);
       Object clonedValue = objectsToClones.get(System.identityHashCode(value));
       if (clonedValue == null)
-        clonedValue = clone(value, objectsToClones);
+        clonedValue = clone(value);
 
       targetField.set(clone, clonedValue);
     }

@@ -7,7 +7,7 @@ import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
  * {@link Counterexample}. All operations are performed with respect to a given,
  * isolated {@link ClassLoader}.
  */
-public interface IStateFactory {
+public interface StateFactory {
   /**
    * @param classLoader    Isolated class loader in which to load all classes. Any
    *                       static state is applied to the classes in this class
