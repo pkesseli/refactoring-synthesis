@@ -2,8 +2,8 @@ package uk.ac.ox.cs.refactoring.classloader;
 
 import java.security.SecureClassLoader;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Extends the default Java {@link ClassLoader} API by making the set of classes
@@ -22,7 +22,7 @@ public abstract class IsolatedClassLoader extends SecureClassLoader {
   /**
    * Mutable view of {@link #LoadedClasses}.
    */
-  protected final Set<String> loadedClasses = new HashSet<>();
+  protected final Set<String> loadedClasses = ConcurrentHashMap.newKeySet();
 
   /**
    * Contains all classes loaded directly by <code>this</code>

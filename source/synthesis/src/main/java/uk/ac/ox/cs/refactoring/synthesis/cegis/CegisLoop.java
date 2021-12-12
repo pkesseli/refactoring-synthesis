@@ -54,18 +54,23 @@ public class CegisLoop<Candidate> {
   public CegisLoop(final CandidateExecutor<Candidate> executor, final Invoker invoker,
       final GeneratorConfiguration generatorConfiguration, final Class<Candidate> candidateType) {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
-    final GeneratorRepository generatorRepository = new GeneratorRepository(sourceOfRandomness)
-        .register(new ServiceLoaderGeneratorSource());
-    generatorRepository.register(new ObjectGenerator());
-    generatorRepository.register(new CounterexampleGenerator(generatorRepository, generatorConfiguration.InstanceType,
-        generatorConfiguration.ParameterTypes));
-    generatorRepository.register(new SnippetCandidateGenerator(generatorConfiguration));
+    final GeneratorRepository baseRepository = new GeneratorRepository(sourceOfRandomness)
+        .register(new ServiceLoaderGeneratorSource())
+        .register(new ObjectGenerator());
+    final GeneratorRepository verificationRepository = new GeneratorRepository(sourceOfRandomness)
+        .register(new ServiceLoaderGeneratorSource())
+        .register(new CounterexampleGenerator(baseRepository, generatorConfiguration.InstanceType,
+            generatorConfiguration.ParameterTypes));
+    final GeneratorRepository synthesisRepository = new GeneratorRepository(sourceOfRandomness)
+        .register(new ServiceLoaderGeneratorSource())
+        .register(new SnippetCandidateGenerator(generatorConfiguration));
+
     final Method fuzzingSynthesisFrameworkMethod = SnippetCandidateGenerator.TestClass
         .getFrameworkMethodPlaceholder(null);
 
-    synthesis = new FuzzingSynthesis<>(generatorRepository, sourceOfRandomness, candidateType,
+    synthesis = new FuzzingSynthesis<>(synthesisRepository, sourceOfRandomness, candidateType,
         fuzzingSynthesisFrameworkMethod, executor);
-    verification = new FuzzingVerification<>(generatorRepository, executor, invoker);
+    verification = new FuzzingVerification<>(verificationRepository, executor, invoker);
   }
 
   /**

@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.mock;
+
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
 
 import javax.swing.JPanel;
 
@@ -59,5 +63,27 @@ class ClassLoaderClonerTest {
     assertNotSame(original, clone);
     final int[][][] cloneArray = (int[][][]) clone;
     assertArrayEquals(original, cloneArray);
+  }
+
+  @Test
+  void interfaceMock() throws Exception {
+    final ItemListener original = mock(ItemListener.class);
+    final Object clone = cloner.clone(original);
+    assertNotNull(clone);
+    assertNotSame(original, clone);
+
+    final Class<?> cloneClass = clone.getClass();
+    assertSame(ItemListener.class, Polymorphism.getNonMockitoInterface(cloneClass));
+  }
+
+  @Test
+  void classMock() throws Exception {
+    final MouseAdapter original = mock(MouseAdapter.class);
+    final Object clone = cloner.clone(original);
+    assertNotNull(clone);
+    assertNotSame(original, clone);
+
+    final Class<?> cloneClass = clone.getClass();
+    assertSame(MouseAdapter.class, cloneClass.getSuperclass());
   }
 }

@@ -25,7 +25,6 @@ public class ComponentTest {
 
   @Test
   void enable() throws Exception {
-    // TODO: Unsound result!
     testAlias(".setEnabled(", "java.awt.Component", "enable");
   }
 }

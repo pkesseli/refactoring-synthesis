@@ -1,18 +1,23 @@
 package uk.ac.ox.cs.refactoring.synthesis.counterexample;
 
+import java.lang.ref.Reference;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
+import org.mockito.exceptions.base.MockitoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Fields;
 
 /**
@@ -24,9 +29,13 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
   /** Sink for errors about accessing the source files. */
   private static final Logger logger = LoggerFactory.getLogger(CounterexampleGenerator.class);
 
-  /**
-   * Repository of all available generators. Used to generate literal values.
-   */
+  /** Static limit on array lengths we chose to explore. */
+  private static final int ARRAY_SIZE_LIMIT = 255;
+
+  /** Limits the number of objects we generate per counterexample component. */
+  private static final int MAX_OBJECT_COUNT = 10;
+
+  /** Repository of all available generators. Used to generate literal values. */
   private final GeneratorRepository repository;
 
   /**
@@ -56,184 +65,107 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
 
   @Override
   public Counterexample generate(final SourceOfRandomness random, final GenerationStatus status) {
-    final ObjectDescription instance = createInstance(random, status);
-    final Counterexample counterexample = new Counterexample(instance);
-    for (int i = 0; i < parameterTypes.size(); ++i) {
-      final Class<?> cls = parameterTypes.get(i);
-      if (Literals.isLiteralType(cls)) {
-        counterexample.LiteralArguments.put(i, generateObject(cls, random, status));
-      } else {
-        counterexample.ObjectArguments.put(i, generate(cls, random, status));
-      }
-    }
+    final ClassLoader classLoader = ClassLoaders.createIsolated();
+    final Function<Class<?>, Object> objenesis = ObjenesisFactory.createObjenesis(classLoader);
+    final Counterexample counterexample = new Counterexample(
+        generate(random, status, classLoader, objenesis, instanceType));
+    for (final Class<?> parameterType : parameterTypes)
+      counterexample.Arguments.add(generate(random, status, classLoader, objenesis, parameterType));
     return counterexample;
   }
 
   /**
-   * Generates {@code this} instance of the counterexample.
+   * Generates a Java object of type {@code type}, using classes loaded in
+   * {@code classLoader}. Also creates primitive values and arrays.
    * 
-   * @param random {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
-   * @param status {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
-   * @return {@code this} instance of counterexample.
+   * @param random      Used to make choices about values in the object.
+   * @param status      {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
+   * @param classLoader Isolated class loader from which to load all classes.
+   * @param objenesis   Used to instantiate objects.
+   * @param type        Type of the object to create.
+   * @return Created object.
    */
-  private ObjectDescription createInstance(final SourceOfRandomness random, final GenerationStatus status) {
-    if (instanceType == null) {
+  private Object generate(final SourceOfRandomness random, final GenerationStatus status, final ClassLoader classLoader,
+      final Function<Class<?>, Object> objenesis, final Class<?> type) {
+    if (type == null)
       return null;
+
+    return generate(random, status, classLoader, objenesis, type, new HashSet<>(), new GenerationContext());
+  }
+
+  /**
+   * Recursive handler of
+   * {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)},
+   * with a limit on recursing on aggregations on the same type.
+   * 
+   * @param random       {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)}
+   * @param status       {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)}
+   * @param classLoader  {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)}
+   * @param objenesis    {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)}
+   * @param type         {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)}
+   * @param visitedTypes Already visited types in this branch, avoiding infinite
+   *                     recursion.
+   * @return {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)}
+   */
+  private Object generate(final SourceOfRandomness random, final GenerationStatus status, final ClassLoader classLoader,
+      final Function<Class<?>, Object> objenesis, final Class<?> type,
+      final Set<Class<?>> visitedTypes, final GenerationContext generationContext) {
+
+    if (!Literals.isLiteralType(type)) {
+      if (generationContext.ObjectCount++ >= MAX_OBJECT_COUNT)
+        return null;
     }
-    return generate(instanceType, random, status);
-  }
 
-  private Object generateObject(final Class<?> type, final SourceOfRandomness sourceOfRandomness,
-      final GenerationStatus status) {
-    return repository.type(type).generate(sourceOfRandomness, status);
-  }
-
-  /**
-   * Recursive root of
-   * {@link #generate(Class, Set, SourceOfRandomness, GenerationStatus)}, starting
-   * with an empty set of explored types.
-   * 
-   * @param type   @link #generate(Class, Set, SourceOfRandomness,
-   *               GenerationStatus)}
-   * @param random {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
-   * @param status {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
-   * @return @link #generate(Class, Set, SourceOfRandomness, GenerationStatus)}
-   */
-  private ObjectDescription generate(final Class<?> type, final SourceOfRandomness random,
-      final GenerationStatus status) {
-    // TODO: Handle interfaces
-    if (type.isInterface())
+    final Set<Class<?>> visitedTypesInBranch = new HashSet<Class<?>>(visitedTypes);
+    if (!isSupported(type) || !visitedTypesInBranch.add(type))
       return null;
-    return generate(type, new HashSet<>(), random, status);
-  }
 
-  /**
-   * Generates an {@link ObjectDescription} of the given type. First tries to
-   * generate a real object using {@link #repository} and convert it to a
-   * {@link ObjectDescription}. If no generator is available, it explicitly
-   * creates an object description for the given type and recursively initialises
-   * its fields using this method.
-   * 
-   * @param type         Type of object to create.
-   * @param visitedTypes
-   * @param random       {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
-   * @param status       {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
-   * @return Counterexample object description.
-   */
-  private ObjectDescription generate(final Class<?> type, final Set<Class<?>> visitedTypes,
-      final SourceOfRandomness random, final GenerationStatus status) {
-    if (visitedTypes.contains(type))
-      return null;
+    try {
+      return repository.type(type).generate(random, status);
+    } catch (final Throwable e) {
+      logger.trace("Could not use JQF native generator.", e);
+    }
+
+    if (type.isArray()) {
+      final int length = Math.max(0, Math.min(ARRAY_SIZE_LIMIT, repository.type(int.class).generate(random, status)));
+      final Object array = Array.newInstance(type.getComponentType(), length);
+      for (int i = 0; i < length; ++i) {
+        final Object value = generate(random, status, classLoader, objenesis, type, visitedTypesInBranch,
+            generationContext);
+        Array.set(array, i, value);
+      }
+      return array;
+    }
 
     final Object object;
     try {
-      object = generateObject(type, random, status);
-    } catch (final Throwable e) {
-      logger.trace("Could not use native generator.", e);
-      return generateObjectDescription(type, visitedTypes, random, status);
-    }
-
-    return toObjectDescription(object);
-  }
-
-  /**
-   * Generates an {@link ObjectDescription} for a type which no generator is
-   * available in {@link #repository}.
-   * 
-   * @param type         Type of the object to generate.
-   * @param visitedTypes
-   * @param random       Source of randomness to generate field values.
-   * @param status       {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
-   * @return Counterexample {@link ObjectDescription} of the given type.
-   */
-  private ObjectDescription generateObjectDescription(final Class<?> type, final Set<Class<?>> visitedTypes,
-      final SourceOfRandomness random, final GenerationStatus status) {
-    if (random.nextBoolean()) {
+      object = objenesis.apply(type);
+    } catch (final MockitoException e) {
+      logger.warn("Could not instantiate part of counterexample.", e);
       return null;
     }
-
-    final ObjectDescription objectDescription = new ObjectDescription(type.getName());
-    Class<?> cls = type;
-    while (cls != null) {
-      visitedTypes.add(type);
-      setFields(objectDescription, cls, visitedTypes, random, status);
-      cls = cls.getSuperclass();
-    }
-    return objectDescription;
-  }
-
-  /**
-   * Initialises all fields of the given {@link ObjectDescription} counterexample.
-   * 
-   * @param objectDescription Counterexample object to be initialised.
-   * @param cls               Type of {@code objectDescription}.
-   * @param visitedTypes
-   * @param random            {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
-   * @param status            {@link Generator#generate(SourceOfRandomness, GenerationStatus)}
-   */
-  private void setFields(final ObjectDescription objectDescription, final Class<?> cls,
-      final Set<Class<?>> visitedTypes, final SourceOfRandomness random, final GenerationStatus status) {
-    for (final Field field : Fields.getInstance(cls)) {
-      field.setAccessible(true);
-      final String name = field.getName();
+    for (final Field field : Fields.getInstance(type)) {
       final Class<?> fieldType = field.getType();
-      if (Literals.isLiteralType(fieldType)) {
-        objectDescription.LiteralFields.put(name, generateObject(fieldType, random, status));
-      } else {
-        objectDescription.ObjectFields.put(name, generate(fieldType, visitedTypes, random, status));
-      }
-    }
-  }
+      if (!isSupported(fieldType))
+        continue;
 
-  /**
-   * Converts a concrete object to a classloader-agnostic counterexample.
-   * 
-   * @param object Concrete object to convert.
-   * @return Equivalent classloader-agnostic representation.
-   */
-  private static ObjectDescription toObjectDescription(final Object object) {
-    if (object == null) {
-      return null;
-    }
-
-    Class<?> cls = Polymorphism.getFactoryType(object);
-    final ObjectDescription description = new ObjectDescription(cls.getName());
-    while (cls != null) {
-      setFields(description, cls, object);
-      cls = cls.getSuperclass();
-    }
-
-    return description;
-  }
-
-  /**
-   * Populates the fields of the given {@code description} with the values of
-   * {@code object}.
-   * 
-   * @param description Counterexample to populate.
-   * @param cls         Type of {@code description}.
-   * @param object      Observed values to turn into counterexample fields.
-   */
-  private static void setFields(final ObjectDescription description, final Class<?> cls, final Object object) {
-    for (final Field field : Fields.getInstance(cls)) {
-      field.setAccessible(true);
-      final String name = field.getName();
-      Object value;
+      final Object value = generate(random, status, classLoader, objenesis, fieldType,
+          visitedTypesInBranch, generationContext);
       try {
-        value = field.get(object);
-      } catch (IllegalAccessException e) {
-        throw new IllegalArgumentException(e);
-      }
-      if (Literals.isLiteralType(field.getType())) {
-        description.LiteralFields.put(name, value);
-      } else {
-        description.ObjectFields.put(name, toObjectDescription(value));
+        Fields.set(type, object, field.getName(), value);
+      } catch (final NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
+        logger.warn("Could not set counterexample member.", e);
       }
     }
+    return object;
   }
 
   @Override
   public Generator<Counterexample> copy() {
     return new CounterexampleGenerator(repository, instanceType, parameterTypes);
+  }
+
+  private static boolean isSupported(final Class<?> cls) {
+    return !Reference.class.isAssignableFrom(cls);
   }
 }

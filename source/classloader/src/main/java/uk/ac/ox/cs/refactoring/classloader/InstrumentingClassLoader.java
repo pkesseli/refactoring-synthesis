@@ -9,6 +9,7 @@ import java.security.CodeSigner;
 import java.security.CodeSource;
 import java.security.PermissionCollection;
 import java.security.ProtectionDomain;
+import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 
@@ -20,6 +21,14 @@ import org.apache.commons.io.IOUtils;
  * their respective wrapped {@link ClassLoader}s.
  */
 public class InstrumentingClassLoader extends IsolatedClassLoader {
+
+  /**
+   * Do not instrument any classes with these prefixes, and instead load them in
+   * {@link #wrapped} directly. This breaks isolation e.g. for Mockito, but is a
+   * necessary compromise since loading Mockito in isolated class loaders simply
+   * does not scale - its class initialisers are too computationally expensive.
+   */
+  private static final String[] SKIPPED_PREFIXES = { "org.mockito." };
 
   /**
    * {@link ClassFileTransformer} to apply to all loaded classes.
@@ -49,6 +58,14 @@ public class InstrumentingClassLoader extends IsolatedClassLoader {
    */
   private static String getClassFileName(final String name) {
     return name.replace(JavaLanguage.PACKAGE_SEPARATOR, JavaLanguage.RESOURCE_SEPARATOR).concat(".class");
+  }
+
+  @Override
+  public Class<?> loadClass(final String name) throws ClassNotFoundException {
+    if (Arrays.stream(SKIPPED_PREFIXES).anyMatch(name::startsWith))
+      return wrapped.loadClass(name);
+
+    return super.loadClass(name);
   }
 
   @Override

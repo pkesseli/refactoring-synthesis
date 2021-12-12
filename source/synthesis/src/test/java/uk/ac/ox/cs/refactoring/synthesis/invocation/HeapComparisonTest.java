@@ -3,6 +3,8 @@ package uk.ac.ox.cs.refactoring.synthesis.invocation;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.benchmark.Benchmarks;
+import uk.ac.ox.cs.refactoring.synthesis.counterexample.ObjenesisFactory;
 import uk.ac.ox.cs.refactoring.synthesis.factory.ObjectFactory;
 
 public class HeapComparisonTest {
@@ -100,5 +103,31 @@ public class HeapComparisonTest {
       assertTrue(
           HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs), new ExecutionResult(rhsClassLoader, rhs)));
     }
+  }
+
+  @Test
+  void recursion() throws Exception {
+    final BiConsumer<Object, Object> lhs = ObjectFactory.create(lhsClassLoader, Benchmarks.OBJECT_ALIASING);
+    lhs.accept(lhs, lhs);
+    final BiConsumer<Object, Object> rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.OBJECT_ALIASING);
+    rhs.accept(rhs, rhs);
+    assertTrue(HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs),
+        new ExecutionResult(rhsClassLoader, rhs)));
+  }
+
+  @Test
+  void interfaceMock() throws Exception {
+    final Object lhs = ObjenesisFactory.createObjenesis(lhsClassLoader).apply(ItemListener.class);
+    final Object rhs = ObjenesisFactory.createObjenesis(rhsClassLoader).apply(ItemListener.class);
+    assertTrue(HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs),
+        new ExecutionResult(rhsClassLoader, rhs)));
+  }
+
+  @Test
+  void classMock() throws Exception {
+    final Object lhs = ObjenesisFactory.createObjenesis(lhsClassLoader).apply(MouseAdapter.class);
+    final Object rhs = ObjenesisFactory.createObjenesis(rhsClassLoader).apply(MouseAdapter.class);
+    assertTrue(HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs),
+        new ExecutionResult(rhsClassLoader, rhs)));
   }
 }

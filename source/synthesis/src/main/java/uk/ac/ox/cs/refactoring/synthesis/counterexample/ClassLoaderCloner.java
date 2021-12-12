@@ -8,17 +8,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Fields;
 
 /** Helper to clone an object into the context of a class loader. */
 public class ClassLoaderCloner {
 
-  /** Substring contained in lambda class names. */
-  private static final String LAMBDA_MARKER = "$$Lambda";
-
-  /** Substring contained in generated proxy classes. */
-  private static final String PROXY_MARKER = "$Proxy";
+  /** Sink for warnings. */
+  private static final Logger logger = LoggerFactory.getLogger(ClassLoaderCloner.class);
 
   /**
    * Isolated class loader in which classes for creating cloned objects should be
@@ -55,12 +55,11 @@ public class ClassLoaderCloner {
       return null;
 
     final Class<?> cls = object.getClass();
-    final String name = cls.getName();
-    if (name.contains(LAMBDA_MARKER) || name.contains(PROXY_MARKER)) {
-      if (ClassLoaders.isUserClass(classLoader, cls))
-        throw new IllegalArgumentException("Lambdas in counterexamples are not allowed");
-      else
-        return object;
+    if (Polymorphism.isDynamic(cls)) {
+      if (ClassLoaders.isUserClass(classLoader, cls)) {
+        logger.warn("Lambdas in user classes are not yet supported.");
+      }
+      return object;
     }
 
     if (Literals.isLiteralType(cls))
@@ -82,20 +81,13 @@ public class ClassLoaderCloner {
       return clone;
     }
 
-    final Class<?> cloneClass = ClassLoaders.loadClass(classLoader, cls);
-    final Function<Class<?>, Object> objenesis = ObjenesisFactory.createObjenesis(classLoader);
-    final Thread currentThread = Thread.currentThread();
-    final ClassLoader originalContextClassLoader = currentThread.getContextClassLoader();
-    final Object clone;
-    try {
-      clone = objenesis.apply(cloneClass);
-    } finally {
-      currentThread.setContextClassLoader(originalContextClassLoader);
-    }
+    final Class<?> cloneableClass = Polymorphism.getModelledClass(cls);
+    final Object clone = createObject(cloneableClass);
     objectsToClones.put(identityHashCode, clone);
 
+    final Class<?> cloneClass = Polymorphism.getModelledClass(clone.getClass());
     final Field[] cloneFields = Fields.getInstance(cloneClass);
-    for (final Field field : Fields.getInstance(cls)) {
+    for (final Field field : Fields.getInstance(cloneableClass)) {
       final Optional<Field> cloneField = Arrays.stream(cloneFields).filter(new FieldEquals(field)).findAny();
       if (!cloneField.isPresent())
         throw new NoSuchFieldException(field.getName());
@@ -112,5 +104,24 @@ public class ClassLoaderCloner {
       targetField.set(clone, clonedValue);
     }
     return clone;
+  }
+
+  /**
+   * Helper to apply {@link ObjenesisFactory}.
+   * 
+   * @param originalClass {@link Class} we would like to instantiate.
+   * @return Minimally initialised object of type {@code originalClass}.
+   * @throws ClassNotFoundException {@link ClassLoaders#loadClass(ClassLoader, Class)}
+   */
+  private Object createObject(final Class<?> originalClass) throws ClassNotFoundException {
+    final Class<?> cloneClass = ClassLoaders.loadClass(classLoader, originalClass);
+    final Function<Class<?>, Object> objenesis = ObjenesisFactory.createObjenesis(classLoader);
+    final Thread currentThread = Thread.currentThread();
+    final ClassLoader originalContextClassLoader = currentThread.getContextClassLoader();
+    try {
+      return objenesis.apply(cloneClass);
+    } finally {
+      currentThread.setContextClassLoader(originalContextClassLoader);
+    }
   }
 }

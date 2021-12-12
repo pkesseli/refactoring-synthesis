@@ -1,8 +1,11 @@
 package uk.ac.ox.cs.refactoring.synthesis.invocation;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Helper to generate and compare abstract reference IDs in order to compare
@@ -25,6 +28,9 @@ public class ObjectIdComparator {
    */
   private final Map<Integer, Integer> rhsIds = new HashMap<>();
 
+  /** Stores already performed comparisons, avoiding recursion. */
+  private final Set<Map.Entry<Integer, Integer>> comparisons = new HashSet<>();
+
   /**
    * Checks whether the two given objects have the same aliasing ID, and thus
    * alias with the same objects on their respective heaps.
@@ -41,25 +47,21 @@ public class ObjectIdComparator {
   }
 
   /**
-   * Indicates that both objects have been seen before on the stack, and they
-   * evaluate to the same object id on the heap.
+   * Indicates that both objects have already been compared, meaning that a
+   * subsequent comparison should default to {@code true}. If the two objects are
+   * not identical, heap comparison will fail anyway, and there is no need to
+   * repeat the comparison, especially since this might cause infinite recursion.
    * 
    * @param lhs Left hand side object to compare.
    * @param rhs Right hand side object to compare.
-   * @return {@code true} if both objects were seen before and have the same id,
-   *         {@code false} othwerwise.
+   * @return {@code true} if both objects were compared before, {@code false} othwerwise.
    */
-  public boolean hasSameExistingId(final Object lhs, final Object rhs) {
+  public boolean wereAlreadyCompared(final Object lhs, final Object rhs) {
     Objects.requireNonNull(lhs);
     Objects.requireNonNull(rhs);
-    final Integer lhsId = getExistingId(lhsIds, lhs);
-    if (lhsId == null)
-      return false;
-    final Integer rhsId = getExistingId(rhsIds, rhs);
-    if (rhsId == null)
-      return false;
-
-    return lhsId == rhsId;
+    final Map.Entry<Integer, Integer> entry = new AbstractMap.SimpleImmutableEntry<>(System.identityHashCode(lhs),
+        System.identityHashCode(rhs));
+    return !comparisons.add(entry);
   }
 
   /**
@@ -72,16 +74,5 @@ public class ObjectIdComparator {
   private static int getId(final Map<Integer, Integer> ids, final Object object) {
     final int identityHash = System.identityHashCode(object);
     return ids.computeIfAbsent(identityHash, k -> ids.size());
-  }
-
-  /**
-   * Looks up an existing object ID from the given heap.
-   * 
-   * @param ids    {@link #lhsIds} or {@link #rhsIds}.
-   * @param object Object whose existing ID to look up.
-   * @return Heap-neutral id associated with the given object, if available.
-   */
-  private static Integer getExistingId(final Map<Integer, Integer> ids, final Object object) {
-    return ids.get(System.identityHashCode(object));
   }
 }

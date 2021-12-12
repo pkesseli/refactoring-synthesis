@@ -1,6 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.invocation;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -10,13 +11,15 @@ import org.apache.commons.lang3.ClassUtils;
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Literals;
+import uk.ac.ox.cs.refactoring.synthesis.counterexample.Polymorphism;
 
 /**
  * Compares {@link ExecutionResult}s from two different heaps for equivalence.
  */
 public final class HeapComparison {
-  private HeapComparison() {
-  }
+
+  /** Byte buddy package, whose classes are assumed not relevant to state. */
+  private static final String[] PRUNED_PREFIXES = { "net.bytebuddy", "java.util.Random", "org.mockito.internal" };
 
   /**
    * Compares two {@link ExecutionResult} executed in two different
@@ -52,6 +55,9 @@ public final class HeapComparison {
     }
 
     for (final String className : lhsClassLoader.LoadedClasses) {
+      if (!isRelevant(className))
+        continue;
+
       final Class<?> lhsClass = ClassLoaders.loadClass(lhsClassLoader, className);
       final Class<?> rhsClass = ClassLoaders.loadClass(rhsClassLoader, className);
       if (!equals(comparator, null, Fields.getStatic(lhsClass), null, Fields.getStatic(rhsClass))) {
@@ -60,6 +66,17 @@ public final class HeapComparison {
     }
 
     return true;
+  }
+
+  /**
+   * Prunes classes with well-known randomness which are irrelevant to the
+   * program's state.
+   * 
+   * @param className {@link String} class name to check.
+   * @return {@code true} if the class can be ignored, {@code false} otherwise.
+   */
+  private static boolean isRelevant(final String className) {
+    return Arrays.stream(PRUNED_PREFIXES).noneMatch(className::startsWith);
   }
 
   /**
@@ -84,7 +101,7 @@ public final class HeapComparison {
       return false;
     }
 
-    if (comparator.hasSameExistingId(lhs, rhs)) {
+    if (comparator.wereAlreadyCompared(lhs, rhs)) {
       return true;
     }
     if (!isAliasingEquivalent(comparator, lhs, rhs)) {
@@ -96,10 +113,22 @@ public final class HeapComparison {
       return Objects.equals(lhs, rhs);
     }
     Class<?> rhsClass = rhs.getClass();
-    if (!lhsClass.getName().equals(rhsClass.getName())) {
+    if (!isSameClass(lhsClass, rhsClass)) {
       return false;
     }
     return equals(comparator, lhs, Fields.getInstance(lhsClass), rhs, Fields.getInstance(rhsClass));
+  }
+
+  /**
+   * Indicates whether these two class objects model the same class, even if they
+   * were loaded on different class loaders.
+   * 
+   * @param lhs {@link Class} to compared.
+   * @param rhs {@link Class} to compared.
+   * @return {@code true} if the same class, {@code false} otherwise.
+   */
+  private static boolean isSameClass(final Class<?> lhs, final Class<?> rhs) {
+    return Polymorphism.getModelledClass(lhs).getName().equals(Polymorphism.getModelledClass(rhs).getName());
   }
 
   /**
@@ -121,6 +150,11 @@ public final class HeapComparison {
       final Object rhs, final Field[] rhsFields) throws IllegalAccessException {
     for (int i = 0; i < lhsFields.length; ++i) {
       final Field lhsField = lhsFields[i];
+      final Class<?> declaringClass = lhsField.getDeclaringClass();
+      if (!isRelevant(declaringClass.getName())
+          || Polymorphism.isMockitoCodegen(declaringClass)
+          || Polymorphism.isDynamic(declaringClass))
+        continue;
       final Field rhsField = rhsFields[i];
       lhsField.setAccessible(true);
       rhsField.setAccessible(true);
@@ -163,5 +197,8 @@ public final class HeapComparison {
     for (final String missingClass : missing) {
       lhs.loadClass(missingClass);
     }
+  }
+
+  private HeapComparison() {
   }
 }

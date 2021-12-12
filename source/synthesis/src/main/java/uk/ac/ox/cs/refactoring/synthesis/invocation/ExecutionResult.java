@@ -4,6 +4,8 @@ import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 
 /**
  * Result of a method invocation, either exceptional or a return value.
+ * 
+ * TODO: Also consider {@code this} instance.
  */
 public final class ExecutionResult {
 

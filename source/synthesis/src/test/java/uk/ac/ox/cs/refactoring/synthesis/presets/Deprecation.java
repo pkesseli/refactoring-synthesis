@@ -27,6 +27,7 @@ public final class Deprecation {
     final MethodIdentifier methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, methodName,
         Arrays.asList(fullyQualifiedParameterClassNames));
     final SnippetCandidate candidate = Deprecation.synthesise(methodToRefactor);
+    System.out.println(candidate.toString());
     assertThat(candidate.toString(), containsString(expected));
   }
 }
