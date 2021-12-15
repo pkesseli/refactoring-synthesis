@@ -50,7 +50,7 @@ public final class HeapComparison {
     loadMissingClasses(rhsClassLoader, lhsClassLoader);
 
     final ObjectIdComparator comparator = new ObjectIdComparator();
-    if (!equals(comparator, lhs.Value, rhs.Value)) {
+    if (!equals(comparator, lhs.Value, rhs.Value) || !equals(comparator, lhs.Instance, rhs.Instance)) {
       return false;
     }
 

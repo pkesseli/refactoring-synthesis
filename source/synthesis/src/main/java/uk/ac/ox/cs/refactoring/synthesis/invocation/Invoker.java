@@ -55,9 +55,9 @@ public class Invoker {
     try {
       result = invokable.invoke(state.Instance, state.Arguments);
     } catch (final Throwable e) {
-      return new ExecutionResult(classLoader, e);
+      return new ExecutionResult(classLoader, state.Instance, e);
     }
-    return new ExecutionResult(classLoader, result);
+    return new ExecutionResult(classLoader, state.Instance, result);
   }
 
 }

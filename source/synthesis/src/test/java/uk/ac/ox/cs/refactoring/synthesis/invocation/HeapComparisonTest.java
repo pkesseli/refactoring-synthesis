@@ -27,8 +27,8 @@ public class HeapComparisonTest {
   void singleInt() throws Exception {
     final IntConsumer lhs = ObjectFactory.create(lhsClassLoader, Benchmarks.STATIC_INT_CONSUMER);
     final IntConsumer rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.STATIC_INT_CONSUMER);
-    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs);
-    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs);
+    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs, null);
+    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs, null);
 
     lhs.accept(10);
     rhs.accept(10);
@@ -41,8 +41,8 @@ public class HeapComparisonTest {
   void singleInteger() throws Exception {
     final Consumer<Integer> lhs = ObjectFactory.create(lhsClassLoader, Benchmarks.STATIC_INTEGER_CONSUMER);
     final Consumer<Integer> rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.STATIC_INTEGER_CONSUMER);
-    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs);
-    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs);
+    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs, null);
+    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs, null);
 
     Callable<Boolean> evaluate = () -> HeapComparison.equals(lhsResult, rhsResult);
     lhs.accept(10);
@@ -62,8 +62,8 @@ public class HeapComparisonTest {
   void biIntegerAliasing() throws Exception {
     final BiConsumer<Integer, Integer> lhs = ObjectFactory.create(lhsClassLoader, Benchmarks.INTEGER_ALIASING);
     final BiConsumer<Integer, Integer> rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.INTEGER_ALIASING);
-    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs);
-    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs);
+    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs, null);
+    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs, null);
     final Integer first = 129;
     final Integer second = 129;
 
@@ -83,8 +83,8 @@ public class HeapComparisonTest {
     final BiConsumer<Object, Object> rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.OBJECT_ALIASING);
     final Object rhsFirst = ObjectFactory.create(rhsClassLoader, Benchmarks.OBJECT_ALIASING);
     final Object rhsSecond = ObjectFactory.create(rhsClassLoader, Benchmarks.OBJECT_ALIASING);
-    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs);
-    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs);
+    final ExecutionResult lhsResult = new ExecutionResult(lhsClassLoader, lhs, null);
+    final ExecutionResult rhsResult = new ExecutionResult(rhsClassLoader, rhs, null);
 
     Callable<Boolean> evaluate = () -> HeapComparison.equals(lhsResult, rhsResult);
     lhs.accept(lhsFirst, lhsSecond);
@@ -101,7 +101,8 @@ public class HeapComparisonTest {
       Paths.get(null);
     } catch (final NullPointerException rhs) {
       assertTrue(
-          HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs), new ExecutionResult(rhsClassLoader, rhs)));
+          HeapComparison.equals(new ExecutionResult(lhsClassLoader, null, lhs),
+              new ExecutionResult(rhsClassLoader, null, rhs)));
     }
   }
 
@@ -111,23 +112,31 @@ public class HeapComparisonTest {
     lhs.accept(lhs, lhs);
     final BiConsumer<Object, Object> rhs = ObjectFactory.create(rhsClassLoader, Benchmarks.OBJECT_ALIASING);
     rhs.accept(rhs, rhs);
-    assertTrue(HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs),
-        new ExecutionResult(rhsClassLoader, rhs)));
+    assertTrue(HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs, null),
+        new ExecutionResult(rhsClassLoader, rhs, null)));
   }
 
   @Test
   void interfaceMock() throws Exception {
     final Object lhs = ObjenesisFactory.createObjenesis(lhsClassLoader).apply(ItemListener.class);
     final Object rhs = ObjenesisFactory.createObjenesis(rhsClassLoader).apply(ItemListener.class);
-    assertTrue(HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs),
-        new ExecutionResult(rhsClassLoader, rhs)));
+    assertTrue(HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs, null),
+        new ExecutionResult(rhsClassLoader, rhs, null)));
+
+    final Object other = new Object();
+    assertFalse(HeapComparison.equals(new ExecutionResult(lhsClassLoader, other, null),
+        new ExecutionResult(rhsClassLoader, rhs, null)));
   }
 
   @Test
   void classMock() throws Exception {
     final Object lhs = ObjenesisFactory.createObjenesis(lhsClassLoader).apply(MouseAdapter.class);
     final Object rhs = ObjenesisFactory.createObjenesis(rhsClassLoader).apply(MouseAdapter.class);
-    assertTrue(HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs),
-        new ExecutionResult(rhsClassLoader, rhs)));
+    assertTrue(HeapComparison.equals(new ExecutionResult(lhsClassLoader, lhs, null),
+        new ExecutionResult(rhsClassLoader, rhs, null)));
+
+    final Object other = new Object();
+    assertFalse(HeapComparison.equals(new ExecutionResult(lhsClassLoader, other, null),
+        new ExecutionResult(rhsClassLoader, rhs, null)));
   }
 }

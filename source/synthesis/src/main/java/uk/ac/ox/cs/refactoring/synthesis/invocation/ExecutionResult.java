@@ -10,6 +10,11 @@ import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 public final class ExecutionResult {
 
   /**
+   * Instance on which the method was invoked. {@code null} for static methods.
+   */
+  public final Object Instance;
+
+  /**
    * Class loader in which the execution was performed.
    */
   public final IsolatedClassLoader ClassLoader;
@@ -28,27 +33,32 @@ public final class ExecutionResult {
 
   /**
    * @param classLoader {@link #ClassLoader}
+   * @param instance    {@link #Instance}
    * @param error       {@lin #Error}
    */
-  public ExecutionResult(final IsolatedClassLoader classLoader, final Throwable error) {
-    this(classLoader, error, null);
+  public ExecutionResult(final IsolatedClassLoader classLoader, final Object instance, final Throwable error) {
+    this(classLoader, instance, error, null);
   }
 
   /**
    * @param classLoader {@link #ClassLoader}
+   * @param instance    {@link #Instance}
    * @param value       {@link #Value}
    */
-  public ExecutionResult(final IsolatedClassLoader classLoader, final Object value) {
-    this(classLoader, null, value);
+  public ExecutionResult(final IsolatedClassLoader classLoader, final Object instance, final Object value) {
+    this(classLoader, instance, null, value);
   }
 
   /**
    * @param classLoader {@link #ClassLoader}
+   * @param instance    {@link #Instance}
    * @param error       {@link #Error}
    * @param value       {@link #Value}
    */
-  private ExecutionResult(final IsolatedClassLoader classLoader, final Throwable error, final Object value) {
+  private ExecutionResult(final IsolatedClassLoader classLoader, final Object instance, final Throwable error,
+      final Object value) {
     ClassLoader = classLoader;
+    Instance = instance;
     Error = error;
     Value = value;
   }

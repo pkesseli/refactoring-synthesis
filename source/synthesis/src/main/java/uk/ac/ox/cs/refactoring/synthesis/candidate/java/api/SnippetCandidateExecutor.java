@@ -27,9 +27,9 @@ public class SnippetCandidateExecutor implements CandidateExecutor<SnippetCandid
     try {
       value = candidate.Block.execute(context);
     } catch (final Exception e) {
-      return new ExecutionResult(classLoader, e);
+      return new ExecutionResult(classLoader, state.Instance, e);
     }
-    return new ExecutionResult(classLoader, value);
+    return new ExecutionResult(classLoader, state.Instance, value);
   }
 
 }
