@@ -1,12 +1,14 @@
 package uk.ac.ox.cs.refactoring.synthesis.invocation;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
@@ -17,6 +19,9 @@ import uk.ac.ox.cs.refactoring.synthesis.counterexample.Polymorphism;
  * Compares {@link ExecutionResult}s from two different heaps for equivalence.
  */
 public final class HeapComparison {
+
+  /** Sink for warnings about native {@link Object#equals(Object)} usage. */
+  private static final Logger logger = LoggerFactory.getLogger(HeapComparison.class);
 
   /** Byte buddy package, whose classes are assumed not relevant to state. */
   private static final String[] PRUNED_PREFIXES = { "net.bytebuddy", "java.util.Random", "org.mockito.internal" };
@@ -41,7 +46,7 @@ public final class HeapComparison {
       return false;
     }
     if (lhs.Error != null) {
-      return lhs.Error.getClass().getName().equals(rhs.Error.getClass().getName());
+      return rhs.Error != null && lhs.Error.getClass().getName().equals(rhs.Error.getClass().getName());
     }
 
     final IsolatedClassLoader lhsClassLoader = lhs.ClassLoader;
@@ -50,7 +55,8 @@ public final class HeapComparison {
     loadMissingClasses(rhsClassLoader, lhsClassLoader);
 
     final ObjectIdComparator comparator = new ObjectIdComparator();
-    if (!equals(comparator, lhs.Value, rhs.Value) || !equals(comparator, lhs.Instance, rhs.Instance)) {
+    if (!equals(comparator, lhsClassLoader, lhs.Value, rhsClassLoader, rhs.Value)
+        || !equals(comparator, lhsClassLoader, lhs.Instance, rhsClassLoader, rhs.Instance)) {
       return false;
     }
 
@@ -60,7 +66,8 @@ public final class HeapComparison {
 
       final Class<?> lhsClass = ClassLoaders.loadClass(lhsClassLoader, className);
       final Class<?> rhsClass = ClassLoaders.loadClass(rhsClassLoader, className);
-      if (!equals(comparator, null, Fields.getStatic(lhsClass), null, Fields.getStatic(rhsClass))) {
+      if (!equals(comparator, lhsClassLoader, null, Fields.getStatic(lhsClass), rhsClassLoader, null,
+          Fields.getStatic(rhsClass))) {
         return false;
       }
     }
@@ -92,7 +99,8 @@ public final class HeapComparison {
    * @throws IllegalAccessException if a field cannot be accessed reflectively for
    *                                value comparison.
    */
-  private static boolean equals(final ObjectIdComparator comparator, final Object lhs, final Object rhs)
+  private static boolean equals(final ObjectIdComparator comparator, final ClassLoader lhsClassLoader, final Object lhs,
+      final ClassLoader rhsClassLoader, final Object rhs)
       throws IllegalAccessException {
     if (lhs == null) {
       return rhs == null;
@@ -110,13 +118,49 @@ public final class HeapComparison {
 
     Class<?> lhsClass = lhs.getClass();
     if (Literals.isLiteralType(lhsClass)) {
-      return Objects.equals(lhs, rhs);
+      return lhs.equals(rhs);
     }
     Class<?> rhsClass = rhs.getClass();
     if (!isSameClass(lhsClass, rhsClass)) {
       return false;
     }
-    return equals(comparator, lhs, Fields.getInstance(lhsClass), rhs, Fields.getInstance(rhsClass));
+
+    if (shouldUseNativeEquals(lhsClassLoader, lhsClass))
+      try {
+        final boolean nativeEquals = lhs.equals(rhs);
+        if (!nativeEquals) {
+          return lhs.equals(rhs);
+        }
+        return nativeEquals;
+      } catch (final Throwable e) {
+        logger.warn("Could not use native equals operation.", e);
+      }
+
+    return equals(comparator, lhsClassLoader, lhs, Fields.getInstance(lhsClass), rhsClassLoader, rhs,
+        Fields.getInstance(rhsClass));
+  }
+
+  /**
+   * For JCL classes we trust {@link Object#equals(Object)} implementations, if
+   * they do not throw and if the compared type explicitly declares it.
+   * 
+   * @param classLoader Used to decide if the class is from the JCL.
+   * @param cls         {@link Class} to examine.
+   * @return {@code true} if the class' {@link Object#equals(Object)} operation
+   *         should be used.
+   */
+  static boolean shouldUseNativeEquals(final ClassLoader classLoader, final Class<?> cls) {
+    if (ClassLoaders.isUserClass(classLoader, cls))
+      return false;
+
+    final Class<?> superclass = cls.getSuperclass();
+    if (superclass == null || !"java.lang.Object".equals(superclass.getName()))
+      return false;
+
+    if (Arrays.stream(cls.getInterfaces()).map(Class::getName).noneMatch("java.lang.Comparable"::equals))
+      return false;
+
+    return Arrays.stream(cls.getDeclaredMethods()).map(Method::getName).anyMatch("equals"::equals);
   }
 
   /**
@@ -146,8 +190,9 @@ public final class HeapComparison {
    *         respective heaps.
    * @throws IllegalAccessException if a field cannot be accessed.
    */
-  private static boolean equals(final ObjectIdComparator comparator, final Object lhs, final Field[] lhsFields,
-      final Object rhs, final Field[] rhsFields) throws IllegalAccessException {
+  private static boolean equals(final ObjectIdComparator comparator, final ClassLoader lhsClassLoader, final Object lhs,
+      final Field[] lhsFields,
+      final ClassLoader rhsClassLoader, final Object rhs, final Field[] rhsFields) throws IllegalAccessException {
     for (int i = 0; i < lhsFields.length; ++i) {
       final Field lhsField = lhsFields[i];
       final Class<?> declaringClass = lhsField.getDeclaringClass();
@@ -158,7 +203,7 @@ public final class HeapComparison {
       final Field rhsField = rhsFields[i];
       lhsField.setAccessible(true);
       rhsField.setAccessible(true);
-      if (!equals(comparator, lhsField.get(lhs), rhsField.get(rhs))) {
+      if (!equals(comparator, lhsClassLoader, lhsField.get(lhs), rhsClassLoader, rhsField.get(rhs))) {
         return false;
       }
     }

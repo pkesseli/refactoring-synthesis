@@ -1,5 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.api;
 
+import java.lang.reflect.InvocationTargetException;
+
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
@@ -26,6 +28,8 @@ public class SnippetCandidateExecutor implements CandidateExecutor<SnippetCandid
     final Object value;
     try {
       value = candidate.Block.execute(context);
+    } catch (final InvocationTargetException e) {
+      return new ExecutionResult(classLoader, state.Instance, e.getCause());
     } catch (final Exception e) {
       return new ExecutionResult(classLoader, state.Instance, e);
     }

@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.random.RandomnessAccessor;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Fields;
 
 /**
@@ -33,7 +34,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
   private static final int ARRAY_SIZE_LIMIT = 255;
 
   /** Limits the number of objects we generate per counterexample component. */
-  private static final int MAX_OBJECT_COUNT = 10;
+  private static final byte MAX_OBJECT_DEPTH = 5;
 
   /** Repository of all available generators. Used to generate literal values. */
   private final GeneratorRepository repository;
@@ -90,7 +91,8 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
     if (type == null)
       return null;
 
-    return generate(random, status, classLoader, objenesis, type, new HashSet<>(), new GenerationContext());
+    final int depth = RandomnessAccessor.nextByte(random, (byte) 2, MAX_OBJECT_DEPTH);
+    return generate(random, status, classLoader, objenesis, type, new HashSet<>(), depth);
   }
 
   /**
@@ -109,10 +111,10 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
    */
   private Object generate(final SourceOfRandomness random, final GenerationStatus status, final ClassLoader classLoader,
       final Function<Class<?>, Object> objenesis, final Class<?> type,
-      final Set<Class<?>> visitedTypes, final GenerationContext generationContext) {
+      final Set<Class<?>> visitedTypes, final int depth) {
 
     if (!Literals.isLiteralType(type)) {
-      if (generationContext.ObjectCount++ >= MAX_OBJECT_COUNT)
+      if (depth <= 0)
         return null;
     }
 
@@ -127,11 +129,11 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
     }
 
     if (type.isArray()) {
-      final int length = Math.max(0, Math.min(ARRAY_SIZE_LIMIT, repository.type(int.class).generate(random, status)));
+      final int length = RandomnessAccessor.nextInt(random, ARRAY_SIZE_LIMIT);
       final Object array = Array.newInstance(type.getComponentType(), length);
       for (int i = 0; i < length; ++i) {
         final Object value = generate(random, status, classLoader, objenesis, type, visitedTypesInBranch,
-            generationContext);
+            depth - 1);
         Array.set(array, i, value);
       }
       return array;
@@ -150,7 +152,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
         continue;
 
       final Object value = generate(random, status, classLoader, objenesis, fieldType,
-          visitedTypesInBranch, generationContext);
+          visitedTypesInBranch, depth - 1);
       try {
         Fields.set(type, object, field.getName(), value);
       } catch (final NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {

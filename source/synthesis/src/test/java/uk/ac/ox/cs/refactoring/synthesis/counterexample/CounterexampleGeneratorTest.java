@@ -1,7 +1,13 @@
 package uk.ac.ox.cs.refactoring.synthesis.counterexample;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyByte;
+import static org.mockito.Mockito.when;
 
+import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
 import java.util.Collections;
 
@@ -27,6 +33,7 @@ class CounterexampleGeneratorTest {
 
   @Test
   void checkboxGroup() throws Exception {
+    when(sourceOfRandomness.nextByte(anyByte(), anyByte())).thenReturn((byte) 2).thenReturn((byte) 0);
     final CounterexampleGenerator generator = new CounterexampleGenerator(repository, CheckboxGroup.class,
         Collections.emptyList());
     final Counterexample counterexample = generator.generate(sourceOfRandomness,
@@ -40,5 +47,10 @@ class CounterexampleGeneratorTest {
     final State state = stateFatory.create(classLoader, counterexample);
     assertNotNull(state);
     assertNotNull(state.Instance);
+    final CheckboxGroup checkboxGroup = (CheckboxGroup) state.Instance;
+    final Checkbox selectedCheckbox = checkboxGroup.getSelectedCheckbox();
+    assertNotNull(selectedCheckbox);
+    assertThat(selectedCheckbox.getItemListeners(), arrayContaining(notNullValue()));
+    assertThat(selectedCheckbox.getMouseListeners(), arrayContaining(notNullValue()));
   }
 }

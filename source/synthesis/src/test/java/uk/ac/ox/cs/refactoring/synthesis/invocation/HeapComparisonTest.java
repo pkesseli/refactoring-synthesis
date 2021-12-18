@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -138,5 +140,14 @@ public class HeapComparisonTest {
     final Object other = new Object();
     assertFalse(HeapComparison.equals(new ExecutionResult(lhsClassLoader, other, null),
         new ExecutionResult(rhsClassLoader, rhs, null)));
+  }
+
+  @Test
+  void shouldUseNativeEquals() {
+    final ClassLoader classLoader = HeapComparisonTest.class.getClassLoader();
+    assertFalse(HeapComparison.shouldUseNativeEquals(classLoader, HeapComparisonTest.class));
+    assertFalse(HeapComparison.shouldUseNativeEquals(classLoader, Object.class));
+    assertFalse(HeapComparison.shouldUseNativeEquals(classLoader, Vector.class));
+    assertTrue(HeapComparison.shouldUseNativeEquals(classLoader, Date.class));
   }
 }
