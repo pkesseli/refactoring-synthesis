@@ -24,19 +24,18 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
  */
 public class FuzzingSynthesis<Candidate> {
 
+  /** Sink for logging candidates. */
+  private final CandidateListener<Candidate> listener = new ConsoleCandidateListener<>();
+
   /**
    * Used to look up JQF generators necessary to construct candidates.
    */
   private final GeneratorRepository generatorRepository;
 
-  /**
-   * Fuzzer's random input stram, used to construct a default candidate.
-   */
+  /** Fuzzer's random input stram, used to construct a default candidate. */
   private final SourceOfRandomness sourceOfRandomness;
 
-  /**
-   * Explicit candidate type, used to construct a default candidate using JQF.
-   */
+  /** Explicit candidate type, used to construct a default candidate using JQF. */
   private final Class<Candidate> candidateType;
 
   /**
@@ -47,9 +46,7 @@ public class FuzzingSynthesis<Candidate> {
    */
   private final Method frameworkMethodPlaceholder;
 
-  /**
-   * Used to try candidates against counterexamples.
-   */
+  /** Used to try candidates against counterexamples. */
   private final CandidateExecutor<Candidate> executor;
 
   /**
@@ -73,8 +70,10 @@ public class FuzzingSynthesis<Candidate> {
    * Provides a default candidate to use in the absence of counterexamples.
    */
   public Candidate getDefault() {
-    return generatorRepository.type(candidateType).generate(sourceOfRandomness,
+    final Candidate initial = generatorRepository.type(candidateType).generate(sourceOfRandomness,
         new NonTrackingGenerationStatus(sourceOfRandomness));
+    listener.initial(initial);
+    return initial;
   }
 
   /**
@@ -94,7 +93,7 @@ public class FuzzingSynthesis<Candidate> {
    */
   public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples)
       throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchElementException, NoSuchFieldException {
-    final CandidateSynthesis<Candidate> frameworkMethod = new CandidateSynthesis<>(counterexamples, executor,
+    final CandidateSynthesis<Candidate> frameworkMethod = new CandidateSynthesis<>(listener, counterexamples, executor,
         frameworkMethodPlaceholder);
     final TestClass testClass = new TestClass(frameworkMethodPlaceholder.getDeclaringClass());
 

@@ -11,29 +11,29 @@ import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.HeapComparison;
 
-/**
- * Simulates a JUnit test method that JQF can fuzz to generate candidates.
- */
-public class CandidateSynthesis<Candidate> extends FrameworkMethod {
+/** Simulates a JUnit test method that JQF can fuzz to generate candidates. */
+class CandidateSynthesis<Candidate> extends FrameworkMethod {
 
-  /**
-   * Counterexamples candidates must satisfy.
-   */
+  /** Sink for candidate logging. */
+  private final CandidateListener<Candidate> listener;
+
+  /** Counterexamples candidates must satisfy. */
   private final Map<Counterexample, ExecutionResult> counterexamples;
 
-  /**
-   * Executor to run a candidate against a counterexample.
-   */
+  /** Executor to run a candidate against a counterexample. */
   private final CandidateExecutor<Candidate> executor;
 
   /**
+   * @param listener        {@link #listener}
    * @param counterexamples {@link #counterexamples}
    * @param executor        {@link #executor}
    * @param method          {@link FrameworkMethod#FrameworkMethod(Method)}
    */
-  public CandidateSynthesis(final Map<Counterexample, ExecutionResult> counterexamples,
+  CandidateSynthesis(final CandidateListener<Candidate> listener,
+      final Map<Counterexample, ExecutionResult> counterexamples,
       final CandidateExecutor<Candidate> executor, final Method method) {
     super(method);
+    this.listener = listener;
     this.executor = executor;
     this.counterexamples = counterexamples;
   }
@@ -47,10 +47,11 @@ public class CandidateSynthesis<Candidate> extends FrameworkMethod {
       final ExecutionResult expected = counterexample.getValue();
       final ExecutionResult actual = executor.execute(candidate, input);
       if (!HeapComparison.equals(expected, actual)) {
+        listener.spurious(candidate);
         return null;
       }
     }
+    listener.genuine(candidate);
     throw new AssertionFailedError("", null, candidate);
   }
-
 }
