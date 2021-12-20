@@ -25,6 +25,6 @@ public class ObjenesisWrapper implements Function<Class<?>, Object> {
     if (Polymorphism.canBeInstantiated(clazz)) {
       return objenesis.newInstance(clazz);
     }
-    return Mockito.mock(clazz);
+    return Mockito.mock(clazz, Mockito.withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS));
   }
 }
