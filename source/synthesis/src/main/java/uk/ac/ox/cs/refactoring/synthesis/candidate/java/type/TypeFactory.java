@@ -35,12 +35,14 @@ public final class TypeFactory {
     if (cls.isPrimitive()) {
       if (void.class == cls)
         return new VoidType();
-      if (int.class == cls)
-        return PrimitiveType.intType();
-      if (double.class == cls)
-        return PrimitiveType.doubleType();
       if (boolean.class == cls)
         return PrimitiveType.booleanType();
+      if (int.class == cls)
+        return PrimitiveType.intType();
+      if (long.class == cls)
+        return PrimitiveType.longType();
+      if (double.class == cls)
+        return PrimitiveType.doubleType();
       throw new IllegalArgumentException();
     }
 
@@ -110,22 +112,22 @@ public final class TypeFactory {
     if (resolvedType instanceof ResolvedPrimitiveType) {
       final ResolvedPrimitiveType primitiveType = (ResolvedPrimitiveType) resolvedType;
       switch (primitiveType) {
-      case BOOLEAN:
-        return PrimitiveType.booleanType();
-      case BYTE:
-        return PrimitiveType.byteType();
-      case CHAR:
-        return PrimitiveType.charType();
-      case DOUBLE:
-        return PrimitiveType.doubleType();
-      case FLOAT:
-        return PrimitiveType.floatType();
-      case INT:
-        return PrimitiveType.intType();
-      case LONG:
-        return PrimitiveType.longType();
-      case SHORT:
-        return PrimitiveType.shortType();
+        case BOOLEAN:
+          return PrimitiveType.booleanType();
+        case BYTE:
+          return PrimitiveType.byteType();
+        case CHAR:
+          return PrimitiveType.charType();
+        case DOUBLE:
+          return PrimitiveType.doubleType();
+        case FLOAT:
+          return PrimitiveType.floatType();
+        case INT:
+          return PrimitiveType.intType();
+        case LONG:
+          return PrimitiveType.longType();
+        case SHORT:
+          return PrimitiveType.shortType();
       }
     } else if (resolvedType instanceof ResolvedReferenceType) {
       final ResolvedReferenceType resolvedReferenceType = (ResolvedReferenceType) resolvedType;

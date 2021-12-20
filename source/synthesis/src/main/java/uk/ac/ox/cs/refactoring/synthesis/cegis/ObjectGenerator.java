@@ -13,6 +13,7 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
  * recursion though, which is why we register an explicit object factory.
  */
 public class ObjectGenerator extends Generator<Object> {
+
   public ObjectGenerator() {
     super(Object.class);
   }

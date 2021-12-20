@@ -56,7 +56,8 @@ public class CegisLoop<Candidate> {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
     final GeneratorRepository baseRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ServiceLoaderGeneratorSource())
-        .register(new ObjectGenerator());
+        .register(new ObjectGenerator())
+        .register(new OperatingSystemMXBeanGenerator());
     final GeneratorRepository verificationRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ServiceLoaderGeneratorSource())
         .register(new CounterexampleGenerator(baseRepository, generatorConfiguration.InstanceType,

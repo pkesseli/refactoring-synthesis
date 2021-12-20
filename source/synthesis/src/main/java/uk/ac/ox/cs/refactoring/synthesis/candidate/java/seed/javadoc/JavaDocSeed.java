@@ -2,6 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -23,12 +25,14 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -43,7 +47,9 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ox.cs.refactoring.classloader.JavaLanguage;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.InstructionSetSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
@@ -99,25 +105,63 @@ public class JavaDocSeed implements InstructionSetSeed {
     final MethodDeclaration method = findMethod(symbolResolver, typeSolver, parseResult);
     if (method == null)
       return;
-    final Optional<Javadoc> javadoc = method.getJavadoc();
-    if (!javadoc.isPresent())
+    final Optional<Javadoc> javadocComment = method.getJavadoc();
+    if (!javadocComment.isPresent())
       return;
 
-    final String deprecatedCodeExample = getDeprecatedCodeExample(javadoc.get());
-    if (deprecatedCodeExample == null)
-      return;
-
-    final Expression expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, parseResult, method,
-        deprecatedCodeExample);
-    final ResolvedType resolvedType = expression.calculateResolvedType();
-    final Type type = TypeFactory.create(javaParser, resolvedType);
-
-    final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, typeSolver, expression,
-        components.InvolvedClasses);
+    final Javadoc javadoc = javadocComment.get();
+    final String deprecatedCodeExample = getDeprecatedCodeExample(javadoc);
     final JavaComponents javaComponents = new JavaComponents(components);
-    javaComponents.nonnull(type, snippetComponent);
+    if (deprecatedCodeExample != null) {
+      final Expression expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, parseResult, method,
+          deprecatedCodeExample);
+      final ResolvedType resolvedType = expression.calculateResolvedType();
+      final Type type = TypeFactory.create(javaParser, resolvedType);
+
+      final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, typeSolver, expression,
+          components.InvolvedClasses);
+      javaComponents.nonnull(type, snippetComponent);
+      return;
+    }
+
+    final String deprecatedLink = getLink(javadoc);
+    if (deprecatedLink == null)
+      return;
+
+    final StringBuilder code = new StringBuilder(deprecatedLink.replace('#', JavaLanguage.PACKAGE_SEPARATOR).trim());
+    if (code.charAt(0) == '.') {
+      code.deleteCharAt(0);
+    }
+    final Expression expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, parseResult, method,
+        code.toString());
+    if (!(expression instanceof MethodCallExpr))
+      return;
+    final MethodCallExpr methodCall = (MethodCallExpr) expression;
+    final ResolvedMethodDeclaration methodDeclaration = methodCall.resolve();
+    final String fullyQualifiedClassName = methodDeclaration.declaringType().getQualifiedName();
+    final String methodName = methodDeclaration.getName();
+    final List<String> fullyQualifiedParameterClassNames = new ArrayList<>();
+    for (int i = 0; i < methodDeclaration.getNumberOfParams(); ++i) {
+      final String type = methodDeclaration.getParam(i).getType().describe();
+      fullyQualifiedParameterClassNames.add(type);
+    }
+    final Method methodToRegister = Methods.getMethod(classLoader,
+        new MethodIdentifier(fullyQualifiedClassName, methodName, fullyQualifiedParameterClassNames));
+    Invoke.register(javaComponents, methodToRegister);
   }
 
+  /**
+   * Locates the {@link MethodDeclaration} for {@link #methodToRefactor} in a
+   * parsed {@link CompilationUnit}.
+   * 
+   * @param symbolResolver Used to check whether a type matches
+   *                       {@link #methodToRefactor}.
+   * @param typeSolver     Used to compare types and signatures against
+   *                       {@link #methodToRefactor}.
+   * @param parseResult    Parsed compilation unit in which to search.
+   * @return {@link MethodDeclaration} for {@link #methodToRefactor}, if
+   *         available. {@code null} otherwise.
+   */
   private MethodDeclaration findMethod(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
       final ParseResult<CompilationUnit> parseResult) {
     return parseResult.getResult().stream().map(CompilationUnit::getTypes).flatMap(Collection::stream)
@@ -153,16 +197,40 @@ public class JavaDocSeed implements InstructionSetSeed {
   }
 
   /**
+   * Provides a Javadoc link from the given {@link Javadoc} in the context of a
+   * deprecated block.
+   * 
+   * @param javadoc Comment in which to search.
+   * @return {@link Javadoc} link reference.
+   */
+  private static String getLink(final Javadoc javadoc) {
+    return getDeprecatedInlineTags(javadoc).filter(tag -> JavadocInlineTag.Type.LINK == tag.getType())
+        .map(JavadocInlineTag::getContent).findAny().orElse(null);
+  }
+
+  /**
    * Extracts a code example in the context of a deprecated block tag.
    * 
    * @param javadoc Comment from which to extract the example.
    * @return Code example to replace the method call.
    */
   private static String getDeprecatedCodeExample(final Javadoc javadoc) {
+    return getDeprecatedInlineTags(javadoc)
+        .filter(tag -> JavadocInlineTag.Type.CODE == tag.getType()).map(JavadocInlineTag::getContent)
+        .findAny().orElse(null);
+  }
+
+  /**
+   * Provides all {@link JavadocInlineTag} in deprecated block tags in a
+   * {@link Javadoc}.
+   * 
+   * @param javadoc {@link Javadoc} in which to search.
+   * @return {@link Stream} of matching {@link JavadocInlineTag}.
+   */
+  private static Stream<JavadocInlineTag> getDeprecatedInlineTags(final Javadoc javadoc) {
     return javadoc.getBlockTags().stream().filter(b -> JavadocBlockTag.Type.DEPRECATED == b.getType())
         .map(JavadocBlockTag::getContent).map(JavadocDescription::getElements).flatMap(Collection::stream)
-        .filter(JavadocInlineTag.class::isInstance).map(JavadocInlineTag.class::cast).map(JavadocInlineTag::getContent)
-        .findAny().orElse(null);
+        .filter(JavadocInlineTag.class::isInstance).map(JavadocInlineTag.class::cast);
   }
 
   /**

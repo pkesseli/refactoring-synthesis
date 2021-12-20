@@ -11,7 +11,7 @@ public class ExtractLocal {
     synchronized (this) {
       if (numberOfEvents > 0) {
         assert message != null;
-        System.out.printf("%i events pending with message `%s`.", numberOfEvents, message);
+        System.out.printf("%d events pending with message `%s`.", numberOfEvents, message);
       }
       // Submit as many events as possible...
     }

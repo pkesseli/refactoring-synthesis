@@ -41,12 +41,16 @@ public final class ClassLoaders {
    */
   public static Class<?> loadClass(final ClassLoader classLoader, final String name) throws ClassNotFoundException {
     switch (name) {
+      case "void":
+        return void.class;
       case "boolean":
         return boolean.class;
-      case "double":
-        return double.class;
       case "int":
         return int.class;
+      case "long":
+        return long.class;
+      case "double":
+        return double.class;
     }
     return classLoader.loadClass(name);
   }

@@ -1,5 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Rectangle;
+import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -15,8 +17,8 @@ import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.VoidType;
+import com.sun.management.OperatingSystemMXBean;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -25,6 +27,7 @@ import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.Component;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.FunctionComponent;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeMethod;
@@ -49,7 +52,7 @@ public class JavaDocSeedTest {
 
     final List<Component<JavaLanguageKey, Object>> seeded = components
         .get(JavaLanguageKeys.expression(PrimitiveType.intType()), 1).collect(Collectors.toList());
-    MatcherAssert.assertThat(seeded, hasItem(isA(SnippetComponent.class)));
+    assertThat(seeded, hasItem(isA(SnippetComponent.class)));
     final Component<JavaLanguageKey, Object> component = seeded.get(0);
     final InvokeMethod invokeMethod = (InvokeMethod) component
         .construct(new Object[] { This.create(TypeFactory.create(Calendar.class)) });
@@ -71,7 +74,7 @@ public class JavaDocSeedTest {
 
     final List<Component<JavaLanguageKey, Object>> seeded = components
         .get(JavaLanguageKeys.expression(new VoidType()), 1).collect(Collectors.toList());
-    MatcherAssert.assertThat(seeded, hasItem(isA(SnippetComponent.class)));
+    assertThat(seeded, hasItem(isA(SnippetComponent.class)));
     final Component<JavaLanguageKey, Object> component = seeded.get(0);
     final InvokeMethod invokeMethod = (InvokeMethod) component.construct(
         new Object[] { new Parameter(0, PrimitiveType.intType()), This.create(TypeFactory.create(Calendar.class)) });
@@ -93,7 +96,7 @@ public class JavaDocSeedTest {
     javaDocSeed(methodIdentifier);
     final List<Component<JavaLanguageKey, Object>> seeded = components
         .get(JavaLanguageKeys.expression(PrimitiveType.booleanType()), 1).collect(Collectors.toList());
-    MatcherAssert.assertThat(seeded, hasItem(isA(SnippetComponent.class)));
+    assertThat(seeded, hasItem(isA(SnippetComponent.class)));
     final Component<JavaLanguageKey, Object> component = seeded.get(0);
     final InvokeMethod invokeMethod = (InvokeMethod) component
         .construct(new Object[] { new Parameter(0, PrimitiveType.intType()), new Parameter(1, PrimitiveType.intType()),
@@ -104,6 +107,24 @@ public class JavaDocSeedTest {
     final ExecutionContext context = new ExecutionContext(classLoader, state);
     final boolean actual = (boolean) invokeMethod.evaluate(context);
     assertTrue(actual);
+  }
+
+  @Test
+  void comSunManagementOperatingSystemMXBean() throws Exception {
+    final MethodIdentifier methodIdentifier = new MethodIdentifier("com.sun.management.OperatingSystemMXBean",
+        "getFreePhysicalMemorySize", Collections.emptyList());
+    javaDocSeed(methodIdentifier);
+
+    final List<Component<JavaLanguageKey, Object>> seeded = components
+        .get(JavaLanguageKeys.expression(PrimitiveType.longType()), 1).collect(Collectors.toList());
+    assertThat(seeded, hasItem(isA(FunctionComponent.class)));
+    final InvokeMethod invokeMethod = (InvokeMethod) seeded.get(0)
+        .construct(new Object[] { This.create(TypeFactory.create(OperatingSystemMXBean.class)) });
+
+    final OperatingSystemMXBean bean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+    final State state = new State(bean);
+    final long actual = (long) invokeMethod.evaluate(new ExecutionContext(classLoader, state));
+    assertEquals(bean.getFreeMemorySize(), actual);
   }
 
   private void javaDocSeed(final MethodIdentifier methodIdentifier)
