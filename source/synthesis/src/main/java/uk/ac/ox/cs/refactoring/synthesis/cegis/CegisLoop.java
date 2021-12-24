@@ -42,6 +42,10 @@ public class CegisLoop<Candidate> {
    */
   private final Map<Counterexample, ExecutionResult> counterexamples = new HashMap<>();
 
+  static {
+    System.setProperty("jqf.ei.MAX_INPUT_SIZE", "20480");
+  }
+
   /**
    * @param executor               {@link CandidateExecutor} used to try
    *                               candidates against inputs.
@@ -55,8 +59,8 @@ public class CegisLoop<Candidate> {
       final GeneratorConfiguration generatorConfiguration, final Class<Candidate> candidateType) {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
     final GeneratorRepository baseRepository = new GeneratorRepository(sourceOfRandomness)
-        .register(new ServiceLoaderGeneratorSource())
         .register(new ObjectGenerator())
+        .register(new ServiceLoaderGeneratorSource())
         .register(new OperatingSystemMXBeanGenerator());
     final GeneratorRepository verificationRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ServiceLoaderGeneratorSource())

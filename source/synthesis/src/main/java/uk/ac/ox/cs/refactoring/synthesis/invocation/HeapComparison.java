@@ -24,7 +24,15 @@ public final class HeapComparison {
   private static final Logger logger = LoggerFactory.getLogger(HeapComparison.class);
 
   /** Byte buddy package, whose classes are assumed not relevant to state. */
-  private static final String[] PRUNED_PREFIXES = { "net.bytebuddy", "java.util.Random", "org.mockito.internal" };
+  private static final String[] PRUNED_PREFIXES = {
+      "net.bytebuddy",
+      "java.util.Random",
+      "org.mockito.internal",
+      "edu.berkeley.cs.jqf.fuzz.junit.quickcheck.InputStreamGenerator",
+      "edu.berkeley.cs.jqf.fuzz.junit.quickcheck.FastSourceOfRandomness",
+      "edu.berkeley.cs.jqf.fuzz.guidance.StreamBackedRandom",
+      "edu.berkeley.cs.jqf.fuzz.ei.ZestGuidance"
+  };
 
   /**
    * Compares two {@link ExecutionResult} executed in two different
@@ -127,11 +135,7 @@ public final class HeapComparison {
 
     if (shouldUseNativeEquals(lhsClassLoader, lhsClass))
       try {
-        final boolean nativeEquals = lhs.equals(rhs);
-        if (!nativeEquals) {
-          return lhs.equals(rhs);
-        }
-        return nativeEquals;
+        return lhs.equals(rhs);
       } catch (final Throwable e) {
         logger.warn("Could not use native equals operation.", e);
       }

@@ -30,9 +30,6 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
   /** Sink for errors about accessing the source files. */
   private static final Logger logger = LoggerFactory.getLogger(CounterexampleGenerator.class);
 
-  /** Static limit on array lengths we chose to explore. */
-  private static final int ARRAY_SIZE_LIMIT = 255;
-
   /** Limits the number of objects we generate per counterexample component. */
   private static final byte MAX_OBJECT_DEPTH = 5;
 
@@ -129,7 +126,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
     }
 
     if (type.isArray()) {
-      final int length = RandomnessAccessor.nextInt(random, ARRAY_SIZE_LIMIT);
+      final int length = (int) random.nextByte(Byte.MIN_VALUE, Byte.MAX_VALUE) - (int) Byte.MIN_VALUE;
       final Object array = Array.newInstance(type.getComponentType(), length);
       for (int i = 0; i < length; ++i) {
         final Object value = generate(random, status, classLoader, objenesis, type, visitedTypesInBranch,

@@ -9,12 +9,9 @@ import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.TestClass;
 import org.opentest4j.AssertionFailedError;
 
-import edu.berkeley.cs.jqf.fuzz.guidance.Guidance;
-import edu.berkeley.cs.jqf.fuzz.junit.GuidedFuzzing;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.FuzzStatement;
-import edu.berkeley.cs.jqf.fuzz.random.NoGuidance;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
-import uk.ac.ox.cs.refactoring.synthesis.cegis.FuzzingConfiguration;
+import uk.ac.ox.cs.refactoring.synthesis.cegis.ZestFuzzingConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
@@ -62,9 +59,28 @@ public class FuzzingVerification<Candidate> {
     final CandidateTest<Candidate> frameworkMethod = new CandidateTest<>(candidate, executor, invoker);
     final TestClass testClass = new TestClass(frameworkMethod.getDeclaringClass());
     final Map<Counterexample, ExecutionResult> counterexamples = new HashMap<>();
-    final Guidance guidance = new NoGuidance(GuidedFuzzing.DEFAULT_MAX_TRIALS, null);
-    final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository, guidance);
-    try (final FuzzingConfiguration config = new FuzzingConfiguration(guidance)) {
+    fuzz(frameworkMethod, testClass, counterexamples, 10, 100);
+    if (counterexamples.isEmpty())
+      fuzz(frameworkMethod, testClass, counterexamples, 1, 400);
+    return counterexamples;
+  }
+
+  /**
+   * 
+   * @param frameworkMethod
+   * @param testClass
+   * @param counterexamples
+   * @param maximumNumberOfCounterexamples
+   * @param maximumNumberOfInputs
+   */
+  private void fuzz(final CandidateTest<Candidate> frameworkMethod, final TestClass testClass,
+      final Map<Counterexample, ExecutionResult> counterexamples, final long maximumNumberOfCounterexamples,
+      final long maximumNumberOfInputs) {
+    final String name = "verification";
+    try (final ZestFuzzingConfiguration configuration = new ZestFuzzingConfiguration(name,
+        VerificationGuidance.createFactory(maximumNumberOfCounterexamples, maximumNumberOfInputs))) {
+      final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository,
+          configuration.Guidance);
       fuzzStatement.evaluate();
     } catch (final AssertionFailedError e) {
       storeCounterexample(counterexamples, e);
@@ -79,7 +95,6 @@ public class FuzzingVerification<Candidate> {
     } catch (final Throwable e) {
       throw new IllegalStateException(e);
     }
-    return counterexamples;
   }
 
   /**

@@ -8,24 +8,16 @@ import edu.berkeley.cs.jqf.fuzz.guidance.GuidanceException;
 import edu.berkeley.cs.jqf.fuzz.guidance.Result;
 import edu.berkeley.cs.jqf.instrument.tracing.events.TraceEvent;
 
-/**
- * Wrapper for {@link Guidance} terminating if a solution is found.
- */
+/** Wrapper for {@link Guidance} terminating if a solution is found. */
 public class SynthesisGuidance implements Guidance {
 
-  /**
-   * Wrapped {@link Guidance}.
-   */
+  /** Wrapped {@link Guidance}. */
   private final Guidance guidance;
 
-  /**
-   * Indicates whether any valid solution was already found.
-   */
+  /** Indicates whether any valid solution was already found. */
   private boolean hasSolution = false;
 
-  /**
-   * @param guidance {@link #guidance}
-   */
+  /** @param guidance {@link #guidance} */
   public SynthesisGuidance(final Guidance guidance) {
     this.guidance = guidance;
   }
