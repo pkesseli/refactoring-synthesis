@@ -12,8 +12,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>parser</artifactId>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>javaparser-core</artifactId>
     </dependency>
   </dependencies>
 
