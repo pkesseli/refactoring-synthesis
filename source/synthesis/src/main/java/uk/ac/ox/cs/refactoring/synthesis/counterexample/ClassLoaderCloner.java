@@ -70,6 +70,11 @@ public class ClassLoaderCloner {
     }
 
     final int identityHashCode = System.identityHashCode(object);
+    final Object existingClone = objectsToClones.get(identityHashCode);
+    if (existingClone != null) {
+      return existingClone;
+    }
+
     if (cls.isArray()) {
       final int length = Array.getLength(object);
       final Object clone = Array.newInstance(cls.getComponentType(), length);
@@ -97,11 +102,11 @@ public class ClassLoaderCloner {
       targetField.setAccessible(true);
 
       final Object value = field.get(object);
-      Object clonedValue = objectsToClones.get(System.identityHashCode(value));
-      if (clonedValue == null)
-        clonedValue = clone(value);
-
-      targetField.set(clone, clonedValue);
+      try {
+        targetField.set(clone, clone(value));
+      } catch(final IllegalArgumentException e) {
+        throw e;
+      }
     }
     return clone;
   }
