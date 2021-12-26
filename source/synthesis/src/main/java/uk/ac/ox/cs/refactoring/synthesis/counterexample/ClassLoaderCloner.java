@@ -3,7 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.counterexample;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -30,7 +30,8 @@ public class ClassLoaderCloner {
    * Stores all created objects so that aliasing references can be looked up
    * instead of being recreated.
    */
-  private final Map<Integer, Object> objectsToClones = new HashMap<>();
+  private final Map<Object, Object> objectsToClones = new IdentityHashMap<>();
+
 
   /** @param classLoader {@link #classLoader} */
   public ClassLoaderCloner(final ClassLoader classLoader) {
@@ -69,8 +70,7 @@ public class ClassLoaderCloner {
       return ClassLoaders.loadClass(classLoader, (Class<?>) object);
     }
 
-    final int identityHashCode = System.identityHashCode(object);
-    final Object existingClone = objectsToClones.get(identityHashCode);
+    final Object existingClone = objectsToClones.get(object);
     if (existingClone != null) {
       return existingClone;
     }
@@ -78,7 +78,7 @@ public class ClassLoaderCloner {
     if (cls.isArray()) {
       final int length = Array.getLength(object);
       final Object clone = Array.newInstance(cls.getComponentType(), length);
-      objectsToClones.put(identityHashCode, clone);
+      objectsToClones.put(object, clone);
 
       for (int i = 0; i < length; ++i) {
         Array.set(clone, i, clone(Array.get(object, i)));
@@ -88,7 +88,7 @@ public class ClassLoaderCloner {
 
     final Class<?> cloneableClass = Polymorphism.getModelledClass(cls);
     final Object clone = createObject(cloneableClass);
-    objectsToClones.put(identityHashCode, clone);
+    objectsToClones.put(object, clone);
 
     final Class<?> cloneClass = Polymorphism.getModelledClass(clone.getClass());
     final Field[] cloneFields = Fields.getInstance(cloneClass);

@@ -1,8 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.invocation;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -17,19 +16,14 @@ import java.util.Set;
  * classes such as dates or strings are loaded by the system class loader.
  */
 public class ObjectIdComparator {
-  /**
-   * Maps {@link System#identityHashCode(Object) system hash codes} of
-   * <code>lhs</code> heap to abstract reference ids.
-   */
-  private final Map<Integer, Integer> lhsIds = new HashMap<>();
+  /** Maps objects by reference equality to abstract reference ids. */
+  private final Map<Object, Integer> lhsIds = new IdentityHashMap<>();
 
-  /**
-   * {@link #lhsIds}
-   */
-  private final Map<Integer, Integer> rhsIds = new HashMap<>();
+  /** {@link #lhsIds} */
+  private final Map<Object, Integer> rhsIds = new IdentityHashMap<>();
 
   /** Stores already performed comparisons, avoiding recursion. */
-  private final Set<Map.Entry<Integer, Integer>> comparisons = new HashSet<>();
+  private final Map<Object, Set<Object>> comparisons = new IdentityHashMap<>();
 
   /**
    * Checks whether the two given objects have the same aliasing ID, and thus
@@ -54,14 +48,36 @@ public class ObjectIdComparator {
    * 
    * @param lhs Left hand side object to compare.
    * @param rhs Right hand side object to compare.
-   * @return {@code true} if both objects were compared before, {@code false} othwerwise.
+   * @return {@code true} if both objects were compared before, {@code false}
+   *         othwerwise.
    */
   public boolean wereAlreadyCompared(final Object lhs, final Object rhs) {
     Objects.requireNonNull(lhs);
     Objects.requireNonNull(rhs);
-    final Map.Entry<Integer, Integer> entry = new AbstractMap.SimpleImmutableEntry<>(System.identityHashCode(lhs),
-        System.identityHashCode(rhs));
-    return !comparisons.add(entry);
+    final boolean wasLhsComparedAgainstRhs = addComparison(lhs, rhs);
+    final boolean wasRhsComparedAgainstLhs = addComparison(rhs, lhs);
+    return wasLhsComparedAgainstRhs || wasRhsComparedAgainstLhs;
+  }
+
+  /**
+   * Marks that {@code lhs == rhs} has already been performed and need not be
+   * evaluated again. This is not aiming to improve performance, but rather
+   * prevent infinite recursion when comparing self-referencing objects.
+   * 
+   * @param lhs First object to be compared.
+   * @param rhs Second object to be compared.
+   * @return {@code true} if this operation was performed before, {@link false}
+   *         otherwise.
+   */
+  private boolean addComparison(final Object lhs, final Object rhs) {
+    final Set<Object> lhsComparisons = comparisons.get(lhs);
+    if (lhsComparisons == null) {
+      final Set<Object> newComparisons = Collections.newSetFromMap(new IdentityHashMap<>());
+      newComparisons.add(rhs);
+      comparisons.put(lhs, newComparisons);
+      return false;
+    }
+    return !lhsComparisons.add(rhs);
   }
 
   /**
@@ -71,8 +87,7 @@ public class ObjectIdComparator {
    * @param object Object for which to provide an id.
    * @return Heap-neutral id associated with the given object.
    */
-  private static int getId(final Map<Integer, Integer> ids, final Object object) {
-    final int identityHash = System.identityHashCode(object);
-    return ids.computeIfAbsent(identityHash, k -> ids.size());
+  private static int getId(final Map<Object, Integer> ids, final Object object) {
+    return ids.computeIfAbsent(object, k -> ids.size());
   }
 }
