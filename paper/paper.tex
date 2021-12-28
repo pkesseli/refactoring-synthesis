@@ -402,7 +402,7 @@ a coverage-based, type and example guided synthesis.
 
 \item We propose a syntax and semantics based approach to eliminate uses of deprecated APIs, which makes use of program synthesis.
 
-\item We introduce the notion of coverage based program synthesis, which makes use of coverage-guided property-based testing in order to generate counterexamples for a type and example guided synthesiser.
+\item We introduce the notion of coverage based CEGIS, which makes use of coverage-guided property-based testing in order to generate counterexamples for a type and example guided synthesiser.
 
 \item We propose a type-directed technique for building components library for program synthesis.
   
@@ -436,26 +436,88 @@ a coverage-based, type and example guided synthesis.
 
 \section{Overview of our approach} \label{sec:approach}
 
-Our technique relies on both syntax and semantics and makes use of advances in the
-field of program synthesis. In particular, we make use of the general
-structure of Counterexample Guided Inductive Synthesis (CEGIS), but
-instead of using symbolic execution to both generate and verify
-candidate refactorings, we use fuzzing, as described later in this
-section.  Our synthesis method is also component based, meaning that
-it uses components from a given library to generate new code.  In the
-rest of this section, we describe how we build the components library
-followed by presenting the actual refactoring synthesis.
+In this section, we use the example in
+Figure~\ref{ex:deprecated-method-other} to informally illustrate our
+technique.  Firstly, our synthesis method is component based, meaning
+that it uses components from a given library to generate new code.  We
+use a type-directed method for generating a specifically designed
+components library for each refactoring. We will provide more details
+on how to generate the components library in
+Section~\ref{sec:components-seeding}.  In the current section, we will
+just assume the components library containts all the instructions
+necessary to generate the refactoring in
+Figure~\ref{ex:deprecated-method-other}.
+
+Similar to CEGIS, our synthesis process is iterative such that in each
+iteration an inductive synthesiser generates a candidate refactoring
+that is subsequently checked by a verifier.  %% Basically, each
+%% synthesised candidate needs to obey the property of interest for all
+%% the inputs in the inputs set.
+In general, each CEGIS
+verification phase produces {\em one} counterexample that is added to
+the set of inputs used by the subsequent synthesis iteration to
+generate a better candidate.  The implicit assumption is that these
+inputs are somehow important such that generating a candidate that
+works for them will help efficiently prune the search space and avoid
+enumerating all possible programs.
+
+%% Thus, the inputs added to this set of inputs are critical to the success of synthesis.
+%% In the absence of good counterexamples, the synthesis algorithms would just
+%% enumerate all possible examples 
+
+In this paper, we propose using the notion of coverage in order to
+generate counterexamples to be added to the inputs set. Basically, in
+each iteration of the synthesis process, the verifier will generate
+multiple counterexample inputs that cause the current candidate to fail the property of interest by
+exercising different paths.
+%
+As we generate refactorings, the property that we are interested to check is observational equivalence
+with respect to the original code, i.e. for each input, the refactoring must generate the
+same result as the original code (in reality, as we must handle code with side effects,
+the refactored and original codes must generate the same program state). 
+
+For our running example, the synthesiser generates the following candidate
+refactoring in the first synthesis iteration:
+ 
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+void main(String[] args) {
+  int hour = java.util.Calendar.getInstance().
+             get(java.util.Calendar.HOUR_OF_DAY);
+}
+\end{lstlisting}
+
+Compared to the original program in Figure~\ref{ex:deprecated-method-other}, this
+candidate refactoring is not semantically equivalent as it does not make
+use of the initial \texttt{date} variable. When passed to the verifier,
+we obtain X counterexamples, each exercising a different path through the
+candidate refactoring (note that, while these paths are not visible in the
+code above, they come from the methods being called). With all these counterexamples,
+the correct refactoring is found in the second iteration.
+
+Our conjecture is that coverage-guided counterexamples help prune
+the search space during CEGIS. In the experimental evaluation, we will
+empirically evaluate our conjecture.
+
+%% Our technique relies on both syntax and semantics and makes use of advances in the
+%% field of program synthesis. In particular, we make use of the general
+%% structure of Counterexample Guided Inductive Synthesis (CEGIS), but
+%% instead of using symbolic execution to both generate and verify
+%% candidate refactorings, we use fuzzing, as described later in this
+%% section.  Our synthesis method is also component based, meaning that
+%% it uses components from a given library to generate new code.  In the
+%% rest of this section, we describe how we build the components library
+%% followed by presenting the actual refactoring synthesis.
 %%Our technique for refactoring deprecated instances (e.g. fields, methods, classes) has two big steps, as described next.
 
-\subsection{{\bf Input to our method}}
-We expect as input the original deprecated code \var{Orig} with inputs
-$\vec{x}$, as well as access to the library where the
-field/method/class has been deprecated. We need the latter to seed the
-components library.  Depending on the user's intention we may also
-take into consideration some amount of context (of the location where
-the deprecated element is found) when searching for a refactoring.
+%% \subsection{{\bf Input to our method}}
+%% We expect as input the original deprecated code \var{Orig} with inputs
+%% $\vec{x}$, as well as access to the library where the
+%% field/method/class has been deprecated. We need the latter to seed the
+%% components library.  Depending on the user's intention we may also
+%% take into consideration some amount of context (of the location where
+%% the deprecated element is found) when searching for a refactoring.
 
-\subsection{{\bf Type-directed seeding of the components library}}
+\section{{\bf Type-directed seeding of the components library}}\label{sec:components-seeding}
 % Our synthesis engine is component based, meaning that, in order to generate new code, it makes use of a library of components.
 For each required refactoring, we start by building the components library.
 This step is critical as the size of the component library has a direct impact
@@ -721,7 +783,7 @@ For this purpose, we use a counterexample-guided iterative process that enables 
 
 
 
-\subsection{Problem encoding}\label{sec:encoding}
+\section{Coverage-directed synthesis}\label{sec:encoding}
 
 In this section, we discuss our encoding of the problem solved in each
 of the two phases of the synthesis process.  We refer to the original
@@ -1170,33 +1232,6 @@ Discuss different types of fuzzing and the one that we use.
 
 \todo{Write description of the algorithm}
 
-\section{Program fuzzing}
-
-In order to generate programs, we make use of the fuzzing technique described
-in~\cite{DBLP:conf/issta/PadhyeLS19} called JQF.  This technique is
-coverage-guided, which means that it uses lightweight program
-instrumentation to trace the code coverage reached by each generated
-input that is fed to the program under test.  Basically, the program
-is continuously executed with randomly generated inputs. However,
-instead of generating inputs from scratch, coverage-guided fuzzers
-evolve a set of saved inputs. If a new input leads to an increase
-in code coverage, it is saved for subsequent evolution.
-
-In our setting, the randomly generated inputs are programs.
-This is a difficult setting for fuzzing because programs are
-highly structured, whereas fuzzers often work with unstructured inputs
-that can be generated via byte-level mutations such as bit flips.
-
-JQF is designed to handle structured inputs, where inputs of type \code{T}
-are generated by a backing \code{Generator<T>}.
-While JQF provides a library of such generators, we manually write our own.
-Essentially, our generator describes the grammar corresponding to the
-programs to be synthesised.
-JQF never generates the same exact program twice. However it may generate many
-syntactically different, but semantically equivalent ones.
-Next, we discuss a few techniques that we use to reduce the number of
-generated programs that are semantically equivalent.
-
 \subsection{Reduction of semantically equivalent programs}
 
 \section{Guarantees}
@@ -1254,84 +1289,84 @@ synthesis phase?
 \item Make pull requests and see how many get merged.
 \end{itemize}  
 
-\section{Context-sensitive vs. context-insensitive refactoring}
+%% \section{Context-sensitive vs. context-insensitive refactoring}
 
-\paragraph{Context-insensitive refactoring}
-We consider different refactoring options. The first and most simple
-one is the so called ``context-insensitive'' refactoring, where we
-find a refactoring for the deprecated code that works irrespective of
-context. This means that, once such a refactoring is found, it can be
-used to replace all the uses of the deprecated code, e.g. a deprecated
-method invocation will be replaced with the same refactored code
-irrespective of the actual parameters or rest of the state at the call
-site.
+%% \paragraph{Context-insensitive refactoring}
+%% We consider different refactoring options. The first and most simple
+%% one is the so called ``context-insensitive'' refactoring, where we
+%% find a refactoring for the deprecated code that works irrespective of
+%% context. This means that, once such a refactoring is found, it can be
+%% used to replace all the uses of the deprecated code, e.g. a deprecated
+%% method invocation will be replaced with the same refactored code
+%% irrespective of the actual parameters or rest of the state at the call
+%% site.
 
-For instance, if we want to refactor the call to method
-\texttt{toRefactor} in the code below, then we search for a refactoring that is
-observationally equivalent to the given method irrespective of the
-context of the call.
+%% For instance, if we want to refactor the call to method
+%% \texttt{toRefactor} in the code below, then we search for a refactoring that is
+%% observationally equivalent to the given method irrespective of the
+%% context of the call.
 
-\begin{lstlisting}[mathescape=true]
-class NoContext {
-  int x;
+%% \begin{lstlisting}[mathescape=true]
+%% class NoContext {
+%%   int x;
 
-  public double toRefactor(int y, int z) {
-    return (double) x + y + z;
-  }
-}
-\end{lstlisting}
+%%   public double toRefactor(int y, int z) {
+%%     return (double) x + y + z;
+%%   }
+%% }
+%% \end{lstlisting}
  
-This means that the state that we can vary in order to check for
-observational equivalence includes \texttt{x, y} and \texttt{z}.
+%% This means that the state that we can vary in order to check for
+%% observational equivalence includes \texttt{x, y} and \texttt{z}.
 
-\paragraph{Context-sensitive refactoring}
-The refactoring context consists of the context where the code to be refactored
-is placed. For instance, in the snippet below, if we are trying to refactor the call to the deprecated
-function \texttt{f}, then the context gives us the valuation $[\texttt{x}\mapsto 1]$ for the function's argument. 
+%% \paragraph{Context-sensitive refactoring}
+%% The refactoring context consists of the context where the code to be refactored
+%% is placed. For instance, in the snippet below, if we are trying to refactor the call to the deprecated
+%% function \texttt{f}, then the context gives us the valuation $[\texttt{x}\mapsto 1]$ for the function's argument. 
 
-\begin{lstlisting}[mathescape=true]
-  int x = 1;
-  A a = new A();
+%% \begin{lstlisting}[mathescape=true]
+%%   int x = 1;
+%%   A a = new A();
   
-  a.f(1)
-\end{lstlisting}
+%%   a.f(1)
+%% \end{lstlisting}
     
-We now look at the possibility of considering the refactoring context
-when searching for a refactoring. This gives us the option of starting
-with very little context and gradually increasing it until finding a
-refactoring. \todo{Adjust this based on what the experiments do.}
+%% We now look at the possibility of considering the refactoring context
+%% when searching for a refactoring. This gives us the option of starting
+%% with very little context and gradually increasing it until finding a
+%% refactoring. \todo{Adjust this based on what the experiments do.}
 
-The other option is to find a refactoring that takes into consideration
-the calling context. For instance, in the code below we have two
-calls to \texttt{toRefactor}, one in method \texttt{foo} and one in
-method \texttt{bar}. When considering the calling context, we have to
-find two different refactorings, one for each of the method calls.
-For the call in \texttt{foo}, the state that we need to consider for observational
-equivalence contains \texttt{ctx} and \texttt{a}, whereas for the call in method
-\texttt{bar} it contains \texttt{ctx, a, b, c, d} and \texttt{e}.
+%% The other option is to find a refactoring that takes into consideration
+%% the calling context. For instance, in the code below we have two
+%% calls to \texttt{toRefactor}, one in method \texttt{foo} and one in
+%% method \texttt{bar}. When considering the calling context, we have to
+%% find two different refactorings, one for each of the method calls.
+%% For the call in \texttt{foo}, the state that we need to consider for observational
+%% equivalence contains \texttt{ctx} and \texttt{a}, whereas for the call in method
+%% \texttt{bar} it contains \texttt{ctx, a, b, c, d} and \texttt{e}.
 
-\begin{lstlisting}[mathescape=true]
-  class Context1 {
-    NoContext ctx = new NoContext();
+%% \begin{lstlisting}[mathescape=true]
+%%   class Context1 {
+%%     NoContext ctx = new NoContext();
 
-    public double foo(int a) {
-      return ctx.toRefactor(a, a);
-    }
-  }
+%%     public double foo(int a) {
+%%       return ctx.toRefactor(a, a);
+%%     }
+%%   }
 
  
 
-  class Context2 {
-    NoContext ctx = new NoContext();
+%%   class Context2 {
+%%     NoContext ctx = new NoContext();
 
-    int d;
-    int e;
+%%     int d;
+%%     int e;
 
-    public double bar(int a, int b, int c) {
-      return ctx.toRefactor(a, b + c + d + e);
-    }
-  }
-\end{lstlisting}
+%%     public double bar(int a, int b, int c) {
+%%       return ctx.toRefactor(a, b + c + d + e);
+%%     }
+%%   }
+%% \end{lstlisting}
 
 
 %% Fuzzing:
@@ -1347,6 +1382,34 @@ equivalence contains \texttt{ctx} and \texttt{a}, whereas for the call in method
 %% automatically.
 
 \section{Implementation}
+
+\section{Program fuzzing}
+
+In order to generate programs, we make use of the fuzzing technique described
+in~\cite{DBLP:conf/issta/PadhyeLS19} called JQF.  This technique is
+coverage-guided, which means that it uses lightweight program
+instrumentation to trace the code coverage reached by each generated
+input that is fed to the program under test.  Basically, the program
+is continuously executed with randomly generated inputs. However,
+instead of generating inputs from scratch, coverage-guided fuzzers
+evolve a set of saved inputs. If a new input leads to an increase
+in code coverage, it is saved for subsequent evolution.
+
+In our setting, the randomly generated inputs are programs.
+This is a difficult setting for fuzzing because programs are
+highly structured, whereas fuzzers often work with unstructured inputs
+that can be generated via byte-level mutations such as bit flips.
+
+JQF is designed to handle structured inputs, where inputs of type \code{T}
+are generated by a backing \code{Generator<T>}.
+While JQF provides a library of such generators, we manually write our own.
+Essentially, our generator describes the grammar corresponding to the
+programs to be synthesised.
+JQF never generates the same exact program twice. However it may generate many
+syntactically different, but semantically equivalent ones.
+Next, we discuss a few techniques that we use to reduce the number of
+generated programs that are semantically equivalent.
+
 
 \subsection{Instrumentation}
 
