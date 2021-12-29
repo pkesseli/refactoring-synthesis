@@ -1,5 +1,6 @@
-package uk.ac.ox.cs.refactoring.synthesis.induction;
+package uk.ac.ox.cs.refactoring.synthesis.guidance;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Consumer;
 
@@ -9,16 +10,16 @@ import edu.berkeley.cs.jqf.fuzz.guidance.Result;
 import edu.berkeley.cs.jqf.instrument.tracing.events.TraceEvent;
 
 /** Wrapper for {@link Guidance} terminating if a solution is found. */
-public class SynthesisGuidance implements Guidance {
+class SynthesisGuidance implements CloseableGuidance {
 
   /** Wrapped {@link Guidance}. */
-  private final Guidance guidance;
+  private final CloseableGuidance guidance;
 
   /** Indicates whether any valid solution was already found. */
   private boolean hasSolution = false;
 
   /** @param guidance {@link #guidance} */
-  public SynthesisGuidance(final Guidance guidance) {
+  SynthesisGuidance(final CloseableGuidance guidance) {
     this.guidance = guidance;
   }
 
@@ -43,4 +44,8 @@ public class SynthesisGuidance implements Guidance {
     return guidance.generateCallBack(thread);
   }
 
+  @Override
+  public void close() throws IOException {
+    guidance.close();
+  }
 }
