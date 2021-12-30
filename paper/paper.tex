@@ -498,6 +498,10 @@ Our conjecture is that coverage-guided counterexamples help prune
 the search space during CEGIS. In the experimental evaluation, we will
 empirically evaluate our conjecture.
 
+TODO:
+- add the implementation todos
+- draw a figure
+
 %% Our technique relies on both syntax and semantics and makes use of advances in the
 %% field of program synthesis. In particular, we make use of the general
 %% structure of Counterexample Guided Inductive Synthesis (CEGIS), but
@@ -1267,27 +1271,27 @@ backends depending on how complex the new feature is); even after
 translating the code into a logical formula, calls to solvers are
 expensive.
 
-\section{Discussion on completeness}
+\paragraph{Discussion on completeness}
 
 
 
-\section{Some research questions}
+%% \section{Some research questions}
 
-What if the new method doesn't maintain observational equivalence?
-TODO: Check existing projects to see how many do preserve equivalence.
-For the rest, is there a notion of partial equivalence that ensures the equivalence
-for the new projects minus the differences introduced by the new function.
+%% What if the new method doesn't maintain observational equivalence?
+%% TODO: Check existing projects to see how many do preserve equivalence.
+%% For the rest, is there a notion of partial equivalence that ensures the equivalence
+%% for the new projects minus the differences introduced by the new function.
 
-How easy is for the fuzzer to handle such structured inputs as we need in the
-synthesis phase?
+%% How easy is for the fuzzer to handle such structured inputs as we need in the
+%% synthesis phase?
 
 
-\subsection{For the experimental evaluation}
-\begin{itemize}
-\item Pick libraries that have deprecated instances.
-\item Pick users of these libraries (i.e. open source projects that are actively maintained).
-\item Make pull requests and see how many get merged.
-\end{itemize}  
+%% \subsection{For the experimental evaluation}
+%% \begin{itemize}
+%% \item Pick libraries that have deprecated instances.
+%% \item Pick users of these libraries (i.e. open source projects that are actively maintained).
+%% \item Make pull requests and see how many get merged.
+%% \end{itemize}  
 
 %% \section{Context-sensitive vs. context-insensitive refactoring}
 
@@ -1383,7 +1387,8 @@ synthesis phase?
 
 \section{Implementation}
 
-\section{Program fuzzing}
+\subsection{Program fuzzing}
+
 
 In order to generate programs, we make use of the fuzzing technique described
 in~\cite{DBLP:conf/issta/PadhyeLS19} called JQF.  This technique is
@@ -1410,6 +1415,7 @@ syntactically different, but semantically equivalent ones.
 Next, we discuss a few techniques that we use to reduce the number of
 generated programs that are semantically equivalent.
 
+\todo{more details about the generators}
 
 \subsection{Instrumentation}
 
@@ -1468,6 +1474,14 @@ static void main(String[] args) {
 \caption{Deprecated `Date' instrumentation.}
 \label{ex:date-instrumentation}
 \end{figure}
+
+\subsection{Abstract classes and interfaces}
+
+\todo{talk about Mockito}
+
+\subsection{Parsing the @code hints}
+
+\todo{use the context of the method to be refactored}
 
 \section{Semantically different refactorings}
 
