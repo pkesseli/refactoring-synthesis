@@ -44,6 +44,11 @@ public class CegisLoop<Candidate> {
 
   static {
     System.setProperty("jqf.ei.MAX_INPUT_SIZE", "102400");
+    System.setProperty("resynth.fuzzing.random", Boolean.toString(false));
+    System.setProperty("resynth.verification.stage1.maxInputs", "100");
+    System.setProperty("resynth.verification.stage1.maxCounterexamples", "10");
+    System.setProperty("resynth.verification.stage2.maxInputs", "400");
+    System.setProperty("resynth.verification.stage2.maxCounterexamples", "1");
   }
 
   /**

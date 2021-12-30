@@ -15,21 +15,18 @@ import org.opentest4j.AssertionFailedError;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.FuzzStatement;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.NonTrackingGenerationStatus;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
-import uk.ac.ox.cs.refactoring.synthesis.cegis.ZestFuzzingConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
+import uk.ac.ox.cs.refactoring.synthesis.guidance.CloseableGuidance;
+import uk.ac.ox.cs.refactoring.synthesis.guidance.GuidanceFactory;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 
-/**
- * Synthesis phase implemented using JQF fuzzing.
- */
+/** Synthesis phase implemented using JQF fuzzing. */
 public class FuzzingSynthesis<Candidate> {
 
   /** Sink for logging candidates. */
   private final CandidateListener<Candidate> listener = new ConsoleCandidateListener<>();
 
-  /**
-   * Used to look up JQF generators necessary to construct candidates.
-   */
+  /** Used to look up JQF generators necessary to construct candidates. */
   private final GeneratorRepository generatorRepository;
 
   /** Fuzzer's random input stram, used to construct a default candidate. */
@@ -66,9 +63,7 @@ public class FuzzingSynthesis<Candidate> {
     this.executor = executor;
   }
 
-  /**
-   * Provides a default candidate to use in the absence of counterexamples.
-   */
+  /** Provides a default candidate to use in the absence of counterexamples. */
   public Candidate getDefault() {
     final Candidate initial = generatorRepository.type(candidateType).generate(sourceOfRandomness,
         new NonTrackingGenerationStatus(sourceOfRandomness));
@@ -97,10 +92,9 @@ public class FuzzingSynthesis<Candidate> {
         frameworkMethodPlaceholder);
     final TestClass testClass = new TestClass(frameworkMethodPlaceholder.getDeclaringClass());
 
-    final String name = "inductive synthesis";
-    try (final ZestFuzzingConfiguration configuration = new ZestFuzzingConfiguration(name, SynthesisGuidance::new)) {
+    try (final CloseableGuidance guidance = GuidanceFactory.synthesis()) {
       final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository,
-          configuration.Guidance);
+          guidance);
       fuzzStatement.evaluate();
     } catch (final MultipleFailureException e) {
       return e.getFailures().stream().map(AssertionFailedError.class::cast).map(this::getCandidate).findAny().get();
