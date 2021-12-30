@@ -1,22 +1,28 @@
 package uk.ac.ox.cs.refactoring.synthesis.experiment;
 
-import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.testAlias;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
+import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
 
 import org.junit.jupiter.api.Test;
 
 class OperatingSystemMXBeanTest {
+
   @Test
   void getFreePhysicalMemorySize() throws Exception {
-    testAlias(".getFreeMemorySize(", "com.sun.management.OperatingSystemMXBean", "getFreePhysicalMemorySize");
+    assertThat(synthesiseAlias("com.sun.management.OperatingSystemMXBean", "getFreePhysicalMemorySize"),
+        contains(".getFreeMemorySize("));
   }
 
   @Test
   void getSystemCpuLoad() throws Exception {
-    testAlias(".getCpuLoad(", "com.sun.management.OperatingSystemMXBean", "getSystemCpuLoad");
+    assertThat(synthesiseAlias("com.sun.management.OperatingSystemMXBean", "getSystemCpuLoad"),
+        contains(".getCpuLoad("));
   }
 
   @Test
   void getTotalPhysicalMemorySize() throws Exception {
-    testAlias(".getTotalMemorySize(", "com.sun.management.OperatingSystemMXBean", "getTotalPhysicalMemorySize");
+    assertThat(synthesiseAlias("com.sun.management.OperatingSystemMXBean", "getTotalPhysicalMemorySize"),
+        contains(".getTotalMemorySize("));
   }
 }

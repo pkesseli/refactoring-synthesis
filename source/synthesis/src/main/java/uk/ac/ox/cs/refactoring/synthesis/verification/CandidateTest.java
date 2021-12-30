@@ -7,9 +7,8 @@ import org.opentest4j.AssertionFailedError;
 
 import edu.berkeley.cs.jqf.fuzz.Fuzz;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
-import uk.ac.ox.cs.refactoring.synthesis.counterexample.ConsoleCounterexampleListener;
+import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
-import uk.ac.ox.cs.refactoring.synthesis.counterexample.CounterexampleListener;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.HeapComparison;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
@@ -18,7 +17,7 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
 public class CandidateTest<Candidate> extends FrameworkMethod {
 
   /** Sink for counterexample events. */
-  private final CounterexampleListener listener = new ConsoleCounterexampleListener();
+  private final CegisLoopListener<Candidate> listener;
 
   /** Candidate to verify. */
   private final Candidate candidate;
@@ -36,12 +35,15 @@ public class CandidateTest<Candidate> extends FrameworkMethod {
    * @param candidate {@link #candidate}
    * @param executor  {@link #executor}
    * @param invoker   {@link #invoker}
+   * @param listener  {@link #listener}
    */
-  public CandidateTest(final Candidate candidate, final CandidateExecutor<Candidate> executor, final Invoker invoker) {
+  public CandidateTest(final Candidate candidate, final CandidateExecutor<Candidate> executor, final Invoker invoker,
+      final CegisLoopListener<Candidate> listener) {
     super(TestClass.getPlaceholder(null));
     this.candidate = candidate;
     this.executor = executor;
     this.invoker = invoker;
+    this.listener = listener;
   }
 
   @Override
