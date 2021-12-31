@@ -16,7 +16,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier
 import uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation;
 import uk.ac.ox.cs.refactoring.synthesis.state.State;
 
-public class DateTest {
+public class java_util_DateTest {
   @ParameterizedTest
   @CsvSource({ "getMonth," + Calendar.MONTH, "getDate," + Calendar.DAY_OF_MONTH, "getHours," + Calendar.HOUR_OF_DAY,
       "getMinutes," + Calendar.MINUTE, "getSeconds," + Calendar.SECOND })
@@ -28,7 +28,7 @@ public class DateTest {
     final Date date = calendar.getTime();
     final int expected = calendar.get(field);
     final State state = new State(date);
-    final ExecutionContext context = new ExecutionContext(DateTest.class.getClassLoader(), state);
+    final ExecutionContext context = new ExecutionContext(java_util_DateTest.class.getClassLoader(), state);
     assertEquals(expected, candidate.Block.execute(context));
   }
 
@@ -43,7 +43,7 @@ public class DateTest {
     final Date date = calendar.getTime();
     final int expected = calendar.get(field) - 1900;
     final State state = new State(date);
-    final ExecutionContext context = new ExecutionContext(DateTest.class.getClassLoader(), state);
+    final ExecutionContext context = new ExecutionContext(java_util_DateTest.class.getClassLoader(), state);
     assertEquals(expected, candidate.Block.execute(context));
   }
 }

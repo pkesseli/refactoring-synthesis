@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 
 import org.junit.jupiter.api.Test;
 
-public class RectangleTest {
+class java_awt_RectangleTest {
 
   @Test
   void inside() throws Exception {

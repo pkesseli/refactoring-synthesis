@@ -13,7 +13,7 @@ import java.awt.Panel;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-class ComponentTest {
+class java_awt_ComponentTest {
 
   @Test
   void bounds() throws Exception {
@@ -31,8 +31,8 @@ class ComponentTest {
     assertThat(synthesiseAlias("java.awt.Component", "disable"),
         allOf(
             contains(".setEnabled("),
-            mapsTo(ComponentTest::isDisabled, component(true)),
-            mapsTo(ComponentTest::isDisabled, component(false))));
+            mapsTo(java_awt_ComponentTest::isDisabled, component(true)),
+            mapsTo(java_awt_ComponentTest::isDisabled, component(false))));
   }
 
   @Test
@@ -40,8 +40,8 @@ class ComponentTest {
     assertThat(synthesiseAlias("java.awt.Component", "enable"),
         allOf(
             contains(".setEnabled("),
-            mapsTo(ComponentTest::isEnabled, component(true)),
-            mapsTo(ComponentTest::isEnabled, component(false))));
+            mapsTo(java_awt_ComponentTest::isEnabled, component(true)),
+            mapsTo(java_awt_ComponentTest::isEnabled, component(false))));
   }
 
   private static Component component(final boolean enabled) {

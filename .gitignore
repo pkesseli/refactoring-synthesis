@@ -6,6 +6,7 @@
 .vscode
 *.code-workspace
 
+/experiments
 /paper/*.aux
 /paper/*.bbl
 /paper/*.blg

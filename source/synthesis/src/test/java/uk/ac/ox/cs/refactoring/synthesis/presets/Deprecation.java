@@ -21,7 +21,7 @@ public final class Deprecation {
       NoSuchElementException, NoSuchFieldException, NoSuchMethodException, IOException {
     final MethodIdentifier methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, methodName,
         Arrays.asList(fullyQualifiedParameterClassNames));
-    return Deprecation.synthesise(methodToRefactor);
+    return synthesise(methodToRefactor);
   }
 
   private Deprecation() {

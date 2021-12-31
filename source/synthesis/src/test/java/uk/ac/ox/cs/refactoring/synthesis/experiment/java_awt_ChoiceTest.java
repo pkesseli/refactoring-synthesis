@@ -6,7 +6,7 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 
 import org.junit.jupiter.api.Test;
 
-public class ChoiceTest {
+class java_awt_ChoiceTest {
 
   @Test
   void countItems() throws Exception {

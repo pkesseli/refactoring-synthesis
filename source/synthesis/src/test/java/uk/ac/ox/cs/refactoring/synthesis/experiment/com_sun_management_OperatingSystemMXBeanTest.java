@@ -6,7 +6,7 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 
 import org.junit.jupiter.api.Test;
 
-class OperatingSystemMXBeanTest {
+class com_sun_management_OperatingSystemMXBeanTest {
 
   @Test
   void getFreePhysicalMemorySize() throws Exception {

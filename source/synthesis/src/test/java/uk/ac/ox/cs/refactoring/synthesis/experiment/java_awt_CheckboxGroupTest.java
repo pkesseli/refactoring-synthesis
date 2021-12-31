@@ -6,7 +6,7 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 
 import org.junit.jupiter.api.Test;
 
-public class CheckboxGroupTest {
+class java_awt_CheckboxGroupTest {
 
   @Test
   void getCurrent() throws Exception {

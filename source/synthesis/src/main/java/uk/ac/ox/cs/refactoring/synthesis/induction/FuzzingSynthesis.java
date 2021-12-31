@@ -15,6 +15,8 @@ import org.opentest4j.AssertionFailedError;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.FuzzStatement;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.NonTrackingGenerationStatus;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
+import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.guidance.CloseableGuidance;
 import uk.ac.ox.cs.refactoring.synthesis.guidance.GuidanceFactory;
@@ -24,7 +26,7 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 public class FuzzingSynthesis<Candidate> {
 
   /** Sink for logging candidates. */
-  private final CandidateListener<Candidate> listener = new ConsoleCandidateListener<>();
+  private final CegisLoopListener<Candidate> listener;
 
   /** Used to look up JQF generators necessary to construct candidates. */
   private final GeneratorRepository generatorRepository;
@@ -34,6 +36,9 @@ public class FuzzingSynthesis<Candidate> {
 
   /** Explicit candidate type, used to construct a default candidate using JQF. */
   private final Class<Candidate> candidateType;
+
+  /** Confiugration for guidance. */
+  private final GeneratorConfiguration generatorConfiguration;
 
   /**
    * JUnit method instance which describes the API to invoke using fuzzed inputs.
@@ -47,20 +52,25 @@ public class FuzzingSynthesis<Candidate> {
   private final CandidateExecutor<Candidate> executor;
 
   /**
+   * @param generatorConfiguration     {@link #generatorConfiguration}
    * @param generatorRepository        {@link #generatorRepository}
    * @param sourceOfRandomness         {@link #sourceOfRandomness}
    * @param candidateType              {@link #candidateType}
    * @param frameworkMethodPlaceholder {@link #frameworkMethodPlaceholder}
    * @param executor                   {@link #executor}
+   * @param listener                   {@link #listener}
    */
-  public FuzzingSynthesis(final GeneratorRepository generatorRepository, final SourceOfRandomness sourceOfRandomness,
+  public FuzzingSynthesis(final GeneratorConfiguration generatorConfiguration,
+      final GeneratorRepository generatorRepository, final SourceOfRandomness sourceOfRandomness,
       final Class<Candidate> candidateType, final Method frameworkMethodPlaceholder,
-      final CandidateExecutor<Candidate> executor) {
+      final CandidateExecutor<Candidate> executor, final CegisLoopListener<Candidate> listener) {
+    this.generatorConfiguration = generatorConfiguration;
     this.generatorRepository = generatorRepository;
     this.sourceOfRandomness = sourceOfRandomness;
     this.candidateType = candidateType;
     this.frameworkMethodPlaceholder = frameworkMethodPlaceholder;
     this.executor = executor;
+    this.listener = listener;
   }
 
   /** Provides a default candidate to use in the absence of counterexamples. */
@@ -92,7 +102,7 @@ public class FuzzingSynthesis<Candidate> {
         frameworkMethodPlaceholder);
     final TestClass testClass = new TestClass(frameworkMethodPlaceholder.getDeclaringClass());
 
-    try (final CloseableGuidance guidance = GuidanceFactory.synthesis()) {
+    try (final CloseableGuidance guidance = GuidanceFactory.synthesis(generatorConfiguration)) {
       final FuzzStatement fuzzStatement = new FuzzStatement(frameworkMethod, testClass, generatorRepository,
           guidance);
       fuzzStatement.evaluate();
@@ -106,6 +116,12 @@ public class FuzzingSynthesis<Candidate> {
     throw new NoSuchElementException();
   }
 
+  /**
+   * Extracts a candidate out of an assertion violation.
+   * 
+   * @param e Assertion violation containing candidate.
+   * @return Extracted candidate.
+   */
   private Candidate getCandidate(final AssertionFailedError e) {
     final Object result = e.getActual().getEphemeralValue();
     @SuppressWarnings("unchecked")
