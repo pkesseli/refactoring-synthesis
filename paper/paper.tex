@@ -179,7 +179,7 @@ Daniel Kroening\inst{2}}
 
 
 
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
 
 As a project evolves, there are certain fields, methods or classes
 that the developers are discouraged from using in the future as
@@ -355,7 +355,7 @@ One of the challenges in component-based synthesis is the large number of compon
 when considering real-world APIs. Specifically for our use case, when generating Java code, we have
 access to the whole of Java standard library.
 We address this challenge by using the code hints provided in the Javadoc comments
-(under the Javadoc \code{@code} tag) and type information to prune the components
+(under the Javadoc \code{@code} tag) and type information to prune the component
 library before the actual synthesis process.
 
 With respect to the synthesis process, we propose using greybox
@@ -431,7 +431,7 @@ makes it amenable to solving via coverage-guided property-based testing.
 
 \item We propose a semantics based approach to eliminate uses of deprecated APIs, which employs component-based program synthesis.
 
-\item We provide a technique for building the components library that is guided by code hints and types.
+\item We provide a technique for building the component library that is guided by code hints and types.
   
 \item We propose greybox program synthesis by encoding the code generation problem as a verification problem that can be solved by coverage-guided property-based testing.
   %% introduce the notion of coverage based CEGIS, which makes use of coverage-guided property-based testing in order to generate counterexamples for a type and example guided synthesiser.
@@ -466,71 +466,148 @@ makes it amenable to solving via coverage-guided property-based testing.
 
 \section{Overview of our approach} \label{sec:approach}
 
-In this section, we use the example in
-Figure~\ref{ex:deprecated-method-other} to informally illustrate our
-technique.  Firstly, our synthesis method is component based, meaning
-that it uses components from a given library to generate new code.  We
-use a type-directed method for generating a specifically designed
-components library for each refactoring. We will provide more details
-on how to generate the components library in
-Section~\ref{sec:components-seeding}.  In the current section, we will
-just assume the components library containts all the instructions
-necessary to generate the refactoring in
-Figure~\ref{ex:deprecated-method-other}.
+As mentioned in Section~\ref{sec:intro}, our approach employs program synthesis
+in order to generate a refactoring that is semantically equivalent to the original code and
+does not use deprecated APIs.
+Essentially, the new code is obtained by composing methods
+that are accessible from that respective location. 
+Consequently, we make use of component-based program synthesis,
+which weaves together components from a library
+(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
+%Component-based program synthesis allows us to 
 
-Similar to CEGIS, our synthesis process is iterative such that in each
-iteration an inductive synthesiser generates a candidate refactoring
-that is subsequently checked by a verifier.  %% Basically, each
-%% synthesised candidate needs to obey the property of interest for all
-%% the inputs in the inputs set.
-In general, each CEGIS
-verification phase produces {\em one} counterexample that is added to
-the set of inputs used by the subsequent synthesis iteration to
-generate a better candidate.  The implicit assumption is that these
-inputs are somehow important such that generating a candidate that
-works for them will help efficiently prune the search space and avoid
-enumerating all possible programs.
+While powerful, program synthesis is very hard due to the vast
+search space. In particular, for component-based synthesis, real-world
+APIs can be very large. %, making synthesis infeasible.
+For illustration, in our setting, indiscriminately adding all members
+found in \code{java.lang} would make synthesis infeasible (see experimental results in Section~\ref{sec:experimental-results}).
+%% In general program synthesis is very difficult. One of the main
+%% challenges is the very large search space.
+%% The objective of recent
+%% program synthesis research has been to reduce the search space.
+%% One such direction, component-based program synthesis allows
+%% synthesis techniques to weave together components from a library
+%% (typically methods from an API) in order to generate the desired program.
+%% While this does improve the efficiency of program synthesis by providing
+%% higher order building blocks that can be used..., real-world APIs are still
+%% too big.
 
-%% Thus, the inputs added to this set of inputs are critical to the success of synthesis.
-%% In the absence of good counterexamples, the synthesis algorithms would just
-%% enumerate all possible examples 
-
-In this paper, we propose using the notion of coverage in order to
-generate counterexamples to be added to the inputs set. Basically, in
-each iteration of the synthesis process, the verifier will generate
-multiple counterexample inputs that cause the current candidate to fail the property of interest by
-exercising different paths.
+Previous works have used type information to make components-based synthesis
+feasible in the presence of large component
+libraries~\cite{DBLP:conf/popl/FengM0DR17}.  However, as shown by our
+experimental results discussed in
+Section~\ref{sec:experimental-results}, the use of types in our setting is insufficient
+for obtaining a fast refactoring technique that is able to
+provide hints to the developer on-the-fly.
 %
-As we generate refactorings, the property that we are interested to check is observational equivalence
-with respect to the original code, i.e. for each input, the refactoring must generate the
-same result as the original code (in reality, as we must handle code with side effects,
-the refactored and original codes must generate the same program state). 
+%% For related work:
+%% However, that worked well when the generated code
+%% only had to be type sound and obey at most three test cases. However, in our case
+%% we need to generate code that is observationally equivalent to the original.
+%% While we will use coverage-guided testing to check observational equivalence (as discussed later),
+%% we still check at least 400 inputs. 
+%
+Our solution is to use the code hints provided in the Javadoc comments to guide the building of the component library. For our running example in Figure~\ref{ex:deprecated-method-other}, the source code for the \code{getHours} method in class \code{Date} is accompanied by the following comment: 
 
-For our running example, the synthesiser generates the following candidate
-refactoring in the first synthesis iteration:
- 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
-void main(String[] args) {
-  int hour = java.util.Calendar.getInstance().
-             get(java.util.Calendar.HOUR_OF_DAY);
-}
+/**
+ * Returns the hour represented by this {@code Date} object. The
+ * returned value is a number ({@code 0} through {@code 23})
+ * representing the hour within the day that contains or begins
+ * with the instant in time represented by this {@code Date}
+ * object, as interpreted in the local time zone.
+ *
+ * @return  the hour represented by this date.
+ * @see     java.util.Calendar
+ * @deprecated As of JDK version 1.1,
+ * replaced by {@code Calendar.get(Calendar.HOUR_OF_DAY)}.
+ */  
 \end{lstlisting}
 
-Compared to the original program in Figure~\ref{ex:deprecated-method-other}, this
-candidate refactoring is not semantically equivalent as it does not make
-use of the initial \texttt{date} variable. When passed to the verifier,
-we obtain X counterexamples, each exercising a different path through the
-candidate refactoring (note that, while these paths are not visible in the
-code above, they come from the methods being called). With all these counterexamples,
-the correct refactoring is found in the second iteration.
+In the above comment, the \code{@code} tag provide the hint \code{Calendar.get(Calendar.HOUR_OF_DAY)} about the method that needs to be called instead of the deprecated \code{getHours}.
+%While it might seem that this hint ma solve the entire problem, 
+Note that this hint is not immediately usable. Although it may seem as if
+method \code{get} is static allowing us to make an immediate call,
+it is actually an instance method, requiring us to have an object of
+class \code{Calendar}. However, no such object is available in the
+original code meaning that it must be created by the refactored code.
+Consequently, we must populate the component library with the necessary
+components to create such an object by consuming existing objects.
+In Section~\ref{sec:components-seeding}, we provide in-depth details about the
+building of the component library. 
 
-Our conjecture is that coverage-guided counterexamples help prune
-the search space during CEGIS. In the experimental evaluation, we will
-empirically evaluate our conjecture.
+Once the component library is built, for the actual synthesis, we opted for a greybox approach, which relies on coverage-guided property-based testing~\cite{DBLP:conf/issta/PadhyeLS19}.
+%Existing approaches are either whitebox or blackbox.
+Intuitively, we wanted to avoid the overheads due to program analysis and
+constraint solving incurred by whitebox methods, while also making use of
+knowledge about the code that can be obtained through lightweight instrumentation.
+For this purpose, %% we phrased the synthesis problem in a manner that makes it amenable
+%% to solving via coverage-guided testing. Essentially,
+we employ an iterative synthesis process based on CounterExample Guided Synthesis (CEGIS)~\ref{},
+where the problems posed in each iteration are phrased such that they can be solved
+by coverage-guided property-based testing. We provide more details about
+this encoding in Section~\ref{sec:encoding}.
 
-TODO:
-- add the implementation todos
-- draw a figure
+%% Whitebox approaches can be inefficient as they require fully interpreting the
+%% internal structures of the code through some form of static analysis.
+
+%% In this section, we use the example in
+%% Figure~\ref{ex:deprecated-method-other} to informally illustrate our
+%% technique.  Firstly, our synthesis method is component based, meaning
+%% that it uses components from a given library to generate new code.  We
+%% use a type-directed method for generating a specifically designed
+%% component library for each refactoring. We will provide more details
+%% on how to generate the component library in
+%% Section~\ref{sec:components-seeding}.  In the current section, we will
+%% just assume the component library containts all the instructions
+%% necessary to generate the refactoring in
+%% Figure~\ref{ex:deprecated-method-other}.
+
+%% Similar to CEGIS, our synthesis process is iterative such that in each
+%% iteration an inductive synthesiser generates a candidate refactoring
+%% that is subsequently checked by a verifier.  
+%% In general, each CEGIS
+%% verification phase produces {\em one} counterexample that is added to
+%% the set of inputs used by the subsequent synthesis iteration to
+%% generate a better candidate.  The implicit assumption is that these
+%% inputs are somehow important such that generating a candidate that
+%% works for them will help efficiently prune the search space and avoid
+%% enumerating all possible programs.
+
+%% In this paper, we propose using the notion of coverage in order to
+%% generate counterexamples to be added to the inputs set. Basically, in
+%% each iteration of the synthesis process, the verifier will generate
+%% multiple counterexample inputs that cause the current candidate to fail the property of interest by
+%% exercising different paths.
+%% %
+%% As we generate refactorings, the property that we are interested to check is observational equivalence
+%% with respect to the original code, i.e. for each input, the refactoring must generate the
+%% same result as the original code (in reality, as we must handle code with side effects,
+%% the refactored and original codes must generate the same program state). 
+
+%% For our running example, the synthesiser generates the following candidate
+%% refactoring in the first synthesis iteration:
+ 
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%% void main(String[] args) {
+%%   int hour = java.util.Calendar.getInstance().
+%%              get(java.util.Calendar.HOUR_OF_DAY);
+%% }
+%% \end{lstlisting}
+
+%% Compared to the original program in Figure~\ref{ex:deprecated-method-other}, this
+%% candidate refactoring is not semantically equivalent as it does not make
+%% use of the initial \texttt{date} variable. When passed to the verifier,
+%% we obtain X counterexamples, each exercising a different path through the
+%% candidate refactoring (note that, while these paths are not visible in the
+%% code above, they come from the methods being called). With all these counterexamples,
+%% the correct refactoring is found in the second iteration.
+
+%% Our conjecture is that coverage-guided counterexamples help prune
+%% the search space during CEGIS. In the experimental evaluation, we will
+%% empirically evaluate our conjecture.
+
+%%==========
 
 %% Our technique relies on both syntax and semantics and makes use of advances in the
 %% field of program synthesis. In particular, we make use of the general
@@ -551,23 +628,38 @@ TODO:
 %% take into consideration some amount of context (of the location where
 %% the deprecated element is found) when searching for a refactoring.
 
-\section{{\bf Type-directed seeding of the components library}}\label{sec:components-seeding}
+\section{{\bf Code hints and type guided seeding of the component library}}\label{sec:components-seeding}
 % Our synthesis engine is component based, meaning that, in order to generate new code, it makes use of a library of components.
-For each required refactoring, we start by building the components library.
-This step is critical as the size of the component library has a direct impact
-on the size of the search space for the refactoring.
-If the component library is too small, meaning that we didn't add all
+As mentioned in Section~\ref{sec:intro}, a critical aspect of our technique is building the
+component library. 
+%For each required refactoring, we start by building the components library.
+%This step is critical as
+Notably, the size of the component library has a direct impact
+on the size of the search space for the respective refactoring.
+If the component library is too small, meaning that it doesn't contain all
 the required components, then the synthesis will fail to find a refactoring.
-However, if we add too many components, then the search space becomes too vast and
+However, if we add too many components, then the search space becomes too large and
 synthesis may not terminate within a reasonable amount of time.
 
-
+Consequently, in our approach, the component library is dynamically built for each refactoring,
+such that it only contains components specific to that use case.
+This simplifies the job if the subsequent synthesis task.
 In order to increase our chances of finding a refactoring fast, we start with a restricted code  {\em core library} and incrementally increase its size
 until we find a refactoring.
 
 
-\paragraph{The core components library}
-%Initially, we build our components library for the actual synthesis process. 
+\paragraph{The core component library}
+%Initially, we build our components library for the actual synthesis process.
+
+In order to restrict the number of components that get added to the library,
+it is straightforward to make use of type information.
+Types have been used extensively in program synthesis, including for
+component-based approaches~\cite{}.
+
+In the example in Figure~\ref{ex:deprecated-method-other}, we can view \code{date} of type \code{Date} as the input to the code to be refactored. The objective is to weave together components that consume this object and generate the integer \code{hour}. While there are many methods in the Java standard library that return an integer without consuming an object of type $Date$, our intention is to only add those that allow using the input object. Basically, we have  
+\code{Source\_Obj}=\{\code{date}\} with given type \code{Source\_Type}=\{\code{Date}\}. We need to consume this in order to obtain an object of type \code{Target\_Type}=\{\code{int}\}.
+
+
 In general, when deprecating a field/method/class, the
 \code{@deprecated} Javadoc tag is used in the comment section to
 inform the developer the reason of deprecation and what can be used in
@@ -608,7 +700,7 @@ This will result in adding the method \code{``int get(int field)''} from class
 \code{Calendar} and constant \code{``Calendar.HOUR_OF_DAY''} to our library.
 The difficulty is that, in order to be able to call method \code{get}, we require an object of
 type \code{Calendar} and our library doesn't contain any way of creating such an object.
-Therefore, we must seed our components library with ways of generating such an object.
+Therefore, we must seed our component library with ways of generating such an object.
 
 Intuitively, the library seeding algorithm must add components that are able to consume the
 inputs to the deprecated code and produce the objects required to make use
@@ -669,26 +761,6 @@ More details on this in Section~\ref{sec:synthesis}.
 
 Note that, once we added the needed components to generate an object of a given type,
 we add that type to $Source\_Types$.
-==================
-For the paper:
-
-jdk15 --> find source files
-components are factories for the expressions in the componets
-components (with holes) enable us to generate expressions by filling the holes with something
-the components library model the library that is given to the fuzzer
-
-JQF:
-the fuzzer gives us random bytes
--- we can query the bytes
--- we can generate random generators from bytes
--- we get bytes and model them using the components
-
-for verification: random data and Objenesys to generate the object that we need
-after we generate an object, we go through the fields and we generate them recursively,
-eventually we hit primitive types.
--- we detect cycles --> if we cycle back to tthe same object we recorgnize
--- if there is an insanely big heap, it will crash
-========
 %% we overload \var{ensured\_types} to take \var{library} as an argument, in which case it returns the set of all the types of the objects that can be created using the instructions in the library.
 
 %% In certain situations, the seeding of the component library may require additional work.
@@ -763,7 +835,7 @@ Note that, as opposed to the core library, here we look at all instructions, not
  %%   }
  %% }
 \end{algorithm}
- \caption{Incremental expansion of the components library}
+ \caption{Incremental expansion of the component library}
 \label{alg:seeding-extended}
 \end{figure}
 
@@ -817,7 +889,7 @@ For this purpose, we use a counterexample-guided iterative process that enables 
 
 
 
-\section{Coverage-directed synthesis}\label{sec:encoding}
+\section{Graybox synthesis}\label{sec:encoding}
 
 In this section, we discuss our encoding of the problem solved in each
 of the two phases of the synthesis process.  We refer to the original
@@ -1512,6 +1584,8 @@ static void main(String[] args) {
 \subsection{Parsing the @code hints}
 
 \todo{use the context of the method to be refactored}
+
+\section{Experimental results}\label{sec:experimental-results}
 
 \section{Semantically different refactorings}
 
