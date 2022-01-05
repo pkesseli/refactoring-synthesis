@@ -108,7 +108,7 @@
                                   % (paid open-access papers, 
                                   % short abstracts)
 
-\title{Automated deprecated elimination with program synthesis}
+\title{Code hints guided refactoring of Java deprecated}
 %\subtitle{Subtitle Text, if any}
 % double-blind submission
 % single-blind only for Technical Research: http://icse2017.gatech.edu/technical-research-cfp
@@ -282,8 +282,7 @@ to a program.  Even when referring back to the example in
 Figure~\ref{ex:deprecated-method-other}, one must have some
 understanding of the semantics in order to conclude that the
 refactoring does maintain the same functionality.
-
-
+%
 %% such refactorings are based on semantics rather
 %% than syntax. For illustration, let's refer back to the example in
 %% Figure~\ref{ex:deprecated-method}.  A {\em syntax-driven refactoring}
@@ -293,7 +292,7 @@ refactoring does maintain the same functionality.
 %% program semantics in order to be applied soundly.  Clearly, the
 %% refactoring of the call to the deprecated \code{Date} constructor
 %% falls into the latter category. 
-
+%
 %\subsection{From the previous introduction:}
 %% Refactorings are structured changes to existing software which leave its
 %% externally observable behaviour unchanged.  They improve non-functional
@@ -303,7 +302,7 @@ refactoring does maintain the same functionality.
 %% as increase development speed and are therefore seen as an integral part
 %% of agile software engineering processes~\cite{DBLP:conf/xpu/Kerievsky04b,
 %% Fowler1999}.
-
+%
 %% However, manual refactorings are a costly, time-intensive, and not least
 %% error-prone process.  This has motivated work on automating specific
 %% refactorings, which promises safe application to large code bases at low
@@ -324,10 +323,10 @@ refactoring does maintain the same functionality.
 %% recognise this and apply {\em Substitute Algorithm}, pattern-based
 %% approaches need explicit patterns for vastly different syntaxes implementing
 %% the same semantics, which is infeasible for practical applications.
-
+%
 %% \todo{I've removed the reference to Move Field as it's a bit controversial given that
 %% Steinmann uses it to explain that purely syntactic approaches are not enough.}
-
+%
 Notably, the limitations of syntax-driven refactorings have been observed
 in several works, resulting in an emerging trend to incorporate more {\em semantic}
 information into refactoring decisions, such as Abstract Syntax Tree (AST) 
@@ -347,14 +346,44 @@ further preventing compilation errors and behaviour changes
 %% \cite{Steimann2011}.
 
 In this paper, we take a step further in this direction by proposing a
-combined syntax and semantics based approach based on program
-synthesis.  Essentially, we make use of syntactic information from the
-original code as well as the Javadoc comments to seed a components
-library, which is then used by a program synthesis engine.
-Notably, the synthesiser automatically generates refactorings
-that are guaranteed to be semantically equivalent to the original
-code.  With respect to the actual program synthesis technique, we use
-a coverage-based, type and example guided synthesis.
+semantics-driven refactoring technique that is guided by {\em code hints} and {\em types}.
+For this purpose, we make use of component-based program synthesis, which assembles programs
+from a library of existing components, e.g. methods provided by an API.
+%Depending on the API, the size of the components library can be large.
+%When synthesising refactorings for Java, a naive approach would
+One of the challenges in component-based synthesis is the large number of components
+when considering real-world APIs. Specifically for our use case, when generating Java code, we have
+access to the whole of Java standard library.
+We address this challenge by using the code hints provided in the Javadoc comments
+(under the Javadoc \code{@code} tag) and type information to prune the components
+library before the actual synthesis process.
+
+With respect to the synthesis process, we propose using greybox
+synthesis. Traditionally, synthesis techniques are either based
+on whitebox or blackbox approaches.  The former are fully aware of the
+internal structure of the program being synthesised, whereas the
+latter only examine its functionality. In this paper, we use a greybox
+approach, which relies on coverage-guided property-based testing. 
+For this purpose, we provide an encoding for the synthesis problem, which
+makes it amenable to solving via coverage-guided property-based testing.
+
+
+%% In this paper, we follow a two-step procedure to address this challenge:
+%% \begin{itemize}
+%% \item[{\bf Step 1}] We start from the code hints provided as Javadoc comments, and use
+%%   type guidance to seed a components library to be used during Step 2. 
+
+%% \item[{\bf Step 2}] Based on the components library built during the first step, we use program synthesis to find a refactoring that is semantically equivalent to the original code.
+%% \end{itemize}
+
+%% syntax and semantics based approach based on program
+%% synthesis.  Essentially, we make use of syntactic information from the
+%% original code as well as the Javadoc comments to seed a components
+%% library, which is then used by a program synthesis engine.
+%% Notably, the synthesiser automatically generates refactorings
+%% that are guaranteed to be semantically equivalent to the original
+%% code.  With respect to the actual program synthesis technique, we use
+%% a coverage-based, type and example guided synthesis.
 
 
 %% fully semantic refactoring approach for removing deprecated elements.
@@ -400,11 +429,12 @@ a coverage-based, type and example guided synthesis.
 
 \begin{itemize}
 
-\item We propose a syntax and semantics based approach to eliminate uses of deprecated APIs, which makes use of program synthesis.
+\item We propose a semantics based approach to eliminate uses of deprecated APIs, which employs component-based program synthesis.
 
-\item We introduce the notion of coverage based CEGIS, which makes use of coverage-guided property-based testing in order to generate counterexamples for a type and example guided synthesiser.
-
-\item We propose a type-directed technique for building components library for program synthesis.
+\item We provide a technique for building the components library that is guided by code hints and types.
+  
+\item We propose greybox program synthesis by encoding the code generation problem as a verification problem that can be solved by coverage-guided property-based testing.
+  %% introduce the notion of coverage based CEGIS, which makes use of coverage-guided property-based testing in order to generate counterexamples for a type and example guided synthesiser.
   
 %% \item We provide an encoding of the synthesis problem as the problem of verifying the safety of a program, which is then solved by fuzzing.
 
