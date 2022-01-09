@@ -12,7 +12,7 @@ public final class Deprecation {
 
   public static SnippetCandidate synthesise(final MethodIdentifier methodToRefactor) throws ClassNotFoundException,
       IllegalAccessException, NoSuchElementException, NoSuchFieldException, NoSuchMethodException, IOException {
-    return Synthesis.synthesise(GeneratorConfigurations.deprecatedMethodWithJavaDoc(methodToRefactor),
+    return Synthesis.synthesise(GeneratorConfigurations.experimentConfiguration(methodToRefactor),
         methodToRefactor);
   }
 

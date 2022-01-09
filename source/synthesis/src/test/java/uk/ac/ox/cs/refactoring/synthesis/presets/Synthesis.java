@@ -26,7 +26,9 @@ public final class Synthesis {
     final Invoker invoker = new Invoker(methodToRefactor);
     final CegisLoop<SnippetCandidate> cegis = new CegisLoop<>(executor, invoker, generatorConfiguration,
         SnippetCandidate.class, listener);
-    return cegis.synthesise();
+    final SnippetCandidate tmp = cegis.synthesise();
+    System.err.println(tmp);
+    return tmp;
   }
 
   private Synthesis() {

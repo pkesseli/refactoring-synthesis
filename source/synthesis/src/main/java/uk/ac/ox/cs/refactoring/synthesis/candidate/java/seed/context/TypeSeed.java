@@ -17,19 +17,13 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.ConstructorInvokable;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invokable;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.MethodInvokable;
 
-/**
- * Adds instructions based on the types used in a method to be replaced.
- */
+/** Adds instructions based on the types used in a method to be replaced. */
 public class TypeSeed implements InstructionSetSeed {
 
-  /**
-   * Used to load classes reflectively for analysis.
-   */
+  /** Used to load classes reflectively for analysis. */
   private final ClassLoader classLoader;
 
-  /**
-   * Method to be replaced.
-   */
+  /** Method to be replaced. */
   private final MethodIdentifier methodToRefactor;
 
   /**
@@ -81,5 +75,4 @@ public class TypeSeed implements InstructionSetSeed {
         return false;
     return allTypes.contains(invokable.getReturnType());
   }
-
 }

@@ -26,14 +26,17 @@ import uk.ac.ox.cs.refactoring.synthesis.statistics.Reports;
 @Command(name = "experiment")
 class ExperimentCommand implements Callable<Integer> {
 
-  @Option(names = "--repetitions", defaultValue = "1")
-  private int repetitions;
+  @Option(names = "--javadoc", defaultValue = "true")
+  private boolean javaDoc;
 
   @Option(names = "--json-report-file-path", defaultValue = "./report.json")
   private Path jsonReportFilePath;
 
-  @Option(names = "--use-random-guidance", defaultValue = "false")
-  private boolean useRandomGuidance;
+  @Option(names = "--random-guidance", defaultValue = "false")
+  private boolean randomGuidance;
+
+  @Option(names = "--repetitions", defaultValue = "1")
+  private int repetitions;
 
   @Option(names = "--stage-one-max-inputs", defaultValue = "100")
   private long stage1MaxInputs;
@@ -55,7 +58,8 @@ class ExperimentCommand implements Callable<Integer> {
     final Report report = Reports.DEFAULT_REPORT;
     final SynthesisResultListener listener = new SynthesisResultListener(report);
 
-    System.setProperty(GeneratorConfigurations.USE_RANDOM_GUIDANCE, Boolean.toString(useRandomGuidance));
+    System.setProperty(GeneratorConfigurations.USE_JAVADOC, Boolean.toString(javaDoc));
+    System.setProperty(GeneratorConfigurations.USE_RANDOM_GUIDANCE, Boolean.toString(randomGuidance));
     System.setProperty(GeneratorConfigurations.STAGE_1_MAX_INPUTS, Long.toString(stage1MaxInputs));
     System.setProperty(GeneratorConfigurations.STAGE_1_MAX_COUNTEREXAMPLES, Long.toString(stage1MaxCounterexamples));
     System.setProperty(GeneratorConfigurations.STAGE_2_MAX_INPUTS, Long.toString(stage2MaxInputs));

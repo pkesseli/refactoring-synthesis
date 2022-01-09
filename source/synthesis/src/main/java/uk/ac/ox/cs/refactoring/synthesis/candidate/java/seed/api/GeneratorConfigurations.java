@@ -19,9 +19,6 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.Invokable;
 /** Factory for {@link GeneratorConfiguration}s. */
 public final class GeneratorConfigurations {
 
-  /** System property configuring whether to use no guidance. */
-  public static final String USE_RANDOM_GUIDANCE = "resynth.fuzzing.random";
-
   /**
    * System property configuring maximum number of counterexamples during the
    * first verification stage.
@@ -45,6 +42,12 @@ public final class GeneratorConfigurations {
    * verification stage.
    */
   public static final String STAGE_2_MAX_INPUTS = "resynth.verification.stage2.maxInputs";
+
+  /** System property configuring whether to hints from Javadoc. */
+  public static final String USE_JAVADOC = "resynth.synthesis.javadoc";
+
+  /** System property configuring whether to use no guidance. */
+  public static final String USE_RANDOM_GUIDANCE = "resynth.fuzzing.random";
 
   /**
    * Default deprecated methods configuration.
@@ -75,12 +78,24 @@ public final class GeneratorConfigurations {
    * @throws NoSuchFieldException   {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    * @throws NoSuchMethodException  {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    */
-  public static GeneratorConfiguration deprecatedMethodWithJavaDoc(final MethodIdentifier methodToRefactor)
+  public static GeneratorConfiguration experimentConfiguration(final MethodIdentifier methodToRefactor)
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     final ClassLoader classLoader = ClassLoaders.createIsolated();
     final ComponentDirectory components = new ComponentDirectory();
-    seed(components, new JavaDocSeed(classLoader, methodToRefactor), new SignatureSeed(classLoader, methodToRefactor),
-        new FactorySeed(classLoader), new ConsumerSeed(classLoader), new StatementSeed());
+
+    final boolean useJavaDoc = Boolean.getBoolean(USE_JAVADOC);
+    final JavaDocSeed javaDocSeed = new JavaDocSeed(classLoader, methodToRefactor);
+    final TypeSeed typeSeed = new TypeSeed(classLoader, methodToRefactor);
+    final SignatureSeed signatureSeed = new SignatureSeed(classLoader, methodToRefactor);
+    final FactorySeed factorySeed = new FactorySeed(classLoader);
+    final ConsumerSeed consumerSeed = new ConsumerSeed(classLoader);
+    final ConstantSeed constantSeed = new ConstantSeed();
+    final StatementSeed statementSeed = new StatementSeed();
+
+    if (useJavaDoc)
+      seed(components, javaDocSeed, signatureSeed, factorySeed, consumerSeed, statementSeed);
+    else
+      seed(components, typeSeed, signatureSeed, constantSeed, statementSeed);
 
     final boolean useRandomGuidance = Boolean.getBoolean(USE_RANDOM_GUIDANCE);
     final long stage1MaxCounterexamples = Long.getLong(STAGE_1_MAX_COUNTEREXAMPLES, 10);
