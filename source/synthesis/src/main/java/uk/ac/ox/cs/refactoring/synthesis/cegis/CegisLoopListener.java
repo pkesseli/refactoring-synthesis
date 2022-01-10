@@ -4,7 +4,7 @@ import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 
 /** Subscribe to synthesis-related events. */
-public interface CegisLoopListener<Candidate> {
+public interface CegisLoopListener<Candidate> extends AutoCloseable {
 
   /**
    * Initial candidate.
@@ -51,4 +51,7 @@ public interface CegisLoopListener<Candidate> {
    * @param candidate Confirmed candidate.
    */
   void verified(Candidate candidate);
+
+  @Override
+  void close();
 }

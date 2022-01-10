@@ -21,7 +21,7 @@ import edu.berkeley.cs.jqf.instrument.tracing.events.TraceEvent;
 class CloseableZestGuidance implements CloseableGuidance {
 
   /** Hard timeout for all Zest fuzzing phases. */
-  private static final Duration TIMEOUT = Duration.ofMinutes(5);
+  private static final Duration TIMEOUT = Duration.ofMinutes(1);
 
   /** Zest output path. */
   private final Path outputDirectory = Files.createTempDirectory("zest");

@@ -19,16 +19,15 @@ public final class Synthesis {
   public static SnippetCandidate synthesise(final GeneratorConfiguration generatorConfiguration,
       final MethodIdentifier methodToRefactor)
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchElementException, IOException {
-    final CegisLoopListener<SnippetCandidate> listener = Reports
-        .createJsonReportListener(methodToRefactor.FullyQualifiedClassName, methodToRefactor.MethodName);
     final StateFactory stateFactory = new ClassLoaderClonerStateFactory();
     final SnippetCandidateExecutor executor = new SnippetCandidateExecutor(stateFactory);
     final Invoker invoker = new Invoker(methodToRefactor);
-    final CegisLoop<SnippetCandidate> cegis = new CegisLoop<>(executor, invoker, generatorConfiguration,
-        SnippetCandidate.class, listener);
-    final SnippetCandidate tmp = cegis.synthesise();
-    System.err.println(tmp);
-    return tmp;
+    try (final CegisLoopListener<SnippetCandidate> listener = Reports
+        .createReportListener(methodToRefactor.FullyQualifiedClassName, methodToRefactor.MethodName)) {
+      final CegisLoop<SnippetCandidate> cegis = new CegisLoop<>(executor, invoker, generatorConfiguration,
+          SnippetCandidate.class, listener);
+      return cegis.synthesise();
+    }
   }
 
   private Synthesis() {

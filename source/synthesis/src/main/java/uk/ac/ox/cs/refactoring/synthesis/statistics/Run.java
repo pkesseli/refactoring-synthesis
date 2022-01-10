@@ -1,6 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.statistics;
 
-public class Benchmark {
+public class Run {
 
   public long RuntimeInMilliseconds;
 
@@ -10,7 +10,7 @@ public class Benchmark {
 
   public FuzzedInputs Candidates = new FuzzedInputs();
 
-  public int Unsound;
+  public String Solution;
 
-  public boolean NoResultFound;
+  public boolean Unsound;
 }

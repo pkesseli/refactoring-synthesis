@@ -2,6 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.statistics;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 
 import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
@@ -13,19 +14,9 @@ class ReportCegisLoopListener<Candidate> implements CegisLoopListener<Candidate>
 
   private final Report report;
 
+  private final Run run = new Run();
+
   private Instant start;
-
-  private Instant end;
-
-  private int spuriousCounterexamples;
-
-  private int genuineCounterexamples;
-
-  private int verificationPhases = 1;
-
-  private int spuriousCandidates;
-
-  private int genuineCandidates;
 
   ReportCegisLoopListener(final String benchmarkName, final Report report) {
     this.benchmarkName = benchmarkName;
@@ -39,46 +30,41 @@ class ReportCegisLoopListener<Candidate> implements CegisLoopListener<Candidate>
 
   @Override
   public void spurious(final Candidate candidate) {
-    ++spuriousCandidates;
+    ++run.Candidates.Spurious;
   }
 
   @Override
   public void genuine(final Candidate candidate) {
-    ++genuineCandidates;
-    ++verificationPhases;
+    ++run.Candidates.Genuine;
+    ++run.Rounds;
   }
 
   @Override
   public void spurious(final Counterexample counterexample) {
-    ++spuriousCounterexamples;
+    ++run.Counterexamples.Spurious;
   }
 
   @Override
   public void genuine(final Counterexample counterexample, final ExecutionResult expected,
       final ExecutionResult actual) {
-    ++genuineCounterexamples;
+    ++run.Counterexamples.Genuine;
   }
 
   @Override
   public void verified(final Candidate candidate) {
-    end = Instant.now();
-    saveToReport();
+    run.Solution = candidate.toString();
   }
 
-  private void saveToReport() {
-    final Benchmark benchmark = new Benchmark();
-    benchmark.RuntimeInMilliseconds = Duration.between(start, end).toMillis();
-    benchmark.Rounds = verificationPhases;
-    benchmark.Candidates.Genuine = genuineCandidates;
-    benchmark.Candidates.Spurious = spuriousCandidates;
-    benchmark.Counterexamples.Genuine = genuineCounterexamples;
-    benchmark.Counterexamples.Spurious = spuriousCounterexamples;
-    report.Benchmarks.put(benchmarkName, benchmark);
+  @Override
+  public void close() {
+    final Instant end = Instant.now();
+    run.RuntimeInMilliseconds = Duration.between(start, end).toMillis();
+    report.Benchmarks.computeIfAbsent(benchmarkName, _1 -> new ArrayList<>()).add(run);
 
-    report.TotalRuntimeInMilliseconds += benchmark.RuntimeInMilliseconds;
-    report.TotalCandidates.Genuine += genuineCandidates;
-    report.TotalCandidates.Spurious += spuriousCandidates;
-    report.TotalCounterexamples.Genuine += genuineCounterexamples;
-    report.TotalCounterexamples.Spurious += spuriousCounterexamples;
+    report.TotalRuntimeInMilliseconds += run.RuntimeInMilliseconds;
+    report.TotalCandidates.Genuine += run.Candidates.Genuine;
+    report.TotalCandidates.Spurious += run.Candidates.Spurious;
+    report.TotalCounterexamples.Genuine += run.Counterexamples.Genuine;
+    report.TotalCounterexamples.Spurious += run.Counterexamples.Spurious;
   }
 }

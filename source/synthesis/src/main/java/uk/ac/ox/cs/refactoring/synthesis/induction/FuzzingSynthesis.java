@@ -12,6 +12,7 @@ import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.TestClass;
 import org.opentest4j.AssertionFailedError;
 
+import edu.berkeley.cs.jqf.fuzz.guidance.GuidanceException;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.FuzzStatement;
 import edu.berkeley.cs.jqf.fuzz.junit.quickcheck.NonTrackingGenerationStatus;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
@@ -110,6 +111,8 @@ public class FuzzingSynthesis<Candidate> {
       return e.getFailures().stream().map(AssertionFailedError.class::cast).map(this::getCandidate).findAny().get();
     } catch (final AssertionFailedError e) {
       return getCandidate(e);
+    } catch (final GuidanceException e) {
+      throw new NoSuchElementException(e);
     } catch (final Throwable e) {
       throw new IllegalStateException(e);
     }

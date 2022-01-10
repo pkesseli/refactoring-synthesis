@@ -1,5 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.cli;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,10 +11,11 @@ import org.junit.platform.engine.TestSource;
 import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
+import org.opentest4j.AssertionFailedError;
 
-import uk.ac.ox.cs.refactoring.synthesis.statistics.Benchmark;
 import uk.ac.ox.cs.refactoring.synthesis.statistics.Report;
 import uk.ac.ox.cs.refactoring.synthesis.statistics.Reports;
+import uk.ac.ox.cs.refactoring.synthesis.statistics.Run;
 
 class SynthesisResultListener implements TestExecutionListener {
 
@@ -24,18 +27,26 @@ class SynthesisResultListener implements TestExecutionListener {
     this.report = report;
   }
 
-  @Override
-  public void executionFinished(final TestIdentifier testIdentifier, final TestExecutionResult testExecutionResult) {
+  private Run getLastRun(final TestIdentifier testIdentifier) {
     final String benchmarkName = getBenchmarkName(testIdentifier);
     if (benchmarkName == null)
+      return null;
+
+    final List<Run> runs = report.Benchmarks.get(benchmarkName);
+    return runs.get(runs.size() - 1);
+  }
+
+  @Override
+  public void executionFinished(final TestIdentifier testIdentifier, final TestExecutionResult testExecutionResult) {
+    final Run run = getLastRun(testIdentifier);
+    if (run == null)
       return;
 
-    final Benchmark benchmark = report.Benchmarks.get(benchmarkName);
     switch (testExecutionResult.getStatus()) {
-      case ABORTED:
       case FAILED:
-        ++benchmark.Unsound;
-      case SUCCESSFUL:
+        if (testExecutionResult.getThrowable().map(AssertionFailedError.class::isInstance).orElse(false))
+          run.Unsound = true;
+      default:
     }
   }
 
@@ -45,9 +56,8 @@ class SynthesisResultListener implements TestExecutionListener {
     if (benchmarkName == null)
       return;
 
-    final Benchmark noResultResult = new Benchmark();
-    noResultResult.NoResultFound = true;
-    report.Benchmarks.put(benchmarkName, noResultResult);
+    final List<Run> runs = report.Benchmarks.computeIfAbsent(benchmarkName, _1 -> new ArrayList<>());
+    runs.add(new Run());
   }
 
   private static String getBenchmarkName(final TestIdentifier testIdentifier) {
