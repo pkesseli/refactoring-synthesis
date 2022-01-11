@@ -47,7 +47,8 @@ public final class GuidanceFactory {
    */
   private static CloseableGuidance getBaseGuidance(final GeneratorConfiguration generatorConfiguration,
       final String phaseName) throws IOException {
-    return generatorConfiguration.UseRandomGuidance ? new CloseableGuidanceAdapter(new NoGuidance(Long.MAX_VALUE, null))
+    return generatorConfiguration.UseRandomGuidance
+        ? new CloseableGuidanceAdapter(new TimeLimitedGuidance(new NoGuidance(Long.MAX_VALUE, null)))
         : new CloseableZestGuidance(phaseName);
   }
 

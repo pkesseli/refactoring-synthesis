@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.platform.engine.discovery.DiscoverySelectors;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 
@@ -56,7 +57,7 @@ class ExperimentCommand implements Callable<Integer> {
         .selectors(DiscoverySelectors.selectPackage(java_util_DateTest.class.getPackageName())).build();
     final Launcher launcher = LauncherFactory.create();
     final Report report = Reports.DEFAULT_REPORT;
-    final SynthesisResultListener listener = new SynthesisResultListener(report);
+    final SynthesisResultListener jsonReportListener = new SynthesisResultListener(report);
 
     System.setProperty(GeneratorConfigurations.USE_JAVADOC, Boolean.toString(javaDoc));
     System.setProperty(GeneratorConfigurations.USE_RANDOM_GUIDANCE, Boolean.toString(randomGuidance));
@@ -65,8 +66,9 @@ class ExperimentCommand implements Callable<Integer> {
     System.setProperty(GeneratorConfigurations.STAGE_2_MAX_INPUTS, Long.toString(stage2MaxInputs));
     System.setProperty(GeneratorConfigurations.STAGE_2_MAX_COUNTEREXAMPLES, Long.toString(stage1MaxCounterexamples));
 
+    final TestExecutionListener printToCommandLineListener = StdoutTestExecutionListener.create();
     for (int i = 0; i < repetitions; ++i) {
-      launcher.execute(request, listener);
+      launcher.execute(request, jsonReportListener, printToCommandLineListener);
     }
 
     final ObjectMapper objectMapper = new ObjectMapper();

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
@@ -20,9 +19,6 @@ import edu.berkeley.cs.jqf.instrument.tracing.events.TraceEvent;
  */
 class CloseableZestGuidance implements CloseableGuidance {
 
-  /** Hard timeout for all Zest fuzzing phases. */
-  private static final Duration TIMEOUT = Duration.ofMinutes(1);
-
   /** Zest output path. */
   private final Path outputDirectory = Files.createTempDirectory("zest");
 
@@ -34,7 +30,7 @@ class CloseableZestGuidance implements CloseableGuidance {
    * @throws IOException {@link Path#toFile()}
    */
   CloseableZestGuidance(final String phaseName) throws IOException {
-    guidance = new ZestGuidance(phaseName, TIMEOUT, outputDirectory.toFile());
+    guidance = new ZestGuidance(phaseName, TimeLimitedGuidance.TIMEOUT, outputDirectory.toFile());
   }
 
   @Override

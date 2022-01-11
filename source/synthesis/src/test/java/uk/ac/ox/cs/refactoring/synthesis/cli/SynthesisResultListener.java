@@ -44,10 +44,14 @@ class SynthesisResultListener implements TestExecutionListener {
 
     switch (testExecutionResult.getStatus()) {
       case FAILED:
-        if (testExecutionResult.getThrowable().map(AssertionFailedError.class::isInstance).orElse(false))
+        if (testExecutionResult.getThrowable().map(SynthesisResultListener::isAssertionViolation).orElse(false))
           run.Unsound = true;
       default:
     }
+  }
+
+  private static boolean isAssertionViolation(final Throwable throwable) {
+    return throwable instanceof AssertionFailedError || throwable instanceof AssertionError;
   }
 
   @Override
