@@ -83,7 +83,7 @@ public final class GeneratorConfigurations {
     final ClassLoader classLoader = ClassLoaders.createIsolated();
     final ComponentDirectory components = new ComponentDirectory();
 
-    final boolean useJavaDoc = Boolean.getBoolean(USE_JAVADOC);
+    final boolean useJavaDoc = getBoolean(USE_JAVADOC, true);
     final JavaDocSeed javaDocSeed = new JavaDocSeed(classLoader, methodToRefactor);
     final TypeSeed typeSeed = new TypeSeed(classLoader, methodToRefactor);
     final SignatureSeed signatureSeed = new SignatureSeed(classLoader, methodToRefactor);
@@ -92,18 +92,37 @@ public final class GeneratorConfigurations {
     final ConstantSeed constantSeed = new ConstantSeed();
     final StatementSeed statementSeed = new StatementSeed();
 
-    if (useJavaDoc)
-      seed(components, javaDocSeed, signatureSeed, factorySeed, consumerSeed, statementSeed);
-    else
+    if (useJavaDoc) {
+      seed(components, javaDocSeed);
+      if (components.size() > 0)
+        seed(components, signatureSeed, factorySeed, consumerSeed, statementSeed);
+    }
+    if (components.size() == 0)
       seed(components, typeSeed, signatureSeed, constantSeed, statementSeed);
 
-    final boolean useRandomGuidance = Boolean.getBoolean(USE_RANDOM_GUIDANCE);
-    final long stage1MaxCounterexamples = Long.getLong(STAGE_1_MAX_COUNTEREXAMPLES, 10);
-    final long stage1MaxInputs = Long.getLong(STAGE_1_MAX_INPUTS, 100);
-    final long stage2MaxCounterexamples = Long.getLong(STAGE_2_MAX_COUNTEREXAMPLES, 1);
-    final long stage2MaxInputs = Long.getLong(STAGE_2_MAX_INPUTS, 400);
+    final boolean useRandomGuidance = getBoolean(USE_RANDOM_GUIDANCE, false);
+    final long stage1MaxCounterexamples = Long.getLong(STAGE_1_MAX_COUNTEREXAMPLES, 1);
+    final long stage1MaxInputs = Long.getLong(STAGE_1_MAX_INPUTS, 500);
+    final long stage2MaxCounterexamples = Long.getLong(STAGE_2_MAX_COUNTEREXAMPLES, 0);
+    final long stage2MaxInputs = Long.getLong(STAGE_2_MAX_INPUTS, 0);
     return deprecatedMethod(methodToRefactor, classLoader, components, (byte) 3, useRandomGuidance,
         stage1MaxCounterexamples, stage1MaxInputs, stage2MaxCounterexamples, stage2MaxInputs);
+  }
+
+  /**
+   * Equivalent to {@link Boolean#getBoolean(String)}, but allows to specify a
+   * default value.
+   * 
+   * @param name         {@link Boolean#getBoolean(String)}
+   * @param defaultValue Default value if no matching property exists.
+   * @return {@link Boolean#getBoolean(String)} if the property exists,
+   *         {@code defaultValue} otherwise.
+   */
+  private static boolean getBoolean(final String name, final boolean defaultValue) {
+    final String value = System.getProperty(name);
+    if (value == null)
+      return defaultValue;
+    return Boolean.parseBoolean(value);
   }
 
   /**

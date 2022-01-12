@@ -14,7 +14,7 @@ import edu.berkeley.cs.jqf.instrument.tracing.events.TraceEvent;
 class TimeLimitedGuidance implements Guidance {
 
   /** Static global time limit. */
-  static final Duration TIMEOUT = Duration.ofMinutes(1);
+  static final Duration TIMEOUT = Duration.ofMinutes(2);
 
   /** Extended guidance. */
   private final Guidance wrapped;
