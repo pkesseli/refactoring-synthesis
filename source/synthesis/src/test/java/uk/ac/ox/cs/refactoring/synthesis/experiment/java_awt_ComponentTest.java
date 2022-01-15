@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.experiment;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anyOf;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.mapsTo;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
@@ -125,6 +126,96 @@ class java_awt_ComponentTest {
   }
 
   @Test
+  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
+  void lostFocus() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "lostFocus", "java.awt.Event", "java.lang.Object"),
+        contains(".processKeyEvent("));
+  }
+
+  @Test
+  void minimumSize() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "minimumSize"), contains(".getMinimumSize()"));
+  }
+
+  @Test
+  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
+  void mouseDown​() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseUp", "java.awt.Event", "int", "int"),
+        contains(".processMouseEvent("));
+  }
+
+  @Test
+  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
+  void mouseDrag​() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseDrag​", "java.awt.Event", "int", "int"),
+        contains(".processMouseMotionEvent("));
+  }
+
+  @Test
+  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
+  void mouseEnter​() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseEnter​", "java.awt.Event", "int", "int"),
+        contains(".processMouseEvent("));
+  }
+
+  @Test
+  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
+  void mouseExit​() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseExit​", "java.awt.Event", "int", "int"),
+        contains(".processMouseEvent("));
+  }
+
+  @Test
+  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
+  void mouseMove​() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseMove​", "java.awt.Event", "int", "int"),
+        contains(".processMouseMotionEvent("));
+  }
+
+  @Test
+  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
+  void mouseUp​() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseUp​", "java.awt.Event", "int", "int"),
+        contains(".processMouseEvent("));
+  }
+
+  @Test
+  void move() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "move", "int", "int"), contains(".setLocation("));
+  }
+
+  @Test
+  void nextFocus() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "nextFocus"),
+        anyOf(contains(".transferFocus("), contains(".transferFocusUpCycle(")));
+  }
+
+  @Test
+  void postEvent() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "postEvent", "java.awt.Event"), contains(".dispatchEvent("));
+  }
+
+  @Test
+  void preferredSize() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "preferredSize"), contains(".getPreferredSize("));
+  }
+
+  @Test
+  void reshape() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "reshape", "int", "int", "int", "int"), contains(".setBounds("));
+  }
+
+  @Test
+  void resize() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "resize", "int", "int"), contains(".setSize("));
+  }
+
+  @Test
+  void resizeDimension() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "resize", "java.awt.Dimension"), contains(".setSize("));
+  }
+
+  @Test
   void show() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "show"),
         allOf(
@@ -142,6 +233,11 @@ class java_awt_ComponentTest {
             mapsTo(java_awt_ComponentTest::isVisible, fromVisible(false), true),
             mapsTo(java_awt_ComponentTest::isHidden, fromVisible(true), false),
             mapsTo(java_awt_ComponentTest::isHidden, fromVisible(false), false)));
+  }
+
+  @Test
+  void size() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "size"), contains(".getSize()"));
   }
 
   private static Component fromFocusTraversable(final boolean isFocusTraversable) {
