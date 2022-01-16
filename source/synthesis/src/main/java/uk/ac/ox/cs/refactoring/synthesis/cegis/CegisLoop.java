@@ -44,11 +44,7 @@ public class CegisLoop<Candidate> {
 
   static {
     System.setProperty("jqf.ei.MAX_INPUT_SIZE", "102400");
-    System.setProperty("resynth.fuzzing.random", Boolean.toString(false));
-    System.setProperty("resynth.verification.stage1.maxInputs", "100");
-    System.setProperty("resynth.verification.stage1.maxCounterexamples", "10");
-    System.setProperty("resynth.verification.stage2.maxInputs", "400");
-    System.setProperty("resynth.verification.stage2.maxCounterexamples", "1");
+    System.setProperty("jqf.ei.QUIET_MODE", Boolean.toString(true));
   }
 
   /**
@@ -59,13 +55,16 @@ public class CegisLoop<Candidate> {
    *                               specification of the synthesis.
    * @param generatorConfiguration Search configuration.
    * @param candidateType          Used to configure JQF candidate generators.
+   * @param listener               Listener for synthesis and verification events.
    */
   public CegisLoop(final CandidateExecutor<Candidate> executor, final Invoker invoker,
-      final GeneratorConfiguration generatorConfiguration, final Class<Candidate> candidateType) {
+      final GeneratorConfiguration generatorConfiguration, final Class<Candidate> candidateType,
+      final CegisLoopListener<Candidate> listener) {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
     final GeneratorRepository baseRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ObjectGenerator())
         .register(new ServiceLoaderGeneratorSource())
+        .register(new ClassGenerator())
         .register(new OperatingSystemMXBeanGenerator());
     final GeneratorRepository verificationRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ServiceLoaderGeneratorSource())
@@ -78,9 +77,10 @@ public class CegisLoop<Candidate> {
     final Method fuzzingSynthesisFrameworkMethod = SnippetCandidateGenerator.TestClass
         .getFrameworkMethodPlaceholder(null);
 
-    synthesis = new FuzzingSynthesis<>(synthesisRepository, sourceOfRandomness, candidateType,
-        fuzzingSynthesisFrameworkMethod, executor);
-    verification = new FuzzingVerification<>(verificationRepository, executor, invoker);
+    synthesis = new FuzzingSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
+        fuzzingSynthesisFrameworkMethod, executor, listener);
+    verification = new FuzzingVerification<>(generatorConfiguration, verificationRepository, executor, invoker,
+        listener);
   }
 
   /**

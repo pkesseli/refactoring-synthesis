@@ -8,13 +8,13 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidateExec
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoop;
+import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
 import uk.ac.ox.cs.refactoring.synthesis.state.ClassLoaderClonerStateFactory;
 import uk.ac.ox.cs.refactoring.synthesis.state.StateFactory;
+import uk.ac.ox.cs.refactoring.synthesis.statistics.Reports;
 
 public final class Synthesis {
-  private Synthesis() {
-  }
 
   public static SnippetCandidate synthesise(final GeneratorConfiguration generatorConfiguration,
       final MethodIdentifier methodToRefactor)
@@ -22,8 +22,14 @@ public final class Synthesis {
     final StateFactory stateFactory = new ClassLoaderClonerStateFactory();
     final SnippetCandidateExecutor executor = new SnippetCandidateExecutor(stateFactory);
     final Invoker invoker = new Invoker(methodToRefactor);
-    final CegisLoop<SnippetCandidate> cegis = new CegisLoop<>(executor, invoker, generatorConfiguration,
-        SnippetCandidate.class);
-    return cegis.synthesise();
+    try (final CegisLoopListener<SnippetCandidate> listener = Reports
+        .createReportListener(methodToRefactor.FullyQualifiedClassName, methodToRefactor.MethodName)) {
+      final CegisLoop<SnippetCandidate> cegis = new CegisLoop<>(executor, invoker, generatorConfiguration,
+          SnippetCandidate.class, listener);
+      return cegis.synthesise();
+    }
+  }
+
+  private Synthesis() {
   }
 }

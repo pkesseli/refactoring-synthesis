@@ -16,13 +16,38 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.TypeSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.JavaDocSeed;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invokable;
 
-/**
- * Factory for {@link GeneratorConfiguration}s.
- */
+/** Factory for {@link GeneratorConfiguration}s. */
 public final class GeneratorConfigurations {
 
-  private GeneratorConfigurations() {
-  }
+  /**
+   * System property configuring maximum number of counterexamples during the
+   * first verification stage.
+   */
+  public static final String STAGE_1_MAX_COUNTEREXAMPLES = "resynth.verification.stage1.maxCounterexamples";
+
+  /**
+   * System property configuring maximum number of inputs during the first
+   * verification stage.
+   */
+  public static final String STAGE_1_MAX_INPUTS = "resynth.verification.stage1.maxInputs";
+
+  /**
+   * System property configuring maximum number of counterexamples during the
+   * second verification stage.
+   */
+  public static final String STAGE_2_MAX_COUNTEREXAMPLES = "resynth.verification.stage2.maxCounterexamples";
+
+  /**
+   * System property configuring maximum number of inputs during the second
+   * verification stage.
+   */
+  public static final String STAGE_2_MAX_INPUTS = "resynth.verification.stage2.maxInputs";
+
+  /** System property configuring whether to hints from Javadoc. */
+  public static final String USE_JAVADOC = "resynth.synthesis.javadoc";
+
+  /** System property configuring whether to use no guidance. */
+  public static final String USE_RANDOM_GUIDANCE = "resynth.fuzzing.random";
 
   /**
    * Default deprecated methods configuration.
@@ -40,7 +65,7 @@ public final class GeneratorConfigurations {
     final ComponentDirectory components = new ComponentDirectory();
     seed(components, new TypeSeed(classLoader, methodToRefactor), new SignatureSeed(classLoader, methodToRefactor),
         new ConstantSeed(), new StatementSeed());
-    return deprecatedMethod(methodToRefactor, classLoader, components, (byte) 1);
+    return deprecatedMethod(methodToRefactor, classLoader, components, (byte) 1, false, 100, 10, 400, 1);
   }
 
   /**
@@ -53,23 +78,66 @@ public final class GeneratorConfigurations {
    * @throws NoSuchFieldException   {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    * @throws NoSuchMethodException  {@link #deprecatedMethod(MethodIdentifier, ClassLoader, byte, InstructionSetSeed)}
    */
-  public static GeneratorConfiguration deprecatedMethodWithJavaDoc(final MethodIdentifier methodToRefactor)
+  public static GeneratorConfiguration experimentConfiguration(final MethodIdentifier methodToRefactor)
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     final ClassLoader classLoader = ClassLoaders.createIsolated();
     final ComponentDirectory components = new ComponentDirectory();
-    seed(components, new JavaDocSeed(classLoader, methodToRefactor), new SignatureSeed(classLoader, methodToRefactor),
-        new FactorySeed(classLoader), new ConsumerSeed(classLoader), new StatementSeed());
-    return deprecatedMethod(methodToRefactor, classLoader, components, (byte) 3);
+
+    final boolean useJavaDoc = getBoolean(USE_JAVADOC, true);
+    final JavaDocSeed javaDocSeed = new JavaDocSeed(classLoader, methodToRefactor);
+    final TypeSeed typeSeed = new TypeSeed(classLoader, methodToRefactor);
+    final SignatureSeed signatureSeed = new SignatureSeed(classLoader, methodToRefactor);
+    final FactorySeed factorySeed = new FactorySeed(classLoader);
+    final ConsumerSeed consumerSeed = new ConsumerSeed(classLoader);
+    final ConstantSeed constantSeed = new ConstantSeed();
+    final StatementSeed statementSeed = new StatementSeed();
+
+    if (useJavaDoc) {
+      seed(components, javaDocSeed);
+      if (components.size() > 0)
+        seed(components, signatureSeed, factorySeed, consumerSeed, statementSeed);
+    }
+    if (components.size() == 0)
+      seed(components, typeSeed, signatureSeed, constantSeed, statementSeed);
+
+    final boolean useRandomGuidance = getBoolean(USE_RANDOM_GUIDANCE, false);
+    final long stage1MaxCounterexamples = Long.getLong(STAGE_1_MAX_COUNTEREXAMPLES, 1);
+    final long stage1MaxInputs = Long.getLong(STAGE_1_MAX_INPUTS, 500);
+    final long stage2MaxCounterexamples = Long.getLong(STAGE_2_MAX_COUNTEREXAMPLES, 0);
+    final long stage2MaxInputs = Long.getLong(STAGE_2_MAX_INPUTS, 0);
+    return deprecatedMethod(methodToRefactor, classLoader, components, (byte) 3, useRandomGuidance,
+        stage1MaxCounterexamples, stage1MaxInputs, stage2MaxCounterexamples, stage2MaxInputs);
+  }
+
+  /**
+   * Equivalent to {@link Boolean#getBoolean(String)}, but allows to specify a
+   * default value.
+   * 
+   * @param name         {@link Boolean#getBoolean(String)}
+   * @param defaultValue Default value if no matching property exists.
+   * @return {@link Boolean#getBoolean(String)} if the property exists,
+   *         {@code defaultValue} otherwise.
+   */
+  private static boolean getBoolean(final String name, final boolean defaultValue) {
+    final String value = System.getProperty(name);
+    if (value == null)
+      return defaultValue;
+    return Boolean.parseBoolean(value);
   }
 
   /**
    * Provides a deprecated methods configuration.
    * 
-   * @param methodToRefactor Deprecated method to refactor.
-   * @param classLoader      Class loader to use when loading classes reflectively
-   *                         to inspect prameter types.
-   * @param minInstructions  Minimum program size.
-   * @param extraSeed        Additional {@link InstructionSetSeed} to apply.
+   * @param methodToRefactor         Deprecated method to refactor.
+   * @param classLoader              Class loader to use when loading classes
+   *                                 reflectively
+   *                                 to inspect prameter types.
+   * @param minInstructions          Minimum program size.
+   * @param useRandomGuidance        {@link GeneratorConfiguration#GeneratorConfiguration(ComponentDirectory, byte, byte, byte, Class, List, Class, boolean, long, long, long, long)}
+   * @param stage1MaxCounterexamples {@link GeneratorConfiguration#GeneratorConfiguration(ComponentDirectory, byte, byte, byte, Class, List, Class, boolean, long, long, long, long)}
+   * @param stage1MaxInputs          {@link GeneratorConfiguration#GeneratorConfiguration(ComponentDirectory, byte, byte, byte, Class, List, Class, boolean, long, long, long, long)}
+   * @param stage2MaxCounterexamples {@link GeneratorConfiguration#GeneratorConfiguration(ComponentDirectory, byte, byte, byte, Class, List, Class, boolean, long, long, long, long)}
+   * @param stage2MaxInputs          {@link GeneratorConfiguration#GeneratorConfiguration(ComponentDirectory, byte, byte, byte, Class, List, Class, boolean, long, long, long, long)}
    * @return Candidate generator configuration.
    * @throws ClassNotFoundException {@link #seed(ComponentDirectory, InstructionSetSeed...)}
    * @throws IllegalAccessException {@link #seed(ComponentDirectory, InstructionSetSeed...)}
@@ -77,7 +145,10 @@ public final class GeneratorConfigurations {
    * @throws NoSuchMethodException  {@link #seed(ComponentDirectory, InstructionSetSeed...)}
    */
   private static GeneratorConfiguration deprecatedMethod(final MethodIdentifier methodToRefactor,
-      final ClassLoader classLoader, final ComponentDirectory components, final byte minInstructions)
+      final ClassLoader classLoader, final ComponentDirectory components, final byte minInstructions,
+      final boolean useRandomGuidance,
+      final long stage1MaxCounterexamples, final long stage1MaxInputs, final long stage2MaxCounterexamples,
+      final long stage2MaxInputs)
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     final byte maxInstructions = 3;
     final byte maxInstructionLength = 3;
@@ -86,7 +157,8 @@ public final class GeneratorConfigurations {
     final List<Class<?>> parameterTypes = invokable.getParameterTypes();
     final Class<?> resultType = invokable.getReturnType();
     return new GeneratorConfiguration(components, minInstructions, maxInstructions, maxInstructionLength, instanceType,
-        parameterTypes, resultType);
+        parameterTypes, resultType, useRandomGuidance, stage1MaxCounterexamples, stage1MaxInputs,
+        stage2MaxCounterexamples, stage2MaxInputs);
   }
 
   /**
@@ -103,5 +175,8 @@ public final class GeneratorConfigurations {
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     for (final InstructionSetSeed instructionSetSeed : instructionSetSeeds)
       instructionSetSeed.seed(components);
+  }
+
+  private GeneratorConfigurations() {
   }
 }

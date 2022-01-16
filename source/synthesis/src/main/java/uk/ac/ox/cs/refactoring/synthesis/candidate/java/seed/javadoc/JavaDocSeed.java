@@ -121,7 +121,6 @@ public class JavaDocSeed implements InstructionSetSeed {
       final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, typeSolver, expression,
           components.InvolvedClasses);
       javaComponents.nonnull(type, snippetComponent);
-      return;
     }
 
     final String deprecatedLink = getLink(javadoc);

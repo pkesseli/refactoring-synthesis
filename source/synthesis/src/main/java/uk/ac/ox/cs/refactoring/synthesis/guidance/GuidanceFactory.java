@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import edu.berkeley.cs.jqf.fuzz.ei.ZestGuidance;
 import edu.berkeley.cs.jqf.fuzz.random.NoGuidance;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 
 /** Helper to create configured synthesis and verification guidances. */
 public final class GuidanceFactory {
@@ -11,11 +12,12 @@ public final class GuidanceFactory {
   /**
    * Provides synthesis guidance configuration.
    * 
+   * @param generatorConfiguration {@link #getBaseGuidance(GeneratorConfiguration, String)}
    * @return Configured synthesis JQF guidance.
    * @throws IOException if Zest guidance could not be initialised.
    */
-  public static CloseableGuidance synthesis() throws IOException {
-    return new SynthesisGuidance(getBaseGuidance("inductive synthesis"));
+  public static CloseableGuidance synthesis(final GeneratorConfiguration generatorConfiguration) throws IOException {
+    return new SynthesisGuidance(getBaseGuidance(generatorConfiguration, "inductive synthesis"));
   }
 
   /**
@@ -26,9 +28,11 @@ public final class GuidanceFactory {
    * @return Configured {@link VerificationGuidance}.
    * @throws IOException if Zest guidance could not be initialised.
    */
-  public static CloseableGuidance verification(final long maximumNumberOfCounterexamples,
+  public static CloseableGuidance verification(final GeneratorConfiguration generatorConfiguration,
+      final long maximumNumberOfCounterexamples,
       final long maximumNumberOfInputs) throws IOException {
-    return new VerificationGuidance(getBaseGuidance("verification"), maximumNumberOfCounterexamples,
+    return new VerificationGuidance(getBaseGuidance(generatorConfiguration, "verification"),
+        maximumNumberOfCounterexamples,
         maximumNumberOfInputs);
   }
 
@@ -36,23 +40,16 @@ public final class GuidanceFactory {
    * Provides shared base guidance (random or Zest) for synthesis and
    * verification.
    * 
-   * @param phaseName {@link ZestGuidance#ZestGuidance(String, java.time.Duration, java.io.File)}
+   * @param generatorConfiguration {@link #getBaseGuidance(GeneratorConfiguration, String)}
+   * @param phaseName              {@link ZestGuidance#ZestGuidance(String, java.time.Duration, java.io.File)}
    * @return Base fuzzing guidance.
    * @throws IOException if Zest guidance could not be initialised.
    */
-  private static CloseableGuidance getBaseGuidance(final String phaseName) throws IOException {
-    return useRandom() ? new CloseableGuidanceAdapter(new NoGuidance(Long.MAX_VALUE, null))
+  private static CloseableGuidance getBaseGuidance(final GeneratorConfiguration generatorConfiguration,
+      final String phaseName) throws IOException {
+    return generatorConfiguration.UseRandomGuidance
+        ? new CloseableGuidanceAdapter(new TimeLimitedGuidance(new NoGuidance(Long.MAX_VALUE, null)))
         : new CloseableZestGuidance(phaseName);
-  }
-
-  /**
-   * Indicates whether Zest or random guidance should be used.
-   * 
-   * @return {@code true} if random guidance should be used, {@code false} if Zest
-   *         guidance should be used.
-   */
-  private static boolean useRandom() {
-    return Boolean.getBoolean("resynth.fuzzing.random");
   }
 
   private GuidanceFactory() {

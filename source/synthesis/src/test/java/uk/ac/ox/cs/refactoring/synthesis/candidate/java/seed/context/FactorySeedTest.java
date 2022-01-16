@@ -18,6 +18,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.JavaDocSeed
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
 public class FactorySeedTest {
+
   @Test
   void seed() throws Exception {
     final ClassLoader classLoader = ClassLoaders.createIsolated();

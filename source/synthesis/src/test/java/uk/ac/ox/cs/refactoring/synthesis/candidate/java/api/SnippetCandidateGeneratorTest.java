@@ -40,7 +40,8 @@ class SnippetCandidateGeneratorTest {
     final byte maxInstructions = 1;
     final byte maxInstructionLength = 1;
     final GeneratorConfiguration generatorConfiguration = new GeneratorConfiguration(components, minInstructions,
-        maxInstructions, maxInstructionLength, Void.class, Collections.emptyList(), double.class);
+        maxInstructions, maxInstructionLength, Void.class, Collections.emptyList(), double.class, false, 10, 100, 1,
+        400);
     final SnippetCandidateGenerator candidateSupplier = new SnippetCandidateGenerator(generatorConfiguration);
     final SnippetCandidate snippetCandidate = candidateSupplier.generate(sourceOfRandomness, null);
     assertThat(snippetCandidate.Block.Statements, hasItems(isA(ExpressionStatement.class)));

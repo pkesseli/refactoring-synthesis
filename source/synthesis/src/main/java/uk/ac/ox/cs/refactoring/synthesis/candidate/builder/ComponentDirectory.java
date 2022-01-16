@@ -152,4 +152,13 @@ public class ComponentDirectory {
         .flatMap(List::stream).filter(keyClass::isInstance).map(keyClass::cast).collect(Collectors.toSet());
   }
 
+  /**
+   * Provides number of all components, across types and sizes.
+   * 
+   * @return Number of components.
+   */
+  public int size() {
+    return components.entrySet().stream().map(Map.Entry::getValue).map(Map::entrySet).flatMap(Collection::stream)
+        .map(Map.Entry::getValue).mapToInt(Collection::size).sum();
+  }
 }

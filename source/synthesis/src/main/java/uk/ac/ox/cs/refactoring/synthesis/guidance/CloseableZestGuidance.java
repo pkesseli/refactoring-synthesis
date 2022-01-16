@@ -30,7 +30,7 @@ class CloseableZestGuidance implements CloseableGuidance {
    * @throws IOException {@link Path#toFile()}
    */
   CloseableZestGuidance(final String phaseName) throws IOException {
-    guidance = new ZestGuidance(phaseName, null, outputDirectory.toFile());
+    guidance = new ZestGuidance(phaseName, TimeLimitedGuidance.TIMEOUT, outputDirectory.toFile());
   }
 
   @Override

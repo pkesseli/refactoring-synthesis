@@ -7,6 +7,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.opentest4j.AssertionFailedError;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
+import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.HeapComparison;
@@ -15,7 +16,7 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.HeapComparison;
 class CandidateSynthesis<Candidate> extends FrameworkMethod {
 
   /** Sink for candidate logging. */
-  private final CandidateListener<Candidate> listener;
+  private final CegisLoopListener<Candidate> listener;
 
   /** Counterexamples candidates must satisfy. */
   private final Map<Counterexample, ExecutionResult> counterexamples;
@@ -29,7 +30,7 @@ class CandidateSynthesis<Candidate> extends FrameworkMethod {
    * @param executor        {@link #executor}
    * @param method          {@link FrameworkMethod#FrameworkMethod(Method)}
    */
-  CandidateSynthesis(final CandidateListener<Candidate> listener,
+  CandidateSynthesis(final CegisLoopListener<Candidate> listener,
       final Map<Counterexample, ExecutionResult> counterexamples,
       final CandidateExecutor<Candidate> executor, final Method method) {
     super(method);
