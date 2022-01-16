@@ -186,49 +186,34 @@ that the developers are discouraged from using in the future as
 they've been superseded and may cease to exist in the future.
 However, removing them directly would break the backward compatibility
 of the project's API.  Instead, such elements can be tagged with the
-\code{@Deprecated} annotation.  In general, when deprecating a
-field/method/class, the \code{@deprecated} Javadoc tag is used in the
-comment section to inform the developer the reason of deprecation and
-what can be used in place.
-
-%% \subsection{Deprecated example}
-
-%% The {\em Deprecated} annotation in Java is used to mark program elements which
-%% programmers are discouraged from using for various reasons such as future API
-%% changes or security problems in the method. Usually API designers provide
-%% programmers with recommendations about what they should use instead.
-
-%% Even in the presence of such recommendations, the transformation of
-%% existing code to the recommended format is not always straightforward,
-%% as illustrated in Fig.~\ref{ex:deprecated-method}. In the example, we
-%% make use of the \code{Date} class and we set the hour of the \code{Date} object to $10$.
-%% However, the \code{getHours} method is deprecated and we must
-%% use \code{Calendar.set} instead.
+\code{@Deprecated} annotation.  %% In general, when deprecating a
+%% field/method/class, the \code{@deprecated} Javadoc tag is used in the
+%% comment section to inform the developer the reason of deprecation and
+%% what can be used in place.
 
 
-Even in the presence of such recommendations, the transformation of
-existing code to the recommended format is not always straightforward,
+%Even in the presence of such recommendations,
+The transformation of existing code such that it doesn't use deprecated APIs
+%to the recommended format
+is not always straightforward,
 as illustrated in Fig.~\ref{ex:deprecated-method-other}. In the example, we
 make use of the \code{getHours} method of the \code{Date} class,
-which is deprecated with the 
-recommendation to use \code{Calendar.get(Calendar.HOUR\_OF\_DAY)} instead.
-%In the example, we set the hour of the \code{Date} object to $10$.
-However,
-%% the 
-%% \code{Date} constructor expects its year parameter to be an offset
-%% from 1900, i.e. the year 2020 is expressed as 120.  This needs to be
-%% transformed to 2020 when using \code{Calendar} API, as shown in the
-%% example. Moreover,
-the \code{Calendar} constructor is protected,
-meaning that we must use \code{getInstance} to obtain a
-\code{Calendar} object. Moreover, in order to be able to use this \code{Calendar} object for our purpose,
+which is deprecated.
+%% with the 
+%% recommendation to use \code{Calendar.get(Calendar.HOUR\_OF\_DAY)} instead.
+In this situation, in order to replace the use of the deprecated method,
+we must first obtain a \code{Calendar} object.
+However, we can't use the \code{Calendar} constructor as it is protected,
+and we must instead call \code{getInstance}.
+Furthermore, in order to be able to use this \code{Calendar} object for our purpose,
 we must first set its time using the existing \code{date}.
 We do this by calling \code{setTime} with \code{date} as argument.
 %% followed by setting the date using \code{set}
 %% and returning a Date object by invoking \code{getTime}.
 %% Alternatively, the \code{GregorianCalendar} class may be used with
 %% similar difficulties.
-Only after all this set up, we can finally make use of the recommendation
+Finally, we can retrieve the hour by calling
+%Only after all this set up, we can finally make use of the recommendation
 \code{calendar.get(Calendar.HOUR\_OF\_DAY)}.
 
 \begin{figure}
@@ -271,12 +256,14 @@ inlining calls to deprecated methods can break equivalence if the
 original function was synchronised.  While it is not possible for two
 invocations of synchronized original method on the same object to
 interleave, this is not guaranteed after inlining the method's body.
-
-Another example of a refactoring that unintuitively breaks
-observational equivalence is given in Figure~\ref{}.
+Such an exampe is given in Figure~\ref{}.
 \todo{add example here.}
 
-Consequently, refactorings based solely on a program's syntax end up
+%% Another example of a refactoring that unintuitively breaks
+%% observational equivalence is given in Figure~\ref{}.
+%% \todo{add example here.}
+
+Consequently, deprecated refactorings based solely on a program's syntax end up
 being overly conservative and mostly address structural changes
 to a program.  Even when referring back to the example in
 Figure~\ref{ex:deprecated-method-other}, one must have some
@@ -346,26 +333,64 @@ further preventing compilation errors and behaviour changes
 %% \cite{Steimann2011}.
 
 In this paper, we take a step further in this direction by proposing a
-semantics-driven refactoring technique that is guided by {\em code hints} and {\em types}.
-For this purpose, we make use of component-based program synthesis, which assembles programs
-from a library of existing components, e.g. methods provided by an API.
-%Depending on the API, the size of the components library can be large.
-%When synthesising refactorings for Java, a naive approach would
-One of the challenges in component-based synthesis is the large number of components
-when considering real-world APIs. Specifically for our use case, when generating Java code, we have
-access to the whole of Java standard library.
-We address this challenge by using the code hints provided in the Javadoc comments
-(under the Javadoc \code{@code} tag) and type information to prune the component
-library before the actual synthesis process.
+semantics-driven refactoring technique that makes use of program synthesis.
+Our goal is to design a refactoring techniques for deprecated instances that computes fast refactoring, thus allowing integration with an IDE.
 
-With respect to the synthesis process, we propose using greybox
-synthesis. Traditionally, synthesis techniques are either based
-on whitebox or blackbox approaches.  The former are fully aware of the
-internal structure of the program being synthesised, whereas the
-latter only examine its functionality. In this paper, we use a greybox
-approach, which relies on coverage-guided property-based testing. 
-For this purpose, we provide an encoding for the synthesis problem, which
-makes it amenable to solving via coverage-guided property-based testing.
+%% As explained in more detail in the overview in Section~\ref{sec:overview},
+%% the program synthesis technique will be guided by {\em code hints}
+%% and {\em types}, as well 
+
+While powerful, program synthesis is very hard due to the vast search space, i.e. space of possible programs that must be considered. Thus, its success is generally relient on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{}, type signatures~\cite{}, or full functional specifications of the expected code~\cite{}.
+%
+The vast search space is particularly a challenge in the current setting given that, in the absence of any additional guidance, the entire \code{java.lang} needs to be considered during code generation.
+In order to prune the search space, we start by investigating the information available to our synthesis procedure.
+%The information that we are going to use to direct
+%\begin{itemize}
+
+{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists on the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, they are not sufficient in the current scenario. %, where the number of possible programs where considering \code{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
+
+{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \code{@deprecated} Javadoc tag is used in the
+  comment section to inform the developer of the reason for deprecation and what can be used in place. As we will show in Section~\ref{sec:overview}, these hints
+  don't provide the whole refactoring, but can be used to guide the search process.
+
+  {\bf (3)} One last information we have about the code to be generated is that it needs to be semantically equivalent to the original. While this does provide us with the {\em semantics of the
+  code to be generated}, it's not easy to use. 
+%* This is not enough to decide semantic equivalence, which, as discussed above, is one of the main difficulties in this refactoring.
+  Notably, proving semantic equivalence is very difficult and has been the subject of extended research over the years \cite{}.
+%Even when theoretically possible, the process of proving semantic equivalence is very expensive as it generally requires full understanding of the code's semantics.
+ %%  Also, fully understanding the semantics of a piece of code is very expensive...
+%% Greybox testing ... is more efficient than whitebox testing and offers more guarantees than blackbox testing.
+%% This contradicts our aforementioned goal to design a technique that is fast. Thus, we make compromise between performace and soundness and
+%% make use of testing to check semantic equivalence.
+Moreover, it generally requires full understanding of a program's internal structure, which is expensive.
+This contradicts our aforementioned goal to design a technique that is fast. In a bid to obtain good performance,
+we investigated using greybox testing for checking program equivalence, rather than formally proving it.
+In particular, we decided to use coverage-guided property-based testing, which only requires limited instrumentation of the programs under test.
+While we can't provide full correctness guarantees,
+our experiments show that, when considering a large number of test inputs, the results are sound.
+
+%Then, we choose a compromise between performance and ease of use and soundness. We use ...
+
+%{\em Following the same principle, we design a greybox synthesis technique that is guided by code hints and types.}
+
+
+%% For this purpose, we make use of component-based program synthesis, which assembles programs
+%% from a library of existing components, e.g. methods provided by an API.
+%% One of the challenges in component-based synthesis is the large number of components
+%% when considering real-world APIs. Specifically for our use case, when generating Java code, we have
+%% access to the whole of Java standard library.
+%% We address this challenge by using the code hints provided in the Javadoc comments
+%% (under the Javadoc \code{@code} tag) and type information to prune the component
+%% library before the actual synthesis process.
+
+%% With respect to the synthesis process, we propose using greybox
+%% synthesis. Traditionally, synthesis techniques are either based
+%% on whitebox or blackbox approaches.  The former are fully aware of the
+%% internal structure of the program being synthesised, whereas the
+%% latter only examine its functionality. In this paper, we use a greybox
+%% approach, which relies on coverage-guided property-based testing. 
+%% For this purpose, we provide an encoding for the synthesis problem, which
+%% makes it amenable to solving via coverage-guided property-based testing.
 
 
 %% In this paper, we follow a two-step procedure to address this challenge:
@@ -429,11 +454,13 @@ makes it amenable to solving via coverage-guided property-based testing.
 
 \begin{itemize}
 
-\item We propose a semantics based approach to eliminate uses of deprecated APIs, which employs component-based program synthesis.
+\item We propose a semantics based approach to eliminate uses of deprecated APIs, which employs program synthesis.
 
-\item We provide a technique for building the component library that is guided by code hints and types.
+\item We propose a greybox program synthesis technique that is driven by type information and code hints, and relies on coverage-guided property-based testing.
   
-\item We propose greybox program synthesis by encoding the code generation problem as a verification problem that can be solved by coverage-guided property-based testing.
+%\item We provide a technique for building the component library that is guided by code hints and types.
+  
+%\item We propose greybox program synthesis by encoding the code generation problem as a verification problem that can be solved by coverage-guided property-based testing.
   %% introduce the notion of coverage based CEGIS, which makes use of coverage-guided property-based testing in order to generate counterexamples for a type and example guided synthesiser.
   
 %% \item We provide an encoding of the synthesis problem as the problem of verifying the safety of a program, which is then solved by fuzzing.
@@ -464,7 +491,7 @@ makes it amenable to solving via coverage-guided property-based testing.
 
 
 
-\section{Overview of our approach} \label{sec:approach}
+\section{Overview of our approach} \label{sec:overview}
 
 As mentioned in Section~\ref{sec:intro}, our approach employs program synthesis
 in order to generate a refactoring that is semantically equivalent to the original code and
@@ -476,8 +503,9 @@ which weaves together components from a library
 (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
 %Component-based program synthesis allows us to 
 
-While powerful, program synthesis is very hard due to the vast
-search space. In particular, for component-based synthesis, real-world
+%% While powerful, program synthesis is very hard due to the vast
+%% search space. In particular,
+For component-based synthesis, real-world
 APIs can be very large. %, making synthesis infeasible.
 For illustration, in our setting, indiscriminately adding all members
 found in \code{java.lang} would make synthesis infeasible (see experimental results in Section~\ref{sec:experimental-results}).
@@ -491,7 +519,7 @@ found in \code{java.lang} would make synthesis infeasible (see experimental resu
 %% While this does improve the efficiency of program synthesis by providing
 %% higher order building blocks that can be used..., real-world APIs are still
 %% too big.
-
+%
 Previous works have used type information to make components-based synthesis
 feasible in the presence of large component
 libraries~\cite{DBLP:conf/popl/FengM0DR17}.  However, as shown by our
@@ -537,15 +565,15 @@ In Section~\ref{sec:components-seeding}, we provide in-depth details about the
 building of the component library. 
 
 Once the component library is built, for the actual synthesis, we opted for a greybox approach, which relies on coverage-guided property-based testing~\cite{DBLP:conf/issta/PadhyeLS19}.
-%Existing approaches are either whitebox or blackbox.
-Intuitively, we wanted to avoid the overheads due to program analysis and
-constraint solving incurred by whitebox methods, while also making use of
-knowledge about the code that can be obtained through lightweight instrumentation.
-For this purpose, %% we phrased the synthesis problem in a manner that makes it amenable
-%% to solving via coverage-guided testing. Essentially,
-we employ an iterative synthesis process based on CounterExample Guided Synthesis (CEGIS)~\ref{},
-where the problems posed in each iteration are phrased such that they can be solved
-by coverage-guided property-based testing. We provide more details about
+%% Intuitively, we wanted to avoid the overheads due to program analysis and
+%% constraint solving incurred by whitebox methods, while also making use of
+%% knowledge about the code that can be obtained through lightweight instrumentation.
+%% For this purpose, %% we phrased the synthesis problem in a manner that makes it amenable
+%% %% to solving via coverage-guided testing. Essentially,
+%% we employ an iterative synthesis process based on CounterExample Guided Synthesis (CEGIS)~\ref{},
+%% where the problems posed in each iteration are phrased such that they can be solved
+%% by coverage-guided property-based testing.
+We provide more details about %
 this encoding in Section~\ref{sec:encoding}.
 
 %% Whitebox approaches can be inefficient as they require fully interpreting the
@@ -1334,11 +1362,11 @@ don't handle these cases.
 Discuss different types of fuzzing and the one that we use.
 \todo{Double check with Pascal what he uses.}
 
-\section{Algorithm}
+%% \section{Algorithm}
 
-\todo{Write description of the algorithm}
+%% \todo{Write description of the algorithm}
 
-\subsection{Reduction of semantically equivalent programs}
+%% \subsection{Reduction of semantically equivalent programs}
 
 \section{Guarantees}
 
