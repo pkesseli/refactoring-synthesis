@@ -74,8 +74,8 @@ class java_awt_ComponentTest {
     assertThat(synthesiseAlias("java.awt.Component", "hide"),
         allOf(
             contains(".setVisible("),
-            mapsTo(java_awt_ComponentTest::isHidden, fromVisible(true)),
-            mapsTo(java_awt_ComponentTest::isHidden, fromVisible(false))));
+            mapsTo(Components::isHidden, fromVisible(true)),
+            mapsTo(Components::isHidden, fromVisible(false))));
   }
 
   @Test
@@ -220,8 +220,8 @@ class java_awt_ComponentTest {
     assertThat(synthesiseAlias("java.awt.Component", "show"),
         allOf(
             contains(".setVisible("),
-            mapsTo(java_awt_ComponentTest::isVisible, fromVisible(true)),
-            mapsTo(java_awt_ComponentTest::isVisible, fromVisible(false))));
+            mapsTo(Components::isVisible, fromVisible(true)),
+            mapsTo(Components::isVisible, fromVisible(false))));
   }
 
   @Test
@@ -229,15 +229,21 @@ class java_awt_ComponentTest {
     assertThat(synthesiseAlias("java.awt.Component", "show", "boolean"),
         allOf(
             contains(".setVisible("),
-            mapsTo(java_awt_ComponentTest::isVisible, fromVisible(true), true),
-            mapsTo(java_awt_ComponentTest::isVisible, fromVisible(false), true),
-            mapsTo(java_awt_ComponentTest::isHidden, fromVisible(true), false),
-            mapsTo(java_awt_ComponentTest::isHidden, fromVisible(false), false)));
+            mapsTo(Components::isVisible, fromVisible(true), true),
+            mapsTo(Components::isVisible, fromVisible(false), true),
+            mapsTo(Components::isHidden, fromVisible(true), false),
+            mapsTo(Components::isHidden, fromVisible(false), false)));
   }
 
   @Test
   void size() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "size"), contains(".getSize()"));
+  }
+
+  private static Component fromVisible(final boolean isVisible) {
+    final Component component = new Panel();
+    component.setVisible(isVisible);
+    return component;
   }
 
   private static Component fromFocusTraversable(final boolean isFocusTraversable) {
@@ -258,20 +264,6 @@ class java_awt_ComponentTest {
 
   private static boolean isDisabled(final Component component, final Void result) {
     return !component.isEnabled();
-  }
-
-  private static Component fromVisible(final boolean isVisible) {
-    final Component component = new Panel();
-    component.setVisible(isVisible);
-    return component;
-  }
-
-  private static boolean isVisible(final Component component, final Void result) {
-    return component.isVisible();
-  }
-
-  private static boolean isHidden(final Component component, final Void result) {
-    return !component.isVisible();
   }
 
   private static Component fromDimension(final int width, final int height) {

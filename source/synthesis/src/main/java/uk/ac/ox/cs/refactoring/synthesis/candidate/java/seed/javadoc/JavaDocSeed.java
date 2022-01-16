@@ -198,13 +198,15 @@ public class JavaDocSeed implements InstructionSetSeed {
   /**
    * Provides a Javadoc link from the given {@link Javadoc} in the context of a
    * deprecated block.
+   * {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, ParseResult, MethodDeclaration, String)
+   * somethig}
    * 
    * @param javadoc Comment in which to search.
    * @return {@link Javadoc} link reference.
    */
   private static String getLink(final Javadoc javadoc) {
     return getDeprecatedInlineTags(javadoc).filter(tag -> JavadocInlineTag.Type.LINK == tag.getType())
-        .map(JavadocInlineTag::getContent).findAny().orElse(null);
+        .map(JavadocInlineTag::getContent).map(Links::getLink).findAny().orElse(null);
   }
 
   /**
