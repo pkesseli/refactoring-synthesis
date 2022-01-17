@@ -1,11 +1,7 @@
 package uk.ac.ox.cs.refactoring.classloader;
 
-/**
- * Helper to construct isolated class loaders.
- */
+/** Helper to construct isolated class loaders. */
 public final class ClassLoaders {
-  private ClassLoaders() {
-  }
 
   /**
    * Equivalent to calling {@link #createIsolated(ClassLoader)} using the class
@@ -93,5 +89,8 @@ public final class ClassLoaders {
       parent = parent.getParent();
     }
     return true;
+  }
+
+  private ClassLoaders() {
   }
 }
