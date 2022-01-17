@@ -265,9 +265,8 @@ Such an exampe is given in Figure~\ref{}.
 
 Consequently, deprecated refactorings based solely on a program's syntax end up
 being overly conservative and mostly address structural changes
-to a program.  Even when referring back to the example in
-Figure~\ref{ex:deprecated-method-other}, one must have some
-understanding of the semantics in order to conclude that the
+to a program.  For illustration, when referring back to the example in
+Figure~\ref{ex:deprecated-method-other}, one must have understanding of the semantics in order to conclude that the
 refactoring does maintain the same functionality.
 %
 %% such refactorings are based on semantics rather
@@ -334,7 +333,7 @@ further preventing compilation errors and behaviour changes
 
 In this paper, we take a step further in this direction by proposing a
 semantics-driven refactoring technique that makes use of program synthesis.
-Our goal is to design a refactoring techniques for deprecated instances that computes fast refactoring, thus allowing integration with an IDE.
+Our goal is to design a refactoring techniques for deprecated instances that computes refactorings fast, thus allowing integration with an IDE.
 
 %% As explained in more detail in the overview in Section~\ref{sec:overview},
 %% the program synthesis technique will be guided by {\em code hints}
@@ -537,6 +536,7 @@ provide hints to the developer on-the-fly.
 %
 Our solution is to use the code hints provided in the Javadoc comments to guide the building of the component library. For our running example in Figure~\ref{ex:deprecated-method-other}, the source code for the \code{getHours} method in class \code{Date} is accompanied by the following comment: 
 
+\begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 /**
  * Returns the hour represented by this {@code Date} object. The
@@ -551,6 +551,10 @@ Our solution is to use the code hints provided in the Javadoc comments to guide 
  * replaced by {@code Calendar.get(Calendar.HOUR_OF_DAY)}.
  */  
 \end{lstlisting}
+\caption{Code hints for the running example.}
+\label{ex:code-hints}
+\end{figure}
+
 
 In the above comment, the \code{@code} tag provide the hint \code{Calendar.get(Calendar.HOUR_OF_DAY)} about the method that needs to be called instead of the deprecated \code{getHours}.
 %While it might seem that this hint ma solve the entire problem, 
@@ -658,15 +662,15 @@ this encoding in Section~\ref{sec:encoding}.
 
 \section{{\bf Code hints and type guided seeding of the component library}}\label{sec:components-seeding}
 % Our synthesis engine is component based, meaning that, in order to generate new code, it makes use of a library of components.
-As mentioned in Section~\ref{sec:intro}, a critical aspect of our technique is building the
+As mentioned in Section~\ref{sec:overview}, a critical aspect of our technique is building the
 component library. 
 %For each required refactoring, we start by building the components library.
 %This step is critical as
-Notably, the size of the component library has a direct impact
-on the size of the search space for the respective refactoring.
-If the component library is too small, meaning that it doesn't contain all
+Notably, %% the size of the component library has a direct impact
+%% on the size of the search space for the respective refactoring.
+if the component library is too small, meaning that it doesn't contain all
 the required components, then the synthesis will fail to find a refactoring.
-However, if we add too many components, then the search space becomes too large and
+Similarly, if we add too many components, then the search space becomes too large and
 synthesis may not terminate within a reasonable amount of time.
 
 Consequently, in our approach, the component library is dynamically built for each refactoring,
@@ -677,42 +681,42 @@ until we find a refactoring.
 
 
 \paragraph{The core component library}
+As mentioned before, we make use of type and code hints to build the component library.
 %Initially, we build our components library for the actual synthesis process.
+%
+%% In order to restrict the number of components that get added to the library,
+%% it is straightforward to make use of type information.
+%% Types have been used extensively in program synthesis, including for
+%% component-based approaches~\cite{}.
+%
+In the example in Figure~\ref{ex:deprecated-method-other}, we can view \code{date} of type \code{Date} as the input to the code to be refactored. The objective is to weave together components that consume this object and generate the integer \code{hour}. While there are many methods in the Java standard library that return an integer without consuming an object of type $Date$, our intention is to only add those that allow using the input object. %% Basically, we have  
+%% \code{source\_obj}=\{\code{date}\} with given type \code{source\_type}=\{\code{Date}\}. We need to consume this in order to obtain an object of type \code{target\_type}=\{\code{int}\}.
 
-In order to restrict the number of components that get added to the library,
-it is straightforward to make use of type information.
-Types have been used extensively in program synthesis, including for
-component-based approaches~\cite{}.
-
-In the example in Figure~\ref{ex:deprecated-method-other}, we can view \code{date} of type \code{Date} as the input to the code to be refactored. The objective is to weave together components that consume this object and generate the integer \code{hour}. While there are many methods in the Java standard library that return an integer without consuming an object of type $Date$, our intention is to only add those that allow using the input object. Basically, we have  
-\code{Source\_Obj}=\{\code{date}\} with given type \code{Source\_Type}=\{\code{Date}\}. We need to consume this in order to obtain an object of type \code{Target\_Type}=\{\code{int}\}.
-
-
-In general, when deprecating a field/method/class, the
-\code{@deprecated} Javadoc tag is used in the comment section to
-inform the developer the reason of deprecation and what can be used in
-place. This enables us to pick components directly from the comments accompanying the
-\code{@deprecated} tag.
+%% In general, when deprecating a field/method/class, the
+%% \code{@deprecated} Javadoc tag is used in the comment section to
+%% inform the developer the reason of deprecation and what can be used in
+%% place. This enables us to pick components directly from the comments accompanying the
+%% \code{@deprecated} tag.
 
 % Other github projects that have already been ported.
 %\todo{Maybe we can also collect sketches as especially the unit tests will provide us with more than just the name of the replacement.}
 % As opposed to the comments in libraries, the unit tests are syntactically valid
 
-As an example, the \code{getHours} method in class \code{Date} used in Figure~\ref{ex:deprecated-method-other} is accompanied by the following comment:
+%% As an example, the \code{getHours} method in class \code{Date} used in Figure~\ref{ex:deprecated-method-other} is accompanied by the following comment:
 
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-/**
- * Returns the hours represented by this <code>Date</code>
- * object as an integer between 0 and 23.
- *
- * @return the hours represented by this date object.
- * @deprecated Use Calendar instead of Date,
- * and use get(Calendar.HOUR_OF_DAY)
- * instead.
- * @see Calendar
- * @see #setHours(int)
- */  
-\end{lstlisting}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%% /**
+%%  * Returns the hours represented by this <code>Date</code>
+%%  * object as an integer between 0 and 23.
+%%  *
+%%  * @return the hours represented by this date object.
+%%  * @deprecated Use Calendar instead of Date,
+%%  * and use get(Calendar.HOUR_OF_DAY)
+%%  * instead.
+%%  * @see Calendar
+%%  * @see #setHours(int)
+%%  */  
+%% \end{lstlisting}
 
 %% /**
  %% * Creates a new Date Object representing the given time.
@@ -724,16 +728,16 @@ As an example, the \code{getHours} method in class \code{Date} used in Figure~\r
  %% * @param day the day as a value between 0 and 31.
  %% */
 
-This will result in adding the method \code{``int get(int field)''} from class
+With respect to the code hints, we refer to those in Figure~\ref{ex:code-hints}.
+Intuitively, the library seeding algorithm must add components that are able to consume the
+inputs to the deprecated code and produce the objects required to make use
+of the Javadoc hints. %% For our example, the only object that can be seen as an input for the 
+%% deprecated code is \code{Source\_Obj}=\{\code{date}\} with given type \code{Source\_Type}=\{\code{Date}\}. Using this, we need to obtain an object of type \code{Target\_Type}=\{\code{Calendar}\}.
+In this case, the code hints instruct us to add method \code{``int get(int field)''} from class
 \code{Calendar} and constant \code{``Calendar.HOUR_OF_DAY''} to our library.
 The difficulty is that, in order to be able to call method \code{get}, we require an object of
 type \code{Calendar} and our library doesn't contain any way of creating such an object.
 Therefore, we must seed our component library with ways of generating such an object.
-
-Intuitively, the library seeding algorithm must add components that are able to consume the
-inputs to the deprecated code and produce the objects required to make use
-of the Javadoc hints. For our example, the only object that can be seen as an input for the 
-deprecated code is \code{Source\_Obj}=\{\code{date}\} with given type \code{Source\_Type}=\{\code{Date}\}. Using this, we need to obtain an object of type \code{Target\_Type}=\{\code{Calendar}\}.
 
 We first scan all the public constructors of class \code{Calendar}
 and all the public methods from class \code{Calendar} that return an object of type \code{Calendar}. We find the following four options:
@@ -750,10 +754,10 @@ and all the public methods from class \code{Calendar} that return an object of t
 %% For our illustrating example, the only object used by the deprecated code is \code{Source\_Obj}=\{\code{date}\} with given type \code{Source\_Type}=\{\code{Date}\}. Using these, we need to obtain an object of type \code{Target\_Type}=\{\code{Calendar}\}, so that we can make use of the JavaDoc hint.  
 %
 Out of the four options above, we search for those for which we have the means to generate all their arguments and their receiver. This means that we are only interested in constructors/methods
-where the types of the arguments and receiver are included in \code{Source\_Types}.
+where the types of the arguments and receiver are included in \code{source\_types}.
 %% Basically, the components library needs to contain constructors/methods for creating objects whose types
 %% match the types of the arguments and the receiver, or constants of those types.
-
+%
 We call such an instruction {\em realizable}, according to Definition~\ref{def:realizable}.
 In the definition, we use
 %\var{ensured\_types(i)} to denote the set of the types corresponding to the objects that can be
@@ -762,7 +766,7 @@ In the definition, we use
 the set of the types of the parameters and receiver required to call instruction \var{i}.
 
 \begin{definition}[Realizable instruction]\label{def:realizable}
-Instruction \var{i} is {\em realizable} iff $\forall t \in required\_types(i). t \in Source\_Types$.
+Instruction \var{i} is {\em realizable} iff $\forall t \in required\_types(i). t \in source\_types$.
   
 \end{definition}
 
