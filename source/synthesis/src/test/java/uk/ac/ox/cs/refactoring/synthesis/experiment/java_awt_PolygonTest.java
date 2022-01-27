@@ -6,11 +6,15 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 
 import org.junit.jupiter.api.Test;
 
-class java_awt_datatransfer_DataFlavor {
+class java_awt_PolygonTest {
 
   @Test
-  void equals​() throws Exception {
-    assertThat(synthesiseAlias("java.awt.datatransfer.DataFlavor", "equals", "java.lang.String"),
-        contains(".isMimeTypeEqual("));
+  void getBoundingBox() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Polygon", "getBoundingBox"), contains(".getBounds("));
+  }
+
+  @Test
+  void inside() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Polygon", "inside", "int", "int"), contains(".contains("));
   }
 }

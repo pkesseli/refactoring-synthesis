@@ -5,7 +5,9 @@ import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 
+import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
@@ -36,16 +38,18 @@ public class FactorySeed implements InstructionSetSeed {
 
     final JavaComponents javaComponents = new JavaComponents(components);
     for (final JavaLanguageKey javaLanguageKey : requiredComponents) {
-      if (javaLanguageKey.Type.isPrimitiveType()) {
+      final Type unwrapped = unwrap(javaLanguageKey.Type);
+
+      if (unwrapped.isPrimitiveType()) {
         constantSeed.seed(javaComponents, javaLanguageKey);
         continue;
       }
-      final ClassOrInterfaceType type = javaLanguageKey.Type.asClassOrInterfaceType();
+      final ClassOrInterfaceType type = unwrapped.asClassOrInterfaceType();
       if (type == null)
         continue;
 
       final String fullyQualifiedName = type.getNameWithScope();
-      final Class<?> cls = classLoader.loadClass(fullyQualifiedName);
+      final Class<?> cls = ClassLoaders.loadClass(classLoader, fullyQualifiedName);
       for (final Method method : cls.getDeclaredMethods()) {
         if (!Modifier.isStatic(method.getModifiers()) || !method.canAccess(null))
           continue;
@@ -59,4 +63,16 @@ public class FactorySeed implements InstructionSetSeed {
     }
   }
 
+  /**
+   * Unwraps array types down to their element types.
+   * 
+   * @param type Potentiall array type.
+   * @return Unwrapped element type.
+   */
+  private static Type unwrap(final Type type) {
+    if (!type.isArrayType())
+      return type;
+
+    return unwrap(type.asArrayType().getElementType());
+  }
 }

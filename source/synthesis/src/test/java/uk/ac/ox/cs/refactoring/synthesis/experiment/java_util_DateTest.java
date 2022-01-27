@@ -17,6 +17,7 @@ import uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation;
 import uk.ac.ox.cs.refactoring.synthesis.state.State;
 
 public class java_util_DateTest {
+
   @ParameterizedTest
   @CsvSource({ "getMonth," + Calendar.MONTH, "getDate," + Calendar.DAY_OF_MONTH, "getHours," + Calendar.HOUR_OF_DAY,
       "getMinutes," + Calendar.MINUTE, "getSeconds," + Calendar.SECOND })

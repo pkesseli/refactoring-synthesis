@@ -1,6 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.type;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
@@ -37,13 +38,26 @@ public final class TypeFactory {
         return new VoidType();
       if (boolean.class == cls)
         return PrimitiveType.booleanType();
+      if (byte.class == cls)
+        return PrimitiveType.byteType();
+      if (short.class == cls)
+        return PrimitiveType.shortType();
       if (int.class == cls)
         return PrimitiveType.intType();
       if (long.class == cls)
         return PrimitiveType.longType();
+      if (float.class == cls)
+        return PrimitiveType.floatType();
       if (double.class == cls)
         return PrimitiveType.doubleType();
+      if (char.class == cls)
+        return PrimitiveType.charType();
       throw new IllegalArgumentException();
+    }
+
+    if (cls.isArray()) {
+      final Type element = create(cls.getComponentType());
+      return new ArrayType(element);
     }
 
     return createClassType(cls);

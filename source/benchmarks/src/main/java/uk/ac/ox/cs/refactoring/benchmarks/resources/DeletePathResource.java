@@ -20,7 +20,7 @@ public class DeletePathResource implements CloseableResource {
 
   /**
    * @param path
-   *          {@link #file}
+   *          {@link Path file}
    */
   public DeletePathResource(final Path path) {
     this.path = path;

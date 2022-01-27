@@ -36,6 +36,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeMethod;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Literal;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifiers;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
@@ -159,14 +160,10 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
     }
     final List<IExpression> arguments = new ArrayList<IExpression>(stack);
     stack.clear();
-    final List<String> parameterTypes = new ArrayList<>();
-    for (int i = 0; i < method.getNumberOfParams(); ++i)
-      parameterTypes.add(method.getParam(i).getType().describe());
 
     final String fullyQualifiedClassName = method.declaringType().getQualifiedName();
     involvedClasses.add(fullyQualifiedClassName);
-    final MethodIdentifier methodIdentifier = new MethodIdentifier(fullyQualifiedClassName, method.getName(),
-        parameterTypes);
+    final MethodIdentifier methodIdentifier = MethodIdentifiers.create(method);
     final Method invokedMethod;
     try {
       invokedMethod = Methods.getMethod(classLoader, methodIdentifier);

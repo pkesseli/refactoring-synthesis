@@ -69,7 +69,7 @@ final class Dependencies {
     if (!Modifier.isStatic(method.getModifiers())) {
       types = Stream.concat(types, Stream.of(method.getDeclaringClass()));
     }
-    final Set<JavaLanguageKey> keys = types.map(TypeFactory::createClassType).map(JavaLanguageKeys::nonnull)
+    final Set<JavaLanguageKey> keys = types.map(TypeFactory::create).map(JavaLanguageKeys::nonnull)
         .collect(Collectors.toSet());
     return predicate.test(keys);
   }

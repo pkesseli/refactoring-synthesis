@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
+import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Double;
@@ -37,12 +38,15 @@ public class TypeSeed implements InstructionSetSeed {
 
   @Override
   public void seed(final ComponentDirectory components) throws ClassNotFoundException, NoSuchMethodException {
+    final Class<?> cls = ClassLoaders.loadClass(classLoader, methodToRefactor.FullyQualifiedClassName);
     final Invokable invokable = Methods.create(classLoader, methodToRefactor);
-    final JavaComponents javaComponents = new JavaComponents(components);
     final Set<Class<?>> allTypes = new HashSet<>();
     allTypes.addAll(invokable.getParameterTypes());
     allTypes.add(invokable.getInstanceType());
     allTypes.add(invokable.getReturnType());
+    allTypes.add(cls);
+
+    final JavaComponents javaComponents = new JavaComponents(components);
     for (final Class<?> type : allTypes)
       add(javaComponents, allTypes, type);
   }

@@ -1,6 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression;
 
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.expr.DoubleLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
@@ -39,17 +40,20 @@ public class Literal implements IExpression {
   public Literal(final Object value, final Type type) {
     if (type.isPrimitiveType()) {
       switch (type.asPrimitiveType().getType()) {
-      case BOOLEAN:
-        expression = new BooleanLiteralExpr((boolean) value);
-        break;
-      case DOUBLE:
-        expression = new DoubleLiteralExpr(value.toString());
-        break;
-      case INT:
-        expression = new IntegerLiteralExpr(value.toString());
-        break;
-      default:
-        throw new IllegalArgumentException();
+        case BOOLEAN:
+          expression = new BooleanLiteralExpr((boolean) value);
+          break;
+        case CHAR:
+          expression = new CharLiteralExpr((char) value);
+          break;
+        case DOUBLE:
+          expression = new DoubleLiteralExpr(value.toString());
+          break;
+        case INT:
+          expression = new IntegerLiteralExpr(value.toString());
+          break;
+        default:
+          throw new IllegalArgumentException();
       }
     } else {
       expression = new NullLiteralExpr();
