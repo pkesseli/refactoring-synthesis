@@ -161,8 +161,15 @@ public class JavaDocSeed implements InstructionSetSeed {
     if (code.charAt(0) == '.') {
       code.deleteCharAt(0);
     }
-    final Expression expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
-        method, code.toString());
+    final Expression expression;
+    try {
+      expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method,
+          code.toString());
+    } catch (final Exception e) {
+      logger.warn("Could not identify method linked in JavaDoc", e);
+      return;
+    }
+
     if (!(expression instanceof MethodCallExpr))
       return;
     final MethodCallExpr methodCall = (MethodCallExpr) expression;

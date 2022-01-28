@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
@@ -61,8 +62,22 @@ public abstract class InvokeInvokable implements IExpression {
   }
 
   public NodeList<Expression> getArguments() {
-    return arguments.stream().map(IExpression::toNode)
+    return arguments.stream().flatMap(InvokeInvokable::expandVarArgs).map(IExpression::toNode)
         .collect(Collectors.<Expression, NodeList<Expression>>toCollection(NodeList::new));
   }
 
+  /**
+   * Expands any varargs arrays into a stream of its members.
+   * 
+   * @param expression Expression to expand, if necessary.
+   * @return Singleton stream with {@code expression} if not a varargs array,
+   *         stream of elements of varargs array otherwise.
+   */
+  private static Stream<IExpression> expandVarArgs(final IExpression expression) {
+    if (!(expression instanceof VarArgsObjectArrayExpression))
+      return Stream.of(expression);
+
+    final VarArgsObjectArrayExpression varargs = (VarArgsObjectArrayExpression) expression;
+    return varargs.arguments.stream();
+  }
 }

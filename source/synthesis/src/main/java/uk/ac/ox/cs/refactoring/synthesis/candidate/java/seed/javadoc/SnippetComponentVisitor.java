@@ -35,6 +35,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeMethod;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Literal;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.VarArgsObjectArrayExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifiers;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
@@ -112,11 +113,11 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
     final IExpression lhs = stack.removeLast();
     final PrimitiveType primitiveType = type.asPrimitiveType();
     switch (primitiveType.getType()) {
-    case INT:
-      visitIntBinaryExpression(n, lhs, rhs);
-      break;
-    default:
-      throw new UnsupportedOperationException();
+      case INT:
+        visitIntBinaryExpression(n, lhs, rhs);
+        break;
+      default:
+        throw new UnsupportedOperationException();
     }
   }
 
@@ -131,14 +132,14 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
   private void visitIntBinaryExpression(final BinaryExpr node, final IExpression lhs, final IExpression rhs) {
     final IExpression binaryExpression;
     switch (node.getOperator()) {
-    case MINUS:
-      binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Minus(lhs, rhs);
-      break;
-    case PLUS:
-      binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Plus(lhs, rhs);
-      break;
-    default:
-      throw new UnsupportedOperationException();
+      case MINUS:
+        binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Minus(lhs, rhs);
+        break;
+      case PLUS:
+        binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Plus(lhs, rhs);
+        break;
+      default:
+        throw new UnsupportedOperationException();
     }
     stack.add(binaryExpression);
   }
@@ -170,7 +171,19 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
     } catch (final NoSuchMethodException | ClassNotFoundException e) {
       throw new IllegalArgumentException(e);
     }
-    stack.add(new InvokeMethod(instance, arguments, invokedMethod));
+
+    final List<IExpression> invocationArguments;
+    if (invokedMethod.isVarArgs()) {
+      final int offset = invokedMethod.getParameterCount() - 1;
+      invocationArguments = new ArrayList<>(arguments.subList(0, offset));
+      final List<IExpression> varargs = arguments.subList(offset, arguments.size());
+      final Class<?> componentType = invokedMethod.getParameterTypes()[offset].componentType();
+      invocationArguments.add(new VarArgsObjectArrayExpression(componentType, varargs));
+    } else {
+      invocationArguments = arguments;
+    }
+
+    stack.add(new InvokeMethod(instance, invocationArguments, invokedMethod));
   }
 
   @Override

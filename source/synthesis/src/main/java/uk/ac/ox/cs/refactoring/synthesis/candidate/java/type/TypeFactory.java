@@ -149,6 +149,9 @@ public final class TypeFactory {
       return javaParser.parseClassOrInterfaceType(name).getResult().get();
     } else if (resolvedType instanceof ResolvedVoidType) {
       return new VoidType();
+    } else if (resolvedType.isTypeVariable()) {
+      // TODO: Support restricted type variables.
+      return javaParser.parseClassOrInterfaceType("java.lang.Object").getResult().get();
     }
     throw new UnsupportedOperationException();
   }

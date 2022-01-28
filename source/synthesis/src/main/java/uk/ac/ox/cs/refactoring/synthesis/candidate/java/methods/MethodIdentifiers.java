@@ -19,8 +19,11 @@ public final class MethodIdentifiers {
    */
   public static MethodIdentifier create(final ResolvedMethodDeclaration method) {
     final List<String> parameterTypes = new ArrayList<>();
-    for (int i = 0; i < method.getNumberOfParams(); ++i)
-      parameterTypes.add(method.getParam(i).getType().describe());
+    for (int i = 0; i < method.getNumberOfParams(); ++i) {
+      final String javaParserName = method.getParam(i).getType().describe();
+      final String nameWithoutGenerics = javaParserName.replaceAll("<[^>]*>", "");
+      parameterTypes.add(nameWithoutGenerics);
+    }
 
     final String fullyQualifiedClassName = method.declaringType().getQualifiedName();
     return new MethodIdentifier(fullyQualifiedClassName, method.getName(), parameterTypes);
