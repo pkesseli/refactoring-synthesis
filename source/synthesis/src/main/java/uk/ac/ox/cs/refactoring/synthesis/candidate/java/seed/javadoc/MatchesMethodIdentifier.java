@@ -17,9 +17,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier
  */
 class MatchesMethodIdentifier implements Predicate<TypeDeclaration<?>> {
 
-  /**
-   * Used in conjuction with {@link #typeSolver}.
-   */
+  /** Used in conjuction with {@link #typeSolver}. */
   private final SymbolResolver symbolResolver;
 
   /**
@@ -28,10 +26,8 @@ class MatchesMethodIdentifier implements Predicate<TypeDeclaration<?>> {
    */
   private final TypeSolver typeSolver;
 
-  /**
-   * {@link MethodIdentifier} for which to find a matching class.
-   */
-  private final MethodIdentifier methodIdentifier;
+  /** {@link MethodIdentifier} for which to find a matching class. */
+  private final String fullyQualifiedClassName;
 
   /**
    * @param symbolResolver   {@link #symbolResolver}
@@ -42,7 +38,9 @@ class MatchesMethodIdentifier implements Predicate<TypeDeclaration<?>> {
       final MethodIdentifier methodIdentifier) {
     this.symbolResolver = symbolResolver;
     this.typeSolver = typeSolver;
-    this.methodIdentifier = methodIdentifier;
+    // TODO: This can be ambiguous, we may need to reimplement JavaParser's
+    // `getQualifiedName`.
+    this.fullyQualifiedClassName = methodIdentifier.FullyQualifiedClassName.replace('$', '.');
   }
 
   @Override
@@ -50,7 +48,7 @@ class MatchesMethodIdentifier implements Predicate<TypeDeclaration<?>> {
     final ResolvedReferenceTypeDeclaration typeDeclaration = symbolResolver.resolveDeclaration(type,
         ResolvedReferenceTypeDeclaration.class);
     final ResolvedReferenceType resolvedType = ReferenceTypeImpl.undeterminedParameters(typeDeclaration, typeSolver);
-    return resolvedType.getQualifiedName().equals(methodIdentifier.FullyQualifiedClassName);
+    return resolvedType.getQualifiedName().equals(fullyQualifiedClassName);
   }
 
 }

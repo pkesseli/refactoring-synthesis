@@ -12,9 +12,9 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
  * Generates instances of OperatingSystemMXBean using
  * {@link ManagementFactory#getOperatingSystemMXBean()}.
  */
-class OperatingSystemMXBeanGenerator extends Generator<OperatingSystemMXBean> {
+public class OperatingSystemMXBeanGenerator extends Generator<OperatingSystemMXBean> {
 
-  OperatingSystemMXBeanGenerator() {
+  public OperatingSystemMXBeanGenerator() {
     super(OperatingSystemMXBean.class);
   }
 

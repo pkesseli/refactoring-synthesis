@@ -262,9 +262,16 @@ public class JavaDocSeed implements InstructionSetSeed {
   private MethodDeclaration findMethod(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
       final ParseResult<CompilationUnit> parseResult) {
     return parseResult.getResult().stream().map(CompilationUnit::getTypes).flatMap(Collection::stream)
+        .flatMap(JavaDocSeed::expandInnerTypes)
         .filter(new MatchesMethodIdentifier(symbolResolver, typeSolver, methodToRefactor))
         .map(TypeDeclaration::getMethods).flatMap(Collection::stream)
         .filter(new MatchesSignature(typeSolver, methodToRefactor)).findAny().orElse(null);
+  }
+
+  private static Stream<TypeDeclaration<?>> expandInnerTypes(final TypeDeclaration<?> type) {
+    return Stream.concat(Stream.of(type),
+        type.getMembers().stream().filter(TypeDeclaration.class::isInstance).map(TypeDeclaration.class::cast)
+            .flatMap(JavaDocSeed::expandInnerTypes));
   }
 
   /**
@@ -388,7 +395,7 @@ public class JavaDocSeed implements InstructionSetSeed {
    */
   private ParseResult<CompilationUnit> findSource(final JavaParser javaParser, final String className)
       throws IOException {
-    final String relativePath = className.replace(String.valueOf(JavaLanguage.PACKAGE_SEPARATOR), "[\\/]");
+    final String relativePath = getRelativeSourceFilePath(className);
     final Pattern pattern = Pattern.compile(".*" + relativePath + ".java");
     for (final Path sourceContainer : sourceContainers) {
       if (Files.isRegularFile(sourceContainer)) {
@@ -404,6 +411,19 @@ public class JavaDocSeed implements InstructionSetSeed {
       }
     }
     return new ParseResult<CompilationUnit>(null, Collections.emptyList(), new CommentsCollection());
+  }
+
+  /**
+   * Calculates the expected path relative to a source directory in which the
+   * source file for the given class is expected.
+   * 
+   * @param className Name of the class to identify.
+   * @return Relative file path to search for.
+   */
+  private static String getRelativeSourceFilePath(final String className) {
+    final String relativePath = className.replace(String.valueOf(JavaLanguage.PACKAGE_SEPARATOR), "[\\/]");
+    final int innerClassStart = relativePath.indexOf('$');
+    return innerClassStart == -1 ? relativePath : relativePath.substring(0, innerClassStart);
   }
 
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+
+import uk.ac.ox.cs.refactoring.classloader.JavaLanguage;
 
 /** Factory for {@link MethodIdentifier}. */
 public final class MethodIdentifiers {
@@ -25,8 +28,31 @@ public final class MethodIdentifiers {
       parameterTypes.add(nameWithoutGenerics);
     }
 
-    final String fullyQualifiedClassName = method.declaringType().getQualifiedName();
+    final String fullyQualifiedClassName = getFullyQualifiedName(method.declaringType());
     return new MethodIdentifier(fullyQualifiedClassName, method.getName(), parameterTypes);
+  }
+
+  /**
+   * Equivalent to {@link ResolvedReferenceTypeDeclaration#getQualifiedName()},
+   * but separates inner classes using
+   * {@link JavaLanguage#INNER_CLASS_SEPARATOR} rather than
+   * {@link JavaLanguage#PACKAGE_SEPARATOR}.
+   * 
+   * @param type Type for which to generate a name.
+   * @return Fully qualified name compatible with Java class loaders.
+   */
+  public static String getFullyQualifiedName(final ResolvedReferenceTypeDeclaration type) {
+    final String qualifiedName = type.getQualifiedName();
+    final String packageName = type.getPackageName();
+    final String packagePrefix = packageName != null ? packageName : "";
+    final int classNameOffset = packagePrefix.isEmpty() ? 0 : packagePrefix.length() + 1;
+    final String className = qualifiedName.substring(classNameOffset);
+    final String escapedClassName = className.replace(JavaLanguage.PACKAGE_SEPARATOR,
+        JavaLanguage.INNER_CLASS_SEPARATOR);
+
+    if (packagePrefix.isEmpty())
+      return escapedClassName;
+    return packagePrefix + JavaLanguage.PACKAGE_SEPARATOR + escapedClassName;
   }
 
   private MethodIdentifiers() {
