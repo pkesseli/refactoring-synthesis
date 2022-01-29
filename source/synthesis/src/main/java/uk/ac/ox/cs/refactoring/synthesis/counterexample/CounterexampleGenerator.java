@@ -2,9 +2,15 @@ package uk.ac.ox.cs.refactoring.synthesis.counterexample;
 
 import java.lang.ref.Reference;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -136,6 +142,29 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       return array;
     }
 
+    if (!type.isInterface() && !Modifier.isAbstract(type.getModifiers())) {
+      final boolean tryPublicConstructor = random.nextBoolean();
+      if (tryPublicConstructor) {
+        final Optional<Constructor<?>> constructorWithMostArguments = Arrays.stream(type.getDeclaredConstructors())
+            .filter(c -> Modifier.isPublic(c.getModifiers()))
+            .max(CounterexampleGenerator::orderConstructorsByNumberOfParameters);
+        if (constructorWithMostArguments.isPresent()) {
+          final Constructor<?> constructor = constructorWithMostArguments.get();
+          final Object[] arguments = Arrays.stream(constructor.getParameterTypes())
+              .map(t -> generate(random, status, classLoader, objenesis, t,
+                  visitedTypesInBranch, depth - 1))
+              .toArray(Object[]::new);
+          try {
+            final Object constructed = constructor.newInstance(arguments);
+            postProcess(type, constructed, Collections.newSetFromMap(new IdentityHashMap<>()));
+            return constructed;
+          } catch (final Throwable e) {
+            logger.warn("Could not use native constructor", e);
+          }
+        }
+      }
+    }
+
     final Object object;
     try {
       object = objenesis.apply(type);
@@ -164,7 +193,50 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
     return new CounterexampleGenerator(repository, instanceType, parameterTypes);
   }
 
+  /**
+   * Using public constructors may lead to heaps with objects of unsupported
+   * types (e.g. {@link Reference}). We null out those fields here.
+   * 
+   * @param type            Type of {@code constructed}.
+   * @param constructed     Object created using constructor.
+   * @param alreadyVisisted Already checked objects to avoid cycles.
+   * @throws NoSuchFieldException   if a type mismatch occurs.
+   * @throws IllegalAccessException if a necessary field could not be accessed.
+   */
+  private static void postProcess(final Class<?> type, final Object constructed, final Set<Object> alreadyVisisted)
+      throws NoSuchFieldException, IllegalAccessException {
+    if (constructed == null || !alreadyVisisted.add(constructed))
+      return;
+
+    for (final Field field : Fields.getInstance(constructed.getClass())) {
+      final Class<?> fieldType = field.getType();
+      if (isSupported(fieldType))
+        postProcess(fieldType, field.get(constructed), alreadyVisisted);
+      else
+        Fields.set(type, constructed, field.getName(), null);
+    }
+  }
+
+  /**
+   * Some types are not yet supported in subsequent steps (e.g. cloning) and must
+   * be excluded from generated counterexamples. We just null such fields out.
+   * 
+   * @param cls Type to check.
+   * @return {@code true} if the type is allowed in counterexamples, {@code false}
+   *         otherwise.
+   */
   private static boolean isSupported(final Class<?> cls) {
     return !Reference.class.isAssignableFrom(cls);
+  }
+
+  /**
+   * Orders constructors by their number of parameters.
+   * 
+   * @param lhs {@link java.util.Comparator#compare(Object, Object)}
+   * @param rhs {@link java.util.Comparator#compare(Object, Object)}
+   * @return {@link java.util.Comparator#compare(Object, Object)}
+   */
+  private static int orderConstructorsByNumberOfParameters(final Constructor<?> lhs, final Constructor<?> rhs) {
+    return lhs.getParameterTypes().length - rhs.getParameterTypes().length;
   }
 }
