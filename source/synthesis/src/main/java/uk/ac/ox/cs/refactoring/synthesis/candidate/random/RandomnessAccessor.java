@@ -30,7 +30,7 @@ public final class RandomnessAccessor {
    */
   public static byte nextByte(SourceOfRandomness sourceOfRandomness, final byte min, final byte max) {
     final byte value = (byte) (sourceOfRandomness.nextByte(Byte.MIN_VALUE, Byte.MAX_VALUE) % (max - min + 1));
-    return (byte) (min + value);
+    return (byte) (min + Math.abs(value));
   }
 
   /**
