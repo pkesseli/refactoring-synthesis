@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 
+import uk.ac.ox.cs.refactoring.classloader.JavaLanguage;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
@@ -19,7 +20,7 @@ class ReportCegisLoopListener<Candidate> implements CegisLoopListener<Candidate>
   private Instant start;
 
   ReportCegisLoopListener(final String benchmarkName, final Report report) {
-    this.benchmarkName = benchmarkName;
+    this.benchmarkName = benchmarkName.replace(JavaLanguage.INNER_CLASS_SEPARATOR, JavaLanguage.PACKAGE_SEPARATOR);
     this.report = report;
   }
 
