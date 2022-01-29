@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
@@ -26,11 +27,12 @@ class CloseableZestGuidance implements CloseableGuidance {
   private final Guidance guidance;
 
   /**
-   * @param phaseName {@link ZestGuidance}
+   * @param phaseName {@link ZestGuidance#ZestGuidance(String, Duration, java.io.File)}
+   * @param duratino  {@link ZestGuidance#ZestGuidance(String, Duration, java.io.File)}
    * @throws IOException {@link Path#toFile()}
    */
-  CloseableZestGuidance(final String phaseName) throws IOException {
-    guidance = new ZestGuidance(phaseName, TimeLimitedGuidance.TIMEOUT, outputDirectory.toFile());
+  CloseableZestGuidance(final String phaseName, final Duration timeout) throws IOException {
+    guidance = new ZestGuidance(phaseName, timeout, outputDirectory.toFile());
   }
 
   @Override

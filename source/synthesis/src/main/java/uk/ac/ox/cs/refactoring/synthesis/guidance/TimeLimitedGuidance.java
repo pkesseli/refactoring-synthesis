@@ -13,8 +13,8 @@ import edu.berkeley.cs.jqf.instrument.tracing.events.TraceEvent;
 /** Adds a time limit to a {@link Guidance}. */
 class TimeLimitedGuidance implements Guidance {
 
-  /** Static global time limit. */
-  static final Duration TIMEOUT = Duration.ofMinutes(2);
+  /** Time limit. */
+  private final Duration timeout;
 
   /** Extended guidance. */
   private final Guidance wrapped;
@@ -23,7 +23,8 @@ class TimeLimitedGuidance implements Guidance {
   private Instant start;
 
   /** @param wrapped {@link #wrapped} */
-  TimeLimitedGuidance(final Guidance wrapped) {
+  TimeLimitedGuidance(final Duration timeout, final Guidance wrapped) {
+    this.timeout = timeout;
     this.wrapped = wrapped;
   }
 
@@ -37,7 +38,7 @@ class TimeLimitedGuidance implements Guidance {
     final Instant now = Instant.now();
     if (start == null)
       start = now;
-    return Duration.between(start, now).compareTo(TIMEOUT) < 0 && wrapped.hasInput();
+    return Duration.between(start, now).compareTo(timeout) < 0 && wrapped.hasInput();
   }
 
   @Override
