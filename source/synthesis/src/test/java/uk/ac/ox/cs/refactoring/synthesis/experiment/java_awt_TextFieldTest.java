@@ -15,7 +15,7 @@ class java_awt_TextFieldTest {
 
   @Test
   void minimumSizeIntInt() throws Exception {
-    assertThat(synthesiseAlias("java.awt.TextField", "minimumSize", "int", "int"), contains(".getMinimumSize("));
+    assertThat(synthesiseAlias("java.awt.TextField", "minimumSize", "int"), contains(".getMinimumSize("));
   }
 
   @Test
@@ -25,7 +25,7 @@ class java_awt_TextFieldTest {
 
   @Test
   void preferredSizeIntInt() throws Exception {
-    assertThat(synthesiseAlias("java.awt.TextField", "preferredSize", "int", "int"), contains(".getPreferredSize("));
+    assertThat(synthesiseAlias("java.awt.TextField", "preferredSize", "int"), contains(".getPreferredSize("));
   }
 
   @Test

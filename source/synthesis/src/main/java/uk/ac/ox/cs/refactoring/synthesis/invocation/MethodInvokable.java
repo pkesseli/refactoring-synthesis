@@ -20,6 +20,7 @@ public class MethodInvokable extends ExecutableInvokable {
   public MethodInvokable(final Method method) {
     super(method);
     this.method = method;
+    method.setAccessible(true);
   }
 
   @Override
