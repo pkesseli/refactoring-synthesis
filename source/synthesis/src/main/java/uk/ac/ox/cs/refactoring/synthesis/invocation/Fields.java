@@ -2,13 +2,19 @@ package uk.ac.ox.cs.refactoring.synthesis.invocation;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-/**
- * Hepler for reflective fields in Java.
- */
+import com.fasterxml.classmate.MemberResolver;
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.ResolvedTypeWithMembers;
+import com.fasterxml.classmate.members.ResolvedField;
+
+/** Helper for reflective fields in Java. */
 public final class Fields {
 
   /**
@@ -63,6 +69,22 @@ public final class Fields {
       cls = cls.getSuperclass();
     }
     return allFields.toArray(Field[]::new);
+  }
+
+  /**
+   * 
+   * @param memberResolver
+   * @param resolvedType
+   * @return
+   */
+  public static List<ResolvedField> getInstance(final MemberResolver memberResolver, ResolvedType resolvedType) {
+    final List<ResolvedField> resolvedFields = new ArrayList<>();
+    while (resolvedType != null) {
+      final ResolvedTypeWithMembers withMembers = memberResolver.resolve(resolvedType, null, null);
+      Collections.addAll(resolvedFields, withMembers.getMemberFields());
+      resolvedType = resolvedType.getParentClass();
+    }
+    return resolvedFields;
   }
 
   /**

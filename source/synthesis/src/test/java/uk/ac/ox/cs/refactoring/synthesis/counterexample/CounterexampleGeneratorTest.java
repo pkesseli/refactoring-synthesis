@@ -11,6 +11,7 @@ import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
 import java.util.Collections;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.internal.generator.ServiceLoaderGeneratorSource;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
@@ -34,8 +35,9 @@ class CounterexampleGeneratorTest {
   @Test
   void checkboxGroup() throws Exception {
     when(sourceOfRandomness.nextByte(anyByte(), anyByte())).thenReturn((byte) 2).thenReturn((byte) 0);
-    final CounterexampleGenerator generator = new CounterexampleGenerator(repository, CheckboxGroup.class,
-        Collections.emptyList());
+    final TypeResolver typeResolver = new TypeResolver();
+    final CounterexampleGenerator generator = new CounterexampleGenerator(repository,
+        typeResolver.resolve(CheckboxGroup.class), Collections.emptyList());
     final Counterexample counterexample = generator.generate(sourceOfRandomness,
         new NonTrackingGenerationStatus(sourceOfRandomness));
 

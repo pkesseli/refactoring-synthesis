@@ -49,7 +49,8 @@ public class SnippetCandidateGenerator extends Generator<SnippetCandidate> {
   public SnippetCandidate generate(final SourceOfRandomness random, final GenerationStatus status) {
     final List<JavaLanguageKey> allTypes = generatorConfiguration.Components.keySet(JavaLanguageKey.class).stream()
         .filter(k -> IStatement.class == k.Kind).collect(Collectors.toList());
-    final JavaLanguageKey resultKey = JavaLanguageKeys.statement(TypeFactory.create(generatorConfiguration.ResultType));
+    final JavaLanguageKey resultKey = JavaLanguageKeys
+        .statement(TypeFactory.create(generatorConfiguration.ResultType.getErasedType()));
     final ComponentDirectory temporaryVariables = new ComponentDirectory();
     final SnippetCandidate result = new SnippetCandidate();
     final byte size = RandomnessAccessor.nextByte(random, generatorConfiguration.MinInstructions,

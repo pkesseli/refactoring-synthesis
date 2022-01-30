@@ -2,6 +2,8 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api;
 
 import java.util.List;
 
+import com.fasterxml.classmate.ResolvedType;
+
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 
 /** Configures candidate generators. */
@@ -20,13 +22,13 @@ public class GeneratorConfiguration {
   public final byte MaxInstructionLength;
 
   /** Instance type of counterexample root. */
-  public final Class<?> InstanceType;
+  public final ResolvedType InstanceType;
 
   /** Parameter types of counterexample root. */
-  public final List<Class<?>> ParameterTypes;
+  public final List<ResolvedType> ParameterTypes;
 
   /** Program result type. */
-  public final Class<?> ResultType;
+  public final ResolvedType ResultType;
 
   /** Use no guidance instead of Zest guidance. */
   public final boolean UseRandomGuidance;
@@ -58,8 +60,8 @@ public class GeneratorConfiguration {
    * @param stage2MaxInputs          {@link #Stage2MaxInputs}
    */
   public GeneratorConfiguration(final ComponentDirectory components, final byte minInstructions,
-      final byte maxInstructions, final byte maxInstructionLength, final Class<?> instanceType,
-      final List<Class<?>> parameterTypes, final Class<?> resultType, final boolean useRandomGuidance,
+      final byte maxInstructions, final byte maxInstructionLength, final ResolvedType instanceType,
+      final List<ResolvedType> parameterTypes, final ResolvedType resultType, final boolean useRandomGuidance,
       final long stage1MaxCounterexamples, final long stage1MaxInputs, final long stage2MaxCounterexamples,
       final long stage2MaxInputs) {
     Components = components;
