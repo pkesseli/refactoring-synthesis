@@ -19,7 +19,9 @@
 % Created:      15 February 2005
 %
 %-----------------------------------------------------------------------------
-\documentclass[runningheads,a4paper]{llncs}
+\documentclass[sigconf,review,anonymous]{acmart}
+\acmConference[ESEC/FSE 2022]{The 30th ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering}{14 - 18 November, 2022}{Singapore}
+%\documentclass[runningheads,a4paper]{llncs}
 %\documentclass[sigconf,authordraft]{acmart}
 %\acmConference[ESEC/FSE 2017]{11th Joint Meeting of the European Software Engineering Conference and the ACM SIGSOFT Symposium on the Foundations of Software Engineering}{4--8 September, 2017}{Paderborn, Germany}
 %\documentclass[10pt,numbers]{sigplanconf}
@@ -27,6 +29,12 @@
 %\usepackage[2ndsubmission]{oopsla2016}
 
 %\usepackage[scaled]{helvet} % see www.ctan.org/get/macros/latex/required/psnfss/psnfss2e.pdf
+
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
 
 \usepackage{microtype}
 \usepackage{url}                  % format URLs
@@ -58,7 +66,7 @@
 \usetikzlibrary{positioning, arrows, automata, shapes}
 \usepackage{hhline}
 \usepackage{pifont}
-\usepackage{cite}
+%\usepackage{cite}
 \usepackage{pdflscape} % Experiments table is landscape
 \usepackage{longtable}
 \usepackage{afterpage}
@@ -122,14 +130,35 @@
  %            {University of Oxford}
  %            {kroening@cs.ox.ac.uk}
 
-\author{
-\mbox{Cristina David}\inst{1} \and
-Pascal Kesseli\inst{2} \and
-Daniel Kroening\inst{2}}
+\author{Cristina David}
+\email{cristina.david@bristol.ac.uk}
+\orcid{0000-0002-9106-934X}
+\affiliation{
+  \institution{University of Bristol}  
+  \city{Bristol}  
+  \country{UK}
+  \postcode{BS8 1TH}
+}
+\author{Pascal Kesseli}
+\affiliation{
+  \institution{Diffblue}  
+  \country{UK}
+}
+\author{Daniel Kroening}
+\affiliation{
+  \institution{Amazon}  
+  \country{UK}
+}
 
-\institute{University of Bristol, UK 
-\and
-  University of Oxford, UK}
+
+%% \author{
+%% \mbox{Cristina David}\inst{1} \and
+%% Pascal Kesseli\inst{2} \and
+%% Daniel Kroening\inst{2}}
+
+%% \institute{University of Bristol, UK 
+%% \and
+%%   University of Oxford, UK}
 
 %% \author{Cristina David}
 %% \affiliation{University of Oxford}
@@ -142,8 +171,6 @@ Daniel Kroening\inst{2}}
 %% \author{Daniel Kroening}
 %% \affiliation{University of Oxford}
 %% \email{kroening@cs.ox.ac.uk}
-
-\maketitle
 
 \begin{abstract}
 %
@@ -164,6 +191,8 @@ Daniel Kroening\inst{2}}
   refactorings.
 %
 \end{abstract}
+
+\maketitle
 
 %\keywords{program refactoring, program synthesis, program verification}
 
@@ -254,7 +283,7 @@ the code, i.e., they must preserve observational equivalence.
 Ensuring observational equivalence is far from trivial.  For instance,
 inlining calls to deprecated methods can break equivalence if the
 original function was synchronised.  While it is not possible for two
-invocations of synchronized original method on the same object to
+invocations  on the same object of the synchronized original method to
 interleave, this is not guaranteed after inlining the method's body.
 Such an exampe is given in Figure~\ref{}.
 \todo{add example here.}
@@ -266,8 +295,8 @@ Such an exampe is given in Figure~\ref{}.
 Consequently, deprecated refactorings based solely on a program's syntax end up
 being overly conservative and mostly address structural changes
 to a program.  For illustration, when referring back to the example in
-Figure~\ref{ex:deprecated-method-other}, one must have understanding of the semantics in order to conclude that the
-refactoring does maintain the same functionality.
+Figure~\ref{ex:deprecated-method-other}, one must understand the code's semantics in order to conclude that the
+refactoring maintains the same functionality.
 %
 %% such refactorings are based on semantics rather
 %% than syntax. For illustration, let's refer back to the example in
@@ -803,22 +832,22 @@ we add that type to $Source\_Types$.
 \SetKwInOut{KwOut}{Output}
 
 \begin{figure}
-\begin{algorithm}[H]
-\SetAlgoLined
-\KwOut{Core component library}
- Add constants suggested under the @deprecated tag to the $library$\;
- Add constants used in the original code to the $library$\;
- Add instructions suggested under the @deprecated tag to the library\;
- \For{instr $\in$ library}{
-   \If{$\neg$realizable(instr)}{
-     \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} Source\_Types$}{
-       $generators = realizable\_public\_constructors(type) \cup realizable\_public\_methods\_returning\_object\_of\_type(type)$\;
-       Add $generators$ to the library\;
-       \If{$generators \neq \emptyset$}{$Source\_types = Source\_types \cup\{type\} $}
-     }
-   }
- }
-\end{algorithm}
+%% \begin{algorithm}[H]
+%% \SetAlgoLined
+%% \KwOut{Core component library}
+%%  Add constants suggested under the @deprecated tag to the $library$\;
+%%  Add constants used in the original code to the $library$\;
+%%  Add instructions suggested under the @deprecated tag to the library\;
+%%  \For{instr $\in$ library}{
+%%    \If{$\neg$realizable(instr)}{
+%%      \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} Source\_Types$}{
+%%        $generators = realizable\_public\_constructors(type) \cup realizable\_public\_methods\_returning\_object\_of\_type(type)$\;
+%%        Add $generators$ to the library\;
+%%        \If{$generators \neq \emptyset$}{$Source\_types = Source\_types \cup\{type\} $}
+%%      }
+%%    }
+%%  }
+%% \end{algorithm}
  \caption{Seeding algorithm for the core library}
 \label{alg:seeding-core}
 \end{figure}
@@ -843,30 +872,17 @@ Note that, as opposed to the core library, here we look at all instructions, not
 %% The seeding algorithm for the core library is provided in Figure~\ref{alg:seeding-extended}.
 
 \begin{figure}
-\begin{algorithm}[H]
-\SetAlgoLined
-\KwIn{Current library}
-\KwOut{Expanded component library}
- %% Add constants suggested under the @deprecated tag to the $library$\;
- %% Add constants used in the original code to the $library$\;
- %% Add instructions suggested under the @deprecated tag to the library\;
- \For{instr $\in$ library}{
-   %% \If{$\neg$realizable(instr)}{
-     \For{$type {\in} required\_types(instr)$}{
-       $generators = realizable\_public\_constructors(type) \cup realizable\_public\_methods\_returning\_object\_of\_type(type)$\;
-       Add $generators$ to the library\;
-     }
-   %% }
- }
- %% \For{instr $\in$ library}{
- %%   \If{$\neg$realizable(instr)}{
- %%     \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} ensured\_types(library)$}{
- %%       $generators = realizable\_public\_constructors(type) \cup realizable\_public\_methods\_returning\_object\_of\_type(type)$\;
- %%       Add $generators$ to the library\;
- %%     }
- %%   }
- %% }
-\end{algorithm}
+%% \begin{algorithm}[H]
+%% \SetAlgoLined
+%% \KwIn{Current library}
+%% \KwOut{Expanded component library}
+%%  \For{instr $\in$ library}{
+%%      \For{$type {\in} required\_types(instr)$}{
+%%        $generators = realizable\_public\_constructors(type) \cup realizable\_public\_methods\_returning\_object\_of\_type(type)$\;
+%%        Add $generators$ to the library\;
+%%      }
+%%  }
+%% \end{algorithm}
  \caption{Incremental expansion of the component library}
 \label{alg:seeding-extended}
 \end{figure}
@@ -1855,9 +1871,9 @@ refactoring schemata, and other semantics-based analysis techniques.
 %\acks
 
 % We recommend abbrvnat bibliography style.
-
-\bibliographystyle{abbrv}
-\bibliography{document}{}
+\bibliographystyle{ACM-Reference-Format}
+%\bibliographystyle{abbrv}
+\bibliography{document}
 
 
 
