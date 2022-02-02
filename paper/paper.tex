@@ -562,17 +562,13 @@ provide hints to the developer on-the-fly.
 %% While we will use coverage-guided testing to check observational equivalence (as discussed later),
 %% we still check at least 400 inputs. 
 %
-Our solution is to use the code hints provided in the Javadoc comments to guide the building of the component library. For our running example in Figure~\ref{ex:deprecated-method-other}, the source code for the \code{getHours} method in class \code{Date} is accompanied by the following comment: 
+Our solution is to use the code hints provided in the Javadoc comments to guide the building of the component library. For our running example in Figure~\ref{ex:deprecated-method-other}, the source code for the \code{getHours} method in class \code{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \code{@code} tag suggests replacing the deprecated \code{getHours}
+with \code{Calendar.get(Calendar.HOUR_OF_DAY)}.
+
 
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
-/**
- * Returns the hour represented by this {@code Date} object. The
- * returned value is a number ({@code 0} through {@code 23})
- * representing the hour within the day that contains or begins
- * with the instant in time represented by this {@code Date}
- * object, as interpreted in the local time zone.
- *
+/*
  * @return  the hour represented by this date.
  * @see     java.util.Calendar
  * @deprecated As of JDK version 1.1,
@@ -584,19 +580,44 @@ Our solution is to use the code hints provided in the Javadoc comments to guide 
 \end{figure}
 
 
-In the above comment, the \code{@code} tag provide the hint \code{Calendar.get(Calendar.HOUR_OF_DAY)} about the method that needs to be called instead of the deprecated \code{getHours}.
 %While it might seem that this hint ma solve the entire problem, 
-Note that this hint is not immediately usable. Although it may seem as if
+Note that this hint is not immediately usable. Some of the challenges
+for this example are:
+
+{\bf Challenge 1.}  Although it may seem as if
 method \code{get} is static allowing us to make an immediate call,
 it is actually an instance method, requiring us to have an object of
 class \code{Calendar}. However, no such object is available in the
 original code meaning that it must be created by the refactored code.
 Consequently, we must populate the component library with the necessary
 components to create such an object by consuming existing objects.
-In Section~\ref{sec:components-seeding}, we provide in-depth details about the
-building of the component library. 
 
-Once the component library is built, for the actual synthesis, we opted for a greybox approach, which relies on coverage-guided property-based testing~\cite{DBLP:conf/issta/PadhyeLS19}.
+{\bf Challenge 2.} Adding too many components to the library will
+make the synthesis task unfeasible. In particular, we should
+be able to differentiate between components that we can use
+(we have or are able to generate
+all the necessary objects for calling them), and those
+that we can't because we can't obtain some of the arguments
+and/or receiver. Adding the latter to the library will
+significantly slow down the synthesis process by
+adding infeasible programs to the search space.
+
+{\bf Challenge 3.} Besides adding components that allow
+us to generate the required objects, we might also need
+components for initialising the new objects. For instance,
+in Figure~\ref{ex:deprecated-method-other}, we must call
+\code{calendar.setTime(date)} to set the calendar's date
+based on the existing \code{date} object.
+
+In Section~\ref{sec:components-seeding}, we provide in-depth details about the
+seeding of the component library and tackling the above challenges. 
+At a high level, the process is guided by types and code hints.
+
+Once the component library is built, for the actual synthesis,
+we use a counterexample-guided iterative process that enables us
+to keep refining a candidate refactoring until we are happy with it.
+The refinement is based on the results provided by 
+coverage-guided property-based testing~\cite{DBLP:conf/issta/PadhyeLS19}.
 %% Intuitively, we wanted to avoid the overheads due to program analysis and
 %% constraint solving incurred by whitebox methods, while also making use of
 %% knowledge about the code that can be obtained through lightweight instrumentation.
@@ -606,7 +627,7 @@ Once the component library is built, for the actual synthesis, we opted for a gr
 %% where the problems posed in each iteration are phrased such that they can be solved
 %% by coverage-guided property-based testing.
 We provide more details about %
-this encoding in Section~\ref{sec:encoding}.
+the synthesis process in Section~\ref{sec:encoding}.
 
 %% Whitebox approaches can be inefficient as they require fully interpreting the
 %% internal structures of the code through some form of static analysis.
