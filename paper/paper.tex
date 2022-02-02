@@ -36,6 +36,11 @@
     \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
 
 
+\makeatletter
+\newcommand{\removelatexerror}{\let\@latex@error\@gobble}
+\makeatother
+
+
 \usepackage{microtype}
 \usepackage{url}                  % format URLs
 \usepackage{listings}          % format code
@@ -715,76 +720,36 @@ As mentioned in Section~\ref{sec:overview}, a critical aspect of our technique i
 component library. 
 %For each required refactoring, we start by building the components library.
 %This step is critical as
-Notably, %% the size of the component library has a direct impact
+%% the size of the component library has a direct impact
 %% on the size of the search space for the respective refactoring.
-if the component library is too small, meaning that it doesn't contain all
-the required components, then the synthesis will fail to find a refactoring.
-Similarly, if we add too many components, then the search space becomes too large and
-synthesis may not terminate within a reasonable amount of time.
+If the component library is too small, meaning that it doesn't contain all
+the required components, then synthesis will fail to find a refactoring.
+Similarly, if we add too many components, then synthesis quickly becomes infeasible
+due to the large search space.
 
 Consequently, in our approach, the component library is dynamically built for each refactoring,
 such that it only contains components specific to that use case.
-This simplifies the job if the subsequent synthesis task.
-In order to increase our chances of finding a refactoring fast, we start with a restricted code  {\em core library} and incrementally increase its size
-until we find a refactoring.
+To further increase our chances of finding a refactoring fast, we start with a restricted code  {\em core library} and incrementally increase its size until we find a refactoring.
 
 
 \paragraph{The core component library}
 As mentioned before, we make use of type and code hints to build the component library.
-%Initially, we build our components library for the actual synthesis process.
-%
-%% In order to restrict the number of components that get added to the library,
-%% it is straightforward to make use of type information.
-%% Types have been used extensively in program synthesis, including for
-%% component-based approaches~\cite{}.
-%
-In the example in Figure~\ref{ex:deprecated-method-other}, we can view \code{date} of type \code{Date} as the input to the code to be refactored. The objective is to weave together components that consume this object and generate the integer \code{hour}. While there are many methods in the Java standard library that return an integer without consuming an object of type $Date$, our intention is to only add those that allow using the input object. %% Basically, we have  
-%% \code{source\_obj}=\{\code{date}\} with given type \code{source\_type}=\{\code{Date}\}. We need to consume this in order to obtain an object of type \code{target\_type}=\{\code{int}\}.
+In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \code{date} of type \code{Date} as the input to the code to be refactored. The objective is to weave together components that consume this object and generate the integer \code{hour}.
+%% While there are many methods in the Java standard library that return an integer without consuming an object of type $Date$, our intention is to only add those that allow using the input object.
 
-%% In general, when deprecating a field/method/class, the
-%% \code{@deprecated} Javadoc tag is used in the comment section to
-%% inform the developer the reason of deprecation and what can be used in
-%% place. This enables us to pick components directly from the comments accompanying the
-%% \code{@deprecated} tag.
-
-% Other github projects that have already been ported.
-%\todo{Maybe we can also collect sketches as especially the unit tests will provide us with more than just the name of the replacement.}
-% As opposed to the comments in libraries, the unit tests are syntactically valid
-
-%% As an example, the \code{getHours} method in class \code{Date} used in Figure~\ref{ex:deprecated-method-other} is accompanied by the following comment:
-
-%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
-%% /**
-%%  * Returns the hours represented by this <code>Date</code>
-%%  * object as an integer between 0 and 23.
-%%  *
-%%  * @return the hours represented by this date object.
-%%  * @deprecated Use Calendar instead of Date,
-%%  * and use get(Calendar.HOUR_OF_DAY)
-%%  * instead.
-%%  * @see Calendar
-%%  * @see #setHours(int)
-%%  */  
-%% \end{lstlisting}
-
-%% /**
- %% * Creates a new Date Object representing the given time.
- %% *
- %% * @deprecated use <code>new GregorianCalendar(year+1900, month,
- %% * day)</code> instead.
- %% * @param year the difference between the required year and 1900.
- %% * @param month the month as a value between 0 and 11.
- %% * @param day the day as a value between 0 and 31.
- %% */
-
-With respect to the code hints, we refer to those in Figure~\ref{ex:code-hints}.
+For this purpose, the starting point are the code hints provided by the Javadoc.
 Intuitively, the library seeding algorithm must add components that are able to consume the
 inputs to the deprecated code and produce the objects required to make use
-of the Javadoc hints. %% For our example, the only object that can be seen as an input for the 
-%% deprecated code is \code{Source\_Obj}=\{\code{date}\} with given type \code{Source\_Type}=\{\code{Date}\}. Using this, we need to obtain an object of type \code{Target\_Type}=\{\code{Calendar}\}.
-In this case, the code hints instruct us to add method \code{``int get(int field)''} from class
+of the Javadoc hints.
+%
+For our running example, the hints are given in Figure~\ref{ex:code-hints}.
+These hints instruct us to add method \code{``int get(int field)''} from class
 \code{Calendar} and constant \code{``Calendar.HOUR_OF_DAY''} to our library.
-The difficulty is that, in order to be able to call method \code{get}, we require an object of
+We actually fix the \code{``Calendar.HOUR_OF_DAY''} constant
+in place, thus adding \code{``int get(Calendar.HOUR_OF_DAY)''}.
+
+The next step is to make sure that we can use the components in the library.
+For the running example, in order to be able to call method \code{get}, we require an object of
 type \code{Calendar} and our library doesn't contain any way of creating such an object.
 Therefore, we must seed our component library with ways of generating such an object.
 
@@ -798,21 +763,21 @@ and all the public methods from class \code{Calendar} that return an object of t
   \item \code{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- gets a calendar with the specified time zone and locale.
 \end{enumerate}
 
-%% Seeding the library is crucial in obtaining an efficient synthesis technique. Thus,
-%% we want to only add instructions that can be used. For this purpose, we start by collecting the given types and the objects to consume from the deprecated code. %% Using these, we need to create an object of the required type.
 %% For our illustrating example, the only object used by the deprecated code is \code{Source\_Obj}=\{\code{date}\} with given type \code{Source\_Type}=\{\code{Date}\}. Using these, we need to obtain an object of type \code{Target\_Type}=\{\code{Calendar}\}, so that we can make use of the JavaDoc hint.  
 %
-Out of the four options above, we search for those for which we have the means to generate all their arguments and their receiver. This means that we are only interested in constructors/methods
-where the types of the arguments and receiver are included in \code{source\_types}.
-%% Basically, the components library needs to contain constructors/methods for creating objects whose types
-%% match the types of the arguments and the receiver, or constants of those types.
-%
-We call such an instruction {\em realizable}, according to Definition~\ref{def:realizable}.
-In the definition, we use
-%\var{ensured\_types(i)} to denote the set of the types corresponding to the objects that can be
-%generated using instruction \var{i}, and
-\var{required\_types(i)} to denote
-the set of the types of the parameters and receiver required to call instruction \var{i}.
+Out of the four options above, we search for those for which we have the means to generate all their arguments and their receiver. We formally refer to such components as {\em realizable}.
+In Definition~\ref{def:realizable}, we make use of the $source\_types$, referring to types
+for which we can generate objects and $required\_types(instr)$, meaning the required types
+for $instr$ to be realizable. In our running example, at the beginning,
+$source\_types=\{Date\}$ and $required\_types(get) = \{Integer, Calendar\}$, where the Integer
+corresponds to the argument and Calendar corresponds to the receiver. As for the core library,
+we fix the argument \code{``Calendar.HOUR_OF_DAY''}, we actually have $required\_types(get) = \{Calendar\}$.
+
+
+%% We call such an instruction {\em realizable}, according to Definition~\ref{def:realizable}.
+%% In the definition, we use
+%% \var{required\_types(i)} to denote
+%% the set of the types of the parameters and receiver required to call instruction \var{i}.
 
 \begin{definition}[Realizable instruction]\label{def:realizable}
 Instruction \var{i} is {\em realizable} iff $\forall t \in required\_types(i). t \in source\_types$.
@@ -827,21 +792,27 @@ The last two methods are in a similar situation as the second. For the core libr
 %% as we use a type-directed approach to term generation...
 
 The seeding algorithm for the core library is provided in Figure~\ref{alg:seeding-core}.
-We start by adding all the constants contained in the Javadoc suggestion
-and in the original code to the library. Then, we also add all the instructions contained
-in the Javadoc suggestion. Next, we need to make sure that the Javadoc suggestions
+We start by adding all the constants contained in the original code to the library
+(those from the code hints are fixed in place).
+Then, we also add all the instructions contained
+in the code hints. Next, we need to make sure that the Javadoc suggestions
 are realizable. For this purpose, we add ways of generating
 objects whose types match the types of the required fields and receivers.
-
-Basically, for each required type that we have no way of generating, we add all the realizable
-public constructors and realizable public methods returning objects of that type to the
+%
+Essentially, for each required type that we have no way of generating, we add all the realizable
+constructors and realizable methods returning objects of that type to the
 core library.
 Notably, it may be the case that there is no realizable instruction for a required type.
 In such a case, the synthesiser won't be able to generate any useful programs.
-More details on this in Section~\ref{sec:synthesis}.
+%More details on this in Section~\ref{sec:synthesis}.
 
-Note that, once we added the needed components to generate an object of a given type,
-we add that type to $Source\_Types$.
+Besides ways of generating objects of certain types, we also need to be able to
+modify the newly generated objects. This is covered in Figure~\ref{alg:seeding-core}
+by adding $modifiers$ to the library. Notably, all the components that
+we add must be accessible from the current location.
+
+Once we added the components required to generate an object of a given type,
+we add that type to $source\_types$.
 %% we overload \var{ensured\_types} to take \var{library} as an argument, in which case it returns the set of all the types of the objects that can be created using the instructions in the library.
 
 %% In certain situations, the seeding of the component library may require additional work.
@@ -852,46 +823,44 @@ we add that type to $Source\_Types$.
 \SetKwInOut{KwOut}{Output}
 
 \begin{figure}
-%% \begin{algorithm}[H]
-%% \SetAlgoLined
-%% \KwOut{Core component library}
-%%  Add constants suggested under the @deprecated tag to the $library$\;
-%%  Add constants used in the original code to the $library$\;
-%%  Add instructions suggested under the @deprecated tag to the library\;
-%%  \For{instr $\in$ library}{
-%%    \If{$\neg$realizable(instr)}{
-%%      \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} Source\_Types$}{
-%%        $generators = realizable\_public\_constructors(type) \cup realizable\_public\_methods\_returning\_object\_of\_type(type)$\;
-%%        Add $generators$ to the library\;
-%%        \If{$generators \neq \emptyset$}{$Source\_types = Source\_types \cup\{type\} $}
-%%      }
-%%    }
-%%  }
-%% \end{algorithm}
+\removelatexerror% Nullify \@latex@error
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwOut{Core component library}
+ Add constants from the original code to the library\;
+ Add instructions from the code hints to the library\;
+ \For{instr $\in$ library}{
+   \If{$\neg$realizable(instr)}{
+     \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} source\_types$}{
+       $generators = realizable\_constructors(type) \cup realizable\_methods\_returning\_type(type)$\;
+       $modifiers = realizable\_methods\_with\_receiver\_of\_type(type)$\;
+       Add $generators$ to the library\;
+       Add $modifiers$ to the library\;
+       \If{$generators \neq \emptyset$}{$source\_types = source\_types \cup\{type\} $}
+     }
+   }
+ }
+\end{algorithm}
  \caption{Seeding algorithm for the core library}
 \label{alg:seeding-core}
 \end{figure}
 
 \paragraph{Incremental expansion of the library}
-If we fail to find a refactoring within a certain amount of time,
-we start to incrementally increase the size of the library by adding additional components to be used during synthesis.
-The library expansion algorithm is provided in Figure~\ref{alg:seeding-extended}.
-Essentially, we go through all the instructions in the current library and add
-ways of generating objects that can be used as their arguments (i.e. whose types match that of their arguments).
-Note that, as opposed to the core library, here we look at all instructions, not just the realizable ones.
+If the synthesis engine fails to find a refactoring within a certain amount of time,
+there might be a need to increase the components library.
+For the core library, in the algorithm in Figure~\ref{alg:seeding-core}, we only ever add realizable components. However, this requirement can be relaxed by adding components that
+are not yet realizable, but would become so if we were to add one
+additional instruction (the generator for the missing type). For our current experiments,
+there was no need to expand the core library. \todo{check this.}
 
-%% Similarly to the core library, we start by adding all the constants contained in the Javadoc suggestion
-%% and in the original code, as well as all the instructions contained
-%% in the Javadoc suggestion to the library. Next, we need to make sure that the Javadoc suggestions
-%% are realizable. We add all the instructions generating
-%% objects whose types are required for this purpose to the library.
-%% This is contrary to the core library, where we were only adding realizable instructions.
-%% Moreover, in a second \code{for} loop, we attempt to make all the instructions currently in
-%% the library realizable by adding required (this time only realizable) instructions.
+%% we start to incrementally increase the size of the library by adding additional components to be used during synthesis.
+%% The library expansion algorithm is provided in Figure~\ref{alg:seeding-extended}.
+%% Essentially, we go through all the instructions in the current library and add
+%% ways of generating objects that can be used as their arguments (i.e. whose types match that of their arguments).
+%% Note that, as opposed to the core library, here we look at all instructions, not just the realizable ones.
 
-%% The seeding algorithm for the core library is provided in Figure~\ref{alg:seeding-extended}.
 
-\begin{figure}
+%%\begin{figure}
 %% \begin{algorithm}[H]
 %% \SetAlgoLined
 %% \KwIn{Current library}
@@ -903,46 +872,19 @@ Note that, as opposed to the core library, here we look at all instructions, not
 %%      }
 %%  }
 %% \end{algorithm}
- \caption{Incremental expansion of the component library}
-\label{alg:seeding-extended}
-\end{figure}
+%% \caption{Incremental expansion of the component library}
+%%\label{alg:seeding-extended}
+%%\end{figure}
 
-
-%% \begin{figure}
-%% \begin{algorithm}[H]
-%% \SetAlgoLined
-%% \KwResult{Core component library}
-%%  Add constants suggested under the @deprecated tag\;
-%%  Add constants used in the original code\;
-%%  %Add constants 0 and 1 to the library\;
-%%  %Add + to the library\;
-%%  Add instructions suggested under the @deprecated tag to the library\;
-%% ; 
-%%  \For{t $\in$ required-types(library)}{
-%%    \If{t $\not\in$ ensured-types(library)}{
-%%      generators = public-constructors(t) $\cup$ public-methods-returning-an-object-of-type(t)\;
-%%      Add ``generators'' to the library\;
-%%      \For{t $\in$ required-types(generators)}{
-%%        \If{t $\not\in$ ensured-types(library)}{
-%%          new-generators = realizable-public-constructors(t) $\cup$ realizable-public-methods-returning-an-object-of-type(t)\;
-%%          Add ``new-generators'' to the library\;
-%%        }
-%%      }
-%%    }
-%%  }
-%% \end{algorithm}
-%%  \caption{Seeding algorithm for the extended library}
-%% \label{alg:seeding-extended}
-%% \end{figure}
-
-
-
-As future work we aim to also collect components and sketches from the  unit tests for the updated library.
+%% As future work we aim to also collect components and sketches from the  unit tests for the updated library.
  
-\paragraph{{\bf Automatically generating the desired refactoring}}
-\todo{Counterexample guided type-directed synthesis?}
 
-For this purpose, we use a counterexample-guided iterative process that enables us to keep refining a candidate refactoring until we are happy with it. This process consists of two phases, described next:
+
+
+
+\section{Synthesising the refactoring}\label{sec:encoding}
+
+We use a counterexample-guided iterative process that enables us to keep refining a candidate refactoring until we are happy with it. This process consists of two phases, described next:
   \begin{itemize}
   \item[{\bf Phase 1:}] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode   
     the synthesis problem as a verification problem that can be solved by fuzzing. We discuss this problem encoding in
@@ -953,11 +895,6 @@ For this purpose, we use a counterexample-guided iterative process that enables 
     we return to the previous step and add this input to the set $In$. Otherwise we have found a correct refactoring and we are done.
   \end{itemize}
 
-\todo{Run through the motivational example: candidates, counterexamples etc.}  
-
-
-
-\section{Graybox synthesis}\label{sec:encoding}
 
 In this section, we discuss our encoding of the problem solved in each
 of the two phases of the synthesis process.  We refer to the original
