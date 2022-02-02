@@ -116,7 +116,7 @@
                                   % (paid open-access papers, 
                                   % short abstracts)
 
-\title{Code hints guided refactoring of Java deprecated}
+\title{Refactoring of Java deprecated guided by types and code hints}
 %\subtitle{Subtitle Text, if any}
 % double-blind submission
 % single-blind only for Technical Research: http://icse2017.gatech.edu/technical-research-cfp
@@ -292,9 +292,10 @@ Such an exampe is given in Figure~\ref{}.
 %% observational equivalence is given in Figure~\ref{}.
 %% \todo{add example here.}
 
-Consequently, deprecated refactorings based solely on a program's syntax end up
-being overly conservative and mostly address structural changes
-to a program.  For illustration, when referring back to the example in
+Consequently, refactorings that rely solely on a program's syntax
+and do not consider its semantics end up
+being overly conservative, mostly addressing structural changes
+to the program.  For illustration, when referring back to the example in
 Figure~\ref{ex:deprecated-method-other}, one must understand the code's semantics in order to conclude that the
 refactoring maintains the same functionality.
 %
@@ -362,13 +363,15 @@ further preventing compilation errors and behaviour changes
 
 In this paper, we take a step further in this direction by proposing a
 semantics-driven refactoring technique that makes use of program synthesis.
-Our goal is to design a refactoring techniques for deprecated instances that computes refactorings fast, thus allowing integration with an IDE.
+While we focus on the refactoring of deprecated methods, the same
+technique can be applied to deprecated fields and classes.
+%Our goal is to design a refactoring techniques for deprecated instances that computes refactorings fast, thus allowing integration with an IDE.
 
 %% As explained in more detail in the overview in Section~\ref{sec:overview},
 %% the program synthesis technique will be guided by {\em code hints}
 %% and {\em types}, as well 
 
-While powerful, program synthesis is very hard due to the vast search space, i.e. space of possible programs that must be considered. Thus, its success is generally relient on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{}, type signatures~\cite{}, or full functional specifications of the expected code~\cite{}.
+Although powerful, program synthesis is very hard due to the vast search space, i.e. space of possible programs that must be considered. Thus, its success is generally relient on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
 %
 The vast search space is particularly a challenge in the current setting given that, in the absence of any additional guidance, the entire \code{java.lang} needs to be considered during code generation.
 In order to prune the search space, we start by investigating the information available to our synthesis procedure.
@@ -378,22 +381,18 @@ In order to prune the search space, we start by investigating the information av
 {\bf (1)} {\em Type information} about the code to be generated. In particular, this consists on the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, they are not sufficient in the current scenario. %, where the number of possible programs where considering \code{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
 
 {\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \code{@deprecated} Javadoc tag is used in the
-  comment section to inform the developer of the reason for deprecation and what can be used in place. As we will show in Section~\ref{sec:overview}, these hints
+  comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show in Section~\ref{sec:overview}, these hints
   don't provide the whole refactoring, but can be used to guide the search process.
 
-  {\bf (3)} One last information we have about the code to be generated is that it needs to be semantically equivalent to the original. While this does provide us with the {\em semantics of the
-  code to be generated}, it's not easy to use. 
+  {\bf (3)} One last information we have about the code to be generated is that it needs to be {\em semantically equivalent to the original}. %While this does provide us with the {\em semantics of the
+  %code to be generated}, it's not easy to use. 
 %* This is not enough to decide semantic equivalence, which, as discussed above, is one of the main difficulties in this refactoring.
-  Notably, proving semantic equivalence is very difficult and has been the subject of extended research over the years \cite{}.
+  However, formally proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
 %Even when theoretically possible, the process of proving semantic equivalence is very expensive as it generally requires full understanding of the code's semantics.
- %%  Also, fully understanding the semantics of a piece of code is very expensive...
-%% Greybox testing ... is more efficient than whitebox testing and offers more guarantees than blackbox testing.
-%% This contradicts our aforementioned goal to design a technique that is fast. Thus, we make compromise between performace and soundness and
-%% make use of testing to check semantic equivalence.
-Moreover, it generally requires full understanding of a program's internal structure, which is expensive.
-This contradicts our aforementioned goal to design a technique that is fast. In a bid to obtain good performance,
-we investigated using greybox testing for checking program equivalence, rather than formally proving it.
-In particular, we decided to use coverage-guided property-based testing, which only requires limited instrumentation of the programs under test.
+%Moreover, it generally requires full understanding of a program's internal structure, which is expensive.
+%This contradicts our aforementioned goal to design a technique that is fast. In a bid to obtain good performance,
+%we investigated using greybox testing for checking program equivalence, rather than formally proving it.
+In this work, instead of aiming for a formal proof,  we use coverage-guided property-based testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
 While we can't provide full correctness guarantees,
 our experiments show that, when considering a large number of test inputs, the results are sound.
 
@@ -499,7 +498,7 @@ our experiments show that, when considering a large number of test inputs, the r
 %%   with no context and gradually increase the amount of context we take into consideration
 %%   until a desirable refactoring is found.
 
-\item We Implemented our technique in the tool ?? and used it to refactor all the deprecated methods in jdk15.
+\item We Implemented our technique in the tool ?? and used it to refactor the methods deprecated in jdk15.
   %refactor deprecated instances in X open source projects.
   
 \end{itemize}  
