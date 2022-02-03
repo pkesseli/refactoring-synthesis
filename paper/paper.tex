@@ -878,38 +878,79 @@ there was no need to expand the core library. \todo{check this.}
 
 %% As future work we aim to also collect components and sketches from the  unit tests for the updated library.
  
-
-
-
-
 \section{Synthesising the refactoring}\label{sec:encoding}
 
-We use a counterexample-guided iterative process that enables us to keep refining a candidate refactoring until we are happy with it. This process consists of two phases, described next:
-  \begin{itemize}
-  \item[{\bf Phase 1:}] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode   
-    the synthesis problem as a verification problem that can be solved by fuzzing. We discuss this problem encoding in
-    Section~\ref{sec:encoding}. The found refactoring is called a candidate.
-  \item[{\bf Phase 2:}] Given the candidate synthesised at the previous step, verify whether it is indeed a correct refactoring.
-    Again, we answer this question by encoding it as a software verification problem to be solved by fuzzing (see Section~\ref{sec:encoding}).
-    If an input for which the candidate isn't observationally equivalent to the original code is found, then
-    we return to the previous step and add this input to the set $In$. Otherwise we have found a correct refactoring and we are done.
-  \end{itemize}
+We make use of a CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, where we
+iteratively improve a candidate refactoring until it obeys a given specification.
+In our case, the specification expresses the fact that the original and
+the refactored blocks of code need to be observationally equivalent.
+%
+In the rest of the paper, we will use the predicate
+$equivalent(P_1(\vec{x}), P_2(\vec{x}))$ to denote that code $P_1$ is
+observationally equivalent to $P_2$ for inputs $\vec{x}$.  In general,
+we refer to the original code as $P_1$ and the refactored code as
+$P_2$. We will fully define what $equivalent$ actually means in Section~\ref{sec:equiv}.
 
 
-In this section, we discuss our encoding of the problem solved in each
-of the two phases of the synthesis process.  We refer to the original
-code as \var{Orig(\vec{x})} and the final refactored code as
-\var{Refactor(\vec{x})}, where we assume that both \var{Orig} and
-\var{Refactor} have the same inputs \var{\vec{x}}. Moreover,
-we use \var{Candidate(\vec{x})} to refer to a candidate refactoring.
+In each iteration of the synthesis process, there are two phases, a synthesis and a verification one. We next show how we encode the problem corresponding to each of these phases so that it can be solved with coverage-guided property-based testing. As we want to start with a high level view
 
-%% We encode the refactoring problem as a verification problem that can be solved by
-%% fuzzing. We next describe the verification and synthesis phases in a CEGIS module,
-%% where \var{Orig} and \var{Refactor} denote the original and refactored code,
-%% respectively.
+
+\paragraph{The synthesis phase} In this phase, we have 
+a finite set of input examples $\{\vec{x_1} \cdots \vec{x_n}\}$ and we must find a candidate refactoring
+that is observationally equivalent to the original code for the given inputs.
+For this purpose, we construct the following \code{Synthesise} method, which
+takes the refactored code $P_2$ as input.
+
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+Synthesise ($P_2$) {
+
+  if (equivalent($P_1$($x_1$), $P_2$($x_1$)) && ...
+      && equivalent($P_1$($x_n$), $P_2$($x_n$)))
+    assert(false);
+}
+\end{lstlisting}
+
+This method consists of only one conditional saying that if $P_1$ and $P_2$ are equivalent on all given inputs $x_1, \cdots, x_n$, then \code{assert(false)} is reached.
+Given that this assertion always fails, it means that the method is unsafe when $P_1$ and $P_2$ are equivalent on the given inputs.
+Thus, we can reduce the synthesis problem to the problem of checking the safety of \code{Synthesise}. If a safety checker manages to
+find an input $P_2$ for which the assertion fails (meaning that \code{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs, which is the code
+that the synthesis phase is supposed to generate. As aforementioned, we use an existing coverage-guided property-based testing (i.e. fuzzing) technique
+as the safety checker. We configure the fuzzer such that it constructs $P_2$ by weaving together components from the component library.
+
+If the safety checker fails to find a $P_2$ for which the assertion fails, then the overall synthesis technique fails to generate a solution refactoring.
+There could be two reasons for this situation, which we cannot differentiate between.
+Firstly, there may indeed be no $P_2$ that can be constructed with the available components in the component library such that
+it is equivalent to $P_1$ on the given inputs. Secondly, this could be caused by the fuzzer's unsoundness.
+Given that fuzzers rely on testing, they may fail to find inputs that trigger unsafe behaviours even when such inputs exist.
+Consequently, we cannot guarantee that we will always find a refactoring whenever one exists. We will provide more details about our decision to use fuzzing as the safety checker in 
+Section~\ref{sec:guarantees}.
+
+%% In other words, answering the initial question posed by the
+%% synthesis phase is now reduced to checking the safety of the \code{Synthesise} method.
+%% If the method is unsafe meaning that the assertion is reached and failed (if reached, the assertion \code{assert(false)} always fails)
+
+%% Again, we reduce the problem to be solved in the synthesis phase to
+%% the problem of checking the safety of the \code{Synthesise} method,
+%% which we do by fuzzing.
+%% The fuzzer will find an input \var{Candidate} that fails the assertion,
+%% meaning that it returns the same output as \texttt{Orig}
+%% on the finite set of inputs \var{x_1, \cdots, x_n}.
+
+
+%% iterative process that enables us to keep refining a candidate refactoring until we are happy with it. This process consists of two phases, described next:
+%%   \begin{itemize}
+%%   \item[{\bf Phase 1:}] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode   
+%%     the synthesis problem as a verification problem that can be solved by fuzzing. We discuss this problem encoding in
+%%     Section~\ref{sec:encoding}. The found refactoring is called a candidate.
+%%   \item[{\bf Phase 2:}] Given the candidate synthesised at the previous step, verify whether it is indeed a correct refactoring.
+%%     Again, we answer this question by encoding it as a software verification problem to be solved by fuzzing (see Section~\ref{sec:encoding}).
+%%     If an input for which the candidate isn't observationally equivalent to the original code is found, then
+%%     we return to the previous step and add this input to the set $In$. Otherwise we have found a correct refactoring and we are done.
+%%   \end{itemize}
+
 
 \paragraph{The verification phase} For the verification phase, we are provided with a candidate
-refactoring and we must check whether there exists any input
+refactoring $P_2$ and we must check whether there exists any input
 \var{\vec{x}} for which the original code and the candidate
 refactoring are not observationally equivalent.  To do this, we build
 the following \code{Verify} method, which given some input
@@ -918,7 +959,7 @@ the following \code{Verify} method, which given some input
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 Verify(x) {
-  assert(equivalent(Orig(x), Candidate(x)));
+  assert(equivalent($P_1$(x), $P_2$(x)));
 }
 \end{lstlisting}
 
@@ -929,21 +970,14 @@ input \var{\vec{x}}, then there is no input that can distinguish
 between the original and the candidate refactoring meaning that this
 is indeed a sound refactoring. However, if \code{Verify} is not safe,
 then we want to be able to obtain a counterexample input
-\var{\vec{x_{cex}}} for which the assertion fails. This counterexample
-will be provided to the synthesis phase and used to refine the current
-candidate. We check the safety of \code{Verify} with coverage-guided
-fuzz testing. While this means that we may fail to find a
-distinguishing input when one does exist, we discuss later in the
-paper our reasons for choosing to use fuzzing over other sound
-verification techniques.
+\var{\vec{x_{cex}}} for which the assertion fails.
 
-A core part of the verification phase and the whole synthesis process
-is the \var{equivalent} procedure, which checks that the original code
-and a candidate refactoring are equivalent for a given input.
-Naively, this would be checked by comparing the results returned by the
-\var{Orig} and \var{Candidate}. However, that is not enough as
-we must also consider the heap representation. We will discuss this in
-Section~\ref{sec:equiv}.
+This counterexample will be provided back to the synthesis phase and
+used to refine the current candidate refactoring. Again, we check the
+safety of \code{Verify} with coverage-guided property-based testing,
+which means that we may fail to find a distinguishing input when one
+does exist.
+
 
 %% notion of program equivalence.  While this is undecidable in
 %% general, our synthesis procedure in the verification phase this problem is restricted to
@@ -953,27 +987,6 @@ Section~\ref{sec:equiv}.
 %% The fuzzer will find an input for which the original and refactored code
 %% produce a different result.
 
-\paragraph{The synthesis phase} For the synthesis phase, we are provided with a
-a finite set of input examples $\{x_1 \cdots x_n\}$ and we need to find a candidate refactoring
-that is observationally equivalent to the original program for these inputs.
-For this purpose, we construct the following \code{Synthesise} method, which
-takes the refactored code \var{Candidate} as input.
-
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-Synthesise (Candidate) {
-
-  if (equivalent(Orig($x_1$), Candidate($x_1$)) && ...
-  && equivalent(Orig($x_n$), Candidate($x_n$)))
-   assert(false);
-}
-\end{lstlisting}
-
-Again, we reduce the problem to be solved in the synthesis phase to
-the problem of checking the safety of the \code{Synthesise} method,
-which we do by fuzzing.
-The fuzzer will find an input \var{Candidate} that fails the assertion,
-meaning that it returns the same output as \texttt{Orig}
-on the finite set of inputs \var{x_1, \cdots, x_n}.
 
 
 %% - Performing the synthesis. Complex bit: synthesising method invocations for methods that contain loops.
@@ -993,6 +1006,15 @@ on the finite set of inputs \var{x_1, \cdots, x_n}.
 %%   \end{enumerate}
 
 \subsection{Checking program equivalence for a certain input}\label{sec:equiv}
+
+A core part of the verification phase and the whole synthesis process
+is the \var{equivalent} procedure, which checks that the original code
+and a candidate refactoring are equivalent for a given input.
+Naively, this would be checked by comparing the results returned by the
+\var{Orig} and \var{Candidate}. However, that is not enough as
+we must also consider the heap representation. We will discuss this in
+Section~\ref{sec:equiv}.
+
 
 %\paragraph{Checking heap equivalence}
 
@@ -1061,7 +1083,7 @@ then \var{E[P(x)]} maps each variable defined in \var{P} to the latest value ass
 Next, we define the notion of equivalence with respect to a concrete input \var{x}.
 
 \begin{definition}[Program equivalence with respect to a concrete input \var{x} {\bf[partial]}]\label{def:prog-equiv}
-  Given two programs \var{P_1} and \var{P_2} and concrete input \var{x},
+  Given two code blocks \var{P_1} and \var{P_2} and concrete input \var{x},
   we say that \var{P_1} and \var{P_2} are equivalent
   with respect to \var{x}, written as \var{equivalent(P_1(x), P_2(x))}
   if and only if the following conditions hold:
@@ -1336,8 +1358,8 @@ don't handle these cases.
 
 
 
-Discuss different types of fuzzing and the one that we use.
-\todo{Double check with Pascal what he uses.}
+%% Discuss different types of fuzzing and the one that we use.
+%% \todo{Double check with Pascal what he uses.}
 
 %% \section{Algorithm}
 
@@ -1345,7 +1367,7 @@ Discuss different types of fuzzing and the one that we use.
 
 %% \subsection{Reduction of semantically equivalent programs}
 
-\section{Guarantees}
+\subsection{Guarantees} \label{sec:guarantees}
 
 \paragraph{Discussion on soundness} Given that we rely on fuzzing, we can't guarantee that the
 refactoring works for all possible inputs. However, it is well suited
@@ -1379,8 +1401,8 @@ translating the code into a logical formula, calls to solvers are
 expensive.
 
 \paragraph{Discussion on completeness}
-
-
+We cannot guarantee that we'll find a refactoring whenever one exists.
+The fuzzer in the synthesis phase may fail to find a candidate.
 
 %% \section{Some research questions}
 
