@@ -1083,11 +1083,11 @@ Next, we define the notion of equivalence with respect to a concrete input \var{
 
 \[
     \begin{aligned}
-      & (1)~ \forall v\in liveVar(P_1)\cap liveVar(P_2). \\
-      & \qquad equivalent(E[P_1(x)](\vec{v}), E[P_2(\vec{x})](v))\\
+      & (1)~ \forall v\in liveVar(P_1). \\
+      & \qquad v\in liveVar(P_2) \wedge equals(E[P_1(x)](\vec{v}), E[P_2(\vec{x})](v))\\
 %& (2) equivalent(aliasEquivClass(liveVar(P_1)), aliasEquivClass(liveVar(P_2)))      
-& (2)~  \forall C {\in} loadedClasses(P_1) \cap loadedClasses(P_2).\forall f {\in} staticFields(C).\\
-  &  \qquad equivalent(E[P_1(\vec{x})](f), E[P_2(\vec{x})](f))
+& (2)~  \forall C \in loadedClasses(P_1). C \in loadedClasses(P_2)~ \wedge \\
+  &  \qquad \forall f {\in} staticFields(C).equals(E[P_1(\vec{x})](f), E[P_2(\vec{x})](f))
     %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
   %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
    %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
@@ -1098,37 +1098,40 @@ Next, we define the notion of equivalence with respect to a concrete input \var{
 
 The above definition says that in order for \var{P_1} and
 \var{P_2} to be equivalent with respect to input \var{\vec{x}}, any variable
-that is live at the end of both \var{P_1} and \var{P_2} must be
-assigned equivalent objects by the executions of \var{P_1} and
-\var{P_2} on \var{\vec{x}}, respectively.
+that is live at the end of \var{P_1}, must also be live at the end of \var{P_2}, and  must be
+assigned equal objects by the executions of \var{P_1} and
+\var{P_2} on \var{\vec{x}}, respectively. By equal objects we mean objects where the values of the
+corresponding attributes are equal.
 Additionally, for any class that
-is being loaded by the class loader of both \var{P_1} and \var{P_2},
-all the static fields must again be assigned equivalent objects by the
-two executions. 
+is being loaded by the class loader of \var{P_1}, it must also be loaded by the class loader of \var{P_2}, and
+all its static fields must again be assigned equal objects by the
+two executions, respectively. 
 %% Note that, as mentioned in its name, Definition~\ref{def:prog-equiv} only partially
 %% defines the equivalence of \var{P_1} and \var{P_2} on input \var{\vec{x}}. For now
 %% we will ignore this and get back to it later in the section.
 
 \begin{example}\label{ex:equiv}
   When applying Definition~\ref{def:prog-equiv} to \var{P_1} and \var{P_2} given in Example~\ref{ex:defs},
-  the following conditions must hold:
+  the following conditions must hold (given that class \var{Date} has no static fields, the second condition is trivial):
 \[
     \begin{aligned}
-& (1)~ \forall v\in \{date\}. equivalent(E[P_1(x)](v), E[P_2(x)](v))\\
-& (2)~  \forall C \in \{Date\}.\forall f \in staticFields(C).equivalent(E[P_1(x)](f), E[P_2(x)](f))
+      & (1)~ date\in \{date,calendar\} ~ \wedge \\
+      & \qquad equals(E[P_1(x)](date), E[P_2(x)](date))\\
+& (2)~  Date \in \{Date, Calendar\}
     %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
   %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
    %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
     \end{aligned}
     \]
 
-    Given that class \var{Date} has no static fields, the second condition is trivially met. Then, in order for the two portions of code to be
-    equivalent with respect to an input \var{x}, the objects assigned to variable \var{date} by the execution of  \var{P_1(x)} and \var{P_2(x)}
-    must be equivalent. We will discuss checking equivalence of two objects in two distinct executions next.
+ 
+    %% Then, in order for the two portions of code to be
+    %% equivalent with respect to an input \var{x}, the objects assigned to variable \var{date} by the execution of  \var{P_1(x)} and \var{P_2(x)}
+    %% must be equivalent. We will discuss checking equivalence of two objects in two distinct executions next.
     
 \end{example}
 
-\todo{define $equivalent(E[P_1(x)](v), E[P_2(x)](v))$}.
+%%\todo{define $equivalent(E[P_1(x)](v), E[P_2(x)](v))$}.
 
 \paragraph{Preserving aliasing}
 When expressing the equivalence relation between \var{P_1} and \var{P_2}, we intentionally missed one important aspect,
