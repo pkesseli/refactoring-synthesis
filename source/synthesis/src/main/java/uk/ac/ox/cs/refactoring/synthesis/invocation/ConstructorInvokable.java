@@ -19,7 +19,6 @@ public class ConstructorInvokable extends ExecutableInvokable {
   public ConstructorInvokable(final Constructor<?> constructor) {
     super(constructor);
     this.constructor = constructor;
-    constructor.setAccessible(true);
   }
 
   @Override

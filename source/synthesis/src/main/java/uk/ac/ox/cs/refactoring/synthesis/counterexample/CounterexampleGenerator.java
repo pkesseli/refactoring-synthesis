@@ -170,7 +170,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
               .toArray(Object[]::new);
           try {
             final Object constructed = constructor.getRawMember().newInstance(arguments);
-            postProcess(type, constructed, Collections.newSetFromMap(new IdentityHashMap<>()));
+            postProcess(memberResolver, type, constructed);
             System.out.println("Constructed: " + type);
             return constructed;
           } catch (final Throwable e) {
@@ -219,18 +219,34 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
   }
 
   /**
+   * Recursive entry point for
+   * {@link #postProcess(MemberResolver, ResolvedType, Object, Set)}.
+   * 
+   * @param memberResolver  {@link #postProcess(MemberResolver, ResolvedType, Object, Set)}
+   * @param resolvedType    {@link #postProcess(MemberResolver, ResolvedType, Object, Set)}
+   * @param constructed     {@link #postProcess(MemberResolver, ResolvedType, Object, Set)}
+   * @param alreadyVisisted {@link #postProcess(MemberResolver, ResolvedType, Object, Set)}
+   * @throws NoSuchFieldException   {@link #postProcess(MemberResolver, ResolvedType, Object, Set)}
+   * @throws IllegalAccessException {@link #postProcess(MemberResolver, ResolvedType, Object, Set)}
+   */
+  public static void postProcess(final MemberResolver memberResolver, final ResolvedType resolvedType,
+      final Object constructed) throws NoSuchFieldException, IllegalAccessException {
+    postProcess(memberResolver, resolvedType, constructed, Collections.newSetFromMap(new IdentityHashMap<>()));
+  }
+
+  /**
    * Using public constructors may lead to heaps with objects of unsupported
    * types (e.g. {@link Reference}). We null out those fields here.
    * 
+   * @param memberResolver  Used to identify fields.
    * @param resolvedType    Type of {@code constructed}.
    * @param constructed     Object created using constructor.
    * @param alreadyVisisted Already checked objects to avoid cycles.
    * @throws NoSuchFieldException   if a type mismatch occurs.
    * @throws IllegalAccessException if a necessary field could not be accessed.
    */
-  private void postProcess(final ResolvedType resolvedType, final Object constructed,
-      final Set<Object> alreadyVisisted)
-      throws NoSuchFieldException, IllegalAccessException {
+  private static void postProcess(final MemberResolver memberResolver, final ResolvedType resolvedType,
+      final Object constructed, final Set<Object> alreadyVisisted) throws NoSuchFieldException, IllegalAccessException {
     if (constructed == null || !alreadyVisisted.add(constructed))
       return;
 
@@ -240,12 +256,11 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
         continue;
 
       if (isSupported(fieldType)) {
-        System.out.println("Not Reset: " + field.getDeclaringType() + ":" + field);
         final Field rawField = field.getRawMember();
         rawField.setAccessible(true);
-        postProcess(fieldType, rawField.get(constructed), alreadyVisisted);
+        postProcess(memberResolver, fieldType, rawField.get(constructed), alreadyVisisted);
       } else {
-        Fields.set(fieldType.getErasedType(), constructed, field.getName(), null);
+        Fields.set(resolvedType.getErasedType(), constructed, field.getName(), null);
       }
     }
   }
