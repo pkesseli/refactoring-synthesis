@@ -923,7 +923,7 @@ Firstly, there may indeed be no $P_2$ that can be constructed with the available
 it is equivalent to $P_1$ on the given inputs. Secondly, this could be caused by the fuzzer's unsoundness.
 Given that fuzzers rely on testing, they may fail to find inputs that trigger unsafe behaviours even when such inputs exist.
 Consequently, we cannot guarantee that we will always find a refactoring whenever one exists. We will provide more details about our decision to use fuzzing as the safety checker in 
-Section~\ref{sec:guarantees}.
+Section~\ref{sec:fuzzing}.
 
 %% In other words, answering the initial question posed by the
 %% synthesis phase is now reduced to checking the safety of the \code{Synthesise} method.
@@ -1255,17 +1255,6 @@ if and only if they are in the same equivalence class induced by the aliasing re
 
 %\todo{also add an example where static fields are changed.}
 
-\todo{Do we discuss about how we implement this?}  
-Given the potential use of aliases, we will use a Hash table to
-associate a symbolic id to each pointer variable such that two
-variable share the same id if and only if they are aliases.
-%% Then, we can check whether the set of aliases is preserved in the
-%% refactored program. For instance, if \texttt{obj1} and \texttt{obj2}
-%% are aliases in the original program, then they must be aliases also
-%% in the second program.
-%\todo{check exactly what this is used for.}
-
-
 
 %% Aliasing check: checks whether the two given objects have the same aliasing ID, and thus
 %%    alias with the same objects on their respective heaps.
@@ -1306,34 +1295,32 @@ variable share the same id if and only if they are aliases.
 
 
 
-\subsubsection{Loaded classes}
+\paragraph{Discussion on loaded classes}
 
-One of the potential issues when checking equivalence of two program
+One potential issue when checking equivalence of two blocks of code
 is the treatment of loaded classes. In particular, one program might
 load more classes than the other, but still have the exact same effect
 as the other one. This can happen for instance if one program calls a
 helper method from a class that needs to be loaded, whereas the other
 program inlines the same method, thus avoiding loading the class.  Our
-assumption is that loadeding and initialization don't perform any
+assumption is that loading and initialization don't perform any
 changes outside of the observable state already checked by the
 existing equivalence check.  While this assumption is generally safe
 to make, there might be some cases when this is not the case, e.g. the
 class initializer might print something on the screen. For now, we
-don't handle these cases.
+don't handle these cases. \todo{So we don't need to load the exact same classes? What if static fields are changed?}
 
+\todo{Is this still a potential problem?}
 Everything that is part of our comparison is in the isolated class loader.
 For instance user defined types will usually be located in the isolated
 class loader, enabling the comparison.
 However, what do we do about wrapper object aliasing?
 For anything outside the class loader, we use reference equality.
-\todo{example?}
+\todo{Example?}
 
 
 %% A class is initialized when a symbol in the class is first used. When
 %% a class is loaded it is not initialized.
-
-\todo{give example}
-
 
 
 %% Discuss different types of fuzzing and the one that we use.
@@ -1345,42 +1332,38 @@ For anything outside the class loader, we use reference equality.
 
 %% \subsection{Reduction of semantically equivalent programs}
 
-\subsection{Guarantees} \label{sec:guarantees}
+%% \subsection{Guarantees} \label{sec:guarantees}
 
-\paragraph{Discussion on soundness} Given that we rely on fuzzing, we can't guarantee that the
-refactoring works for all possible inputs. However, it is well suited
-to the particular scenarios for which we designed our technique,
-IDE integration where the refactoring is presented as a suggestion to the programmer,
-or automated pull requests to be approved by the developers.
-%% where
-%% continuous integration practices are in place. In particular, once our
-%% technique has found a possible refactoring, we sumit a pull request
-%% that needs to be approved by other developers.
+%% \paragraph{Discussion on soundness} Given that we rely on fuzzing, we can't guarantee that the
+%% refactoring works for all possible inputs. However, it is well suited
+%% to the particular scenarios for which we designed our technique,
+%% IDE integration where the refactoring is presented as a suggestion to the programmer,
+%% or automated pull requests to be approved by the developers.
 
-In order to fully guarantee the soundness of the refactorings proposed
-by our technique, we would have to use a sound verification technique
-in the verification phase mentioned earlier. However, such a technique
-would require symbolic execution, which is notoriously difficult for
-real-world programs due to features such as loops, library functions,
-complex data structures. The most successful such verification
-techniques are either bounded (i.e. check that an erroneous state
-cannot be reached within a bounded number of loop unrollings) or
-require user input in the form of loop invariants. While the former
-class of techniques provides limited soundness guarantees, the latter
-requires intricate help from the user.  In fact, we are not aware of
-any sound and automatic symbolic verification method that can handle
-the kind of code we are interested in.
+%% In order to fully guarantee the soundness of the refactorings proposed
+%% by our technique, we would have to use a sound verification technique
+%% in the verification phase mentioned earlier. However, such a technique
+%% would require symbolic execution, which is notoriously difficult for
+%% real-world programs due to features such as loops, library functions,
+%% complex data structures. The most successful such verification
+%% techniques are either bounded (i.e. check that an erroneous state
+%% cannot be reached within a bounded number of loop unrollings) or
+%% require user input in the form of loop invariants. While the former
+%% class of techniques provides limited soundness guarantees, the latter
+%% requires intricate help from the user.  In fact, we are not aware of
+%% any sound and automatic symbolic verification method that can handle
+%% the kind of code we are interested in.
 
-Discuss tradeoff: symbolic execution is expensive; programming
-languages evolve faster than verification techniques and therefore
-many new features are not supported by their front ends (and/or
-backends depending on how complex the new feature is); even after
-translating the code into a logical formula, calls to solvers are
-expensive.
+%% Discuss tradeoff: symbolic execution is expensive; programming
+%% languages evolve faster than verification techniques and therefore
+%% many new features are not supported by their front ends (and/or
+%% backends depending on how complex the new feature is); even after
+%% translating the code into a logical formula, calls to solvers are
+%% expensive.
 
-\paragraph{Discussion on completeness}
-We cannot guarantee that we'll find a refactoring whenever one exists.
-The fuzzer in the synthesis phase may fail to find a candidate.
+%% \paragraph{Discussion on completeness}
+%% We cannot guarantee that we'll find a refactoring whenever one exists.
+%% The fuzzer in the synthesis phase may fail to find a candidate.
 
 %% \section{Some research questions}
 
@@ -1494,12 +1477,11 @@ The fuzzer in the synthesis phase may fail to find a candidate.
 
 \section{Implementation}
 
-\subsection{Program fuzzing}
+\subsection{Program fuzzing} \label{sec:fuzzing}
 
-
-In order to generate programs, we make use of the fuzzing technique described
-in~\cite{DBLP:conf/issta/PadhyeLS19} called JQF.  This technique is
-coverage-guided, which means that it uses lightweight program
+In order to generate programs, we make use of JQF~\cite{DBLP:conf/issta/PadhyeLS19}, which performs 
+coverage-guided property-based fuzz testing.
+Coverage-guided means that JQF uses lightweight program
 instrumentation to trace the code coverage reached by each generated
 input that is fed to the program under test.  Basically, the program
 is continuously executed with randomly generated inputs. However,
@@ -1507,22 +1489,74 @@ instead of generating inputs from scratch, coverage-guided fuzzers
 evolve a set of saved inputs. If a new input leads to an increase
 in code coverage, it is saved for subsequent evolution.
 
-In our setting, the randomly generated inputs are programs.
-This is a difficult setting for fuzzing because programs are
+In our setting, we use JQF for two tasks. Firstly, in the synthesis phase, 
+JQF is generating the refactored block of code.
+Secondly, in the verification phase, JQF generated
+inputs that can differentiate between the original and refactored codes.
+In particular the former task is a difficult setting for fuzzing because programs are
 highly structured, whereas fuzzers often work with unstructured inputs
 that can be generated via byte-level mutations such as bit flips.
 
 JQF is designed to handle structured inputs, where inputs of type \code{T}
 are generated by a backing \code{Generator<T>}.
 While JQF provides a library of such generators, we manually write our own.
-Essentially, our generator describes the grammar corresponding to the
+For the synthesis phase, our generator describes the grammar corresponding to the
 programs to be synthesised.
+\todo{Do we need more details about the generators?}
+
 JQF never generates the same exact program twice. However it may generate many
 syntactically different, but semantically equivalent ones.
-Next, we discuss a few techniques that we use to reduce the number of
-generated programs that are semantically equivalent.
+\todo{Did we do something for this?}
+%% Next, we discuss a few techniques that we use to reduce the number of
+%% generated programs that are semantically equivalent.
 
-\todo{more details about the generators}
+\paragraph{Discussion on guarantees}
+As explained in Section~\ref{sec:encoding}, due to the use of fuzzing in the synthesis
+phase, our technique may fail to find a refactoring even when one
+exists, whereas using fuzzing in the verification phase may result in
+finding a refactoring that is not equivalent to the original on all
+inputs.  In order to guarantee the soundness and completeness of the
+proposed refactoring technique, we could attempt to swap fuzzing
+with some formal verification technique. However, in general, program
+verification is undecidable. Even for decidable restrictions, such
+techniques tend to be expensive as they generally require some form of
+symbolic execution and calls to off-the-shelves solvers.  Moreover,
+programming languages evolve faster than verification techniques and
+therefore new features might not be supported by the front ends of
+such techniques.
+
+
+
+%% such a technique would require symbolic execution, which is no-
+%% toriously difficult for real-world programs due to features such as
+%% loops, library functions, complex data structures. The most success-
+%% ful such verification techniques are either bounded (i.e. check that
+%% an erroneous state cannot be reached within a bounded number of
+%% loop unrollings) or require user input in the form of loop invariants.
+%% While the former class of techniques provides limited soundness
+%% guarantees, the latter requires intricate help from the user. In fact,
+%% we are not aware of any sound and automatic symbolic verification
+%% method that can handle the kind of code we are interested in.
+
+%% Discuss tradeoff: symbolic execution is expensive; programming
+%% languages evolve faster than verification techniques and therefore
+%% many new features are not supported by their front ends (and/or
+%% backends depending on how complex the new feature is); even
+%% after translating the code into a logical formula, calls to solvers are
+%% expensive.
+
+\subsection{Checking aliasing}
+Given the potential use of aliases, we will use a Hash table to
+associate a symbolic id to each pointer variable such that two
+variable share the same id if and only if they are aliases.
+\todo{More details?}
+
+%% Then, we can check whether the set of aliases is preserved in the
+%% refactored program. For instance, if \texttt{obj1} and \texttt{obj2}
+%% are aliases in the original program, then they must be aliases also
+%% in the second program.
+%\todo{check exactly what this is used for.}
+
 
 \subsection{Instrumentation}
 
