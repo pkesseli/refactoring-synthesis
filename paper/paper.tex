@@ -1153,44 +1153,49 @@ namely aliasing. To understand the problem let's look a the following example, w
 modified version of the running example.
 
 \begin{example}\label{ex:aliasing}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-  Date date1 = new Date(120, 12, 30);
-  Date date2 = new Date(120, 12, 30);  
-  
+  \begin{lstlisting}[mathescape=true,showstringspaces=false]
+    
+  // assume date refers to 2022-12-01 13:30:00    
+
+  // $P_3$
+  int hour1 = date.getHours();
+  int hour2 = date.getHours();    
+
+  // $P_4$
   final Calendar calendar = Calendar.getInstance();
-  calendar.set(2020, 12, 30);
-  Date date1 = calendar.getTime();
-  Date date2 = date1;
+  calendar.setTime(date);
+  int hour1 = calendar.get(Calendar.HOUR_OF_DAY);
+  int hour2 = hour1;
 \end{lstlisting}
 
 For the code above, we will refer to the first two lines denoting the
 original deprecated code as \var{P_3}, and the rest, denoting the
 refactored code, as \var{P_4}.  We note that, as opposed to the
-running example, \var{P_3} defines two variables \var{date1} and
-\var{date2}, both assigned a \var{Date} object created by calling the
-\var{Date} constructor with identical arguments.
-Conversely, in \var{P_4}, \var{date1} and \var{date2} are aliases, i.e. they point to the same
+running example, \var{P_3} defines two variables \var{hour1} and
+\var{hour2}, both assigned an \var{int} by calling
+\var{date.getHours()}.
+Conversely, in \var{P_4}, \var{hour1} and \var{hour2} are aliases, i.e. they point to the same
 memory location.
 
-Note that, according to Definition~\ref{def:prog-equiv}, given an input \var{x}, \var{P_3} and \var{P_4} are equivalent with respect to \var{x}.
-\todo{I should use a concrete input here.}
-So, everything looks good until now. Let's however, assume that the following code
-is used after \var{P_3/P_4}, corresponding to whether we refer to the original or refactored code.
+Note that, according to Definition~\ref{def:prog-equiv}, given a concrete input \var{date} (referring to concrete date 2022-12-01 13:30:00), \var{P_3} and \var{P_4} are equivalent with respect to \var{date}.
+%\todo{I should use a concrete input here.}
+%So, everything looks good until now.
+Let's however, assume that the following code
+is used after \var{P_3} and \var{P_4}, respectively.
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
-  date1 = new Date(120, 10, 30);
+  hour1 = 2;
 \end{lstlisting}
 
-Our intention is to execute the whole code, including this additional line, on input \var{x}.
-If \var{P_3} and \var{P_4} were indeed semantically equivalent with respect to input \var{x},
-then we would expect \var{date1} and \var{date2} to have the same value at the end of both
+Our intention is to execute the whole code, including this additional line, on input \var{date}.
+If \var{P_3} and \var{P_4} were indeed semantically equivalent with respect to input \var{date},
+then we would expect \var{hour1} and \var{hour2} to have the same value at the end of both
 executions, respectively. However, this is not the case.
-In the original code, using \var{P_3}, \var{date2} will be assigned an object
-denoting the date ``30/12/2020'', whereas in the refactored code,
-\var{date2} will correspond to the date ``30/10/2020''. This is due to the fact that,
-in \var{P_4}, \var{date1} and \var{date2} are aliases. Then, when the object referenced by
-\var{date1} was changed to refer to the date denoting ``30/10/2020'', this also affected \var{date2}.
-Thus, \var{P_3} and \var{P_4} are not semantically equivalent for input \var{x}.
+In the original code, using \var{P_3}, \var{hour2} will be assigned 13 (the hour in \var{date}), whereas in the refactored code,
+\var{hour2} will have value 2. This is due to the fact that,
+in \var{P_4}, \var{hour1} and \var{hour2} are aliases. %% Then, when the object referenced by
+%% \var{hour1} was changed to refer to the date denoting ``30/10/2020'', this also affected \var{date2}.
+Thus, \var{P_3} and \var{P_4} are not semantically equivalent for input \var{date}.
 \end{example}  
 
 Intuitively, any aliases between live variables at the end of the original code should also
@@ -1221,22 +1226,17 @@ In \var{P_4}, the alising relation induces one equivalence class, namely \var{\{
 
 \end{example}
   
-Next, we adjust Definition~\ref{def:prog-equiv} to capture the aliasing aspect.
+Next, we complete Definition~\ref{def:prog-equiv} by capturing the aliasing aspect.
 
-\begin{definition}[Program equivalence with respect to a concrete input \var{x} {\bf[complete]}]\label{def:prog-equiv}
-  Given two programs \var{P_1} and \var{P_2} and concrete input \var{x},
-  we say that \var{P_1} and \var{P_2} are equivalent
-  with respect to \var{x}, written as \var{equivalent(P_1(x), P_2(x))}
-  if and only if the following conditions hold:
+\begin{definition}[Addition to Definition~\ref{def:prog-equiv}]\label{def:prog-equiv-add}
+  For two programs \var{P_1} and \var{P_2} to be equivalent
+  with respect to \var{x}, in addition to Definition~\ref{def:prog-equiv}, we need the following two conditions:
 
 \[
     \begin{aligned}
-      & (1)~ \forall v\in liveVar(P_1)\cap liveVar(P_2). equivalent(E[P_1(x)](v), E[P_2(x)](v))\\
-& (2)~ \forall v_1,v_2 \in liveVar(P_1) \cap liveVar(P_2). aliases(P_1, v_1, v_2) \Rightarrow aliases(P_2, v_1,v_2)\\      
-& (3)~  \forall C \in loadedClasses(P_1) \cap loadedClasses(P_2).\forall f \in staticFields(C).\\
-      &  ~~~~~ equivalent(E[P_1(x)](f), E[P_2(x)](f))\\
-      & (4)~\forall f_1,f_2 \in staticFields(loadedClasses(P_1) \cap loadedClasses(P_2)).\\
-      & ~~~~~ aliases(P_1, f_1, f_2) \Rightarrow aliases(P_2, f_1,f_2)
+& (4)~ \forall v_1,v_2 \in liveVar(P_1). aliases(P_1, v_1, v_2) \Rightarrow aliases(P_2, v_1,v_2)\\      
+    & (5)~\forall f_1,f_2 \in staticFields(loadedClasses(P_1)).\\
+      & \qquad aliases(P_1, f_1, f_2) \Rightarrow aliases(P_2, f_1,f_2)
     %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
   %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
    %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
@@ -1246,15 +1246,16 @@ Next, we adjust Definition~\ref{def:prog-equiv} to capture the aliasing aspect.
   \end{definition}
 
 where, given a program \var{P}, variables \var{v_1} and \var{v_2} are aliases, i.e. \var{aliases(P, v_1, v_2)} holds,
-if and only if they are in the same equivalence class induced by the aliasing relation,
-  i.e. \var{aliasEquivClass(\{v_1,v_2\}) = \{\{v_1,v_2\}\}}.
+if and only if they are in the same equivalence class induced by the aliasing relation,\\
+  i.e. $aliasEquivClass(\{v_1,v_2\}) = \{\{v_1,v_2\}\}$.
 
-  For the fourth condition, we abuse the notation to use \var{staticFields} over a set of classes, rather than just one class.
+  For the fifth condition, we abuse the notation to use \var{staticFields} over a set of classes, rather than just one class.
   The objective is to return the set of all static fields defined in all the classes in the set of classes taken as argument.
   
-\todo{revise the rest.}
-\todo{also add an example where static fields are changed.}
 
+%\todo{also add an example where static fields are changed.}
+
+\todo{Do we discuss about how we implement this?}  
 Given the potential use of aliases, we will use a Hash table to
 associate a symbolic id to each pointer variable such that two
 variable share the same id if and only if they are aliases.
@@ -1262,48 +1263,7 @@ variable share the same id if and only if they are aliases.
 %% refactored program. For instance, if \texttt{obj1} and \texttt{obj2}
 %% are aliases in the original program, then they must be aliases also
 %% in the second program.
-\todo{check exactly what this is used for.}
-
-Note on aliasing checking:
-Everything that is part of our comparison is in the isolated class loader.
-For instance user defined types will usually be located in the isolated
-class loader, enabling the comparison.
-However, what do we do about wrapper object aliasing?
-For anything outside the class loader, we use reference equality.
-\todo{example?}
-
-We execute the two programs on the given input and then compare the
-result for equivalence. The two programs are equivalent with respect to
-the given input if one of the conditions below are fulfilled: 
-\begin{enumerate}
-\item They throw the same exception.
-\item They return equivalent values and all the static fields in the two corresponding classes
-  are respectively equivalent.
-\end{enumerate}  
-
-Let's refer to the two programs as \var{P_1} and \var{P_2}, and the corresponding execution results
-as \var{R_1} and \var{R_2}. We use $class(R)$ to get the class of object \var{R} and
-$getStatic(C)$ to retrieve the static fields of \var{C}. Then, we provide the definition
-for program equivalence on input \var{i} as follows:
-
-\begin{definition}[Program equivalence with respect to a concrete input]
-  Given the results \var{R_1} and \var{R_1} of executing \var{P_1} and \var{P_2}
-  on the input \var{i}, respectively, we say the \var{P_1} and \var{P_2} are equivalent
-  with respect to \var{i} if and only if one of the following holds:
-
-  \begin{itemize}
-  \item \var{R_1} throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
-  \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
-    $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
-    \end{itemize}
-    
-  \end{definition}
-
-  
-Next, we define equivalence between two objects, denoted above by \var{equiv(R_1,R_2)}.
-
-Equivalence classes induced by the aliasing relation need to be preserved by the
-refactored program.
+%\todo{check exactly what this is used for.}
 
 
 
@@ -1360,6 +1320,14 @@ existing equivalence check.  While this assumption is generally safe
 to make, there might be some cases when this is not the case, e.g. the
 class initializer might print something on the screen. For now, we
 don't handle these cases.
+
+Everything that is part of our comparison is in the isolated class loader.
+For instance user defined types will usually be located in the isolated
+class loader, enabling the comparison.
+However, what do we do about wrapper object aliasing?
+For anything outside the class loader, we use reference equality.
+\todo{example?}
+
 
 %% A class is initialized when a symbol in the class is first used. When
 %% a class is loaded it is not initialized.
