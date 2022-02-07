@@ -1038,6 +1038,7 @@ at the end of $P$. %% Thus, \var{liveVars(P_1)} gives us the
 %% live at the end of \var{P_1}.
 \item \var{staticFields(C)} returns
   the set of static fields of a class \var{C}.
+\item \var{exc(P)} to obtain the exception thrown by $P$.  
 \end{itemize}  
 
 \begin{example}\label{ex:defs}
@@ -1064,7 +1065,8 @@ Then, we have:
   \var{loadedClasses(P_1)} &= \{Date\} \\
   \var{loadedClasses(P_2)} &= \{Calendar, Date\} \\  
   \var{staticFields(Date)} &= \emptyset\\
-  \var{staticFields(Calendar)} &= \{DATE, YEAR, \cdots\}  
+  \var{staticFields(Calendar)} &= \{DATE, YEAR, \cdots\}\\
+  \var{exc(P_1)}=\var{exc(P_2)} &=\emptyset
 \end{aligned}
 \]
 \end{example}
@@ -1082,11 +1084,13 @@ Next, we define the notion of equivalence with respect to a concrete input \var{
   if and only if the following conditions hold:
 
 \[
-    \begin{aligned}
-      & (1)~ \forall v\in liveVar(P_1). \\
+\begin{aligned}
+  & (1) exc(P_1)=\{e_1\} \wedge exc(P_2)=\{e_2\} \wedge equals(e_1,e_2) ~\vee\\
+  & \qquad \var{exc(P_1)}=\var{exc(P_2)} =\emptyset \\ 
+      & (2)~ \forall v\in liveVar(P_1). \\
       & \qquad v\in liveVar(P_2) \wedge equals(E[P_1(x)](\vec{v}), E[P_2(\vec{x})](v))\\
 %& (2) equivalent(aliasEquivClass(liveVar(P_1)), aliasEquivClass(liveVar(P_2)))      
-& (2)~  \forall C \in loadedClasses(P_1). C \in loadedClasses(P_2)~ \wedge \\
+& (3)~  \forall C \in loadedClasses(P_1). C \in loadedClasses(P_2)~ \wedge \\
   &  \qquad \forall f {\in} staticFields(C).equals(E[P_1(\vec{x})](f), E[P_2(\vec{x})](f))
     %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
   %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
@@ -1097,11 +1101,17 @@ Next, we define the notion of equivalence with respect to a concrete input \var{
   \end{definition}
 
 The above definition says that in order for \var{P_1} and
-\var{P_2} to be equivalent with respect to input \var{\vec{x}}, any variable
+\var{P_2} to be equivalent with respect to input \var{\vec{x}},
+(1) either they both throw an exception and the two exceptions are equal, or none does,
+(2) any variable
 that is live at the end of \var{P_1}, must also be live at the end of \var{P_2}, and  must be
 assigned equal objects by the executions of \var{P_1} and
-\var{P_2} on \var{\vec{x}}, respectively. By equal objects we mean objects where the values of the
-corresponding attributes are equal.
+\var{P_2} on \var{\vec{x}}, respectively, and
+(3) the static fields of the loaded classes must be respectively equal.
+We check equality by recursively following attribute chains until we reach primitive types or types that have an explicit \code{equals} provided, which we then compare.
+%Alternatively, if there is an explicit \code{equals} implemented for a given type, then we use it.
+%% By equal objects we mean objects where the values of the
+%% corresponding attributes are equal.
 Additionally, for any class that
 is being loaded by the class loader of \var{P_1}, it must also be loaded by the class loader of \var{P_2}, and
 all its static fields must again be assigned equal objects by the
@@ -1110,14 +1120,18 @@ two executions, respectively.
 %% defines the equivalence of \var{P_1} and \var{P_2} on input \var{\vec{x}}. For now
 %% we will ignore this and get back to it later in the section.
 
+
+%In our experiments, given that we only refactor deprecated methods, the only live variable at the end of the original invocation is \var{this}.
+
 \begin{example}\label{ex:equiv}
   When applying Definition~\ref{def:prog-equiv} to \var{P_1} and \var{P_2} given in Example~\ref{ex:defs},
-  the following conditions must hold (given that class \var{Date} has no static fields, the second condition is trivial):
+  the following conditions hold (given that class \var{Date} has no static fields, the second condition is trivial):
 \[
-    \begin{aligned}
-      & (1)~ date\in \{date,calendar\} ~ \wedge \\
+\begin{aligned}
+      & (1)~ \var{exc(P_1)}=\var{exc(P_2)} =\emptyset\\
+      & (2)~ date\in \{date,calendar\} ~ \wedge \\
       & \qquad equals(E[P_1(x)](date), E[P_2(x)](date))\\
-& (2)~  Date \in \{Date, Calendar\}
+& (3)~  Date \in \{Date, Calendar\}
     %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
   %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
    %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
