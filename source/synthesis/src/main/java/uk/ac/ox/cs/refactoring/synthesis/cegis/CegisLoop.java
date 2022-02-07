@@ -43,7 +43,7 @@ public class CegisLoop<Candidate> {
   private final Map<Counterexample, ExecutionResult> counterexamples = new HashMap<>();
 
   static {
-    System.setProperty("jqf.ei.MAX_INPUT_SIZE", "102400");
+    System.setProperty("jqf.ei.MAX_INPUT_SIZE", "1024000");
     System.setProperty("jqf.ei.QUIET_MODE", Boolean.toString(true));
   }
 
@@ -66,7 +66,9 @@ public class CegisLoop<Candidate> {
         .register(new ServiceLoaderGeneratorSource())
         .register(new ClassGenerator())
         .register(new MethodHandlesLookupGenerator())
-        .register(new OperatingSystemMXBeanGenerator());
+        .register(new OperatingSystemMXBeanGenerator())
+        .register(new AffineTransformGenerator())
+        .register(new FontMetricsGenerator());
     baseRepository.register(new RuntimeVersionGenerator(baseRepository));
     final GeneratorRepository verificationRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ServiceLoaderGeneratorSource())

@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,12 +38,13 @@ public class TableGenerator {
         final PrintWriter writer = new PrintWriter(buffer)) {
 
       writer.println("\\documentclass{article}");
-      writer.println("\\usepackage{wasysym}");
+      writer.println("\\usepackage{longtable}");
       writer.println("\\usepackage{pifont}");
+      writer.println("\\usepackage{wasysym}");
       writer.println("\\newcommand{\\xmark}{\\ding{55}}");
       writer.println("\\begin{document}");
 
-      writer.print("\\begin{tabular}{ l ");
+      writer.print("\\begin{longtable}{ l ");
       for (int i = 0; i < numberOfConfigurations; ++i)
         writer.print("r ");
       writer.println('}');
@@ -59,7 +61,7 @@ public class TableGenerator {
           writer.println("\\hline");
         }
       }
-      writer.println("\\end{tabular}");
+      writer.println("\\end{longtable}");
       writer.println("\\end{document}");
     }
   }
@@ -73,12 +75,14 @@ public class TableGenerator {
     final int numberOfConfigurations = jsonFiles.length;
     final int numberOfColumns = numberOfConfigurations + 1;
     int numberOfRows = -1;
+    final Map<String, Report> reports = new HashMap<>();
     for (int column = 0; column < numberOfConfigurations; ++column) {
       final Path jsonFile = Paths.get(jsonFiles[column]);
       final Report report;
       try (final InputStream is = Files.newInputStream(jsonFile)) {
         report = objectMapper.readValue(is, Report.class);
       }
+      reports.put(jsonFiles[column], report);
 
       final int numberOfBenchmarks = report.Benchmarks.size();
       numberOfRows = numberOfBenchmarks + 2;

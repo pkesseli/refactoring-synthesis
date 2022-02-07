@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.HierarchicalComponent;
@@ -74,5 +75,16 @@ class SnippetComponent implements HierarchicalComponent<JavaLanguageKey, IExpres
       converter.Parameters.get(i).expression = args[i];
     }
     return converter.getExpression();
+  }
+
+  /**
+   * Indicates that the code example is just an unresolved name and thus not
+   * useful.
+   * 
+   * @return {@code true} if the code example is not useful, {@code false}
+   *         otherwise.
+   */
+  public boolean isUnresolved() {
+    return getParameterKeys().size() == 1 && javadocExpression instanceof NameExpr;
   }
 }

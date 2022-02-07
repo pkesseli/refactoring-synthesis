@@ -7,6 +7,7 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 @SuppressWarnings("rawtypes")
 public class ClassGenerator extends Generator<Class> {
 
+  /** {@link Generator#Generator(java.lang.Class)} */
   public ClassGenerator() {
     super(Class.class);
   }

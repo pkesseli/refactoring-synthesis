@@ -13,9 +13,7 @@
 /paper/*.fdb_latexmk
 /paper/*.fls
 /paper/*.log
-/paper/paper.pdf
-/paper/paper-deprecated.pdf
-/paper/paper.synctex.gz
-/paper/paper-deprecated.synctex.gz
+/paper/*.pdf
+/paper/*.synctex.gz
 
 target/

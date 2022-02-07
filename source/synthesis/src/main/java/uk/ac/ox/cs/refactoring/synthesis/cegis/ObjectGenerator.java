@@ -14,6 +14,7 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
  */
 public class ObjectGenerator extends Generator<Object> {
 
+  /** {@link Generator#Generator(java.lang.Class)} */
   public ObjectGenerator() {
     super(Object.class);
   }

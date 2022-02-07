@@ -14,6 +14,7 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
  */
 public class OperatingSystemMXBeanGenerator extends Generator<OperatingSystemMXBean> {
 
+  /** {@link Generator#Generator(java.lang.Class)} */
   public OperatingSystemMXBeanGenerator() {
     super(OperatingSystemMXBean.class);
   }

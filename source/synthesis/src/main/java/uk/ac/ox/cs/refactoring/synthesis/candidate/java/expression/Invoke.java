@@ -2,6 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +35,13 @@ public final class Invoke {
    * @param method
    */
   public static void register(final JavaComponents components, final Method method) {
+    if (!Modifier.isPublic(method.getModifiers()))
+      return;
+
     final Type type = TypeFactory.create(method.getReturnType());
     final List<JavaLanguageKey> parameterKeys = getParameterKeys(new MethodInvokable(method));
-    components.nonnull(type, new FunctionComponent<JavaLanguageKey, InvokeMethod>(parameterKeys, new InvokeMethodFactory(method)));
+    components.nonnull(type,
+        new FunctionComponent<JavaLanguageKey, InvokeMethod>(parameterKeys, new InvokeMethodFactory(method)));
   }
 
   /**

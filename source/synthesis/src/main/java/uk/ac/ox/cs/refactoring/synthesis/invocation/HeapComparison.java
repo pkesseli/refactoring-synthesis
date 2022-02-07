@@ -54,7 +54,8 @@ public final class HeapComparison {
       return false;
     }
     if (lhs.Error != null) {
-      return rhs.Error != null && lhs.Error.getClass().getName().equals(rhs.Error.getClass().getName());
+      if (rhs.Error == null || !lhs.Error.getClass().getName().equals(rhs.Error.getClass().getName()))
+        return false;
     }
 
     final IsolatedClassLoader lhsClassLoader = lhs.ClassLoader;

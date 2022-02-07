@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Collections;
 
+import com.fasterxml.classmate.TypeResolver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
@@ -39,9 +40,10 @@ class SnippetCandidateGeneratorTest {
     final byte minInstructions = 1;
     final byte maxInstructions = 1;
     final byte maxInstructionLength = 1;
+    final TypeResolver typeResolver = new TypeResolver();
     final GeneratorConfiguration generatorConfiguration = new GeneratorConfiguration(components, minInstructions,
-        maxInstructions, maxInstructionLength, Void.class, Collections.emptyList(), double.class, false, 10, 100, 1,
-        400);
+        maxInstructions, maxInstructionLength, typeResolver.resolve(Void.class), Collections.emptyList(),
+        typeResolver.resolve(double.class), false, 10, 100, 1, 400);
     final SnippetCandidateGenerator candidateSupplier = new SnippetCandidateGenerator(generatorConfiguration);
     final SnippetCandidate snippetCandidate = candidateSupplier.generate(sourceOfRandomness, null);
     assertThat(snippetCandidate.Block.Statements, hasItems(isA(ExpressionStatement.class)));

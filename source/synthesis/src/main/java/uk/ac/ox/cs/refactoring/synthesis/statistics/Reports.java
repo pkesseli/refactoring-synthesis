@@ -10,8 +10,7 @@ public final class Reports {
     return className + '#' + methodName;
   }
 
-  public static <Candidate> CegisLoopListener<Candidate> createReportListener(final String className,
-      final String methodName) {
-    return new ReportCegisLoopListener<>(createBenchmarkName(className, methodName), DEFAULT_REPORT);
+  public static <Candidate> CegisLoopListener<Candidate> createReportListener(final String benchmarkName) {
+    return new ReportCegisLoopListener<>(benchmarkName, DEFAULT_REPORT);
   }
 }

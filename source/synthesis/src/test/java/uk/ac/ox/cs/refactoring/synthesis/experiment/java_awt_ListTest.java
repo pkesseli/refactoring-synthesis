@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.experiment;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
+import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAliasBenchmark;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,8 @@ class java_awt_ListTest {
 
   @Test
   void addItemStringInt() throws Exception {
-    assertThat(synthesiseAlias("java.awt.List", "addItem", "java.lang.String", "int"), contains(".add("));
+    assertThat(synthesiseAliasBenchmark("addItemStringInt", "java.awt.List", "addItem", "java.lang.String", "int"),
+        contains(".add("));
   }
 
   @Test
@@ -50,7 +52,8 @@ class java_awt_ListTest {
 
   @Test
   void minimumSizeInt() throws Exception {
-    assertThat(synthesiseAlias("java.awt.List", "minimumSize", "int"), contains(".getMinimumSize("));
+    assertThat(synthesiseAliasBenchmark("minimumSizeInt", "java.awt.List", "minimumSize", "int"),
+        contains(".getMinimumSize("));
   }
 
   @Test
@@ -60,7 +63,8 @@ class java_awt_ListTest {
 
   @Test
   void preferredSizeInt() throws Exception {
-    assertThat(synthesiseAlias("java.awt.List", "preferredSize", "int"), contains(".getPreferredSize("));
+    assertThat(synthesiseAliasBenchmark("preferredSizeInt", "java.awt.List", "preferredSize", "int"),
+        contains(".getPreferredSize("));
   }
 
   @Test

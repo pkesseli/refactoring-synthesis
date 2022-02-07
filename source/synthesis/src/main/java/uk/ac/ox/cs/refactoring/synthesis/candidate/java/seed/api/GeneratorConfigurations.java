@@ -1,6 +1,17 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import com.fasterxml.classmate.MemberResolver;
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.ResolvedTypeWithMembers;
+import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.classmate.members.ResolvedMethod;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
@@ -14,7 +25,6 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.SignatureSe
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.StatementSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.TypeSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.JavaDocSeed;
-import uk.ac.ox.cs.refactoring.synthesis.invocation.Invokable;
 
 /** Factory for {@link GeneratorConfiguration}s. */
 public final class GeneratorConfigurations {
@@ -152,10 +162,23 @@ public final class GeneratorConfigurations {
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     final byte maxInstructions = 3;
     final byte maxInstructionLength = 3;
-    final Invokable invokable = Methods.create(classLoader, methodToRefactor);
-    final Class<?> instanceType = invokable.getInstanceType();
-    final List<Class<?>> parameterTypes = invokable.getParameterTypes();
-    final Class<?> resultType = invokable.getReturnType();
+
+    final Method method = Methods.getMethod(classLoader, methodToRefactor);
+    final TypeResolver typeResolver = new TypeResolver();
+    final ResolvedType instanceType = typeResolver.resolve(method.getDeclaringClass());
+    final MemberResolver memberResolver = new MemberResolver(typeResolver);
+    final ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(instanceType, null, null);
+    final ResolvedMethod[] methods;
+    if (Modifier.isStatic(method.getModifiers()))
+      methods = typeWithMembers.getStaticMethods();
+    else
+      methods = typeWithMembers.getMemberMethods();
+
+    final ResolvedMethod resolvedMethod = Arrays.stream(methods).filter(new MethodFilter(method)).findAny().get();
+    final List<ResolvedType> parameterTypes = IntStream.range(0, resolvedMethod.getArgumentCount())
+        .mapToObj(resolvedMethod::getArgumentType).collect(Collectors.toList());
+    final ResolvedType returnType = resolvedMethod.getReturnType();
+    final ResolvedType resultType = returnType != null ? returnType : typeResolver.resolve(void.class);
     return new GeneratorConfiguration(components, minInstructions, maxInstructions, maxInstructionLength, instanceType,
         parameterTypes, resultType, useRandomGuidance, stage1MaxCounterexamples, stage1MaxInputs,
         stage2MaxCounterexamples, stage2MaxInputs);

@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
@@ -49,9 +48,7 @@ public class CegisLoopTest {
   @ParameterizedTest
   @CsvSource({ "getHours," + Calendar.HOUR_OF_DAY, "getMinutes," + Calendar.MINUTE, "getSeconds," + Calendar.SECOND })
   void javaUtilDateGet(final String methodName, final int field) throws Exception {
-    final MethodIdentifier methodToRefactor = new MethodIdentifier(Date.class.getName(), methodName,
-        Collections.emptyList());
-    final SnippetCandidate candidate = Deprecation.synthesise(methodToRefactor);
+    final SnippetCandidate candidate = Deprecation.synthesiseAlias(Date.class.getName(), methodName);
     final Calendar calendar = Calendar.getInstance();
     final Date date = calendar.getTime();
     final int expected = calendar.get(field);
@@ -62,9 +59,7 @@ public class CegisLoopTest {
 
   @Test
   void javaAwtRectangle() throws Exception {
-    final MethodIdentifier methodToRefactor = new MethodIdentifier("java.awt.Rectangle", "inside",
-        Arrays.asList("int", "int"));
-    final SnippetCandidate candidate = Deprecation.synthesise(methodToRefactor);
+    final SnippetCandidate candidate = Deprecation.synthesiseAlias("java.awt.Rectangle", "inside", "int", "int");
 
     assertThat(candidate.toString(), containsString(".contains("));
   }

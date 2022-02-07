@@ -35,6 +35,7 @@ import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -132,7 +133,8 @@ public class JavaDocSeed implements InstructionSetSeed {
 
         final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, typeSolver,
             deprecatedCodeExample, components.InvolvedClasses);
-        javaComponents.nonnull(type, snippetComponent);
+        if (!snippetComponent.isUnresolved())
+          javaComponents.nonnull(type, snippetComponent);
       } catch (final RuntimeException e) {
         logger.warn("Could not parse JavaDoc code example.", e);
 
@@ -356,7 +358,13 @@ public class JavaDocSeed implements InstructionSetSeed {
   private static boolean containsDeprectedMethodCalls(final ClassLoader classLoader, final Expression expression) {
     final Collection<MethodCallExpr> calledMethods = expression.findAll(MethodCallExpr.class);
     for (final MethodCallExpr calledMethod : calledMethods) {
-      final ResolvedMethodDeclaration resolvedMethodDeclaration = calledMethod.resolve();
+      final ResolvedMethodDeclaration resolvedMethodDeclaration;
+      try {
+        resolvedMethodDeclaration = calledMethod.resolve();
+      } catch (final UnsolvedSymbolException e) {
+        logger.warn("Could not check whether the hinted method is deprecatd.", e);
+        continue;
+      }
       final MethodIdentifier methodIdentifier = MethodIdentifiers.create(resolvedMethodDeclaration);
       final Method invokedMethod;
       try {
