@@ -288,10 +288,50 @@ the code, i.e., they must preserve observational equivalence.
 Ensuring observational equivalence is far from trivial.  For instance,
 inlining calls to deprecated methods can break equivalence if the
 original function was synchronised.  While it is not possible for two
-invocations  on the same object of the synchronized original method to
+invocations  on the same object of the synchronised original method to
 interleave, this is not guaranteed after inlining the method's body.
-Such an exampe is given in Figure~\ref{}.
-\todo{add example here.}
+Fig.~\ref{ex:unsound-refactoring-original} and
+Fig.~\ref{ex:unsound-refactoring-refactored} illustrate an example where
+the "Extract Local Variable..." integrated in Eclipse 4.21.0 inadvertently
+removes synchronisation for the evaluation of the expression $x > 0$.
+
+\begin{minipage}{.23\textwidth}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+
+synchronized (this) {
+  if (x > 0) {
+    foo();
+  }
+}
+// ...
+synchronized (this) {
+  if (x > 0) {
+    bar();
+  }
+}
+\end{lstlisting}
+\captionof{figure}{Concurrent example.}
+\label{ex:unsound-refactoring-original}
+\end{minipage}
+\begin{minipage}{.23\textwidth}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+boolean tmp = x > 0;
+synchronized (this) {
+  if (tmp) {
+    foo();
+  }
+}
+// ...
+synchronized (this) {
+  if (tmp) {
+    bar();
+  }
+}
+\end{lstlisting}
+\captionof{figure}{Unsound refactoring.}
+\label{ex:unsound-refactoring-refactored}
+\end{minipage}
+\vspace{0.8em}
 
 %% Another example of a refactoring that unintuitively breaks
 %% observational equivalence is given in Figure~\ref{}.
