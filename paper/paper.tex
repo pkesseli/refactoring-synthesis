@@ -1568,13 +1568,77 @@ sufficient for the scope of our experiments.
 %% in the second program.
 %\todo{check exactly what this is used for.}
 
+\subsection{Sources of unsoundness and incompleteness}
+As explained in Section~\ref{sec:encoding}, due to the use of fuzzing in the synthesis
+phase, our technique may fail to find a refactoring even when one
+exists (i.e. it is {\em incomplete}), whereas using fuzzing in the verification phase may result in finding a refactoring that is not equivalent to the original on all
+inputs (i.e. our technique is {\em unsond}).
+
+Another potential source of unsoundness is I/O,
+which is not part of the JVM state. We currently don't check
+that the original and refactored code perform the same I/O.
+%the possibility that the static initialiser performs some I/O,. 
+
+%%However, we make no guarantee about correctness with respect to such operations
+%% anyway, whether static or instance state.}
+
+With respect to the use of fuzzing,
+%In order to guarantee the soundness and completeness of the
+%proposed refactoring technique,
+we could attempt to swap it with some formal verification technique.
+However, program verification is undecidable in general.
+Even for restricted, decidable fragments, such
+techniques tend to be expensive as they generally require some form of
+symbolic execution and calls to off-the-shelves solvers.  Moreover,
+programming languages evolve faster than verification techniques and
+therefore new features might not be supported by the front ends of
+such techniques.
+
+\todo{Other sources of incompleteness and unsoundness?}
+
+%% such a technique would require symbolic execution, which is no-
+%% toriously difficult for real-world programs due to features such as
+%% loops, library functions, complex data structures. The most success-
+%% ful such verification techniques are either bounded (i.e. check that
+%% an erroneous state cannot be reached within a bounded number of
+%% loop unrollings) or require user input in the form of loop invariants.
+%% While the former class of techniques provides limited soundness
+%% guarantees, the latter requires intricate help from the user. In fact,
+%% we are not aware of any sound and automatic symbolic verification
+%% method that can handle the kind of code we are interested in.
+
+%% Discuss tradeoff: symbolic execution is expensive; programming
+%% languages evolve faster than verification techniques and therefore
+%% many new features are not supported by their front ends (and/or
+%% backends depending on how complex the new feature is); even
+%% after translating the code into a logical formula, calls to solvers are
+%% expensive.
+
 
 \subsection{The isolated class loader}
 
 In our implementation, we use isolated class loaders for both the original and the refactored code.
 \todo{Do we mean something else?}
 By isolated, we mean that the bootstrap classloader for the JVM doesn't have any extra
-classes in it.
+classes in it. Everything that is part of our comparison is in the isolated class loader.
+
+\todo{Anything else to discuss here? Maybe elaborating on the next point you made.
+  Otherwise, I'll integrate this bit somewhere else.}
+
+It only means that we might have a "dirty" static state from previous executions for classes which we do not load in the isolate class loader.
+
+
+
+%% For instance user defined types will usually be located in the isolated
+%% class loader, enabling the comparison.
+%% However, what do we do about wrapper object aliasing?
+%% For anything outside the class loader, we use reference equality.
+%% PAK: I think this should be in a separate section. Being loaded in the isolated
+%% class loader or not doesn't prohibit comparison per se.
+
+%% We also never use reference equality,
+%% but rather rely on native `equals' implementations if they satisfy certain criteria.
+%% This should probably also be explained in its own subsection.
 
 %% One potential issue when checking equivalence of two blocks of code
 %% is the treatment of loaded classes. In particular, one program might
@@ -1591,25 +1655,7 @@ classes in it.
 %% \todo{So we don't need to load the exact same classes? What if static fields are changed? -
 %% PAK: We check that all static fields in classes that were loaded by either program are equivalent.
 %% That means that if one program didn't load a class, we load it for it, and check that the
-%% initial state of that class is the same as the other program's. So the only potential source of
-%% unsoundness is if the static initialiser performs some I/O, i.e. something that is not part of
-%% the JVM state. However, we make no guarantee about correctness with respect to such operations
-%% anyway, whether static or instance state.}
-
-\todo{Is this still a potential problem?}
-Everything that is part of our comparison is in the isolated class loader.
-For instance user defined types will usually be located in the isolated
-class loader, enabling the comparison.
-However, what do we do about wrapper object aliasing?
-For anything outside the class loader, we use reference equality.
-PAK: I think this should be in a separate section. Being loaded in the isolated
-class loader or not doesn't prohibit comparison per se. It only means that we
-might have a "dirty" static state from previous executions for classes which we
-do not load in the isolate class loader. We also never use reference equality,
-but rather rely on native `equals' implementations if they satisfy certain criteria.
-This should probably also be explained in its own subsection.
-\todo{Example?}
-
+%% initial state of that class is the same as the other program's. 
 
 \subsection{Instrumentation}
 
@@ -1720,40 +1766,6 @@ public boolean inside(int X, int Y) {
 \label{ex:javadoc-hint}
 \end{figure}
 
-\subsection{Sources of unsoundness and incompleteness}
-As explained in Section~\ref{sec:encoding}, due to the use of fuzzing in the synthesis
-phase, our technique may fail to find a refactoring even when one
-exists (i.e. it is {\em incomplete}), whereas using fuzzing in the verification phase may result in
-finding a refactoring that is not equivalent to the original on all
-inputs (i.e. our technique is {\em unsond}).  In order to guarantee the soundness and completeness of the
-proposed refactoring technique, we could attempt to swap fuzzing
-with some formal verification technique. However, in general, program
-verification is undecidable. Even for decidable restrictions, such
-techniques tend to be expensive as they generally require some form of
-symbolic execution and calls to off-the-shelves solvers.  Moreover,
-programming languages evolve faster than verification techniques and
-therefore new features might not be supported by the front ends of
-such techniques.
-
-\todo{Discuss other sources of incompleteness and unsoundness.}
-
-%% such a technique would require symbolic execution, which is no-
-%% toriously difficult for real-world programs due to features such as
-%% loops, library functions, complex data structures. The most success-
-%% ful such verification techniques are either bounded (i.e. check that
-%% an erroneous state cannot be reached within a bounded number of
-%% loop unrollings) or require user input in the form of loop invariants.
-%% While the former class of techniques provides limited soundness
-%% guarantees, the latter requires intricate help from the user. In fact,
-%% we are not aware of any sound and automatic symbolic verification
-%% method that can handle the kind of code we are interested in.
-
-%% Discuss tradeoff: symbolic execution is expensive; programming
-%% languages evolve faster than verification techniques and therefore
-%% many new features are not supported by their front ends (and/or
-%% backends depending on how complex the new feature is); even
-%% after translating the code into a logical formula, calls to solvers are
-%% expensive.
 
 
 \section{Experimental results}\label{sec:experimental-results}
