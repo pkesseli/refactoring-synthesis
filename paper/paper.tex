@@ -927,8 +927,8 @@ In our case, the specification expresses the fact that the original and
 the refactored blocks of code need to be observationally equivalent.
 %
 In the rest of the paper, we will use the predicate
-$equivalent(P_1(\vec{x}), P_2(\vec{x}))$ to denote that code $P_1$ is
-observationally equivalent to $P_2$ for inputs $\vec{x}$.  In general,
+$equivalent(P_1(\vec{i}), P_2(\vec{i}))$ to denote that code $P_1$ is
+observationally equivalent to $P_2$ for inputs $\vec{i}$.  In general,
 we refer to the original code as $P_1$ and the refactored code as
 $P_2$. We will fully define what $equivalent$ actually means in Section~\ref{sec:equiv}.
 
@@ -937,7 +937,7 @@ In each iteration of the synthesis process, there are two phases, a synthesis an
 
 
 \paragraph{The synthesis phase} In this phase, we have 
-a finite set of input examples $\{\vec{x_1} \cdots \vec{x_n}\}$ and we must find a candidate refactoring
+a finite set of input examples $\{\vec{i_1} \cdots \vec{i_n}\}$ and we must find a candidate refactoring
 that is observationally equivalent to the original code for the given inputs.
 For this purpose, we construct the following \code{Synthesise} method, which
 takes the refactored code $P_2$ as input.
@@ -945,16 +945,16 @@ takes the refactored code $P_2$ as input.
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 Synthesise ($P_2$) {
 
-  if (equivalent($P_1$($x_1$), $P_2$($x_1$)) && ...
-      && equivalent($P_1$($x_n$), $P_2$($x_n$)))
+  if (equivalent($P_1$($\vec{i_1}$), $P_2$($\vec{i_1}$)) && ...
+      && equivalent($P_1$($\vec{i_n}$), $P_2$($\vec{i_n}$)))
     assert(false);
 }
 \end{lstlisting}
 
-This method consists of only one conditional saying that if $P_1$ and $P_2$ are equivalent on all given inputs $x_1, \cdots, x_n$, then \code{assert(false)} is reached.
+This method consists of only one conditional saying that if $P_1$ and $P_2$ are equivalent on all given inputs $\vec{i_1}, \cdots, \vec{i_n}$, then \code{assert(false)} is reached.
 Given that this assertion always fails, it means that the method is unsafe when $P_1$ and $P_2$ are equivalent on the given inputs.
 Thus, we can reduce the synthesis problem to the problem of checking the safety of \code{Synthesise}. If a safety checker manages to
-find an input $P_2$ for which the assertion fails (meaning that \code{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs, which is the code
+find an input $P_2$ for which the assertion fails (meaning that \code{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs. This $P_2$ is the code
 that the synthesis phase is supposed to generate. As aforementioned, we use an existing coverage-guided property-based testing (i.e. fuzzing) technique
 as the safety checker. We configure the fuzzer such that it constructs $P_2$ by weaving together components from the component library.
 
@@ -992,26 +992,26 @@ Section~\ref{sec:fuzzing}.
 
 \paragraph{The verification phase} For the verification phase, we are provided with a candidate
 refactoring $P_2$ and we must check whether there exists any input
-\var{\vec{x}} for which the original code and the candidate
+$\vec{i}$ for which the original code and the candidate
 refactoring are not observationally equivalent.  To do this, we build
 the following \code{Verify} method, which given some input
-\var{\vec{x}}, asserts that the two programs are equivalent for
-\var{\vec{x}}.
+$\vec{i}$, asserts that the two programs are equivalent for
+$\vec{i}$.
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
-Verify(x) {
-  assert(equivalent($P_1$(x), $P_2$(x)));
+Verify($\vec{i}$) {
+  assert(equivalent($P_1(\vec{i})$, $P_2(\vec{i})$));
 }
 \end{lstlisting}
 
 In other words, answering the initial question posed by the verification
 phase is reduced to checking the safety of this method: if
 \code{Verify} is safe (i.e. the assertion is not violated) for any
-input \var{\vec{x}}, then there is no input that can distinguish
-between the original and the candidate refactoring meaning that this
-is indeed a sound refactoring. However, if \code{Verify} is not safe,
+input $\vec{i}$, then there is no input that can distinguish
+between the original and the candidate refactoring (this
+is indeed a sound refactoring). However, if \code{Verify} is not safe,
 then we want to be able to obtain a counterexample input
-\var{\vec{x_{cex}}} for which the assertion fails.
+$\vec{i_{cex}}$ for which the assertion fails.
 
 This counterexample will be provided back to the synthesis phase and
 used to refine the current candidate refactoring. Again, we check the
