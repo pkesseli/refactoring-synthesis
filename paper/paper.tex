@@ -1863,7 +1863,8 @@ In the example, we use \var{date1}, \var{date2} and \var{date3} to denote the th
   Date date2 = calendar.getTime();
     
   // Or:
-  Date date3=new GregorianCalendar(1900+year,month,day).getTime();
+  Date date3=new GregorianCalendar(1900+year,month,day).
+             getTime();
   \end{lstlisting}
 \caption{Deprecated `Date' example.}
 \label{ex:three-dates}
@@ -1876,7 +1877,7 @@ In the example, we use \var{date1}, \var{date2} and \var{date3} to denote the th
 Notably, the ways in which \var{date2} and \var{date3} are computed
 represent a valid refactoring for the piece of code computing
 \var{date1}. However, when we provide this example to our
-verifier (as described in Section~\ref{X}), we obtain the following
+verification phase (as described in Section~\ref{sec:encoding}), we obtain the following
 counterexample:
 
   \begin{lstlisting}[mathescape=true,showstringspaces=false]
