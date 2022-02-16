@@ -1516,9 +1516,9 @@ in code coverage, it is saved for subsequent evolution.
 
 In our setting, we use JQF for two tasks. Firstly, in the synthesis phase, 
 JQF is generating the refactored block of code.
-Secondly, in the verification phase, JQF generated
+Secondly, in the verification phase, JQF generates
 inputs that can differentiate between the original and refactored codes.
-In particular the former task is a difficult setting for fuzzing because programs are
+The former task in particular is a difficult setting for fuzzing because programs are
 highly structured, whereas fuzzers often work with unstructured inputs
 that can be generated via byte-level mutations such as bit flips.
 
@@ -1554,10 +1554,30 @@ our current technique is still effective (as shown by the experimental evaluatio
 
 \subsection{Checking aliasing}
 
+In Section~\ref{sec:equiv}, we discussed about checking program equivalence with respect to a concrete input. As part of this, 
+we must check that the refactored code preserves the aliases present in the original code (see Definition~\ref{def:prog-equiv-add}).
+
+%% In our implementation we enforce a strict notion of aliasing. In
+%% particular, every reference variable encountered in the original and
+%% refactored code is assigned a strictly increasing symbolic id
+%% $sid(v)$. We start from the same initial symbolic id in the original
+%% and refactored code.  Then, every live variable at the end of the
+%% original code (which according to Definition~\ref{} is also live at
+%% the end of the refactored code) must be assigned the same symbolic id
+%% by the original code and the refactored one.
+
+%% Notably, this is stronger than needed as it means that variables are declared in the same order by the
+%% original and the refactored program
+%% Then, two variables $v_1$ and $v_2$ in $P$ (where $P$ is either the original or the refactored code)
+%% are aliases if 
+
+\todo{Discuss this.}
 When checking heap equivalence, we enforce a strict notion of aliasing
-equivalence. While exploring the heaps and comparing them for value equivalence,
-every pointer encountered is assigned a strictly increasing symbolic id
-$sid(v)$. Two heaps $H_A$, $H_B$ are only considered equivalent if
+equivalence.
+While exploring the heaps and comparing
+them for value equivalence, every pointer encountered is assigned
+a strictly increasing symbolic id $sid(v)$.
+Two heaps $H_A$, $H_B$ are only considered equivalent if
 $\mathop \forall \limits_{i=1}^{n} sid(v^A_i)=sid(v^B_i)$. This is a strong
 under-approximation and may be subject to improvement in future work, but was
 sufficient for the scope of our experiments.
@@ -1731,18 +1751,24 @@ We explicitly avoid constructors which are not amenable to fuzzing, such as
 collection constructors which take an integer capacity argument, where an
 unlucky fuzzed input might lead to an out of memory error.
 
+\todo{Example}
+
 \subsection{Parsing the @code hints}
 
-When constructing the CEGIS instruction set, our algorithm not only considers
-type information, but also interprets Javadoc hints provided by the developer.
-\code{@code} blocks inside \code{@deprecated} sections are interpreted as code
+As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
+interpret Javadoc hints. % provided by the developer.
+in particular, \code{@code} blocks inside \code{@deprecated} sections are interpreted as code
 hints, and we attempt to parse them as Java expressions. Since code hints are
-not always expressed as well-formed Java, we use a custom variation of the
-GitHub Java parser framework which accepts undeclared identifiers and type names
-as arguments. The code example is parsed as if it were invoked in the context of
-the method to refactor, such that imports or the implicit \code{this} argument
-are considered during parsing. Fig.~\ref{ex:javadoc-hint} provides an example of
-a valid Javadoc hint.
+not always expressed as well-formed Java, we customised the
+GitHub Java parser
+%%framework
+to accept undeclared identifiers and type names
+as arguments. For instance, the Javadoc hint in Figure~\ref{ex:javadoc-hint} suggests using
+\code{contains(int, int)}, which would normally cause a parsing error as the \code{int} type
+appears in the place of argument names. In our setting, we accept this hint as valid.
+
+%% provides an example of
+%% a valid Javadoc hint.
 
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -1768,7 +1794,9 @@ public boolean inside(int X, int Y) {
 \label{ex:javadoc-hint}
 \end{figure}
 
-
+Additionally, the code example is parsed as if it were invoked in the context of
+the method to refactor, such that imports or the implicit \code{this} argument
+are considered during parsing.
 
 \section{Experimental results}\label{sec:experimental-results}
 
