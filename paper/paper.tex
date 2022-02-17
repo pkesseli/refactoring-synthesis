@@ -1614,6 +1614,7 @@ programming languages evolve faster than verification techniques and
 therefore new features might not be supported by the front ends of
 such techniques.
 
+
 \todo{Other sources of incompleteness and unsoundness?}
 
 %% such a technique would require symbolic execution, which is no-
@@ -1637,16 +1638,15 @@ such techniques.
 
 \subsection{The isolated class loader}
 
+\todo{Explain the reason for using an isolated class loader.}
+
+\todo{Discuss problems related to the "dirty" static state from previous executions for classes which we do not load in the isolate class loader.}
+
 In our implementation, we use isolated class loaders for both the original and the refactored code.
-\todo{Do we mean something else?}
 By isolated, we mean that the bootstrap classloader for the JVM doesn't have any extra
-classes in it. Everything that is part of our comparison is in the isolated class loader.
+classes in it.
 
-\todo{Anything else to discuss here? Maybe elaborating on the next point you made.
-  Otherwise, I'll integrate this bit somewhere else.}
-
-It only means that we might have a "dirty" static state from previous executions for classes which we do not load in the isolate class loader.
-
+%Everything that is part of our comparison is in the isolated class loader.
 
 
 %% For instance user defined types will usually be located in the isolated
@@ -1679,63 +1679,67 @@ It only means that we might have a "dirty" static state from previous executions
 
 \subsection{Instrumentation}
 
-\todo{I'm actually not fully following what's happening here.}
+\todo{Not sure if this is the best section name.}
 
-The goal of our instrumentation is to execute a program candidate in
-the same context as the original, deprecated method. The original
-method can affect the program state by virtue of its return value,
-field assignments in the case of instance methods, and static field
-assignments. In order to account for these effects, our
-instrumentation passes a reference to the original method's object
-instance, if present, as an argument to the program candidate.
-An example of this is presented in
-Fig.~\ref{ex:side-effects-instrumentation}.
+\todo{Talk about reflective invocation.}
 
-\begin{figure}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-// Redundant snippet:
-Date today;
-Date tomorrow;
+
+
+%% The goal of our instrumentation is to execute a program candidate in
+%% the same context as the original, deprecated method. The original
+%% method can affect the program state by virtue of its return value,
+%% field assignments in the case of instance methods, and static field
+%% assignments. In order to account for these effects, our
+%% instrumentation passes a reference to the original method's object
+%% instance, if present, as an argument to the program candidate.
+%% An example of this is presented in
+%% Fig.~\ref{ex:side-effects-instrumentation}.
+
+%% \begin{figure}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%% // Redundant snippet:
+%% Date today;
+%% Date tomorrow;
   
-void init(int year, int month, int day) {
-  // Original:
-  this.setDates(year, month, day);
+%% void init(int year, int month, int day) {
+%%   // Original:
+%%   this.setDates(year, month, day);
 
-  // Instrumented:
-  Program.of(0xabcd).execute(year, month, day, this);
-}
+%%   // Instrumented:
+%%   Program.of(0xabcd).execute(year, month, day, this);
+%% }
   
-@Deprecated
-private void setDates(int year, int month, int day) {
-  final Calendar calendar = Calendar.getInstance();
-  calendar.set(year, month, day);
-  this.today = calendar.getTime();
-  calendar.add(Calendar.DAY_OF_MONTH, 1);
-  this.tomorrow = calendar.getTime();
-}
-\end{lstlisting}
-\caption{Deprecated side-effects instrumentation.}
-\label{ex:side-effects-instrumentation}
-\end{figure}
+%% @Deprecated
+%% private void setDates(int year, int month, int day) {
+%%   final Calendar calendar = Calendar.getInstance();
+%%   calendar.set(year, month, day);
+%%   this.today = calendar.getTime();
+%%   calendar.add(Calendar.DAY_OF_MONTH, 1);
+%%   this.tomorrow = calendar.getTime();
+%% }
+%% \end{lstlisting}
+%% \caption{Deprecated side-effects instrumentation.}
+%% \label{ex:side-effects-instrumentation}
+%% \end{figure}
 
-Fig.~\ref{ex:date-instrumentation} illustrates an example where no
-such relevant instance object exists and thus only the original
-arguments are passed as arguments into the program candidate.
+%% Fig.~\ref{ex:date-instrumentation} illustrates an example where no
+%% such relevant instance object exists and thus only the original
+%% arguments are passed as arguments into the program candidate.
 
-\begin{figure}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-// Redundant snippet:
-static void main(String[] args) {
-  // Original:
-  Date date = new Date(120, 12, 30);
+%% \begin{figure}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%% // Redundant snippet:
+%% static void main(String[] args) {
+%%   // Original:
+%%   Date date = new Date(120, 12, 30);
 
-  // Instrumented:
-  Date date = Program.of(0xabcd).execute(120, 12, 30);
-}
-\end{lstlisting}
-\caption{Deprecated `Date' instrumentation.}
-\label{ex:date-instrumentation}
-\end{figure}
+%%   // Instrumented:
+%%   Date date = Program.of(0xabcd).execute(120, 12, 30);
+%% }
+%% \end{lstlisting}
+%% \caption{Deprecated `Date' instrumentation.}
+%% \label{ex:date-instrumentation}
+%% \end{figure}
 
 \subsection{Abstract classes and interfaces}
 
@@ -1751,7 +1755,7 @@ We explicitly avoid constructors which are not amenable to fuzzing, such as
 collection constructors which take an integer capacity argument, where an
 unlucky fuzzed input might lead to an out of memory error.
 
-\todo{Example}
+\todo{Show an example, which illustrates the problem of using Mockito and the advantage of using a subclass.}
 
 \subsection{Parsing the @code hints}
 
@@ -1909,41 +1913,102 @@ counterexample:
   
 \section{Related Work}
 
-Related paper: in \cite{DBLP:conf/paste/Perkins05}, the authors
-replace calls to deprecated methods by their bodies.
+\paragraph{Program synthesis}
 
-Often, genetic improvement
-\cite{DBLP:journals/dagstuhl-reports/PetkeGFL18} is used for the
-purpose of code refactoring. Due to the manner in which such works measure
-the fitness of potential refactorings, genetic improvement cannot vary
-the refactoring context.  Conversely, our technique allows varying this
-context until a refactoring is being found.
+
+CEGIS based approaches to program synthesis have been previously used
+for program transformations such as superoptimisation and
+deobfuscation~\cite{DBLP:conf/icse/JhaGST10}.  In
+\cite{DBLP:journals/corr/abs-1712-07388}, David et al present an
+automatic refactoring tool that transforms Java with external
+iteration over collections into code that uses Streams. Their approach
+is based on CEGIS and makes use of formal verification to check the
+correctness of a refactoring.  Cheung et al.~describe a system that
+automatically transforms fragments of application logic into SQL
+queries~\cite{DBLP:conf/pldi/CheungSM13} by using a CEGIS-based
+synthesiser to generate invariants and postconditions that validate
+their transformations (a~similar approach is presented
+in~\cite{DBLP:conf/cc/IuCZ10}).  While our approach is also based
+on CEGIS, we are guided by code hints and types in
+order to efficiently prune the search space. Without this guidance,
+the current refactoring would not be feasible.  
+
+% type-directed synthesis
+Type information has been extensively used in program synthesis to
+guide the search for a solution~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/FeserCD15,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/LubinCOC20}.
+In our work, we combine type information with code hints.
+%
+% component-based synthesis
+Another direction that inspired us is that of component-based synthesis~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}, where the target program is generated by composing components from a library. Similarly
+to these approaches, we use a library of components for our program
+generation approach. However, our technique uses information about types
+and code hints to build the component library, which is specific to each refactoring.
+
+%% For the intro: correct-by-contruction, preserves the behaviour.
+%% we use an explicit return variable ret, which is live. Also, we make "this explicit".
+%% Essentially, we must capture the whole program state, consisting of return values and heap. 
+
+
+
+%% An approach to program synthesis very similar to ours is Syntax Guided
+%% Synthesis (SyGuS)~\cite{sygus}.  SyGuS synthesisers supplement the logical
+%% specification with a syntactic template that constrains the space of allowed
+%% implementations.  Thus, each semantic specification is accompanied by a
+%% syntactic specification in the form of a grammar.  Other second-order
+%% solvers are introduced in~\cite{DBLP:conf/pldi/GrebenshchikovLPR12,
+%% DBLP:conf/cav/BeyenePR13}.  As opposed to ours, these focus on
+%% Horn clauses.
+
+
+  %% The main difference (besides the actual
+%% goal of the work, which is different from ours) to our work is that the
+%% lists they operate on are immutable and do not support operations such as
+%% remove.  Capturing the potential side effects caused by such operations is
+%% one of our work's main challenges.
+
+Program synthesis is generally guided by the principle of correct-by-construction, meaning that it provides strong correctness guarantees about the generated code.
+As opposed to that, our work is guided by program testing. This is similar in nature with genetic programming~\cite{Koza92} and genetic improvement~\cite{DBLP:journals/dagstuhl-reports/PetkeGFL18,7911210}. In particular, the latter has been used for program refactoring. Genetic programming and genetic improvement obtain candidate programs by applying operations analogous to genetic processes to an existing population of programs. Conversely, we pose the code generation problem as safety verification.
+
+
+
+%% Often, genetic improvement
+%% \cite{DBLP:journals/dagstuhl-reports/PetkeGFL18} is used for the
+%% purpose of code refactoring. Due to the manner in which such works measure
+%% the fitness of potential refactorings, genetic improvement cannot vary
+%% the refactoring context.  Conversely, our technique allows varying this
+%% context until a refactoring is being found.
+
 
 \paragraph{Program refactoring}
 
-Cheung et al.~describe a system that automatically transforms fragments of
-application logic into SQL queries~\cite{DBLP:conf/pldi/CheungSM13}. 
-Moreover, similar to our approach, the authors rely on synthesis technology
-to generate invariants and postconditions that validate their
-transformations (a~similar approach is presented
-in~\cite{DBLP:conf/cc/IuCZ10}).  The main difference (besides the actual
-goal of the work, which is different from ours) to our work is that the
-lists they operate on are immutable and do not support operations such as
-remove.  Capturing the potential side effects caused by such operations is
-one of our work's main challenges.
+With respect to the refactoring of deprecated instances, 
+the authors of \cite{DBLP:conf/paste/Perkins05}
+replace calls to deprecated methods by their bodies.
 
+The authors of \cite{10.1007/978-3-642-14107-2_11}
+show that it is all too easy for a refactoring that works on concurrent
+programs to introduce concurrency bugs by enabling new interactions between
+parallel threads. They also provide techniques to make such refactorings
+behavior-preserving.
+
+Rule-based source-to-source transformations: they provide languages in which
+transformation rules can be expressed ...
 Syntax-driven refactoring base program transformation decisions
 on observations on the program's syntax tree.  Visser
 presents a purely syntax-driven framework~\cite{stratego}.  The
 presented method is intended to be configurable for specific
 refactoring tasks, but cannot provide guarantees about semantics
 preservation.  The same holds for~\cite{txl} by Cordy et al.,
+
+
+Automated program refactoring:
 \cite{sawin} by Sawin et al., \cite{bae} by Bae et al.~and
 \cite{chris} by Christopoulou et al.  In contrast to these approaches,
 our procedure constructs an equivalence proof before transforming the
 program. In \cite{conf/sigsoft/GyoriFDL13}, Gyori et al. present a
 similar refactoring to ours but performed in a syntax-driven manner.
 %
+
 Steimann et al.~present Constraint-Based Refactoring in \cite{Steimann2011},
 \cite{Steimann2012Pilgrim} and \cite{Steimann2011KollePilgrim}. Their approach
 generates explicit constraints over the program's abstract syntax tree to
@@ -1992,8 +2057,9 @@ soundness guarantees.
 Franklin et al. implement a pattern-based refactoring approach
 transforming statements to stream queries~\cite{Gyori:2013:CGI:2491411.2491461}.
 Their tool LambdaFicator~\cite{DBLP:conf/icse/FranklinGLD04} is available as a
-NetBeans branch. We compared \tool against it in our experimental evaluation
-in Sec.~\ref{experiments-results}.
+NetBeans branch.
+%We compared \tool against it in our experimental evaluation
+%in Sec.~\ref{experiments-results}.
 %
 %% \paragraph{Heap Logics}
 %
@@ -2009,16 +2075,8 @@ in Sec.~\ref{experiments-results}.
 %% logics~\cite{DBLP:conf/csl/ImmermanRRSY04} are not concise and easily
 %% translatable to stream code.
 
-\paragraph{Program synthesis}
 
-An approach to program synthesis very similar to ours is Syntax Guided
-Synthesis (SyGuS)~\cite{sygus}.  SyGuS synthesisers supplement the logical
-specification with a syntactic template that constrains the space of allowed
-implementations.  Thus, each semantic specification is accompanied by a
-syntactic specification in the form of a grammar.  Other second-order
-solvers are introduced in~\cite{DBLP:conf/pldi/GrebenshchikovLPR12,
-DBLP:conf/cav/BeyenePR13}.  As opposed to ours, these focus on
-Horn clauses.
+
 
 \section{Conclusion}
 
