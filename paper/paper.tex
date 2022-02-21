@@ -1194,55 +1194,57 @@ and check that the initial state of that class is the same for both blocks of co
 %%\todo{define $equivalent(E[P_1(x)](v), E[P_2(x)](v))$}.
 
 \paragraph{Preserving aliasing}
+
 When expressing the equivalence relation between \var{P_1} and \var{P_2}, we intentionally missed one important aspect,
-namely aliasing. To understand the problem let's look a the following example, which denotes a slightly
-modified version of the running example.
+namely aliasing. To understand the problem let's look a the following example.
+%, which denotes a slightly
+%modified version of the running example.
 
-\begin{example}\label{ex:aliasing}
-  \begin{lstlisting}[mathescape=true,showstringspaces=false]
+\todo{Get another example from Pascal, where the return is an object.}
+
+%% \begin{example}\label{ex:aliasing}
+%%   \begin{lstlisting}[mathescape=true,showstringspaces=false]
     
-  // assume date refers to 2022-12-01 13:30:00    
+%%   // assume date refers to 2022-12-01 13:30:00    
 
-  // $P_3$:
-  int hour1 = date.getHours();
-  int hour2 = date.getHours();    
+%%   // $P_3$:
+%%   int hour1 = date.getHours();
+%%   int hour2 = date.getHours();    
 
-  // $P_4$:
-  final Calendar calendar = Calendar.getInstance();
-  calendar.setTime(date);
-  int hour1 = calendar.get(Calendar.HOUR_OF_DAY);
-  int hour2 = hour1;
-\end{lstlisting}
+%%   // $P_4$:
+%%   final Calendar calendar = Calendar.getInstance();
+%%   calendar.setTime(date);
+%%   int hour1 = calendar.get(Calendar.HOUR_OF_DAY);
+%%   int hour2 = hour1;
+%% \end{lstlisting}
 
-For the code above, we will refer to the first two lines denoting the
-original deprecated code as \var{P_3}, and the rest, denoting the
-refactored code, as \var{P_4}.  We note that, as opposed to the
-running example, \var{P_3} defines two variables \var{hour1} and
-\var{hour2}, both assigned an \var{int} by calling
-\var{date.getHours()}.
-Conversely, in \var{P_4}, \var{hour1} and \var{hour2} are aliases, i.e. they point to the same
-memory location.
+%% For the code above, we will refer to the first two lines denoting the
+%% original deprecated code as \var{P_3}, and the rest, denoting the
+%% refactored code, as \var{P_4}.  We note that, as opposed to the
+%% running example, \var{P_3} defines two variables \var{hour1} and
+%% \var{hour2}, both assigned an \var{int} by calling
+%% \var{date.getHours()}.
+%% Conversely, in \var{P_4}, \var{hour1} and \var{hour2} are aliases, i.e. they point to the same
+%% memory location.
 
-Note that, \var{P_3} and \var{P_4} are equivalent with respect to a concrete \var{d} (denoting the date 2022-12-01 13:30:00) according to Definition~\ref{def:prog-equiv}.
-%\todo{I should use a concrete input here.}
-%So, everything looks good until now.
-Let's however, assume that the following code
-is used after \var{P_3} and \var{P_4}, respectively.
+%% Note that, \var{P_3} and \var{P_4} are equivalent with respect to a concrete \var{d} (denoting the date 2022-12-01 13:30:00) according to Definition~\ref{def:prog-equiv}.
+%% Let's however, assume that the following code
+%% is used after \var{P_3} and \var{P_4}, respectively.
 
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-  hour1 = 2;
-\end{lstlisting}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%%   hour1 = 2;
+%% \end{lstlisting}
 
-Our intention is to execute the whole code, including this additional line, on input \var{d}.
-If \var{P_3} and \var{P_4} were indeed equivalent with respect to input \var{d},
-then we would expect \var{hour1} and \var{hour2} to have the same value at the end of both
-executions, respectively. However, this is not the case.
-In the original code, using \var{P_3}, \var{hour2} will be assigned 13 (the hour in \var{d}), whereas in the refactored code,
-\var{hour2} will have value 2. This is due to the fact that,
-in \var{P_4}, \var{hour1} and \var{hour2} are aliases. %% Then, when the object referenced by
-%% \var{hour1} was changed to refer to the date denoting ``30/10/2020'', this also affected \var{date2}.
-Thus, \var{P_3} and \var{P_4} are not equivalent for input \var{d}.
-\end{example}  
+%% Our intention is to execute the whole code, including this additional line, on input \var{d}.
+%% If \var{P_3} and \var{P_4} were indeed equivalent with respect to input \var{d},
+%% then we would expect \var{hour1} and \var{hour2} to have the same value at the end of both
+%% executions, respectively. However, this is not the case.
+%% In the original code, using \var{P_3}, \var{hour2} will be assigned 13 (the hour in \var{d}), whereas in the refactored code,
+%% \var{hour2} will have value 2. This is due to the fact that,
+%% in \var{P_4}, \var{hour1} and \var{hour2} are aliases. %% Then, when the object referenced by
+%% %% \var{hour1} was changed to refer to the date denoting ``30/10/2020'', this also affected \var{date2}.
+%% Thus, \var{P_3} and \var{P_4} are not equivalent for input \var{d}.
+%% \end{example}  
 
 Intuitively, any aliases between live variables at the end of the original code should also
 be present at the end of the refactored code. For this purpose, we use the notation
@@ -1571,16 +1573,32 @@ we must check that the refactored code preserves the aliases present in the orig
 %% Then, two variables $v_1$ and $v_2$ in $P$ (where $P$ is either the original or the refactored code)
 %% are aliases if 
 
-\todo{Discuss this.}
-When checking heap equivalence, we enforce a strict notion of aliasing
-equivalence.
-While exploring the heaps and comparing
-them for value equivalence, every pointer encountered is assigned
-a strictly increasing symbolic id $sid(v)$.
-Two heaps $H_A$, $H_B$ are only considered equivalent if
-$\mathop \forall \limits_{i=1}^{n} sid(v^A_i)=sid(v^B_i)$. This is a strong
-under-approximation and may be subject to improvement in future work, but was
-sufficient for the scope of our experiments.
+%\todo{Discuss this.}
+Intuitively, when checking preservation of aliases, we want to preserve the equivalence classes induced by the aliasing relation.
+For simplicity, in our implementation, we enforce a stricter check than necessary.
+In particular, all the objects
+%(memory locations)
+that are being referenced during the code's execution
+are assigned increasing symbolic identifiers.
+Then, we enforce aliasing preservation (condition (4) in Definition~\ref{def:prog-equiv-add}),
+by checking that, for all variables defined by both the original and the refactored code,
+the objects they reference have the same symbolic id.
+
+While this is a much stronger requirement than needed, it was sufficient for our experiments.
+For future work, we plan on relaxing it and explicitly tracking the equivalence classes induced by the aliasing
+relation.
+
+\todo{Refer to the new example obtained from Pascal.}
+
+%% heap equivalence, we enforce a strict notion of aliasing
+%% equivalence.
+%% While exploring the heaps and comparing
+%% them for value equivalence, every pointer encountered is assigned
+%% a strictly increasing symbolic id $sid(v)$.
+%% Two heaps $H_A$, $H_B$ are only considered equivalent if
+%% $\mathop \forall \limits_{i=1}^{n} sid(v^A_i)=sid(v^B_i)$. This is a strong
+%% under-approximation and may be subject to improvement in future work, but was
+%% sufficient for the scope of our experiments.
 
 %% Then, we can check whether the set of aliases is preserved in the
 %% refactored program. For instance, if \texttt{obj1} and \texttt{obj2}
@@ -1944,10 +1962,13 @@ to these approaches, we use a library of components for our program
 generation approach. However, our technique uses information about types
 and code hints to build the component library, which is specific to each refactoring.
 
-%% For the intro: correct-by-contruction, preserves the behaviour.
+%% For the intro:
+% not correct-by-contruction, preserves the behaviour, refer to the paper
+% on refactoring concurrent programs.
+%% for equivalence checking:
 %% we use an explicit return variable ret, which is live. Also, we make "this explicit".
 %% Essentially, we must capture the whole program state, consisting of return values and heap. 
-
+%% Todo: related work, alising check, intro, equiv check.
 
 
 %% An approach to program synthesis very similar to ours is Syntax Guided
