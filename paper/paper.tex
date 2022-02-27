@@ -1617,6 +1617,11 @@ which is not part of the JVM state. We currently don't check
 that the original and refactored code perform the same I/O.
 %the possibility that the static initialiser performs some I/O,. 
 
+Furthermore, our algorithm does currently not explore the entire classpath for
+potential overrides of the method to refactor. This may lead to unsound results
+when different subclasses of the original class are used polymorphically in the
+refactored context.
+
 %%However, we make no guarantee about correctness with respect to such operations
 %% anyway, whether static or instance state.}
 
