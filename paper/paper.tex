@@ -1654,15 +1654,34 @@ such techniques.
 %% expensive.
 
 
-\subsection{The isolated class loader}
+\subsection{Instrumentation and isolation}
 
-\todo{Explain the reason for using an isolated class loader.}
+We use reflection to invoke the original method to refactor with fuzzed inputs,
+as well as our synthesised refactoring candidates. This allows us to dynamically
+invoke new candidates without the need for compilation. The state of a Java
+program is modelled by the current program stack as well as its heap consisting
+of instance variables and static field values. Static Field values are stored
+with their respective classes, which in turn are loaded by class loaders. Java
+allows to load the same class in different class loaders, which creates
+independent copies of its static fields.
 
-\todo{Discuss problems related to the "dirty" static state from previous executions for classes which we do not load in the isolate class loader.}
+In order to fully isolate the program state during the execution of the original
+and refactored code from each other, we load all invovled classes in separate
+class loaders. These class loaders are disposed immediately after the curent set
+of fuzzed inputs were executed, and new class loaders are created for the next
+inputs. Classes which do not maintain a static state are loaded in a shared
+parent class loader to improve performance.
 
-In our implementation, we use isolated class loaders for both the original and the refactored code.
-By isolated, we mean that the bootstrap classloader for the JVM doesn't have any extra
-classes in it.
+The OpenJDK Java virtual machine implementation does not allow us to load
+classes contained in the \code{java.lang} package in such an isolated class
+loader. For such classes we cannot apply refactorings which depend on static
+fields, as they cannot be reset and will retain the state of previous
+executions. Instead of observing the effect of one isolated refactoring
+candidate, we would observe their accumulated effect, leading to both
+incompleteness and unsoundness depending on the context. For the scope of our
+experiments this did not pose a problem, since most of the affected classes in
+the \code{java.lang} package do not maintain a static state, and the ones who do
+were irrelevant to our refactorings.
 
 %Everything that is part of our comparison is in the isolated class loader.
 
@@ -1694,12 +1713,6 @@ classes in it.
 %% PAK: We check that all static fields in classes that were loaded by either program are equivalent.
 %% That means that if one program didn't load a class, we load it for it, and check that the
 %% initial state of that class is the same as the other program's. 
-
-\subsection{Instrumentation}
-
-\todo{Not sure if this is the best section name.}
-
-\todo{Talk about reflective invocation.}
 
 
 
