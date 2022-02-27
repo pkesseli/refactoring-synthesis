@@ -1767,13 +1767,19 @@ of subclasses to be used in favour of Mockito mocks for certain types, and users
 have the option to extend this list with a custom configuration. This is
 particularly useful when the default behaviour of mocked objects affect the
 refactoring, and thus mocked objects as under-approximation could lead to
-spurious solutions.
+spurious solutions. A trivial example of this limitation is refactoring the
+method \code{layout} in the abstract class \code{java.awt.Component}. The
+method is not abstract, but has an empty body and is meant to be overriden by
+subclasses. Using this empty body as a specification will only guranatee a sound
+refactoring for subclasses which do not override it. Our approach is still
+guaranteed to find the preferred refactoring of using \code{doLayout} instead,
+since we take the Javadoc hint into account. However, a more complete approach
+in general would be to fuzz against all available subclasses of
+\code{Component} on the classpath.
 
 We explicitly avoid constructors which are not amenable to fuzzing, such as
 collection constructors which take an integer capacity argument, where an
 unlucky fuzzed input might lead to an out of memory error.
-
-\todo{Show an example, which illustrates the problem of using Mockito and the advantage of using a subclass.}
 
 \subsection{Parsing the @code hints}
 
