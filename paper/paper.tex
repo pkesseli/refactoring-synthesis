@@ -1143,14 +1143,19 @@ Next, we define the notion of equivalence with respect to a concrete input $\vec
 
 The above definition says that in order for \var{P_1} and
 \var{P_2} to be equivalent with respect to input $\vec{i}$,
-(1) either they both throw an exception and the two exceptions are equal, or none does,
+(1) either they both throw an exception and the two exceptions have the same type, or none does,
 (2) any variable
 that is live at the end of \var{P_1}, must also be live at the end of \var{P_2}, and  must be
 assigned equal objects by the executions of \var{P_1} and
 \var{P_2} on $\vec{i}$, respectively, and
 (3) the static fields of the loaded classes must be respectively equal.
-We check equality by recursively following attribute chains until we reach primitive types or types that have an explicit \code{equals} provided, which we then compare.
-\todo{Any checks for equals?}
+We check equality by recursively following attribute chains until we reach primitive types. We
+generally do not consider \code{equals} methods unless (1) the method was not written by the user
+(i.e. JCL classes), (2) the type inerits from \code{java.lang.Object}, (3) the class implements
+\code{java.lang.Comparable} and (4) the type declares an \code{equals} implementation. Examples
+of classes which satisfy these strict requirements are \code{java.lang.Integer} or
+\code{java.util.Date}. All other \code{equals} implementations are considered unreliable and
+ignored.
 %Alternatively, if there is an explicit \code{equals} implemented for a given type, then we use it.
 %% By equal objects we mean objects where the values of the
 %% corresponding attributes are equal.
@@ -1621,6 +1626,11 @@ Furthermore, our algorithm does currently not explore the entire classpath for
 potential overrides of the method to refactor. This may lead to unsound results
 when different subclasses of the original class are used polymorphically in the
 refactored context.
+
+Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on \code{equals}
+implementations for equivalence comparison. While we strictly filter which \code{equals}
+implementations we consider, if any of them do not accurately assess an equivalent program state, 
+our refactoring may prove unsound at runtime.
 
 %%However, we make no guarantee about correctness with respect to such operations
 %% anyway, whether static or instance state.}
