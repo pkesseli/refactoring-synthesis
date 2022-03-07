@@ -1612,11 +1612,17 @@ Then, we enforce aliasing preservation (condition (4) in Definition~\ref{def:pro
 by checking that, for all variables defined by both the original and the refactored code,
 the objects they reference have the same symbolic id.
 
+For illustration, in the original code in Example~\ref{ex:aliasing}, the object of type \code{Dimension} referenced by variable \var{dim1}
+is assigned symbolic value \var{s_1}, whereas the object referenced by \var{dim2} is assigned symbolic value \var{s_2}.
+In a similar manner, the object referenced by both \var{dim1} and \var{dim2} in the refactored code is assigned value \var{s_1}.
+Then, the aliasing check fails as, in the original code, the object referenced by \var{dim2} has symbolic value \var{s_2},
+whereas, in the refactored code, the object referenced by \var{dim2} has symbolic value \var{s_1}.
+
 While this is a much stronger requirement than needed, it was sufficient for our experiments.
 For future work, we plan on relaxing it and explicitly tracking the equivalence classes induced by the aliasing
 relation.
 
-\todo{Refer to the new example obtained from Pascal.}
+%\todo{Refer to the new example obtained from Pascal.}
 
 %% heap equivalence, we enforce a strict notion of aliasing
 %% equivalence.
