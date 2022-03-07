@@ -1143,14 +1143,19 @@ Next, we define the notion of equivalence with respect to a concrete input $\vec
 
 The above definition says that in order for \var{P_1} and
 \var{P_2} to be equivalent with respect to input $\vec{i}$,
-(1) either they both throw an exception and the two exceptions are equal, or none does,
+(1) either they both throw an exception and the two exceptions have the same type, or none does,
 (2) any variable
 that is live at the end of \var{P_1}, must also be live at the end of \var{P_2}, and  must be
 assigned equal objects by the executions of \var{P_1} and
 \var{P_2} on $\vec{i}$, respectively, and
 (3) the static fields of the loaded classes must be respectively equal.
-We check equality by recursively following attribute chains until we reach primitive types or types that have an explicit \code{equals} provided, which we then compare.
-\todo{Any checks for equals?}
+We check equality by recursively following attribute chains until we reach primitive types. We
+generally do not consider \code{equals} methods unless (1) the method was not written by the user
+(i.e. JCL classes), (2) the type inerits from \code{java.lang.Object}, (3) the class implements
+\code{java.lang.Comparable} and (4) the type declares an \code{equals} implementation. Examples
+of classes which satisfy these strict requirements are \code{java.lang.Integer} or
+\code{java.util.Date}. All other \code{equals} implementations are considered unreliable and
+ignored.
 %Alternatively, if there is an explicit \code{equals} implemented for a given type, then we use it.
 %% By equal objects we mean objects where the values of the
 %% corresponding attributes are equal.
@@ -1617,6 +1622,16 @@ which is not part of the JVM state. We currently don't check
 that the original and refactored code perform the same I/O.
 %the possibility that the static initialiser performs some I/O,. 
 
+Furthermore, our algorithm does currently not explore the entire classpath for
+potential overrides of the method to refactor. This may lead to unsound results
+when different subclasses of the original class are used polymorphically in the
+refactored context.
+
+Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on \code{equals}
+implementations for equivalence comparison. While we strictly filter which \code{equals}
+implementations we consider, if any of them do not accurately assess an equivalent program state, 
+our refactoring may prove unsound at runtime.
+
 %%However, we make no guarantee about correctness with respect to such operations
 %% anyway, whether static or instance state.}
 
@@ -1654,15 +1669,34 @@ such techniques.
 %% expensive.
 
 
-\subsection{The isolated class loader}
+\subsection{Instrumentation and isolation}
 
-\todo{Explain the reason for using an isolated class loader.}
+We use reflection to invoke the original method to refactor with fuzzed inputs,
+as well as our synthesised refactoring candidates. This allows us to dynamically
+invoke new candidates without the need for compilation. The state of a Java
+program is modelled by the current program stack as well as its heap consisting
+of instance variables and static field values. Static Field values are stored
+with their respective classes, which in turn are loaded by class loaders. Java
+allows to load the same class in different class loaders, which creates
+independent copies of its static fields.
 
-\todo{Discuss problems related to the "dirty" static state from previous executions for classes which we do not load in the isolate class loader.}
+In order to fully isolate the program state during the execution of the original
+and refactored code from each other, we load all invovled classes in separate
+class loaders. These class loaders are disposed immediately after the curent set
+of fuzzed inputs were executed, and new class loaders are created for the next
+inputs. Classes which do not maintain a static state are loaded in a shared
+parent class loader to improve performance.
 
-In our implementation, we use isolated class loaders for both the original and the refactored code.
-By isolated, we mean that the bootstrap classloader for the JVM doesn't have any extra
-classes in it.
+The OpenJDK Java virtual machine implementation does not allow us to load
+classes contained in the \code{java.lang} package in such an isolated class
+loader. For such classes we cannot apply refactorings which depend on static
+fields, as they cannot be reset and will retain the state of previous
+executions. Instead of observing the effect of one isolated refactoring
+candidate, we would observe their accumulated effect, leading to both
+incompleteness and unsoundness depending on the context. For the scope of our
+experiments this did not pose a problem, since most of the affected classes in
+the \code{java.lang} package do not maintain a static state, and the ones who do
+were irrelevant to our refactorings.
 
 %Everything that is part of our comparison is in the isolated class loader.
 
@@ -1694,12 +1728,6 @@ classes in it.
 %% PAK: We check that all static fields in classes that were loaded by either program are equivalent.
 %% That means that if one program didn't load a class, we load it for it, and check that the
 %% initial state of that class is the same as the other program's. 
-
-\subsection{Instrumentation}
-
-\todo{Not sure if this is the best section name.}
-
-\todo{Talk about reflective invocation.}
 
 
 
@@ -1767,13 +1795,19 @@ of subclasses to be used in favour of Mockito mocks for certain types, and users
 have the option to extend this list with a custom configuration. This is
 particularly useful when the default behaviour of mocked objects affect the
 refactoring, and thus mocked objects as under-approximation could lead to
-spurious solutions.
+spurious solutions. A trivial example of this limitation is refactoring the
+method \code{layout} in the abstract class \code{java.awt.Component}. The
+method is not abstract, but has an empty body and is meant to be overriden by
+subclasses. Using this empty body as a specification will only guranatee a sound
+refactoring for subclasses which do not override it. Our approach is still
+guaranteed to find the preferred refactoring of using \code{doLayout} instead,
+since we take the Javadoc hint into account. However, a more complete approach
+in general would be to fuzz against all available subclasses of
+\code{Component} on the classpath.
 
 We explicitly avoid constructors which are not amenable to fuzzing, such as
 collection constructors which take an integer capacity argument, where an
 unlucky fuzzed input might lead to an out of memory error.
-
-\todo{Show an example, which illustrates the problem of using Mockito and the advantage of using a subclass.}
 
 \subsection{Parsing the @code hints}
 
