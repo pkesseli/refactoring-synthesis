@@ -1201,11 +1201,29 @@ and check that the initial state of that class is the same for both blocks of co
 \paragraph{Preserving aliasing}
 
 When expressing the equivalence relation between \var{P_1} and \var{P_2}, we intentionally missed one important aspect,
-namely aliasing. To understand the problem let's look a the following example.
+namely aliasing. To understand the problem let's look a the following example, which makes use of java.awt.Container,
+where a generic Abstract Window Toolkit (AWT) container object is a component that can contain other AWT components.
+Method \code{preferredSize} used by the original code below returns the preferred size of the calling container \code{container}.
+However, \code{preferredSize} is deprecated, and, instead, the refactored version uses \code{getPreferredSize}.
+
 %, which denotes a slightly
 %modified version of the running example.
 
-\todo{Get another example from Pascal, where the return is an object.}
+\begin{example}\label{ex:aliasing}
+  \begin{lstlisting}[mathescape=true,showstringspaces=false]
+    
+  // Original code:
+  Dimension dim1 = container.preferredSize();
+  Dimension dim2 = container.preferredSize();    
+
+  // Refactored code:
+  Dimension dim1 = container.getpreferredSize();  
+  Dimension dim2 = dim1;
+\end{lstlisting}
+%\end{example}
+
+
+%\todo{Get another example from Pascal, where the return is an object.}
 
 %% \begin{example}\label{ex:aliasing}
 %%   \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -1225,31 +1243,36 @@ namely aliasing. To understand the problem let's look a the following example.
 
 %% For the code above, we will refer to the first two lines denoting the
 %% original deprecated code as \var{P_3}, and the rest, denoting the
-%% refactored code, as \var{P_4}.  We note that, as opposed to the
-%% running example, \var{P_3} defines two variables \var{hour1} and
-%% \var{hour2}, both assigned an \var{int} by calling
-%% \var{date.getHours()}.
-%% Conversely, in \var{P_4}, \var{hour1} and \var{hour2} are aliases, i.e. they point to the same
-%% memory location.
+%% refactored code, as \var{P_4}.
 
-%% Note that, \var{P_3} and \var{P_4} are equivalent with respect to a concrete \var{d} (denoting the date 2022-12-01 13:30:00) according to Definition~\ref{def:prog-equiv}.
-%% Let's however, assume that the following code
-%% is used after \var{P_3} and \var{P_4}, respectively.
+We note that, the original code above defines two variables \var{dim1} and
+\var{dim2}, each assigned an object of type \texttt{Dimension} returned by calling
+\var{container.preferredSize()}.
+Conversely, in the refactored code, \var{dim1} and \var{dim2} are aliases, i.e. they point to the same
+object of type \code{Dimension}.
 
-%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
-%%   hour1 = 2;
-%% \end{lstlisting}
+The original and the refactored code are equivalent according to Definition~\ref{def:prog-equiv}.
+Let's next assume that the following code
+is used after both the original and the refactored code, respectively.
 
-%% Our intention is to execute the whole code, including this additional line, on input \var{d}.
-%% If \var{P_3} and \var{P_4} were indeed equivalent with respect to input \var{d},
-%% then we would expect \var{hour1} and \var{hour2} to have the same value at the end of both
-%% executions, respectively. However, this is not the case.
-%% In the original code, using \var{P_3}, \var{hour2} will be assigned 13 (the hour in \var{d}), whereas in the refactored code,
-%% \var{hour2} will have value 2. This is due to the fact that,
-%% in \var{P_4}, \var{hour1} and \var{hour2} are aliases. %% Then, when the object referenced by
-%% %% \var{hour1} was changed to refer to the date denoting ``30/10/2020'', this also affected \var{date2}.
-%% Thus, \var{P_3} and \var{P_4} are not equivalent for input \var{d}.
-%% \end{example}  
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+  dim1.setSize(1,2);
+  dim2.setSize(2,3);  
+\end{lstlisting}
+
+Our intention is to execute both the original and the refactored code, respectively, plus the additional two lines.
+If the original and the refactored code were indeed equivalent,
+%with respect to input \var{d},
+then we would expect \var{dim1} and \var{dim2} to have the same value at the end of both executions. 
+%executions, respectively.
+However, this is not the case.
+In the original code, \var{dim1} will have width 1 and height 2, whereas in the refactored code,
+\var{dim1} will have width 2 and height 3. This is due to the fact that,
+in the refactored code, \var{dim1} and \var{dim2} are aliases. %% Then, when the object referenced by
+%% \var{hour1} was changed to refer to the date denoting ``30/10/2020'', this also affected \var{date2}.
+Thus, when \var{dim2} has its size set to (2,3), this also affects the object \code{dim1} is referencing.
+%\var{P_3} and \var{P_4} are not equivalent for input \var{d}.
+\end{example}  
 
 Intuitively, any aliases between live variables at the end of the original code should also
 be present at the end of the refactored code. For this purpose, we use the notation
