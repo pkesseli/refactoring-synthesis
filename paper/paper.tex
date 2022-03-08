@@ -886,6 +886,8 @@ we add that type to $source\_types$.
 \label{alg:seeding-core}
 \end{figure}
 
+\todo{Discuss what happens if no hint exists or it can't be parsed.}
+
 \paragraph{Incremental expansion of the library}
 If the synthesis engine fails to find a refactoring within a certain amount of time,
 there might be a need to increase the components library.
@@ -2065,51 +2067,94 @@ As opposed to that, our work is guided by program testing. This is similar in na
 
 \paragraph{Program refactoring}
 
-With respect to the refactoring of deprecated instances, 
-the authors of \cite{DBLP:conf/paste/Perkins05}
-replace calls to deprecated methods by their bodies.
-
-The authors of \cite{10.1007/978-3-642-14107-2_11}
-show that it is all too easy for a refactoring that works on concurrent
+With respect to works targeting the refactoring of deprecated instances, the work of Perkins directly replaces calls to deprecated methods by their bodies~\cite{DBLP:conf/paste/Perkins05}.
+As mentioned earlier in the paper, we believe that this solution does not follow the intention of the language designers. Moreover, it can
+introduce concurrency bugs. Notably, the authors of \cite{10.1007/978-3-642-14107-2_11}
+show that it is very easy for a refactoring that works on concurrent
 programs to introduce concurrency bugs by enabling new interactions between
-parallel threads. They also provide techniques to make such refactorings
-behavior-preserving.
+parallel threads. %They also provide techniques to make such refactorings behavior-preserving.
 
-Rule-based source-to-source transformations: they provide languages in which
-transformation rules can be expressed ...
-Syntax-driven refactoring base program transformation decisions
-on observations on the program's syntax tree.  Visser
-presents a purely syntax-driven framework~\cite{stratego}.  The
-presented method is intended to be configurable for specific
-refactoring tasks, but cannot provide guarantees about semantics
-preservation.
 
-In~\cite{txl}, Cordy et al. introduce TXL, a programming language and rapid prototyping
-system specifically designed to support structural source transformation.
-As opposed to our work, here the user needs to provide the transformation rules.
+In~\cite{DBLP:conf/kbse/Huang0PW021}, Huang et al. automatically find replacements for missing APIs in library update (an API is considered as a public method in a public class). As new library versions are released, some APIs may get deprecated, removed or refactored.
+The focus in this work is on locating a replacement API through heuristics based on method signatures, rather than on finding an equivalent block of code.
+The tool presented in this paper, {\sc RepFinder} searches deprecation messages, the current library and external libraries in order to find replacement APIs. Replacement APIs must have either identical signatures to the missing API, or similar. For the latter category, {\sc RepFinder} computes the weighted sum of the distances of return types, method names and parameter types. Finally, the API with the smallest distance is selected. As opposed to our technique, this work offers no guarantees as it doesn't
+investigate the body of the deprecated method or of the replacement one. Moreover, API calls
+are simply replaced by some other API call, rather than more complex code as in our situation.
 
-Automated program refactoring:
-\cite{sawin} by Sawin et al., \cite{bae} by Bae et al.~and
-\cite{chris} by Christopoulou et al.  In contrast to these approaches,
-our procedure constructs an equivalence proof before transforming the
-program. In \cite{conf/sigsoft/GyoriFDL13}, Gyori et al. present a
-similar refactoring to ours but performed in a syntax-driven manner.
+
+%name change, signature change, move to a different package
+
+%% The signature of mo can be changed in
+%% ln, including its return type, method name and parameter type.
+%% mo can also be move into a different class in ln.
+
+%% At the class level, mo can be substituted
+%% by a method from another class, either with the same method
+%% name or a different method name. At the method level, mo
+%% can be substituted by a different method from its own class.
+
+
+
+There are several rule-based source-to-source transformation systems that provide languages in which
+transformation rules based on the program's syntax can be expressed~\cite{stratego,txl}. 
+%% Syntax-driven refactoring base program transformation decisions
+%% on observations on the program's syntax tree.  Visser
+%% presents a purely syntax-driven framework~\cite{stratego}.  The
+%% presented method is intended to be configurable for specific
+%% refactoring tasks, but cannot provide guarantees about semantics
+%% preservation.
+%% In~\cite{txl}, Cordy et al. introduce TXL, a programming language and rapid prototyping
+%% system specifically designed to support structural source transformation.
+As opposed to our work, such systems require the user to provide the actual transformation rules and are syntax-guided.
+
+
+Search-based approaches to automating the task of software refactoring, based
+on the concept of treating object-oriented design as a combinatorial optimisation
+problem, have been also proposed~\cite{search1,search2}. They usually make use of techniques such as
+simulated annealing, genetic algorithms and multiple ascent hill-climbing.
+%O'Keffe and Cinn{\'{e}}ide present a search-based refactoring
+%refactoring~\cite{search1, search2}, which is similar to syntax-driven
+%refactoring.  They rephrase refactoring
+%which is rephrased as an optimisation problem,
+%using code metrics as fitness measures~\cite{search1, search2}.  %% As such, the method optimises
+%% syntactical constraints and does not take program semantics into
+%% account.
+While our technique is search based, the search is guided by types, code hints, as well as counterexamples
+provided by property-based testing.
+
+Closer to our work, several refactoring techniques make explicit use of some form of semantic information.
+%With respect to automated program refactoring,
+Khatchadourian et al. use a type inference algorithm to automatically transform legacy Java code (pre Java 1.5) to use the \code{enum} construct~\cite{sawin}.
+%\cite{sawin} by Sawin et al.,
+Other automated refactoring techniques aim to transform programs into a particular design pattern~\cite{chris,bae}.
+%In \cite{bae}, Bae et al. propose an automated approach to
+%identifying the candidate spots, then on which the defined refactoring strategy would be applied for the
+%~and \cite{chris} by Christopoulou et al.  In contrast to these approaches,
+%our procedure constructs an equivalence proof before transforming the
+%program.
 %
-
+%% In \cite{conf/sigsoft/GyoriFDL13}, Gyori et al. present a
+%% similar refactoring to ours but performed in a syntax-driven manner.
+%
+%
+%
 Steimann et al.~present Constraint-Based Refactoring in \cite{Steimann2011},
-\cite{Steimann2012Pilgrim} and \cite{Steimann2011KollePilgrim}. Their approach
-generates explicit constraints over the program's abstract syntax tree to
-prevent compilation errors or behaviour changes by automated refactorings.
+\cite{Steimann2012Pilgrim} and \cite{Steimann2011KollePilgrim},
+where given well-formedness logical rules about the program are translated into constraints that are then solved to assist the refactoring.
+%% , their approach
+%% generates explicit constraints
+%% over the program's abstract syntax tree to
+%% prevent compilation errors or behaviour changes by automated refactorings.
 % This gives rise to a flexible framework of customisable refactorings,
 % implementable through a refactoring constraint specification language
 % (cf. \cite{Steimann2011KollePilgrim}).
-The approach is limited by the information
-a program's AST provides and thus favours conservative implementations of
-syntax-focused refactorings such as \emph{Pull Up Field}.
+%% The approach is limited by the information
+%% a program's AST provides and thus favours conservative implementations of
+%% syntax-focused refactorings such as \emph{Pull Up Field}.
 %
 Fuhrer et al.~implement a type constraint system to introduce missing type
 parameters in uses of generic classes (cf. \cite{DBLP:conf/ecoop/FuhrerTKDK05})
-and to introduce generic type parameters into classes which do not provide
+and to introduce generic type parameters into classes that do not provide
 a generic interfaces despite being used in multiple type contexts
 (cf. \cite{DBLP:conf/icse/KiezunETF07}).
 %
@@ -2125,26 +2170,48 @@ a generic interfaces despite being used in multiple type contexts
 % aims to identify past refactorings performed by programmers, but is
 % not a decision procedure for automated refactorings.
 %
-O'Keffe and Cinn{\'{e}}ide present search-based
-refactoring~\cite{search1, search2}, which is similar to syntax-driven
-refactoring.  They rephrase refactoring as an optimisation problem,
-using code metrics as fitness measure.  As such, the method optimises
-syntactical constraints and does not take program semantics into
-account.
 %
 % Bavota et al. implement refactoring decisions in \cite{Bavota:2011:IEC}
 % using semantic information limited to identifiers and comments,
 % which may differ from the actual semantics (e.g. due to bugs).
 %
-Kataoka et al. interpret program semantics to apply refactorings
-\cite{Kataoka:2001:ASP:846228.848644}, but use dynamic test execution
-rather than formal verification, and hence their transformation lacks
-soundness guarantees.
-%
-Franklin et al. implement a pattern-based refactoring approach
-transforming statements to stream queries~\cite{Gyori:2013:CGI:2491411.2491461}.
-Their tool LambdaFicator~\cite{DBLP:conf/icse/FranklinGLD04} is available as a
+%Some of the closest to our refactoring from the point of considering program semantics are~\cite{Kataoka:2001:ASP:846228.848644}, 
+Kataoka et al. use
+program invariants (found by the dynamic tool Daikon) to infer
+%such that when a particular pattern of invariant
+%relationships appears at a program point, a
+whether specific refactoring are applicable~\cite{Kataoka:2001:ASP:846228.848644}. %The invariant detection tool called Daikon is used to
+%dynamically infer the required invariants.
+Notably, %the refacoring process relies on finding the required invariants, which
+finding invariants is notoriously difficult especially
+for real-world programs. Moreover, the technique is limited to a small number of refactorings and does not include
+the elimination of deprecated instances.
+In \cite{conf/sigsoft/GyoriFDL13}, Gyori et al. present the tool {\sc LambdaFicator} which
+automates two pattern-based refactorings. The first refactoring converts
+anonymous inner classes to lambda expressions. The second
+refactoring converts for loops that iterate over Collections
+to functional operations that use lambda expressions.
+The {\sc LambdaFicator} tool~\cite{DBLP:conf/icse/FranklinGLD04} is available as a
 NetBeans branch.
+
+
+
+%% . However, because search-based refactoring is a novel
+%% approach it has yet to be established which search techniques are most suitable
+%% for the task. In this article we report the results of an empirical comparison of
+%% simulated annealing, genetic algorithms and multiple ascent hill-climbing in search-based
+%% refactoring. 
+
+
+%% Kataoka et al. interpret program semantics to apply refactorings
+%% \cite{Kataoka:2001:ASP:846228.848644}, but use dynamic test execution
+%% rather than formal verification, and hence their transformation lacks
+%% soundness guarantees.
+%
+%% Franklin et al. implement a pattern-based refactoring approach
+%% transforming statements to stream queries~\cite{Gyori:2013:CGI:2491411.2491461}.
+%% Their tool LambdaFicator~\cite{DBLP:conf/icse/FranklinGLD04} is available as a
+%% NetBeans branch.
 %We compared \tool against it in our experimental evaluation
 %in Sec.~\ref{experiments-results}.
 %
@@ -2162,7 +2229,13 @@ NetBeans branch.
 %% logics~\cite{DBLP:conf/csl/ImmermanRRSY04} are not concise and easily
 %% translatable to stream code.
 
-
+Although it is guided by semantics, our techniques does not expect any
+precomputed information such as logical well-formedness properties or
+invariants. Instead, we make use of information that is already
+available in the original program and Javadoc, namely code hints and
+type information. Moreover, we explore the space of all potential
+candidate programs by combining techniques from type-directed,
+component-based and counterexample-guided inductive synthesis.
 
 
 \section{Conclusion}
