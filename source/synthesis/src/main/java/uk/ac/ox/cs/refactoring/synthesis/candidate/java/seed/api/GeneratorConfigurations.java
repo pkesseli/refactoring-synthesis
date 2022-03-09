@@ -105,7 +105,7 @@ public final class GeneratorConfigurations {
     if (useJavaDoc) {
       seed(components, javaDocSeed);
       if (components.size() > 0)
-        seed(components, signatureSeed, factorySeed, consumerSeed, statementSeed);
+        seed(components, signatureSeed, constantSeed, factorySeed, consumerSeed, statementSeed);
     }
     if (components.size() == 0)
       seed(components, typeSeed, signatureSeed, constantSeed, statementSeed);

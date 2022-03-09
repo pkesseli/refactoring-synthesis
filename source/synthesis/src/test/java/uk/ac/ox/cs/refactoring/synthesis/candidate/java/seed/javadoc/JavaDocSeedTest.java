@@ -1,7 +1,9 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -15,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.VoidType;
 import com.sun.management.OperatingSystemMXBean;
@@ -125,6 +128,35 @@ public class JavaDocSeedTest {
     final State state = new State(bean);
     final long actual = (long) invokeMethod.evaluate(new ExecutionContext(classLoader, state));
     assertEquals(bean.getFreeMemorySize(), actual);
+  }
+
+  @Test
+  void javaRmiServerRMIClassLoader() throws Exception {
+    final MethodIdentifier methodIdentifier = new MethodIdentifier("java.rmi.server.RMIClassLoader",
+        "loadClass", Arrays.asList("java.lang.String"));
+    javaDocSeed(methodIdentifier);
+    final List<Component<JavaLanguageKey, Object>> seeded = components
+        .get(JavaLanguageKeys.expression(TypeFactory.createClassType(Class.class)), 1).collect(Collectors.toList());
+    assertThat(seeded, hasItem(isA(SnippetComponent.class)));
+    final Component<JavaLanguageKey, Object> component = seeded.get(0);
+    final ClassOrInterfaceType string = TypeFactory.createClassType(String.class);
+    final InvokeMethod invokeMethod = (InvokeMethod) component
+        .construct(new Object[] { new Parameter(0, string), new Parameter(1, string) });
+
+    final String integer = "java.lang.Integer";
+    final State state = new State(null, null, integer);
+    final ExecutionContext context = new ExecutionContext(classLoader, state);
+    final Class<?> actual = (Class<?>) invokeMethod.evaluate(context);
+    assertThat(actual, hasProperty("name", equalTo(integer)));
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+      "asdf<code>the-code</code>xyz,asdf{@code the-code}xyz",
+      "<link>the-code</link>,{@link the-code}"
+  })
+  void replaceHtml(final String input, final String expected) {
+    assertEquals(expected, JavaDocSeed.replaceHtml(input));
   }
 
   private void javaDocSeed(final MethodIdentifier methodIdentifier)

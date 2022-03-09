@@ -1,7 +1,6 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 import com.github.javaparser.JavaParser;
@@ -46,7 +45,7 @@ class Typecheck extends VoidVisitorAdapter<Void> {
   private final Type defaultType;
 
   /** Node replacements to perform for type correctness. */
-  private final Map<Map.Entry<Node, Node>, Node> replacements = new HashMap<>();
+  private final Map<Node, Map<Node, Node>> replacements = new IdentityHashMap<>();
 
   /**
    * @param javaParser {@link #javaParser}
@@ -70,12 +69,11 @@ class Typecheck extends VoidVisitorAdapter<Void> {
       final Expression expression) {
     final Typecheck typecheck = new Typecheck(javaParser, typeSolver, defaultType);
     expression.accept(typecheck, null);
-    for (final Map.Entry<Map.Entry<Node, Node>, Node> entry : typecheck.replacements.entrySet()) {
-      final Map.Entry<Node, Node> parentAndNodeToReplace = entry.getKey();
-      final Node parent = parentAndNodeToReplace.getKey();
-      final Node nodeToReplace = parentAndNodeToReplace.getValue();
-      final Node newNode = entry.getValue();
-      parent.replace(nodeToReplace, newNode);
+    for (final Map.Entry<Node, Map<Node, Node>> entry : typecheck.replacements.entrySet()) {
+      final Node parent = entry.getKey();
+      final Map<Node, Node> replacementsForParent = entry.getValue();
+      for (final Map.Entry<Node, Node> replacement : replacementsForParent.entrySet())
+        parent.replace(replacement.getKey(), replacement.getValue());
     }
   }
 
@@ -86,8 +84,8 @@ class Typecheck extends VoidVisitorAdapter<Void> {
       return;
 
     final Node parent = n.getParentNode().get();
-    final Map.Entry<Node, Node> key = new AbstractMap.SimpleImmutableEntry<>(parent, n);
-    replacements.put(key, new TypeExpr(getType(n)));
+    final Map<Node, Node> replacementsForParent = replacements.computeIfAbsent(parent, p -> new IdentityHashMap<>());
+    replacementsForParent.put(n, new TypeExpr(getType(n)));
   }
 
   private Type getType(final NameExpr n) {

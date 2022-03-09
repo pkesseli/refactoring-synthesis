@@ -50,6 +50,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import org.apache.commons.collections4.IterableUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -410,15 +411,28 @@ public class JavaDocSeed implements InstructionSetSeed {
         try (final ZipFile zipFile = new ZipFile(sourceContainer.toFile())) {
           for (final ZipEntry entry : Collections.list(zipFile.entries())) {
             if (pattern.matcher(entry.getName()).matches()) {
+              final String content;
               try (final InputStream is = zipFile.getInputStream(entry)) {
-                return javaParser.parse(is);
+                content = IOUtils.toString(is, javaParser.getParserConfiguration().getCharacterEncoding());
               }
+              return javaParser.parse(replaceHtml(content));
             }
           }
         }
       }
     }
     return new ParseResult<CompilationUnit>(null, Collections.emptyList(), new CommentsCollection());
+  }
+
+  /**
+   * Replaces Javadoc HTML syntax by modern Javadoc syndax (e.g.
+   * &lt; code&gt;xyz()&lt; /code&gt; by {@code xyz()}).
+   * 
+   * @param content Source file content to mutate.
+   * @return New source file content.
+   */
+  static String replaceHtml(final String content) {
+    return content.replaceAll("<(code|link)>(.*?)</\\1>", "{@$1 $2}");
   }
 
   /**
