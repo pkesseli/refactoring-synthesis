@@ -47,6 +47,8 @@
 \lstset{
   mathescape, 
   language={Java},
+  numbers=left,
+  stepnumber=1,
   basicstyle=\footnotesize
 }
 \usepackage{enumitem}      % adjust spacing in enums
@@ -220,8 +222,8 @@ that the developers are discouraged from using in the future as
 they've been superseded and may cease to exist in the future.
 However, removing them directly would break the backward compatibility
 of the project's API.  Instead, such elements can be tagged with the
-\code{@Deprecated} annotation.  %% In general, when deprecating a
-%% field/method/class, the \code{@deprecated} Javadoc tag is used in the
+\texttt{@Deprecated} annotation.  %% In general, when deprecating a
+%% field/method/class, the \texttt{@deprecated} Javadoc tag is used in the
 %% comment section to inform the developer the reason of deprecation and
 %% what can be used in place.
 
@@ -231,24 +233,24 @@ The transformation of existing code such that it doesn't use deprecated APIs
 %to the recommended format
 is not always straightforward,
 as illustrated in Fig.~\ref{ex:deprecated-method-other}. In the example, we
-make use of the \code{getHours} method of the \code{Date} class,
+make use of the \texttt{getHours} method of the \texttt{Date} class,
 which is deprecated.
 %% with the 
-%% recommendation to use \code{Calendar.get(Calendar.HOUR\_OF\_DAY)} instead.
+%% recommendation to use \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)} instead.
 In this situation, in order to replace the use of the deprecated method,
-we must first obtain a \code{Calendar} object.
-However, we can't use the \code{Calendar} constructor as it is protected,
-and we must instead call \code{getInstance}.
-Furthermore, in order to be able to use this \code{Calendar} object for our purpose,
-we must first set its time using the existing \code{date}.
-We do this by calling \code{setTime} with \code{date} as argument.
-%% followed by setting the date using \code{set}
-%% and returning a Date object by invoking \code{getTime}.
-%% Alternatively, the \code{GregorianCalendar} class may be used with
+we must first obtain a \texttt{Calendar} object.
+However, we can't use the \texttt{Calendar} constructor as it is protected,
+and we must instead call \texttt{getInstance}.
+Furthermore, in order to be able to use this \texttt{Calendar} object for our purpose,
+we must first set its time using the existing \texttt{date}.
+We do this by calling \texttt{setTime} with \texttt{date} as argument.
+%% followed by setting the date using \texttt{set}
+%% and returning a Date object by invoking \texttt{getTime}.
+%% Alternatively, the \texttt{GregorianCalendar} class may be used with
 %% similar difficulties.
 Finally, we can retrieve the hour by calling
 %Only after all this set up, we can finally make use of the recommendation
-\code{calendar.get(Calendar.HOUR\_OF\_DAY)}.
+\texttt{calendar.get(Calendar.HOUR\_OF\_DAY)}.
 
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -271,13 +273,52 @@ While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to
 recognise the use of deprecated APIs and warn the programmer about it,
 refactoring the code to a preferred API is significantly more
 complex. Indeed neither Eclipse 4.15.0 nor IntelliJ IDEA 2020.2.2 make
-any attempt to suggest a better alternative to the user. There is also
-very limited support offered by the research community, mainly
-focusing on replacing calls to deprecated methods by their
-bodies~\cite{DBLP:conf/paste/Perkins05}. 
+any attempt to suggest an alternative to the user.
+
+With respect to the work pursued by the academic community, 
+the closest paper to our current proposal
+%aims to replace the
+%deprecated usages,
+replaces calls
+to deprecated methods by their
+bodies~\cite{DBLP:conf/paste/Perkins05}.  The issue is that, frequently, this
+strategy doesn't follow the intention of the language designers, who
+use deprecation to signal that there is a safer and generally better
+way of achieving a given goal.  Moreover, inlining calls to deprecated
+methods can cause undesirable effects if the original function was
+synchronised.  While it is not possible for two invocations on the
+same object of the synchronised original method to interleave, this is
+not guaranteed after inlining the method's body.
+
+%% There is also
+%% very limited support offered by the research community, mainly
+%% focusing on replacing calls to deprecated methods by their
+%% bodies~\cite{DBLP:conf/paste/Perkins05}. 
+
+Another closely related class of works focuses on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. However, change rules don't provide the actual code to be used in order to perform the replacement (lines 6-8 in Figure~\ref{ex:deprecated-method-other}). Instead, the programmer is still required to perform a lot of the work
+manually. This is a time-consuming and error-prone process, especially as the programmer
+is left to guarantee that the way in which she performed the replacement
+does not change the functionality of
+the code. Indeed, the hardest part about such refactorings is that they must preserve observational equivalence, i.e. they must preserve the code's behaviour.
+
+%% For instance, in~\cite{}, Huang et al. attempt to find replacements for missing APIs
+%% (an API is considered as a public method in a public class). This includes APIs
+%% that have been deprecated.
+%% A crucial remark is that, in general, API adaptation can be decomposed into two tasks; i.e., the first is to find what is the replacement of a missing API (e.g., [13, 18, 89, 95]),
+%% and the second is to identify how usages of a missing API are actually replaced by usages of its replacement API (e.g., [24, 81]).
+%% Basically, this means that the former task only finds alternative APIs, but without providing ways in which these alternatives can
+%% be used. For instance, for the motivational example, it might say that the code hint needs to be used, but not how.
+
+%% In the current work, we perform both tasks, meaning that we provide the exact lines of code
+%% to replace the deprecated usage. While we do not provide absolute guarantees about
+%% the correctness of our suggestion, our suggestions have been tested on a minimum of X inputs.
+
+%%usually such change rules only fix the syntactic difference
+
+
 
 Consequently, the majority of
-such refactorings are done manually, which is a costly,
+refactorings removing deprecated instances are done manually, which is a costly,
 time-intensive, and not least error-prone process.  This situation is
 also a real issue for legacy code that makes use of deprecated APIs
 that need to be replaced with latest APIs/libraries.
@@ -285,54 +326,67 @@ that need to be replaced with latest APIs/libraries.
 The main cause of difficulty when replacing deprecated instances lies
 with the fact that refactorings should not change the functionality of
 the code, i.e., they must preserve observational equivalence.
-Ensuring observational equivalence is far from trivial.  For instance,
-inlining calls to deprecated methods can break equivalence if the
-original function was synchronised.  While it is not possible for two
-invocations  on the same object of the synchronised original method to
-interleave, this is not guaranteed after inlining the method's body.
-Fig.~\ref{ex:unsound-refactoring-original} and
-Fig.~\ref{ex:unsound-refactoring-refactored} illustrate an example where
-the "Extract Local Variable..." refactoring integrated in Eclipse 4.21.0
-inadvertently removes synchronisation for the evaluation of the expression
-$x > 0$.
+Ensuring observational equivalence is far from trivial.
 
-\begin{minipage}{.23\textwidth}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
 
-synchronized (this) {
-  if (x > 0) {
-    foo();
-  }
-}
-// ...
-synchronized (this) {
-  if (x > 0) {
-    bar();
-  }
-}
-\end{lstlisting}
-\captionof{figure}{Concurrent example.}
-\label{ex:unsound-refactoring-original}
-\end{minipage}
-\begin{minipage}{.23\textwidth}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-boolean tmp = x > 0;
-synchronized (this) {
-  if (tmp) {
-    foo();
-  }
-}
-// ...
-synchronized (this) {
-  if (tmp) {
-    bar();
-  }
-}
-\end{lstlisting}
-\captionof{figure}{Unsound refactoring.}
-\label{ex:unsound-refactoring-refactored}
-\end{minipage}
-\vspace{0.8em}
+For
+illustration, when referring back to the example in
+Figure~\ref{ex:deprecated-method-other}, it's not immediately
+obvious that the original and the refactored code behave in an identical manner.
+Indeed, one needs to understand the
+code's semantics in order to reach this conclusion.
+
+that the refactoring maintains
+the same functionality.
+
+%% For instance,
+%% inlining calls to deprecated methods can break equivalence if the
+%% original function was synchronised.  While it is not possible for two
+%% invocations  on the same object of the synchronised original method to
+%% interleave, this is not guaranteed after inlining the method's body.
+%% Fig.~\ref{ex:unsound-refactoring-original} and
+%% Fig.~\ref{ex:unsound-refactoring-refactored} illustrate an example where
+%% the "Extract Local Variable..." refactoring integrated in Eclipse 4.21.0
+%% inadvertently removes synchronisation for the evaluation of the expression
+%% $x > 0$.
+
+%% \begin{minipage}{.23\textwidth}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+
+%% synchronized (this) {
+%%   if (x > 0) {
+%%     foo();
+%%   }
+%% }
+%% // ...
+%% synchronized (this) {
+%%   if (x > 0) {
+%%     bar();
+%%   }
+%% }
+%% \end{lstlisting}
+%% \captionof{figure}{Concurrent example.}
+%% \label{ex:unsound-refactoring-original}
+%% \end{minipage}
+%% \begin{minipage}{.23\textwidth}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%% boolean tmp = x > 0;
+%% synchronized (this) {
+%%   if (tmp) {
+%%     foo();
+%%   }
+%% }
+%% // ...
+%% synchronized (this) {
+%%   if (tmp) {
+%%     bar();
+%%   }
+%% }
+%% \end{lstlisting}
+%% \captionof{figure}{Unsound refactoring.}
+%% \label{ex:unsound-refactoring-refactored}
+%% \end{minipage}
+%% \vspace{0.8em}
 
 %% Another example of a refactoring that unintuitively breaks
 %% observational equivalence is given in Figure~\ref{}.
@@ -341,9 +395,19 @@ synchronized (this) {
 Consequently, refactorings that rely solely on a program's syntax
 and do not consider its semantics end up
 being overly conservative, mostly addressing structural changes
-to the program.  For illustration, when referring back to the example in
-Figure~\ref{ex:deprecated-method-other}, one must understand the code's semantics in order to conclude that the
-refactoring maintains the same functionality.
+to the program.  
+
+The observation that 
+%Ohter works have made the observation that 
+identifying refactoring candidates generally requires a semantic analysis of a program is not new~\cite{Kataoka:2001:ASP:846228.848644}.
+Notably, the limitations of syntax-driven refactorings have been observed
+in several works, resulting in an emerging trend to incorporate more {\em semantic}
+information into refactoring decisions, such as Abstract Syntax Tree (AST) 
+type information,
+further preventing compilation errors and behaviour changes
+\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
+
+
 %
 %% such refactorings are based on semantics rather
 %% than syntax. For illustration, let's refer back to the example in
@@ -352,7 +416,7 @@ refactoring maintains the same functionality.
 %% information about a program's semantics, whereas a {\em
 %%   semantics-driven refactoring} requires detailed understanding of the
 %% program semantics in order to be applied soundly.  Clearly, the
-%% refactoring of the call to the deprecated \code{Date} constructor
+%% refactoring of the call to the deprecated \texttt{Date} constructor
 %% falls into the latter category. 
 %
 %\subsection{From the previous introduction:}
@@ -389,12 +453,6 @@ refactoring maintains the same functionality.
 %% \todo{I've removed the reference to Move Field as it's a bit controversial given that
 %% Steinmann uses it to explain that purely syntactic approaches are not enough.}
 %
-Notably, the limitations of syntax-driven refactorings have been observed
-in several works, resulting in an emerging trend to incorporate more {\em semantic}
-information into refactoring decisions, such as Abstract Syntax Tree (AST) 
-type information,
-further preventing compilation errors and behaviour changes
-\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
 %% use constraints involving the abstract syntax tree type 
 %% information in order to handle the {\em Move Field} (when a field
 %% is used by another class more than the class on which it is defined)
@@ -407,8 +465,11 @@ further preventing compilation errors and behaviour changes
 %% further preventing compilation errors and behaviour changes
 %% \cite{Steimann2011}.
 
-In this paper, we take a step further in this direction by proposing a
-semantics-driven refactoring technique that makes use of program synthesis.
+In this paper, we propose to use techniques from program synthesis in order to
+incorporate semantic information about the
+code into the refactoring process.
+%take a step further in this direction by proposing a
+%semantics-driven refactoring technique that makes use of program synthesis.
 While we focus on the refactoring of deprecated methods, the same
 technique can be applied to deprecated fields and classes.
 %Our goal is to design a refactoring techniques for deprecated instances that computes refactorings fast, thus allowing integration with an IDE.
@@ -419,14 +480,14 @@ technique can be applied to deprecated fields and classes.
 
 Although powerful, program synthesis is very hard due to the vast search space, i.e. space of possible programs that must be considered. Thus, its success is generally relient on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
 %
-The vast search space is particularly a challenge in the current setting given that, in the absence of any additional guidance, the entire \code{java.lang} needs to be considered during code generation.
+The vast search space is particularly a challenge in the current setting given that, in the absence of any additional guidance, the entire \texttt{java.lang} needs to be considered during code generation.
 In order to prune the search space, we start by investigating the information available to our synthesis procedure.
 %The information that we are going to use to direct
 %\begin{itemize}
 
-{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists on the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, they are not sufficient in the current scenario. %, where the number of possible programs where considering \code{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
+{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists on the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, they are not sufficient in the current scenario. %, where the number of possible programs where considering \texttt{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
 
-{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \code{@deprecated} Javadoc tag is used in the
+{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@deprecated} Javadoc tag is used in the
   comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show in Section~\ref{sec:overview}, these hints
   don't provide the whole refactoring, but can be used to guide the search process.
 
@@ -453,7 +514,7 @@ our experiments show that, when considering a large number of test inputs, the r
 %% when considering real-world APIs. Specifically for our use case, when generating Java code, we have
 %% access to the whole of Java standard library.
 %% We address this challenge by using the code hints provided in the Javadoc comments
-%% (under the Javadoc \code{@code} tag) and type information to prune the component
+%% (under the Javadoc \texttt{@code} tag) and type information to prune the component
 %% library before the actual synthesis process.
 
 %% With respect to the synthesis process, we propose using greybox
@@ -581,7 +642,7 @@ which weaves together components from a library
 For component-based synthesis, real-world
 APIs can be very large. %, making synthesis infeasible.
 For illustration, in our setting, indiscriminately adding all members
-found in \code{java.lang} would make synthesis infeasible (see experimental results in Section~\ref{sec:experimental-results}).
+found in \texttt{java.lang} would make synthesis infeasible (see experimental results in Section~\ref{sec:experimental-results}).
 %% In general program synthesis is very difficult. One of the main
 %% challenges is the very large search space.
 %% The objective of recent
@@ -608,8 +669,8 @@ provide hints to the developer on-the-fly.
 %% While we will use coverage-guided testing to check observational equivalence (as discussed later),
 %% we still check at least 400 inputs. 
 %
-Our solution is to use the code hints provided in the Javadoc comments to guide the building of the component library. For our running example in Figure~\ref{ex:deprecated-method-other}, the source code for the \code{getHours} method in class \code{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \code{@code} tag suggests replacing the deprecated \code{getHours}
-with \code{Calendar.get(Calendar.HOUR_OF_DAY)}.
+Our solution is to use the code hints provided in the Javadoc comments to guide the building of the component library. For our running example in Figure~\ref{ex:deprecated-method-other}, the source code for the \texttt{getHours} method in class \texttt{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests replacing the deprecated \texttt{getHours}
+with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
 
 
 \begin{figure}
@@ -631,9 +692,9 @@ Note that this hint is not immediately usable. Some of the challenges
 for this example are:
 
 {\bf Challenge 1.}  Although it may seem as if
-method \code{get} is static allowing us to make an immediate call,
+method \texttt{get} is static allowing us to make an immediate call,
 it is actually an instance method, requiring us to have an object of
-class \code{Calendar}. However, no such object is available in the
+class \texttt{Calendar}. However, no such object is available in the
 original code meaning that it must be created by the refactored code.
 Consequently, we must populate the component library with the necessary
 components to create such an object by consuming existing objects.
@@ -652,8 +713,8 @@ adding infeasible programs to the search space.
 us to generate the required objects, we might also need
 components for initialising the new objects. For instance,
 in Figure~\ref{ex:deprecated-method-other}, we must call
-\code{calendar.setTime(date)} to set the calendar's date
-based on the existing \code{date} object.
+\texttt{calendar.setTime(date)} to set the calendar's date
+based on the existing \texttt{date} object.
 
 In Section~\ref{sec:components-seeding}, we provide in-depth details about the
 seeding of the component library and tackling the above challenges. 
@@ -775,7 +836,7 @@ To further increase our chances of finding a refactoring fast, we start with a r
 
 \paragraph{The core component library}
 As mentioned before, we make use of type and code hints to build the component library.
-In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \code{date} of type \code{Date} as the input to the code to be refactored. The objective is to weave together components that consume this object and generate the integer \code{hour}.
+In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \texttt{date} of type \texttt{Date} as the input to the code to be refactored. The objective is to weave together components that consume this object and generate the integer \texttt{hour}.
 %% While there are many methods in the Java standard library that return an integer without consuming an object of type $Date$, our intention is to only add those that allow using the input object.
 
 For this purpose, the starting point are the code hints provided by the Javadoc.
@@ -784,27 +845,27 @@ inputs to the deprecated code and produce the objects required to make use
 of the Javadoc hints.
 %
 For our running example, the hints are given in Figure~\ref{ex:code-hints}.
-These hints instruct us to add method \code{``int get(int field)''} from class
-\code{Calendar} and constant \code{``Calendar.HOUR_OF_DAY''} to our library.
-We actually fix the \code{``Calendar.HOUR_OF_DAY''} constant
-in place, thus adding \code{``int get(Calendar.HOUR_OF_DAY)''}.
+These hints instruct us to add method \texttt{``int get(int field)''} from class
+\texttt{Calendar} and constant \texttt{``Calendar.HOUR\_OF\_DAY''} to our library.
+We actually fix the \texttt{``Calendar.HOUR\_OF\_DAY''} constant
+in place, thus adding \texttt{``int get(Calendar.HOUR\_OF\_DAY)''}.
 
 The next step is to make sure that we can use the components in the library.
-For the running example, in order to be able to call method \code{get}, we require an object of
-type \code{Calendar} and our library doesn't contain any way of creating such an object.
+For the running example, in order to be able to call method \texttt{get}, we require an object of
+type \texttt{Calendar} and our library doesn't contain any way of creating such an object.
 Therefore, we must seed our component library with ways of generating such an object.
 
-We first scan all the public constructors of class \code{Calendar}
-and all the public methods from class \code{Calendar} that return an object of type \code{Calendar}. We find the following four options:
+We first scan all the public constructors of class \texttt{Calendar}
+and all the public methods from class \texttt{Calendar} that return an object of type \texttt{Calendar}. We find the following four options:
 
 \begin{enumerate}
-  \item \code{static Calendar	getInstance()} -- gets a calendar using the default time zone and locale.
-  \item \code{static Calendar getInstance(Locale aLocale)} -- gets a calendar using the default time zone and specified locale.
-  \item \code{static Calendar	getInstance(TimeZone zone)} -- gets a calendar using the specified time zone and default locale.
-  \item \code{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- gets a calendar with the specified time zone and locale.
+  \item \texttt{static Calendar	getInstance()} -- gets a calendar using the default time zone and locale.
+  \item \texttt{static Calendar getInstance(Locale aLocale)} -- gets a calendar using the default time zone and specified locale.
+  \item \texttt{static Calendar	getInstance(TimeZone zone)} -- gets a calendar using the specified time zone and default locale.
+  \item \texttt{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- gets a calendar with the specified time zone and locale.
 \end{enumerate}
 
-%% For our illustrating example, the only object used by the deprecated code is \code{Source\_Obj}=\{\code{date}\} with given type \code{Source\_Type}=\{\code{Date}\}. Using these, we need to obtain an object of type \code{Target\_Type}=\{\code{Calendar}\}, so that we can make use of the JavaDoc hint.  
+%% For our illustrating example, the only object used by the deprecated code is \texttt{Source\_Obj}=\{\texttt{date}\} with given type \texttt{Source\_Type}=\{\texttt{Date}\}. Using these, we need to obtain an object of type \texttt{Target\_Type}=\{\texttt{Calendar}\}, so that we can make use of the JavaDoc hint.  
 %
 Out of the four options above, we search for those for which we have the means to generate all their arguments and their receiver. We formally refer to such components as {\em realizable}.
 In Definition~\ref{def:realizable}, we make use of the $source\_types$, referring to types
@@ -812,7 +873,7 @@ for which we can generate objects and $required\_types(instr)$, meaning the requ
 for $instr$ to be realizable. In our running example, at the beginning,
 $source\_types=\{Date\}$ and $required\_types(get) = \{Integer, Calendar\}$, where the Integer
 corresponds to the argument and Calendar corresponds to the receiver. As for the core library,
-we fix the argument \code{``Calendar.HOUR_OF_DAY''}, we actually have $required\_types(get) = \{Calendar\}$.
+we fix the argument \texttt{``Calendar.HOUR\_OF\_DAY''}, we actually have $required\_types(get) = \{Calendar\}$.
 
 
 %% We call such an instruction {\em realizable}, according to Definition~\ref{def:realizable}.
@@ -825,7 +886,7 @@ Instruction \var{i} is {\em realizable} iff $\forall t \in required\_types(i). t
   
 \end{definition}
 
-Regarding the four methods in our example, the first one is realizable. Conversely, in order to call the second method, we would need to generate an object of type \code{Locale},
+Regarding the four methods in our example, the first one is realizable. Conversely, in order to call the second method, we would need to generate an object of type \texttt{Locale},
 for which purpose we don't have an instruction in the library.
 The last two methods are in a similar situation as the second. For the core library, we only add the first method.
 
@@ -858,7 +919,7 @@ we add that type to $source\_types$.
 
 %% In certain situations, the seeding of the component library may require additional work.
 %% For instance, for the example in Figure~\ref{ex:deprecated-method-other}, we need to also provide a way of obtaining
-%% a \code{Calendar} object. Thus, we add \code{Calendar.getInstance()}. 
+%% a \texttt{Calendar} object. Thus, we add \texttt{Calendar.getInstance()}. 
 
 \SetKwInOut{KwIn}{Input}
 \SetKwInOut{KwOut}{Output}
@@ -941,7 +1002,7 @@ In each iteration of the synthesis process, there are two phases, a synthesis an
 \paragraph{The synthesis phase} In this phase, we have 
 a finite set of input examples $\{\vec{i_1} \cdots \vec{i_n}\}$ and we must find a candidate refactoring
 that is observationally equivalent to the original code for the given inputs.
-For this purpose, we construct the following \code{Synthesise} method, which
+For this purpose, we construct the following \texttt{Synthesise} method, which
 takes the refactored code $P_2$ as input.
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -953,10 +1014,10 @@ Synthesise ($P_2$) {
 }
 \end{lstlisting}
 
-This method consists of only one conditional saying that if $P_1$ and $P_2$ are equivalent on all given inputs $\vec{i_1}, \cdots, \vec{i_n}$, then \code{assert(false)} is reached.
+This method consists of only one conditional saying that if $P_1$ and $P_2$ are equivalent on all given inputs $\vec{i_1}, \cdots, \vec{i_n}$, then \texttt{assert(false)} is reached.
 Given that this assertion always fails, it means that the method is unsafe when $P_1$ and $P_2$ are equivalent on the given inputs.
-Thus, we can reduce the synthesis problem to the problem of checking the safety of \code{Synthesise}. If a safety checker manages to
-find an input $P_2$ for which the assertion fails (meaning that \code{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs. This $P_2$ is the code
+Thus, we can reduce the synthesis problem to the problem of checking the safety of \texttt{Synthesise}. If a safety checker manages to
+find an input $P_2$ for which the assertion fails (meaning that \texttt{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs. This $P_2$ is the code
 that the synthesis phase is supposed to generate. As aforementioned, we use an existing coverage-guided property-based testing (i.e. fuzzing) technique
 as the safety checker. We configure the fuzzer such that it constructs $P_2$ by weaving together components from the component library.
 
@@ -969,11 +1030,11 @@ Consequently, we cannot guarantee that we will always find a refactoring wheneve
 Section~\ref{sec:fuzzing}.
 
 %% In other words, answering the initial question posed by the
-%% synthesis phase is now reduced to checking the safety of the \code{Synthesise} method.
-%% If the method is unsafe meaning that the assertion is reached and failed (if reached, the assertion \code{assert(false)} always fails)
+%% synthesis phase is now reduced to checking the safety of the \texttt{Synthesise} method.
+%% If the method is unsafe meaning that the assertion is reached and failed (if reached, the assertion \texttt{assert(false)} always fails)
 
 %% Again, we reduce the problem to be solved in the synthesis phase to
-%% the problem of checking the safety of the \code{Synthesise} method,
+%% the problem of checking the safety of the \texttt{Synthesise} method,
 %% which we do by fuzzing.
 %% The fuzzer will find an input \var{Candidate} that fails the assertion,
 %% meaning that it returns the same output as \texttt{Orig}
@@ -996,7 +1057,7 @@ Section~\ref{sec:fuzzing}.
 refactoring $P_2$ and we must check whether there exists any input
 $\vec{i}$ for which the original code and the candidate
 refactoring are not observationally equivalent.  To do this, we build
-the following \code{Verify} method, which given some input
+the following \texttt{Verify} method, which given some input
 $\vec{i}$, asserts that the two programs are equivalent for
 $\vec{i}$.
 
@@ -1008,16 +1069,16 @@ Verify($\vec{i}$) {
 
 In other words, answering the initial question posed by the verification
 phase is reduced to checking the safety of this method: if
-\code{Verify} is safe (i.e. the assertion is not violated) for any
+\texttt{Verify} is safe (i.e. the assertion is not violated) for any
 input $\vec{i}$, then there is no input that can distinguish
 between the original and the candidate refactoring (this
-is indeed a sound refactoring). However, if \code{Verify} is not safe,
+is indeed a sound refactoring). However, if \texttt{Verify} is not safe,
 then we want to be able to obtain a counterexample input
 $\vec{i_{cex}}$ for which the assertion fails.
 
 This counterexample will be provided back to the synthesis phase and
 used to refine the current candidate refactoring. Again, we check the
-safety of \code{Verify} with coverage-guided property-based testing,
+safety of \texttt{Verify} with coverage-guided property-based testing,
 which means that we may fail to find a distinguishing input when one
 does exist.
 
@@ -1152,13 +1213,13 @@ assigned equal objects by the executions of \var{P_1} and
 \var{P_2} on $\vec{i}$, respectively, and
 (3) the static fields of the loaded classes must be respectively equal.
 We check equality by recursively following attribute chains until we reach primitive types. We
-generally do not consider \code{equals} methods unless (1) the method was not written by the user
-(i.e. JCL classes), (2) the type inerits from \code{java.lang.Object}, (3) the class implements
-\code{java.lang.Comparable} and (4) the type declares an \code{equals} implementation. Examples
-of classes which satisfy these strict requirements are \code{java.lang.Integer} or
-\code{java.util.Date}. All other \code{equals} implementations are considered unreliable and
+generally do not consider \texttt{equals} methods unless (1) the method was not written by the user
+(i.e. JCL classes), (2) the type inerits from \texttt{java.lang.Object}, (3) the class implements
+\texttt{java.lang.Comparable} and (4) the type declares an \texttt{equals} implementation. Examples
+of classes which satisfy these strict requirements are \texttt{java.lang.Integer} or
+\texttt{java.util.Date}. All other \texttt{equals} implementations are considered unreliable and
 ignored.
-%Alternatively, if there is an explicit \code{equals} implemented for a given type, then we use it.
+%Alternatively, if there is an explicit \texttt{equals} implemented for a given type, then we use it.
 %% By equal objects we mean objects where the values of the
 %% corresponding attributes are equal.
 
@@ -1205,8 +1266,8 @@ and check that the initial state of that class is the same for both blocks of co
 When expressing the equivalence relation between \var{P_1} and \var{P_2}, we intentionally missed one important aspect,
 namely aliasing. To understand the problem let's look a the following example, which makes use of java.awt.Container,
 where a generic Abstract Window Toolkit (AWT) container object is a component that can contain other AWT components.
-Method \code{preferredSize} used by the original code below returns the preferred size of the calling container \code{container}.
-However, \code{preferredSize} is deprecated, and, instead, the refactored version uses \code{getPreferredSize}.
+Method \texttt{preferredSize} used by the original code below returns the preferred size of the calling container \texttt{container}.
+However, \texttt{preferredSize} is deprecated, and, instead, the refactored version uses \texttt{getPreferredSize}.
 
 %, which denotes a slightly
 %modified version of the running example.
@@ -1251,7 +1312,7 @@ We note that, the original code above defines two variables \var{dim1} and
 \var{dim2}, each assigned an object of type \texttt{Dimension} returned by calling
 \var{container.preferredSize()}.
 Conversely, in the refactored code, \var{dim1} and \var{dim2} are aliases, i.e. they point to the same
-object of type \code{Dimension}.
+object of type \texttt{Dimension}.
 
 The original and the refactored code are equivalent according to Definition~\ref{def:prog-equiv}.
 Let's next assume that the following code
@@ -1272,7 +1333,7 @@ In the original code, \var{dim1} will have width 1 and height 2, whereas in the 
 \var{dim1} will have width 2 and height 3. This is due to the fact that,
 in the refactored code, \var{dim1} and \var{dim2} are aliases. %% Then, when the object referenced by
 %% \var{hour1} was changed to refer to the date denoting ``30/10/2020'', this also affected \var{date2}.
-Thus, when \var{dim2} has its size set to (2,3), this also affects the object \code{dim1} is referencing.
+Thus, when \var{dim2} has its size set to (2,3), this also affects the object \texttt{dim1} is referencing.
 %\var{P_3} and \var{P_4} are not equivalent for input \var{d}.
 \end{example}  
 
@@ -1554,8 +1615,8 @@ The former task in particular is a difficult setting for fuzzing because program
 highly structured, whereas fuzzers often work with unstructured inputs
 that can be generated via byte-level mutations such as bit flips.
 
-JQF is designed to handle structured inputs, where inputs of type \code{T}
-are generated by a backing \code{Generator<T>}. JQF provides a library of
+JQF is designed to handle structured inputs, where inputs of type \texttt{T}
+are generated by a backing \texttt{Generator<T>}. JQF provides a library of
 generators for basic types such as primitive values. We implement custom
 JQF generators for the synthesis and verification phase of the CEGIS loop. In
 the case of the former the generator produces candidate programs, in the latter
@@ -1614,7 +1675,7 @@ Then, we enforce aliasing preservation (condition (4) in Definition~\ref{def:pro
 by checking that, for all variables defined by both the original and the refactored code,
 the objects they reference have the same symbolic id.
 
-For illustration, in the original code in Example~\ref{ex:aliasing}, the object of type \code{Dimension} referenced by variable \var{dim1}
+For illustration, in the original code in Example~\ref{ex:aliasing}, the object of type \texttt{Dimension} referenced by variable \var{dim1}
 is assigned symbolic value \var{s_1}, whereas the object referenced by \var{dim2} is assigned symbolic value \var{s_2}.
 In a similar manner, the object referenced by both \var{dim1} and \var{dim2} in the refactored code is assigned value \var{s_1}.
 Then, the aliasing check fails as, in the original code, the object referenced by \var{dim2} has symbolic value \var{s_2},
@@ -1658,8 +1719,8 @@ potential overrides of the method to refactor. This may lead to unsound results
 when different subclasses of the original class are used polymorphically in the
 refactored context.
 
-Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on \code{equals}
-implementations for equivalence comparison. While we strictly filter which \code{equals}
+Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on \texttt{equals}
+implementations for equivalence comparison. While we strictly filter which \texttt{equals}
 implementations we consider, if any of them do not accurately assess an equivalent program state, 
 our refactoring may prove unsound at runtime.
 
@@ -1719,14 +1780,14 @@ inputs. Classes which do not maintain a static state are loaded in a shared
 parent class loader to improve performance.
 
 The OpenJDK Java virtual machine implementation does not allow us to load
-classes contained in the \code{java.lang} package in such an isolated class
+classes contained in the \texttt{java.lang} package in such an isolated class
 loader. For such classes we cannot apply refactorings which depend on static
 fields, as they cannot be reset and will retain the state of previous
 executions. Instead of observing the effect of one isolated refactoring
 candidate, we would observe their accumulated effect, leading to both
 incompleteness and unsoundness depending on the context. For the scope of our
 experiments this did not pose a problem, since most of the affected classes in
-the \code{java.lang} package do not maintain a static state, and the ones who do
+the \texttt{java.lang} package do not maintain a static state, and the ones who do
 were irrelevant to our refactorings.
 
 %Everything that is part of our comparison is in the isolated class loader.
@@ -1827,14 +1888,14 @@ have the option to extend this list with a custom configuration. This is
 particularly useful when the default behaviour of mocked objects affect the
 refactoring, and thus mocked objects as under-approximation could lead to
 spurious solutions. A trivial example of this limitation is refactoring the
-method \code{layout} in the abstract class \code{java.awt.Component}. The
+method \texttt{layout} in the abstract class \texttt{java.awt.Component}. The
 method is not abstract, but has an empty body and is meant to be overriden by
 subclasses. Using this empty body as a specification will only guranatee a sound
 refactoring for subclasses which do not override it. Our approach is still
-guaranteed to find the preferred refactoring of using \code{doLayout} instead,
+guaranteed to find the preferred refactoring of using \texttt{doLayout} instead,
 since we take the Javadoc hint into account. However, a more complete approach
 in general would be to fuzz against all available subclasses of
-\code{Component} on the classpath.
+\texttt{Component} on the classpath.
 
 We explicitly avoid constructors which are not amenable to fuzzing, such as
 collection constructors which take an integer capacity argument, where an
@@ -1844,14 +1905,14 @@ unlucky fuzzed input might lead to an out of memory error.
 
 As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
 interpret Javadoc hints. % provided by the developer.
-in particular, \code{@code} blocks inside \code{@deprecated} sections are interpreted as code
+in particular, \texttt{@code} blocks inside \texttt{@deprecated} sections are interpreted as code
 hints, and we attempt to parse them as Java expressions. Since code hints are
 not always expressed as well-formed Java, we customised the
 GitHub Java parser
 %%framework
 to accept undeclared identifiers and type names
 as arguments. For instance, the Javadoc hint in Figure~\ref{ex:javadoc-hint} suggests using
-\code{contains(int, int)}, which would normally cause a parsing error as the \code{int} type
+\texttt{contains(int, int)}, which would normally cause a parsing error as the \texttt{int} type
 appears in the place of argument names. In our setting, we accept this hint as valid.
 
 %% provides an example of
@@ -1882,7 +1943,7 @@ public boolean inside(int X, int Y) {
 \end{figure}
 
 Additionally, the code example is parsed as if it were invoked in the context of
-the method to refactor, such that imports or the implicit \code{this} argument
+the method to refactor, such that imports or the implicit \texttt{this} argument
 are considered during parsing.
 
 \section{Experimental results}\label{sec:experimental-results}
@@ -1919,18 +1980,18 @@ parts of the input domain. In such a case, the deprecated and the new
 feature may not be semantically equivalent on the entire input domain.
 
 For illustration, let's consider the example in Figure~\ref{ex:three-dates}.
-In the example, we make use of the constructor \code{new Date(year, month, day)}, 
+In the example, we make use of the constructor \texttt{new Date(year, month, day)}, 
 which is deprecated with the 
-recommendation to use the \code{Calendar} class instead.
+recommendation to use the \texttt{Calendar} class instead.
 The refactoring is not trivial given that the 
-\code{Date} constructor expects its year parameter to be an offset
+\texttt{Date} constructor expects its year parameter to be an offset
 from 1900.  This needs to be
-transformed by adding 1900 when using \code{Calendar} API, as shown in the
+transformed by adding 1900 when using \texttt{Calendar} API, as shown in the
 example. Moreover, as already seen in the motivational example in  Figure~\ref{ex:deprecated-method-other},
-the \code{Calendar} constructor is protected,
-meaning that we must use \code{getInstance} to obtain a
-\code{Calendar} object.
-Alternatively, the \code{GregorianCalendar} class may be used with
+the \texttt{Calendar} constructor is protected,
+meaning that we must use \texttt{getInstance} to obtain a
+\texttt{Calendar} object.
+Alternatively, the \texttt{GregorianCalendar} class may be used with
 similar difficulties.
 In the example, we use \var{date1}, \var{date2} and \var{date3} to denote the three distinct ways of constructing a date.
 
@@ -2124,7 +2185,7 @@ provided by property-based testing.
 
 Closer to our work, several refactoring techniques make explicit use of some form of semantic information.
 %With respect to automated program refactoring,
-Khatchadourian et al. use a type inference algorithm to automatically transform legacy Java code (pre Java 1.5) to use the \code{enum} construct~\cite{sawin}.
+Khatchadourian et al. use a type inference algorithm to automatically transform legacy Java code (pre Java 1.5) to use the \texttt{enum} construct~\cite{sawin}.
 %\cite{sawin} by Sawin et al.,
 Other automated refactoring techniques aim to transform programs into a particular design pattern~\cite{chris,bae}.
 %In \cite{bae}, Bae et al. propose an automated approach to
