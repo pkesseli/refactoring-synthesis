@@ -123,7 +123,7 @@
                                   % (paid open-access papers, 
                                   % short abstracts)
 
-\title{Refactoring of Java deprecated guided by types and code hints}
+\title{Automatic refactoring of deprecated APIs} % guided by types and code hints}
 %\subtitle{Subtitle Text, if any}
 % double-blind submission
 % single-blind only for Technical Research: http://icse2017.gatech.edu/technical-research-cfp
@@ -189,10 +189,12 @@
   semantic information about the code. Our refactoring procedure
   performs semantic reasoning and search in the space of possible
   refactorings using automated program synthesis. In particular, the
-  program synthesis is guided by code hints and type information. We
-  encode both the synthesis of refactoring candidates and their
-  verification as program safety problems that we then solve with
-  coverage-guided property-based testing.  We implemented our
+  program synthesis is guided by code hints and type information and makes use of
+  coverage-guided property-based testing. %% We
+  %% encode both the synthesis of refactoring candidates and their
+  %% verification as program safety problems that we then solve with
+  %% coverage-guided property-based testing.
+  We implemented our
   technique in the tool ?? and used it to refactor a considerable
   proportion of the methods deprecated in jdk15.
   %
