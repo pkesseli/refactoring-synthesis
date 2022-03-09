@@ -281,8 +281,8 @@ the closest paper to our current proposal
 %deprecated usages,
 replaces calls
 to deprecated methods by their
-bodies~\cite{DBLP:conf/paste/Perkins05}.  The issue is that, frequently, this
-strategy doesn't follow the intention of the language designers, who
+bodies~\cite{DBLP:conf/paste/Perkins05}.  The issue is that, this
+strategy doesn't usually follow the intention of the language designers, who
 use deprecation to signal that there is a safer and generally better
 way of achieving a given goal.  Moreover, inlining calls to deprecated
 methods can cause undesirable effects if the original function was
@@ -295,11 +295,14 @@ not guaranteed after inlining the method's body.
 %% focusing on replacing calls to deprecated methods by their
 %% bodies~\cite{DBLP:conf/paste/Perkins05}. 
 
-Another closely related class of works focuses on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. However, change rules don't provide the actual code to be used in order to perform the replacement (lines 6-8 in Figure~\ref{ex:deprecated-method-other}). Instead, the programmer is still required to perform a lot of the work
-manually. This is a time-consuming and error-prone process, especially as the programmer
-is left to guarantee that the way in which she performed the replacement
-does not change the functionality of
-the code. Indeed, the hardest part about such refactorings is that they must preserve observational equivalence, i.e. they must preserve the code's behaviour.
+Another closely related class of works focuses on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. Notably, {\em change rules are different from refactorings} as they don't provide the actual replacement code. Instead, the programmer is still required to perform a lot of the work
+manually: for instance, she has to figure out lines 6-8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
+responsibility of guaranteeing that the refactored code maintains the original behaviour
+is left to the programmer.
+%% programmer
+%% is left to guarantee that the way in which she performed the replacement
+%% does not change the functionality of
+%% the code. Indeed, the hardest part about such refactorings is that they must preserve observational equivalence, i.e. they must preserve the code's behaviour.
 
 %% For instance, in~\cite{}, Huang et al. attempt to find replacements for missing APIs
 %% (an API is considered as a public method in a public class). This includes APIs
@@ -317,28 +320,25 @@ the code. Indeed, the hardest part about such refactorings is that they must pre
 
 
 
-Consequently, the majority of
-refactorings removing deprecated instances are done manually, which is a costly,
-time-intensive, and not least error-prone process.  This situation is
-also a real issue for legacy code that makes use of deprecated APIs
-that need to be replaced with latest APIs/libraries.
+%% Consequently, the majority of
+%% refactorings removing deprecated instances are done manually, which is a costly,
+%% time-intensive, and not least error-prone process.  This situation is
+%% also a real issue for legacy code that makes use of deprecated APIs
+%% that need to be replaced with latest APIs/libraries.
 
-The main cause of difficulty when replacing deprecated instances lies
-with the fact that refactorings should not change the functionality of
-the code, i.e., they must preserve observational equivalence.
-Ensuring observational equivalence is far from trivial.
+%% The main cause of difficulty when replacing deprecated instances lies
+%% with the fact that refactorings should not change the functionality of
+%% the code, i.e., they must preserve observational equivalence.
+%% Ensuring observational equivalence is far from trivial.
 
 
 For
 illustration, when referring back to the example in
 Figure~\ref{ex:deprecated-method-other}, it's not immediately
-obvious that the original and the refactored code behave in an identical manner.
-Indeed, one needs to understand the
-code's semantics in order to reach this conclusion.
-
-that the refactoring maintains
-the same functionality.
-
+obvious that the original and the refactored code behave in the same manner.
+One needs a good understanding of the
+code's semantics in order to reach such a conclusion.
+%
 %% For instance,
 %% inlining calls to deprecated methods can break equivalence if the
 %% original function was synchronised.  While it is not possible for two
@@ -349,10 +349,10 @@ the same functionality.
 %% the "Extract Local Variable..." refactoring integrated in Eclipse 4.21.0
 %% inadvertently removes synchronisation for the evaluation of the expression
 %% $x > 0$.
-
+%
 %% \begin{minipage}{.23\textwidth}
 %% \begin{lstlisting}[mathescape=true,showstringspaces=false]
-
+%
 %% synchronized (this) {
 %%   if (x > 0) {
 %%     foo();
@@ -387,25 +387,24 @@ the same functionality.
 %% \label{ex:unsound-refactoring-refactored}
 %% \end{minipage}
 %% \vspace{0.8em}
-
+%
 %% Another example of a refactoring that unintuitively breaks
 %% observational equivalence is given in Figure~\ref{}.
 %% \todo{add example here.}
-
-Consequently, refactorings that rely solely on a program's syntax
+%
+Indeed, refactorings that rely solely on a program's syntax
 and do not consider its semantics end up
 being overly conservative, mostly addressing structural changes
 to the program.  
-
 The observation that 
 %Ohter works have made the observation that 
-identifying refactoring candidates generally requires a semantic analysis of a program is not new~\cite{Kataoka:2001:ASP:846228.848644}.
-Notably, the limitations of syntax-driven refactorings have been observed
-in several works, resulting in an emerging trend to incorporate more {\em semantic}
-information into refactoring decisions, such as Abstract Syntax Tree (AST) 
-type information,
-further preventing compilation errors and behaviour changes
-\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
+refactoring generally benefits from semantic analyses of a program is not new, e.g. previous works made use of program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
+%% Notably, the limitations of syntax-driven refactorings have been observed
+%% in several works, resulting in an emerging trend to incorporate more {\em semantic}
+%% information into refactoring decisions, such as Abstract Syntax Tree (AST) 
+%% type information,
+%% further preventing compilation errors and behaviour changes
+%% \cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
 
 
 %
@@ -465,7 +464,9 @@ further preventing compilation errors and behaviour changes
 %% further preventing compilation errors and behaviour changes
 %% \cite{Steimann2011}.
 
-In this paper, we propose to use techniques from program synthesis in order to
+\paragraph{Program refactoring via program synthesis} In this paper, we propose an
+automated refactoring technique for replacing uses of deprecated APIs. 
+The proposed technique makes use of program synthesis in order to
 incorporate semantic information about the
 code into the refactoring process.
 %take a step further in this direction by proposing a
@@ -480,18 +481,20 @@ technique can be applied to deprecated fields and classes.
 
 Although powerful, program synthesis is very hard due to the vast search space, i.e. space of possible programs that must be considered. Thus, its success is generally relient on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
 %
-The vast search space is particularly a challenge in the current setting given that, in the absence of any additional guidance, the entire \texttt{java.lang} needs to be considered during code generation.
-In order to prune the search space, we start by investigating the information available to our synthesis procedure.
+The vast search space is particularly a challenge in the current setting given that, in the absence of any additional guidance, the entire \texttt{java.lang} could be considered when synthesising the refactoring.
+In order to prune the search space, we start by investigating the information available to our refactoring procedure.
 %The information that we are going to use to direct
 %\begin{itemize}
 
-{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists on the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, they are not sufficient in the current scenario. %, where the number of possible programs where considering \texttt{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
+{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists on the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient in the current scenario. %, where the number of possible programs where considering \texttt{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
 
-{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@deprecated} Javadoc tag is used in the
+{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
   comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show in Section~\ref{sec:overview}, these hints
   don't provide the whole refactoring, but can be used to guide the search process.
-
-  {\bf (3)} One last information we have about the code to be generated is that it needs to be {\em semantically equivalent to the original}. %While this does provide us with the {\em semantics of the
+While code hints have been previously used to generate change rules~\cite{DBLP:conf/kbse/Huang0PW021}, our aim is to generate complete refactorings.
+  
+  {\bf (3)} One last information we have about the code to be generated is that it needs to be {\em semantically equivalent to the original}, meaning that they must preserve its behaviour. %While this does provide us with the {\em semantics of the
   %code to be generated}, it's not easy to use. 
 %* This is not enough to decide semantic equivalence, which, as discussed above, is one of the main difficulties in this refactoring.
   However, formally proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
@@ -588,9 +591,11 @@ our experiments show that, when considering a large number of test inputs, the r
 
 \begin{itemize}
 
-\item We propose a semantics based approach to eliminate uses of deprecated APIs, which employs program synthesis.
+\item We propose a program synthesis based technique for refactoring uses of deprecated APIs, which incorporates semantic information about the code. In particular, the program synthesis is guided by code hints and type information.
 
-\item We propose a greybox program synthesis technique that is driven by type information and code hints, and relies on coverage-guided property-based testing.
+\item We encode both the synthesis of refactoring candidates, and their verification as program safety problems that we then solve with coverage-guided property-based testing.
+
+  %% propose a program synthesis technique that is driven by type information and code hints, and relies on coverage-guided property-based testing.
   
 %\item We provide a technique for building the component library that is guided by code hints and types.
   
@@ -605,7 +610,7 @@ our experiments show that, when considering a large number of test inputs, the r
 %%   with no context and gradually increase the amount of context we take into consideration
 %%   until a desirable refactoring is found.
 
-\item We Implemented our technique in the tool ?? and used it to refactor the methods deprecated in jdk15.
+\item We implemented our technique in the tool ?? and used it to refactor the methods deprecated in jdk15.
   %refactor deprecated instances in X open source projects.
   
 \end{itemize}  
