@@ -16,6 +16,7 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
+import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
@@ -132,8 +133,14 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
   private void visitIntBinaryExpression(final BinaryExpr node, final IExpression lhs, final IExpression rhs) {
     final IExpression binaryExpression;
     switch (node.getOperator()) {
+      case DIVIDE:
+        binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Divide(lhs, rhs);
+        break;
       case MINUS:
         binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Minus(lhs, rhs);
+        break;
+      case MULTIPLY:
+        binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Multiply(lhs, rhs);
         break;
       case PLUS:
         binaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Plus(lhs, rhs);
@@ -142,6 +149,46 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
         throw new UnsupportedOperationException();
     }
     stack.add(binaryExpression);
+  }
+
+  
+  @Override
+  public void visit(final UnaryExpr n, final Void arg) {
+    super.visit(n, arg);
+    final Type type = getType(n);
+    if (!type.isPrimitiveType()) {
+      throw new UnsupportedOperationException();
+    }
+
+    final IExpression op = stack.removeLast();
+    final PrimitiveType primitiveType = type.asPrimitiveType();
+    switch (primitiveType.getType()) {
+      case INT:
+        visitIntUnaryExpression(n, op);
+        break;
+      default:
+        throw new UnsupportedOperationException();
+    }
+  }
+
+    /**
+   * Assumes that the type of {@code node} is {@code int} and puts an integer
+   * unary expression on {@link #stack}.
+   * 
+   * @param node {@link BinaryExpr} to convert.
+   * @param lhs  {@link IExpression} operand.
+   */
+  private void visitIntUnaryExpression(final UnaryExpr node, final IExpression op) {
+    final IExpression zero = new Literal(0, PrimitiveType.intType());
+    final IExpression unaryExpression;
+    switch (node.getOperator()) {
+      case MINUS:
+        unaryExpression = new uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Integer.Minus(zero, op);
+        break;
+      default:
+        throw new UnsupportedOperationException();
+    }
+    stack.add(unaryExpression);
   }
 
   @Override
@@ -159,8 +206,10 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
       }
       instance = stack.removeLast();
     }
-    final List<IExpression> arguments = new ArrayList<IExpression>(stack);
-    stack.clear();
+    final int numberOfArguments = n.getArguments().size();
+    final List<IExpression> arguments = new ArrayList<>(numberOfArguments);
+    for (int i = 0; i < numberOfArguments; ++i)
+      arguments.add(stack.removeLast());
 
     final String fullyQualifiedClassName = method.declaringType().getQualifiedName();
     involvedClasses.add(fullyQualifiedClassName);

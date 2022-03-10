@@ -47,6 +47,31 @@ public final class Integer {
     }
   }
 
+  public static class Divide extends BinaryExpression<java.lang.Integer> {
+    public Divide(final IExpression lhs, final IExpression rhs) {
+      super(lhs, Operator.DIVIDE, rhs, PrimitiveType.intType());
+    }
+
+    @Override
+    public java.lang.Integer evaluate(final ExecutionContext context) throws ClassNotFoundException,
+        InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+      return getLhs(context) / getRhs(context);
+    }
+  }
+
+  
+  public static class Multiply extends BinaryExpression<java.lang.Integer> {
+    public Multiply(final IExpression lhs, final IExpression rhs) {
+      super(lhs, Operator.MULTIPLY, rhs, PrimitiveType.intType());
+    }
+
+    @Override
+    public java.lang.Integer evaluate(final ExecutionContext context) throws ClassNotFoundException,
+        InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+      return getLhs(context) * getRhs(context);
+    }
+  }
+
   /**
    * Helper to register int expressions in Java candidate builders.
    * 

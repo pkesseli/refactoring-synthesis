@@ -31,6 +31,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.Component;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.FunctionComponent;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeMethod;
@@ -63,6 +64,28 @@ public class JavaDocSeedTest {
     final Calendar calendar = Calendar.getInstance();
     final int expected = 10;
     calendar.set(field, expected);
+    final State state = new State(calendar);
+    final ExecutionContext context = new ExecutionContext(classLoader, state);
+    final Object actual = invokeMethod.evaluate(context);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void javaUtilDateGetTimezoneOffset() throws Exception {
+    final MethodIdentifier methodIdentifier = new MethodIdentifier("java.util.Date", "getTimezoneOffset",
+        Collections.emptyList());
+    javaDocSeed(methodIdentifier);
+
+    final List<Component<JavaLanguageKey, Object>> seeded = components
+        .get(JavaLanguageKeys.expression(PrimitiveType.intType()), 1).collect(Collectors.toList());
+    assertThat(seeded, hasItem(isA(SnippetComponent.class)));
+    final Component<JavaLanguageKey, Object> component = seeded.get(0);
+    final IExpression invokeMethod = (IExpression) component.construct(new Object[] {
+        This.create(TypeFactory.create(Calendar.class)), This.create(TypeFactory.create(Calendar.class)) });
+
+    final Calendar calendar = Calendar.getInstance();
+    @SuppressWarnings("deprecation")
+    final int expected = calendar.getTime().getTimezoneOffset();
     final State state = new State(calendar);
     final ExecutionContext context = new ExecutionContext(classLoader, state);
     final Object actual = invokeMethod.evaluate(context);
