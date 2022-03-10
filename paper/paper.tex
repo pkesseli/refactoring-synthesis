@@ -650,11 +650,13 @@ our experiments show that, when considering a large number of test inputs, the r
 \section{Overview of our approach} \label{sec:overview}
 
 As mentioned in Section~\ref{sec:intro}, our approach employs program synthesis
-in order to generate a refactoring that is semantically equivalent to the original code and
+in order to generate a refactoring that
+%is semantically equivalent to
+preserves the behaviour of the original code and
 does not use deprecated APIs.
-Essentially, the new code is obtained by composing methods
+At a high level, the new code is obtained by composing methods
 that are accessible from that respective location. 
-Consequently, we make use of component-based program synthesis,
+Consequently, we take inspiration from component-based program synthesis,
 which weaves together components from a library
 (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
 %Component-based program synthesis allows us to 
@@ -662,9 +664,9 @@ which weaves together components from a library
 %% While powerful, program synthesis is very hard due to the vast
 %% search space. In particular,
 For component-based synthesis, real-world
-APIs can be very large. %, making synthesis infeasible.
+APIs can quickly lead to very large component libraries. %, making synthesis infeasible.
 For illustration, in our setting, indiscriminately adding all members
-found in \texttt{java.lang} would make synthesis infeasible (see experimental results in Section~\ref{sec:experimental-results}).
+found in \texttt{java.lang} would make synthesis infeasible. % (see experimental results in Section~\ref{sec:experimental-results}).
 %% In general program synthesis is very difficult. One of the main
 %% challenges is the very large search space.
 %% The objective of recent
@@ -679,10 +681,11 @@ found in \texttt{java.lang} would make synthesis infeasible (see experimental re
 Previous works have used type information to make components-based synthesis
 feasible in the presence of large component
 libraries~\cite{DBLP:conf/popl/FengM0DR17}.  However, as shown by our
-experimental results discussed in
-Section~\ref{sec:experimental-results}, the use of types in our setting is insufficient
-for obtaining a fast refactoring technique that is able to
-provide hints to the developer on-the-fly.
+experimental results in
+Section~\ref{sec:experimental-results}, the use of types in our setting is still insufficient
+for obtaining an efficient refactoring technique.
+%that is able to
+%provide hints to the developer on-the-fly.
 %
 %% For related work:
 %% However, that worked well when the generated code
@@ -721,22 +724,23 @@ original code meaning that it must be created by the refactored code.
 Consequently, we must populate the component library with the necessary
 components to create such an object by consuming existing objects.
 
-{\bf Challenge 2.} Adding too many components to the library will
-make the synthesis task unfeasible. In particular, we should
-be able to differentiate between components that we can use
-(we have or are able to generate
-all the necessary objects for calling them), and those
-that we can't because we can't obtain some of the arguments
-and/or receiver. Adding the latter to the library will
-significantly slow down the synthesis process by
-adding infeasible programs to the search space.
-
-{\bf Challenge 3.} Besides adding components that allow
-us to generate the required objects, we might also need
-components for initialising the new objects. For instance,
+{\bf Challenge 2.} Besides adding components that allow
+us to generate the required objects, we also need
+components for setting their fields. For instance,
 in Figure~\ref{ex:deprecated-method-other}, we must call
 \texttt{calendar.setTime(date)} to set the calendar's date
 based on the existing \texttt{date} object.
+
+{\bf Challenge 3.} Adding too many components to the library will
+make the synthesis task unfeasible. In particular, we should
+be able to differentiate between components that we can use
+(we have or we are able to generate
+all the necessary arguments and the current object for calling them), and those
+that we can't because we can't obtain some of the arguments
+and/or the current object. Adding the latter components to the library will
+significantly slow down the synthesis process by
+adding infeasible programs to the search space.
+
 
 In Section~\ref{sec:components-seeding}, we provide in-depth details about the
 seeding of the component library and tackling the above challenges. 
