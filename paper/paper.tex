@@ -1406,7 +1406,7 @@ Next, we complete Definition~\ref{def:prog-equiv} by capturing the aliasing aspe
   with respect to $\vec{i}$ iff:
 \[
     \begin{aligned}
-      & (4)~ \forall v_1,v_2 \in liveVar(P_1) \cup staticFields(loadedClasses(P_1)). \\
+      & (4)~ \forall v_1,v_2 \in \mathit{liveVar}(P_1) \cup \mathit{staticFields}(loadedClasses(P_1)). \\
       & \qquad aliases(P_1, v_1, v_2) \Rightarrow aliases(P_2, v_1,v_2)      
     %% & (5)~\forall f_1,f_2 \in staticFields(loadedClasses(P_1)).\\
     %%   & \qquad aliases(P_1, f_1, f_2) \Rightarrow aliases(P_2, f_1,f_2)
