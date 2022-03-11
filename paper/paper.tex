@@ -1242,7 +1242,7 @@ We check equality by recursively following attribute chains until we reach primi
 generally do not consider \texttt{equals} methods unless (1) the method was not written by the user
 (i.e. JCL classes), (2) the type inerits from \texttt{java.lang.Object}, (3) the class implements
 \texttt{java.lang.Comparable} and (4) the type declares an \texttt{equals} implementation. Examples
-of classes which satisfy these strict requirements are \texttt{java.lang.Integer} or
+of classes that satisfy these strict requirements are \texttt{java.lang.Integer} or
 \texttt{java.util.Date}. All other \texttt{equals} implementations are considered unreliable and
 ignored.
 %Alternatively, if there is an explicit \texttt{equals} implemented for a given type, then we use it.
