@@ -496,7 +496,7 @@ technique can be applied to deprecated fields and classes.
 %% the program synthesis technique will be guided by {\em code hints}
 %% and {\em types}, as well 
 
-Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally relient on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
+Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
 %
 The vast search space is particularly a challenge in the current setting given that, in the absence of any additional guidance, the entire \texttt{java.lang} could be considered when synthesising the refactoring.
 In order to prune the search space, we start by investigating the information available to our refactoring procedure.
