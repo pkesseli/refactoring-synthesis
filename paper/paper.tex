@@ -1208,11 +1208,11 @@ then $E[P(\vec{i})]$ maps each variable defined in \var{P} to the latest object 
 Next, we define the notion of equivalence with respect to a concrete input $\vec{i}$ (this definition is incomplete and we will build up on it in the rest of the section).
 
 \begin{definition}[Program equivalence with respect to a concrete input $\vec{i}$ {\bf[partial]}]\label{def:prog-equiv}
-  Given two code blocks \var{P_1} and \var{P_2} and concrete input $\vec{i}$,
+  Given two code blocks \var{P_1} and \var{P_2} and concrete input~$\vec{i}$,
   we say that \var{P_1} and \var{P_2} are equivalent
   with respect to $\vec{i}$, written as $equivalent(P_1(\vec{i}), P_2(\vec{i}))$
   if and only if the following conditions hold:
-
+%
 \[
 \begin{aligned}
   & (1) exc(P_1, \vec{i})=\{e_1\} \wedge exc(P_2, \vec{i})=\{e_2\} \wedge equals(e_1,e_2) ~\vee\\
