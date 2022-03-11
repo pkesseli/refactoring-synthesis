@@ -1751,10 +1751,11 @@ potential overrides of the method to refactor. This may lead to unsound results
 when different subclasses of the original class are used polymorphically in the
 refactored context.
 
-Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on \texttt{equals}
-implementations for equivalence comparison. While we strictly filter which \texttt{equals}
-implementations we consider, if any of them do not accurately assess an equivalent program state, 
-our refactoring may prove unsound at runtime.
+Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on
+\texttt{equals} implementations for equivalence comparison.  While we
+strictly filter which \texttt{equals} implementations we consider, if any of
+them do not accurately identify an equivalent program state, our refactoring
+may prove unsound at runtime.
 
 %%However, we make no guarantee about correctness with respect to such operations
 %% anyway, whether static or instance state.}
