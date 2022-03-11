@@ -959,11 +959,11 @@ we add that type to $source\_types$.
  Add instructions from the code hints to the library\;
  \For{instr $\in$ library}{
    \If{$\neg$realizable(instr)}{
-     \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} source\_types$}{
+     \For{$type {\in} required\_types(instr) ~\wedge~ type {\not\in} source\_types$}{
        $generators = realizable\_constructors(type) \cup realizable\_methods\_returning\_type(type)$\;
        $modifiers = realizable\_methods\_with\_receiver\_of\_type(type)$\;
        Add $generators$ to the library\;
-       Add $modifiers$ to the library\;
+       Add $\mathit{modifiers}$ to the library\;
        \If{$generators \neq \emptyset$}{$source\_types = source\_types \cup\{type\} $}
      }
    }
