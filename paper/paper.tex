@@ -1808,13 +1808,13 @@ independent copies of its static fields.
 In order to fully isolate the program state during the execution of the original
 and refactored code from each other, we load all invovled classes in separate
 class loaders. These class loaders are disposed immediately after the curent set
-of fuzzed inputs were executed, and new class loaders are created for the next
-inputs. Classes which do not maintain a static state are loaded in a shared
+of fuzzed inputs are executed, and new class loaders are created for the next
+inputs. Classes that do not maintain a static state are loaded in a shared
 parent class loader to improve performance.
 
 The OpenJDK Java virtual machine implementation does not allow us to load
 classes contained in the \texttt{java.lang} package in such an isolated class
-loader. For such classes we cannot apply refactorings which depend on static
+loader. For such classes we cannot apply refactorings that depend on static
 fields, as they cannot be reset and will retain the state of previous
 executions. Instead of observing the effect of one isolated refactoring
 candidate, we would observe their accumulated effect, leading to both
@@ -1924,14 +1924,14 @@ spurious solutions. A trivial example of this limitation is refactoring the
 method \texttt{layout} in the abstract class \texttt{java.awt.Component}. The
 method is not abstract, but has an empty body and is meant to be overriden by
 subclasses. Using this empty body as a specification will only guranatee a sound
-refactoring for subclasses which do not override it. Our approach is still
+refactoring for subclasses that do not override it. Our approach is still
 guaranteed to find the preferred refactoring of using \texttt{doLayout} instead,
 since we take the Javadoc hint into account. However, a more complete approach
 in general would be to fuzz against all available subclasses of
 \texttt{Component} on the classpath.
 
-We explicitly avoid constructors which are not amenable to fuzzing, such as
-collection constructors which take an integer capacity argument, where an
+We explicitly avoid constructors that are not amenable to fuzzing, such as
+collection constructors that take an integer capacity argument, where an
 unlucky fuzzed input might lead to an out of memory error.
 
 \subsection{Parsing the @code hints}
