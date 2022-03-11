@@ -313,7 +313,7 @@ not guaranteed after inlining the method's body.
 %% bodies~\cite{DBLP:conf/paste/Perkins05}. 
 
 Another closely related class of works focuses on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. Notably, {\em change rules are different from refactorings} as they don't provide the actual replacement code. Instead, the programmer is still required to perform a lot of the work
-manually: for instance, she has to figure out lines 6-8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
+manually: for instance, she has to figure out lines 6--8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
 responsibility of guaranteeing that the refactored code maintains the original behaviour
 is left to the programmer.
 %% programmer
