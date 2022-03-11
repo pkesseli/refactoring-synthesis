@@ -1289,11 +1289,15 @@ and check that the initial state of that class is the same for both blocks of co
 
 \paragraph{Preserving aliasing}
 
-When expressing the equivalence relation between \var{P_1} and \var{P_2}, we intentionally missed one important aspect,
-namely aliasing. To understand the problem let's look a the following example, which makes use of java.awt.Container,
-where a generic Abstract Window Toolkit (AWT) container object is a component that can contain other AWT components.
-Method \texttt{preferredSize} used by the original code below returns the preferred size of the calling container \texttt{container}.
-However, \texttt{preferredSize} is deprecated, and, instead, the refactored version uses \texttt{getPreferredSize}.
+When expressing the equivalence relation between \var{P_1} and \var{P_2}, we
+intentionally missed one important aspect, namely aliasing.  To understand
+the problem let's look a the following example, which makes use of
+java.awt.Container, where a generic Abstract Window Toolkit (AWT) container
+object is a component that can contain other AWT components.  Method
+\texttt{preferredSize} used by the original code below returns the preferred
+size of the calling container \texttt{container}.  However, the method
+\texttt{preferredSize} is deprecated, and, instead, the refactored version
+uses \texttt{getPreferredSize}.
 
 %, which denotes a slightly
 %modified version of the running example.
