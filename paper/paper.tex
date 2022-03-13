@@ -1735,7 +1735,7 @@ relation.
 %% in the second program.
 %\todo{check exactly what this is used for.}
 
-\subsection{Sources of unsoundness and incompleteness}
+\subsection{Sources of unsoundness and incompleteness}\label{sec:incompleteness}
 As explained in Section~\ref{sec:encoding}, due to the use of fuzzing in the synthesis
 phase, our technique may fail to find a refactoring even when one
 exists (i.e. it is {\em incomplete}), whereas using fuzzing in the verification phase may result in finding a refactoring that is not equivalent to the original on all
@@ -1980,8 +1980,48 @@ the method to refactor, such that imports or the implicit \texttt{this} argument
 are considered during parsing.
 
 \section{Experimental results}\label{sec:experimental-results}
+Our benchmark suite consists of 119 deprecated methods from the Oracle JDK 15
+Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}. We only considered
+methods where the suggested refactoring is semantically equivalent to the
+original code, as explained in Sec.~\ref{sec:semantically-different-refactorings}.
+Furthermore, we also omitted methods with I/O side-effects, which is currently
+unsupported by our implementaiton (see Sec.~\ref{sec:incompleteness}).
 
-\section{Semantically different refactorings}
+\todo{Update number of benchmarks}
+
+\subsection{Experiment design}
+We compare four configurations of our algorithm against each other. The
+configurations differ in terms of the search space of programs they consider
+as well as the JQF fuzzing guidance applied. Configurations marked as \em{TI}
+only consider type information when building the instruction set, whereas
+configurations marked as (\em{TI/CH}) consider both type information and Javadoc
+code hints. Equally, configurations marked as \em{Rand} use JQF's random fuzzing
+guidance, whereas \em{Zest} uses JQF's coverage-guided Zest guidance.
+
+We evalute in Sec.~\ref{sec:experimental-results} for each configuration how
+many sound as well as unsound refactorings are produced, how many refactoring
+opportunities were missed and the average time to successfully produce a
+refactoring. We bound the search by at most 500 inputs and 5 minutes per verification
+phase, and at most 2 minutes per syntheis phase.
+
+\subsection{Results}\label{sec:experimental-results}
+
+\todo{Update section and table after most recent run finishes}
+
+\begin{table}[h]
+\begin{tabular} {|l|r|r|r|r|}
+\hline
+Config  & \checkmark & \xmark & \lightning & $\diameter$ runtime (s) \\ \hline
+Zest TI      & 0 & 0 & 0 & 0 \\ 
+Zest TI/CH   & 0 & 0 & 0 & 0 \\ 
+Rand TI      & 0 & 0 & 0 & 0 \\ 
+Rand TI/CH   & 0 & 0 & 0 & 0 \\  \hline
+\end{tabular} 
+\caption{Experimental results per configuration.}
+\label{tab:configuration-results}   
+\end{table}
+
+\section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
 
 \begin{figure}
