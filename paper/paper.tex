@@ -313,7 +313,7 @@ not guaranteed after inlining the method's body.
 %% bodies~\cite{DBLP:conf/paste/Perkins05}. 
 
 Another closely related class of works focuses on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. Notably, {\em change rules are different from refactorings} as they don't provide the actual replacement code. Instead, the programmer is still required to perform a lot of the work
-manually: for instance, she has to figure out lines 6-8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
+manually: for instance, she has to figure out lines 6--8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
 responsibility of guaranteeing that the refactored code maintains the original behaviour
 is left to the programmer.
 %% programmer
@@ -496,7 +496,7 @@ technique can be applied to deprecated fields and classes.
 %% the program synthesis technique will be guided by {\em code hints}
 %% and {\em types}, as well 
 
-Although powerful, program synthesis is very hard due to the vast search space, i.e. space of possible programs that must be considered. Thus, its success is generally relient on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
+Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
 %
 The vast search space is particularly a challenge in the current setting given that, in the absence of any additional guidance, the entire \texttt{java.lang} could be considered when synthesising the refactoring.
 In order to prune the search space, we start by investigating the information available to our refactoring procedure.
@@ -504,14 +504,14 @@ In order to prune the search space, we start by investigating the information av
 %\begin{itemize}
 
 {\bf (1)} {\em Type information} about the code to be generated. In particular, this consists on the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
-However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient in the current scenario. %, where the number of possible programs where considering \texttt{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
+However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient to solve the problem. %, where the number of possible programs where considering \texttt{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
 
 {\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
   comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show in Section~\ref{sec:overview}, these hints
   don't provide the whole refactoring, but can be used to guide the search process.
 While code hints have been previously used to generate change rules~\cite{DBLP:conf/kbse/Huang0PW021}, our aim is to generate complete refactorings.
   
-  {\bf (3)} One last information we have about the code to be generated is that it needs to be {\em semantically equivalent to the original}, meaning that they must preserve its behaviour. %While this does provide us with the {\em semantics of the
+  {\bf (3)} Finally, the key criterion we have for the code to be generated is that it needs to be {\em semantically equivalent to the original}, meaning that they must preserve its behaviour. %While this does provide us with the {\em semantics of the
   %code to be generated}, it's not easy to use. 
 %* This is not enough to decide semantic equivalence, which, as discussed above, is one of the main difficulties in this refactoring.
   However, formally proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
@@ -743,7 +743,7 @@ adding infeasible programs to the search space.
 
 
 In Section~\ref{sec:components-seeding}, we provide in-depth details about the
-seeding of the component library and tackling the above challenges. 
+seeding of the component library and how to tackle the above challenges. 
 At a high level, the process is guided by types and code hints.
 
 Once the component library is built, for the actual synthesis,
@@ -844,8 +844,8 @@ the synthesis process in Section~\ref{sec:encoding}.
 
 \section{{\bf Code hints and type guided seeding of the component library}}\label{sec:components-seeding}
 % Our synthesis engine is component based, meaning that, in order to generate new code, it makes use of a library of components.
-As mentioned in Section~\ref{sec:overview}, a critical aspect of our technique is building the
-component library. 
+As mentioned in Section~\ref{sec:overview}, a critical aspect of our technique is the construction
+of the component library. 
 %For each required refactoring, we start by building the components library.
 %This step is critical as
 %% the size of the component library has a direct impact
@@ -1043,6 +1043,7 @@ we add to the library must be accessible from the current location.
 \begin{algorithm}[H]
 \SetAlgoLined
 \KwOut{Core component library}
+%<<<<<<< HEAD
 // {\bf Phase 1: Initialise}\\
 Add constants and instructions from the code hints\;
 
@@ -1058,6 +1059,21 @@ Add constants and instructions from the code hints\;
 Add mutators to the library for the types in the $target\_types$ set that consume objects from $consumable\_objs$\;
 Remove from $consumable\_objs$\;
 }
+%% =======
+%%  Add constants from the original code to the library\;
+%%  Add instructions from the code hints to the library\;
+%%  \For{instr $\in$ library}{
+%%    \If{$\neg$realizable(instr)}{
+%%      \For{$type {\in} required\_types(instr) ~\wedge~ type {\not\in} source\_types$}{
+%%        $generators = realizable\_constructors(type) \cup realizable\_methods\_returning\_type(type)$\;
+%%        $modifiers = realizable\_methods\_with\_receiver\_of\_type(type)$\;
+%%        Add $generators$ to the library\;
+%%        Add $\mathit{modifiers}$ to the library\;
+%%        \If{$generators \neq \emptyset$}{$source\_types = source\_types \cup\{type\} $}
+%%      }
+%%    }
+%%  }
+%% >>>>>>> 64d053e021f0976d2f4411950ad48f41ed31c8d9
 \end{algorithm}
  \caption{Seeding algorithm for the core library}
 \label{alg:seeding-core}
@@ -1068,7 +1084,7 @@ Remove from $consumable\_objs$\;
 
 \subsection{Incremental expansion of the library} \label{sec:extend-library}
 If the synthesis engine fails to find a refactoring within a certain amount of time,
-there might be a need to increase the components library.
+there might be a need to extend the components library.
 For the core library, in the algorithm in Figure~\ref{alg:seeding-core}, we only ever add realizable components. However, this requirement can be relaxed by adding components that
 are not yet realizable, but would become so if we were to add one
 additional instruction (the generator for the missing type). For our current experiments,
@@ -1113,8 +1129,8 @@ we refer to the original code as $P_1$ and the refactored code as
 $P_2$. We will fully define what $equivalent$ actually means in Section~\ref{sec:equiv}.
 
 
-In each iteration of the synthesis process, there are two phases, a synthesis and a verification one. We next show how we encode the problem corresponding to each of these phases so that it can be solved with coverage-guided property-based testing. As we want to start with a high level view
-
+In each iteration of the synthesis process, there are two phases, a synthesis and a verification one. We next show how we encode the problem corresponding to each of these phases so that it can be solved with coverage-guided property-based testing.
+% As we want to start with a high level view
 
 \paragraph{The synthesis phase} In this phase, we have 
 a finite set of input examples $\{\vec{i_1} \cdots \vec{i_n}\}$ and we must find a candidate refactoring
@@ -1187,7 +1203,7 @@ Verify($\vec{i}$) {
 In other words, answering the initial question posed by the verification
 phase is reduced to checking the safety of this method: if
 \texttt{Verify} is safe (i.e. the assertion is not violated) for any
-input $\vec{i}$, then there is no input that can distinguish
+input~$\vec{i}$, then there is no input that can distinguish
 between the original and the candidate refactoring (this
 is indeed a sound refactoring). However, if \texttt{Verify} is not safe,
 then we want to be able to obtain a counterexample input
@@ -1299,11 +1315,11 @@ then $E[P(\vec{i})]$ maps each variable defined in \var{P} to the latest object 
 Next, we define the notion of equivalence with respect to a concrete input $\vec{i}$ (this definition is incomplete and we will build up on it in the rest of the section).
 
 \begin{definition}[Program equivalence with respect to a concrete input $\vec{i}$ {\bf[partial]}]\label{def:prog-equiv}
-  Given two code blocks \var{P_1} and \var{P_2} and concrete input $\vec{i}$,
+  Given two code blocks \var{P_1} and \var{P_2} and concrete input~$\vec{i}$,
   we say that \var{P_1} and \var{P_2} are equivalent
   with respect to $\vec{i}$, written as $equivalent(P_1(\vec{i}), P_2(\vec{i}))$
   if and only if the following conditions hold:
-
+%
 \[
 \begin{aligned}
   & (1) exc(P_1, \vec{i})=\{e_1\} \wedge exc(P_2, \vec{i})=\{e_2\} \wedge equals(e_1,e_2) ~\vee\\
@@ -1328,14 +1344,17 @@ The above definition says that in order for \var{P_1} and
 that is live at the end of \var{P_1}, must also be live at the end of \var{P_2}, and  must be
 assigned equal objects by the executions of \var{P_1} and
 \var{P_2} on $\vec{i}$, respectively, and
-(3) the static fields of the loaded classes must be respectively equal.
-We check equality by recursively following attribute chains until we reach primitive types. We
-generally do not consider \texttt{equals} methods unless (1) the method was not written by the user
-(i.e. JCL classes), (2) the type inerits from \texttt{java.lang.Object}, (3) the class implements
-\texttt{java.lang.Comparable} and (4) the type declares an \texttt{equals} implementation. Examples
-of classes which satisfy these strict requirements are \texttt{java.lang.Integer} or
-\texttt{java.util.Date}. All other \texttt{equals} implementations are considered unreliable and
-ignored.
+(3) the static fields of the loaded classes must be respectively equal.  We
+check equality by recursively following attribute chains until we reach
+primitive types.  We generally do not consider \texttt{equals} methods
+unless (1)~the method was not written by the user (i.e.  JCL classes),
+(2)~the type inerits from \texttt{java.lang.Object}, (3)~the class
+implements \texttt{java.lang.Comparable} and (4)~the type declares an
+\texttt{equals} implementation.  Examples of classes that satisfy these
+strict requirements are \texttt{java.lang.Integer} or
+\texttt{java.util.Date}.  All other \texttt{equals} implementations are
+considered unreliable and ignored.
+
 %Alternatively, if there is an explicit \texttt{equals} implemented for a given type, then we use it.
 %% By equal objects we mean objects where the values of the
 %% corresponding attributes are equal.
@@ -1380,18 +1399,21 @@ and check that the initial state of that class is the same for both blocks of co
 
 \paragraph{Preserving aliasing}
 
-When expressing the equivalence relation between \var{P_1} and \var{P_2}, we intentionally missed one important aspect,
-namely aliasing. To understand the problem let's look a the following example, which makes use of java.awt.Container,
-where a generic Abstract Window Toolkit (AWT) container object is a component that can contain other AWT components.
-Method \texttt{preferredSize} used by the original code below returns the preferred size of the calling container \texttt{container}.
-However, \texttt{preferredSize} is deprecated, and, instead, the refactored version uses \texttt{getPreferredSize}.
+When expressing the equivalence relation between \var{P_1} and \var{P_2}, we
+intentionally missed one important aspect, namely aliasing.  To understand
+the problem let's look a the following example, which makes use of
+java.awt.Container, where a generic Abstract Window Toolkit (AWT) container
+object is a component that can contain other AWT components.  Method
+\texttt{preferredSize} used by the original code below returns the preferred
+size of the calling container \texttt{container}.  However, the method
+\texttt{preferredSize} is deprecated, and, instead, the refactored version
+uses \texttt{getPreferredSize}.
 
 %, which denotes a slightly
 %modified version of the running example.
 
 \begin{example}\label{ex:aliasing}
-  \begin{lstlisting}[mathescape=true,showstringspaces=false]
-    
+~\begin{lstlisting}[mathescape=true,showstringspaces=false]
   // Original code:
   Dimension dim1 = container.preferredSize();
   Dimension dim2 = container.preferredSize();    
@@ -1491,7 +1513,7 @@ Next, we complete Definition~\ref{def:prog-equiv} by capturing the aliasing aspe
   with respect to $\vec{i}$ iff:
 \[
     \begin{aligned}
-      & (4)~ \forall v_1,v_2 \in liveVar(P_1) \cup staticFields(loadedClasses(P_1)). \\
+      & (4)~ \forall v_1,v_2 \in \mathit{liveVar}(P_1) \cup \mathit{staticFields}(loadedClasses(P_1)). \\
       & \qquad aliases(P_1, v_1, v_2) \Rightarrow aliases(P_2, v_1,v_2)      
     %% & (5)~\forall f_1,f_2 \in staticFields(loadedClasses(P_1)).\\
     %%   & \qquad aliases(P_1, f_1, f_2) \Rightarrow aliases(P_2, f_1,f_2)
@@ -1820,7 +1842,7 @@ relation.
 %% in the second program.
 %\todo{check exactly what this is used for.}
 
-\subsection{Sources of unsoundness and incompleteness}
+\subsection{Sources of unsoundness and incompleteness}\label{sec:incompleteness}
 As explained in Section~\ref{sec:encoding}, due to the use of fuzzing in the synthesis
 phase, our technique may fail to find a refactoring even when one
 exists (i.e. it is {\em incomplete}), whereas using fuzzing in the verification phase may result in finding a refactoring that is not equivalent to the original on all
@@ -1836,10 +1858,11 @@ potential overrides of the method to refactor. This may lead to unsound results
 when different subclasses of the original class are used polymorphically in the
 refactored context.
 
-Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on \texttt{equals}
-implementations for equivalence comparison. While we strictly filter which \texttt{equals}
-implementations we consider, if any of them do not accurately assess an equivalent program state, 
-our refactoring may prove unsound at runtime.
+Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on
+\texttt{equals} implementations for equivalence comparison.  While we
+strictly filter which \texttt{equals} implementations we consider, if any of
+them do not accurately identify an equivalent program state, our refactoring
+may prove unsound at runtime.
 
 %%However, we make no guarantee about correctness with respect to such operations
 %% anyway, whether static or instance state.}
@@ -1851,7 +1874,7 @@ we could attempt to swap it with some formal verification technique.
 However, program verification is undecidable in general.
 Even for restricted, decidable fragments, such
 techniques tend to be expensive as they generally require some form of
-symbolic execution and calls to off-the-shelves solvers.  Moreover,
+symbolic execution and calls to off-the-shelf solvers.  Moreover,
 programming languages evolve faster than verification techniques and
 therefore new features might not be supported by the front ends of
 such techniques.
@@ -1892,13 +1915,13 @@ independent copies of its static fields.
 In order to fully isolate the program state during the execution of the original
 and refactored code from each other, we load all invovled classes in separate
 class loaders. These class loaders are disposed immediately after the curent set
-of fuzzed inputs were executed, and new class loaders are created for the next
-inputs. Classes which do not maintain a static state are loaded in a shared
+of fuzzed inputs are executed, and new class loaders are created for the next
+inputs. Classes that do not maintain a static state are loaded in a shared
 parent class loader to improve performance.
 
 The OpenJDK Java virtual machine implementation does not allow us to load
 classes contained in the \texttt{java.lang} package in such an isolated class
-loader. For such classes we cannot apply refactorings which depend on static
+loader. For such classes we cannot apply refactorings that depend on static
 fields, as they cannot be reset and will retain the state of previous
 executions. Instead of observing the effect of one isolated refactoring
 candidate, we would observe their accumulated effect, leading to both
@@ -2008,21 +2031,21 @@ spurious solutions. A trivial example of this limitation is refactoring the
 method \texttt{layout} in the abstract class \texttt{java.awt.Component}. The
 method is not abstract, but has an empty body and is meant to be overriden by
 subclasses. Using this empty body as a specification will only guranatee a sound
-refactoring for subclasses which do not override it. Our approach is still
+refactoring for subclasses that do not override it. Our approach is still
 guaranteed to find the preferred refactoring of using \texttt{doLayout} instead,
 since we take the Javadoc hint into account. However, a more complete approach
 in general would be to fuzz against all available subclasses of
 \texttt{Component} on the classpath.
 
-We explicitly avoid constructors which are not amenable to fuzzing, such as
-collection constructors which take an integer capacity argument, where an
+We explicitly avoid constructors that are not amenable to fuzzing, such as
+collection constructors that take an integer capacity argument, where an
 unlucky fuzzed input might lead to an out of memory error.
 
 \subsection{Parsing the @code hints}
 
 As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
 interpret Javadoc hints. % provided by the developer.
-in particular, \texttt{@code} blocks inside \texttt{@deprecated} sections are interpreted as code
+In particular, \texttt{@code} blocks inside \texttt{@deprecated} sections are interpreted as code
 hints, and we attempt to parse them as Java expressions. Since code hints are
 not always expressed as well-formed Java, we customised the
 GitHub Java parser
@@ -2064,8 +2087,50 @@ the method to refactor, such that imports or the implicit \texttt{this} argument
 are considered during parsing.
 
 \section{Experimental results}\label{sec:experimental-results}
+Our benchmark suite consists of 119 deprecated methods from the Oracle JDK 15
+Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}. We only considered
+methods where the suggested refactoring is semantically equivalent to the
+original code, as explained in Sec.~\ref{sec:semantically-different-refactorings}.
+Furthermore, we also omitted methods with I/O side-effects, which is currently
+unsupported by our implementaiton (see Sec.~\ref{sec:incompleteness}).
 
-\section{Semantically different refactorings}
+\todo{Update number of benchmarks}
+
+\subsection{Experiment design}
+We compare four configurations of our algorithm against each other. The
+configurations differ in terms of the search space of programs they consider
+as well as the JQF fuzzing guidance applied. Configurations marked as \em{TI}
+only consider type information when building the instruction set, whereas
+configurations marked as (\em{TI/CH}) consider both type information and Javadoc
+code hints. Equally, configurations marked as \em{Rand} use JQF's random fuzzing
+guidance, whereas \em{Zest} uses JQF's coverage-guided Zest guidance.
+
+We evalute in Sec.~\ref{sec:experimental-results} for each configuration how
+many sound as well as unsound refactorings are produced, how many refactoring
+opportunities were missed and the average time to successfully produce a
+refactoring. We bound the search by at most 500 inputs and 5 minutes per verification
+phase, and at most 2 minutes per synthesis phase. Experiments were performed on
+a Windows 10 computer with Oracle JDK 15.02, 32 GB of RAM and an Intel Core
+i7-4790 CPU dual core at 3.60 GHz.
+
+\subsection{Results}\label{sec:experimental-results}
+
+\todo{Update section and table after most recent run finishes}
+
+\begin{table}[h]
+\begin{tabular} {|l|r|r|r|r|}
+\hline
+Config  & \checkmark & \xmark & \lightning & $\diameter$ runtime (s) \\ \hline
+Zest TI      & 0 & 0 & 0 & 0 \\ 
+Zest TI/CH   & 0 & 0 & 0 & 0 \\ 
+Rand TI      & 0 & 0 & 0 & 0 \\ 
+Rand TI/CH   & 0 & 0 & 0 & 0 \\  \hline
+\end{tabular} 
+\caption{Experimental results per configuration.}
+\label{tab:configuration-results}   
+\end{table}
+
+\section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
 
 \begin{figure}
@@ -2180,7 +2245,7 @@ counterexample:
 CEGIS based approaches to program synthesis have been previously used
 for program transformations such as superoptimisation and
 deobfuscation~\cite{DBLP:conf/icse/JhaGST10}.  In
-\cite{DBLP:journals/corr/abs-1712-07388}, David et al present an
+\cite{DBLP:journals/corr/abs-1712-07388}, David et al.~present an
 automatic refactoring tool that transforms Java with external
 iteration over collections into code that uses Streams. Their approach
 is based on CEGIS and makes use of formal verification to check the
