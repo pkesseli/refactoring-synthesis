@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
-import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.mapsTo;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
 
 import java.util.Calendar;

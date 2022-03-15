@@ -46,6 +46,8 @@ public class TypeSeed implements InstructionSetSeed {
     allTypes.add(invokable.getReturnType());
     allTypes.add(cls);
 
+    if (allTypes.remove(byte.class))
+      allTypes.add(int.class);
     final JavaComponents javaComponents = new JavaComponents(components);
     for (final Class<?> type : allTypes)
       add(javaComponents, allTypes, type);

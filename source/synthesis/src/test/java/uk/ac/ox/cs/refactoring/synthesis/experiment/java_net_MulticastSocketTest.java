@@ -1,9 +1,13 @@
 package uk.ac.ox.cs.refactoring.synthesis.experiment;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
+import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-class java_net_MulticastSocketTest {
+public class java_net_MulticastSocketTest {
 
   @Test
   @Disabled("We do not recognise generic types, and thus would conclude return types differ.")
@@ -11,8 +15,8 @@ class java_net_MulticastSocketTest {
   }
 
   @Test
-  @Disabled("Return types differ.")
-  void getTTL() {
+  void getTTL() throws Exception {
+    assertThat(synthesiseAlias("java.net.MulticastSocket", "getTTL"), contains(".getTimeToLive("));
   }
 
   @Test
@@ -31,7 +35,7 @@ class java_net_MulticastSocketTest {
   }
 
   @Test
-  @Disabled("Argument types differ.")
-  void setTTL() {
+  void setTTL() throws Exception {
+    assertThat(synthesiseAlias("java.net.MulticastSocket", "setTTL", "byte"), contains(".setTimeToLive("));
   }
 }

@@ -84,5 +84,7 @@ public final class Integer {
     final Iterable<Class<?>> classes = Classes.getNonAbstractMemberClasses(Integer.class)::iterator;
     for (final Class<?> cls : classes)
       components.nonnull(type, new ConstructorComponent<>(parameterKeys, cls));
+
+    Cast.register(components);
   }
 }

@@ -2087,14 +2087,14 @@ the method to refactor, such that imports or the implicit \texttt{this} argument
 are considered during parsing.
 
 \section{Experimental results}\label{sec:experimental-results}
-Our benchmark suite consists of 119 deprecated methods from the Oracle JDK 15
-Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}. We only considered
-methods where the suggested refactoring is semantically equivalent to the
-original code, as explained in Sec.~\ref{sec:semantically-different-refactorings}.
-Furthermore, we also omitted methods with I/O side-effects, which is currently
-unsupported by our implementaiton (see Sec.~\ref{sec:incompleteness}).
-
-\todo{Update number of benchmarks}
+Our benchmark suite consists of the first 127 deprecated methods from the Oracle
+JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI} for which
+the suggested refactoring is semantically equivalent to the original code, as
+explained in Sec.~\ref{sec:semantically-different-refactorings}.
+Furthermore, we excluded methods with I/O side-effects, which is currently
+unsupported by our implementation (see Sec.~\ref{sec:incompleteness}). Other
+reasons for exclusion were: Deprecation without replacement, Methods
+inaccessible by non-JCL classes, and native methods.
 
 \subsection{Experiment design}
 We compare four configurations of our algorithm against each other. The
@@ -2115,20 +2115,49 @@ i7-4790 CPU dual core at 3.60 GHz.
 
 \subsection{Results}\label{sec:experimental-results}
 
-\todo{Update section and table after most recent run finishes}
+Tab.~\ref{tab:configuration-results} provides an overview about the number of
+sound refactorings (\checkmark), missed refactorings (\xmark) and unsound
+refactorings (\lightning) produced per configuration, as well as the average
+runtime per refactoring. Our experiment did not yield significant performance
+differences between using JQF's coverage-guided Zest guidance and its random
+guidance. Using Javadoc Code Hints increased the rate of successful refactorings
+by 51\% for Zest guidance and 33\% for random guidance.
 
 \begin{table}[h]
 \begin{tabular} {|l|r|r|r|r|}
 \hline
 Config  & \checkmark & \xmark & \lightning & $\diameter$ runtime (s) \\ \hline
-Zest TI      & 0 & 0 & 0 & 0 \\ 
-Zest TI/CH   & 0 & 0 & 0 & 0 \\ 
-Rand TI      & 0 & 0 & 0 & 0 \\ 
-Rand TI/CH   & 0 & 0 & 0 & 0 \\  \hline
+Zest TI      & 55 & 58 & 14 & 228.4 \\ 
+Zest TI/CH   & 83 & 39 &  5 & 197.1 \\ 
+Rand TI      & 61 & 55 & 11 & 217.7 \\ 
+Rand TI/CH   & 81 & 40 &  6 & 207.2 \\  \hline
 \end{tabular} 
 \caption{Experimental results per configuration.}
 \label{tab:configuration-results}   
 \end{table}
+
+For the Zest TI/CH configuration, out of the 39 missed refactorings 26 were
+missed because our instruction is insufficient. The current instruction set
+checks whether it can construct well-formed refactoring candidates using
+methods in the class containing the method to refactor, as well as any class
+used in the signature and Javadoc of the method to refactor. For these 26
+methods the correct refactoring requires constructing an object of a type which
+does not occur in any of these sources, or invoking a method which is not
+contained in any of the aforementioned types. For most of these methods, the
+Javadoc actually contains a code example that would have allowed us to produce
+a refatoring, but was not correctly marked using an \code{@code} inline tag and
+thus could not be identified by our Javadoc parser.
+
+Three further refactorings were missed due to the size cap configured for
+refactored programs during the experiment, and three further refactorings were
+missed because our engine does not yet consider polymorphic or generic type
+relations. All other refactoring opportunities were missed due to fuzzing
+timeouts. The five unsound refactorings occured because the method to refactor
+was a default method with an empty body, meant to be overridden by subclasses.
+To find a sound refactoring in these cases our algorithm should expand its
+equivalence constraint to types who override the method to refactor.
+Tab.~\ref{tab:configuration-results} also highlights that Javadoc Code Hints
+significantly reduce the likelihood of unsound refactorings in this context.
 
 \section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
