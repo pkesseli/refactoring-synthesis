@@ -1893,17 +1893,33 @@ relation.
 %\todo{check exactly what this is used for.}
 
 \subsection{Sources of unsoundness and incompleteness}\label{sec:incompleteness}
-As explained in Section~\ref{sec:encoding}, due to the use of fuzzing in the synthesis
+As explained in Section~\ref{sec:encoding}, due to the use of fuzz testing in the synthesis
 phase, our technique may fail to find a refactoring even when one
-exists (i.e. it is {\em incomplete}), whereas using fuzzing in the verification phase may result in finding a refactoring that is not equivalent to the original on all
+exists (i.e. it is {\em incomplete}), whereas using fuzz testing in the verification phase may result in finding a refactoring that is not equivalent to the original on all
 inputs (i.e. our technique is {\em unsond}).
 
-Another potential source of unsoundness is I/O,
+%With respect to the use of fuzzing,
+%In order to guarantee the soundness and completeness of the
+%proposed refactoring technique,
+While we could attempt to swap fuzz testing with a formal verification technique,
+program verification is undecidable in general.
+Even for restricted, decidable fragments, such
+techniques tend to be expensive as they generally require some form of
+symbolic execution and calls to off-the-shelf solvers.  Moreover,
+programming languages evolve faster than formal verification techniques and
+therefore new language features might not be supported by the front ends of
+such techniques. An attempt at using formal methods for proving
+observational equivalence during the refactoring process was made in~\cite{DBLP:journals/corr/abs-1712-07388} and exposed the aforementioned limitations.
+
+Besides the use of fuzz testing, we identified three other potential sources of unsoundness,
+which we discuss next.
+
+Firstly, unsoundness can be caused by I/O,
 which is not part of the JVM state. We currently don't check
 that the original and refactored code perform the same I/O.
 %the possibility that the static initialiser performs some I/O,. 
 
-Furthermore, our algorithm does currently not explore the entire classpath for
+Secondly, our algorithm does currently not explore the entire classpath for
 potential overrides of the method to refactor. This may lead to unsound results
 when different subclasses of the original class are used polymorphically in the
 refactored context.
@@ -1912,25 +1928,13 @@ Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on
 \texttt{equals} implementations for equivalence comparison.  While we
 strictly filter which \texttt{equals} implementations we consider, if any of
 them do not accurately identify an equivalent program state, our refactoring
-may prove unsound at runtime.
+may be unsound.
 
 %%However, we make no guarantee about correctness with respect to such operations
 %% anyway, whether static or instance state.}
 
-With respect to the use of fuzzing,
-%In order to guarantee the soundness and completeness of the
-%proposed refactoring technique,
-we could attempt to swap it with some formal verification technique.
-However, program verification is undecidable in general.
-Even for restricted, decidable fragments, such
-techniques tend to be expensive as they generally require some form of
-symbolic execution and calls to off-the-shelf solvers.  Moreover,
-programming languages evolve faster than verification techniques and
-therefore new features might not be supported by the front ends of
-such techniques.
 
-
-\todo{Other sources of incompleteness and unsoundness?}
+%\todo{Other sources of incompleteness and unsoundness?}
 
 %% such a technique would require symbolic execution, which is no-
 %% toriously difficult for real-world programs due to features such as
