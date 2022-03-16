@@ -5,6 +5,7 @@ import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAliasBenchmark;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class java_awt_TextAreaTest {
@@ -14,6 +15,7 @@ class java_awt_TextAreaTest {
     assertThat(synthesiseAlias("java.awt.TextArea", "appendText", "java.lang.String"), contains(".append("));
   }
 
+  @Disabled("Crashed VM on last execution.")
   @Test
   void insertText() throws Exception {
     assertThat(synthesiseAlias("java.awt.TextArea", "insertText", "java.lang.String", "int"), contains(".insert("));

@@ -2,6 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -210,6 +211,7 @@ class SnippetComponentVisitor extends VoidVisitorAdapter<Void> {
     final List<IExpression> arguments = new ArrayList<>(numberOfArguments);
     for (int i = 0; i < numberOfArguments; ++i)
       arguments.add(stack.removeLast());
+    Collections.reverse(arguments);
 
     final String fullyQualifiedClassName = method.declaringType().getQualifiedName();
     involvedClasses.add(fullyQualifiedClassName);

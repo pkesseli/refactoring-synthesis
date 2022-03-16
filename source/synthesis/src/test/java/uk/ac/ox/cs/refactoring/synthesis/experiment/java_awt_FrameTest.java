@@ -19,7 +19,7 @@ class java_awt_FrameTest {
 
   @Test
   @Disabled("Fails because our type-dependent instruction set generation would need to recognise that Frame instanceof Component. Future work.")
-  void setCursorType() throws Exception {
+  void setCursor() throws Exception {
     assertThat(synthesiseAlias("java.awt.Frame", "setCursor", "int"),
         allOf(contains(".setCursor("), contains("Cursor.getPredefinedCursor(")));
   }

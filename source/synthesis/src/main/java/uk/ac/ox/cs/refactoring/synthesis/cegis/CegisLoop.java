@@ -70,7 +70,8 @@ public class CegisLoop<Candidate> {
         .register(new AffineTransformGenerator())
         .register(new FontMetricsGenerator())
         .register(new OfflineMulticastSocketGenerator());
-    baseRepository.register(new RuntimeVersionGenerator(baseRepository));
+    baseRepository.register(new RuntimeVersionGenerator(baseRepository))
+        .register(new TextAreaGenerator(baseRepository));
     final GeneratorRepository verificationRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ServiceLoaderGeneratorSource())
         .register(new CounterexampleGenerator(baseRepository, generatorConfiguration.InstanceType,
