@@ -1783,16 +1783,9 @@ if and only if they are in the same equivalence class induced by the aliasing re
 
 \subsection{Using fuzz testing for synthesis} \label{sec:fuzzing}
 
-In order to generate programs, we make use of JQF~\cite{DBLP:conf/issta/PadhyeLS19}, which performs 
-coverage-guided property-based fuzz testing.
-Coverage-guided means that JQF uses lightweight program
-instrumentation to trace the code coverage reached by each generated
-input that is fed to the program under test.  Basically, the program
-is continuously executed with randomly generated inputs. However,
-instead of generating inputs from scratch, coverage-guided fuzzers
-evolve a set of saved inputs. If a new input leads to an increase
-in code coverage, it is saved for subsequent evolution.
-
+In order to generate programs, we make use of JQF~\cite{DBLP:conf/issta/PadhyeLS19}, a  %coverage-guided property-based
+fuzz testing platform for Java.
+%
 As explained in Section~\ref{sec:encoding}, we use JQF for two tasks. Firstly, in the synthesis phase, 
 JQF is generating the refactored block of code.
 Secondly, in the verification phase, JQF generates
@@ -2152,23 +2145,46 @@ are considered during parsing.
 \section{Experimental results}\label{sec:experimental-results}
 Our benchmark suite consists of the first 127 deprecated methods from the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI} for which
-the suggested refactoring is semantically equivalent to the original code, as
-explained in Sec.~\ref{sec:semantically-different-refactorings}.
-Furthermore, we excluded methods with I/O side-effects, which is currently
+there exist refactorings that are semantically equivalent to the original code.
+Besides deprecated methods that don't have a semantically equivalent refactoring
+(see Section~\ref{sec:semantically-different-refactorings}),
+we also excluded methods with I/O side-effects, which are currently
 unsupported by our implementation (see Sec.~\ref{sec:incompleteness}). Other
-reasons for exclusion were: Deprecation without replacement, Methods
+reasons for exclusion were: deprecation without replacement, methods
 inaccessible by non-JCL classes, and native methods.
 
 \subsection{Experiment design}
-We compare four configurations of our algorithm against each other. The
-configurations differ in terms of the search space of programs they consider
-as well as the JQF fuzzing guidance applied. Configurations marked as \em{TI}
-only consider type information when building the instruction set, whereas
-configurations marked as (\em{TI/CH}) consider both type information and Javadoc
-code hints. Equally, configurations marked as \em{Rand} use JQF's random fuzzing
-guidance, whereas \em{Zest} uses JQF's coverage-guided Zest guidance.
+We use JQF in two modes: (1) with Zest~\cite{DBLP:conf/issta/PadhyeLSPT19}
+guidance, which incorporates
+feedback from the test program in the form of semantic validity of
+test inputs and the code coverage achieved during test execution, and
+(2) with random guidance, which randomly generates test inputs without using
+code coverage feedback.
+%
+%% However,
+%% random-from-scratch input generation is exceedingly unlikely to
+%% generate inputs fitting precise bug-revealing conditions, like those
+%% described above
+%
+%
+The coverage feedback used by Zest means that JQF uses lightweight program
+instrumentation to trace the code coverage reached by each generated
+input that is fed to the program under test.  %% Basically, the program
+%% is continuously executed with randomly generated inputs. However,
+Instead of generating inputs from scratch, coverage-guided fuzzers
+evolve a set of saved inputs. If a new input leads to an increase
+in code coverage, it is saved for subsequent evolution.
 
-We evalute in Sec.~\ref{sec:experimental-results} for each configuration how
+
+In our experiments, we compare four configurations of our algorithm against each other. The
+configurations differ in terms of the search space of programs they consider
+as well as the JQF fuzzing guidance applied. Configurations marked as {\bf TI}
+only consider type information when building the component library, whereas
+configurations marked as ({\bf TI/CH}) consider both type information and Javadoc
+code hints. Equally, configurations marked as {\bf Rand} use JQF's random fuzzing
+guidance, whereas {\bf Zest} uses JQF's coverage-guided Zest guidance.
+
+In Sec.~\ref{sec:experimental-results}, for each configuration we evaluate how
 many sound as well as unsound refactorings are produced, how many refactoring
 opportunities were missed and the average time to successfully produce a
 refactoring. We bound the search by at most 500 inputs and 5 minutes per verification
