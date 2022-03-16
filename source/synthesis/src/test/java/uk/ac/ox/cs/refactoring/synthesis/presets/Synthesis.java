@@ -24,7 +24,8 @@ public final class Synthesis {
     final Invoker invoker = new Invoker(methodToRefactor);
     final String methodName = benchmarkMethodName != null ? benchmarkMethodName : methodToRefactor.MethodName;
     final String benchmarkName = Reports.createBenchmarkName(methodToRefactor.FullyQualifiedClassName, methodName);
-    try (final CegisLoopListener<SnippetCandidate> listener = Reports.createReportListener(benchmarkName)) {
+    try (final CegisLoopListener<SnippetCandidate> listener = Reports.createReportListener(benchmarkName,
+        generatorConfiguration.FoundCodeHints)) {
       final CegisLoop<SnippetCandidate> cegis = new CegisLoop<>(executor, invoker, generatorConfiguration,
           SnippetCandidate.class, listener);
       return cegis.synthesise();

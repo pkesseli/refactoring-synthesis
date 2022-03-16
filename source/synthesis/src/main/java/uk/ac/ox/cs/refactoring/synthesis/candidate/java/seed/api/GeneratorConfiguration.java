@@ -21,6 +21,9 @@ public class GeneratorConfiguration {
   /** Maximum instruction length. */
   public final byte MaxInstructionLength;
 
+  /** Indicates whether Javadoc code hints were found */
+  public final boolean FoundCodeHints;
+
   /** Instance type of counterexample root. */
   public final ResolvedType InstanceType;
 
@@ -50,6 +53,7 @@ public class GeneratorConfiguration {
    * @param minInstructions          {@link #MinInstructions}
    * @param maxInstructions          {@link #MaxInstructions}
    * @param maxInstructionLength     {@link #MaxInstructionLength}
+   * @param foundCodeHints           {@link #FoundCodeHints}
    * @param instanceType             {@link #InstanceType}
    * @param parameterTypes           {@link #ParameterTypes}
    * @param resultType               {@link #ResultType}
@@ -60,14 +64,15 @@ public class GeneratorConfiguration {
    * @param stage2MaxInputs          {@link #Stage2MaxInputs}
    */
   public GeneratorConfiguration(final ComponentDirectory components, final byte minInstructions,
-      final byte maxInstructions, final byte maxInstructionLength, final ResolvedType instanceType,
-      final List<ResolvedType> parameterTypes, final ResolvedType resultType, final boolean useRandomGuidance,
-      final long stage1MaxCounterexamples, final long stage1MaxInputs, final long stage2MaxCounterexamples,
-      final long stage2MaxInputs) {
+      final byte maxInstructions, final byte maxInstructionLength, final boolean foundCodeHints,
+      final ResolvedType instanceType, final List<ResolvedType> parameterTypes, final ResolvedType resultType,
+      final boolean useRandomGuidance, final long stage1MaxCounterexamples, final long stage1MaxInputs,
+      final long stage2MaxCounterexamples, final long stage2MaxInputs) {
     Components = components;
     MinInstructions = minInstructions;
     MaxInstructions = maxInstructions;
     MaxInstructionLength = maxInstructionLength;
+    FoundCodeHints = foundCodeHints;
     InstanceType = instanceType;
     ParameterTypes = parameterTypes;
     ResultType = resultType;

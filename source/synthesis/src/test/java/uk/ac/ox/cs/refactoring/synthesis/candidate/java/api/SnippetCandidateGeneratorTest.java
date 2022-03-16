@@ -42,7 +42,7 @@ class SnippetCandidateGeneratorTest {
     final byte maxInstructionLength = 1;
     final TypeResolver typeResolver = new TypeResolver();
     final GeneratorConfiguration generatorConfiguration = new GeneratorConfiguration(components, minInstructions,
-        maxInstructions, maxInstructionLength, typeResolver.resolve(Void.class), Collections.emptyList(),
+        maxInstructions, maxInstructionLength, false, typeResolver.resolve(Void.class), Collections.emptyList(),
         typeResolver.resolve(double.class), false, 10, 100, 1, 400);
     final SnippetCandidateGenerator candidateSupplier = new SnippetCandidateGenerator(generatorConfiguration);
     final SnippetCandidate snippetCandidate = candidateSupplier.generate(sourceOfRandomness, null);

@@ -19,9 +19,10 @@ class ReportCegisLoopListener<Candidate> implements CegisLoopListener<Candidate>
 
   private Instant start;
 
-  ReportCegisLoopListener(final String benchmarkName, final Report report) {
+  ReportCegisLoopListener(final String benchmarkName, final Report report, final boolean foundCodeHints) {
     this.benchmarkName = benchmarkName.replace(JavaLanguage.INNER_CLASS_SEPARATOR, JavaLanguage.PACKAGE_SEPARATOR);
     this.report = report;
+    run.FoundCodeHints = foundCodeHints;
   }
 
   @Override
