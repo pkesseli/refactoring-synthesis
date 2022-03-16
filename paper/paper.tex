@@ -1011,6 +1011,7 @@ The last two methods are in a similar situation as the second. Thus, we only add
 %% in the code hints.
 
 \paragraph{{\bf Phase 3: Add mutators for $target\_types$}}
+\todo{Comment PK: I would call these "transformers". Just to avoid confusion with reviewers, if they expect them to "mutate" the state of an object in Java terms, which of course not all of them do.}
 The third and last phase adds  mutators for the target types.
 By mutators we refer to methods that modify the value of an instance variable.
 Given our objective to generate objects for the $target\_types$ while consuming objects from $consumable\_objs$,
