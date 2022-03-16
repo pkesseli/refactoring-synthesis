@@ -2263,25 +2263,25 @@ significantly reduce the likelihood of unsound refactorings in this context.
 \section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
 
-\begin{figure}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-void main(String[] args) {
-  // Deprecated:
-  Date date = new Date(120, 12, 30);
+%% \begin{figure}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%% void main(String[] args) {
+%%   // Deprecated:
+%%   Date date = new Date(120, 12, 30);
  
-  // Should have been:
-  final Calendar calendar = Calendar.getInstance();
-  calendar.set(2020, 12, 30);
-  final Date date = calendar.getTime();
+%%   // Should have been:
+%%   final Calendar calendar = Calendar.getInstance();
+%%   calendar.set(2020, 12, 30);
+%%   final Date date = calendar.getTime();
 
-  // Or:
-  final Date date = new GregorianCalendar(2020, 12, 30)
-                      .getTime();
-}
-\end{lstlisting}
-\caption{Deprecated method example.}
-\label{ex:deprecated-method}
-\end{figure}
+%%   // Or:
+%%   final Date date = new GregorianCalendar(2020, 12, 30)
+%%                       .getTime();
+%% }
+%% \end{lstlisting}
+%% \caption{Deprecated method example.}
+%% \label{ex:deprecated-method}
+%% \end{figure}
 
 
 Sometimes, the deprecated and the refactored features are not semantically
