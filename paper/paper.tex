@@ -859,15 +859,16 @@ Consequently, in our approach, the component library is dynamically built for ea
 such that it only contains components specific to that particular use case.
 We designed two versions of the library, differentiated by the seeding guidance:
 \begin{itemize}
-\item {Core library:} the seeding is guided by both Javadoc code hints and types.
-\item {Extended library:} the seeding is only guided by types.
+\item For the {\bf CodeHints-library} the seeding is guided
+  by both Javadoc code hints and types.
+\item For the {\bf Types-library} the seeding is only guided by types.
 \end{itemize}  
 %% two versions of the component library
 %% To further increase our chances of finding a refactoring fast, we start with a restricted {\em core library} (see Section~\ref{sec:core-library}).
 %% If we fail to find a refactoring within a given amount of time, we then increase the size of the library by adding additional components (see Section~\ref{sec:extend-library}).
 
 
-\subsection{Core library} \label{sec:core-library}
+\subsection{CodeHints-library} \label{sec:core-library}
 %As mentioned before, we make use of type and code hints to seed the component library.
 In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \texttt{date} of type \texttt{Date} as the input to the code to be refactored, and the integer \texttt{hour} as the output. Generally speaking, the refactoring technique will weave together components from the component library that consume the inputs and generate the required outputs.
 
@@ -901,7 +902,7 @@ add components to the library that make use of the $available\_types$ to generat
 of $target\_types$. At the same time, we want to consume the objects from the
 $consumable\_objs$ set, i.e. the inputs of the original code.
 
-The seeding algorithm for the core library is provided in Figure~\ref{alg:seeding-core} and consists of three phases, which we discuss next.
+The seeding algorithm for the CodeHints-library is provided in Figure~\ref{alg:seeding-core} and consists of three phases, which we discuss next.
 
 \paragraph{{\bf Phase 1: Initialise with code hints}}
 During the first phase, the initialisation, we add all the constants and instructions from the code hints to the library.
@@ -998,7 +999,7 @@ Out of the four methods,
 %from our example that can produce objects of type \texttt{Calendar},
 only the first one is realisable. Conversely, in order to call the second method, we would need to generate an object of type \texttt{Locale},
 for which we don't have a corresponding component in the library.
-The last two methods are in a similar situation as the second. Thus, we only add the first method to the core component library.
+The last two methods are in a similar situation as the second. Thus, we only add the first method to the CodeHints-library.
 
 %% Even though we add them, they are not going to be used by the synthesis engine
 %% as we use a type-directed approach to term generation...
@@ -1015,7 +1016,7 @@ By mutators we refer to methods that modify the value of an instance variable.
 Given our objective to generate objects for the $target\_types$ while consuming objects from $consumable\_objs$,
 we prioritise mutators that consume such objects.
 For instance, for our running example there are 16 public mutators for the \texttt{Calendar} class.
-However, for the core library, instead of adding all of them, we prioritise those that
+However, for the CodeHints-library, instead of adding all of them, we prioritise those that
 consume the \texttt{date} object. There is only one such mutator \texttt{void setTime(Date date)}.
 Once we added any new mutators to the library, we remove the consumed objects from \texttt{consumable\_obj}.
 
@@ -1068,7 +1069,7 @@ we add to the library must be accessible from the current location.
 \removelatexerror% Nullify \@latex@error
 \begin{algorithm}[H]
 \SetAlgoLined
-\KwOut{Core component library}
+\KwOut{CodeHints-library}
 %<<<<<<< HEAD
 // {\bf Phase 1: Initialise}\\
 Add constants and instructions from the code hints\;
@@ -1104,18 +1105,20 @@ Remove consumed objs from $consumable\_objs$\;
 %%  }
 %% >>>>>>> 64d053e021f0976d2f4411950ad48f41ed31c8d9
 \end{algorithm}
- \caption{Seeding algorithm for the core library}
+ \caption{Seeding algorithm for the CodeHints-library}
 \label{alg:seeding-core}
 \end{figure}
 
 It may be the case that there is no realisable generator for a target type, or no mutators for the $target\_types$ that can consume all the
 $consumable\_objs$. When we finish exploring all the available methods, we exit the corresponding loops in phases 2 and 3.
-As a consequence, the synthesiser may fail to generate a valid refactoring when relying solely on the core library.
-For such a situation, we extend the component library as explained in Section~\ref{sec:extend-library}.
+As a consequence, the synthesiser may fail to generate a valid refactoring when relying solely on the CodeHints-library.
+%% For such a situation, we extend the component library as explained in Section~\ref{sec:extend-library}.
+A possible future direction is allowing unrealisable generators and mutators to be added to the library and iterating phases 2 and 3 a set of number of times (potentially until fixed point).
+%% iterate phase 2 and 3 until fixed point to 
 
-\subsection{Extended library} \label{sec:extend-library}
+\subsection{Types-library} \label{sec:extend-library}
 
-For the core library, the Javadoc code hints guidance results in the code hints being
+For the CodeHints-library, the Javadoc code hints guidance results in the code hints being
 used to collect the $target\_types$ set during the initialisation phase.
 Conversely, when seeding solely based on types, we start with the $target\_types$ set containing
 the class where the original code resides, as well as the type of the inputs and outputs of the
@@ -1124,8 +1127,16 @@ i.e. we attempt to add generators and mutators for the $target\_types$ to the li
 
 %For our running example, we would have $target\_types = \{\}$
 
-We use the extended library if the synthesis fails for the core library, or if
-we fail to find or parse the Javadoc code hints. 
+While we expect some overlap between the Types-library and the CodeHints-library, 
+the former may miss critical types provided by the Javadoc code hints.
+For instance, in our running example, the \texttt{Calendar} class is only mentioned by the
+code hints and would not be included in the Types-library.
+
+%% it's otherwise impossible to obtain, while trying to
+%% keep the component libraries relatively small.
+
+%% We use the Types-library if the synthesis fails for the CodeHints-library, or if
+%% we fail to find or parse the Javadoc code hints. 
 
 
 %\todo{Discuss what happens if no hint exists or it can't be parsed.}
@@ -1812,8 +1823,8 @@ prune the search space using observational equivalence with respect to a set of 
 that are syntactically different, yet semantically equivalent.
 While we plan on investigating some of these directions as part of future work,
 our current technique is still effective without equivalence reduction.
-Our conjecture is that, especially for the core library, this is due to the reduced number of components. 
-\todo{Do we use any heuristic at all for this?}
+Our conjecture is that, especially for the CodeHints-library, this is due to the reduced number of components. 
+\todo{Do we want to mention number of components? Do we use any heuristic at all for this?}
 %% given the restricted set of instructions in the core library,
 %% our current technique is still effective (as shown by the experimental evaluation).
 
