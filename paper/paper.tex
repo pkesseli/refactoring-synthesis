@@ -2409,12 +2409,15 @@ show that it is very easy for a refactoring that works on concurrent
 programs to introduce concurrency bugs by enabling new interactions between
 parallel threads. %They also provide techniques to make such refactorings behavior-preserving.
 
+A related class of techniques aim to adapt APIs after library updates. Such techniques
+automatically identify change rules linking different library releases~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. Conversely to our work, a change rule describes a match between methods existing in the old release, but which have been removed or deprecated in the new
+one, and replacement methods in the new release. However, they do not provide the actual refactored code.
 
-In~\cite{DBLP:conf/kbse/Huang0PW021}, Huang et al. automatically find replacements for missing APIs in library update (an API is considered as a public method in a public class). As new library versions are released, some APIs may get deprecated, removed or refactored.
-The focus in this work is on locating a replacement API through heuristics based on method signatures, rather than on finding an equivalent block of code.
-The tool presented in this paper, {\sc RepFinder} searches deprecation messages, the current library and external libraries in order to find replacement APIs. Replacement APIs must have either identical signatures to the missing API, or similar. For the latter category, {\sc RepFinder} computes the weighted sum of the distances of return types, method names and parameter types. Finally, the API with the smallest distance is selected. As opposed to our technique, this work offers no guarantees as it doesn't
-investigate the body of the deprecated method or of the replacement one. Moreover, API calls
-are simply replaced by some other API call, rather than more complex code as in our situation.
+%% In~\cite{DBLP:conf/kbse/Huang0PW021}, Huang et al. automatically find replacements for missing APIs in library update (an API is considered as a public method in a public class). As new library versions are released, some APIs may get deprecated, removed or refactored.
+%% The focus in this work is on locating a replacement API through heuristics based on method signatures, rather than on finding an equivalent block of code.
+%% The tool presented in this paper, {\sc RepFinder} searches deprecation messages, the current library and external libraries in order to find replacement APIs. Replacement APIs must have either identical signatures to the missing API, or similar. For the latter category, {\sc RepFinder} computes the weighted sum of the distances of return types, method names and parameter types. Finally, the API with the smallest distance is selected. As opposed to our technique, this work offers no guarantees as it doesn't
+%% investigate the body of the deprecated method or of the replacement one. Moreover, API calls
+%% are simply replaced by some other API call, rather than more complex code as in our situation.
 
 
 %name change, signature change, move to a different package
