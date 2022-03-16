@@ -1924,7 +1924,7 @@ potential overrides of the method to refactor. This may lead to unsound results
 when different subclasses of the original class are used polymorphically in the
 refactored context.
 
-Finally, as described in Sec.~\ref{sec:equiv} we rely in some cases on
+Finally, as described in Sec.~\ref{sec:equiv}, we rely in some cases on
 \texttt{equals} implementations for equivalence comparison.  While we
 strictly filter which \texttt{equals} implementations we consider, if any of
 them do not accurately identify an equivalent program state, our refactoring
@@ -1961,16 +1961,16 @@ We use reflection to invoke the original method to refactor with fuzzed inputs,
 as well as our synthesised refactoring candidates. This allows us to dynamically
 invoke new candidates without the need for compilation. The state of a Java
 program is modelled by the current program stack as well as its heap consisting
-of instance variables and static field values. Static Field values are stored
+of instance variables and static field values. Static field values are stored
 with their respective classes, which in turn are loaded by class loaders. Java
 allows to load the same class in different class loaders, which creates
 independent copies of its static fields.
 
-In order to fully isolate the program state during the execution of the original
-and refactored code from each other, we load all invovled classes in separate
+In the verification phase, in order to fully isolate the program state during the execution of the original and refactored code from each other, we load all involved classes in separate
 class loaders. These class loaders are disposed immediately after the curent set
 of fuzzed inputs are executed, and new class loaders are created for the next
-inputs. Classes that do not maintain a static state are loaded in a shared
+inputs (which will be used in the next iteration of the CEGIS loop).
+Classes that do not maintain a static state are loaded in a shared
 parent class loader to improve performance.
 
 The OpenJDK Java virtual machine implementation does not allow us to load
