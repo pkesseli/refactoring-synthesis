@@ -1010,16 +1010,16 @@ The last two methods are in a similar situation as the second. Thus, we only add
 %% Then, we also add all the instructions contained
 %% in the code hints.
 
-\paragraph{{\bf Phase 3: Add mutators for $target\_types$}}
-\todo{Comment PK: I would call these "transformers". Just to avoid confusion with reviewers, if they expect them to "mutate" the state of an object in Java terms, which of course not all of them do.}
-The third and last phase adds  mutators for the target types.
-By mutators we refer to methods that modify the value of an instance variable.
+\paragraph{{\bf Phase 3: Add transformers for $target\_types$}}
+%% \todo{Comment PK: I would call these "transformers". Just to avoid confusion with reviewers, if they expect them to "mutate" the state of an object in Java terms, which of course not all of them do.}
+The third and last phase adds  transformers for the target types.
+By transformers we refer to methods that modify the value of an instance variable.
 Given our objective to generate objects for the $target\_types$ while consuming objects from $consumable\_objs$,
-we prioritise mutators that consume such objects.
-For instance, for our running example there are 16 public mutators for the \texttt{Calendar} class.
+we prioritise transformers that consume such objects.
+For instance, for our running example there are 16 public transformers for the \texttt{Calendar} class.
 However, for the CodeHints-library, instead of adding all of them, we prioritise those that
-consume the \texttt{date} object. There is only one such mutator \texttt{void setTime(Date date)}.
-Once we added any new mutators to the library, we remove the consumed objects from \texttt{consumable\_obj}.
+consume the \texttt{date} object. There is only one such transformer \texttt{void setTime(Date date)}.
+Once we added any new transformers to the library, we remove the consumed objects from \texttt{consumable\_obj}.
 
 %% Besides ways of generating objects of certain types, we also need to be able to
 %% modify the newly generated objects by setting their fields.
@@ -1085,9 +1085,9 @@ Add constants and instructions from the code hints\;
   Remove consumed objs from $consumable\_objs$\;
 }
 
-// {\bf Phase 3: Add mutators for $target\_types$}\\
+// {\bf Phase 3: Add transformers for $target\_types$}\\
 \While{$consumable\_obj\neq\emptyset$}{
-Add realisable mutators to the library for types in $target\_types$ that consume objects from $consumable\_objs$\;
+Add realisable transformers to the library for types in $target\_types$ that consume objects from $consumable\_objs$\;
 Remove consumed objs from $consumable\_objs$\;
 }
 %% =======
@@ -1110,11 +1110,11 @@ Remove consumed objs from $consumable\_objs$\;
 \label{alg:seeding-core}
 \end{figure}
 
-It may be the case that there is no realisable generator for a target type, or no mutators for the $target\_types$ that can consume all the
+It may be the case that there is no realisable generator for a target type, or no transformers for the $target\_types$ that can consume all the
 $consumable\_objs$. When we finish exploring all the available methods, we exit the corresponding loops in phases 2 and 3.
 As a consequence, the synthesiser may fail to generate a valid refactoring when relying solely on the CodeHints-library.
 %% For such a situation, we extend the component library as explained in Section~\ref{sec:extend-library}.
-A possible future direction is allowing unrealisable generators and mutators to be added to the library and iterating phases 2 and 3 a given number of times (potentially until fixed point).
+A possible future direction is allowing unrealisable generators and transformers to be added to the library and iterating phases 2 and 3 a given number of times (potentially until fixed point).
 %% iterate phase 2 and 3 until fixed point to 
 
 \subsection{Types-library} \label{sec:extend-library}
@@ -1124,7 +1124,7 @@ used to collect the $target\_types$ set during the initialisation phase.
 Conversely, when seeding solely based on types, we start with the $target\_types$ set containing
 the class where the original code resides, as well as the type of the inputs and outputs of the
 original code. Phases 2 and 3 of the seeding algorithm are the same as those in Figure~\ref{alg:seeding-core},
-i.e. we attempt to add generators and mutators for the $target\_types$ to the library.
+i.e. we attempt to add generators and transformers for the $target\_types$ to the library.
 
 %For our running example, we would have $target\_types = \{\}$
 
