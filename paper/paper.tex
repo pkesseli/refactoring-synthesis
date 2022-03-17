@@ -855,7 +855,7 @@ the required components, then synthesis will fail to find a refactoring.
 Similarly, if it contains too many components, then synthesis quickly becomes infeasible
 due to the large search space.
 
-Consequently, in our approach, the component library is dynamically built for each refactoring,
+Consequently, in our approach, the component library is dynamically built for each refactoring
 such that it only contains components specific to that particular use case.
 We designed two versions of the library, differentiated by the seeding guidance:
 \begin{itemize}
@@ -929,7 +929,8 @@ $required\_types(method)$ refers to the types of the objects required to call $m
 In our running example, $required\_types(\texttt{get}) = \{\texttt{int, Calendar}\}$
 given that, in order to call \texttt{get}, we must provide an argument of type \texttt{int} and a current object of type \texttt{Calendar}.
 Method \texttt{get} is not realisable as the library doesn't contain any generator for \texttt{Calendar}.
-Consequently, \texttt{Calendar} is added to $target\_types$, resulting in $target\_types = \{\texttt{int, Calendar}\}$
+Consequently, \texttt{Calendar} is added to $target\_types$, resulting in:
+$$target\_types = \{\texttt{int, Calendar}\}$$
 
 %% at the beginning of the library seeding process:
 %% \[
@@ -955,9 +956,9 @@ Consequently, \texttt{Calendar} is added to $target\_types$, resulting in $targe
 Method \var{i} is {\em realisable} iff $\forall t \in required\_types(i). t \in available\_types \vee t~is~a~primitive~type$.
 \end{definition}
 
-For our running example, \texttt{Calendar} is needed
-in order to call method \texttt{get}, which is required by the code hint. However, our library doesn't contain any way of creating such an object.
-Then, we add \texttt{Calendar} to $target\_types$.
+%% For our running example, \texttt{Calendar} is needed
+%% in order to call method \texttt{get}, which is required by the code hint. However, our library doesn't contain any way of creating such an object.
+%% Then, we add \texttt{Calendar} to $target\_types$.
 
 %% The objective is to generate objects for the $target\_types$, while consuming objects from $consumable\_objs$.
 %% During the process, $available\_types$ tells us for which types we have the means
@@ -971,11 +972,12 @@ Then, we add \texttt{Calendar} to $target\_types$.
 %In the algorithm in Figure~\ref{alg:seeding-core}, %% in the second phase, we add ways of generating
 %% objects whose types match the types of the required arguments and current objects to the library.
 %
-By generators, we refer to constructors and any other methods returning objects of that particular type.
+By generators we refer to constructors and any other methods returning objects of that particular type.
 %% Essentially, for each required type that we have no way of generating, we add all the realizable
 %% constructors and realizable methods returning objects of that type to the
 %% core library.
-Once we added a generator for a new type, we must add that type to $available\_types$.
+In the algorithm in Figure~\ref{alg:seeding-core},
+once we added a generator for a new type, we must add that type to $available\_types$.
 Additionally, if the new generator consumes any objects from $consumable\_objs$,
 we must remove them from the set.
 %More details on this in Section~\ref{sec:synthesis}.
@@ -1017,7 +1019,7 @@ By transformers we refer to methods that modify the value of an instance variabl
 Given our objective to generate objects for the $target\_types$ while consuming objects from $consumable\_objs$,
 we prioritise transformers that consume such objects.
 For instance, for our running example there are 16 public transformers for the \texttt{Calendar} class.
-However, for the CodeHints-library, instead of adding all of them, we prioritise those that
+However, instead of adding all of them to the CodeHints-library, we prioritise those that
 consume the \texttt{date} object. There is only one such transformer \texttt{void setTime(Date date)}.
 Once we added any new transformers to the library, we remove the consumed objects from \texttt{consumable\_obj}.
 
@@ -1073,7 +1075,7 @@ we add to the library must be accessible from the current location.
 \KwOut{CodeHints-library}
 %<<<<<<< HEAD
 // {\bf Phase 1: Initialise}\\
-Add constants and instructions from the code hints\;
+Add constants and instructions from the code hints to the library\;
 \For{each unrealisable instruction $i$ in library}{
   $target\_types$ = $target\_types \cup required\_types(i)$\;
 }
@@ -1112,7 +1114,7 @@ Remove consumed objs from $consumable\_objs$\;
 
 It may be the case that there is no realisable generator for a target type, or no transformers for the $target\_types$ that can consume all the
 $consumable\_objs$. When we finish exploring all the available methods, we exit the corresponding loops in phases 2 and 3.
-As a consequence, the synthesiser may fail to generate a valid refactoring when relying solely on the CodeHints-library.
+As a consequence, the synthesiser may fail to generate a valid refactoring from the CodeHints-library.
 %% For such a situation, we extend the component library as explained in Section~\ref{sec:extend-library}.
 A possible future direction is allowing unrealisable generators and transformers to be added to the library and iterating phases 2 and 3 a given number of times (potentially until fixed point).
 %% iterate phase 2 and 3 until fixed point to 
@@ -1121,8 +1123,9 @@ A possible future direction is allowing unrealisable generators and transformers
 
 For the CodeHints-library, the Javadoc code hints guidance results in the code hints being
 used to collect the $target\_types$ set during the initialisation phase.
-Conversely, when seeding solely based on types, we start with the $target\_types$ set containing
-the class where the original code resides, as well as the type of the inputs and outputs of the
+If we don't have access to code hints and we are seeding solely
+based on types, we start with the $target\_types$ set containing
+the class where the original code resides, as well as the types of the inputs and outputs of the
 original code (essentially using the signature of the original code).
 Phases 2 and 3 of the seeding algorithm are the same as those in Figure~\ref{alg:seeding-core},
 where we attempt to add generators and transformers for the $target\_types$ to the library.
