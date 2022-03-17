@@ -1123,15 +1123,22 @@ For the CodeHints-library, the Javadoc code hints guidance results in the code h
 used to collect the $target\_types$ set during the initialisation phase.
 Conversely, when seeding solely based on types, we start with the $target\_types$ set containing
 the class where the original code resides, as well as the type of the inputs and outputs of the
-original code. Phases 2 and 3 of the seeding algorithm are the same as those in Figure~\ref{alg:seeding-core},
-i.e. we attempt to add generators and transformers for the $target\_types$ to the library.
+original code (essentially using the signature of the original code).
+Phases 2 and 3 of the seeding algorithm are the same as those in Figure~\ref{alg:seeding-core},
+where we attempt to add generators and transformers for the $target\_types$ to the library.
 
 %For our running example, we would have $target\_types = \{\}$
 
-While we expect some overlap between the Types-library and the CodeHints-library, 
-the former may miss critical types provided by the Javadoc code hints.
-For instance, in our running example, the \texttt{Calendar} class is only mentioned by the
-code hints and would not be included in the Types-library.
+Given that both the CodeHints-library and the Types-library consider the output of the
+original code as a target type, we expect some overlap between the two libraries.
+From our experience, the seeding process for the Types-library may end up missing critical types provided by the Javadoc code hints. For instance, in our running example, the \texttt{Calendar} class is only mentioned by the
+code hints and would not be included in the seeding of the Types-library.
+One possibility for adding
+\texttt{Calendar} to the target types without considering
+the Javadoc hints, would be to add all the classes from the
+\texttt{java.util} package, which contains \texttt{Date}. However, doing so would result
+in a very large component library, most likely outside the capabilities of existing
+synthesis techniques.
 
 %% it's otherwise impossible to obtain, while trying to
 %% keep the component libraries relatively small.
