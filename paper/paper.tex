@@ -2299,7 +2299,7 @@ missed because our engine does not yet consider polymorphic or generic type
 relations. Finally, 2 more refactorings were missed because the method return
 value was dependent on an external system state which changed frequently between
 invocations
-(e.g. \code{getFreePhysicalMemorySize} in \code{OperatingSystemMXBean}),
+(e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
 %
 All the other refactoring opportunities were missed due to fuzzing
@@ -2310,7 +2310,7 @@ refactorings missed
 by Zest-Types and Rand-Types were due to missing library components.
 
 As explained in Section~\ref{sec:components-seeding}, one option 
-for relaxing the seeding of our libraries
+for increasing the size of our libraries 
 is allowing unrealisable generators and transformers to
 be added and iterating phases 2 and 3 a given number of times (potentially until fixed point).
 
@@ -2322,10 +2322,10 @@ Types-library), we can either
 %caused by insufficient counterexamples. This could have been addressed by
 increase the fuzzing timeout for the verification phase (resulting in
 more counterexamples), or attempt to produce higher quality
-counterexamples. For the latter, one solution is stop relying on libraries
+counterexamples. For the latter, one solution is to stop relying on libraries
 like Objenesis for object construction and instead use public constructors.
 For the former, the disadvantage of increasing the timeout is that it will
-slow down the overall refactoring.
+slow down the overall refactoring procedure.
 
 One solution was unsound
 because the method to refactor was a default method with an empty body, meant
@@ -2338,7 +2338,7 @@ method to refactor. %% Tab.~\ref{tab:configuration-results} also highlights that
 \paragraph{Zest vs Rand guidance}
 %% We couldn't find a big difference between Rand and Zest, although we expected
 %% Zest to find better counterexamples.
-Our experiment did not yield significant performance
+Our experiments did not yield significant performance
 differences between using JQF's coverage-guided Zest guidance and its random
 guidance. %% Using Javadoc Code Hints increased the rate of successful refactorings
 %% by 51\% for Zest guidance and 33\% for random guidance.
