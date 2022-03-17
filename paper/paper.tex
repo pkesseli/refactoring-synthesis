@@ -609,7 +609,7 @@ our experiments show that, when considering a large number of test inputs, a lar
 
 \item We propose a program synthesis based technique for refactoring uses of deprecated APIs, which incorporates semantic information about the code. In particular, the program synthesis is guided by code hints and type information.
 
-\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing.
+\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
 
   %% propose a program synthesis technique that is driven by type information and code hints, and relies on coverage-guided property-based testing.
   
@@ -682,8 +682,8 @@ Previous works have used type information to make components-based synthesis
 feasible in the presence of large component
 libraries~\cite{DBLP:conf/popl/FengM0DR17}.  However, as shown by our
 experimental results in
-Section~\ref{sec:experimental-results}, the use of types in our setting is still insufficient
-for obtaining an efficient refactoring technique.
+Section~\ref{sec:experimental-results}, the use of types in our setting is still insufficient.
+%for obtaining an efficient refactoring technique.
 %that is able to
 %provide hints to the developer on-the-fly.
 %
@@ -750,7 +750,7 @@ Once the component library is built, for the actual synthesis,
 we use a counterexample-guided iterative process that enables us
 to keep refining a candidate refactoring until we are happy with it.
 The refinement is based on the results provided by 
-fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
+fuzz testing.
 %% Intuitively, we wanted to avoid the overheads due to program analysis and
 %% constraint solving incurred by whitebox methods, while also making use of
 %% knowledge about the code that can be obtained through lightweight instrumentation.
