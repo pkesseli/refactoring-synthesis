@@ -2196,11 +2196,14 @@ in code coverage, it is saved for subsequent evolution.
 
 
 In our experiments, we compare four configurations of our algorithm against each other. The
-configurations differ in terms of the search space of programs they consider
-as well as the JQF fuzzing guidance applied. Configurations marked as {\bf TI}
-only consider type information when building the component library, whereas
-configurations marked as ({\bf TI/CH}) consider both type information and Javadoc
-code hints. Equally, configurations marked as {\bf Rand} use JQF's random fuzzing
+configurations differ in terms of the component library they consider
+as well as the JQF fuzzing guidance applied. Configurations marked as {\bf Types}
+are based on the Types-library,
+%only consider type information when building the component library,
+whereas configurations marked as ({\bf CodeHints}) work with the CodeHints-library.
+%consider both type information and Javadoc
+%code hints.
+Equally, configurations marked as {\bf Rand} use JQF's random fuzzing
 guidance, whereas {\bf Zest} uses JQF's coverage-guided Zest guidance.
 
 In Sec.~\ref{sec:experimental-results}, for each configuration we evaluate how
@@ -2213,76 +2216,139 @@ i7-4790 CPU dual core at 3.60 GHz.
 
 \subsection{Results}\label{sec:experimental-results}
 
-Tab.~\ref{tab:configuration-results} provides an overview about the number of
+Table~\ref{tab:configuration-results} provides an overview about the number of
 sound refactorings (\checkmark), missed refactorings (\xmark) and unsound
 refactorings (\lightning) produced per configuration, as well as the average
-runtime per refactoring. Our experiment did not yield significant performance
-differences between using JQF's coverage-guided Zest guidance and its random
-guidance. Using Javadoc Code Hints increased the rate of successful refactorings
-by 51\% for Zest guidance and 33\% for random guidance.
-
+runtime per refactoring. 
 \begin{table}[h]
 \begin{tabular} {|l|r|r|r|r|}
 \hline
 Config  & \checkmark & \xmark & \lightning & $\diameter$ runtime (s) \\ \hline
-Zest TI      & 58 & 58 & 12 & 228.4 \\ 
-Zest TI/CH   & 84 & 39 &  5 & 197.1 \\ 
-Rand TI      & 62 & 55 & 11 & 217.7 \\ 
-Rand TI/CH   & 83 & 40 &  5 & 207.2 \\  \hline\hline
+Zest-Types      & 58 & 58 & 12 & 228.4 \\ 
+Zest-CodeHints   & 84 & 39 &  5 & 197.1 \\ 
+Rand-Types      & 62 & 55 & 11 & 217.7 \\ 
+Rand-CodeHints   & 83 & 40 &  5 & 207.2 \\  \hline\hline
 \end{tabular} 
 \caption{Experimental results per configuration.}
 \label{tab:configuration-results}   
 \end{table}
 
-For the Zest TI/CH configuration, out of the 39 missed refactorings 13 were due
-to a failure to identify a suitable code hint.
-Tab.~\ref{tab:configuration-results-ch} shows the same evaluation as
-Tab.~\ref{tab:configuration-results}, but excluding refactorings where we failed
-to identify a suitable code hint, further highlighting the importance of Javadoc
-code hints. Excluding failures due to missing code hints, our success rate
-increases from 65\% to 75\% for the Zest TI/CH configuration.
+In Table~\ref{tab:configuration-results}, many of the refactorings missed when
+using the CodeHints-library are
+due to the fact that we actually couldn't find a Javadoc code hint,
+or we failed to parse it. In particular, there are 16 such methods.
+%
+%% For instance, for the Zest Ty/CH configuration,
+%% out of the 39 missed refactorings, 13 were due
+%%to a failure to identify a code hint.
+In such a situation, our approach falls back
+to using the Types-library. As we are interested in quantifying the benefit of
+using code hints compared to simply relying on types,
+Table~\ref{tab:configuration-results-ch} shows the same evaluation as
+Table~\ref{tab:configuration-results}, but excluding the 16 methods where we failed
+to identify a code hint. Next, we discuss the results of our experiments,
+as captured by Table~\ref{tab:configuration-results-ch}.
+%, further highlighting the importance of Javadoc code hints.
 
 \begin{table}[h]
 \begin{tabular} {|l|r|r|r|r|}
 \hline
 Config  & \checkmark & \xmark & \lightning & $\diameter$ runtime (s) \\ \hline
-Zest TI/CH   & 84 & 23 &  5 & 197.1 \\ 
-Rand TI/CH   & 83 & 24 &  5 & 207.2 \\  \hline\hline
+Zest-CodeHints   & 84 & 23 &  5 & 197.1 \\ 
+Rand-CodeHints   & 83 & 24 &  5 & 207.2 \\  \hline\hline
 \hline
 \end{tabular} 
-\caption{Results with present code hints.}
+\caption{Results when code hints were present.}
 \label{tab:configuration-results-ch}   
 \end{table}
 
-13 further refactorings were missed because our instruction is too conservative.
-The current instruction set checks whether it can construct well-formed 
-candidates using methods in the class containing the method to refactor, as well
-as any class used in the signature and Javadoc of the method to refactor. For
-these 13 methods the correct refactoring requires constructing an object of a
-type which does not occur in any of these sources, or invoking a method which is
-not contained in any of the aforementioned types.
+\todo{In Table~\ref{tab:configuration-results-ch}, can we have the results for Zest Types and Rand Types on the same benchmarks? This is the table leading the comparison between the approaches.}
 
-Three further refactorings were missed due to the size cap configured for
-refactored programs during the experiment, and another three refactorings were
+\paragraph{Successful refactorings for CodeHints vs Types}
+When we were able to find a code hint, the use of the CodeHints-library increased the
+success rate of our refactoring technique 
+from ? to ?. %75\%.
+%% Excluding failures due to missing code hints, our success rate
+%% increases from 65\% to 75\% for the Zest Ty/CH configuration.
+The higher quality of the instructions in the CodeHints-library compared to the
+Types-library significantly reduced
+the number of both unsound and missed refactorings.
+
+\todo{Is there any benchmark where using the Types-library found a refactorings, but using code hints didn't?}
+
+\paragraph{Missed refactorings}
+13 out of the refactorings missed by both Zest-CodeHints and Rand-CodeHints
+were missed because the component library was too conservative.
+%% further refactorings were missed because our instruction is too conservative.
+%% The current instruction set checks whether it can construct well-formed 
+%% candidates using methods in the class containing the method to refactor, as well
+%% as any class used in the signature and Javadoc of the method to refactor.
+For all these cases, the correct refactoring requires constructing an object whose type
+%% that can't be obtained through the seeding algorithms described in
+%% Section~\ref{sec:components-seeding}.
+does not occur in the code hints, the signature of the original code
+or the class containing the deprecated code.
+%% any of these sources, or invoking a method which is
+%% not contained in any of the aforementioned types.
+%
+%
+%Furthermore, 3 other refactorings were missed due to the size cap configured for
+%refactored programs during the experiment, and another
+Furthermore, 3 refactorings were
 missed because our engine does not yet consider polymorphic or generic type
-relations. Finally, two more refactorings were missed because the method return
+relations. Finally, 2 more refactorings were missed because the method return
 value was dependent on an external system state which changed frequently between
 invocations
 (e.g. \code{getFreePhysicalMemorySize} in \code{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
+%
+All the other refactoring opportunities were missed due to fuzzing
+timeouts.
 
-All other refactoring opportunities were missed due to fuzzing
-timeouts. The unsound refactorings in Zest TI and Zest TI/CH are almost all
-caused by insufficient counterexamples. This could have been addressed by
-increasing the verification fuzzing timeout or producing more higher quality
-counterexamples, e.g. by not relying on libraries like Objenesis for object
-construction and instead use public constructors. One solution was unsound
+When inspecting the results obtained with the Types-library, the additional
+refactorings missed
+by Zest-Types and Rand-Types were due to missing library components.
+
+As explained in Section~\ref{sec:components-seeding}, one option 
+for relaxing the seeding of our libraries
+is allowing unrealisable generators and transformers to
+be added and iterating phases 2 and 3 a given number of times (potentially until fixed point).
+
+
+\paragraph{Unsound refactorings}
+In order to catch the unsound refactorings (for both the CodeHints-library and the
+Types-library), we can either  
+%in Zest Ty and Zest Ty/CH are almost all
+%caused by insufficient counterexamples. This could have been addressed by
+increase the fuzzing timeout for the verification phase (resulting in
+more counterexamples), or attempt to produce higher quality
+counterexamples. For the latter, one solution is stop relying on libraries
+like Objenesis for object construction and instead use public constructors.
+For the former, the disadvantage of increasing the timeout is that it will
+slow down the overall refactoring.
+
+One solution was unsound
 because the method to refactor was a default method with an empty body, meant
 to be overridden by subclasses. To find a sound refactoring in these cases our
 algorithm should expand its equivalence constraint to types who override the
-method to refactor. Tab.~\ref{tab:configuration-results} also highlights that
-Javadoc Code Hints significantly reduce the likelihood of unsound refactorings
-in this context.
+method to refactor. %% Tab.~\ref{tab:configuration-results} also highlights that
+%% Javadoc Code Hints significantly reduce the likelihood of unsound refactorings
+%% in this context.
+
+\paragraph{Zest vs Rand guidance}
+%% We couldn't find a big difference between Rand and Zest, although we expected
+%% Zest to find better counterexamples.
+Our experiment did not yield significant performance
+differences between using JQF's coverage-guided Zest guidance and its random
+guidance. %% Using Javadoc Code Hints increased the rate of successful refactorings
+%% by 51\% for Zest guidance and 33\% for random guidance.
+In general, Zest guidance is known to perform better at 
+%%random-from-scratch input generation is exceedingly unlikely to
+generating inputs fitting precise bug-revealing conditions than random guidance.
+We expect this to account for the marginal improvement when using
+Zest guidance.
+
+
 
 \section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
