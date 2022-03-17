@@ -237,7 +237,7 @@ class java_awt_ComponentTest {
 
   @Test
   void size() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "size"), contains(".getSize()"));
+    assertThat(synthesiseAlias("java.awt.Component", "size"), contains(".getSize("));
   }
 
   private static Component fromVisible(final boolean isVisible) {

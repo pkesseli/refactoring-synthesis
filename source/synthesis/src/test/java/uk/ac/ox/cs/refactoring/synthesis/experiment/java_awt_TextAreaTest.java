@@ -37,7 +37,7 @@ class java_awt_TextAreaTest {
 
   @Test
   void preferredSizeIntInt() throws Exception {
-    assertThat(synthesiseAliasBenchmark("minimumSizeIntInt", "java.awt.TextArea", "preferredSize", "int", "int"),
+    assertThat(synthesiseAliasBenchmark("preferredSizeIntInt", "java.awt.TextArea", "preferredSize", "int", "int"),
         contains(".getPreferredSize("));
   }
 
