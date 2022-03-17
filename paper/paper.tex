@@ -189,14 +189,13 @@
   semantic information about the code. Our refactoring procedure
   performs semantic reasoning and search in the space of possible
   refactorings using automated program synthesis. In particular, the
-  program synthesis is guided by code hints and type information and makes use of
-  coverage-guided property-based testing. %% We
+  program synthesis is guided by Javadoc code hints and type information and makes use of
+  fuzz testing. %% We
   %% encode both the synthesis of refactoring candidates and their
   %% verification as program safety problems that we then solve with
   %% coverage-guided property-based testing.
-  We implemented our
-  technique in the tool ?? and used it to refactor a considerable
-  proportion of the methods deprecated in jdk15.
+  We implemented our technique and used it to refactor deprecated methods from the Oracle
+JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
   %
   %% Refactorings are structured changes to existing software that leave its
   %% externally observable behaviour unchanged.  Their intent is to improve
@@ -503,7 +502,7 @@ In order to prune the search space, we start by investigating the information av
 %The information that we are going to use to direct
 %\begin{itemize}
 
-{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists on the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
 However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient to solve the problem. %, where the number of possible programs where considering \texttt{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
 
 {\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
@@ -519,9 +518,9 @@ While code hints have been previously used to generate change rules~\cite{DBLP:c
 %Moreover, it generally requires full understanding of a program's internal structure, which is expensive.
 %This contradicts our aforementioned goal to design a technique that is fast. In a bid to obtain good performance,
 %we investigated using greybox testing for checking program equivalence, rather than formally proving it.
-In this work, instead of aiming for a formal proof,  we use coverage-guided property-based testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
+In this work, instead of aiming for a formal proof,  we use fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
 While we can't provide full correctness guarantees,
-our experiments show that, when considering a large number of test inputs, the refactorings do indeed preserve the behaviour of the original code.
+our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
 
 %Then, we choose a compromise between performance and ease of use and soundness. We use ...
 
@@ -610,7 +609,7 @@ our experiments show that, when considering a large number of test inputs, the r
 
 \item We propose a program synthesis based technique for refactoring uses of deprecated APIs, which incorporates semantic information about the code. In particular, the program synthesis is guided by code hints and type information.
 
-\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with coverage-guided property-based testing.
+\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing.
 
   %% propose a program synthesis technique that is driven by type information and code hints, and relies on coverage-guided property-based testing.
   
@@ -627,7 +626,8 @@ our experiments show that, when considering a large number of test inputs, the r
 %%   with no context and gradually increase the amount of context we take into consideration
 %%   until a desirable refactoring is found.
 
-\item We implemented our technique in the tool ?? and used it to refactor the methods deprecated in jdk15.
+\item We implemented our technique and used it to refactor deprecated methods from the Oracle
+JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
   %refactor deprecated instances in X open source projects.
   
 \end{itemize}  
@@ -750,7 +750,7 @@ Once the component library is built, for the actual synthesis,
 we use a counterexample-guided iterative process that enables us
 to keep refining a candidate refactoring until we are happy with it.
 The refinement is based on the results provided by 
-coverage-guided property-based testing~\cite{DBLP:conf/issta/PadhyeLS19}.
+fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
 %% Intuitively, we wanted to avoid the overheads due to program analysis and
 %% constraint solving incurred by whitebox methods, while also making use of
 %% knowledge about the code that can be obtained through lightweight instrumentation.
