@@ -2265,13 +2265,14 @@ Rand-CodeHints   & 83 & 24 &  5 & 207.2 \\  \hline\hline
 \todo{In Table~\ref{tab:configuration-results-ch}, can we have the results for Zest Types and Rand Types on the same benchmarks? This is the table leading the comparison between the approaches.}
 
 \paragraph{Successful refactorings for CodeHints vs Types}
-When we were able to find a code hint, the use of the CodeHints-library increased the
-success rate of our refactoring technique 
-from ? to ?. %75\%.
+Using the CodeHints-library enables our technique to find more refactorings
+than with the Type-library.
+In particular, when code hints are present, the success rate of our
+refactoring technique is 75\%.
 %% Excluding failures due to missing code hints, our success rate
 %% increases from 65\% to 75\% for the Zest Ty/CH configuration.
 The higher quality of the instructions in the CodeHints-library compared to the
-Types-library significantly reduced
+Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
 
 \todo{Is there any benchmark where using the Types-library found a refactorings, but using code hints didn't?}
