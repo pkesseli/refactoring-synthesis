@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.anyOf;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.mapsTo;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
+import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAliasBenchmark;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -54,7 +55,7 @@ class java_awt_ComponentTest {
 
   @Test
   void enableBoolean() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "enable", "boolean"),
+    assertThat(synthesiseAliasBenchmark("enableBoolean", "java.awt.Component", "enable", "boolean"),
         allOf(
             contains(".setEnabled("),
             mapsTo(java_awt_ComponentTest::isEnabled, fromEnabled(true), true),
@@ -212,7 +213,8 @@ class java_awt_ComponentTest {
 
   @Test
   void resizeDimension() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "resize", "java.awt.Dimension"), contains(".setSize("));
+    assertThat(synthesiseAliasBenchmark("resizeDimension", "java.awt.Component", "resize", "java.awt.Dimension"),
+        contains(".setSize("));
   }
 
   @Test
@@ -226,7 +228,7 @@ class java_awt_ComponentTest {
 
   @Test
   void showBoolean() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "show", "boolean"),
+    assertThat(synthesiseAliasBenchmark("showBoolean", "java.awt.Component", "show", "boolean"),
         allOf(
             contains(".setVisible("),
             mapsTo(Components::isVisible, fromVisible(true), true),
