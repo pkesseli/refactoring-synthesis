@@ -118,8 +118,10 @@ public class TableGenerator {
           final long count = cells.stream().map(r -> r.get(0)).filter(Objects::nonNull).map(pattern::matcher)
               .filter(Matcher::matches).count();
           final String label = count <= 0 ? shortName : shortName + Long.toString(count + 1);
-          row.set(0, label);
-          benchmarkNameToFoundCodeHints.put(label, runs.stream().anyMatch(run -> run.FoundCodeHints));
+          final boolean hasCodeHints = runs.stream().anyMatch(run -> run.FoundCodeHints);
+          final String annotatedLabel = hasCodeHints ? label + '*' : label;
+          row.set(0, annotatedLabel);
+          benchmarkNameToFoundCodeHints.put(annotatedLabel, hasCodeHints);
         }
 
         final boolean isUnsound = runs.stream().anyMatch(run -> run.Unsound);
@@ -176,8 +178,9 @@ public class TableGenerator {
           .filter(UNSOUND_MARKER::equals).count();
       final long missedChOnly = getChOnlyRow(benchmarkNameToFoundCodeHints, cells, column).filter(MISSED_MARKER::equals)
           .count();
-      final double successRate = (double) sound / (sound + unsound + missed);
-      final double successRateChOnly = (double) soundChOnly / (soundChOnly + unsoundChOnly + missedChOnly);
+      final double successRate = Math.round((double) sound / (sound + unsound + missed) * 100.0) / 100.0;
+      final double successRateChOnly = Math
+          .round((double) soundChOnly / (soundChOnly + unsoundChOnly + missedChOnly) * 100.0) / 100.0;
 
       cells.get(averageRow).set(column, Long.toString(average));
       cells.get(soundRow).set(column, Long.toString(sound));
