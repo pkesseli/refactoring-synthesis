@@ -2235,9 +2235,9 @@ i7-4790 CPU dual core at 3.60 GHz.
 
 \subsection{Results}\label{sec:experimental-results}
 
-Table~\ref{tab:configuration-results} provides an overview about the number of
+Table~\ref{tab:configuration-results} provides an overview of the number of
 sound refactorings (\checkmark), missed refactorings (\xmark), unsound
-refactorings (\lightning) as well as percentage of sound refactorings (\%)
+refactorings (\lightning), the percentage of sound refactorings (\%)
 produced per configuration, as well as the average runtime per refactoring. 
 \begin{table}[h]
 \begin{tabular} {|l|r|r|r|r|r|}
@@ -2295,37 +2295,39 @@ Types-library leads to  a reduction in
 the number of both unsound and missed refactorings.
 
 \paragraph{Missed refactorings}
-13 out of the refactorings missed by both Zest-CodeHints and Rand-CodeHints
-were missed because the component library was too conservative.
-%% further refactorings were missed because our instruction is too conservative.
-%% The current instruction set checks whether it can construct well-formed 
-%% candidates using methods in the class containing the method to refactor, as well
-%% as any class used in the signature and Javadoc of the method to refactor.
-For all these cases, the correct refactoring requires constructing an object whose type
-%% that can't be obtained through the seeding algorithms described in
-%% Section~\ref{sec:components-seeding}.
-does not occur in the code hints, the signature of the original code
-or the class containing the deprecated code.
-%% any of these sources, or invoking a method which is
-%% not contained in any of the aforementioned types.
-%
-%
-%Furthermore, 3 other refactorings were missed due to the size cap configured for
-%refactored programs during the experiment, and another
-Furthermore, 3 refactorings were
-missed because our engine does not yet consider polymorphic or generic type
-relations. Finally, 2 more refactorings were missed because the method return
+Out of the refactorings missed by both Zest-CodeHints and Rand-CodeHints, 
+2 were missed because the method return
 value was dependent on an external system state which changed frequently between
-invocations
+invocations\\
 (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
-%
-All the other refactoring opportunities were missed due to fuzzing
-timeouts.
+The rest of the refactorings missed by Zest-CodeHints and Rand-CodeHints
+were caused by fuzzing timeouts.  
 
-When inspecting the results obtained with the Types-library, the additional
-refactorings missed
-by Zest-Types and Rand-Types were due to missing library components.
+Regarding the refactorings missed by Zest-Types and Rand-Types, apart from those
+caused by the nondeterminism issue mentioned above, the majority
+were due to fuzzing timeouts. Particularly in the case of Zest-Types and Rand-Types,
+the timeouts are likely due to the Types-library missing some
+needed instructions.
+
+
+
+%% 3 refactorings were
+%% missed because our engine does not yet consider polymorphic or generic type
+%% relations
+
+%% 13 out of the refactorings missed by both Zest-CodeHints and Rand-CodeHints
+%% were missed because the component library was too conservative.
+%% For all these cases, the correct refactoring requires constructing an object whose type
+%% does not occur in the code hints, the signature of the original code
+%% or the class containing the deprecated code.
+%% Furthermore, 
+%% All the other refactoring opportunities were missed due to fuzzing
+%% timeouts.
+
+%% When inspecting the results obtained with the Types-library, the additional
+%% refactorings missed
+%% by Zest-Types and Rand-Types were due to missing library components.
 
 As explained in Section~\ref{sec:components-seeding}, one option 
 for increasing the size of our libraries 
