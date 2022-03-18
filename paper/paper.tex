@@ -1199,7 +1199,10 @@ we refer to the original code as $P_1$ and the refactored code as
 $P_2$. We will fully define what $equivalent$ actually means in Section~\ref{sec:equiv}.
 
 
-In each iteration of the synthesis process, there are two phases, a synthesis phase and a verification phase. We next show how we encode the problem corresponding to each of these phases so that it can be solved with fuzz testing. 
+In each iteration of the synthesis process, there are two phases, a synthesis phase and a verification phase. The synthesis phase generates a {\em candidate refactoring} that is equivalent to
+the original code on a finite set of inputs. Then, the verification phase tries to find a new {\em counterexample input} that distinguishes between the current candidate refactoring and the original code. If it manages, this input is added to the set of finite inputs used by the next synthesis phase, and if it fails, then the current candidate is indeed a solution refactoring.
+
+We next show how we encode the problem corresponding to each of the two phases so that it can be solved with fuzz testing. 
 % As we want to start with a high level view
 
 \paragraph{The synthesis phase} In this phase, we have 
@@ -1220,7 +1223,7 @@ Synthesise ($P_2$) {
 This method consists of only one conditional saying that if $P_1$ and $P_2$ are equivalent on all given inputs $\vec{i_1}, \cdots, \vec{i_n}$, then \texttt{assert(false)} is reached.
 Given that this assertion always fails, it means that the method is unsafe when $P_1$ and $P_2$ are equivalent on the given inputs.
 Thus, we can reduce the synthesis problem to the problem of checking the safety of \texttt{Synthesise}. If a safety checker manages to
-find an input $P_2$ for which the assertion fails (meaning that \texttt{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs. This $P_2$ is the code
+find an input $P_2$ for which the assertion fails (meaning that \texttt{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs. This $P_2$ is the {\em refactoring candidate}
 that the synthesis phase is supposed to generate. As aforementioned, we use an existing fuzz testing technique
 as the safety checker. We configure the fuzzer such that it constructs $P_2$ by weaving together components from the component library.
 
@@ -1270,20 +1273,20 @@ Verify($\vec{i}$) {
 }
 \end{lstlisting}
 
-In other words, answering the initial question posed by the verification
+In other words, answering the question posed by the verification
 phase is reduced to checking the safety of this method: if
 \texttt{Verify} is safe (i.e. the assertion is not violated) for any
 input~$\vec{i}$, then there is no input that can distinguish
-between the original and the candidate refactoring (this
+between the original code and the candidate refactoring (this
 is indeed a sound refactoring). However, if \texttt{Verify} is not safe,
-then we want to be able to obtain a counterexample input
+then we want to be able to obtain a {\em counterexample input}
 $\vec{i_{cex}}$ for which the assertion fails.
-
+%
 This counterexample will be provided back to the synthesis phase and
 used to refine the current candidate refactoring. Again, we check the
 safety of \texttt{Verify} with fuzz testing,
-which means that we may fail to find a distinguishing input when one
-does exist.
+which means that we may fail to find a distinguishing input even if one
+exists.
 
 
 %% notion of program equivalence.  While this is undecidable in
