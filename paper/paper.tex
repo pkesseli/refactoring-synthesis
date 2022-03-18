@@ -2037,7 +2037,14 @@ to accept undeclared identifiers and type names
 as arguments. For instance, the Javadoc hint in Figure~\ref{ex:javadoc-hint} suggests using
 \texttt{contains(int, int)}, which would normally cause a parsing error as the \texttt{int} type
 appears in the place of argument names. In our setting, we accept this hint as valid.
-
+There are still situations where our parser is too strict and fails to accept
+some of the code hints. Additionally, there are scenarios where, while the Javadoc
+does contain a useful code hint, it is not tagged accordingly with
+the \texttt{@code} tag. These situations are reflected in the experimental results
+in Section~\ref{sec:experimental-results}
+as some of the benchmarks for which we failed to identify a code hint. These benchmarks
+are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\ref{tab:configuration-results-ch} (some of the missing benchmarks from Table~\ref{tab:configuration-results-ch} do genuinely miss a code hint). We will improve our technique for collecting code hints as future work.
+ 
 %% provides an example of
 %% a valid Javadoc hint.
 
