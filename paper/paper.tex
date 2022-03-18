@@ -1341,7 +1341,9 @@ In this section, we provide details on how we check this equivalence.
 We start by introducing some notation:
 \begin{itemize}
 \item \var{loadedClasses(P)} returns the set of classes loaded by the class loader
-  in which \var{P} is executed.
+  in which \var{P} is executed. Note that Java allows to load the same class
+in different class loaders, which creates independent copies of its
+static fields.
 \item \var{liveVars(P)} provides the set of variables that are live
 at the end of $P$. %% Thus, \var{liveVars(P_1)} gives us the
 %% variables that have been updated in the original code \var{P_1} and are
