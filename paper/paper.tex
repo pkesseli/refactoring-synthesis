@@ -2725,17 +2725,27 @@ component-based and counterexample-guided inductive synthesis.
 
 \section{Conclusion}
 
-We conjecture that refactorings driven by the semantics of programs have
-broader applicability and are able to address more complex refactoring
-schemata in comparison to conventional syntax-driven refactorings, thereby
-increasing the benefits of automated refactoring.  The space of possible
-semantic refactoring methods is enormous; as an instance, we have presented
-a method for refactoring iteration over Java collection classes based on
-program synthesis methods.  Our experiments indicate that refactoring using
-this specific instance is feasible, sound and sufficiently performant. 
-Future research must broaden the evidence for our general hypothesis by
-considering other programming languages, further, ideally more complex
-refactoring schemata, and other semantics-based analysis techniques.
+In this paper, we presented an automated program refactoring technique
+that eliminates uses of deprecated methods. Our technique is guided by
+types and Javadoc code hints, and performs semantic reasoning and
+search in the space of possible refactorings using automated program
+synthesis.  In particular, it makes use of component-based and
+counterexample-guided inductive synthesis. We encoded both the
+synthesis of refactoring candidates and their verification as program
+safety problems that we then solved with fuzz testing.
+
+
+%% We conjecture that refactorings driven by the semantics of programs have
+%% broader applicability and are able to address more complex refactoring
+%% schemata in comparison to conventional syntax-driven refactorings, thereby
+%% increasing the benefits of automated refactoring.  The space of possible
+%% semantic refactoring methods is enormous; as an instance, we have presented
+%% a method for refactoring iteration over Java collection classes based on
+%% program synthesis methods.  Our experiments indicate that refactoring using
+%% this specific instance is feasible, sound and sufficiently performant. 
+%% Future research must broaden the evidence for our general hypothesis by
+%% considering other programming languages, further, ideally more complex
+%% refactoring schemata, and other semantics-based analysis techniques.
 
 %\acks
 
