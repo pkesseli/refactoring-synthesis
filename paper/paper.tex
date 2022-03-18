@@ -1887,7 +1887,7 @@ allows to load the same class in different class loaders, which creates
 independent copies of its static fields.
 
 In the verification phase, in order to fully isolate the program state during the execution of the original and refactored code from each other, we load all involved classes in separate
-class loaders. These class loaders are disposed immediately after the curent set
+class loaders. These class loaders are disposed immediately after the current set
 of fuzzed inputs are executed, and new class loaders are created for the next
 inputs (which will be used in the next iteration of the CEGIS loop).
 Classes that do not maintain a static state are loaded in a shared
