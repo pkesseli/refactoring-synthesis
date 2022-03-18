@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,11 +28,10 @@ import uk.ac.ox.cs.refactoring.synthesis.statistics.Run;
 
 public class TableGenerator {
 
-  private static final int NUMBER_OF_SUMMARY_COLUMNS = 4;
+  private static final int NUMBER_OF_SUMMARY_COLUMNS = 10;
 
   public static void main(final String[] args) throws IOException {
-    final String[] files = Arrays.stream(args).map(Paths::get).filter(Files::exists).map(Path::toString)
-        .toArray(String[]::new);
+    final Path[] files = Parameters.getJsonFiles(args);
     final int numberOfConfigurations = files.length;
     final List<List<String>> cells = getCells(files);
     final int numberOfBenchmarks = cells.size() - NUMBER_OF_SUMMARY_COLUMNS - 1;
@@ -77,7 +75,7 @@ public class TableGenerator {
 
   private static final String MISSED_MARKER = "\\multicolumn{1}{c}{\\xmark}";
 
-  private static List<List<String>> getCells(final String[] jsonFiles) throws IOException {
+  private static List<List<String>> getCells(final Path[] jsonFiles) throws IOException {
     if (jsonFiles.length == 0)
       return Collections.emptyList();
 
@@ -87,13 +85,14 @@ public class TableGenerator {
     final int numberOfColumns = numberOfConfigurations + 1;
     int numberOfRows = -1;
     final Map<String, Report> reports = new HashMap<>();
+    final Map<String, Boolean> benchmarkNameToFoundCodeHints = new HashMap<>();
     for (int column = 0; column < numberOfConfigurations; ++column) {
-      final Path jsonFile = Paths.get(jsonFiles[column]);
+      final Path jsonFile = jsonFiles[column];
       final Report report;
       try (final InputStream is = Files.newInputStream(jsonFile)) {
         report = objectMapper.readValue(is, Report.class);
       }
-      reports.put(jsonFiles[column], report);
+      reports.put(jsonFiles[column].toString(), report);
 
       final int numberOfBenchmarks = report.Benchmarks.size();
       numberOfRows = numberOfBenchmarks + NUMBER_OF_SUMMARY_COLUMNS + 1;
@@ -110,6 +109,7 @@ public class TableGenerator {
       int rowIndex = 1;
       for (final Map.Entry<String, List<Run>> benchmark : report.Benchmarks.entrySet()) {
         final List<String> row = cells.get(rowIndex++);
+        final List<Run> runs = benchmark.getValue();
 
         if (row.get(0) == null) {
           final String name = benchmark.getKey();
@@ -119,9 +119,9 @@ public class TableGenerator {
               .filter(Matcher::matches).count();
           final String label = count <= 0 ? shortName : shortName + Long.toString(count + 1);
           row.set(0, label);
+          benchmarkNameToFoundCodeHints.put(label, runs.stream().anyMatch(run -> run.FoundCodeHints));
         }
 
-        final List<Run> runs = benchmark.getValue();
         final boolean isUnsound = runs.stream().anyMatch(run -> run.Unsound);
         if (isUnsound) {
           row.set(columnIndex, UNSOUND_MARKER);
@@ -144,11 +144,23 @@ public class TableGenerator {
     final int soundRow = averageRow + 1;
     final int unsoundRow = soundRow + 1;
     final int missedRow = unsoundRow + 1;
+    final int averageRowChOnly = missedRow + 1;
+    final int soundRowChOnly = averageRowChOnly + 1;
+    final int unsoundRowChOnly = soundRowChOnly + 1;
+    final int missedRowChOnly = unsoundRowChOnly + 1;
+    final int successRateRow = missedRowChOnly + 1;
+    final int successRateRowChOnly = successRateRow + 1;
 
     cells.get(averageRow).set(0, "Average");
     cells.get(soundRow).set(0, "Sound");
     cells.get(unsoundRow).set(0, "Unsound");
     cells.get(missedRow).set(0, "Missed");
+    cells.get(averageRowChOnly).set(0, "Average CH");
+    cells.get(soundRowChOnly).set(0, "Sound CH");
+    cells.get(unsoundRowChOnly).set(0, "Unsound CH");
+    cells.get(missedRowChOnly).set(0, "Missed CH");
+    cells.get(successRateRow).set(0, "Success Rate");
+    cells.get(successRateRowChOnly).set(0, "Success Rate CH");
 
     for (int column = 1; column < numberOfConfigurations + 1; ++column) {
       final long average = Math.round(getRow(cells, column)
@@ -156,11 +168,27 @@ public class TableGenerator {
       final long sound = getRow(cells, column).filter(NumberUtils::isParsable).count();
       final long unsound = getRow(cells, column).filter(UNSOUND_MARKER::equals).count();
       final long missed = getRow(cells, column).filter(MISSED_MARKER::equals).count();
+      final long averageChOnly = Math.round(getChOnlyRow(benchmarkNameToFoundCodeHints, cells, column)
+          .filter(NumberUtils::isParsable).collect(Collectors.averagingLong(Long::parseLong)));
+      final long soundChOnly = getChOnlyRow(benchmarkNameToFoundCodeHints, cells, column)
+          .filter(NumberUtils::isParsable).count();
+      final long unsoundChOnly = getChOnlyRow(benchmarkNameToFoundCodeHints, cells, column)
+          .filter(UNSOUND_MARKER::equals).count();
+      final long missedChOnly = getChOnlyRow(benchmarkNameToFoundCodeHints, cells, column).filter(MISSED_MARKER::equals)
+          .count();
+      final double successRate = (double) sound / (sound + unsound + missed);
+      final double successRateChOnly = (double) soundChOnly / (soundChOnly + unsoundChOnly + missedChOnly);
 
       cells.get(averageRow).set(column, Long.toString(average));
       cells.get(soundRow).set(column, Long.toString(sound));
       cells.get(unsoundRow).set(column, Long.toString(unsound));
       cells.get(missedRow).set(column, Long.toString(missed));
+      cells.get(averageRowChOnly).set(column, Long.toString(averageChOnly));
+      cells.get(soundRowChOnly).set(column, Long.toString(soundChOnly));
+      cells.get(unsoundRowChOnly).set(column, Long.toString(unsoundChOnly));
+      cells.get(missedRowChOnly).set(column, Long.toString(missedChOnly));
+      cells.get(successRateRow).set(column, Double.toString(successRate));
+      cells.get(successRateRowChOnly).set(column, Double.toString(successRateChOnly));
     }
 
     return cells;
@@ -168,5 +196,11 @@ public class TableGenerator {
 
   private static Stream<String> getRow(final List<List<String>> cells, final int column) {
     return cells.stream().skip(1).map(row -> row.get(column));
+  }
+
+  private static Stream<String> getChOnlyRow(final Map<String, Boolean> benchmarkNameToFoundCodeHints,
+      final List<List<String>> cells, final int column) {
+    return cells.stream().skip(1).filter(row -> Boolean.TRUE.equals(benchmarkNameToFoundCodeHints.get(row.get(0))))
+        .map(row -> row.get(column));
   }
 }
