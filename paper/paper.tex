@@ -2181,7 +2181,7 @@ Our conjecture is that, especially for the CodeHints-library, this is due to the
 
 
 \section{Experimental results}\label{sec:experimental-results}
-Our benchmark suite consists of the first 128 deprecated methods from the Oracle
+Our benchmark suite consists of the first 132 deprecated methods from the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI} for which
 there exist refactorings that are semantically equivalent to the original code.
 Besides deprecated methods that don't have a semantically equivalent refactoring
@@ -2236,17 +2236,17 @@ i7-4790 CPU dual core at 3.60 GHz.
 \subsection{Results}\label{sec:experimental-results}
 
 Table~\ref{tab:configuration-results} provides an overview about the number of
-sound refactorings (\checkmark), missed refactorings (\xmark) and unsound
-refactorings (\lightning) produced per configuration, as well as the average
-runtime per refactoring. 
+sound refactorings (\checkmark), missed refactorings (\xmark), unsound
+refactorings (\lightning) as well as percentage of sound refactorings (\%)
+produced per configuration, as well as the average runtime per refactoring. 
 \begin{table}[h]
-\begin{tabular} {|l|r|r|r|r|}
+\begin{tabular} {|l|r|r|r|r|r|}
 \hline
-Config  & \checkmark & \xmark & \lightning & $\diameter$ runtime (s) \\ \hline
-Zest-Types      & 58 & 58 & 12 & 228.4 \\ 
-Zest-CodeHints   & 84 & 39 &  5 & 197.1 \\ 
-Rand-Types      & 62 & 55 & 11 & 217.7 \\ 
-Rand-CodeHints   & 83 & 40 &  5 & 207.2 \\  \hline\hline
+Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
+Zest-Types     &         61 &     59 &         12 & 46 & 233.2 \\ 
+Zest-CodeHints &         88 &     39 &          5 & 67 & 199.9 \\ 
+Rand-Types     &         66 &     55 &         11 & 50 & 220.3 \\ 
+Rand-CodeHints &         87 &     40 &          5 & 66 & 207.4 \\  \hline\hline
 \end{tabular} 
 \caption{Experimental results per configuration.}
 \label{tab:configuration-results}   
@@ -2255,7 +2255,7 @@ Rand-CodeHints   & 83 & 40 &  5 & 207.2 \\  \hline\hline
 In Table~\ref{tab:configuration-results}, many of the refactorings missed when
 using the CodeHints-library are
 due to the fact that we actually couldn't find a Javadoc code hint,
-or we failed to parse it. In particular, there are 16 such methods.
+or we failed to parse it.
 %
 %% For instance, for the Zest Ty/CH configuration,
 %% out of the 39 missed refactorings, 13 were due
@@ -2264,37 +2264,35 @@ In such a situation, our approach falls back
 to using the Types-library. As we are interested in quantifying the benefit of
 using code hints compared to simply relying on types,
 Table~\ref{tab:configuration-results-ch} shows the same evaluation as
-Table~\ref{tab:configuration-results}, but excluding the 16 methods where we failed
+Table~\ref{tab:configuration-results}, but excluding methods where we failed
 to identify a code hint. Next, we discuss the results of our experiments,
 as captured by Table~\ref{tab:configuration-results-ch}.
 %, further highlighting the importance of Javadoc code hints.
 
 \begin{table}[h]
-\begin{tabular} {|l|r|r|r|r|}
+\begin{tabular} {|l|r|r|r|r|r|}
 \hline
-Config  & \checkmark & \xmark & \lightning & $\diameter$ runtime (s) \\ \hline
-Zest-CodeHints   & 84 & 23 &  5 & 197.1 \\ 
-Rand-CodeHints   & 83 & 24 &  5 & 207.2 \\  \hline\hline
+Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
+Zest-Types     &         55 &     28 &  8         & 60 & 234.7 \\ 
+Zest-CodeHints &         85 &      5 &  1         & 93 & 206.8 \\ 
+Rand-Types     &         60 &     23 &  8         & 65 & 224.9 \\ 
+Rand-CodeHints &         83 &      7 &  1         & 91 & 209.7 \\  \hline\hline
 \hline
 \end{tabular} 
 \caption{Results when code hints were present.}
 \label{tab:configuration-results-ch}   
 \end{table}
 
-\todo{In Table~\ref{tab:configuration-results-ch}, can we have the results for Zest Types and Rand Types on the same benchmarks? This is the table leading the comparison between the approaches.}
-
 \paragraph{Successful refactorings for CodeHints vs Types}
 Using the CodeHints-library enables our technique to find more refactorings
 than with the Type-library.
 In particular, when code hints are present, the success rate of our
-refactoring technique is 75\% with Zest-CodeHints.
+refactoring technique is 93\% with Zest-CodeHints.
 %% Excluding failures due to missing code hints, our success rate
 %% increases from 65\% to 75\% for the Zest Ty/CH configuration.
 The higher quality of the instructions in the CodeHints-library compared to the
 Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
-
-\todo{Is there any benchmark where using the Types-library found a refactorings, but using code hints didn't?}
 
 \paragraph{Missed refactorings}
 13 out of the refactorings missed by both Zest-CodeHints and Rand-CodeHints
@@ -2365,8 +2363,9 @@ guidance. %% Using Javadoc Code Hints increased the rate of successful refactori
 In general, Zest guidance is known to perform better at 
 %%random-from-scratch input generation is exceedingly unlikely to
 generating inputs fitting precise bug-revealing conditions than random guidance.
-We expect this to account for the marginal improvement when using
-Zest guidance.
+However, this better guidance comes at the price of lower performance than the
+in-memory PRNG guidance and thus results in fewer counterexamples and more
+timeouts.
 
 
 

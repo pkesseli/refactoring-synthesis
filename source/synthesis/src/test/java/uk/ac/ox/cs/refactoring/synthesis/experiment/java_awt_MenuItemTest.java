@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.allOf;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.mapsTo;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
+import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAliasBenchmark;
 
 import java.awt.MenuItem;
 
@@ -33,7 +34,7 @@ class java_awt_MenuItemTest {
 
   @Test
   void enableBoolean() throws Exception {
-    assertThat(synthesiseAlias("java.awt.MenuItem", "enable", "boolean"),
+    assertThat(synthesiseAliasBenchmark("enableBoolean", "java.awt.MenuItem", "enable", "boolean"),
         allOf(
             contains(".setEnabled("),
             mapsTo(java_awt_MenuItemTest::isEnabled, fromEnabled(true), true),
