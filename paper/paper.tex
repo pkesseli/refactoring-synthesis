@@ -1079,14 +1079,14 @@ Add constants and instructions from the code hints to the library\;
 \For{each unrealisable instruction $i$ in library}{
   $target\_types$ = $target\_types \cup required\_types(i)$\;
 }
-
+$\newline$
 // {\bf Phase 2: Add generators for $target\_types$}\\
 \For{each $t \in target\_types$ for which there is no generator}{
   Add realisable generators for $t$ to library\;
   $available\_types = available\_types \cup \{t\}$\;
   Remove consumed objs from $consumable\_objs$\;
 }
-
+$\newline$
 // {\bf Phase 3: Add transformers for $target\_types$}\\
 \While{$consumable\_obj\neq\emptyset$}{
 Add realisable transformers to the library for types in $target\_types$ that consume objects from $consumable\_objs$\;
