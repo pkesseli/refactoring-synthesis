@@ -2188,10 +2188,11 @@ We plan on investigating some of these directions as part of future work.
 
 
 \section{Experimental results}\label{sec:experimental-results}
-Our benchmark suite consists of the first 132 deprecated methods from the Oracle
-JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI} for which
-there exist refactorings that are semantically equivalent to the original code.
-Besides deprecated methods that don't have a semantically equivalent refactoring
+We selected 132 out of 392 deprecated methods on the Oracle
+JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}, for which
+there exist refactorings that are semantically equivalent to the original code,
+prioritised in order of appearance on the website.
+Besides deprecated methods that do not have a semantically equivalent refactoring
 (see Section~\ref{sec:semantically-different-refactorings}),
 we also excluded methods with I/O side-effects, which are currently
 unsupported by our implementation (see Sec.~\ref{sec:incompleteness}). Other
