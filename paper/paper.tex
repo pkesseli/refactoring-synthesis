@@ -2162,10 +2162,10 @@ reduce the number of equivalent programs that get explored.
 For example, \citet{DBLP:conf/cav/AlbarghouthiGK13} 
 prune the search space using observational equivalence with respect to a set of input/output examples, i.e., two programs are considered to be in the same equivalence class if, for all given inputs in the set of input/output examples, they produce the same outputs. Alternatively, \citet{DBLP:conf/vmcai/SmithA19} generate only programs in a specific normal form, where term rewriting is used to transform a program into its normal form. In~\cite{DBLP:journals/corr/KoukoutosKK16}, Koukoutos et al. make use of attribute grammars to only produce certain types of expressions in their normal form, thus skipping other expressions
 that are syntactically different, yet semantically equivalent.
-While we plan on investigating some of these directions as part of future work,
-our current technique is still effective without equivalence reduction.
-Our conjecture is that, especially for the CodeHints-library, this is due to the reduced number of components. 
-\todo{Do we want to mention number of components? Do we use any heuristic at all for this?}
+We plan on investigating some of these directions as part of future work.
+%% our current technique is still effective without equivalence reduction.
+%% Our conjecture is that, especially for the CodeHints-library, this is due to the reduced number of components. 
+%% \todo{Do we want to mention number of components? Do we use any heuristic at all for this?}
 %% given the restricted set of instructions in the core library,
 %% our current technique is still effective (as shown by the experimental evaluation).
 
