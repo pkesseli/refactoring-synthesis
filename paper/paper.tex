@@ -1187,18 +1187,19 @@ synthesis techniques.
 \section{Synthesising the refactoring}\label{sec:encoding}
 
 We make use of a CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, where we
-iteratively improve a candidate refactoring (generated using the component library) until it obeys a given specification.
+iteratively improve a candidate refactoring (generated using one of the component libraries) until it obeys a given specification.
 In our case, the specification expresses the fact that the original and
-the refactored blocks of code need to have the same behaviour, meaning that they are observationally equivalent.
+the refactored blocks of code must behave indistinguishably, i.e. they are observationally equivalent.
 %
 In the rest of the paper, we will use the predicate
 $equivalent(P_1(\vec{i}), P_2(\vec{i}))$ to denote that code $P_1$ is
-observationally equivalent to $P_2$ for inputs $\vec{i}$.  In general,
+observationally equivalent to $P_2$ for inputs $\vec{i}$, meaning that the two programs
+can't be distinguished by their behaviour on inputs $\vec{i}$.  In general,
 we refer to the original code as $P_1$ and the refactored code as
 $P_2$. We will fully define what $equivalent$ actually means in Section~\ref{sec:equiv}.
 
 
-In each iteration of the synthesis process, there are two phases, a synthesis and a verification one. We next show how we encode the problem corresponding to each of these phases so that it can be solved with fuzz testing. 
+In each iteration of the synthesis process, there are two phases, a synthesis phase and a verification phase. We next show how we encode the problem corresponding to each of these phases so that it can be solved with fuzz testing. 
 % As we want to start with a high level view
 
 \paragraph{The synthesis phase} In this phase, we have 
