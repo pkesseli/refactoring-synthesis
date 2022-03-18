@@ -2199,12 +2199,23 @@ reasons for exclusion were: deprecation without replacement, methods
 inaccessible by non-JCL classes, and native methods.
 
 \subsection{Experiment design}
+
+In our experiments, we compare four configurations of our algorithm against
+each other.  The configurations differ in terms of the component library
+they consider as well as the JQF fuzzing guidance applied.
+
+Configurations marked as {\bf Types}
+are based on the Types-library,
+%only consider type information when building the component library,
+whereas configurations marked as ({\bf CodeHints}) work with the CodeHints-library.
+%consider both type information and Javadoc
+%code hints.
+
 We use JQF in two modes: (1) with Zest~\cite{DBLP:conf/issta/PadhyeLSPT19}
-guidance, which incorporates
-feedback from the test program in the form of semantic validity of
-test inputs and the code coverage achieved during test execution, and
-(2) with random guidance, which randomly generates test inputs without using
-code coverage feedback.
+guidance, which incorporates feedback from the test program in the form of
+semantic validity of test inputs and the code coverage achieved during test
+execution, and (2) with random guidance, which randomly generates test
+inputs without using code coverage feedback.
 %
 %% However,
 %% random-from-scratch input generation is exceedingly unlikely to
@@ -2219,26 +2230,16 @@ input that is fed to the program under test.  %% Basically, the program
 Instead of generating inputs from scratch, coverage-guided fuzzers
 evolve a set of saved inputs. If a new input leads to an increase
 in code coverage, it is saved for subsequent evolution.
-
-
-In our experiments, we compare four configurations of our algorithm against each other. The
-configurations differ in terms of the component library they consider
-as well as the JQF fuzzing guidance applied. Configurations marked as {\bf Types}
-are based on the Types-library,
-%only consider type information when building the component library,
-whereas configurations marked as ({\bf CodeHints}) work with the CodeHints-library.
-%consider both type information and Javadoc
-%code hints.
-Equally, configurations marked as {\bf Rand} use JQF's random fuzzing
+Configurations marked as {\bf Rand} use JQF's random fuzzing
 guidance, whereas {\bf Zest} uses JQF's coverage-guided Zest guidance.
 
-In Sec.~\ref{sec:experimental-results}, for each configuration we evaluate how
-many sound as well as unsound refactorings are produced, how many refactoring
-opportunities were missed and the average time to successfully produce a
-refactoring. We bound the search by at most 500 inputs and 5 minutes per verification
-phase, and at most 2 minutes per synthesis phase. Experiments were performed on
-a Windows 10 computer with Oracle JDK 15.02, 32 GB of RAM and an Intel Core
-i7-4790 CPU dual core at 3.60 GHz.
+For each configuration we evaluate how many sound as well as unsound
+refactorings are produced, how many refactoring opportunities were missed
+and the average time to successfully produce a refactoring.  We bound the
+search by at most 500 inputs and 5 minutes per verification phase, and at
+most 2 minutes per synthesis phase.  Experiments were performed on a Windows
+10 computer with Oracle JDK 15.02, 32 GB of RAM and an Intel Core i7-4790
+CPU dual core at 3.60 GHz.
 
 \subsection{Results}\label{sec:experimental-results}
 
