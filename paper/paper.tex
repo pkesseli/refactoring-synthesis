@@ -2024,7 +2024,7 @@ We explicitly avoid constructors that are not amenable to fuzzing, such as
 collection constructors that take an integer capacity argument, where an
 unlucky fuzzed input might lead to an out of memory error.
 
-\subsection{Parsing the @code hints}
+\subsection{Parsing the @code hints} \label{sec:parse}
 
 As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
 interpret Javadoc hints. % provided by the developer.
@@ -2263,7 +2263,7 @@ Rand-CodeHints &         87 &     40 &          5 & 66 & 207.4 \\  \hline\hline
 In Table~\ref{tab:configuration-results}, many of the refactorings missed when
 using the CodeHints-library are
 due to the fact that we actually couldn't find a Javadoc code hint,
-or we failed to parse it.
+or we failed to parse it (see Section~\ref{sec:parse} for details).
 %
 %% For instance, for the Zest Ty/CH configuration,
 %% out of the 39 missed refactorings, 13 were due
