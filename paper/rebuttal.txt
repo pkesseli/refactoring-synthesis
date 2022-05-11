@@ -1,7 +1,8 @@
-Review A
-Q1. What do the generators look like? Please provide the generators you used for synthesis and verification. PK
+Reviewer A:
+Q1. What do the generators look like? Please provide the generators you used for synthesis and verification.
+- PK
 
-Review B
+Reviewer B:
 Q1: What were your refactorings evaluated on?
 - CD
 Q2: How does your tool work? Is it a plugin that will just do the refactorings automatically? How the unsound cases would be handled? Would one need to manually accept each and every refactoring?
@@ -9,9 +10,9 @@ Q2: How does your tool work? Is it a plugin that will just do the refactorings a
 Q3: How practical is your approach with regards to manual refactorings and/or automated change pattern suggestions etc.?
 - PK
 
-Review C
+Reviewer C:
 Q1: Did the authors manually verify the soundness reported in Tables 1 and 2?
-- Yes.
+- Yes, we did manually verify the soundness of the results.
 Q2: How good are the automatic refactorings proposed by this tool?
 - Number of unsound. PK
 Q3: Why 500 inputs, and not 250 or 5000? Would more/less inputs affect the output of the tool?
@@ -21,10 +22,16 @@ Q4: Why 5 minutes, and not 30 minutes or 24h? Would shorter/longer runs affect t
 Q5: L567: Don't all Java objects inherit from java.lang.Object?
 - We meant to say that we only consider class types which *directly* inherit from Object, as e.g. `java.util.Date` does.
 
-Additional comments:
-Review A
+Additional comments
+Reviewer A:
 Line 560: "for any class that is being loaded by the class loader of P_1, it must also be loaded by the class loader P_2" --> why is this requirement necessary? What if a class is deprecated and should not be used in P_2? PK
 
 Line 715: "most of the affected classes in the java.lang package do not maintain a static state" --> Do you have evidence for this? PK
 
-Line 637: What does notation "{{ ... }}" mean? CD
+Line 637: What does notation "{{ ... }}" mean?
+This notation denotes a set of sets, e.g. {{1}, {2,3}}.
+
+All reviewers:
+Replication package: We did intend to provide a replication package. However, the question "Do you intend to submit to an artifact if the paper is accepted?" on the submission page gave us the impression that that is only necessary if the paper is accepted. 
+
+
