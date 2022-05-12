@@ -4,9 +4,9 @@ Q1. What do the generators look like? Please provide the generators you used for
 
 Reviewer B:
 Q1: What were your refactorings evaluated on?
-- CD
+A candidate refactoring is considered to be a solution if it is observationally equivalent to the original code on 500 inputs, which we test by fuzzing as explained in the paper. Additionally, we manually inspected the generated refactorings.  
 Q2: How does your tool work? Is it a plugin that will just do the refactorings automatically? How the unsound cases would be handled? Would one need to manually accept each and every refactoring?
-- CD
+We envision that our tool will be used as a plugin that suggests refactorings to the programmer, who would manually accept them. 
 Q3: How practical is your approach with regards to manual refactorings and/or automated change pattern suggestions etc.?
 - PK
 
