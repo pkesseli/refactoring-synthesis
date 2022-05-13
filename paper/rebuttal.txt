@@ -1,8 +1,9 @@
 Reviewer A:
 Q1. What do the generators look like? Please provide the generators you used for synthesis and verification.
-- Counterexample generator: Configured with respect to the method to be refactored, accepts expected instance and parameter types (including static variables). Recursively instantiates each requested type using other generators in the generator repository, reflection or objenesis in this order of preference. For reflection or objenesis instantiation fields are recursively instantiated up to a configurable depth, after which they are left with default/null values. Due to this priority, literal values such as strings or ints are always retrieved from JQF generators.
-- Candidate generator: Instruction set of subset of Java is constructed based on Code Hint and Type information as the described in the paper, including parameter expressions. A pre-configured maximum number of statements with maxmium expression height is selected from the instruction set based on `SourceOfRandomness`.
-- Constraint: CEGIS synthesis and verification constraint are mapped to `FuzzStatement` executions, where `AssertionFailedError` are raised if a new candidate or counterexample is found.
+- Counterexample generator (used for verification): Configured with respect to the method to be refactored, accepts expected instance and parameter types (including static variables). Recursively instantiates each requested type using other generators in the generator repository, reflection or objenesis in this order of preference. For reflection or objenesis instantiation fields are recursively instantiated up to a configurable depth, after which they are left with default/null values. Due to this priority, literal values such as strings or ints are always retrieved from JQF generators.
+- Candidate generator (used for synthesis): Instruction set of subset of Java is constructed based on Code Hint and Type information as the described in the paper, including parameter expressions. A pre-configured maximum number of statements with maxmium expression height is selected from the instruction set based on `SourceOfRandomness`.
+
+The CEGIS synthesis and verification constraints are mapped to `FuzzStatement` executions, where `AssertionFailedError` are raised if a new candidate or counterexample is found.
 
 Reviewer B:
 Q1: What were your refactorings evaluated on?
