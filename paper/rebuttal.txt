@@ -1,6 +1,8 @@
 Reviewer A:
 Q1. What do the generators look like? Please provide the generators you used for synthesis and verification.
-- PK
+- Counterexample generator: Configured with respect to the method to be refactored, accepts expected instance and parameter types (including static variables). Recursively instantiates each requested type using other generators in the generator repository, reflection or objenesis in this order of preference. For reflection or objenesis instantiation fields are recursively instantiated up to a configurable depth, after which they are left with default/null values. Due to this priority, literal values such as strings or ints are always retrieved from JQF generators.
+- Candidate generator: Instruction set of subset of Java is constructed based on Code Hint and Type information as the described in the paper, including parameter expressions. A pre-configured maximum number of statements with maxmium expression height is selected from the instruction set based on `SourceOfRandomness`.
+- Constraint: CEGIS synthesis and verification constraint are mapped to `FuzzStatement` executions, where `AssertionFailedError` are raised if a new candidate or counterexample is found.
 
 Reviewer B:
 Q1: What were your refactorings evaluated on?
@@ -8,13 +10,13 @@ A candidate refactoring is considered to be a solution if it is observationally 
 Q2: How does your tool work? Is it a plugin that will just do the refactorings automatically? How the unsound cases would be handled? Would one need to manually accept each and every refactoring?
 We envision that our tool will be used as a plugin that suggests refactorings to the programmer, who would manually accept them. 
 Q3: How practical is your approach with regards to manual refactorings and/or automated change pattern suggestions etc.?
-- PK
+- Manual refactorings require the user to read and understand the code to be refactored, as well as the new API. A plug-in approach can e.g. perform these refactorings in the background and suggest them to the user when ready. Users would not have to actively worry about refactorings, but would get code markers in the IDE suggesting refactorings where appropriate. This reduces developer time spent on refactorings and can instead be used in other areas.
 
 Reviewer C:
 Q1: Did the authors manually verify the soundness reported in Tables 1 and 2?
 - Yes, we did manually verify the soundness of the results.
 Q2: How good are the automatic refactorings proposed by this tool?
-- Number of unsound. PK
+- For Zest Guidance with Code Hints present, only one out of 91 refactorings were unsound, and only 5 out of 132 when including scenarios with missing Code Hints. These "unsound" refactorings worked correctly for base classes, but did not consider the behaviour of subclasses, which can be amended by extending our constraint. We deemed this strong evidence that a fuzzing-based approach can give high confidence in automated refactorings.
 Q3: Why 500 inputs, and not 250 or 5000? Would more/less inputs affect the output of the tool?
 - We tried fuzzing additional inputs up to 2500, but they did not improve results. We will add these results in a revised paper.
 Q4: Why 5 minutes, and not 30 minutes or 24h? Would shorter/longer runs affect the output of the tool?
