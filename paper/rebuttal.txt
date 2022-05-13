@@ -26,9 +26,11 @@ Q5: L567: Don't all Java objects inherit from java.lang.Object?
 
 Additional comments
 Reviewer A:
-Line 560: "for any class that is being loaded by the class loader of P_1, it must also be loaded by the class loader P_2" --> why is this requirement necessary? What if a class is deprecated and should not be used in P_2? PK
+Line 560: "for any class that is being loaded by the class loader of P_1, it must also be loaded by the class loader P_2" --> why is this requirement necessary? What if a class is deprecated and should not be used in P_2?
+- Our refactoring only targets deprecated methods, and we apply a strict notion of equivalence on the observable state of the program. Our program does not need to load all classes and many of our refactorings do not, but we assert during verification that every class (even deprecated ones) loaded by either program version has the same static state. For classes not loaded by the refactored program, we effectively assert that the original program did not change their state beyond what is implied by the class initialiser.
 
-Line 715: "most of the affected classes in the java.lang package do not maintain a static state" --> Do you have evidence for this? PK
+Line 715: "most of the affected classes in the java.lang package do not maintain a static state" --> Do you have evidence for this?
+- By "affected" classes we were referring to classes in our benchmark set for which we could not synthesise sound refactorings. Not being able to reset the static state of a class in `java.lang` was never the reason for unsoundness or incompleteness in our benchmark set.
 
 Line 637: What does notation "{{ ... }}" mean?
 This notation denotes a set of sets, e.g. {{1}, {2,3}}.
