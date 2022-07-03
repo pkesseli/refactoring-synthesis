@@ -10,7 +10,17 @@ class java_awt_CheckboxGroupTest {
 
   @Test
   void getCurrent() throws Exception {
-    assertThat(synthesiseAlias("java.awt.CheckboxGroup", "getCurrent"), contains(".getSelectedCheckbox("));
+    try {
+      assertThat(synthesiseAlias("java.awt.CheckboxGroup", "getCurrent"), contains(".getSelectedCheckbox("));
+    } catch (final Exception e) {
+      if (e instanceof org.junit.runners.model.MultipleFailureException) {
+        for (final Throwable t : ((org.junit.runners.model.MultipleFailureException) e).getFailures()) {
+          t.printStackTrace();
+        }
+      }
+      e.printStackTrace();
+      throw e;
+    }
   }
 
   @Test

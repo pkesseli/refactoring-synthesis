@@ -9,6 +9,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoop;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
+import uk.ac.ox.cs.refactoring.synthesis.cegis.ConsoleCegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
 import uk.ac.ox.cs.refactoring.synthesis.state.ClassLoaderClonerStateFactory;
 import uk.ac.ox.cs.refactoring.synthesis.state.StateFactory;
@@ -24,8 +25,8 @@ public final class Synthesis {
     final Invoker invoker = new Invoker(methodToRefactor);
     final String methodName = benchmarkMethodName != null ? benchmarkMethodName : methodToRefactor.MethodName;
     final String benchmarkName = Reports.createBenchmarkName(methodToRefactor.FullyQualifiedClassName, methodName);
-    try (final CegisLoopListener<SnippetCandidate> listener = Reports.createReportListener(benchmarkName,
-        generatorConfiguration.FoundCodeHints)) {
+    try (final CegisLoopListener<SnippetCandidate> listener = /*Reports.createReportListener(benchmarkName,
+        generatorConfiguration.FoundCodeHints)*/ new ConsoleCegisLoopListener()) {
       final CegisLoop<SnippetCandidate> cegis = new CegisLoop<>(executor, invoker, generatorConfiguration,
           SnippetCandidate.class, listener);
       return cegis.synthesise();

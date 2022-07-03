@@ -167,14 +167,19 @@ public final class GeneratorConfigurations {
 
     final Method method = Methods.getMethod(classLoader, methodToRefactor);
     final TypeResolver typeResolver = new TypeResolver();
-    final ResolvedType instanceType = typeResolver.resolve(method.getDeclaringClass());
+    final boolean isStatic = Modifier.isStatic(method.getModifiers());
+    final ResolvedType declaringType = typeResolver.resolve(method.getDeclaringClass());
     final MemberResolver memberResolver = new MemberResolver(typeResolver);
-    final ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(instanceType, null, null);
+    final ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(declaringType, null, null);
+    final ResolvedType instanceType;
     final ResolvedMethod[] methods;
-    if (Modifier.isStatic(method.getModifiers()))
+    if (isStatic) {
+      instanceType = null;
       methods = typeWithMembers.getStaticMethods();
-    else
+    } else {
+      instanceType = declaringType;
       methods = typeWithMembers.getMemberMethods();
+    }
 
     final ResolvedMethod resolvedMethod = Arrays.stream(methods).filter(new MethodFilter(method)).findAny().get();
     final List<ResolvedType> parameterTypes = IntStream.range(0, resolvedMethod.getArgumentCount())

@@ -77,7 +77,7 @@ public final class ClassLoaders {
    * @throws ClassNotFoundException {@link #loadClass(ClassLoader, String)}
    */
   public static Class<?> loadClass(final ClassLoader classLoader, final Class<?> cls) throws ClassNotFoundException {
-    if (!isUserClass(classLoader, cls))
+    if (isLambda(cls) || !isUserClass(classLoader, cls))
       return cls;
     return loadClass(classLoader, cls.getName());
   }
@@ -104,6 +104,16 @@ public final class ClassLoaders {
       parent = parent.getParent();
     }
     return true;
+  }
+
+  /**
+   * Lambdas do not maintain a state, no need to load them in isolation.
+   * 
+   * @param cls Class in question.
+   * @return {@code true} if a generated lambda class, {@code false} otherwise.
+   */
+  public static boolean isLambda(final Class<?> cls) {
+    return cls.getName().contains("$$Lambda$");
   }
 
   private ClassLoaders() {

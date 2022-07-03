@@ -1,8 +1,13 @@
 package uk.ac.ox.cs.refactoring.synthesis.counterexample;
 
+import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,6 +17,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.IntStream;
+
+import org.mockito.exceptions.base.MockitoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.classmate.MemberResolver;
 import com.fasterxml.classmate.ResolvedType;
@@ -23,10 +32,6 @@ import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
-
-import org.mockito.exceptions.base.MockitoException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.random.RandomnessAccessor;
@@ -109,6 +114,8 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
     return generate(random, status, classLoader, objenesis, type, new HashSet<>(), depth);
   }
 
+  private static final HashSet<String> UNIQUE = new HashSet<>();
+
   /**
    * Recursive handler of
    * {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)},
@@ -128,14 +135,40 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       final int depth) {
 
     final Class<?> cls = type.getErasedType();
+    if (UNIQUE.add(cls.getName())) {
+      try {
+        Files.writeString(Paths.get("D:/temp/counterexample.txt"), cls.getName() + System.lineSeparator(),
+            StandardCharsets.UTF_8,
+            StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+      } catch (IOException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
+    }
+
     if (!Literals.isLiteralType(cls)) {
       if (depth <= 0)
         return null;
     }
 
+    final String className = cls.getName();
+    if (className.contains("java.awt") && className.contains("peer")) {
+      return null;
+    }
+
     final Set<Class<?>> visitedTypesInBranch = new HashSet<Class<?>>(visitedClasses);
     if (!isSupported(type) || !visitedTypesInBranch.add(cls))
       return null;
+
+    if (Character.class == cls || char.class == cls) {
+      if (random.nextBoolean()) {
+        final String alphaNumeric = " 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        final byte maxIndex = (byte) (alphaNumeric.length() - 1);
+        final byte index = random.nextByte((byte) 0, maxIndex);
+        final char result = alphaNumeric.charAt(index);
+        return Character.class == cls ? Character.valueOf(result) : result;
+      }
+    }
 
     try {
       return repository.type(cls).generate(random, status);

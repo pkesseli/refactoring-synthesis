@@ -24,6 +24,7 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.CommentsCollection;
@@ -100,7 +101,7 @@ public class JavaDocSeed implements InstructionSetSeed {
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     final String className = methodToRefactor.FullyQualifiedClassName;
     final ParserConfiguration parserConfiguration = new ParserConfiguration();
-    parserConfiguration.setLanguageLevel(LanguageLevel.JAVA_15);
+    parserConfiguration.setLanguageLevel(LanguageLevel.JAVA_17);
     final CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(),
         new ClassLoaderTypeSolver(classLoader));
     typeSolver.setExceptionHandler(SecurityException.class::isInstance);

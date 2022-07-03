@@ -1,8 +1,14 @@
 package uk.ac.ox.cs.refactoring.synthesis.counterexample;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -32,11 +38,12 @@ public class ClassLoaderCloner {
    */
   private final Map<Object, Object> objectsToClones = new IdentityHashMap<>();
 
-
   /** @param classLoader {@link #classLoader} */
   public ClassLoaderCloner(final ClassLoader classLoader) {
     this.classLoader = classLoader;
   }
+
+  private static final HashSet<String> UNIQUE = new HashSet<>();
 
   /**
    * Creates a copy of {@code object} using classes from {@link #classLoader}.
@@ -54,6 +61,16 @@ public class ClassLoaderCloner {
       throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
     if (object == null)
       return null;
+
+    if (UNIQUE.add(object.getClass().getName())) {
+      try {
+        Files.writeString(Paths.get("D:/temp/clone.txt"), object.getClass().getName() + System.lineSeparator(), StandardCharsets.UTF_8,
+            StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+      } catch (IOException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
+    }
 
     final Class<?> cls = object.getClass();
     if (Polymorphism.isDynamic(cls)) {
@@ -80,9 +97,16 @@ public class ClassLoaderCloner {
       final Object clone = Array.newInstance(cls.getComponentType(), length);
       objectsToClones.put(object, clone);
 
-      for (int i = 0; i < length; ++i) {
-        Array.set(clone, i, clone(Array.get(object, i)));
+      try {
+        for (int i = 0; i < length; ++i) {
+          Array.set(clone, i, clone(Array.get(object, i)));
+        }
+      } catch (final IllegalArgumentException e) {
+        logger.warn("", e);
+        objectsToClones.put(object, object);
+        return object;
       }
+
       return clone;
     }
 
@@ -104,7 +128,7 @@ public class ClassLoaderCloner {
       final Object value = field.get(object);
       try {
         targetField.set(clone, clone(value));
-      } catch(final IllegalArgumentException e) {
+      } catch (final IllegalArgumentException e) {
         throw e;
       }
     }

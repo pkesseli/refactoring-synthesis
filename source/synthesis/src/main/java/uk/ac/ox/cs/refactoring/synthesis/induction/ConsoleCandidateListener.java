@@ -18,4 +18,7 @@ public class ConsoleCandidateListener<Candidate> implements CandidateListener<Ca
     System.out.println("CA genuine: " + candidate);
   }
 
+  public void verified(final Candidate candidate) {
+    System.out.println("CA verified: " + candidate);
+  }
 }

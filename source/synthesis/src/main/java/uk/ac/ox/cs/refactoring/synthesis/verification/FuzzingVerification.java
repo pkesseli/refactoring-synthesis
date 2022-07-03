@@ -101,6 +101,9 @@ public class FuzzingVerification<Candidate> {
         if (failure instanceof AssertionFailedError) {
           storeCounterexample(counterexamples, (AssertionFailedError) failure);
         } else {
+          System.err.println("====== no assertion violdation ====");
+          e.printStackTrace();
+          System.err.println("====== no assertion violdation ====");
           throw new IllegalStateException(e);
         }
       }
