@@ -30,9 +30,9 @@ class ConsoleCounterexampleListenerTest {
   void instanceNoFieldsCe() {
     final Counterexample counterexample = new Counterexample("the-instance");
     Collections.addAll(counterexample.Arguments, 0, 1, 2);
-    assertEquals("Counterexample { \r\n" +
-        "  Instance = the-instance\r\n" +
-        "  Arguments = [0, 1, 2]\r\n" +
+    assertEquals("Counterexample { " + System.lineSeparator() +
+        "  Instance = the-instance" + System.lineSeparator() +
+        "  Arguments = [0, 1, 2]" + System.lineSeparator() +
         "}", ConsoleCounterexampleListener.toString(counterexample));
   }
 
@@ -41,10 +41,10 @@ class ConsoleCounterexampleListenerTest {
     final Counterexample counterexample = new Counterexample("the-instance");
     Collections.addAll(counterexample.Arguments, 0, 1, 2);
     counterexample.Fields.put("Class1.FIELD", "10");
-    assertEquals("Counterexample { \r\n" +
-        "  Instance = the-instance\r\n" +
-        "  Arguments = [0, 1, 2]\r\n" +
-        "  Fields = {Class1.FIELD=10}\r\n" +
+    assertEquals("Counterexample { " + System.lineSeparator() +
+        "  Instance = the-instance" + System.lineSeparator() +
+        "  Arguments = [0, 1, 2]" + System.lineSeparator() +
+        "  Fields = {Class1.FIELD=10}" + System.lineSeparator() +
         "}", ConsoleCounterexampleListener.toString(counterexample));
   }
 
