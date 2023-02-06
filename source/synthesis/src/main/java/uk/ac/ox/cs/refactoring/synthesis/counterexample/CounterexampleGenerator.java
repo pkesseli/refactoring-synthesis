@@ -13,6 +13,10 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import org.mockito.exceptions.base.MockitoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.classmate.MemberResolver;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
@@ -23,10 +27,6 @@ import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
-
-import org.mockito.exceptions.base.MockitoException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.random.RandomnessAccessor;
@@ -143,15 +143,27 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       logger.trace("Could not use JQF native generator.", e);
     }
 
+    final Function<ResolvedType, Object> generateElement = elementType -> generate(random, status, classLoader,
+        objenesis, elementType, visitedTypesInBranch, depth - 1);
     if (type.isArray()) {
-      final int length = getRandomArrayLength(random);
-      final Object array = Array.newInstance(type.getArrayElementType().getErasedType(), length);
+      final int length = CollectionsGenerator.getRandomArrayLength(random);
+      final Class<?> componentClass = type.getArrayElementType().getErasedType();
+      final Object array = Array.newInstance(componentClass, length);
+      final ResolvedType componentType = typeResolver.resolve(componentClass);
       for (int i = 0; i < length; ++i) {
-        final Object value = generate(random, status, classLoader, objenesis, type, visitedTypesInBranch,
-            depth - 1);
+        final Object value = generateElement.apply(componentType);
         Array.set(array, i, value);
       }
       return array;
+    }
+
+    final Object createdCollection;
+    try {
+      createdCollection = CollectionsGenerator.createCollection(random, typeResolver, generateElement, type);
+      if (createdCollection != null)
+        return createdCollection;
+    } catch (final Throwable e) {
+      logger.trace("Error when creating well-known collection type.", e);
     }
 
     if (!type.isInterface() && !type.isAbstract()) {
@@ -201,16 +213,6 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       }
     }
     return object;
-  }
-
-  /**
-   * Provides a random length for a collection or array to use.
-   * 
-   * @param random Random source.
-   * @return Length to use.
-   */
-  private static int getRandomArrayLength(final SourceOfRandomness random) {
-    return (int) random.nextByte(Byte.MIN_VALUE, Byte.MAX_VALUE) - (int) Byte.MIN_VALUE;
   }
 
   @Override
