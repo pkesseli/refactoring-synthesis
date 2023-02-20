@@ -109,6 +109,34 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
     return generate(random, status, classLoader, objenesis, type, new HashSet<>(), depth);
   }
 
+  private static Object getDefaultValue(final Class<?> cls) {
+    if (cls == byte.class || cls == Byte.class) {
+      return (byte) 0;
+    }
+    if (cls == short.class || cls == Short.class) {
+      return (short) 0;
+    }
+    if (cls == int.class || cls == Integer.class) {
+      return 0;
+    }
+    if (cls == long.class || cls == Long.class) {
+      return 0L;
+    }
+    if (cls == char.class || cls == Character.class) {
+      return '\0';
+    }
+    if (cls == float.class || cls == Float.class) {
+      return 0.0f;
+    }
+    if (cls == double.class || cls == Double.class) {
+      return 0.0;
+    }
+    if (cls == boolean.class || cls == Boolean.class) {
+      return false;
+    }
+    return null;
+  }
+
   /**
    * Recursive handler of
    * {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)},
@@ -130,12 +158,12 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
     final Class<?> cls = type.getErasedType();
     if (!Literals.isLiteralType(cls)) {
       if (depth <= 0)
-        return null;
+        return getDefaultValue(cls);
     }
 
     final Set<Class<?>> visitedTypesInBranch = new HashSet<Class<?>>(visitedClasses);
     if (!isSupported(type) || !visitedTypesInBranch.add(cls))
-      return null;
+      return getDefaultValue(cls);
 
     try {
       return repository.type(cls).generate(random, status);
@@ -197,7 +225,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       object = objenesis.apply(cls);
     } catch (final MockitoException e) {
       logger.warn("Could not instantiate part of counterexample.", e);
-      return null;
+      return getDefaultValue(cls);
     }
     for (final ResolvedField field : Fields.getInstance(memberResolver, type)) {
       final ResolvedType fieldType = field.getType();

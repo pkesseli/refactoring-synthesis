@@ -20,6 +20,10 @@ public final class Polymorphism {
   /** Substring contained in generated proxy classes. */
   private static final String PROXY_MARKER = "$Proxy";
 
+  private static final String SUREFIRE_MARKER = "org.apache.maven.surefire";
+
+  private static final String JQF_MARKER = "edu.berkeley.cs.jqf";
+
   /**
    * Decides whether the given type can be instantiated directly.
    * 
@@ -43,7 +47,7 @@ public final class Polymorphism {
   }
 
   /**
-   * Identifies the class modelled by a Mockito mock or daynamic proxy. Usually
+   * Identifies the class modelled by a Mockito mock or dynamic proxy. Usually
    * just returns {@code originalClass},
    * but for Mockito objects a parent class or interface is chosen instead. For
    * byte buddy proxies this may return {@link Object}, indicating that class
@@ -61,7 +65,6 @@ public final class Polymorphism {
       return ifc;
 
     return cls.getSuperclass();
-
   }
 
   /**
@@ -90,6 +93,7 @@ public final class Polymorphism {
    */
   public static boolean isDynamic(final Class<?> cls) {
     final String name = cls.getName();
-    return name.contains(PROXY_MARKER) || name.contains(LAMBDA_MARKER) || name.contains(BYTE_BUDDY_ACCESSOR);
+    return name.contains(PROXY_MARKER) || name.contains(LAMBDA_MARKER) || name.contains(BYTE_BUDDY_ACCESSOR)
+        || name.contains(SUREFIRE_MARKER) || name.contains(JQF_MARKER);
   }
 }

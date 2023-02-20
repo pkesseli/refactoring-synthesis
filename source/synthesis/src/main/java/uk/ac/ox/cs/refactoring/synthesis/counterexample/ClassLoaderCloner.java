@@ -32,7 +32,6 @@ public class ClassLoaderCloner {
    */
   private final Map<Object, Object> objectsToClones = new IdentityHashMap<>();
 
-
   /** @param classLoader {@link #classLoader} */
   public ClassLoaderCloner(final ClassLoader classLoader) {
     this.classLoader = classLoader;
@@ -67,7 +66,11 @@ public class ClassLoaderCloner {
       return object;
 
     if (Class.class == cls) {
-      return ClassLoaders.loadClass(classLoader, (Class<?>) object);
+      final Class<?> classObject = (Class<?>) object;
+      if (Polymorphism.isDynamic(classObject))
+        return classObject;
+
+      return ClassLoaders.loadClass(classLoader, classObject);
     }
 
     final Object existingClone = objectsToClones.get(object);
@@ -76,8 +79,9 @@ public class ClassLoaderCloner {
     }
 
     if (cls.isArray()) {
+      final Class<?> cloneClass = ClassLoaders.loadClass(classLoader, cls);
       final int length = Array.getLength(object);
-      final Object clone = Array.newInstance(cls.getComponentType(), length);
+      final Object clone = Array.newInstance(cloneClass.getComponentType(), length);
       objectsToClones.put(object, clone);
 
       for (int i = 0; i < length; ++i) {
@@ -102,11 +106,7 @@ public class ClassLoaderCloner {
       targetField.setAccessible(true);
 
       final Object value = field.get(object);
-      try {
-        targetField.set(clone, clone(value));
-      } catch(final IllegalArgumentException e) {
-        throw e;
-      }
+      targetField.set(clone, clone(value));
     }
     return clone;
   }
