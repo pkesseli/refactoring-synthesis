@@ -95,6 +95,18 @@ public class JavaDocSeed implements InstructionSetSeed {
     }
   }
 
+  private static boolean isEqual(final ResolvedMethodDeclaration resolvedMethodDeclaration,
+      final MethodDeclaration methodDeclaration) {
+    final ResolvedMethodDeclaration other;
+    try {
+      other = methodDeclaration.resolve();
+    } catch (final Exception e) {
+      return false;
+    }
+
+    return resolvedMethodDeclaration.getQualifiedSignature().equals(other.getQualifiedSignature());
+  }
+
   @Override
   public void seed(final ComponentDirectory components)
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
@@ -148,36 +160,65 @@ public class JavaDocSeed implements InstructionSetSeed {
                 .stream()
                 .filter(new MatchesMethodName(methodCallExpr.getNameAsString())).collect(Collectors.toSet());
             if (methods.size() == 1) {
-              register(classLoader, javaComponents, IterableUtils.first(methods));
-              return;
+              final ResolvedMethodDeclaration methodInCodeTag = IterableUtils.first(methods);
+              if (!isEqual(methodInCodeTag, method)) {
+                register(classLoader, javaComponents, methodInCodeTag);
+                return;
+              }
             }
           }
         }
       }
     }
 
-    final String deprecatedLink = getLink(javadoc);
-    if (deprecatedLink == null)
-      return;
+    final Set<String> deprecatedLinks = getLink(javadoc);
+    for (final String deprecatedLink : deprecatedLinks) {
+      final StringBuilder code = new StringBuilder(deprecatedLink.replace('#', JavaLanguage.PACKAGE_SEPARATOR).trim());
+      if (code.charAt(0) == '.') {
+        code.deleteCharAt(0);
+      }
 
-    final StringBuilder code = new StringBuilder(deprecatedLink.replace('#', JavaLanguage.PACKAGE_SEPARATOR).trim());
-    if (code.charAt(0) == '.') {
-      code.deleteCharAt(0);
+      final String codeWithParametersAsExpressions = code.toString();
+      ResolvedMethodDeclaration resolvedMethodDeclaration = getResolvedMethodDeclarationFromLink(symbolResolver,
+          typeSolver, javaParser, defaultType, parseResult, method, codeWithParametersAsExpressions);
+      if (resolvedMethodDeclaration == null) {
+        String codeAsType = code.toString().replaceAll("([,)])", " raw_param$1");
+        int paramIndex = 0;
+        String previous = "";
+        while (!codeAsType.equals(previous)) {
+          previous = codeAsType;
+          codeAsType = codeAsType.replaceFirst("raw_param", "param" + paramIndex);
+        }
+        resolvedMethodDeclaration = getResolvedMethodDeclarationFromLink(symbolResolver, typeSolver, javaParser,
+            defaultType, parseResult, method, codeAsType);
+        if (resolvedMethodDeclaration != null) {
+          register(classLoader, javaComponents, resolvedMethodDeclaration);
+          break;
+        }
+      }
     }
+  }
+
+  private ResolvedMethodDeclaration getResolvedMethodDeclarationFromLink(final JavaSymbolSolver symbolResolver,
+      final CombinedTypeSolver typeSolver, final JavaParser javaParser, final Type defaultType,
+      final ParseResult<CompilationUnit> parseResult, final MethodDeclaration method, final String code) {
     final Expression expression;
     try {
-      expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method,
-          code.toString());
+      expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method, code);
     } catch (final Exception e) {
       logger.warn("Could not identify method linked in JavaDoc", e);
-      return;
+      return null;
     }
 
     if (!(expression instanceof MethodCallExpr))
-      return;
+      return null;
     final MethodCallExpr methodCall = (MethodCallExpr) expression;
-    final ResolvedMethodDeclaration methodDeclaration = methodCall.resolve();
-    register(classLoader, javaComponents, methodDeclaration);
+    try {
+      return methodCall.resolve();
+    } catch (final Exception e) {
+      logger.warn("Could not resolved method linked in JavaDoc", e);
+      return null;
+    }
   }
 
   /**
@@ -313,9 +354,9 @@ public class JavaDocSeed implements InstructionSetSeed {
    * @param javadoc Comment in which to search.
    * @return {@link Javadoc} link reference.
    */
-  private static String getLink(final Javadoc javadoc) {
+  private static Set<String> getLink(final Javadoc javadoc) {
     return getDeprecatedInlineTags(javadoc).filter(tag -> JavadocInlineTag.Type.LINK == tag.getType())
-        .map(JavadocInlineTag::getContent).map(Links::getLink).findAny().orElse(null);
+        .map(JavadocInlineTag::getContent).map(Links::getLink).collect(Collectors.toSet());
   }
 
   /**
