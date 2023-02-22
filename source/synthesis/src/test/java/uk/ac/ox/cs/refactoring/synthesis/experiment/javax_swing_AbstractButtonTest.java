@@ -8,10 +8,15 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 import org.junit.jupiter.api.Test;
 
 class javax_swing_AbstractButtonTest {
-
   @Test
   void getLabel() throws Exception {
     assertThat(synthesiseAlias("javax.swing.AbstractButton", "getLabel"),
         contains("getText"));
+  }
+
+  @Test
+  void setLabel() throws Exception {
+    assertThat(synthesiseAlias("javax.swing.AbstractButton", "setLabel", "java.lang.String"),
+        contains("setText"));
   }
 }
