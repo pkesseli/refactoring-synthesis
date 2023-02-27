@@ -50,7 +50,9 @@ public class Literal implements IExpression {
           expression = new DoubleLiteralExpr(value.toString());
           break;
         case BYTE:
+        case SHORT:
         case INT:
+        case LONG:
           expression = new IntegerLiteralExpr(value.toString());
           break;
         default:
