@@ -1,0 +1,1 @@
+The method javax.swing.text.JTextComponent.modelToView​(int) is deprecated.Show me a refactoring example.

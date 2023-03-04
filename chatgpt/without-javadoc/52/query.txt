@@ -1,0 +1,1 @@
+The method java.awt.Container.locate​(int, int) is deprecated.Show me a refactoring example.

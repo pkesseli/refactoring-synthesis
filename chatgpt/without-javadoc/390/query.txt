@@ -1,0 +1,1 @@
+The method org.ietf.jgss.GSSContext.verifyMIC​(InputStream, InputStream, MessageProp) is deprecated.Show me a refactoring example.

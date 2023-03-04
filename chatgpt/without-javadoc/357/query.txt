@@ -1,0 +1,1 @@
+The method javax.swing.text.html.HTMLEditorKit.InsertHTMLTextAction.insertAtBoundry​(JEditorPane, HTMLDocument, int, Element, String, HTML.Tag, HTML.Tag) is deprecated.Show me a refactoring example.

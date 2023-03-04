@@ -1,0 +1,4 @@
+The method java.net.MulticastSocket.getInterface() is deprecated. The related deprecation comment in Javadoc is "The network interface may not be uniquely identified by
+             the InetAddress returned.
+             Use MulticastSocket.getNetworkInterface() instead."
+Show me a refactoring example.

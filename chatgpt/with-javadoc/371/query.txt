@@ -1,0 +1,3 @@
+The method javax.swing.text.Utilities.getPositionBelow​(JTextComponent, int, int) is deprecated. The related deprecation comment in Javadoc is "replaced by
+     Utilities.getPositionBelow(JTextComponent, int, float)"
+Show me a refactoring example.

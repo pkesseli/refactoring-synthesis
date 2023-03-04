@@ -1,0 +1,4 @@
+The method javax.swing.text.Utilities.getTabbedTextOffset​(Segment, FontMetrics, int, int, TabExpander, int) is deprecated. The related deprecation comment in Javadoc is "replaced by
+     Utilities.getTabbedTextOffset(Segment, FontMetrics, float, float,
+                                 TabExpander, int, boolean)"
+Show me a refactoring example.

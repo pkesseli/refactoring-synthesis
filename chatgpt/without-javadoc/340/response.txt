@@ -1,0 +1,47 @@
+# Response Time: 26.921549320220947
+Sure, here's an example of how you can refactor the `javax.swing.plaf.metal.MetalComboBoxUI.editablePropertyChanged(PropertyChangeEvent)` method that is deprecated:
+
+Before Refactoring:
+```java
+public void editablePropertyChanged(PropertyChangeEvent e) {
+    if (Boolean.TRUE.equals(e.getNewValue())) {
+        comboBox.addActionListener(editorRemover);
+        editor.addMouseListener(editorMouseListener);
+        editor.addMouseMotionListener(editorMouseMotionListener);
+    } else {
+        comboBox.removeActionListener(editorRemover);
+        editor.removeMouseListener(editorMouseListener);
+        editor.removeMouseMotionListener(editorMouseMotionListener);
+    }
+}
+```
+
+After Refactoring:
+```java
+public void propertyChange(PropertyChangeEvent e) {
+    String propertyName = e.getPropertyName();
+    Object newValue = e.getNewValue();
+
+    if (propertyName.equals("editable")) {
+        if (Boolean.TRUE.equals(newValue)) {
+            addListenersToEditor();
+        } else {
+            removeListenersFromEditor();
+        }
+    }
+}
+
+private void addListenersToEditor() {
+    comboBox.addActionListener(editorRemover);
+    editor.addMouseListener(editorMouseListener);
+    editor.addMouseMotionListener(editorMouseMotionListener);
+}
+
+private void removeListenersFromEditor() {
+    comboBox.removeActionListener(editorRemover);
+    editor.removeMouseListener(editorMouseListener);
+    editor.removeMouseMotionListener(editorMouseMotionListener);
+}
+```
+
+In the refactored code, we replaced the deprecated method `editablePropertyChanged` with `propertyChange` that is not deprecated. We also created two new helper methods `addListenersToEditor` and `removeListenersFromEditor` that perform the actions previously done by `editablePropertyChanged`. This approach helps to keep the code clean, easy to read, and maintainable.

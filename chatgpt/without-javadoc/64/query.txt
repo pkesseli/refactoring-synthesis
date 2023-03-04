@@ -1,0 +1,1 @@
+The method java.awt.Frame.getCursorType() is deprecated.Show me a refactoring example.

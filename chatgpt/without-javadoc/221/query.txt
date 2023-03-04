@@ -1,0 +1,1 @@
+The method java.sql.DriverManager.getLogStream() is deprecated.Show me a refactoring example.

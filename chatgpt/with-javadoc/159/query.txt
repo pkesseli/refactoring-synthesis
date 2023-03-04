@@ -1,0 +1,2 @@
+The method java.net.DatagramSocketImpl.getTTL() is deprecated. The related deprecation comment in Javadoc is "use getTimeToLive instead."
+Show me a refactoring example.

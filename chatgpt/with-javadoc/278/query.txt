@@ -1,0 +1,3 @@
+The method javax.management.monitor.CounterMonitor.getDerivedGauge() is deprecated. The related deprecation comment in Javadoc is "As of JMX 1.2, replaced by
+ CounterMonitor.getDerivedGauge(ObjectName)"
+Show me a refactoring example.

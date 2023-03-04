@@ -1,0 +1,2 @@
+The method java.lang.Character.isJavaLetter​(char) is deprecated. The related deprecation comment in Javadoc is "Replaced by isJavaIdentifierStart(char)."
+Show me a refactoring example.

@@ -1,0 +1,1 @@
+The method org.ietf.jgss.GSSContext.getMIC​(InputStream, OutputStream, MessageProp) is deprecated.Show me a refactoring example.

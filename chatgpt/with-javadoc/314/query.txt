@@ -1,0 +1,5 @@
+The method javax.swing.JComponent.reshape​(int, int, int, int) is deprecated. The related deprecation comment in Javadoc is "As of JDK 5,
+ replaced by Component.setBounds(int, int, int, int).
+ 
+ Moves and resizes this component."
+Show me a refactoring example.

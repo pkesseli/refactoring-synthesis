@@ -1,0 +1,3 @@
+The method java.net.URLStreamHandler.setURL​(URL, String, String, int, String, String) is deprecated. The related deprecation comment in Javadoc is "Use setURL(URL, String, String, int, String, String, String,
+             String);"
+Show me a refactoring example.

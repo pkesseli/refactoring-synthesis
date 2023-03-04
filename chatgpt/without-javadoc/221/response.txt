@@ -1,0 +1,34 @@
+# Response Time: 28.512211799621582
+Sure, here's an example of how you can refactor code that uses `java.sql.DriverManager.getLogStream()` to avoid using the deprecated method:
+
+```java
+import java.sql.*;
+import java.io.*;
+
+public class Example {
+  public static void main(String[] args) throws SQLException {
+    String url = "jdbc:mysql://localhost:3306/mydatabase";
+    String user = "username";
+    String password = "password";
+    
+    // Deprecated method
+    PrintWriter writer = DriverManager.getLogWriter();
+    
+    // Refactored code
+    File logFile = new File("jdbc.log");
+    FileWriter fileWriter = new FileWriter(logFile, true);
+    PrintWriter writer = new PrintWriter(fileWriter);
+    DriverManager.setLogWriter(writer);
+    
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      // Use the connection here
+    }
+  }
+}
+```
+
+In the above code, we have refactored the deprecated `java.sql.DriverManager.getLogStream()` method to use `java.sql.DriverManager.setLogWriter()` instead. The `setLogWriter()` method takes a `PrintWriter` object as a parameter, which we can use to write the log output to a file or any other destination.
+
+In the refactored code, we create a `FileWriter` object to write the log output to a file, and then wrap it in a `PrintWriter` object to make it compatible with `setLogWriter()`. Finally, we call `setLogWriter()` with the `PrintWriter` object to set it as the log output destination.
+
+Note that we have also removed the deprecated `getLogStream()` method and replaced it with the new `setLogWriter()` method. This ensures that the code does not use any deprecated methods and is more future-proof.

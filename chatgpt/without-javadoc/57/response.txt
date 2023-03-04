@@ -1,0 +1,26 @@
+# Response Time: 18.30558443069458
+Sure, here's an example of how you can refactor the `normalizeMimeTypeParameter` method in Java using the recommended approach:
+
+Before:
+```java
+String normalized = DataFlavor.normalizeMimeTypeParameter(parameter, value);
+```
+
+After:
+```java
+String normalized = normalizeMimeTypeParameter(parameter, value);
+// ...
+private static String normalizeMimeTypeParameter(String parameter, String value) {
+    return MimeUtility.unfold(value);
+}
+```
+
+In the refactored version, we've created a private method `normalizeMimeTypeParameter` that replaces the deprecated `DataFlavor.normalizeMimeTypeParameter` method. The new method simply uses the `MimeUtility.unfold` method to unfold and normalize the value of the parameter. 
+
+Now you can use the `normalizeMimeTypeParameter` method without getting a deprecated warning, like this:
+
+```java
+String normalized = normalizeMimeTypeParameter(parameter, value);
+```
+
+This approach separates the deprecated code from the main logic of your program and uses a recommended method to achieve the same result.

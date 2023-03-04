@@ -1,0 +1,2 @@
+The method java.awt.event.KeyEvent.setModifiers​(int) is deprecated. The related deprecation comment in Javadoc is "as of JDK1.1.4"
+Show me a refactoring example.

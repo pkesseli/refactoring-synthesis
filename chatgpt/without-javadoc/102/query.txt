@@ -1,0 +1,1 @@
+The method java.awt.Scrollbar.setLineIncrement​(int) is deprecated.Show me a refactoring example.

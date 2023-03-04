@@ -1,0 +1,5 @@
+The method javax.xml.stream.XMLEventFactory.newInstance​(String, ClassLoader) is deprecated. The related deprecation comment in Javadoc is "This method has been deprecated to maintain API consistency.
+              All newInstance methods have been replaced with corresponding
+              newFactory methods. The replacement XMLEventFactory.newFactory(java.lang.String, java.lang.ClassLoader)
+              method defines no changes in behavior."
+Show me a refactoring example.

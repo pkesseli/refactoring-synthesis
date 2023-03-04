@@ -1,0 +1,1 @@
+The method java.awt.Component.keyDown​(Event, int) is deprecated.Show me a refactoring example.

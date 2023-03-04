@@ -1,0 +1,1 @@
+The method java.lang.Object.finalize() is deprecated.Show me a refactoring example.

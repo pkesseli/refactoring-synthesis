@@ -1,0 +1,1 @@
+The method javax.management.MBeanServer.deserialize​(String, byte[]) is deprecated.Show me a refactoring example.

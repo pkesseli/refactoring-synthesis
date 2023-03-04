@@ -1,0 +1,3 @@
+The method java.io.ObjectInputStream.readLine() is deprecated. The related deprecation comment in Javadoc is "This method does not properly convert bytes to characters.
+          see DataInputStream for the details and alternatives."
+Show me a refactoring example.

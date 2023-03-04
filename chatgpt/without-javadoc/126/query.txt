@@ -1,0 +1,1 @@
+The method java.beans.Beans.instantiate​(ClassLoader, String, BeanContext, AppletInitializer) is deprecated.Show me a refactoring example.

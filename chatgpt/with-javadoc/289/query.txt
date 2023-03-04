@@ -1,0 +1,2 @@
+The method javax.management.monitor.GaugeMonitorMBean.getDerivedGaugeTimeStamp() is deprecated. The related deprecation comment in Javadoc is "As of JMX 1.2, replaced by GaugeMonitorMBean.getDerivedGaugeTimeStamp(ObjectName)"
+Show me a refactoring example.

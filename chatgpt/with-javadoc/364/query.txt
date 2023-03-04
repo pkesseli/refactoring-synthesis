@@ -1,0 +1,3 @@
+The method javax.swing.text.PlainView.drawLine​(int, Graphics, int, int) is deprecated. The related deprecation comment in Javadoc is "replaced by
+     PlainView.drawLine(int, Graphics2D, float, float)"
+Show me a refactoring example.

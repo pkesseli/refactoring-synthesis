@@ -1,0 +1,3 @@
+The method java.security.Signature.setParameter​(String, Object) is deprecated. The related deprecation comment in Javadoc is "Use
+ setParameter."
+Show me a refactoring example.

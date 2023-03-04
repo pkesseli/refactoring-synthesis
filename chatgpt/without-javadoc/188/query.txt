@@ -1,0 +1,1 @@
+The method java.rmi.server.LogStream.write​(byte[], int, int) is deprecated.Show me a refactoring example.

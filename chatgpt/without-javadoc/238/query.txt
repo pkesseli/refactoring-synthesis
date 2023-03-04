@@ -1,0 +1,1 @@
+The method java.util.concurrent.atomic.AtomicLong.weakCompareAndSet​(long, long) is deprecated.Show me a refactoring example.

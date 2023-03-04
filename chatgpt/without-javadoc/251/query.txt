@@ -1,0 +1,1 @@
+The method java.util.Date.parse​(String) is deprecated.Show me a refactoring example.

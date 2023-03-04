@@ -1,0 +1,1 @@
+The method javax.swing.tree.DefaultTreeSelectionModel.notifyPathChange​(Vector&lt;?&gt;, TreePath) is deprecated.Show me a refactoring example.

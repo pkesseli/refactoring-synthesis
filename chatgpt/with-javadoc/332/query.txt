@@ -1,0 +1,2 @@
+The method javax.swing.plaf.basic.BasicSplitPaneUI.createKeyboardHomeListener() is deprecated. The related deprecation comment in Javadoc is "As of Java 2 platform v1.3."
+Show me a refactoring example.

@@ -1,0 +1,40 @@
+# Response Time: 36.974719762802124
+Sure, here's an example of how you could refactor code that uses the `show()` method of the `java.awt.Component` class:
+
+Before refactoring:
+
+```java
+import java.awt.Button;
+import java.awt.Frame;
+
+public class Example {
+    public static void main(String[] args) {
+        Frame frame = new Frame("My Frame");
+        Button button = new Button("My Button");
+
+        frame.add(button);
+        frame.setSize(300, 200);
+        frame.show(); // Deprecated method call
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.Button;
+import java.awt.Frame;
+
+public class Example {
+    public static void main(String[] args) {
+        Frame frame = new Frame("My Frame");
+        Button button = new Button("My Button");
+
+        frame.add(button);
+        frame.setSize(300, 200);
+        frame.setVisible(true); // New method call
+    }
+}
+```
+
+In this example, the `show()` method has been replaced with the `setVisible(true)` method, which achieves the same result of showing the frame on the screen. This method is not deprecated and should be used instead of `show()`.

@@ -1,0 +1,2 @@
+The method java.awt.ComponentOrientation.getOrientation​(ResourceBundle) is deprecated. The related deprecation comment in Javadoc is "As of J2SE 1.4, use ComponentOrientation.getOrientation(java.util.Locale)."
+Show me a refactoring example.

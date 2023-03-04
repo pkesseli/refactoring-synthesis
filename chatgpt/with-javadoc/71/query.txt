@@ -1,0 +1,3 @@
+The method java.awt.image.renderable.RenderContext.preConcetenateTransform​(AffineTransform) is deprecated. The related deprecation comment in Javadoc is "replaced by
+                 preConcatenateTransform(AffineTransform)."
+Show me a refactoring example.

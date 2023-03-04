@@ -1,0 +1,1 @@
+The method javax.xml.stream.XMLOutputFactory.newInstance​(String, ClassLoader) is deprecated.Show me a refactoring example.

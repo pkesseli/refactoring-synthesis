@@ -1,0 +1,1 @@
+The method java.awt.datatransfer.DataFlavor.equals​(String) is deprecated.Show me a refactoring example.

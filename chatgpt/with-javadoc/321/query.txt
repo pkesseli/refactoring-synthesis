@@ -1,0 +1,3 @@
+The method javax.swing.JPasswordField.getText​(int, int) is deprecated. The related deprecation comment in Javadoc is "As of Java 2 platform v1.2,
+ replaced by getPassword."
+Show me a refactoring example.

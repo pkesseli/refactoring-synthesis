@@ -1,0 +1,1 @@
+The method java.awt.TextField.preferredSize​(int) is deprecated.Show me a refactoring example.

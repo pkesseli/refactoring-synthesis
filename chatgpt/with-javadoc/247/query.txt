@@ -1,0 +1,3 @@
+The method java.util.Date.getMonth() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1,
+ replaced by Calendar.get(Calendar.MONTH)."
+Show me a refactoring example.

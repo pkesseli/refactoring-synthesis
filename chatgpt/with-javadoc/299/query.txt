@@ -1,0 +1,4 @@
+The method javax.management.ValueExp.setMBeanServer​(MBeanServer) is deprecated. The related deprecation comment in Javadoc is "This method is not needed because a
+ ValueExp can access the MBean server in which it
+ is being evaluated by using QueryEval.getMBeanServer()."
+Show me a refactoring example.

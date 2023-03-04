@@ -1,0 +1,3 @@
+The method javax.swing.plaf.basic.BasicTextUI.modelToView​(JTextComponent, int) is deprecated. The related deprecation comment in Javadoc is "replaced by
+     TextUI.modelToView2D(JTextComponent, int, Position.Bias)"
+Show me a refactoring example.

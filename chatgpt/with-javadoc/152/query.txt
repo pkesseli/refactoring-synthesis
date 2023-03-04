@@ -1,0 +1,4 @@
+The method java.lang.ThreadGroup.allowThreadSuspension​(boolean) is deprecated. The related deprecation comment in Javadoc is "The definition of this call depends on ThreadGroup.suspend(),
+             which is deprecated.  Further, the behavior of this call
+             was never specified."
+Show me a refactoring example.

@@ -1,0 +1,3 @@
+The method java.util.Date.toLocaleString() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1,
+ replaced by DateFormat.format(Date date)."
+Show me a refactoring example.

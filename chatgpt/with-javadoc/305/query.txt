@@ -1,0 +1,3 @@
+The method javax.swing.FocusManager.disableSwingFocusManager() is deprecated. The related deprecation comment in Javadoc is "as of 1.4, replaced by
+ KeyboardFocusManager.setDefaultFocusTraversalPolicy(FocusTraversalPolicy)"
+Show me a refactoring example.

@@ -1,0 +1,1 @@
+The method java.util.concurrent.atomic.AtomicIntegerArray.weakCompareAndSet​(int, int, int) is deprecated.Show me a refactoring example.

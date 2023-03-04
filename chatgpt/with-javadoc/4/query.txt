@@ -1,0 +1,3 @@
+The method com.sun.management.OperatingSystemMXBean.getTotalPhysicalMemorySize() is deprecated. The related deprecation comment in Javadoc is "Use OperatingSystemMXBean.getTotalMemorySize() instead of
+ this historically named method."
+Show me a refactoring example.

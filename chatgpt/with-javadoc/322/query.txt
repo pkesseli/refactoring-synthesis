@@ -1,0 +1,2 @@
+The method javax.swing.JPopupMenu.getComponentAtIndex​(int) is deprecated. The related deprecation comment in Javadoc is "replaced by Container.getComponent(int)"
+Show me a refactoring example.

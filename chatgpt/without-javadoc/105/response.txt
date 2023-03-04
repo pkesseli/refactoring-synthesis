@@ -1,0 +1,32 @@
+# Response Time: 16.711090087890625
+Certainly! Here's an example of how you can refactor code that uses the deprecated `appendText` method in Java's `java.awt.TextArea` class:
+
+Before refactoring:
+
+```java
+import java.awt.TextArea;
+
+public class Example {
+    public static void main(String[] args) {
+        TextArea textArea = new TextArea();
+        String newText = "This is some new text.";
+        textArea.appendText(newText);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.TextArea;
+
+public class Example {
+    public static void main(String[] args) {
+        TextArea textArea = new TextArea();
+        String newText = "This is some new text.";
+        textArea.append(newText);
+    }
+}
+```
+
+In the refactored code, we simply replace the `appendText` method with the `append` method. The `append` method was introduced as a replacement for the deprecated `appendText` method in Java 9.

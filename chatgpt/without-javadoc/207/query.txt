@@ -1,0 +1,1 @@
+The method java.rmi.server.UnicastRemoteObject.exportObject​(Remote) is deprecated.Show me a refactoring example.

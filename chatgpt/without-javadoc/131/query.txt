@@ -1,0 +1,1 @@
+The method java.io.ObjectOutputStream.PutField.write​(ObjectOutput) is deprecated.Show me a refactoring example.

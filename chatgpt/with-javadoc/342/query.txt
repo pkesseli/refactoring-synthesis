@@ -1,0 +1,2 @@
+The method javax.swing.plaf.metal.MetalScrollPaneUI.uninstallListeners​(JScrollPane) is deprecated. The related deprecation comment in Javadoc is "- Replaced by BasicScrollPaneUI.uninstallListeners(JComponent)"
+Show me a refactoring example.

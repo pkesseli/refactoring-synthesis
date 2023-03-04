@@ -1,0 +1,3 @@
+The method java.awt.Window.applyResourceBundle​(String) is deprecated. The related deprecation comment in Javadoc is "As of J2SE 1.4, replaced by
+ Component.applyComponentOrientation."
+Show me a refactoring example.

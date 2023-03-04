@@ -1,0 +1,1 @@
+The method java.rmi.server.Skeleton.dispatch​(Remote, RemoteCall, int, long) is deprecated.Show me a refactoring example.

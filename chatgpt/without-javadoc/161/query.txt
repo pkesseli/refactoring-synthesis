@@ -1,0 +1,1 @@
+The method java.net.MulticastSocket.getInterface() is deprecated.Show me a refactoring example.

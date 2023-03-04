@@ -1,0 +1,1 @@
+The method java.sql.Date.getSeconds() is deprecated.Show me a refactoring example.

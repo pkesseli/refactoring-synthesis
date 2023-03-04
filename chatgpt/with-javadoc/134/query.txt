@@ -1,0 +1,2 @@
+The method java.lang.Character.isSpace​(char) is deprecated. The related deprecation comment in Javadoc is "Replaced by isWhitespace(char)."
+Show me a refactoring example.

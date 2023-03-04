@@ -1,0 +1,1 @@
+The method javax.swing.JComponent.hide() is deprecated.Show me a refactoring example.

@@ -1,0 +1,1 @@
+The method java.lang.String.getBytes​(int, int, byte[], int) is deprecated.Show me a refactoring example.

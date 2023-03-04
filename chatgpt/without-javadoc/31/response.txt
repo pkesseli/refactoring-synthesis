@@ -1,0 +1,36 @@
+# Response Time: 23.813314199447632
+
+
+Sure! Here's an example of refactoring the deprecated `java.awt.Component.mouseDown(Event, int, int)` method using the `java.awt.event.MouseAdapter` class:
+
+```java
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class MyPanel extends JPanel {
+
+    public MyPanel() {
+        addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                int x = e.getX();
+                int y = e.getY();
+                // Handle the mouse press event here
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("My Panel");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(new MyPanel());
+        frame.pack();
+        frame.setVisible(true);
+    }
+}
+```
+
+In this refactored code, we're using the `java.awt.event.MouseAdapter` class to handle mouse events instead of the deprecated `java.awt.Component.mouseDown(Event, int, int)` method. We're adding a `MouseListener` to our `MyPanel` object and overriding the `mousePressed` method to handle the mouse press event. 
+
+Now, when the user presses the mouse button on our panel, the `mousePressed` method will be called and we can handle the event however we need to. This code is more up-to-date and easier to maintain than using the deprecated method.

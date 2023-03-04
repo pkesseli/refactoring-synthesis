@@ -1,0 +1,1 @@
+The method javax.management.monitor.CounterMonitor.getDerivedGauge() is deprecated.Show me a refactoring example.

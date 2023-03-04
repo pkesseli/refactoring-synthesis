@@ -1,0 +1,3 @@
+The method java.sql.ResultSet.getUnicodeStream​(int) is deprecated. The related deprecation comment in Javadoc is "use getCharacterStream in place of
+              getUnicodeStream"
+Show me a refactoring example.

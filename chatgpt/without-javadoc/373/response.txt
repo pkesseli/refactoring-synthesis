@@ -1,0 +1,20 @@
+# Response Time: 28.598374366760254
+Sure, here's an example refactoring that replaces the deprecated `getTabbedTextOffset()` method with a recommended alternative:
+
+```java
+// Original code using deprecated method
+int tabbedOffset = Utilities.getTabbedTextOffset(textSegment, fm, x, startOffset, null, direction, false);
+
+// Refactored code using recommended alternative
+TabExpander expander = new DefaultTabExpander(fm);
+int[] tabs = expander.getTabbedTextWidths(textSegment, fm);
+int tabbedOffset = (int) TabRenderer.getTabbedTextOffset(textSegment, fm, x, expander, startOffset, tabs, direction);
+```
+
+In the refactored code, we first create a new `TabExpander` instance using the `DefaultTabExpander` class, passing in the `FontMetrics` object `fm`. We then call the `getTabbedTextWidths()` method on the `TabExpander` instance, passing in the `Segment` object `textSegment` and the same `FontMetrics` object `fm`. This method returns an array of tab stop positions, which we'll use later.
+
+Next, we call the `getTabbedTextOffset()` method on the `TabRenderer` class, passing in the same `Segment` object `textSegment`, `FontMetrics` object `fm`, the x-coordinate `x`, the `TabExpander` instance `expander`, the starting offset `startOffset`, the array of tab stop positions `tabs`, and the direction `direction`.
+
+Note that the `getTabbedTextOffset()` method returns a `float` value, so we cast it to an `int` to match the original return type of the deprecated method.
+
+This refactored code achieves the same functionality as the original code, but without using the deprecated `getTabbedTextOffset()` method.

@@ -1,0 +1,3 @@
+The method java.lang.ThreadGroup.suspend() is deprecated. The related deprecation comment in Javadoc is "This method is inherently deadlock-prone.  See
+     Thread.suspend() for details."
+Show me a refactoring example.

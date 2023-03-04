@@ -1,0 +1,3 @@
+The method javax.swing.text.LabelView.getFontMetrics() is deprecated. The related deprecation comment in Javadoc is "FontMetrics are not used for glyph rendering
+  when running in the JDK."
+Show me a refactoring example.

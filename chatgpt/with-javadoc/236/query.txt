@@ -1,0 +1,6 @@
+The method java.util.concurrent.atomic.AtomicInteger.weakCompareAndSet​(int, int) is deprecated. The related deprecation comment in Javadoc is "This method has plain memory effects but the method
+ name implies volatile memory effects (see methods such as
+ AtomicInteger.compareAndExchange(int, int) and AtomicInteger.compareAndSet(int, int)).  To avoid
+ confusion over plain or volatile memory effects it is recommended that
+ the method AtomicInteger.weakCompareAndSetPlain(int, int) be used instead."
+Show me a refactoring example.

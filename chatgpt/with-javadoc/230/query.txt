@@ -1,0 +1,2 @@
+The method java.sql.Time.getMonth() is deprecated. The related deprecation comment in Javadoc is ""
+Show me a refactoring example.

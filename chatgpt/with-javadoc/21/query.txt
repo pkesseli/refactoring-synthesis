@@ -1,0 +1,3 @@
+The method java.awt.Component.hide() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1,
+ replaced by setVisible(boolean)."
+Show me a refactoring example.

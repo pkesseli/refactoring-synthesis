@@ -1,0 +1,2 @@
+The method java.sql.PreparedStatement.setUnicodeStream​(int, InputStream, int) is deprecated. The related deprecation comment in Javadoc is "Use setCharacterStream"
+Show me a refactoring example.

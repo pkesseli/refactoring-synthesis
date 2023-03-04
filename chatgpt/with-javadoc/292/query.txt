@@ -1,0 +1,2 @@
+The method javax.management.monitor.MonitorMBean.getObservedObject() is deprecated. The related deprecation comment in Javadoc is "As of JMX 1.2, replaced by MonitorMBean.getObservedObjects()"
+Show me a refactoring example.

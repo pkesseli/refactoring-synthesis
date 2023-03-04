@@ -1,0 +1,3 @@
+The method java.util.Date.setMonth​(int) is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1,
+ replaced by Calendar.set(Calendar.MONTH, int month)."
+Show me a refactoring example.

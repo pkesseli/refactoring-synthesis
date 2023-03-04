@@ -1,0 +1,33 @@
+# Response Time: 24.754042387008667
+Sure! In Java, the `getYear()` method of the `java.util.Date` class is deprecated because it returns the year relative to 1900. To refactor code that uses `getYear()`, you can use the `java.util.Calendar` class or the `java.time` package introduced in Java 8.
+
+Here's an example refactoring using the `java.util.Calendar` class:
+
+```
+// Using java.util.Date
+Date date = new Date();
+int year = date.getYear() + 1900;
+System.out.println("Year: " + year);
+
+// Refactored using java.util.Calendar
+Calendar calendar = Calendar.getInstance();
+calendar.setTime(new Date());
+int year = calendar.get(Calendar.YEAR);
+System.out.println("Year: " + year);
+```
+
+And here's an example using the `java.time` package:
+
+```
+// Using java.util.Date
+Date date = new Date();
+int year = date.getYear() + 1900;
+System.out.println("Year: " + year);
+
+// Refactored using java.time
+LocalDateTime localDateTime = LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault());
+int year = localDateTime.getYear();
+System.out.println("Year: " + year);
+```
+
+Note that in both cases, we're obtaining the year value from the `Calendar` or `LocalDateTime` object directly, rather than using the deprecated `getYear()` method on a `Date` object.

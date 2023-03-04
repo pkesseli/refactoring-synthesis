@@ -1,0 +1,3 @@
+The method javax.swing.plaf.TextUI.getToolTipText​(JTextComponent, Point) is deprecated. The related deprecation comment in Javadoc is "replaced by
+     TextUI.getToolTipText2D(JTextComponent, Point2D)"
+Show me a refactoring example.

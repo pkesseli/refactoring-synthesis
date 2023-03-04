@@ -1,0 +1,50 @@
+# Response Time: 33.5645797252655
+Sure, here's an example refactoring using the new recommended approach:
+
+Before Refactoring:
+```
+import javax.management.AttributeValueExp;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
+public class MyMBean {
+    private MBeanServer mBeanServer;
+
+    public AttributeValueExp getAttributeValueExp(ObjectName objectName, String attributeName) {
+        AttributeValueExp attributeValueExp = new AttributeValueExp();
+        attributeValueExp.setMBeanServer(mBeanServer);
+        attributeValueExp.setObject(objectName);
+        attributeValueExp.setAttributeName(attributeName);
+        return attributeValueExp;
+    }
+}
+```
+
+After Refactoring:
+```
+import javax.management.AttributeValueExp;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import javax.management.Query;
+
+public class MyMBean {
+    private MBeanServer mBeanServer;
+
+    public AttributeValueExp getAttributeValueExp(ObjectName objectName, String attributeName) {
+        AttributeValueExp attributeValueExp = new AttributeValueExp();
+        attributeValueExp.setTargetObject(objectName);
+        attributeValueExp.setAttributeName(attributeName);
+        attributeValueExp.setMBeanServer(mBeanServer);
+
+        Query query = Query.eq(Query.attr(attributeName), Query.value(attributeValueExp));
+        return attributeValueExp;
+    }
+}
+```
+
+Explanation:
+In the refactored code, we replaced the deprecated `setAttributeName` and `setObject` methods of `AttributeValueExp` with the `setTargetObject` method. Additionally, we rearranged the order of the calls to these methods to match the order in which they appear in the `Query.eq` method.
+
+We also added a new `Query` object, which allows us to construct a more complex query that can be used to search for MBeans based on attribute values. In this example, we're constructing a query that searches for MBeans where the specified attribute has the specified value.
+
+Finally, we're passing the `mBeanServer` object to `AttributeValueExp` using the deprecated `setMBeanServer` method, as there's currently no alternative to this method.

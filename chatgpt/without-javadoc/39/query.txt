@@ -1,0 +1,1 @@
+The method java.awt.Component.postEvent​(Event) is deprecated.Show me a refactoring example.

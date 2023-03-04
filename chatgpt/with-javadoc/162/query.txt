@@ -1,0 +1,4 @@
+The method java.net.MulticastSocket.getLoopbackMode() is deprecated. The related deprecation comment in Javadoc is "Use DatagramSocket.getOption(SocketOption) with
+             StandardSocketOptions.IP_MULTICAST_LOOP
+             instead."
+Show me a refactoring example.

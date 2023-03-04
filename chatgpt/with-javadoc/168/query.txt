@@ -1,0 +1,6 @@
+The method java.net.MulticastSocket.setLoopbackMode​(boolean) is deprecated. The related deprecation comment in Javadoc is "Use DatagramSocket.setOption(SocketOption, Object) with
+             StandardSocketOptions.IP_MULTICAST_LOOP
+             instead. The loopback mode is enabled by default,
+             MulticastSocket.setOption(StandardSocketOptions.IP_MULTICAST_LOOP, false)
+             disables it."
+Show me a refactoring example.

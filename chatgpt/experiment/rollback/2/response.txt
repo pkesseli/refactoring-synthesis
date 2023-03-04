@@ -1,0 +1,34 @@
+# Response Time: 21.51380205154419
+Sure, here's an example of how you can refactor your code to use `OperatingSystemMXBean.getFreeMemorySize()` instead of the deprecated `OperatingSystemMXBean.getFreePhysicalMemorySize()` method:
+
+Before refactoring:
+
+```java
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+
+public class Example {
+    public static void main(String[] args) {
+        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+        long freePhysicalMemory = osBean.getFreePhysicalMemorySize();
+        System.out.println("Free physical memory: " + freePhysicalMemory);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+
+public class Example {
+    public static void main(String[] args) {
+        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+        long freeMemory = osBean.getFreeMemorySize();
+        System.out.println("Free memory: " + freeMemory);
+    }
+}
+```
+
+As you can see, the only change is to replace `osBean.getFreePhysicalMemorySize()` with `osBean.getFreeMemorySize()`. This will ensure that your code uses the recommended method and is not affected by the deprecation of `getFreePhysicalMemorySize()`.

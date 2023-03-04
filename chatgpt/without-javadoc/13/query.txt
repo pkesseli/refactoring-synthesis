@@ -1,0 +1,1 @@
+The method java.awt.Component.action​(Event, Object) is deprecated.Show me a refactoring example.
