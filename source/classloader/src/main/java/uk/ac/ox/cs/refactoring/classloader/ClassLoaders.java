@@ -80,7 +80,9 @@ public final class ClassLoaders {
       return cls;
 
     final String canonicalName = cls.getCanonicalName();
-    return loadClass(classLoader, canonicalName != null ? canonicalName : cls.getName());
+    final String name = cls.getName();
+    final boolean isInnerClass = cls.getName().contains("$");
+    return loadClass(classLoader, canonicalName == null || isInnerClass ? name : canonicalName);
   }
 
   /**
