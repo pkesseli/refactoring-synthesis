@@ -43,7 +43,7 @@ public class CegisLoop<Candidate> {
   private final Map<Counterexample, ExecutionResult> counterexamples = new HashMap<>();
 
   static {
-    System.setProperty("jqf.ei.MAX_INPUT_SIZE", "1024000");
+    System.setProperty("jqf.ei.MAX_INPUT_SIZE", "102400000");
     System.setProperty("jqf.ei.QUIET_MODE", Boolean.toString(true));
   }
 
