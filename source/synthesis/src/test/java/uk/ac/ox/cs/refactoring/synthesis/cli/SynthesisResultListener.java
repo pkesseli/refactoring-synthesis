@@ -1,5 +1,12 @@
 package uk.ac.ox.cs.refactoring.synthesis.cli;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,18 +20,27 @@ import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.opentest4j.AssertionFailedError;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import uk.ac.ox.cs.refactoring.synthesis.statistics.Report;
 import uk.ac.ox.cs.refactoring.synthesis.statistics.Reports;
 import uk.ac.ox.cs.refactoring.synthesis.statistics.Run;
 
-class SynthesisResultListener implements TestExecutionListener {
+/**
+ * Assumes to be run with failsafe, where every test will be executed in its own
+ * VM. Writes a report per test to the file system.
+ */
+public class SynthesisResultListener implements TestExecutionListener {
 
   private static final Pattern PARAMTER_FORMAT = Pattern.compile("^\\[\\d+\\]\\s+([^,]+),\\s+\\d+$");
 
-  private final Report report;
+  private final Report report = Reports.DEFAULT_REPORT;
 
-  SynthesisResultListener(final Report report) {
-    this.report = report;
+  private final Path surefireReportsDirectory;
+
+  public SynthesisResultListener() throws URISyntaxException {
+    surefireReportsDirectory = Reports.getSurefireReportsDirectory();
   }
 
   private Run getLastRun(final TestIdentifier testIdentifier) {
@@ -47,6 +63,16 @@ class SynthesisResultListener implements TestExecutionListener {
         if (testExecutionResult.getThrowable().map(SynthesisResultListener::isAssertionViolation).orElse(false))
           run.Unsound = true;
       default:
+    }
+
+    final String reportFileName = getBenchmarkName(testIdentifier) + ".json";
+    final Path jsonReportFilePath = surefireReportsDirectory.resolve(reportFileName);
+    final ObjectMapper objectMapper = new ObjectMapper();
+    final ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
+    try (final OutputStream os = Files.newOutputStream(jsonReportFilePath)) {
+      writer.writeValue(os, report);
+    } catch (final IOException e) {
+      e.printStackTrace();
     }
   }
 
