@@ -1,0 +1,32 @@
+# Response Time: 10.22590947151184
+Sure, here's an example of how you can refactor code that uses the deprecated `enable()` method to use the recommended `setEnabled(boolean)` method instead.
+
+Before refactoring:
+
+```java
+import java.awt.*;
+
+public class MyMenu extends Menu {
+    public MyMenu() {
+        MenuItem menuItem = new MenuItem("My Item");
+        menuItem.enable(); // deprecated method
+        add(menuItem);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.*;
+
+public class MyMenu extends Menu {
+    public MyMenu() {
+        MenuItem menuItem = new MenuItem("My Item");
+        menuItem.setEnabled(true); // recommended method
+        add(menuItem);
+    }
+}
+```
+
+As you can see, the only change we made was to replace `menuItem.enable()` with `menuItem.setEnabled(true)`. This ensures that we're using the recommended method and avoids any potential issues that may arise from using a deprecated method.

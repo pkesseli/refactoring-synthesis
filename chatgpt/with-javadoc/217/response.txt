@@ -1,0 +1,35 @@
+# Response Time: 25.07958698272705
+Sure, here's an example of how you could refactor code that uses the deprecated `getSeconds()` method in `java.sql.Date`:
+
+Before:
+
+```
+import java.sql.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date(System.currentTimeMillis());
+        int seconds = date.getSeconds();
+        System.out.println("Seconds: " + seconds);
+    }
+}
+```
+
+After:
+
+```
+import java.sql.Date;
+import java.time.LocalDateTime;
+
+public class Example {
+    public static void main(String[] args) {
+        LocalDateTime now = LocalDateTime.now();
+        int seconds = now.getSecond();
+        System.out.println("Seconds: " + seconds);
+    }
+}
+```
+
+In the refactored code, we've replaced the use of the `java.sql.Date` class with the `java.time.LocalDateTime` class, which provides a similar functionality but without the deprecated method. We can then get the current time using the `now()` method, and get the seconds value using the `getSecond()` method instead of `getSeconds()`. 
+
+Note that this is just one example of how you could refactor code that uses the deprecated method. Depending on your specific use case, there may be other ways to refactor your code.

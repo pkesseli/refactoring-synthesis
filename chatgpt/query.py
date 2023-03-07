@@ -34,13 +34,17 @@ for entry in range(sys.maxsize):
                 ):
                     response = data["message"]
                 elapsed = time() - start
-                file.write('# Response Time: ' + str(elapsed))
+                file.write('# Response Time: ' + str(elapsed) + '\n')
                 file.write(response)
                 # chatbot.rollback_conversation()
-            except Error as e:
-                if e.code != 2:
-                    raise
-                else:
-                    print('Rate limit exceeded, waiting for one hour..')
-                    sleep(3600)
-                    continue
+                break
+            except Error:
+                print('Retry after 10 minutes..')
+                sleep(600)
+                continue
+                # if e.code != 2:
+                #     raise
+                # else:
+                #     print('Rate limit exceeded, waiting for one hour..')
+                #     sleep(3600)
+                #     continue

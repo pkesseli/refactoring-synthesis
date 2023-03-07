@@ -1,0 +1,47 @@
+# Response Time: 22.5214364528656
+Sure, here's an example of how you could refactor code that uses the deprecated `java.awt.Container.countComponents()` method:
+
+Before refactoring:
+
+```java
+import java.awt.Container;
+
+public class Example {
+
+  public static void main(String[] args) {
+    Container container = new Container();
+    int numComponents = container.countComponents();
+    System.out.println("Number of components: " + numComponents);
+  }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.Container;
+import java.awt.Component;
+
+public class Example {
+
+  public static void main(String[] args) {
+    Container container = new Container();
+    int numComponents = countComponents(container);
+    System.out.println("Number of components: " + numComponents);
+  }
+
+  public static int countComponents(Container container) {
+    int count = 0;
+    Component[] components = container.getComponents();
+    for (Component component : components) {
+      if (component instanceof Container) {
+        count += countComponents((Container) component);
+      }
+      count++;
+    }
+    return count;
+  }
+}
+```
+
+In the refactored code, we replace the use of `countComponents()` with a new method `countComponents(Container container)` that calculates the number of components recursively. The new method uses the `getComponents()` method to get an array of all components in the container and then iterates over each component in the array. If a component is itself a container, we recursively call the `countComponents()` method on it. If the component is not a container, we increment the count. This way, we can calculate the total number of components in the container and its children.

@@ -1,0 +1,50 @@
+# Response Time: 56.75208353996277
+Sure, here's an example of refactoring code that uses the deprecated `java.util.Date.UTC()` method:
+
+Before refactoring:
+
+```java
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        int year = 2022;
+        int month = 3;
+        int day = 5;
+        int hour = 10;
+        int minute = 30;
+        int second = 0;
+
+        Date date = new Date(Date.UTC(year - 1900, month - 1, day, hour, minute, second));
+
+        System.out.println(date);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.util.Calendar;
+import java.util.TimeZone;
+
+public class Example {
+    public static void main(String[] args) {
+        int year = 2022;
+        int month = 3;
+        int day = 5;
+        int hour = 10;
+        int minute = 30;
+        int second = 0;
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.set(year, month - 1, day, hour, minute, second);
+
+        long timeInMillis = calendar.getTime().getTime();
+
+        System.out.println(new Date(timeInMillis));
+    }
+}
+```
+
+In the refactored code, we replace the deprecated `java.util.Date.UTC()` method with `Calendar.set()` and `Calendar.getTime().getTime()` methods. We create a new `Calendar` instance with the UTC time zone, set the date and time using `set()`, get the time in milliseconds using `getTime().getTime()`, and finally create a new `Date` object using the time in milliseconds. This way, we can achieve the same functionality as before but without using the deprecated method.

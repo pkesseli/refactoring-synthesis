@@ -1,0 +1,43 @@
+# Response Time: 48.635958671569824
+Sure! Here's an example of how to refactor code that uses `java.rmi.registry.RegistryHandler.registryImpl(int)`:
+
+Before refactoring:
+
+```java
+import java.rmi.registry.Registry;
+import java.rmi.registry.RegistryHandler;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class MyServer {
+    public static void main(String[] args) throws RemoteException {
+        MyRemoteImpl myRemoteObj = new MyRemoteImpl();
+        MyRemote stub = (MyRemote) UnicastRemoteObject.exportObject(myRemoteObj, 0);
+        RegistryHandler registryHandler = new RegistryHandler();
+        Registry registry = registryHandler.registryImpl(1099);
+        registry.rebind("MyRemote", stub);
+        System.out.println("MyRemote bound in registry");
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class MyServer {
+    public static void main(String[] args) throws RemoteException {
+        MyRemoteImpl myRemoteObj = new MyRemoteImpl();
+        MyRemote stub = (MyRemote) UnicastRemoteObject.exportObject(myRemoteObj, 0);
+        Registry registry = LocateRegistry.createRegistry(1099);
+        registry.rebind("MyRemote", stub);
+        System.out.println("MyRemote bound in registry");
+    }
+}
+```
+
+In the refactored code, we've replaced `RegistryHandler.registryImpl(int)` with `LocateRegistry.createRegistry(int)`, which is the recommended way to obtain a registry implementation since Java 2 platform v1.2. This method returns a `Registry` object that we can use to bind our remote object to the registry.

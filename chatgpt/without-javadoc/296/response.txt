@@ -1,0 +1,40 @@
+# Response Time: 18.409194469451904
+Sure, here's an example refactoring of code that uses the deprecated `javax.management.monitor.StringMonitorMBean.getDerivedGauge()` method.
+
+Deprecated Method Usage:
+
+```java
+StringMonitorMBean stringMonitor = new StringMonitor();
+// set up StringMonitor instance...
+
+// Get the derived gauge value
+String derivedGaugeValue = stringMonitor.getDerivedGauge();
+```
+
+Refactored Code:
+
+```java
+StringMonitorMBean stringMonitor = new StringMonitor();
+// set up StringMonitor instance...
+
+// Register a listener to receive the derived gauge value
+stringMonitor.addNotificationListener(new NotificationListener() {
+    public void handleNotification(Notification notification, Object handback) {
+        if (notification instanceof MBeanAttributeNotification) {
+            MBeanAttributeNotification attributeNotification = (MBeanAttributeNotification) notification;
+            String attributeName = attributeNotification.getAttributeName();
+            if (attributeName.equals(StringMonitorMBean.DERIVED_GAUGE_ATTRIBUTE)) {
+                String derivedGaugeValue = (String) attributeNotification.getNewValue();
+                // Use the derived gauge value here...
+            }
+        }
+    }
+}, null, null);
+
+// Start the monitor
+stringMonitor.start();
+```
+
+In the refactored code, instead of calling the deprecated `getDerivedGauge()` method, we register a notification listener to receive notifications when the derived gauge value changes. When we receive a notification with the new value of the derived gauge attribute, we can use that value as needed.
+
+Note that in this example code, we assume that the `StringMonitor` instance has already been set up with the necessary parameters and started using the `start()` method.

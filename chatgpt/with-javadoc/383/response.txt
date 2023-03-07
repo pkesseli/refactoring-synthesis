@@ -1,0 +1,16 @@
+# Response Time: 30.007293939590454
+Sure! Here's an example of how you could refactor code that uses the deprecated `newInstance` method to use the new `newFactory` method instead.
+
+Before refactoring:
+
+```java
+XMLEventFactory eventFactory = XMLEventFactory.newInstance("com.sun.xml.internal.stream.events.XMLEventFactoryImpl", getClass().getClassLoader());
+```
+
+After refactoring:
+
+```java
+XMLEventFactory eventFactory = XMLEventFactory.newFactory("com.sun.xml.internal.stream.events.XMLEventFactoryImpl", getClass().getClassLoader());
+```
+
+As you can see, the only change required is to replace `newInstance` with `newFactory`. The parameters remain the same. This is because the new `newFactory` method defines no changes in behavior.

@@ -1,0 +1,73 @@
+# Response Time: 232.4446930885315
+Sure, here is an example of refactoring code that uses the deprecated `getUnicodeStream` method to use `getCharacterStream` instead:
+
+Before refactoring:
+
+```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Example {
+    public static void main(String[] args) {
+        Connection conn = null;
+        ResultSet rs = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
+            rs = conn.createStatement().executeQuery("SELECT name FROM users WHERE id = 1");
+            if (rs.next()) {
+                java.io.InputStream is = rs.getUnicodeStream("name");
+                java.io.InputStreamReader isr = new java.io.InputStreamReader(is);
+                java.io.BufferedReader br = new java.io.BufferedReader(isr);
+                System.out.println(br.readLine());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Example {
+    public static void main(String[] args) {
+        Connection conn = null;
+        ResultSet rs = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "password");
+            rs = conn.createStatement().executeQuery("SELECT name FROM users WHERE id = 1");
+            if (rs.next()) {
+                java.io.Reader reader = rs.getCharacterStream("name");
+                java.io.BufferedReader br = new java.io.BufferedReader(reader);
+                System.out.println(br.readLine());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+As you can see, we have replaced the `getUnicodeStream` method with `getCharacterStream` and changed the type of the `is` variable from `InputStream` to `Reader`. This is because `getCharacterStream` returns a `Reader`, which is a character-based stream, while `getUnicodeStream` returns an `InputStream`, which is a byte-based stream. We also updated the `isr` variable to be of type `java.io.Reader` instead of `java.io.InputStreamReader`, which is unnecessary. Finally, we updated the `System.out.println` statement to use the `br` variable instead of `is`.

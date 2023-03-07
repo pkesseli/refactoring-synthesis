@@ -1,0 +1,20 @@
+# Response Time: 39.83226680755615
+Sure! Here's an example of refactoring code that uses `JComponent.reshape()` to use `Component.setBounds()` instead:
+
+Before:
+
+```java
+JButton button = new JButton("Click me!");
+button.reshape(50, 50, 100, 30);
+```
+
+After:
+
+```java
+JButton button = new JButton("Click me!");
+button.setBounds(50, 50, 100, 30);
+```
+
+In the refactored code, we simply replace the call to `reshape()` with a call to `setBounds()`. The parameters for both methods are the same, so we can just copy them over directly.
+
+Note that while `JComponent.reshape()` is deprecated, it will still work for the time being. However, it's always a good idea to keep your code up-to-date and use non-deprecated methods whenever possible.

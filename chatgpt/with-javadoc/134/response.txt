@@ -1,0 +1,24 @@
+# Response Time: 9.27788233757019
+
+
+Sure! Here's an example of how you can refactor your code to use the `isWhitespace(char)` method instead of the deprecated `isSpace(char)` method:
+
+Before refactoring:
+
+```java
+char ch = ' ';
+if (Character.isSpace(ch)) {
+    System.out.println("Character is a space.");
+}
+```
+
+After refactoring:
+
+```java
+char ch = ' ';
+if (Character.isWhitespace(ch)) {
+    System.out.println("Character is a whitespace character.");
+}
+```
+
+As you can see, the only change required is to replace `isSpace(ch)` with `isWhitespace(ch)` in the condition of the `if` statement. The `isWhitespace(char)` method returns `true` if the specified character is a whitespace character, which includes spaces, tabs, line feeds, and other similar characters.

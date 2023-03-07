@@ -1,0 +1,46 @@
+# Response Time: 14.395270109176636
+Sure, here's an example of refactoring code that uses the deprecated `preferredSize()` method in `java.awt.List` to use the recommended `getPreferredSize()` method instead:
+
+Before refactoring:
+```java
+import java.awt.Frame;
+import java.awt.List;
+
+public class MyFrame extends Frame {
+    private List myList;
+
+    public MyFrame() {
+        super("My Frame");
+        myList = new List();
+        add(myList);
+        setSize(myList.preferredSize()); // deprecated method
+        setVisible(true);
+    }
+}
+```
+
+After refactoring:
+```java
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.List;
+
+public class MyFrame extends Frame {
+    private List myList;
+
+    public MyFrame() {
+        super("My Frame");
+        myList = new List();
+        add(myList);
+        pack(); // use pack instead of setSize
+        setVisible(true);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(200, 200); // set preferred size here
+    }
+}
+```
+
+In the refactored code, the deprecated `preferredSize()` method is replaced with the recommended `getPreferredSize()` method. Instead of calling `setSize()` with the preferred size of the `List`, the `pack()` method is used to resize the frame based on the preferred size of its components. Additionally, the `getPreferredSize()` method is overridden to set the preferred size of the `Frame`.

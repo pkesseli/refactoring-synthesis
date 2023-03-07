@@ -1,0 +1,36 @@
+# Response Time: 18.402862310409546
+Sure! Here's an example of how you can refactor code that uses the deprecated `java.awt.List.addItem(String)` method:
+
+Before refactoring:
+
+```java
+import java.awt.List;
+
+public class MyList {
+    public static void main(String[] args) {
+        List myList = new List();
+        myList.addItem("Item 1");
+        myList.addItem("Item 2");
+        myList.addItem("Item 3");
+        System.out.println(myList);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.Choice;
+
+public class MyChoice {
+    public static void main(String[] args) {
+        Choice myChoice = new Choice();
+        myChoice.add("Item 1");
+        myChoice.add("Item 2");
+        myChoice.add("Item 3");
+        System.out.println(myChoice);
+    }
+}
+```
+
+In the refactored code, we have replaced the `List` class with the `Choice` class and used the `add(String)` method instead of the deprecated `addItem(String)` method. Note that the `Choice` class is similar to the `List` class, but allows for only one item to be selected at a time, whereas the `List` class allows for multiple items to be selected.

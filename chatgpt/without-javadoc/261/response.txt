@@ -1,0 +1,16 @@
+# Response Time: 13.765893936157227
+Sure! The `java.util.logging.Logger.logrb(Level, String, String, String, String)` method is deprecated as of Java 9, and it is recommended to use the `java.util.logging.Logger.logp(Level, String, String, String)` method instead. The `logp()` method is similar to `logrb()`, but it takes only three parameters: the logging level, the source class name, and the source method name. Here's an example of how to refactor a call to `logrb()` to use `logp()`:
+
+Before:
+```java
+Logger logger = Logger.getLogger("com.example");
+logger.logrb(Level.WARNING, "com.example.MyClass", "myMethod", "bundle", "Log message");
+```
+
+After:
+```java
+Logger logger = Logger.getLogger("com.example");
+logger.logp(Level.WARNING, "com.example.MyClass", "myMethod", "Log message");
+```
+
+As you can see, we simply removed the deprecated "bundle" parameter and passed only the source class name, source method name, and log message to the `logp()` method. This will produce the same result as the original `logrb()` call, but without triggering any deprecation warnings.

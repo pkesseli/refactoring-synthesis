@@ -1,0 +1,57 @@
+# Response Time: 19.25593876838684
+Sure, here's an example of how you could refactor code that uses `javax.swing.text.WrappedPlainView.drawUnselectedText()`:
+
+Before refactoring:
+
+```
+@Override
+public void paint(Graphics g, Shape a) {
+    Rectangle alloc = (a instanceof Rectangle) ? (Rectangle)a : a.getBounds();
+    JTextComponent c = getComponent();
+    Font f = c.getFont();
+    g.setFont(f);
+    if (c.isEnabled()) {
+        g.setColor(c.getForeground());
+    } else {
+        g.setColor(c.getDisabledTextColor());
+    }
+    // Call deprecated method
+    ((WrappedPlainView)this).drawUnselectedText(g, alloc.x, alloc.width, alloc.y, alloc.height);
+}
+```
+
+After refactoring:
+
+```
+@Override
+public void paint(Graphics g, Shape a) {
+    Rectangle alloc = (a instanceof Rectangle) ? (Rectangle)a : a.getBounds();
+    JTextComponent c = getComponent();
+    Font f = c.getFont();
+    g.setFont(f);
+    if (c.isEnabled()) {
+        g.setColor(c.getForeground());
+    } else {
+        g.setColor(c.getDisabledTextColor());
+    }
+    // Refactored method call
+    drawText(g, alloc.x, alloc.width, alloc.y, alloc.height);
+}
+
+private void drawText(Graphics g, int x, int width, int y, int height) {
+    JTextComponent c = getComponent();
+    Document doc = c.getDocument();
+    Element map = doc.getDefaultRootElement();
+    Element elem = map.getElement(map.getElementIndex(y));
+    int startOffset = elem.getStartOffset();
+    int endOffset = Math.min(doc.getLength(), startOffset + width);
+    try {
+        String text = doc.getText(startOffset, endOffset - startOffset);
+        g.drawString(text, x, y);
+    } catch (BadLocationException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+In the refactored code, we've removed the call to the deprecated `WrappedPlainView.drawUnselectedText()` method and replaced it with a new private method `drawText()`. This new method takes care of rendering the text by accessing the document and drawing the text onto the graphics object using `g.drawString()`.

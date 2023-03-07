@@ -1,0 +1,44 @@
+# Response Time: 21.58629059791565
+Sure! Here's an example of how you could refactor code that uses the deprecated `finalize()` method of `ThreadPoolExecutor` in Java:
+
+```java
+// Instantiate a ThreadPoolExecutor with 10 threads
+ThreadPoolExecutor executor = new ThreadPoolExecutor(
+    10, // core pool size
+    10, // maximum pool size
+    60, // keep alive time for idle threads
+    TimeUnit.SECONDS, // time unit for keep alive time
+    new LinkedBlockingQueue<>() // queue for pending tasks
+);
+
+// Do some work using the executor
+
+// Call the deprecated finalize() method to shut down the executor when we're done
+executor.finalize();
+```
+
+Instead of using `finalize()`, we can use the `shutdown()` method to gracefully shut down the executor and wait for all tasks to complete:
+
+```java
+// Instantiate a ThreadPoolExecutor with 10 threads
+ThreadPoolExecutor executor = new ThreadPoolExecutor(
+    10, // core pool size
+    10, // maximum pool size
+    60, // keep alive time for idle threads
+    TimeUnit.SECONDS, // time unit for keep alive time
+    new LinkedBlockingQueue<>() // queue for pending tasks
+);
+
+// Do some work using the executor
+
+// Shut down the executor when we're done
+executor.shutdown();
+try {
+    // Wait for all tasks to complete
+    executor.awaitTermination(1, TimeUnit.MINUTES);
+} catch (InterruptedException e) {
+    // Handle interrupted exception if necessary
+}
+```
+
+In this refactored example, we call the `shutdown()` method to signal that we're done using the executor. We then wait for up to one minute for all tasks to complete using the `awaitTermination()` method. This ensures that all threads are stopped gracefully and any pending tasks are completed before the program exits.

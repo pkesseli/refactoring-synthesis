@@ -1,0 +1,51 @@
+# Response Time: 77.0941321849823
+Sure, here's an example of refactoring code that uses the deprecated `javax.swing.plaf.TextUI.getToolTipText​(JTextComponent, Point)` method to instead use the recommended `TextUI.getToolTipText2D(JTextComponent, Point2D)` method:
+
+Before refactoring:
+
+```java
+import javax.swing.plaf.TextUI;
+import javax.swing.text.JTextComponent;
+
+public class MyTextComponent extends JTextComponent {
+    
+    // ...
+    
+    @Override
+    public String getToolTipText() {
+        String tip = null;
+        Point p = getMousePosition();
+        if (p != null) {
+            TextUI ui = getUI();
+            tip = ui.getToolTipText(this, p); // Deprecated method
+        }
+        return tip;
+    }
+}
+```
+
+After refactoring:
+
+```java
+import javax.swing.plaf.TextUI;
+import javax.swing.text.JTextComponent;
+import java.awt.geom.Point2D;
+
+public class MyTextComponent extends JTextComponent {
+    
+    // ...
+    
+    @Override
+    public String getToolTipText() {
+        String tip = null;
+        Point2D p = getMousePosition();
+        if (p != null) {
+            TextUI ui = getUI();
+            tip = ui.getToolTipText2D(this, p); // Recommended method
+        }
+        return tip;
+    }
+}
+```
+
+As you can see, the only change necessary is to replace the `Point` parameter with a `Point2D` parameter in the call to the `getToolTipText2D()` method. This change allows the code to use the recommended method and avoid the use of the deprecated one.

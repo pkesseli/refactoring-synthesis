@@ -1,0 +1,34 @@
+# Response Time: 11.584609270095825
+
+
+Sure, here's an example of how you can refactor the deprecated `preferredSize(int, int)` method to use the recommended `getPreferredSize(int, int)` method instead.
+
+Before:
+
+```java
+import java.awt.TextArea;
+
+public class Example {
+    public static void main(String[] args) {
+        TextArea textArea = new TextArea();
+        textArea.preferredSize(400, 300);
+    }
+}
+```
+
+After:
+
+```java
+import java.awt.Dimension;
+import java.awt.TextArea;
+
+public class Example {
+    public static void main(String[] args) {
+        TextArea textArea = new TextArea();
+        Dimension preferredSize = textArea.getPreferredSize(400, 300);
+        textArea.setPreferredSize(preferredSize);
+    }
+}
+```
+
+In the refactored code, we first call the `getPreferredSize(int, int)` method to obtain the preferred size of the text area. Then, we set this preferred size using the `setPreferredSize(Dimension)` method. This way, we have successfully refactored our code to use the recommended method instead of the deprecated one.

@@ -1,0 +1,43 @@
+# Response Time: 124.51067972183228
+Sure! Here's an example of how you could refactor code that uses the deprecated `viewToModel` method in `MultiTextUI`:
+
+Before refactoring:
+
+```java
+import javax.swing.*;
+import javax.swing.plaf.multi.MultiTextUI;
+import java.awt.*;
+
+public class Example {
+    public static void main(String[] args) {
+        JTextArea textArea = new JTextArea();
+        MultiTextUI multiTextUI = new MultiTextUI();
+        Point point = new Point(50, 50);
+        int index = multiTextUI.viewToModel(textArea, point);
+        System.out.println("Index at point: " + index);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import javax.swing.*;
+import javax.swing.text.View;
+import javax.swing.text.Position.Bias;
+import java.awt.*;
+
+public class Example {
+    public static void main(String[] args) {
+        JTextArea textArea = new JTextArea();
+        View view = textArea.getUI().getRootView(textArea).getView(0);
+        Point point = new Point(50, 50);
+        int index = view.viewToModel(point, new Rectangle(), Bias.Forward);
+        System.out.println("Index at point: " + index);
+    }
+}
+```
+
+In the refactored code, we've replaced the use of `MultiTextUI.viewToModel` with the `javax.swing.text.View.viewToModel` method, which provides similar functionality. 
+
+To use `View.viewToModel`, we first get the root view of the text component's UI with `textArea.getUI().getRootView(textArea)`. Then, we get the first child view of the root view with `getRootView(textArea).getView(0)`, which should correspond to the entire text content of the text component. Finally, we call `viewToModel` on this view with the point and an empty rectangle, along with a bias parameter to indicate which side of a character the point should fall on. The returned index is the index of the closest character to the given point.

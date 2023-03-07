@@ -1,0 +1,37 @@
+# Response Time: 16.27871561050415
+
+
+Sure! Instead of using the deprecated `java.awt.Toolkit.getFontList()` method, you can use the `java.awt.GraphicsEnvironment.getAllFonts()` method to get a list of all available fonts on the system. Here's an example of how you can refactor your code to use `getAllFonts()`:
+
+Before refactoring:
+
+```java
+import java.awt.Toolkit;
+
+public class FontExample {
+    public static void main(String[] args) {
+        String[] fontList = Toolkit.getDefaultToolkit().getFontList();
+        for (String fontName : fontList) {
+            System.out.println(fontName);
+        }
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.GraphicsEnvironment;
+import java.awt.Font;
+
+public class FontExample {
+    public static void main(String[] args) {
+        Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+        for (Font font : fonts) {
+            System.out.println(font.getName());
+        }
+    }
+}
+```
+
+In the refactored code, we use the `getAllFonts()` method to get an array of `Font` objects, and then we loop through each `Font` object and print its name using the `getName()` method.

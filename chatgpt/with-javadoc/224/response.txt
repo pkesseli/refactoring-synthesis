@@ -1,0 +1,18 @@
+# Response Time: 51.4972288608551
+Sure, here's an example of refactoring code that uses the deprecated `getBigDecimal(int, int)` method to use the suggested replacement method `getBigDecimal(int)`:
+
+Before refactoring:
+
+```java
+ResultSet rs = statement.executeQuery("SELECT price FROM products WHERE id = 123");
+BigDecimal price = rs.getBigDecimal(1, 2);
+```
+
+After refactoring:
+
+```java
+ResultSet rs = statement.executeQuery("SELECT price FROM products WHERE id = 123");
+BigDecimal price = rs.getBigDecimal(1);
+```
+
+In the refactored code, the deprecated `getBigDecimal(int, int)` method call has been replaced with `getBigDecimal(int)` which is suggested in the deprecation comment. The `int` parameter that specified the scale of the `BigDecimal` is no longer needed because the `getBigDecimal(int)` method returns the entire value of the column as a `BigDecimal`.

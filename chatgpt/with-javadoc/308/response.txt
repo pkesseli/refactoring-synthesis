@@ -1,0 +1,20 @@
+# Response Time: 23.115933179855347
+
+
+Sure, here's an example of how you can refactor code that uses the deprecated `disable()` method:
+
+Before refactoring:
+
+```java
+JButton myButton = new JButton("Click me");
+myButton.disable(); // deprecated method
+```
+
+After refactoring:
+
+```java
+JButton myButton = new JButton("Click me");
+myButton.setEnabled(false);
+```
+
+In the refactored code, we replace the `disable()` method with the `setEnabled(false)` method, which is the recommended replacement method as mentioned in the deprecation comment. This will have the same effect as disabling the component.

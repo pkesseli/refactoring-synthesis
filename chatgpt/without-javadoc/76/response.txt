@@ -1,0 +1,40 @@
+# Response Time: 12.79088044166565
+Sure, here's an example of how you can refactor your code to avoid using the deprecated `java.awt.List.countItems()` method:
+
+Before refactoring:
+
+```java
+import java.awt.List;
+
+public class MyList {
+    private List list;
+    
+    public MyList(List list) {
+        this.list = list;
+    }
+    
+    public int countItems() {
+        return list.countItems();
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.List;
+
+public class MyList {
+    private List list;
+    
+    public MyList(List list) {
+        this.list = list;
+    }
+    
+    public int countItems() {
+        return list.getItemCount();
+    }
+}
+```
+
+In this refactored code, we've replaced the deprecated `countItems()` method with the recommended `getItemCount()` method. This should give you the same result while avoiding using the deprecated method.

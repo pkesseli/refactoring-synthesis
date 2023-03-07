@@ -1,0 +1,77 @@
+# Response Time: 32.21380972862244
+
+
+Sure! Here's an example refactoring that avoids using the deprecated `Thread.resume()` method:
+
+```java
+// Deprecated code using Thread.suspend() and Thread.resume()
+Thread thread = new Thread(() -> {
+    while (true) {
+        System.out.println("Thread is running");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+});
+thread.start();
+
+try {
+    Thread.sleep(5000);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+thread.suspend(); // Deprecated method
+System.out.println("Thread suspended");
+
+try {
+    Thread.sleep(5000);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+thread.resume(); // Deprecated method
+System.out.println("Thread resumed");
+```
+
+Refactored code using a volatile boolean flag to control the thread:
+
+```java
+// Refactored code using a volatile boolean flag
+volatile boolean isRunning = true;
+
+Thread thread = new Thread(() -> {
+    while (isRunning) {
+        System.out.println("Thread is running");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+});
+thread.start();
+
+try {
+    Thread.sleep(5000);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+isRunning = false; // Stop the thread
+System.out.println("Thread stopped");
+
+try {
+    Thread.sleep(5000);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+isRunning = true; // Restart the thread
+System.out.println("Thread restarted");
+thread.start(); // Start a new thread since the old one cannot be restarted
+```
+
+As you can see, the refactored code avoids using the deprecated `Thread.resume()` method by using a volatile boolean flag to control the thread. Instead of suspending and resuming the thread, the flag is set to `false` to stop the thread and `true` to restart it. A new thread is started to replace the old one, which cannot be restarted once it has been stopped.

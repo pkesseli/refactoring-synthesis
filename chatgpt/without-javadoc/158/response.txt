@@ -1,0 +1,18 @@
+# Response Time: 12.732170820236206
+Sure, here's an example of how you can refactor the usage of `java.math.BigDecimal.setScale(int, int)` method, which is deprecated, to use `java.math.RoundingMode` instead:
+
+Before refactoring:
+
+```java
+BigDecimal bigDecimal = new BigDecimal("123.4567");
+BigDecimal scaledDecimal = bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
+```
+
+After refactoring:
+
+```java
+BigDecimal bigDecimal = new BigDecimal("123.4567");
+BigDecimal scaledDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
+```
+
+In the refactored code, we have replaced the deprecated `BigDecimal.ROUND_HALF_UP` constant with `RoundingMode.HALF_UP` enumeration value, which is a more type-safe and recommended approach to perform rounding in BigDecimal operations.

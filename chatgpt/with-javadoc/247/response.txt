@@ -1,0 +1,37 @@
+# Response Time: 21.705384254455566
+
+
+Sure, here is an example of refactoring code that uses the deprecated `getMonth()` method to use `Calendar.get(Calendar.MONTH)` instead:
+
+Before:
+
+```java
+import java.util.Date;
+
+public class MyClass {
+   public static void main(String[] args) {
+      Date now = new Date();
+      int currentMonth = now.getMonth();
+      System.out.println("The current month is: " + currentMonth);
+   }
+}
+```
+
+After:
+
+```java
+import java.util.Calendar;
+import java.util.Date;
+
+public class MyClass {
+   public static void main(String[] args) {
+      Date now = new Date();
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(now);
+      int currentMonth = calendar.get(Calendar.MONTH);
+      System.out.println("The current month is: " + currentMonth);
+   }
+}
+```
+
+In the refactored code, we create a `Calendar` object and set its time to the current `Date`. Then we use `Calendar.get(Calendar.MONTH)` to get the month instead of the deprecated `Date.getMonth()`.

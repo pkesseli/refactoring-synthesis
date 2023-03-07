@@ -1,0 +1,33 @@
+# Response Time: 10.067810535430908
+
+
+Sure! Here's an example of refactoring code that uses the deprecated `minimumSize()` method in Java's AWT `TextArea` class:
+
+Before refactoring:
+```java
+import java.awt.TextArea;
+
+public class Example {
+    public void doSomething() {
+        TextArea textArea = new TextArea();
+        textArea.minimumSize(); // deprecated method
+        // ... rest of code
+    }
+}
+```
+
+After refactoring:
+```java
+import java.awt.Dimension;
+import java.awt.TextArea;
+
+public class Example {
+    public void doSomething() {
+        TextArea textArea = new TextArea();
+        Dimension minimumSize = textArea.getMinimumSize(); // use replacement method
+        // ... rest of code
+    }
+}
+```
+
+In the refactored code, we have replaced the deprecated `minimumSize()` method with the replacement method `getMinimumSize()`. We have also imported the `Dimension` class, which is the return type of the replacement method. The rest of the code remains unchanged.

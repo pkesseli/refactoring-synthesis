@@ -1,0 +1,18 @@
+# Response Time: 8.217564821243286
+Sure, here's an example of refactoring code that uses the deprecated `countItems()` method in favor of the recommended `getItemCount()` method:
+
+Before refactoring:
+
+```
+Menu myMenu = new Menu("File");
+int numOfItems = myMenu.countItems();
+```
+
+After refactoring:
+
+```
+Menu myMenu = new Menu("File");
+int numOfItems = myMenu.getItemCount();
+```
+
+In the refactored code, we have replaced the deprecated `countItems()` method with the recommended `getItemCount()` method, which serves the same purpose. This ensures that the code continues to function as intended while using up-to-date and supported methods.

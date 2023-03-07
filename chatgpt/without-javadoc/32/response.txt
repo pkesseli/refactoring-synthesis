@@ -1,0 +1,24 @@
+# Response Time: 15.766679286956787
+
+
+Sure! The `java.awt.Component.mouseDrag` method has been deprecated since Java 9, and you can use the `java.awt.Component.mouseDragged` method instead. Here's an example of how you can refactor your code to use the new method:
+
+Before:
+```java
+public void mouseDrag(Event event, int x, int y) {
+   // Your code here
+}
+```
+
+After:
+```java
+public void mouseDragged(MouseEvent e) {
+   int x = e.getX();
+   int y = e.getY();
+   // Your code here
+}
+```
+
+In the refactored code, we've changed the method signature to match the new method name and parameter type. Instead of receiving an `Event` object and two integers, the method now receives a `MouseEvent` object. We then extract the `x` and `y` coordinates from the `MouseEvent` object using the `getX` and `getY` methods, respectively.
+
+Make sure to update any code that calls this method as well to use the new method name.

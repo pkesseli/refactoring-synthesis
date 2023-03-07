@@ -1,0 +1,34 @@
+# Response Time: 8.974445819854736
+
+
+Sure! Here's an example of how you could refactor code that uses `resize()` to use `setSize()` instead:
+
+Before:
+
+```java
+import java.awt.*;
+
+public class ExampleComponent extends Component {
+    
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        // additional code here
+    }
+}
+```
+
+After:
+
+```java
+import java.awt.*;
+
+public class ExampleComponent extends Component {
+    
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+        // additional code here
+    }
+}
+```
+
+As you can see, the only change needed is to replace the method call `resize()` with `setSize()`. This is because `resize()` has been deprecated and replaced by `setSize()` in JDK 1.1.

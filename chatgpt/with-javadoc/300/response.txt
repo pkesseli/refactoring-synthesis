@@ -1,0 +1,22 @@
+# Response Time: 68.89682126045227
+Sure, here is an example of refactoring the code to use the suggested method instead:
+
+Before:
+```
+HandshakeCompletedEvent event = ...;
+X509Certificate[] certs = (X509Certificate[])event.getPeerCertificateChain();
+```
+
+After:
+```
+HandshakeCompletedEvent event = ...;
+Certificate[] certs = event.getPeerCertificates();
+X509Certificate[] x509Certs = Arrays.stream(certs)
+                                     .filter(c -> c instanceof X509Certificate)
+                                     .map(c -> (X509Certificate) c)
+                                     .toArray(X509Certificate[]::new);
+```
+
+In the above refactored code, we first obtain the `Certificate` array using the `getPeerCertificates()` method instead of the deprecated `getPeerCertificateChain()` method. We then use Java 8 streams to filter out only the X509Certificates from the array and convert it into an array of `X509Certificate`. 
+
+Note that `getPeerCertificates()` method returns an array of `java.security.cert.Certificate` which may include certificates of different types, not only `X509Certificate`. Therefore, we need to filter the array to only include `X509Certificate` instances before converting it to an array of `X509Certificate`.

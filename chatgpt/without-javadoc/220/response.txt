@@ -1,0 +1,40 @@
+# Response Time: 24.067469596862793
+Sure, here's an example of how you could refactor code that uses the deprecated `java.sql.Date.setSeconds(int)` method:
+
+Before refactoring:
+
+```
+import java.sql.Date;
+
+public class DateExample {
+    public static void main(String[] args) {
+        Date date = new Date(System.currentTimeMillis());
+        date.setSeconds(30); // deprecated method
+        System.out.println(date);
+    }
+}
+```
+
+After refactoring:
+
+```
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+
+public class DateExample {
+    public static void main(String[] args) {
+        LocalDateTime dateTime = LocalDateTime.now();
+        dateTime = dateTime.withSecond(30);
+        long epochSeconds = dateTime.toEpochSecond(ZoneOffset.UTC);
+        Date date = new Date(epochSeconds * 1000);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = formatter.format(dateTime);
+        System.out.println(formattedDate);
+    }
+}
+```
+
+In the refactored code, we are using the `java.time` package instead of `java.sql.Date`. We create a `LocalDateTime` object using the current time, set the seconds to 30 using the `withSecond()` method, convert it to epoch seconds using the `toEpochSecond()` method, and then create a new `java.sql.Date` object using the epoch seconds multiplied by 1000 (since `java.sql.Date` expects milliseconds). Finally, we format the `LocalDateTime` object using a `DateTimeFormatter` object and print it to the console.
+
+Note that this refactored code assumes that you want to use the UTC time zone. If you want to use a different time zone, you can replace `ZoneOffset.UTC` with a different `ZoneOffset` object, or use the `ZoneId` class instead.

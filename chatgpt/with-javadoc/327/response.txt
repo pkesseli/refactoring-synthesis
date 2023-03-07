@@ -1,0 +1,23 @@
+# Response Time: 45.98067617416382
+Sure! Here's an example of how you can refactor your code to replace the use of the `isBackingStoreEnabled()` method with `getScrollMode()`:
+
+Before refactoring:
+
+```
+JViewport viewport = new JViewport();
+if (viewport.isBackingStoreEnabled()) {
+    // Do something
+}
+```
+
+After refactoring:
+
+```
+JViewport viewport = new JViewport();
+if (viewport.getScrollMode() == JViewport.BLIT_SCROLL_MODE ||
+    viewport.getScrollMode() == JViewport.BACKINGSTORE_SCROLL_MODE) {
+    // Do something
+}
+```
+
+In the refactored code, we first check if the scroll mode is either `BLIT_SCROLL_MODE` or `BACKINGSTORE_SCROLL_MODE`, which are the two modes that correspond to the old behavior of `isBackingStoreEnabled()`. This will give us the same result as the original code, but without using the deprecated method.

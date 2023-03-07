@@ -1,0 +1,36 @@
+# Response Time: 17.820663928985596
+Sure, here's an example of how you could refactor code that uses the deprecated `java.awt.Toolkit.getFontMetrics(Font)` method to use the recommended `Font.getLineMetrics()` method:
+
+Before refactoring:
+
+```java
+import java.awt.Font;
+import java.awt.Toolkit;
+
+public class FontMetricsExample {
+    public static void main(String[] args) {
+        Font font = new Font("Serif", Font.PLAIN, 12);
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        int stringWidth = toolkit.getFontMetrics(font).stringWidth("Hello World");
+        System.out.println("String width: " + stringWidth);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.Font;
+import java.awt.font.LineMetrics;
+
+public class FontMetricsExample {
+    public static void main(String[] args) {
+        Font font = new Font("Serif", Font.PLAIN, 12);
+        LineMetrics metrics = font.getLineMetrics("Hello World", null);
+        float stringWidth = metrics.stringWidth("Hello World");
+        System.out.println("String width: " + stringWidth);
+    }
+}
+```
+
+In the refactored code, we first create a `Font` object using the same parameters as before. Instead of getting the font metrics from the `Toolkit` object using the deprecated method, we now call `getLineMetrics()` on the `Font` object itself and pass in the string we want to measure and `null` for the `FontRenderContext` parameter. This returns a `LineMetrics` object that we can use to get the string width using the `stringWidth()` method. The width is then printed to the console as before.

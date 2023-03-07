@@ -1,0 +1,44 @@
+# Response Time: 18.13182783126831
+Sure, here's an example of refactoring code that uses the deprecated method `java.awt.MenuItem.enable(boolean)`:
+
+```java
+import java.awt.*;
+
+public class MyMenu extends MenuBar {
+    private MenuItem myItem;
+    
+    public MyMenu() {
+        Menu myMenu = new Menu("My Menu");
+        myItem = new MenuItem("My Item");
+        myMenu.add(myItem);
+        add(myMenu);
+    }
+    
+    public void enableItem(boolean enabled) {
+        myItem.enable(enabled);
+    }
+}
+```
+
+To refactor this code, we can replace the deprecated `enable()` method with the recommended alternative, `setEnabled(boolean)`. Here's the refactored code:
+
+```java
+import java.awt.*;
+
+public class MyMenu extends MenuBar {
+    private MenuItem myItem;
+    
+    public MyMenu() {
+        Menu myMenu = new Menu("My Menu");
+        myItem = new MenuItem("My Item");
+        myMenu.add(myItem);
+        add(myMenu);
+    }
+    
+    public void enableItem(boolean enabled) {
+        myItem.setEnabled(enabled);
+    }
+}
+```
+
+As you can see, the only change made was to replace `myItem.enable(enabled)` with `myItem.setEnabled(enabled)`. This ensures that the code will continue to function correctly, while also avoiding the use of a deprecated method.

@@ -1,0 +1,39 @@
+# Response Time: 35.115318775177
+Sure, here's an example of how to refactor code that uses `getSystemToolClassLoader()` method to use the system tool provider instead:
+
+Before refactoring:
+
+```java
+import javax.tools.ToolProvider;
+import java.net.URLClassLoader;
+
+public class MyClass {
+    public void myMethod() {
+        URLClassLoader systemToolClassLoader = ToolProvider.getSystemToolClassLoader();
+        // Use the systemToolClassLoader to load tools
+        // ...
+    }
+}
+```
+
+After refactoring:
+
+```java
+import javax.tools.ToolProvider;
+import java.net.URLClassLoader;
+
+public class MyClass {
+    public void myMethod() {
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        URLClassLoader systemToolClassLoader = ToolProvider.getSystemToolClassLoader(systemClassLoader);
+        // Use the systemToolClassLoader to load tools
+        // ...
+    }
+}
+```
+
+In the refactored code, we replaced the deprecated `getSystemToolClassLoader()` method with `getSystemToolClassLoader(ClassLoader)` method which takes a `ClassLoader` object as an argument. 
+
+To obtain the `ClassLoader` object, we use `ClassLoader.getSystemClassLoader()` method, which returns the system class loader for delegation. Then we pass it as an argument to `ToolProvider.getSystemToolClassLoader(ClassLoader)` method to obtain the `URLClassLoader` object.
+
+With this refactoring, the code still uses the system tool provider to locate system tools, but now uses a recommended method that avoids the deprecated `getSystemToolClassLoader()` method.

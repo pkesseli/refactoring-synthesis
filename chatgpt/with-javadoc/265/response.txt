@@ -1,0 +1,38 @@
+# Response Time: 93.48475408554077
+Sure! Here's an example refactoring that replaces the deprecated `java.util.logging.LogManager.getLoggingMXBean()` method with the recommended `ManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class)` method:
+
+Before refactoring:
+
+```
+import java.util.logging.LogManager;
+import java.util.logging.LoggingMXBean;
+
+public class Example {
+    public void printLoggerNames() {
+        LoggingMXBean loggingMXBean = LogManager.getLoggingMXBean();
+        String[] loggerNames = loggingMXBean.getLoggerNames();
+        for (String loggerName : loggerNames) {
+            System.out.println(loggerName);
+        }
+    }
+}
+```
+
+After refactoring:
+
+```
+import java.lang.management.ManagementFactory;
+import java.lang.management.PlatformLoggingMXBean;
+
+public class Example {
+    public void printLoggerNames() {
+        PlatformLoggingMXBean loggingMXBean = ManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class);
+        String[] loggerNames = loggingMXBean.getLoggerNames();
+        for (String loggerName : loggerNames) {
+            System.out.println(loggerName);
+        }
+    }
+}
+```
+
+As you can see, the main change is in the line where we get the `PlatformLoggingMXBean` object. Instead of calling the deprecated `LogManager.getLoggingMXBean()` method, we now use `ManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class)`. This new method call returns an instance of the `PlatformLoggingMXBean` interface, which we can use to get information about the logging system.

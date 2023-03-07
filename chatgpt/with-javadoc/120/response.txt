@@ -1,0 +1,30 @@
+# Response Time: 11.97762131690979
+Sure! Here's an example of refactoring code that uses the deprecated `java.awt.Window.applyResourceBundle(String)` method to use the replacement `Component.applyComponentOrientation(ComponentOrientation)` method instead:
+
+Before Refactoring:
+
+```java
+import java.awt.*;
+
+public class MyWindow extends Window {
+    public MyWindow() {
+        applyResourceBundle("myResourceBundle");
+    }
+}
+```
+
+After Refactoring:
+
+```java
+import java.awt.*;
+
+public class MyWindow extends Window {
+    public MyWindow() {
+        applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
+    }
+}
+```
+
+In the refactored code, we've replaced the deprecated `applyResourceBundle()` method call with `applyComponentOrientation()` method call, which is the recommended replacement. We've used `ComponentOrientation.getOrientation(Locale.getDefault())` to determine the default component orientation based on the current locale. This ensures that the component's orientation is set correctly based on the user's language and regional settings.
+
+Note that this is just a simple example, and the refactoring required for your code may be more complex depending on the specific use case.

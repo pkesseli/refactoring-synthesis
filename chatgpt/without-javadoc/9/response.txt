@@ -1,0 +1,28 @@
+# Response Time: 19.638662338256836
+Sure, I can show you an example of refactoring the deprecated method `java.awt.CheckboxGroup.getCurrent()`. 
+
+The `getCurrent()` method in `CheckboxGroup` class is deprecated since JDK 1.1, and is replaced by `getSelectedCheckbox()`. Therefore, we can refactor the code to use the new method as follows:
+
+Before refactoring:
+
+```java
+CheckboxGroup group = new CheckboxGroup();
+Checkbox checkbox1 = new Checkbox("Option 1", group, false);
+Checkbox checkbox2 = new Checkbox("Option 2", group, false);
+
+// Get currently selected checkbox
+Checkbox currentCheckbox = group.getCurrent();
+```
+
+After refactoring:
+
+```java
+CheckboxGroup group = new CheckboxGroup();
+Checkbox checkbox1 = new Checkbox("Option 1", group, false);
+Checkbox checkbox2 = new Checkbox("Option 2", group, false);
+
+// Get currently selected checkbox
+Checkbox selectedCheckbox = group.getSelectedCheckbox();
+```
+
+In the refactored code, we have replaced the deprecated `getCurrent()` method with `getSelectedCheckbox()`, which is the recommended method to get the currently selected `Checkbox`. The functionality remains the same, but the code is updated to use the newer method.

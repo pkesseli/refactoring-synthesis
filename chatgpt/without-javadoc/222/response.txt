@@ -1,0 +1,66 @@
+# Response Time: 30.107874393463135
+Sure, here's an example of how you could refactor code that uses `java.sql.DriverManager.setLogStream​(PrintStream)` to use the newer `java.util.logging` API instead.
+
+Before refactoring:
+
+```java
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseConnection {
+
+  private static final String JDBC_URL = "jdbc:mysql://localhost:3306/mydatabase";
+  private static final String USERNAME = "myusername";
+  private static final String PASSWORD = "mypassword";
+
+  public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+    PrintStream logStream = new PrintStream(new FileOutputStream("database.log"));
+    DriverManager.setLogStream(logStream);
+
+    Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
+    System.out.println("Connection successful");
+    // ... use the connection
+  }
+}
+```
+
+After refactoring:
+
+```java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class DatabaseConnection {
+
+  private static final String JDBC_URL = "jdbc:mysql://localhost:3306/mydatabase";
+  private static final String USERNAME = "myusername";
+  private static final String PASSWORD = "mypassword";
+
+  public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    Class.forName("com.mysql.jdbc.Driver");
+
+    Logger logger = Logger.getLogger("com.mysql.jdbc");
+    logger.setLevel(Level.ALL);
+    Handler consoleHandler = new ConsoleHandler();
+    consoleHandler.setLevel(Level.ALL);
+    logger.addHandler(consoleHandler);
+
+    Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
+    System.out.println("Connection successful");
+    // ... use the connection
+  }
+}
+```
+
+In this refactored example, we're creating a `Logger` object for the `com.mysql.jdbc` package, setting its log level to `Level.ALL`, and adding a `ConsoleHandler` to it that logs all messages at the `Level.ALL` level. By default, the `ConsoleHandler` logs to the console, but you could also configure it to log to a file or another destination if needed.
+
+Note that this is just one example of how you could refactor code that uses `DriverManager.setLogStream`. Depending on your specific use case, you might need to adjust the log level, log format, or logging destination to suit your needs.

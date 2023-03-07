@@ -1,0 +1,25 @@
+# Response Time: 23.859325408935547
+Certainly! Here's an example of how to refactor code that uses the deprecated `java.net.MulticastSocket.leaveGroup​(InetAddress)` method:
+
+Before Refactoring:
+```java
+InetAddress groupAddress = InetAddress.getByName("224.0.0.1");
+MulticastSocket socket = new MulticastSocket(1234);
+socket.joinGroup(groupAddress);
+// ...
+socket.leaveGroup(groupAddress);
+```
+
+After Refactoring:
+```java
+InetAddress groupAddress = InetAddress.getByName("224.0.0.1");
+try (MulticastSocket socket = new MulticastSocket()) {
+    socket.joinGroup(new InetSocketAddress(groupAddress, 1234), NetworkInterface.getByInetAddress(groupAddress));
+    // ...
+    socket.leaveGroup(new InetSocketAddress(groupAddress, 1234), NetworkInterface.getByInetAddress(groupAddress));
+}
+```
+
+In the refactored code, we use the `java.net.MulticastSocket.joinGroup(SocketAddress, NetworkInterface)` method to join the multicast group with the specified `InetAddress` and port number, and also specify the `NetworkInterface` to use. We then use the `java.net.MulticastSocket.leaveGroup(SocketAddress, NetworkInterface)` method to leave the multicast group with the same `InetAddress` and port number, and `NetworkInterface`. We also use the try-with-resources statement to automatically close the `MulticastSocket`.
+
+Note that the `java.net.MulticastSocket.joinGroup(SocketAddress, NetworkInterface)` method was introduced in Java 9 as a replacement for the deprecated `java.net.MulticastSocket.joinGroup​(InetAddress)` and `java.net.MulticastSocket.joinGroup​(SocketAddress)` methods. Similarly, the `java.net.MulticastSocket.leaveGroup(SocketAddress, NetworkInterface)` method was introduced as a replacement for the deprecated `java.net.MulticastSocket.leaveGroup​(InetAddress)` method.

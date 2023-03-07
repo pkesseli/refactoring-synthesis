@@ -1,0 +1,39 @@
+# Response Time: 15.851895093917847
+
+
+Sure, here's an example of how you could refactor code that uses `java.awt.List.delItems(int, int)` to remove the deprecation warning and use a non-deprecated alternative:
+
+Before:
+```java
+import java.awt.List;
+
+public class MyList extends List {
+  
+  public void removeItems(int start, int end) {
+    delItems(start, end);
+  }
+}
+```
+
+After:
+```java
+import java.awt.List;
+import java.util.Arrays;
+
+public class MyList extends List {
+  
+  public void removeItems(int start, int end) {
+    int[] selected = getSelectedIndexes();
+    int[] toRemove = Arrays.copyOfRange(selected, start, end + 1);
+    for (int i : toRemove) {
+      deselect(i);
+    }
+  }
+}
+```
+
+In this example, we are replacing the use of the deprecated `delItems` method with an alternative implementation that uses `getSelectedIndexes` and `deselect` methods. The `getSelectedIndexes` method returns an array of integers representing the indexes of the selected items in the list, and `deselect` method deselects the item at the specified index. 
+
+We use the `Arrays.copyOfRange` method to get a subarray of the selected items between the start and end indices, inclusive, and then iterate over that subarray to deselect each item.
+
+Note that this is just one example of how you could refactor code that uses the `delItems` method. The specific refactoring you choose will depend on the specifics of your code and what alternative methods are available.

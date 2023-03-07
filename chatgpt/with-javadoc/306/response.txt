@@ -1,0 +1,37 @@
+# Response Time: 89.89954614639282
+Sure, here's an example of how to refactor code that uses the deprecated method `javax.swing.FocusManager.isFocusManagerEnabled()` to use `KeyboardFocusManager.getDefaultFocusTraversalPolicy()` instead.
+
+Let's say we have a class called `MyComponent` that extends `JComponent` and we want to check whether the focus manager is enabled or not. Here's what the code might look like using the deprecated method:
+
+```
+public class MyComponent extends JComponent {
+    public void someMethod() {
+        if (FocusManager.isFocusManagerEnabled()) {
+            // do something if focus manager is enabled
+        } else {
+            // do something else if focus manager is disabled
+        }
+    }
+}
+```
+
+To refactor this code to use `KeyboardFocusManager.getDefaultFocusTraversalPolicy()`, we can modify `someMethod()` as follows:
+
+```
+public class MyComponent extends JComponent {
+    public void someMethod() {
+        KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        if (focusManager.getDefaultFocusTraversalPolicy() != null) {
+            // do something if focus manager is enabled
+        } else {
+            // do something else if focus manager is disabled
+        }
+    }
+}
+```
+
+In this example, we're using `KeyboardFocusManager.getCurrentKeyboardFocusManager()` to get an instance of the current focus manager, and then calling `getDefaultFocusTraversalPolicy()` on that instance to check whether the focus manager is enabled or not.
+
+Note that `getDefaultFocusTraversalPolicy()` returns `null` if the focus manager is disabled, so we're checking for `null` to determine whether the focus manager is enabled or not.
+
+By making this simple change to our code, we've updated it to use the recommended method and removed the use of the deprecated method.

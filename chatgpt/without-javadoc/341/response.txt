@@ -1,0 +1,68 @@
+# Response Time: 27.027612447738647
+Sure, here is an example of refactoring the deprecated method `javax.swing.plaf.metal.MetalComboBoxUI.removeListeners()`:
+
+Before Refactoring:
+
+```java
+public class MyComboBoxUI extends MetalComboBoxUI {
+    // ...
+    
+    public void cleanup() {
+        removeListeners(); // Deprecated method
+        // Other cleanup code
+    }
+}
+```
+
+After Refactoring:
+
+```java
+public class MyComboBoxUI extends MetalComboBoxUI {
+    // ...
+    
+    public void cleanup() {
+        removeComboBoxListeners(comboBox);
+        removePopupListeners(popup);
+        removeAncestorListeners(comboBox);
+        // Other cleanup code
+    }
+
+    private void removeComboBoxListeners(JComboBox<?> comboBox) {
+        for (ActionListener listener : comboBox.getActionListeners()) {
+            comboBox.removeActionListener(listener);
+        }
+        for (ItemListener listener : comboBox.getItemListeners()) {
+            comboBox.removeItemListener(listener);
+        }
+        for (KeyListener listener : comboBox.getKeyListeners()) {
+            comboBox.removeKeyListener(listener);
+        }
+        for (PopupMenuListener listener : comboBox.getPopupMenuListeners()) {
+            comboBox.removePopupMenuListener(listener);
+        }
+    }
+
+    private void removePopupListeners(JPopupMenu popup) {
+        for (MouseListener listener : popup.getMouseListeners()) {
+            popup.removeMouseListener(listener);
+        }
+        for (PopupMenuListener listener : popup.getPopupMenuListeners()) {
+            popup.removePopupMenuListener(listener);
+        }
+    }
+
+    private void removeAncestorListeners(JComponent component) {
+        for (AncestorListener listener : component.getAncestorListeners()) {
+            component.removeAncestorListener(listener);
+        }
+    }
+}
+```
+
+Explanation:
+
+The `removeListeners()` method is deprecated because it does not remove all the listeners that were added to the `JComboBox` and its popup menu. To replace this method, we need to manually remove all the listeners that were added. The refactored `cleanup()` method now calls three separate methods, `removeComboBoxListeners()`, `removePopupListeners()`, and `removeAncestorListeners()`, each of which removes a specific set of listeners.
+
+The `removeComboBoxListeners()` method removes all the listeners that were added to the `JComboBox` using its `addActionListener()`, `addItemListener()`, `addKeyListener()`, and `addPopupMenuListener()` methods. The `removePopupListeners()` method removes all the listeners that were added to the popup menu using its `addMouseListener()` and `addPopupMenuListener()` methods. Finally, the `removeAncestorListeners()` method removes all the ancestor listeners that were added to the `JComboBox`. 
+
+By breaking down the removal of listeners into smaller methods, we can ensure that all the listeners are properly removed and avoid the use of a deprecated method.

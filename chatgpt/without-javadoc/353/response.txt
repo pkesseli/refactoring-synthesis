@@ -1,0 +1,28 @@
+# Response Time: 13.556313514709473
+Sure! Here's an example refactoring that replaces the deprecated method `getViewportBorderBounds` with a recommended alternative:
+
+```java
+// Before refactoring
+JScrollPane scrollPane = new JScrollPane();
+// ... code that configures the scroll pane ...
+
+// Get the viewport border bounds (deprecated)
+Rectangle viewportBorderBounds = scrollPane.getViewportBorderBounds();
+
+// After refactoring
+JScrollPane scrollPane = new JScrollPane();
+// ... code that configures the scroll pane ...
+
+// Get the viewport bounds (recommended alternative)
+JViewport viewport = scrollPane.getViewport();
+Insets insets = scrollPane.getInsets();
+Rectangle viewportBounds = new Rectangle(
+    insets.left,
+    insets.top,
+    scrollPane.getWidth() - insets.left - insets.right,
+    scrollPane.getHeight() - insets.top - insets.bottom
+);
+Rectangle viewportBorderBounds = SwingUtilities.calculateInnerArea(viewport, viewportBounds);
+```
+
+In the refactored code, we use the `getViewport` method to obtain the viewport of the scroll pane, and then calculate its inner area using the `SwingUtilities.calculateInnerArea` method. This gives us the same `Rectangle` object that the deprecated `getViewportBorderBounds` method used to return.

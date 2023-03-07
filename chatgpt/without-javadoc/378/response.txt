@@ -1,0 +1,55 @@
+# Response Time: 23.867843866348267
+Sure! Here's an example of how to refactor the deprecated method `javax.swing.text.WrappedPlainView.drawSelectedText(Graphics, int, int, int, int)`:
+
+Before refactoring:
+
+```java
+public class MyView extends WrappedPlainView {
+
+  @Override
+  public void drawSelectedText(Graphics g, int x, int y, int p0, int p1) {
+    // Do something with the selected text
+    super.drawSelectedText(g, x, y, p0, p1);
+  }
+}
+```
+
+After refactoring:
+
+```java
+public class MyView extends WrappedPlainView {
+
+  @Override
+  public void paint(Graphics g, Shape a) {
+    super.paint(g, a);
+
+    // Draw selected text
+    JTextComponent c = getComponent();
+    Highlighter h = c.getHighlighter();
+    Highlighter.Highlight[] highlights = h.getHighlights();
+    for (Highlighter.Highlight highlight : highlights) {
+      if (highlight.getPainter() instanceof DefaultHighlighter.DefaultHighlightPainter) {
+        int p0 = highlight.getStartOffset();
+        int p1 = highlight.getEndOffset();
+        Rectangle r0 = getVisibleEditorRect();
+        Shape s0 = modelToView(p0, r0, Position.Bias.Forward);
+        Shape s1 = modelToView(p1, r0, Position.Bias.Forward);
+        if ((s0 != null) && (s1 != null)) {
+          Rectangle r = s0.getBounds().union(s1.getBounds());
+          g.setColor(c.getSelectedTextColor());
+          g.fillRect(r.x, r.y, r.width, r.height);
+          g.setColor(c.getBackground());
+          View v = getViewAtPosition(p0, r);
+          if (v instanceof WrappedPlainView) {
+            ((WrappedPlainView) v).drawUnselectedText(g, s0.getBounds().x, s0.getBounds().y, p0, p1);
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+In the refactored version, we override the `paint()` method instead of the deprecated `drawSelectedText()` method. We then use the `getHighlighter()` method to obtain an array of all the highlighted regions in the text component. We iterate over this array and draw each highlighted region using the `fillRect()` method of the graphics object. We also draw the unselected text by calling `drawUnselectedText()` method of the `WrappedPlainView` class.
+
+Note that this refactored version may not work for all cases, as it assumes that the text component is a `JTextComponent`. You may need to modify it based on your specific use case.

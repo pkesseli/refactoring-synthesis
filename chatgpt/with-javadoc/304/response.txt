@@ -1,0 +1,32 @@
+# Response Time: 26.700832843780518
+Sure! Here's an example of refactoring the use of `setLabel` to `setText`:
+
+Before refactoring:
+
+```java
+import javax.swing.*;
+
+public class MyButton extends JButton {
+    
+    public MyButton() {
+        setLabel("Click me");
+    }
+    
+}
+```
+
+After refactoring:
+
+```java
+import javax.swing.*;
+
+public class MyButton extends JButton {
+    
+    public MyButton() {
+        setText("Click me");
+    }
+    
+}
+```
+
+In this example, we simply replaced the use of `setLabel` with `setText` to update the button's text. This ensures that the code will continue to work correctly as `setLabel` is deprecated and may be removed in a future version of Java.

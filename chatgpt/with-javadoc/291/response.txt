@@ -1,0 +1,40 @@
+# Response Time: 67.06217789649963
+
+
+Sure, here's an example of how you can refactor your code to replace the deprecated `Monitor.setObservedObject(ObjectName)` method with the new `Monitor.addObservedObject(ObjectName)` method:
+
+Before refactoring:
+
+```java
+import javax.management.ObjectName;
+import javax.management.monitor.Monitor;
+
+public class MonitorExample {
+
+    public static void main(String[] args) throws Exception {
+        Monitor monitor = new Monitor();
+        ObjectName objectName = new ObjectName("com.example:type=MyMonitor");
+        monitor.setObservedObject(objectName);
+        // ...
+    }
+}
+```
+
+After refactoring:
+
+```java
+import javax.management.ObjectName;
+import javax.management.monitor.Monitor;
+
+public class MonitorExample {
+
+    public static void main(String[] args) throws Exception {
+        Monitor monitor = new Monitor();
+        ObjectName objectName = new ObjectName("com.example:type=MyMonitor");
+        monitor.addObservedObject(objectName);
+        // ...
+    }
+}
+```
+
+As you can see, the only change you need to make is to replace `setObservedObject` with `addObservedObject`.

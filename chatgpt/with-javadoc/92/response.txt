@@ -1,0 +1,36 @@
+# Response Time: 13.905372858047485
+
+
+Sure, here's an example of how to refactor code that uses the deprecated `getBoundingBox()` method to use the recommended `getBounds()` method:
+
+Before Refactoring:
+
+```java
+import java.awt.Polygon;
+
+public class Example {
+    public static void main(String[] args) {
+        Polygon polygon = new Polygon(new int[] {0, 10, 20}, new int[] {0, 20, 10}, 3);
+        // Get the bounding box
+        java.awt.Rectangle boundingBox = polygon.getBoundingBox();
+        System.out.println("Bounding box: " + boundingBox);
+    }
+}
+```
+
+After Refactoring:
+
+```java
+import java.awt.Polygon;
+
+public class Example {
+    public static void main(String[] args) {
+        Polygon polygon = new Polygon(new int[] {0, 10, 20}, new int[] {0, 20, 10}, 3);
+        // Get the bounds
+        java.awt.Rectangle bounds = polygon.getBounds();
+        System.out.println("Bounds: " + bounds);
+    }
+}
+```
+
+As you can see, the only change needed was to replace the `getBoundingBox()` method with `getBounds()`. This ensures that the code will continue to work correctly even as new versions of Java are released.

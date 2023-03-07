@@ -1,0 +1,32 @@
+# Response Time: 21.92802357673645
+Certainly, here is an example of refactoring code that uses the deprecated `java.lang.Package.getPackage(String)` method:
+
+```
+// Example code that uses the deprecated java.lang.Package.getPackage(String) method
+Package myPackage = Package.getPackage("com.example.myapp");
+if (myPackage != null) {
+    System.out.println("Package found: " + myPackage.getName());
+} else {
+    System.out.println("Package not found.");
+}
+```
+
+To refactor this code, we can replace the usage of `Package.getPackage(String)` with `Class.forName(String).getPackage()`. Here's the refactored code:
+
+```
+// Refactored code that uses Class.forName(String).getPackage() instead of deprecated Package.getPackage(String)
+try {
+    Package myPackage = Class.forName("com.example.myapp.SomeClass").getPackage();
+    if (myPackage != null) {
+        System.out.println("Package found: " + myPackage.getName());
+    } else {
+        System.out.println("Package not found.");
+    }
+} catch (ClassNotFoundException e) {
+    System.out.println("Class not found: " + e.getMessage());
+}
+```
+
+In this refactored code, we use `Class.forName(String)` to load a class in the package we're interested in. We then call `getPackage()` on the class object to obtain the `Package` object representing the package. Note that we have wrapped the code in a `try` block to handle the `ClassNotFoundException` that `Class.forName(String)` can throw.
+
+This refactored code achieves the same result as the original code, but uses a non-deprecated method.

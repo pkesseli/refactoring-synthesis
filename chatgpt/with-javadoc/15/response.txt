@@ -1,0 +1,30 @@
+# Response Time: 9.938987731933594
+Sure, here's an example of how you can refactor code that uses the deprecated `deliverEvent` method to use the recommended `dispatchEvent` method instead.
+
+Before refactoring:
+```java
+public void handleEvent(Event e) {
+    if (e.id == Event.MOUSE_DOWN) {
+        // do something
+        deliverEvent(e);
+    } else if (e.id == Event.MOUSE_UP) {
+        // do something else
+        deliverEvent(e);
+    }
+}
+```
+
+After refactoring:
+```java
+public void handleEvent(Event e) {
+    if (e.id == Event.MOUSE_DOWN) {
+        // do something
+        dispatchEvent(e);
+    } else if (e.id == Event.MOUSE_UP) {
+        // do something else
+        dispatchEvent(e);
+    }
+}
+```
+
+As you can see, the only change made is to replace `deliverEvent` with `dispatchEvent`. This ensures that the code is using the recommended method and is no longer using a deprecated method.

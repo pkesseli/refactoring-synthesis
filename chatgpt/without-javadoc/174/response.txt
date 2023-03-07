@@ -1,24 +1,22 @@
-# Response Time: 21.035598039627075
-Sure! Here's an example refactoring that uses the recommended replacement for the deprecated method `java.net.URLStreamHandler.setURL`:
+# Response Time: 12.387637615203857
 
-Original code:
 
-```
-URL url = new URL("https", "example.com", 443, "/path");
+Sure, here's an example of how to refactor code that uses `setURL` method in `URLStreamHandler`:
+
+Deprecated Method:
+
+```java
+URL url = new URL("https", "example.com", 443, "/index.html");
 URLStreamHandler handler = url.getURLStreamHandler();
-handler.setURL(url, "https", "example.com", 443, "/path", null);
+handler.setURL(url, "https", "example.com", 443, "/index.html", null);
 ```
 
-Refactored code:
+Refactored Method:
 
+```java
+URL url = new URL("https", "example.com", 443, "/index.html");
+URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+url = uri.toURL();
 ```
-URL url = new URL("https://example.com/path");
-```
 
-Explanation:
-
-The `setURL` method was used to set various properties of the URL such as the protocol, host, port, and path. The recommended replacement for this method is to use the URL constructor that takes a single string argument that represents the complete URL.
-
-In the refactored code, we construct the URL using the single string argument constructor. This constructor automatically parses the URL and sets all the necessary properties. This approach is simpler and more concise than the original code, and it avoids using the deprecated `setURL` method.
-
-Note that if you need to set additional properties of the URL, such as query parameters or the fragment identifier, you can use the appropriate methods on the URL object after constructing it with the single string argument constructor.
+In the refactored code, we create a new `URI` object using the components of the original URL, and then convert the `URI` object to a new `URL` object. This avoids the use of the deprecated `setURL` method.

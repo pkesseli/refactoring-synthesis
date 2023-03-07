@@ -1,0 +1,20 @@
+# Response Time: 10.306226968765259
+Sure! Here's an example of how you can refactor your code to use a different method instead of `setMenuBar()`:
+
+Before refactoring:
+```java
+JInternalFrame internalFrame = new JInternalFrame("My Frame", true, true, true, true);
+JMenuBar menuBar = new JMenuBar();
+// add menu items to the menu bar
+internalFrame.setMenuBar(menuBar);
+```
+
+After refactoring:
+```java
+JInternalFrame internalFrame = new JInternalFrame("My Frame", true, true, true, true);
+JMenuBar menuBar = new JMenuBar();
+// add menu items to the menu bar
+internalFrame.setJMenuBar(menuBar);
+```
+
+Instead of using the deprecated `setMenuBar()` method, we can use the `setJMenuBar()` method which serves the same purpose. This method sets the menu bar for the internal frame, just like `setMenuBar()`. By using the non-deprecated method, we ensure that our code will work correctly even as Swing evolves and changes over time.

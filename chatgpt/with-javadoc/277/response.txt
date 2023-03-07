@@ -1,0 +1,21 @@
+# Response Time: 64.71180176734924
+Sure, here's an example refactoring that shows how to replace the deprecated `javax.management.MBeanServer.deserialize(ObjectName, byte[])` method with the suggested `getClassLoaderFor()` method:
+
+```java
+// Before refactoring
+byte[] serializedObject = getSerializedObject(); // Get serialized object bytes
+ObjectName objectName = new ObjectName("mydomain:type=mytype");
+MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
+Object deserializedObject = mbeanServer.deserialize(objectName, serializedObject);
+
+// After refactoring
+byte[] serializedObject = getSerializedObject(); // Get serialized object bytes
+ObjectName objectName = new ObjectName("mydomain:type=mytype");
+MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
+ClassLoader classLoader = mbeanServer.getClassLoaderFor(objectName);
+ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(serializedObject));
+Object deserializedObject = in.readObject();
+in.close();
+```
+
+In the refactored code, we first obtain the `ClassLoader` using the `getClassLoaderFor()` method and then use it to deserialize the object using an `ObjectInputStream` instance created from a `ByteArrayInputStream` containing the serialized object bytes. Finally, we close the `ObjectInputStream` instance to release resources.

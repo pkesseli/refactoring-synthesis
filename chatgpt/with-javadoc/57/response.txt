@@ -1,0 +1,36 @@
+# Response Time: 15.407564878463745
+
+
+Sure, here's an example of how you can refactor your code to replace the use of `normalizeMimeTypeParameter` method with an alternative approach:
+
+Before Refactoring:
+```java
+import java.awt.datatransfer.DataFlavor;
+
+public class MyDataFlavorUtils {
+    public static DataFlavor createDataFlavor(String mimeType) {
+        String normalizedMimeType = DataFlavor.normalizeMimeTypeParameter(mimeType, "charset=utf-8");
+        return new DataFlavor(normalizedMimeType, null);
+    }
+}
+```
+
+After Refactoring:
+```java
+import java.awt.datatransfer.DataFlavor;
+import java.nio.charset.StandardCharsets;
+
+public class MyDataFlavorUtils {
+    public static DataFlavor createDataFlavor(String mimeType) {
+        String normalizedMimeType = mimeType + ";charset=" + StandardCharsets.UTF_8.name();
+        return new DataFlavor(normalizedMimeType, null);
+    }
+}
+```
+
+Explanation:
+In the above code, the `createDataFlavor` method creates a new `DataFlavor` object by normalizing the provided MIME type using the `DataFlavor.normalizeMimeTypeParameter` method, which is now deprecated.
+
+To refactor this code, we can replace the use of `normalizeMimeTypeParameter` with a simple string concatenation approach to append the "charset=utf-8" parameter to the MIME type. We can also replace the hard-coded "utf-8" value with a constant `StandardCharsets.UTF_8.name()`.
+
+This way, we can create the new `DataFlavor` object without using the deprecated method.

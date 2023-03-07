@@ -1,0 +1,30 @@
+# Response Time: 10.558993816375732
+
+
+Sure, here is an example of how you can refactor your code to use the non-deprecated method `getLocation()` instead of the deprecated `location()` method:
+
+Before Refactoring:
+```
+import java.awt.Component;
+
+public class MyComponent extends Component {
+    public void printLocation() {
+        System.out.println(location()); // using deprecated location() method
+    }
+}
+```
+
+After Refactoring:
+```
+import java.awt.Component;
+import java.awt.Point;
+
+public class MyComponent extends Component {
+    public void printLocation() {
+        Point location = getLocation(); // using getLocation() method
+        System.out.println(location);
+    }
+}
+```
+
+As you can see, we replaced the usage of `location()` method with `getLocation()` method, which returns a `Point` object containing the x and y coordinates of the component's top-left corner. This way, we avoid using the deprecated method and make our code more maintainable and up-to-date with the latest Java API.

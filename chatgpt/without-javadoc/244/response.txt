@@ -1,0 +1,55 @@
+# Response Time: 23.442577362060547
+Sure, here's an example of how to refactor code that uses the deprecated `java.util.Date.getDay()` method:
+
+Original Code:
+```java
+import java.util.Date;
+
+public class Example {
+  public static void main(String[] args) {
+    Date today = new Date();
+    int dayOfWeek = today.getDay();
+    System.out.println("Today is " + getDayOfWeekAsString(dayOfWeek));
+  }
+
+  private static String getDayOfWeekAsString(int dayOfWeek) {
+    switch (dayOfWeek) {
+      case 0:
+        return "Sunday";
+      case 1:
+        return "Monday";
+      case 2:
+        return "Tuesday";
+      case 3:
+        return "Wednesday";
+      case 4:
+        return "Thursday";
+      case 5:
+        return "Friday";
+      case 6:
+        return "Saturday";
+      default:
+        return "";
+    }
+  }
+}
+```
+
+Refactored Code:
+```java
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+
+public class Example {
+  public static void main(String[] args) {
+    LocalDate today = LocalDate.now();
+    DayOfWeek dayOfWeek = today.getDayOfWeek();
+    System.out.println("Today is " + dayOfWeek.toString());
+  }
+}
+```
+
+Explanation:
+In the original code, `java.util.Date` is used to get the day of the week using `getDay()`, which is a deprecated method. To refactor the code, we can use the newer `java.time.LocalDate` class and its `getDayOfWeek()` method to get the day of the week. We can then use the `toString()` method on the `DayOfWeek` enum to get the name of the day of the week.
+
+Note: In Java 8 and earlier versions, you can use `java.time.LocalDateTime` instead of `java.time.LocalDate` to get the current date and time. However, starting from Java 9, `java.time.LocalDate` and `java.time.LocalTime` have been recommended to use for date and time operations.

@@ -1,0 +1,32 @@
+# Response Time: 11.33577585220337
+Sure, here's an example of how you could refactor code that uses the deprecated `readLine()` method of `ObjectInputStream`:
+
+Before refactoring:
+
+```java
+try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("myFile.ser"))) {
+    String line = ois.readLine();
+    while (line != null) {
+        System.out.println(line);
+        line = ois.readLine();
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+```
+
+After refactoring:
+
+```java
+try (DataInputStream dis = new DataInputStream(new FileInputStream("myFile.ser"))) {
+    String line = dis.readLine();
+    while (line != null) {
+        System.out.println(line);
+        line = dis.readLine();
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+```
+
+In the refactored code, we have replaced the `ObjectInputStream` with a `DataInputStream` and used its `readLine()` method instead of the deprecated `readLine()` method of `ObjectInputStream`. The `DataInputStream` properly converts bytes to characters, so we don't need to worry about that anymore.

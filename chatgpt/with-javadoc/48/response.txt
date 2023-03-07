@@ -1,0 +1,32 @@
+# Response Time: 8.79170846939087
+
+
+Sure, here's an example refactoring of code that uses the deprecated `countComponents()` method to instead use `getComponentCount()`:
+
+Before refactoring:
+
+```
+import java.awt.Container;
+
+public class MyContainer extends Container {
+    
+    public void printComponentCount() {
+        System.out.println("Number of components: " + countComponents());
+    }
+}
+```
+
+After refactoring:
+
+```
+import java.awt.Container;
+
+public class MyContainer extends Container {
+    
+    public void printComponentCount() {
+        System.out.println("Number of components: " + getComponentCount());
+    }
+}
+```
+
+As you can see, the only change that was necessary was to replace the call to `countComponents()` with a call to `getComponentCount()`. This ensures that the code continues to work as expected, while avoiding the use of a deprecated method.

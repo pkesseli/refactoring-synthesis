@@ -1,0 +1,45 @@
+# Response Time: 25.535461902618408
+
+
+Certainly! Here's an example of refactoring code that uses the deprecated `size()` method of `java.awt.Component`:
+
+```java
+import java.awt.Button;
+import java.awt.Frame;
+
+public class DeprecatedSizeExample {
+    public static void main(String[] args) {
+        Frame frame = new Frame("Example Frame");
+        Button button = new Button("Click Me");
+
+        button.setSize(100, 50);
+        frame.add(button);
+        frame.setSize(400, 400);
+        frame.setVisible(true);
+    }
+}
+```
+
+In the code above, we're creating a simple GUI with a `Frame` and a `Button`. The `Button` is given a fixed size using the `size()` method, which is marked as deprecated.
+
+To refactor this code, we can use the preferred method of setting the size of a `Component`, which is to use the `setPreferredSize()` method. Here's the refactored code:
+
+```java
+import java.awt.Button;
+import java.awt.Dimension;
+import java.awt.Frame;
+
+public class RefactoredSizeExample {
+    public static void main(String[] args) {
+        Frame frame = new Frame("Example Frame");
+        Button button = new Button("Click Me");
+
+        button.setPreferredSize(new Dimension(100, 50));
+        frame.add(button);
+        frame.setSize(400, 400);
+        frame.setVisible(true);
+    }
+}
+```
+
+In this refactored code, we've replaced the deprecated `size()` method with `setPreferredSize()`. We create a new `Dimension` object with the desired size of the `Button`, and pass it to the `setPreferredSize()` method. This achieves the same effect as the previous code, but without using a deprecated method.

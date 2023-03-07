@@ -1,0 +1,37 @@
+# Response Time: 59.386319160461426
+
+
+Sure, here's an example refactoring of code that uses the deprecated `java.sql.Date.setHours(int)` method:
+
+Before refactoring:
+
+```java
+import java.sql.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date(System.currentTimeMillis());
+        date.setHours(12); // Deprecated method
+        System.out.println(date);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        localDateTime = localDateTime.withHour(12);
+        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        System.out.println(date);
+    }
+}
+```
+
+In the refactored code, we use the `java.time.LocalDateTime` class to manipulate the date and time, and convert it to a `java.util.Date` object using the `Date.from()` method. We also use the `ZoneId.systemDefault()` method to get the default time zone for the system.

@@ -1,0 +1,24 @@
+# Response Time: 24.265681743621826
+
+
+Sure, here's an example refactoring using the `LocalDateTime` class from the `java.time` package, which replaces the deprecated `java.sql.Date.getHours()` method:
+
+Before refactoring:
+
+```
+java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+int hours = date.getHours();
+```
+
+After refactoring:
+
+```
+java.time.LocalDateTime dateTime = java.time.LocalDateTime.now();
+int hours = dateTime.getHour();
+```
+
+In this example, we create a `LocalDateTime` object using the `now()` method, which returns the current date and time. We then use the `getHour()` method to retrieve the hour component of the date and time.
+
+Note that we use `LocalDateTime` instead of `LocalDate` because the latter class does not have a time component, and therefore cannot provide the hour of the day.
+
+By using the `java.time` package, we are using a modern and more robust API for handling dates and times in Java. Additionally, we are avoiding the use of deprecated methods, which may become unsupported in future versions of Java.

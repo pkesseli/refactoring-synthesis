@@ -1,0 +1,33 @@
+# Response Time: 12.022339105606079
+Sure, here's an example of how to refactor code that uses the deprecated `java.awt.Frame.getCursorType()` method:
+
+Before refactoring:
+
+```java
+import java.awt.Cursor;
+import java.awt.Frame;
+
+public class MyFrame extends Frame {
+    public void doSomething() {
+        int cursorType = getCursorType();
+        Cursor cursor = new Cursor(cursorType);
+        setCursor(cursor);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.Cursor;
+import java.awt.Frame;
+
+public class MyFrame extends Frame {
+    public void doSomething() {
+        Cursor cursor = getCursor();
+        setCursor(cursor);
+    }
+}
+```
+
+As you can see, the `getCursorType()` method has been replaced with the `getCursor()` method, as recommended in the Javadoc comment. The `Cursor` object is then created directly from the `getCursor()` method and passed to the `setCursor()` method. This code should functionally equivalent to the original code, but without using the deprecated method.

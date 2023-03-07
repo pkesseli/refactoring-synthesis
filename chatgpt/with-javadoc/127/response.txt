@@ -1,0 +1,43 @@
+# Response Time: 14.010739803314209
+
+
+Sure! Here's an example of how you can refactor code that uses the deprecated `java.io.ByteArrayOutputStream.toString(int)` method to use the recommended `java.io.ByteArrayOutputStream.toString(String charsetName)` method:
+
+Before refactoring:
+
+```java
+import java.io.ByteArrayOutputStream;
+
+public class Example {
+    public static void main(String[] args) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        outputStream.write("Hello, world!".getBytes());
+
+        // Deprecated method call
+        String output = outputStream.toString(0);
+
+        System.out.println(output);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+
+public class Example {
+    public static void main(String[] args) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        outputStream.write("Hello, world!".getBytes());
+
+        // Recommended method call
+        String output = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+
+        System.out.println(output);
+    }
+}
+```
+
+In the refactored code, we replaced the deprecated `ByteArrayOutputStream.toString(int)` method with the recommended `new String(byte[], String)` constructor. This constructor takes two arguments: the byte array to be converted to a string, and the character set to use when decoding the bytes. In this case, we used the UTF-8 character set, which is a common and widely supported encoding for Unicode text.

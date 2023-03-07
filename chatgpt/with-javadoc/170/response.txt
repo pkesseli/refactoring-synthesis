@@ -1,0 +1,40 @@
+# Response Time: 25.15430974960327
+
+
+Sure, here's an example of how you can refactor the usage of `getDefaultRequestProperty` method:
+
+Before Refactoring:
+
+```
+import java.net.URL;
+import java.net.URLConnection;
+
+public class Example {
+    public static void main(String[] args) throws Exception {
+        URL url = new URL("https://www.example.com");
+        URLConnection connection = url.openConnection();
+        
+        String userAgent = connection.getDefaultRequestProperty("User-Agent");
+        System.out.println("User-Agent: " + userAgent);
+    }
+}
+```
+
+After Refactoring:
+
+```
+import java.net.URL;
+import java.net.URLConnection;
+
+public class Example {
+    public static void main(String[] args) throws Exception {
+        URL url = new URL("https://www.example.com");
+        URLConnection connection = url.openConnection();
+        
+        String userAgent = connection.getRequestProperty("User-Agent");
+        System.out.println("User-Agent: " + userAgent);
+    }
+}
+```
+
+As you can see, we simply replaced the `getDefaultRequestProperty` method with the `getRequestProperty` method on the `URLConnection` instance.

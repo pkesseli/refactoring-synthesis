@@ -1,0 +1,70 @@
+# Response Time: 32.02081251144409
+
+
+Sure! Here's an example of how you could refactor code that uses `Thread.suspend()` to avoid using the deprecated method:
+
+Before refactoring:
+
+```java
+Thread thread = new Thread(() -> {
+    while (true) {
+        System.out.println("Thread running...");
+        Thread.sleep(1000);
+    }
+});
+
+thread.start();
+
+// Suspend the thread after 5 seconds
+Thread.sleep(5000);
+thread.suspend();
+
+// Resume the thread after 5 seconds
+Thread.sleep(5000);
+thread.resume();
+```
+
+After refactoring:
+
+```java
+volatile boolean suspended = false;
+
+Thread thread = new Thread(() -> {
+    while (true) {
+        synchronized (this) {
+            while (suspended) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        System.out.println("Thread running...");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+});
+
+thread.start();
+
+// Suspend the thread after 5 seconds
+Thread.sleep(5000);
+suspended = true;
+
+// Resume the thread after 5 seconds
+Thread.sleep(5000);
+suspended = false;
+synchronized (thread) {
+    thread.notify();
+}
+```
+
+In the refactored code, we've replaced `Thread.suspend()` and `Thread.resume()` with a `volatile boolean` variable `suspended`. When `suspended` is `true`, the thread waits on a `wait()` call inside a `synchronized` block. When `suspended` is `false`, the thread is allowed to continue running.
+
+To suspend the thread, we simply set `suspended` to `true`. To resume the thread, we set `suspended` to `false` and call `notify()` on the thread inside a `synchronized` block.
+
+This code avoids the deadlock-prone behavior of `Thread.suspend()` by using a simple flag variable and `wait()`/`notify()` calls instead.

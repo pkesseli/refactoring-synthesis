@@ -1,0 +1,20 @@
+# Response Time: 26.93310046195984
+
+
+Sure, here's an example of how to refactor your code to use `getJMenuBar()` instead of `getMenuBar()`:
+
+Before:
+
+```java
+JFrame frame = new JFrame("My Application");
+JMenuBar menuBar = frame.getRootPane().getMenuBar();
+```
+
+After:
+
+```java
+JFrame frame = new JFrame("My Application");
+JMenuBar menuBar = frame.getJMenuBar();
+```
+
+As you can see, the only change required is to replace the call to `getRootPane().getMenuBar()` with a call to `getJMenuBar()`. This should resolve the deprecation warning and ensure your code remains compatible with newer versions of Swing.

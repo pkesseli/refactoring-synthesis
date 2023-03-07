@@ -1,0 +1,56 @@
+# Response Time: 95.6360285282135
+
+
+Sure, here is an example of how you can refactor the deprecated method `javax.swing.plaf.basic.BasicSplitPaneUI.getDividerBorderSize()`:
+
+Before Refactoring:
+
+```java
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+
+public class SplitPaneExample extends JFrame {
+
+    private JSplitPane splitPane;
+
+    public SplitPaneExample() {
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setDividerLocation(150);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setDividerSize(new BasicSplitPaneUI().getDividerBorderSize());
+        
+        // Rest of the code
+    }
+    
+    // Rest of the code
+}
+```
+
+After Refactoring:
+
+```java
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+
+public class SplitPaneExample extends JFrame {
+
+    private JSplitPane splitPane;
+
+    public SplitPaneExample() {
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setDividerLocation(150);
+        splitPane.setOneTouchExpandable(true);
+        
+        // Set a border on the divider instead of using deprecated method
+        splitPane.setDividerSize(5);
+        splitPane.setBorder(new LineBorder(Color.GRAY));
+        
+        // Rest of the code
+    }
+    
+    // Rest of the code
+}
+```
+
+In this example, we replaced the deprecated `getDividerBorderSize()` method with `setDividerSize()` and `setBorder()` methods to set a border on the divider. By doing this, we have eliminated the use of the deprecated method and updated the code to use the recommended method of setting the border on the divider.

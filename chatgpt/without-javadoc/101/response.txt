@@ -1,0 +1,32 @@
+# Response Time: 13.865891456604004
+Sure, here's an example of how you could refactor code that uses the deprecated `java.awt.Scrollbar.getVisible()` method:
+
+Before refactoring:
+
+```java
+import java.awt.Scrollbar;
+
+public class ScrollbarExample {
+    public static void main(String[] args) {
+        Scrollbar scrollbar = new Scrollbar();
+        boolean isVisible = scrollbar.getVisible();
+        System.out.println("Scrollbar visible: " + isVisible);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.Scrollbar;
+
+public class ScrollbarExample {
+    public static void main(String[] args) {
+        Scrollbar scrollbar = new Scrollbar();
+        boolean isVisible = scrollbar.isVisible();
+        System.out.println("Scrollbar visible: " + isVisible);
+    }
+}
+```
+
+In this example, we simply replaced the deprecated `getVisible()` method with the non-deprecated `isVisible()` method. This should work just as well, but without the risk of using a deprecated method.

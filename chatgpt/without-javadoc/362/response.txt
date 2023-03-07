@@ -1,0 +1,46 @@
+# Response Time: 22.934876203536987
+Certainly, here's an example of how you can refactor the `drawSelectedText` method in `javax.swing.text.PasswordView`:
+
+Before Refactoring:
+```java
+public void drawSelectedText(Graphics g, int x, int y, int p0, int p1) {
+    if (g instanceof Graphics2D) {
+        ((Graphics2D)g).setComposite(AlphaComposite.getInstance(
+            AlphaComposite.SRC_OVER, selectedAlpha));
+    }
+    g.setColor(selectedTextColor);
+    int dot = getDot();
+    int mark = getMark();
+    int p = Math.min(dot, mark);
+    int q = Math.max(dot, mark);
+    FontMetrics fm = g.getFontMetrics();
+    g.fillRect(x + Utilities.getTabbedTextOffset(this, x, p),
+               y - fm.getAscent(),
+               Utilities.getTabbedTextWidth(this, p, q, x, fm),
+               fm.getHeight());
+}
+```
+
+After Refactoring:
+```java
+public void drawSelectedText(Graphics g, int x, int y, int p0, int p1) {
+    Graphics2D g2d = (Graphics2D)g.create();
+    g2d.setComposite(AlphaComposite.getInstance(
+        AlphaComposite.SRC_OVER, selectedAlpha));
+    g2d.setColor(selectedTextColor);
+    int dot = getDot();
+    int mark = getMark();
+    int p = Math.min(dot, mark);
+    int q = Math.max(dot, mark);
+    FontMetrics fm = g.getFontMetrics();
+    g2d.fillRect(x + Utilities.getTabbedTextOffset(this, x, p),
+               y - fm.getAscent(),
+               Utilities.getTabbedTextWidth(this, p, q, x, fm),
+               fm.getHeight());
+    g2d.dispose();
+}
+```
+
+In this refactored version, we create a new `Graphics2D` object by calling `create()` on the original `Graphics` object. Then, we set the alpha composite and color on the new `Graphics2D` object, and call `fillRect()` on it instead of the original `Graphics` object. Finally, we dispose of the new `Graphics2D` object to release any system resources it may be holding onto.
+
+Note that this is just an example of how to refactor the `drawSelectedText` method to address the deprecation warning. The specific approach you take may depend on your particular use case and requirements.

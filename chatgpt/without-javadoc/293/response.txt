@@ -1,0 +1,51 @@
+# Response Time: 21.867958068847656
+Sure, here is an example of refactoring code that uses the deprecated `setObservedObject` method in `javax.management.monitor.MonitorMBean`.
+
+Before refactoring:
+
+```java
+import javax.management.ObjectName;
+import javax.management.monitor.Monitor;
+import javax.management.monitor.MonitorMBean;
+
+public class MonitorExample {
+
+    public static void main(String[] args) throws Exception {
+
+        MonitorMBean monitor = new Monitor();
+
+        ObjectName objectName = new ObjectName("com.example:type=MyMonitor");
+        monitor.setObservedObject(objectName);
+
+        // other code to configure and start the monitor
+    }
+}
+```
+
+In the above code, the `setObservedObject` method is used to set the `ObjectName` that the monitor will observe. However, this method is now deprecated and should not be used.
+
+Here's an example of how to refactor the code to use the recommended alternative method, `setObservedObject(ObjectName object, Object handback)`:
+
+After refactoring:
+
+```java
+import javax.management.ObjectName;
+import javax.management.monitor.Monitor;
+import javax.management.monitor.MonitorMBean;
+
+public class MonitorExample {
+
+    public static void main(String[] args) throws Exception {
+
+        MonitorMBean monitor = new Monitor();
+
+        ObjectName objectName = new ObjectName("com.example:type=MyMonitor");
+        Object handback = null;
+        monitor.setObservedObject(objectName, handback);
+
+        // other code to configure and start the monitor
+    }
+}
+```
+
+In the refactored code, we have replaced the deprecated `setObservedObject(ObjectName)` method with the `setObservedObject(ObjectName, Object)` method. The `Object` parameter can be used to pass a context object to the monitor, which can be used to associate additional information with the monitored object. In this example, we pass a `null` value for the `handback` parameter since we don't need to pass any context information.

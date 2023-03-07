@@ -1,0 +1,36 @@
+# Response Time: 87.52628469467163
+Sure, here's an example of how you can refactor code that uses the deprecated `java.util.Date.getDate()` method to use the recommended `Calendar.get(Calendar.DAY_OF_MONTH)` method instead:
+
+```java
+import java.util.Calendar;
+import java.util.Date;
+
+public class DateExample {
+
+    public static void main(String[] args) {
+        Date date = new Date();
+
+        // Deprecated method
+        int day = date.getDate();
+        System.out.println("Day: " + day);
+
+        // Recommended method
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int recommendedDay = calendar.get(Calendar.DAY_OF_MONTH);
+        System.out.println("Recommended day: " + recommendedDay);
+    }
+
+}
+```
+
+In this example, we first create a `Date` object using the no-arg constructor, which initializes it with the current date and time. We then call the deprecated `getDate()` method to get the day of the month from the `Date` object.
+
+To refactor this code, we create a `Calendar` object using the `getInstance()` method and set its time to the `Date` object using the `setTime()` method. We then call the recommended `get(Calendar.DAY_OF_MONTH)` method to get the day of the month from the `Calendar` object.
+
+This code produces the same output as before, but now uses the recommended method:
+
+```
+Day: 5
+Recommended day: 5
+```

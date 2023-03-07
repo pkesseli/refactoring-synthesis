@@ -1,0 +1,20 @@
+# Response Time: 20.344987630844116
+Sure, here's an example of how you can refactor code that uses the deprecated `com.sun.management.OperatingSystemMXBean.getSystemCpuLoad()` method:
+
+```java
+// Old code using deprecated method
+com.sun.management.OperatingSystemMXBean osBean = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+double cpuLoad = osBean.getSystemCpuLoad();
+
+System.out.println("CPU Load: " + cpuLoad);
+
+// Refactored code using recommended method
+OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+double cpuLoad = osBean.getSystemLoadAverage();
+
+System.out.println("CPU Load: " + cpuLoad);
+```
+
+In the refactored code, we replace the use of the deprecated `getSystemCpuLoad()` method with the recommended method `getSystemLoadAverage()`. The `getSystemLoadAverage()` method returns the system load average for the last minute as a double value. Note that we no longer need to cast the `OperatingSystemMXBean` to `com.sun.management.OperatingSystemMXBean` in the refactored code since the `getSystemLoadAverage()` method is available in the standard `OperatingSystemMXBean` interface.
+
+This code is just an example and might not fit your specific use case. Make sure to read the documentation and use the appropriate method for your needs.

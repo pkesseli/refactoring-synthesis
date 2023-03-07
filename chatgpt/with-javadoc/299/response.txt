@@ -1,0 +1,49 @@
+# Response Time: 109.46027159690857
+Sure, here's an example of refactoring code that currently uses the deprecated `setMBeanServer` method:
+
+```java
+import javax.management.MBeanServer;
+import javax.management.QueryEval;
+import javax.management.ValueExp;
+
+public class MyValueExp extends ValueExp {
+    
+    private MBeanServer mbeanServer;
+    
+    public void setMBeanServer(MBeanServer mbeanServer) {
+        this.mbeanServer = mbeanServer;
+    }
+    
+    // other methods...
+    
+    public void evaluate() {
+        // use the MBeanServer to evaluate the expression
+        // ...
+    }
+}
+```
+
+In this example, the `MyValueExp` class extends `ValueExp` and has a `setMBeanServer` method that sets the `MBeanServer` instance variable. This method is now deprecated and should not be used.
+
+To refactor this code, we can replace the use of `setMBeanServer` with a call to `QueryEval.getMBeanServer()`. Here's an updated version of the code:
+
+```java
+import javax.management.QueryEval;
+import javax.management.ValueExp;
+
+public class MyValueExp extends ValueExp {
+    
+    // remove the MBeanServer instance variable
+    
+    // other methods...
+    
+    public void evaluate() {
+        // use QueryEval.getMBeanServer() to get the MBeanServer
+        final var mbeanServer = QueryEval.getMBeanServer();
+        // use the MBeanServer to evaluate the expression
+        // ...
+    }
+}
+```
+
+In this updated version of the code, we remove the `MBeanServer` instance variable and instead use `QueryEval.getMBeanServer()` to get the `MBeanServer` instance. We can then use this instance to evaluate the expression. This refactored code no longer uses the deprecated `setMBeanServer` method and is now compliant with the deprecation warning.

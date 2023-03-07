@@ -1,0 +1,34 @@
+# Response Time: 14.332048654556274
+Sure! Here's an example of how to refactor code that uses the deprecated `javax.swing.text.PasswordView.drawUnselectedText` method:
+
+Before refactoring:
+
+```java
+public class MyPasswordView extends PasswordView {
+
+  @Override
+  protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1)
+  {
+    // Draw unselected text using the deprecated method
+    return super.drawUnselectedText(g, x, y, p0, p1);
+  }
+}
+```
+
+After refactoring:
+
+```java
+public class MyPasswordView extends PasswordView {
+
+  @Override
+  protected void paintUnselectedText(Graphics g, int x, int y, int p0, int p1)
+  {
+    // Draw unselected text using the recommended replacement method
+    super.paintUnselectedText(g, x, y, p0, p1);
+  }
+}
+```
+
+As you can see, the recommended replacement method for `drawUnselectedText` is `paintUnselectedText`. This new method is used in the refactored code instead of the deprecated method.
+
+Note that the return type of the methods is different - `drawUnselectedText` returns an `int`, while `paintUnselectedText` returns `void`. If you need to return a value from the method, you'll need to find a different way to do so, such as by setting a variable in the class or using a callback function.

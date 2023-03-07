@@ -1,0 +1,19 @@
+# Response Time: 14.111544370651245
+Sure, here's an example refactoring using the `contains(int x, int y)` method instead of the deprecated `inside(int x, int y)` method in Java's `Rectangle` class:
+
+```
+// Create a new Rectangle object with dimensions (0, 0, 100, 100)
+Rectangle rect = new Rectangle(0, 0, 100, 100);
+
+// Check if point (50, 50) is inside the rectangle using the deprecated inside() method
+if (rect.inside(50, 50)) {
+    System.out.println("Point (50, 50) is inside the rectangle.");
+}
+
+// Refactored code using contains() method instead of inside() method
+if (rect.contains(50, 50)) {
+    System.out.println("Point (50, 50) is inside the rectangle.");
+}
+```
+
+In the refactored code, we simply replaced the `inside()` method with the `contains()` method. The `contains()` method is not deprecated and performs the same function as the `inside()` method.

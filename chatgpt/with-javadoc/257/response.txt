@@ -1,0 +1,52 @@
+# Response Time: 85.9442675113678
+
+
+Sure, here's an example of how you can refactor code that uses `java.util.Date.setYear(int)` to use `Calendar.set(Calendar.YEAR, year + 1900)` instead:
+
+Before refactoring:
+
+```java
+import java.util.Date;
+
+public class DateExample {
+
+    public static void main(String[] args) {
+        Date date = new Date();
+        date.setYear(2022); // deprecated method
+        System.out.println(date);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.util.Calendar;
+import java.util.Date;
+
+public class DateExample {
+
+    public static void main(String[] args) {
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.YEAR, 2022);
+        date = calendar.getTime();
+        System.out.println(date);
+    }
+}
+```
+
+As you can see, the deprecated `setYear(int)` method is replaced with `Calendar.set(Calendar.YEAR, year + 1900)`. 
+
+Here's how the refactored code works:
+
+1. We create a new `Calendar` instance and set its time to the `Date` object using `calendar.setTime(date)`.
+
+2. We use `calendar.set(Calendar.YEAR, 2022)` to set the year to 2022.
+
+3. We use `calendar.getTime()` to get a new `Date` object with the updated year.
+
+4. Finally, we print the updated `Date` object using `System.out.println(date)`.
+
+This refactored code should work just as well as the original code, but without using deprecated methods.

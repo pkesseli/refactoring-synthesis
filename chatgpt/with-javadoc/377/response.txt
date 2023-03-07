@@ -1,0 +1,36 @@
+# Response Time: 21.211851596832275
+Sure, here's an example refactoring of code that uses the deprecated `drawLine` method in `WrappedPlainView`.
+
+Before refactoring:
+
+```java
+import javax.swing.text.*;
+
+class MyWrappedView extends WrappedPlainView {
+    public void paint(Graphics g, Shape a) {
+        super.paint(g, a);
+        Rectangle rect = a.getBounds();
+        g.setColor(Color.RED);
+        drawLine(rect.x, rect.y, g, rect.width, rect.height);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import javax.swing.text.*;
+import java.awt.Graphics2D;
+
+class MyWrappedView extends WrappedPlainView {
+    public void paint(Graphics g, Shape a) {
+        super.paint(g, a);
+        Rectangle rect = a.getBounds();
+        g.setColor(Color.RED);
+        Graphics2D g2d = (Graphics2D) g;
+        drawLine(rect.x, rect.y, g2d, (float) rect.width, (float) rect.height);
+    }
+}
+```
+
+In the refactored code, we've replaced the deprecated `drawLine` method with the new one that takes a `Graphics2D` object and two `float` parameters for the end points of the line. We've also cast the `Graphics` object to `Graphics2D` in order to use the new method.

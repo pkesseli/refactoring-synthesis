@@ -1,0 +1,40 @@
+# Response Time: 7.769450902938843
+Sure! Here's an example of refactoring code that uses `Component.enable()` to use the recommended `setEnabled(boolean)` method:
+
+Before refactoring:
+
+```
+import java.awt.Button;
+
+public class MyFrame extends Frame {
+
+    private Button myButton;
+
+    public MyFrame() {
+        myButton = new Button("Click me");
+        myButton.enable();
+        add(myButton);
+    }
+
+}
+```
+
+After refactoring:
+
+```
+import java.awt.Button;
+
+public class MyFrame extends Frame {
+
+    private Button myButton;
+
+    public MyFrame() {
+        myButton = new Button("Click me");
+        myButton.setEnabled(true);
+        add(myButton);
+    }
+
+}
+```
+
+In the refactored code, we replaced the call to `myButton.enable()` with `myButton.setEnabled(true)`, which achieves the same result using the recommended method.

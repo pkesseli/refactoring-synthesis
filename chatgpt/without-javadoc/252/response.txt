@@ -1,0 +1,30 @@
+# Response Time: 11.85790228843689
+Sure! Instead of using the deprecated `java.util.Date.setDate(int)` method, you can use the `java.time.LocalDate` class to set the day of the month. Here's an example refactoring:
+
+Before:
+```
+import java.util.Date;
+
+public class Example {
+  public static void main(String[] args) {
+    Date date = new Date();
+    date.setDate(10);
+    System.out.println(date);
+  }
+}
+```
+
+After:
+```
+import java.time.LocalDate;
+
+public class Example {
+  public static void main(String[] args) {
+    LocalDate localDate = LocalDate.now();
+    localDate = localDate.withDayOfMonth(10);
+    System.out.println(localDate);
+  }
+}
+```
+
+In the refactored code, we're using the `java.time.LocalDate` class instead of the deprecated `java.util.Date` class. We get the current date using the `now()` method, and then we set the day of the month to 10 using the `withDayOfMonth()` method. Finally, we print the updated date using the `println()` method.

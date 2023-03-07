@@ -1,0 +1,26 @@
+# Response Time: 53.0845890045166
+
+
+Sure, here's an example of refactoring the deprecated method `createKeyboardHomeListener()` in `javax.swing.plaf.basic.BasicSplitPaneUI`:
+
+Before refactoring:
+```java
+BasicSplitPaneUI splitPaneUI = new BasicSplitPaneUI();
+KeyListener homeListener = splitPaneUI.createKeyboardHomeListener();
+```
+
+After refactoring:
+```java
+BasicSplitPaneUI splitPaneUI = new BasicSplitPaneUI();
+KeyListener homeListener = new KeyAdapter() {
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if ((e.getModifiers() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) != 0 &&
+            e.getKeyCode() == KeyEvent.VK_HOME) {
+            // Handle home key press event
+        }
+    }
+};
+```
+
+In the refactored code, we create an anonymous inner class `KeyAdapter` and override the `keyPressed()` method to handle the home key press event. This is a more up-to-date way of implementing the same functionality as the deprecated method.

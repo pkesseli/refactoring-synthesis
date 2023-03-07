@@ -1,0 +1,43 @@
+# Response Time: 17.73811674118042
+Sure, here's an example of how to refactor the use of the deprecated `getHours()` method in Java:
+
+Before Refactoring:
+
+```
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        int hours = date.getHours();
+        System.out.println("Current hour is: " + hours);
+    }
+}
+```
+
+After Refactoring:
+
+```
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class Example {
+    public static void main(String[] args) {
+        LocalDateTime now = LocalDateTime.now();
+        int hours = now.getHour();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
+        System.out.println("Current hour is: " + hours + ", formatted date time is: " + formattedDateTime);
+    }
+}
+```
+
+Explanation:
+
+In the above example, we have refactored the code to use the newer `java.time.LocalDateTime` class instead of the deprecated `java.util.Date` class.
+
+To get the current hour, we now call the `getHour()` method on a `LocalDateTime` object instead of calling the deprecated `getHours()` method on a `Date` object.
+
+We also added a `DateTimeFormatter` to format the date and time. This is because `LocalDateTime` does not have a default format, unlike `Date`.
+
+Finally, we printed out the formatted date time string and the current hour to verify the correctness of the output.

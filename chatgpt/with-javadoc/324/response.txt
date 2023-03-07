@@ -1,0 +1,26 @@
+# Response Time: 40.33636546134949
+Sure, here's an example of how you can refactor your code to use the non-deprecated `setJMenuBar()` method instead of the deprecated `setMenuBar()` method:
+
+Before refactoring:
+
+```
+JFrame frame = new JFrame("My Frame");
+JMenuBar menuBar = new JMenuBar();
+// ... add menus to the menu bar ...
+
+// Set the menu bar on the root pane of the frame
+frame.getRootPane().setMenuBar(menuBar);
+```
+
+After refactoring:
+
+```
+JFrame frame = new JFrame("My Frame");
+JMenuBar menuBar = new JMenuBar();
+// ... add menus to the menu bar ...
+
+// Set the menu bar on the frame
+frame.setJMenuBar(menuBar);
+```
+
+As you can see, the only change needed is to replace the call to `setMenuBar()` with `setJMenuBar()`. This will ensure that your code is using the non-deprecated method, which is the recommended approach going forward.

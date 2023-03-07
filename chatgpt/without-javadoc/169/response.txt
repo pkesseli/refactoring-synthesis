@@ -1,0 +1,17 @@
+# Response Time: 13.025612831115723
+
+
+Certainly! The `setTTL(byte)` method in `java.net.MulticastSocket` has been deprecated since Java 9, and you should use the `setTimeToLive(int)` method instead. Here's an example of how to refactor your code to use the non-deprecated method:
+
+```java
+// Create a multicast socket
+MulticastSocket multicastSocket = new MulticastSocket(port);
+
+// Set the time-to-live for multicast packets to 5 (deprecated)
+multicastSocket.setTTL((byte) 5);
+
+// Refactored code using setTimeToLive() instead
+multicastSocket.setTimeToLive(5);
+```
+
+As you can see, the only change needed is to replace the call to `setTTL(byte)` with `setTimeToLive(int)`, passing the same value as an `int`. This will ensure that your code is using the current method and is not affected by the deprecation of the older method.

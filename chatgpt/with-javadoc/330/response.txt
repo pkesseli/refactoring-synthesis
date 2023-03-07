@@ -1,0 +1,55 @@
+# Response Time: 114.51750040054321
+
+
+Sure, here's an example of how to refactor the `createKeyboardDownRightListener()` method, which is now deprecated:
+
+Before refactoring:
+
+```java
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+import javax.swing.JSplitPane;
+
+public class MySplitPane extends JSplitPane {
+
+    public MySplitPane() {
+        super();
+        BasicSplitPaneUI ui = (BasicSplitPaneUI) getUI();
+        ui.getDivider().addKeyListener(ui.createKeyboardDownRightListener());
+    }
+    
+}
+```
+
+After refactoring:
+
+```java
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+import javax.swing.JSplitPane;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class MySplitPane extends JSplitPane {
+
+    public MySplitPane() {
+        super();
+        BasicSplitPaneUI ui = (BasicSplitPaneUI) getUI();
+        ui.getDivider().addKeyListener(new KeyboardDownRightListener());
+    }
+
+    private class KeyboardDownRightListener implements KeyListener {
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                int loc = ui.getDividerLocation();
+                int newLoc = loc + ui.getKeyboardMoveIncrement();
+                ui.setDividerLocation(newLoc);
+                e.consume();
+            }
+        }
+
+        public void keyReleased(KeyEvent e) {}
+        public void keyTyped(KeyEvent e) {}
+    }
+}
+```
+
+As you can see, instead of calling the deprecated `createKeyboardDownRightListener()` method, we have created a new `KeyboardDownRightListener` class that implements the `KeyListener` interface. This class handles the `KeyPressed` event, checking whether the key pressed is either `VK_DOWN` or `VK_RIGHT`, and then setting the new divider location accordingly.

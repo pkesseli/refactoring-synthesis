@@ -1,0 +1,36 @@
+# Response Time: 20.938900232315063
+Sure, here's an example refactoring that uses the recommended alternative to `setObservedObject(ObjectName)`:
+
+Before refactoring:
+
+```java
+import javax.management.ObjectName;
+import javax.management.monitor.Monitor;
+
+Monitor monitor = new Monitor();
+ObjectName observedObject = new ObjectName("com.example:type=MyMBean");
+monitor.setObservedObject(observedObject);
+```
+
+After refactoring:
+
+```java
+import javax.management.ObjectName;
+import javax.management.monitor.Monitor;
+import javax.management.MBeanServerConnection;
+import javax.management.MBeanServerConnectionFactory;
+import javax.management.remote.JMXConnector;
+import javax.management.remote.JMXConnectorFactory;
+import javax.management.remote.JMXServiceURL;
+
+Monitor monitor = new Monitor();
+ObjectName objectName = new ObjectName("com.example:type=MyMBean");
+JMXServiceURL serviceURL = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi");
+JMXConnector jmxConnector = JMXConnectorFactory.connect(serviceURL, null);
+MBeanServerConnection mbeanServerConnection = jmxConnector.getMBeanServerConnection();
+monitor.addObservedObject(mbeanServerConnection, objectName);
+```
+
+In the refactored code, we use `addObservedObject(MBeanServerConnection, ObjectName)` instead of `setObservedObject(ObjectName)` to specify the MBeanServerConnection where the MBean we want to monitor resides. We also use the JMX API to connect to the remote MBean server and obtain the `MBeanServerConnection` object. 
+
+Note that in the refactored code, we assume that the remote MBean server is running on `localhost` at port `9999` and using the `jmxrmi` JNDI context. You may need to adjust these settings to match your specific environment.

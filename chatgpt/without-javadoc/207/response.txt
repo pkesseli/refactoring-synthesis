@@ -1,0 +1,63 @@
+# Response Time: 31.38476014137268
+Sure, here's an example of refactoring code that uses the deprecated method `java.rmi.server.UnicastRemoteObject.exportObject(Remote)`:
+
+Before refactoring:
+
+```java
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class MyRemoteObject extends UnicastRemoteObject implements MyRemoteInterface {
+
+    public MyRemoteObject() throws RemoteException {
+        super();
+    }
+
+    public static void main(String[] args) throws RemoteException {
+        Registry registry = LocateRegistry.getRegistry();
+        MyRemoteInterface stub = (MyRemoteInterface) UnicastRemoteObject.exportObject(new MyRemoteObject(), 0);
+        registry.rebind("MyRemoteObject", stub);
+        System.out.println("MyRemoteObject bound");
+    }
+
+    // implementation of MyRemoteInterface methods
+}
+```
+
+After refactoring:
+
+```java
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.ExportException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class MyRemoteObject extends UnicastRemoteObject implements MyRemoteInterface {
+
+    public MyRemoteObject() throws RemoteException {
+        super();
+    }
+
+    public static void main(String[] args) throws RemoteException {
+        Registry registry = LocateRegistry.getRegistry();
+        MyRemoteObject obj = new MyRemoteObject();
+        try {
+            MyRemoteInterface stub = (MyRemoteInterface) UnicastRemoteObject.exportObject(obj);
+            registry.rebind("MyRemoteObject", stub);
+            System.out.println("MyRemoteObject bound");
+        } catch (ExportException ex) {
+            MyRemoteInterface stub = (MyRemoteInterface) registry.lookup("MyRemoteObject");
+            if (!stub.equals(obj)) {
+                throw new RuntimeException("Cannot bind MyRemoteObject", ex);
+            }
+        }
+    }
+
+    // implementation of MyRemoteInterface methods
+}
+```
+
+In the refactored code, we've replaced the deprecated `UnicastRemoteObject.exportObject(Remote)` method with `UnicastRemoteObject.exportObject(Remote, int)` method that takes only one argument - the remote object to export. We've also added a try-catch block to handle the case where the object is already exported and registered with the RMI registry. If that happens, we look up the object in the registry and make sure it's the same object we're trying to bind. If it's not the same object, we throw a `RuntimeException` to indicate that the binding failed.

@@ -1,0 +1,45 @@
+# Response Time: 16.256835460662842
+Sure, here's an example refactoring that replaces the deprecated `java.awt.Toolkit.getMenuShortcutKeyMask()` method with `java.awt.event.InputEvent.CTRL_DOWN_MASK` using the suggested replacement `Toolkit.getMenuShortcutKeyMaskEx()`:
+
+Before refactoring:
+
+```java
+import java.awt.*;
+import java.awt.event.*;
+
+public class MyFrame extends Frame implements ActionListener {
+    
+    public MyFrame() {
+        // ...
+    }
+    
+    public void actionPerformed(ActionEvent e) {
+        if ((e.getModifiers() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) != 0) {
+            // Handle menu shortcut key press
+        }
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.*;
+import java.awt.event.*;
+
+public class MyFrame extends Frame implements ActionListener {
+    
+    public MyFrame() {
+        // ...
+    }
+    
+    public void actionPerformed(ActionEvent e) {
+        if ((e.getModifiers() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()) != 0
+            || (e.getModifiers() & InputEvent.CTRL_DOWN_MASK) != 0) {
+            // Handle menu shortcut key press
+        }
+    }
+}
+```
+
+In the refactored code, the `java.awt.Toolkit.getMenuShortcutKeyMask()` method is replaced with `java.awt.Toolkit.getMenuShortcutKeyMaskEx()`. In addition, the `InputEvent.CTRL_DOWN_MASK` constant is added to handle the case where the Ctrl key is used as the menu shortcut key. This is because the `getMenuShortcutKeyMaskEx()` method returns the platform-specific menu shortcut key mask, which may differ depending on the platform and user settings.

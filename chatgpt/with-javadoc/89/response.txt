@@ -1,0 +1,62 @@
+# Response Time: 15.914427280426025
+
+
+Sure, here's an example of refactoring code that uses the deprecated `disable()` method to use the `setEnabled(boolean)` method instead:
+
+Before refactoring:
+
+```java
+import java.awt.*;
+
+public class MenuExample {
+    public static void main(String[] args) {
+        Frame f = new Frame("Menu Example");
+
+        MenuBar mb = new MenuBar();
+        Menu file = new Menu("File");
+        MenuItem open = new MenuItem("Open");
+        MenuItem save = new MenuItem("Save");
+
+        // Deprecated method used here
+        open.disable();
+
+        file.add(open);
+        file.add(save);
+        mb.add(file);
+
+        f.setMenuBar(mb);
+        f.setSize(300, 300);
+        f.setVisible(true);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.*;
+
+public class MenuExample {
+    public static void main(String[] args) {
+        Frame f = new Frame("Menu Example");
+
+        MenuBar mb = new MenuBar();
+        Menu file = new Menu("File");
+        MenuItem open = new MenuItem("Open");
+        MenuItem save = new MenuItem("Save");
+
+        // Refactored to use setEnabled method
+        open.setEnabled(false);
+
+        file.add(open);
+        file.add(save);
+        mb.add(file);
+
+        f.setMenuBar(mb);
+        f.setSize(300, 300);
+        f.setVisible(true);
+    }
+}
+```
+
+In the refactored code, the `disable()` method is replaced with the `setEnabled(false)` method, which achieves the same result. This way, the code is no longer using a deprecated method and is more future-proof.

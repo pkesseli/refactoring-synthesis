@@ -1,0 +1,31 @@
+# Response Time: 57.109273195266724
+Sure! Here's an example of how you can refactor your code to replace the deprecated `drawLine(int, Graphics, int, int)` method with the new `drawLine(int, Graphics2D, float, float)` method in the `PlainView` class:
+
+Before refactoring:
+
+```
+public void paint(Graphics g, Shape allocation) {
+    super.paint(g, allocation);
+    // ...
+    Rectangle r = allocation.getBounds();
+    int y = r.y + fm.getAscent();
+    g.drawLine(r.x, y, r.x + r.width, y);
+    // ...
+}
+```
+
+After refactoring:
+
+```
+public void paint(Graphics g, Shape allocation) {
+    super.paint(g, allocation);
+    // ...
+    Rectangle r = allocation.getBounds();
+    int y = r.y + fm.getAscent();
+    Graphics2D g2d = (Graphics2D) g;
+    g2d.drawLine(r.x, y, r.x + r.width, y);
+    // ...
+}
+```
+
+In the refactored code, we've replaced the `Graphics` object with a `Graphics2D` object and updated the call to `drawLine` accordingly. Note that we need to cast the `Graphics` object to a `Graphics2D` object before we can call the `drawLine` method with four arguments.

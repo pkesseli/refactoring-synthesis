@@ -1,0 +1,32 @@
+# Response Time: 9.746173620223999
+Sure! Here's an example of refactoring code that uses the deprecated `enable(boolean)` method to use the recommended `setEnabled(boolean)` method instead:
+
+Before refactoring:
+
+```java
+import java.awt.Button;
+
+public class Example {
+    public static void main(String[] args) {
+        Button button = new Button("Click me!");
+        button.enable(false); // deprecated method
+        // ... rest of code
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.Button;
+
+public class Example {
+    public static void main(String[] args) {
+        Button button = new Button("Click me!");
+        button.setEnabled(false); // recommended method
+        // ... rest of code
+    }
+}
+```
+
+As you can see, the only change needed was to replace the `enable(false)` method call with `setEnabled(false)`. This will ensure that the code is compatible with newer versions of Java, and will also make the code more readable and maintainable for other developers.

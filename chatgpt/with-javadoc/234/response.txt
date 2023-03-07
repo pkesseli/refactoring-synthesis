@@ -1,0 +1,21 @@
+# Response Time: 32.248717308044434
+Sure, here's an example of how you could refactor code that uses the deprecated `java.sql.Time.setYear(int)` method:
+
+Before refactoring:
+
+```
+Time time = new Time(System.currentTimeMillis());
+time.setYear(2022);
+```
+
+After refactoring:
+
+```
+LocalDateTime localDateTime = LocalDateTime.now();
+localDateTime = localDateTime.withYear(2022);
+Time time = Time.valueOf(localDateTime.toLocalTime());
+```
+
+In the refactored code, we first create a `LocalDateTime` object using the `now()` method. We then use the `withYear()` method to set the year to 2022. Finally, we convert the `LocalDateTime` object to a `Time` object using the `valueOf()` method, passing in the `toLocalTime()` method of the `LocalDateTime` object. This results in a `Time` object with the same time as the original `Time` object, but with the year set to 2022. 
+
+Note that the refactored code uses the newer `java.time` API instead of the deprecated `java.sql.Time` API. This API provides a more modern and robust set of classes for handling date and time values.

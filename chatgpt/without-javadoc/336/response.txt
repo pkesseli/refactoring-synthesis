@@ -1,0 +1,58 @@
+# Response Time: 24.699632167816162
+Sure! Here's an example of how to refactor code that uses the deprecated `javax.swing.plaf.basic.BasicTextUI.modelToView(JTextComponent, int)` method:
+
+Before refactoring:
+
+```java
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicTextUI;
+import java.awt.Rectangle;
+import java.util.Optional;
+
+public class MyTextField extends JTextField {
+    // ...
+    
+    public Optional<Rectangle> getCharacterBounds(int index) {
+        BasicTextUI ui = (BasicTextUI) getUI();
+        try {
+            Rectangle rect = ui.modelToView(this, index);
+            return Optional.of(rect);
+        } catch (javax.swing.text.BadLocationException e) {
+            return Optional.empty();
+        }
+    }
+}
+```
+
+After refactoring:
+
+```java
+import javax.swing.*;
+import javax.swing.text.Element;
+import java.awt.Rectangle;
+import java.util.Optional;
+
+public class MyTextField extends JTextField {
+    // ...
+    
+    public Optional<Rectangle> getCharacterBounds(int index) {
+        Element root = getDocument().getDefaultRootElement();
+        Element elem = root.getElement(index);
+        if (elem == null) {
+            return Optional.empty();
+        }
+        Rectangle rect = getUI().modelToView(this, elem.getStartOffset(), Position.Bias.Forward, elem.getEndOffset(), Position.Bias.Backward);
+        return Optional.ofNullable(rect);
+    }
+}
+```
+
+Explanation:
+
+In the original code, the `modelToView` method is called on a `BasicTextUI` object, which is obtained from the text component's `getUI()` method. However, this method is deprecated, so we need to find an alternative.
+
+The new implementation uses the `javax.swing.text.Element` API to get the bounds of the character at the given index. First, we get the root element of the document using `getDocument().getDefaultRootElement()`. Then, we get the element at the given index using `root.getElement(index)`.
+
+If the element is null, we return an empty `Optional`. Otherwise, we call `getUI().modelToView` on the text component, passing in the start and end offsets of the element and the appropriate `Position.Bias` values. We then return the result as an `Optional`.
+
+Note that in the new implementation, we don't cast the `UI` object to `BasicTextUI`. This is because the `modelToView` method is now part of the `javax.swing.text.View` interface, which is implemented by all text component UIs.

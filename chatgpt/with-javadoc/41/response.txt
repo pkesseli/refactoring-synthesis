@@ -1,0 +1,40 @@
+# Response Time: 13.293361902236938
+Sure! Here is an example of how to refactor code that uses the deprecated `reshape` method to use the `setBounds` method instead:
+
+Before refactoring:
+
+```java
+import java.awt.Button;
+import java.awt.Frame;
+
+public class Example {
+    public static void main(String[] args) {
+        Frame frame = new Frame();
+        Button button = new Button("Click me");
+        button.reshape(50, 50, 100, 50);
+        frame.add(button);
+        frame.setSize(200, 200);
+        frame.setVisible(true);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.Button;
+import java.awt.Frame;
+
+public class Example {
+    public static void main(String[] args) {
+        Frame frame = new Frame();
+        Button button = new Button("Click me");
+        button.setBounds(50, 50, 100, 50);
+        frame.add(button);
+        frame.setSize(200, 200);
+        frame.setVisible(true);
+    }
+}
+```
+
+In this example, we simply replaced the call to `reshape` with a call to `setBounds`, which has the same parameters and functionality. The result is code that will continue to work as intended, but without using a deprecated method.

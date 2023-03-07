@@ -1,0 +1,49 @@
+# Response Time: 24.750497817993164
+Certainly! Here's an example of how to refactor the deprecated method `javax.swing.text.html.HTMLEditorKit.InsertHTMLTextAction.insertAtBoundry()`:
+
+Deprecated method signature:
+```
+public static void insertAtBoundry(JEditorPane editor, HTMLDocument doc, int offset, Element insertElement, String html, HTML.Tag tag, HTML.Tag insertTag)
+```
+
+Refactored method signature:
+```
+public static void insertHtml(JEditorPane editor, HTMLDocument doc, int offset, String html, HTML.Tag insertTag)
+```
+
+Explanation:
+The deprecated method `insertAtBoundry()` is used to insert HTML text into an `HTMLDocument` at a specified offset, while optionally enclosing the inserted text in a specific HTML tag. 
+
+To refactor this method, we can simplify the API by removing the `Element insertElement` parameter and the `HTML.Tag tag` parameter, since they are only used to enclose the inserted text in a specific HTML tag. Instead, we can pass in the desired enclosing tag as a separate parameter `HTML.Tag insertTag`.
+
+The refactored method `insertHtml()` will perform the same functionality as the deprecated `insertAtBoundry()` method but with a simplified API.
+
+Here's an example implementation of the refactored method:
+```
+public static void insertHtml(JEditorPane editor, HTMLDocument doc, int offset, String html, HTML.Tag insertTag) throws BadLocationException, IOException {
+    if (editor == null || doc == null || html == null) {
+        throw new IllegalArgumentException("Arguments cannot be null");
+    }
+    if (offset < 0 || offset > doc.getLength()) {
+        throw new BadLocationException("Invalid offset", offset);
+    }
+
+    // Enclose the inserted text in the specified HTML tag
+    String taggedHtml = String.format("<%s>%s</%s>", insertTag.toString(), html, insertTag.toString());
+    doc.insertBeforeEnd(doc.getDefaultRootElement(), taggedHtml);
+
+    // Update the editor pane to reflect the changes
+    editor.setDocument(doc);
+}
+```
+
+Example usage:
+```
+JEditorPane editor = new JEditorPane();
+HTMLDocument doc = new HTMLDocument();
+editor.setEditorKit(new HTMLEditorKit());
+editor.setDocument(doc);
+insertHtml(editor, doc, 0, "Hello world", HTML.Tag.P);
+``` 
+
+In this example, the `insertHtml()` method inserts the text "Hello world" into the `HTMLDocument` at offset 0, enclosed in the `<p>` tag, and updates the `JEditorPane` to reflect the changes.

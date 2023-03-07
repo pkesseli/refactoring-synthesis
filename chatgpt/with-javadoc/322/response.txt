@@ -1,0 +1,18 @@
+# Response Time: 28.579371213912964
+Sure, here's an example of refactoring code that uses `getComponentAtIndex(int)` to use `getComponent(int)` instead:
+
+Before refactoring:
+
+```java
+JPopupMenu popupMenu = new JPopupMenu();
+Component component = popupMenu.getComponentAtIndex(0);
+```
+
+After refactoring:
+
+```java
+JPopupMenu popupMenu = new JPopupMenu();
+Component component = popupMenu.getComponent(0);
+```
+
+As you can see, the only change is to replace the deprecated `getComponentAtIndex(int)` method with the non-deprecated `getComponent(int)` method. This will achieve the same result without using deprecated methods.

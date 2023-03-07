@@ -1,0 +1,42 @@
+# Response Time: 19.491700649261475
+
+
+Sure, here's an example of refactoring code that uses the deprecated `java.net.MulticastSocket.getInterface()` method:
+
+Before refactoring:
+
+```java
+import java.net.MulticastSocket;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+
+public class MulticastExample {
+    public static void main(String[] args) throws SocketException {
+        MulticastSocket socket = new MulticastSocket(1234);
+        NetworkInterface ni = NetworkInterface.getByName("eth0");
+        socket.setInterface(ni);
+        // ... other code
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+
+public class MulticastExample {
+    public static void main(String[] args) throws SocketException {
+        MulticastSocket socket = new MulticastSocket(1234);
+        NetworkInterface ni = NetworkInterface.getByName("eth0");
+        InetAddress addr = ni.getInetAddresses().nextElement();
+        socket.setInterface(addr);
+        // ... other code
+    }
+}
+```
+
+In the refactored code, we use `NetworkInterface.getInetAddresses()` to get the `InetAddress` associated with the network interface, instead of using the deprecated `MulticastSocket.getInterface()` method. We then use the obtained `InetAddress` to set the interface of the `MulticastSocket`. This code should work in the same way as the original code, but without using deprecated methods.

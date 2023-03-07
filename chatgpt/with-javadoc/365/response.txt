@@ -1,0 +1,97 @@
+# Response Time: 170.33704781532288
+Sure, here is an example of how you can refactor your code to use the new method `PlainView.drawSelectedText(Graphics2D, float, float, int, int)` instead of the deprecated method `PlainView.drawSelectedText(Graphics, int, int, int, int)`:
+
+Before refactoring:
+
+```java
+@Override
+public void paint(Graphics g, Shape shape) {
+    super.paint(g, shape);
+    
+    // Get the bounds of the text area to be painted
+    Rectangle rect = g.getClipBounds();
+    int startOffset = getStartOffset();
+    int endOffset = getEndOffset();
+    
+    // Paint the selected text
+    if (selectionStart != selectionEnd) {
+        g.setColor(selectionColor);
+        try {
+            Shape selectionShape = modelToView(selectionStart, Position.Bias.Forward, selectionEnd, Position.Bias.Backward, shape);
+            Rectangle selectionRect = selectionShape.getBounds();
+            g.fillRect(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height);
+            
+            // Draw the selected text
+            g.setColor(selectedTextColor);
+            drawSelectedText(g, startOffset, selectionStart, selectionEnd, endOffset);
+        } catch (BadLocationException e) {
+            // Ignore
+        }
+    }
+}
+
+protected void drawSelectedText(Graphics g, int x, int y, int startOffset, int endOffset) {
+    // Draw the selected text
+    Element elem = getElement();
+    JTextComponent textComp = (JTextComponent) getContainer();
+    Document doc = getDocument();
+    FontMetrics fm = textComp.getFontMetrics(textComp.getFont());
+    
+    try {
+        int length = endOffset - startOffset;
+        doc.getText(startOffset, length, seg);
+        x = Utilities.drawTabbedText(seg, x, y, g, this, startOffset);
+    } catch (BadLocationException e) {
+        // Ignore
+    }
+}
+```
+
+After refactoring:
+
+```java
+@Override
+public void paint(Graphics g, Shape shape) {
+    super.paint(g, shape);
+    
+    // Get the bounds of the text area to be painted
+    Rectangle rect = g.getClipBounds();
+    int startOffset = getStartOffset();
+    int endOffset = getEndOffset();
+    
+    // Paint the selected text
+    if (selectionStart != selectionEnd) {
+        g.setColor(selectionColor);
+        try {
+            Shape selectionShape = modelToView(selectionStart, Position.Bias.Forward, selectionEnd, Position.Bias.Backward, shape);
+            Rectangle selectionRect = selectionShape.getBounds();
+            g.fillRect(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height);
+            
+            // Draw the selected text
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setColor(selectedTextColor);
+            drawSelectedText(g2d, (float) selectionRect.x, (float) selectionRect.y, selectionStart, selectionEnd);
+        } catch (BadLocationException e) {
+            // Ignore
+        }
+    }
+}
+
+protected void drawSelectedText(Graphics2D g, float x, float y, int startOffset, int endOffset) {
+    // Draw the selected text
+    Element elem = getElement();
+    JTextComponent textComp = (JTextComponent) getContainer();
+    Document doc = getDocument();
+    FontMetrics fm = textComp.getFontMetrics(textComp.getFont());
+    
+    try {
+        int length = endOffset - startOffset;
+        doc.getText(startOffset, length, seg);
+        x = Utilities.drawTabbedText(seg, x, y, g, this, startOffset);
+    } catch (BadLocationException e) {
+        // Ignore
+    }
+}
+```
+
+As you can see, the main change is in

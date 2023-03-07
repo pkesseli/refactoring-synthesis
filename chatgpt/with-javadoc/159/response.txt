@@ -1,0 +1,18 @@
+# Response Time: 13.301877737045288
+Sure! Here's an example of how you can refactor code that uses `getTTL()` to use `getTimeToLive()` instead:
+
+Before refactoring:
+```java
+DatagramSocket socket = new DatagramSocket();
+int ttl = socket.getTTL();
+System.out.println("TTL: " + ttl);
+```
+
+After refactoring:
+```java
+DatagramSocket socket = new DatagramSocket();
+int ttl = socket.getTimeToLive();
+System.out.println("TTL: " + ttl);
+```
+
+As you can see, the only change needed is to replace `getTTL()` with `getTimeToLive()`. This will ensure that the code continues to work correctly while using the recommended method instead of the deprecated one.

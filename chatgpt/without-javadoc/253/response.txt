@@ -1,0 +1,21 @@
+# Response Time: 13.06227731704712
+Sure, here's an example of how you could refactor code that uses `java.util.Date.setHours(int)` to use a non-deprecated alternative:
+
+Original code using `java.util.Date.setHours(int)`:
+
+```java
+Date date = new Date();
+date.setHours(5);
+```
+
+Refactored code using `java.util.Calendar.set(int, int)`:
+
+```java
+Calendar calendar = Calendar.getInstance();
+calendar.setTime(new Date());
+calendar.set(Calendar.HOUR_OF_DAY, 5);
+
+Date date = calendar.getTime();
+```
+
+In the refactored code, we use `Calendar.getInstance()` to get a `Calendar` instance, which we then set to the current date using `calendar.setTime(new Date())`. We then use `calendar.set(Calendar.HOUR_OF_DAY, 5)` to set the hour of the day to 5, which is equivalent to the deprecated `Date.setHours(5)`. Finally, we use `calendar.getTime()` to get a `Date` instance with the updated hour.

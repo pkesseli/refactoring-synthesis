@@ -1,0 +1,28 @@
+# Response Time: 10.516469240188599
+Sure! Here's an example of how you can refactor your code to use `getMinimumSize(int, int)` instead of the deprecated `minimumSize(int, int)` method:
+
+```java
+// Deprecated code using minimumSize(int, int)
+import java.awt.*;
+
+public class MyTextArea extends TextArea {
+    public MyTextArea(String text, int rows, int columns) {
+        super(text, rows, columns);
+        Dimension minimumSize = minimumSize(rows, columns);
+        setMinimumSize(minimumSize);
+    }
+}
+
+// Refactored code using getMinimumSize(int, int)
+import java.awt.*;
+
+public class MyTextArea extends TextArea {
+    public MyTextArea(String text, int rows, int columns) {
+        super(text, rows, columns);
+        Dimension minimumSize = getMinimumSize(rows, columns);
+        setMinimumSize(minimumSize);
+    }
+}
+```
+
+As you can see, the only change needed is to replace `minimumSize(rows, columns)` with `getMinimumSize(rows, columns)` to avoid using the deprecated method.

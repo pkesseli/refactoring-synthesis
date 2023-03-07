@@ -1,0 +1,38 @@
+# Response Time: 90.21214580535889
+Sure! Here's an example refactoring using the deprecated `java.sql.Date.setSeconds(int)` method:
+
+Before refactoring:
+
+```java
+import java.sql.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date(System.currentTimeMillis());
+        date.setSeconds(30);
+        System.out.println(date);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.sql.Timestamp;
+
+public class Example {
+    public static void main(String[] args) {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        timestamp.setSeconds(30);
+        System.out.println(new Date(timestamp.getTime()));
+    }
+}
+```
+
+Explanation:
+
+The `java.sql.Date` class is a subclass of `java.util.Date` and represents a SQL `DATE` value, which does not include a time component. The `setSeconds(int)` method sets the seconds component of the date's time value, which is not useful for a `java.sql.Date` object.
+
+To refactor this code, we can replace the `java.sql.Date` object with a `java.sql.Timestamp` object, which represents a SQL `TIMESTAMP` value and includes a time component. We can then set the seconds component of the `Timestamp` object and convert it to a `java.sql.Date` object using the `getTime()` method.
+
+Note that the `java.sql.Timestamp` class also has a deprecated `setSeconds(int)` method, but this method has not been removed yet and can still be used.

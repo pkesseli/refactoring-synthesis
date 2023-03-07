@@ -1,0 +1,22 @@
+# Response Time: 35.40632462501526
+Sure, here's an example of refactoring the use of `disableResizedPosting()` in a `JTable`:
+
+Before refactoring:
+
+```java
+JTable table = new JTable();
+TableColumnModel columnModel = table.getColumnModel();
+TableColumn column = columnModel.getColumn(0);
+column.disableResizedPosting(); // deprecated method
+```
+
+After refactoring:
+
+```java
+JTable table = new JTable();
+TableColumnModel columnModel = table.getColumnModel();
+TableColumn column = columnModel.getColumn(0);
+column.setResizable(false); // preferred method
+```
+
+In the refactored code, the `setResizable()` method is used instead of `disableResizedPosting()`. This method also controls whether a column can be resized or not, but it is not deprecated and is the preferred method to use.

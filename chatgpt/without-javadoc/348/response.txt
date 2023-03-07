@@ -1,0 +1,47 @@
+# Response Time: 15.610672235488892
+Sure! Here's an example of how you can refactor code that uses the deprecated `javax.swing.plaf.TextUI.modelToView​(JTextComponent, int)` method:
+
+Before refactoring:
+
+```java
+import javax.swing.plaf.TextUI;
+
+public class TextUIExample {
+    public static void main(String[] args) {
+        JTextComponent textComponent = new JTextComponent();
+        TextUI textUI = textComponent.getUI();
+        int offset = 10;
+        Rectangle rect = null;
+        
+        try {
+            rect = textUI.modelToView(textComponent, offset);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+        
+        System.out.println(rect);
+    }
+}
+```
+
+After refactoring:
+
+```java
+public class TextUIExample {
+    public static void main(String[] args) {
+        JTextComponent textComponent = new JTextComponent();
+        int offset = 10;
+        Rectangle rect = null;
+        
+        try {
+            rect = textComponent.modelToView(offset);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+        
+        System.out.println(rect);
+    }
+}
+```
+
+In the refactored code, we removed the `TextUI` object and called the `modelToView(int)` method directly on the `JTextComponent` object. This is possible because the `modelToView(int)` method is now defined directly in the `JTextComponent` class, rather than in the deprecated `TextUI` interface.

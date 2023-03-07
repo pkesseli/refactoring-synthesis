@@ -1,0 +1,20 @@
+# Response Time: 12.039612054824829
+Sure! Here's an example refactoring that replaces the deprecated `getModifiers()` method with `getModifiersEx()`:
+
+```java
+// Before refactoring
+if (event.getModifiers() == InputEvent.SHIFT_MASK) {
+    // Handle shift key pressed
+}
+
+// After refactoring
+if ((event.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0) {
+    // Handle shift key pressed
+}
+```
+
+In the example above, we are checking whether the shift key is pressed during an `InputEvent` by using the `getModifiers()` method. However, since this method is deprecated, we can refactor the code to use `getModifiersEx()` instead, as recommended by the deprecation comment. 
+
+In the refactored code, we use the `&` operator to check if the `SHIFT_DOWN_MASK` bit is set in the `modifiersEx` value returned by `getModifiersEx()`. This is equivalent to checking if the `SHIFT_MASK` bit is set in the old `getModifiers()` method. 
+
+By using `getModifiersEx()`, we can also check for extended modifier keys like `ALT_GRAPH_DOWN_MASK` and `BUTTON1_DOWN_MASK`, which were not supported by the old `getModifiers()` method.

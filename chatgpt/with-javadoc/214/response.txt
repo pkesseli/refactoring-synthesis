@@ -1,0 +1,28 @@
+# Response Time: 51.59134268760681
+Sure, here's an example of refactoring code that uses the deprecated method `getBigDecimal(int, int)` in Java to the recommended alternatives `getBigDecimal(int)` or `getBigDecimal(String)`:
+
+Before refactoring:
+```java
+CallableStatement cs = conn.prepareCall("{ call my_proc(?) }");
+cs.setDouble(1, 123.45);
+ResultSet rs = cs.executeQuery();
+BigDecimal result = cs.getBigDecimal(1, 2);
+```
+
+After refactoring:
+```java
+CallableStatement cs = conn.prepareCall("{ call my_proc(?) }");
+cs.setDouble(1, 123.45);
+ResultSet rs = cs.executeQuery();
+BigDecimal result = cs.getBigDecimal(1);
+```
+
+Alternatively:
+```java
+CallableStatement cs = conn.prepareCall("{ call my_proc(?) }");
+cs.setDouble(1, 123.45);
+ResultSet rs = cs.executeQuery();
+BigDecimal result = cs.getBigDecimal("parameterName");
+```
+
+In this refactored code, we simply replace the deprecated method call `getBigDecimal(int, int)` with `getBigDecimal(int)` or `getBigDecimal(String)` based on the type of parameters used. This way, we avoid using the deprecated method and use the recommended alternatives instead.

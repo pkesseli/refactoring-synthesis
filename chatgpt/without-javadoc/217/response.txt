@@ -1,0 +1,21 @@
+# Response Time: 15.689938306808472
+Sure! Here's an example of how to refactor code that uses the deprecated `getSeconds()` method in the `java.sql.Date` class:
+
+Before refactoring:
+
+```java
+java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+int seconds = date.getSeconds();
+```
+
+After refactoring:
+
+```java
+java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+LocalDateTime localDateTime = date.toLocalDate().atStartOfDay();
+int seconds = localDateTime.toLocalTime().getSecond();
+```
+
+In the refactored code, we first create a `LocalDateTime` object by converting the `java.sql.Date` object to a `LocalDate` object and then setting it to the start of the day. We then get the number of seconds from the `LocalTime` object of the `LocalDateTime` object. This achieves the same result as the deprecated `getSeconds()` method.
+
+Note that the `toLocalDate()` method assumes the default time zone of the JVM is used. If you need to use a specific time zone, you can use the `toLocalDate(ZoneId zone)` method and pass in the desired time zone as a parameter.

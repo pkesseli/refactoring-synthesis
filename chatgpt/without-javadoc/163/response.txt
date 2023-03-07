@@ -1,0 +1,15 @@
+# Response Time: 11.453304529190063
+Sure! Here's an example of how you can refactor code that uses the deprecated `java.net.MulticastSocket.getTTL()` method to use a non-deprecated alternative:
+
+```java
+// Old code using deprecated method
+MulticastSocket socket = new MulticastSocket();
+int ttl = socket.getTTL();
+
+// Refactored code using non-deprecated method
+MulticastSocket socket = new MulticastSocket();
+socket.setTimeToLive(2);
+int ttl = socket.getTimeToLive();
+```
+
+In the refactored code, we use the `setTimeToLive(int ttl)` method instead of `getTTL()` to set the time to live for the multicast packets. Then, we use the non-deprecated `getTimeToLive()` method to retrieve the time to live value. This ensures that the code continues to work as expected while avoiding the use of deprecated methods.

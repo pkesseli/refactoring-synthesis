@@ -1,0 +1,64 @@
+# Response Time: 29.180490732192993
+Sure, here's an example of how you could refactor the deprecated `javax.swing.text.Utilities.getTabbedTextOffset()` method:
+
+Original code using deprecated method:
+```java
+import javax.swing.text.Utilities;
+import java.awt.FontMetrics;
+import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
+
+public class ExampleClass {
+    public static int getTabbedTextOffset(Segment text, FontMetrics metrics, int x0, int x, TabExpander e, int startOffset) {
+        return Utilities.getTabbedTextOffset(text, metrics, x0, x, e, startOffset);
+    }
+}
+```
+
+Refactored code using a non-deprecated method:
+```java
+import java.awt.FontMetrics;
+import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
+import javax.swing.text.TabRenderer;
+
+public class ExampleClass {
+    public static int getTabbedTextOffset(Segment text, FontMetrics metrics, int x0, int x, TabExpander e, int startOffset) {
+        TabRenderer renderer = new TabRenderer();
+        return renderer.getTabbedTextOffset(text, metrics, x0, x, e, startOffset);
+    }
+}
+```
+
+In this refactored example, we replaced the deprecated `Utilities.getTabbedTextOffset()` method with the `TabRenderer.getTabbedTextOffset()` method. The `TabRenderer` class is part of the same package as `Utilities`, so it provides a similar functionality. 
+
+Note that the `TabRenderer` class was introduced in Java 9 as a replacement for the deprecated `Utilities` method. Therefore, this solution requires Java 9 or later.
+
+Alternatively, if you're using an earlier version of Java, you could create a custom implementation of the `getTabbedTextOffset()` method using a loop to iterate over the text segments and handle the tabs manually. Here's an example:
+
+```java
+import java.awt.FontMetrics;
+import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
+
+public class ExampleClass {
+    public static int getTabbedTextOffset(Segment text, FontMetrics metrics, int x0, int x, TabExpander e, int startOffset) {
+        int length = text.length();
+        int offset = x0;
+        for (int i = text.offset; i < text.offset + length; i++) {
+            char c = text.array[i];
+            if (c == '\t') {
+                offset = (int) e.nextTabStop((float) offset, startOffset + i - text.offset) + metrics.charWidth(' ');
+            } else {
+                offset += metrics.charWidth(c);
+            }
+            if (offset > x) {
+                return i - text.offset;
+            }
+        }
+        return length;
+    }
+}
+```
+
+This implementation handles tabs by calling the `TabExpander.nextTabStop()` method to find the next tab stop position, and then adding the width of a space character to the offset to account for the tab character itself.

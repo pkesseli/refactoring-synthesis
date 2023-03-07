@@ -1,0 +1,22 @@
+# Response Time: 11.648002624511719
+Sure, here's an example refactoring that you can use to replace the deprecated `javax.swing.plaf.multi.MultiTextUI.viewToModel​(JTextComponent, Point)` method:
+
+```java
+// Deprecated method:
+// int javax.swing.plaf.multi.MultiTextUI.viewToModel(JTextComponent, Point)
+
+// Refactored code:
+import javax.swing.text.JTextComponent;
+import java.awt.Point;
+
+public class Example {
+    public int viewToModel(JTextComponent textComponent, Point point) {
+        int offset = textComponent.viewToModel(point);
+        return offset;
+    }
+}
+```
+
+In the refactored code, we simply call the `viewToModel` method on the `textComponent` object instead of calling the deprecated method on the `MultiTextUI` object. This will give us the same result without using the deprecated method.
+
+Note that the `viewToModel` method is available in the `JTextComponent` class, which is the superclass of `MultiTextUI`. This method maps the given point in the coordinate space of the text component's view to the nearest character position in the document.

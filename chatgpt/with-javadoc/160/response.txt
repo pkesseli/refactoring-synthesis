@@ -1,0 +1,19 @@
+# Response Time: 16.480319261550903
+Sure, here's an example refactoring using the `setTimeToLive(int ttl)` method instead of the deprecated `setTTL(byte ttl)` method in `DatagramSocketImpl` class:
+
+Before refactoring:
+
+```
+DatagramSocket socket = new DatagramSocket();
+DatagramSocketImpl impl = socket.getImpl();
+impl.setTTL((byte) 128); // deprecated method
+```
+
+After refactoring:
+
+```
+DatagramSocket socket = new DatagramSocket();
+socket.setTimeToLive(128);
+```
+
+In the refactored code, we use the `setTimeToLive(int ttl)` method provided by the `DatagramSocket` class instead of the deprecated `setTTL(byte ttl)` method in the `DatagramSocketImpl` class. This is the recommended way to set the time-to-live (TTL) value for a DatagramSocket instance.

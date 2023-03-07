@@ -1,0 +1,22 @@
+# Response Time: 15.572641611099243
+Sure, here's an example of how you can refactor code that uses the deprecated `countStackFrames()` method in Java:
+
+```java
+// Old code using deprecated method
+public void doSomething() {
+    Thread currentThread = Thread.currentThread();
+    int stackDepth = currentThread.countStackFrames();
+    System.out.println("Stack depth: " + stackDepth);
+}
+
+// Refactored code using recommended method
+public void doSomething() {
+    StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+    int stackDepth = stackTrace.length;
+    System.out.println("Stack depth: " + stackDepth);
+}
+```
+
+In the refactored code, we replace the `countStackFrames()` method with `getStackTrace()`, which returns an array of `StackTraceElement` objects representing the current thread's call stack. We can then get the length of this array to determine the stack depth.
+
+Note that the `getStackTrace()` method returns an array that includes all stack frames starting from the current method call, whereas `countStackFrames()` only returns the number of frames between the current method and the top of the stack. So the behavior of the refactored code may differ slightly from the original code in certain cases.

@@ -1,0 +1,30 @@
+# Response Time: 59.293389320373535
+Sure, here's an example of how you can refactor the code that uses `MulticastSocket.setInterface​(InetAddress)` method to use the recommended `MulticastSocket.setNetworkInterface(NetworkInterface)` method:
+
+Before refactoring:
+
+```
+// create a multicast socket and join the group
+MulticastSocket socket = new MulticastSocket(1234);
+InetAddress group = InetAddress.getByName("224.0.0.1");
+socket.joinGroup(group);
+
+// set the interface for sending and receiving multicast packets
+InetAddress iface = InetAddress.getLocalHost();
+socket.setInterface(iface);
+```
+
+After refactoring:
+
+```
+// create a multicast socket and join the group
+MulticastSocket socket = new MulticastSocket(1234);
+InetAddress group = InetAddress.getByName("224.0.0.1");
+socket.joinGroup(group);
+
+// set the network interface for sending and receiving multicast packets
+NetworkInterface ni = NetworkInterface.getByInetAddress(InetAddress.getLocalHost());
+socket.setNetworkInterface(ni);
+```
+
+As you can see, the `setInterface()` method is replaced with `setNetworkInterface()` method, which takes a `NetworkInterface` object as its parameter. To get the `NetworkInterface` object, we use the `NetworkInterface.getByInetAddress()` method and pass in the `InetAddress` of the local host. This ensures that we are using the correct network interface for sending and receiving multicast packets.

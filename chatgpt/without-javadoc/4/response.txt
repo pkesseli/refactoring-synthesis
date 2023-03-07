@@ -1,0 +1,40 @@
+# Response Time: 28.34486436843872
+
+
+Sure! Here's an example of how you can refactor your code to replace the deprecated `getTotalPhysicalMemorySize()` method with an alternative:
+
+```
+// Before refactoring
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+
+public class Example {
+    public static void main(String[] args) {
+        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+        long physicalMemorySize = osBean.getTotalPhysicalMemorySize();
+        System.out.println("Total physical memory size: " + physicalMemorySize);
+    }
+}
+```
+
+```
+// After refactoring
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+
+public class Example {
+    public static void main(String[] args) {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        long physicalMemorySize = memoryBean.getHeapMemoryUsage().getCommitted();
+        System.out.println("Total physical memory size: " + physicalMemorySize);
+    }
+}
+```
+
+In the refactored code, we have removed the import statement for `OperatingSystemMXBean` since we are no longer using it. Instead, we have imported `MemoryMXBean`, which provides an alternative way to access memory information.
+
+We are also using the `getMemoryMXBean()` method from the `ManagementFactory` class to get an instance of `MemoryMXBean`. Then, we are using the `getHeapMemoryUsage()` method to get the memory usage information for the heap, and the `getCommitted()` method to get the total amount of memory that is guaranteed to be available for use by the JVM. This value can be considered as an approximation of the physical memory size.
+
+Finally, we are printing the physical memory size to the console using the `println()` method.
+
+Note that this is just one possible way to refactor the code, and there may be other alternatives depending on your specific use case.

@@ -1,0 +1,38 @@
+# Response Time: 86.15462684631348
+Sure! Here's an example of how you could refactor code that uses the deprecated `java.security.Signature.getParameter(String)` method:
+
+Before refactoring:
+
+```java
+import java.security.Signature;
+import java.security.SignatureException;
+
+public class SignatureExample {
+    public static void main(String[] args) throws SignatureException {
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        String parameter = signature.getParameter("keysize");
+        System.out.println("Parameter value: " + parameter);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.security.Signature;
+import java.security.SignatureException;
+import java.util.Map;
+
+public class SignatureExample {
+    public static void main(String[] args) throws SignatureException {
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        Map<String, ?> parameters = signature.getParameters();
+        String parameterValue = (String) parameters.get("keysize");
+        System.out.println("Parameter value: " + parameterValue);
+    }
+}
+```
+
+In this refactored code, we've replaced the use of the `getParameter(String)` method with the `getParameters()` method, which returns a `Map` containing all of the signature parameters. We then retrieve the parameter value we're interested in by looking up the corresponding key in the map. Note that we need to cast the value to a `String` since the map's value type is a wildcard (`?`). 
+
+This refactored code should work just as well as the original, but it uses a non-deprecated method, so it should be more future-proof.

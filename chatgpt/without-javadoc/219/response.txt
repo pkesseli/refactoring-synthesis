@@ -1,0 +1,35 @@
+# Response Time: 15.770186424255371
+Sure! Here's an example of how you can refactor code that uses the deprecated `java.sql.Date.setMinutes(int)` method:
+
+Before:
+
+```java
+import java.sql.Date;
+
+public class Example {
+  public static void main(String[] args) {
+    Date date = new Date(System.currentTimeMillis());
+    date.setMinutes(30);
+    System.out.println(date);
+  }
+}
+```
+
+After:
+
+```java
+import java.sql.Timestamp;
+
+public class Example {
+  public static void main(String[] args) {
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    timestamp.setMinutes(30);
+    Date date = new Date(timestamp.getTime());
+    System.out.println(date);
+  }
+}
+```
+
+In this example, we replaced the `java.sql.Date` object with a `java.sql.Timestamp` object, which has a non-deprecated `setMinutes(int)` method. We then used the `getTime()` method to get the time in milliseconds and passed it to the `java.sql.Date` constructor to create a new `java.sql.Date` object with the same date and time as the original `timestamp` object. 
+
+Note that we also imported `java.sql.Timestamp` instead of `java.sql.Date`.

@@ -1,0 +1,20 @@
+# Response Time: 6.233539581298828
+
+
+Sure, here's an example of how you could refactor your code to replace the deprecated `disable()` method with `setEnabled(false)`:
+
+Before refactoring:
+
+```java
+Button myButton = new Button("Click me!");
+myButton.disable();
+```
+
+After refactoring:
+
+```java
+Button myButton = new Button("Click me!");
+myButton.setEnabled(false);
+```
+
+This code achieves the same result as the original code, but it uses the recommended `setEnabled()` method instead of the deprecated `disable()` method.

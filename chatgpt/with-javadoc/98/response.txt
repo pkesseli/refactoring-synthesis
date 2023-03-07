@@ -1,0 +1,18 @@
+# Response Time: 9.554947853088379
+Sure, here's an example of how you can refactor your code to use the non-deprecated `setSize(int, int)` method instead of the deprecated `resize(int, int)` method in the `java.awt.Rectangle` class:
+
+Before Refactoring:
+
+```java
+Rectangle rect = new Rectangle(10, 10, 50, 50);
+rect.resize(100, 100); // Deprecated method
+```
+
+After Refactoring:
+
+```java
+Rectangle rect = new Rectangle(10, 10, 50, 50);
+rect.setSize(100, 100); // Non-deprecated method
+```
+
+In the refactored code, we simply replaced the deprecated method `resize(int, int)` with the non-deprecated method `setSize(int, int)` as suggested in the Javadoc comment. This change will ensure that our code will continue to work correctly in future versions of Java that may remove the deprecated method.

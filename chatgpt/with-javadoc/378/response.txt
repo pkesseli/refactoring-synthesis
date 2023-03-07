@@ -1,0 +1,33 @@
+# Response Time: 90.83123254776001
+Sure, here's an example of refactoring code that uses the deprecated method `javax.swing.text.WrappedPlainView.drawSelectedText(Graphics, int, int, int, int)` to the new method `javax.swing.text.WrappedPlainView.drawSelectedText(Graphics2D, float, float, int, int)`:
+
+Before refactoring:
+```java
+public class MyWrappedPlainView extends WrappedPlainView {
+
+    @Override
+    public void drawSelectedText(Graphics g, int x, int y, int p0, int p1) {
+        // Draw selected text using the deprecated method
+        super.drawSelectedText(g, x, y, p0, p1);
+    }
+    
+}
+```
+
+After refactoring:
+```java
+public class MyWrappedPlainView extends WrappedPlainView {
+
+    @Override
+    public void drawSelectedText(Graphics g, int x, int y, int p0, int p1) {
+        // Create a Graphics2D object from the original Graphics object
+        Graphics2D g2d = (Graphics2D) g;
+        
+        // Draw selected text using the new method
+        super.drawSelectedText(g2d, (float) x, (float) y, p0, p1);
+    }
+    
+}
+```
+
+In the refactored code, we create a `Graphics2D` object from the original `Graphics` object using a type cast, and then pass this object and the parameters `x` and `y` to the new method `drawSelectedText(Graphics2D, float, float, int, int)`. The other parameters `p0` and `p1` remain the same.

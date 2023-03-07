@@ -1,0 +1,17 @@
+# Response Time: 8.90619158744812
+Sure, here's an example of how you can refactor code that uses the deprecated method `javax.swing.JRootPane.getMenuBar()`:
+
+```
+// Before refactoring
+JFrame frame = new JFrame("My Frame");
+JMenuBar menuBar = frame.getRootPane().getMenuBar();
+menuBar.add(new JMenu("File"));
+
+// After refactoring
+JFrame frame = new JFrame("My Frame");
+JMenuBar menuBar = new JMenuBar();
+frame.setJMenuBar(menuBar);
+menuBar.add(new JMenu("File"));
+```
+
+In the refactored code, we've replaced the use of `getMenuBar()` with `setJMenuBar()`, which is the recommended way to set the menu bar for a `JFrame`. We've also created a new `JMenuBar` instance instead of getting it from the root pane, and added a menu to it using the `add()` method.

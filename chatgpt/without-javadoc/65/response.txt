@@ -1,0 +1,32 @@
+# Response Time: 18.208604097366333
+Sure, here is an example of how you could refactor code that uses the deprecated method `java.awt.Frame.setCursor(int)`:
+
+Before refactoring:
+```java
+import java.awt.Cursor;
+import java.awt.Frame;
+
+public class Main {
+    public static void main(String[] args) {
+        Frame frame = new Frame();
+        frame.setCursor(Cursor.HAND_CURSOR); // Deprecated method
+    }
+}
+```
+
+After refactoring:
+```java
+import java.awt.Cursor;
+import java.awt.Frame;
+import java.awt.Toolkit;
+
+public class Main {
+    public static void main(String[] args) {
+        Frame frame = new Frame();
+        Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        frame.setCursor(handCursor);
+    }
+}
+```
+
+In this refactored example, we've replaced the deprecated `setCursor(int)` method with `setCursor(Cursor)` and obtained the `Cursor` instance using `Cursor.getPredefinedCursor(int)` instead. This method returns a predefined `Cursor` object for the specified cursor type, which is a recommended replacement for the deprecated method. We've also added an import statement for the `Toolkit` class, which is necessary for the `Cursor.getPredefinedCursor(int)` method to work properly.

@@ -1,0 +1,15 @@
+# Response Time: 42.76417088508606
+Sure, here's an example of how you could refactor your code to use the replacement method, `CounterMonitorMBean.getThreshold(ObjectName)` instead of the deprecated method, `CounterMonitorMBean.getThreshold()`:
+
+```java
+// Before refactoring:
+CounterMonitorMBean counterMonitor = // initialize counter monitor
+Number threshold = counterMonitor.getThreshold(); // deprecated method
+
+// After refactoring:
+CounterMonitorMBean counterMonitor = // initialize counter monitor
+ObjectName objectName = // initialize object name for the MBean
+Number threshold = counterMonitor.getThreshold(objectName); // replacement method
+```
+
+As you can see, the main change here is that we're now passing an `ObjectName` parameter to the `getThreshold()` method instead of calling it without any parameters. This should give you the same functionality as before, but without using the deprecated method.

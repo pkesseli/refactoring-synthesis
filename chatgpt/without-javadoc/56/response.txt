@@ -1,0 +1,21 @@
+# Response Time: 19.917927742004395
+Certainly! Here's an example of how you could refactor code that uses the deprecated `normalizeMimeType` method in the `DataFlavor` class:
+
+Before refactoring:
+
+```java
+String mimeType = "text/plain; charset=utf-8";
+String normalizedMimeType = DataFlavor.normalizeMimeType(mimeType);
+System.out.println(normalizedMimeType);
+```
+
+After refactoring:
+
+```java
+String mimeType = "text/plain; charset=utf-8";
+DataFlavor dataFlavor = new DataFlavor(mimeType);
+String normalizedMimeType = dataFlavor.getMimeType();
+System.out.println(normalizedMimeType);
+```
+
+In the refactored code, we create a new `DataFlavor` object using the MIME type string, and then call the `getMimeType()` method to retrieve the normalized MIME type. This method returns the same result as the deprecated `normalizeMimeType` method.

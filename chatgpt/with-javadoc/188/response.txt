@@ -1,0 +1,44 @@
+# Response Time: 74.8449318408966
+Sure, here's an example of how you could refactor code that uses the deprecated `java.rmi.server.LogStream.write(byte[], int, int)` method.
+
+Suppose you have the following code:
+
+```
+import java.rmi.server.LogStream;
+
+public class MyLogger {
+    private LogStream log;
+
+    public MyLogger(LogStream log) {
+        this.log = log;
+    }
+
+    public void log(String message) {
+        log.write(message.getBytes(), 0, message.length());
+    }
+}
+```
+
+To refactor this code, you could replace the deprecated `write(byte[], int, int)` method with the non-deprecated `write(int)` method. Here's how the refactored code would look:
+
+```
+import java.rmi.server.LogStream;
+
+public class MyLogger {
+    private LogStream log;
+
+    public MyLogger(LogStream log) {
+        this.log = log;
+    }
+
+    public void log(String message) {
+        byte[] bytes = message.getBytes();
+        for (byte b : bytes) {
+            log.write(b);
+        }
+        log.write('\n');
+    }
+}
+```
+
+In the refactored code, we first convert the `message` string to a byte array using the `getBytes()` method. Then, instead of using the deprecated `write(byte[], int, int)` method, we iterate over each byte in the byte array and write it to the log using the non-deprecated `write(int)` method. Finally, we write a newline character to the log to separate each log message.

@@ -1,0 +1,26 @@
+# Response Time: 12.123373746871948
+Sure, here's an example of how to refactor code that uses the deprecated `getComponentAtIndex` method in `javax.swing.JMenuBar`:
+
+Before refactoring:
+
+```java
+JMenuBar menuBar = new JMenuBar();
+// ... code that adds menu items to the menu bar ...
+
+// Access the menu item at index 0
+JMenu firstMenu = (JMenu) menuBar.getComponentAtIndex(0);
+// ... do something with the first menu ...
+```
+
+After refactoring:
+
+```java
+JMenuBar menuBar = new JMenuBar();
+// ... code that adds menu items to the menu bar ...
+
+// Access the menu item at index 0
+JMenu firstMenu = (JMenu) menuBar.getMenu(0);
+// ... do something with the first menu ...
+```
+
+In the refactored code, we've replaced the deprecated `getComponentAtIndex` method with the non-deprecated `getMenu` method. This method returns the menu item at the specified index, so we can still access the first menu item by passing in an index of 0. This refactored code should work just as well as the original code, but without the use of a deprecated method.

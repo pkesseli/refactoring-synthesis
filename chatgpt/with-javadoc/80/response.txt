@@ -1,0 +1,43 @@
+# Response Time: 15.779827117919922
+Sure, here's an example of how you can refactor code that uses the deprecated `minimumSize()` method to use the `getMinimumSize()` method instead:
+
+```java
+import java.awt.List;
+
+public class MyList extends List {
+
+    public MyList(int rows) {
+        super(rows);
+    }
+
+    public void doSomething() {
+        // Deprecated method
+        int minSize = minimumSize();
+        // Do something with minSize
+    }
+}
+```
+
+Here's how you can refactor the code to use the non-deprecated `getMinimumSize()` method:
+
+```java
+import java.awt.List;
+import java.awt.Dimension;
+
+public class MyList extends List {
+
+    public MyList(int rows) {
+        super(rows);
+    }
+
+    public void doSomething() {
+        // Non-deprecated method
+        Dimension minSize = getMinimumSize();
+        int width = (int) minSize.getWidth();
+        int height = (int) minSize.getHeight();
+        // Do something with width and height
+    }
+}
+```
+
+As you can see, instead of calling the deprecated `minimumSize()` method, we call the non-deprecated `getMinimumSize()` method, which returns a `Dimension` object representing the minimum size of the list. We then extract the width and height from the `Dimension` object using the `getWidth()` and `getHeight()` methods, respectively. Finally, we do something with the width and height values, just like we did with the `minSize` value in the original code.

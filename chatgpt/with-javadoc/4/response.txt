@@ -1,0 +1,32 @@
+# Response Time: 11.464472532272339
+Sure! Here's an example of how to refactor code that uses the deprecated `getTotalPhysicalMemorySize()` method to use `getTotalMemorySize()` instead:
+
+Before:
+
+```
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+
+public class MemoryUtil {
+    public static long getTotalPhysicalMemory() {
+        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+        return osBean.getTotalPhysicalMemorySize();
+    }
+}
+```
+
+After:
+
+```
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+
+public class MemoryUtil {
+    public static long getTotalPhysicalMemory() {
+        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+        return osBean.getTotalMemorySize();
+    }
+}
+```
+
+As you can see, the only change needed was to replace `getTotalPhysicalMemorySize()` with `getTotalMemorySize()`. This change is backward-compatible, meaning that the new code will still work with older versions of Java that don't have the deprecated method.

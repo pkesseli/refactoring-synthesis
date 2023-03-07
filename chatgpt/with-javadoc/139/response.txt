@@ -1,0 +1,63 @@
+# Response Time: 19.795165300369263
+
+
+Sure, here's an example of refactoring code that uses `finalize()` method to instead use `Cleaner` class.
+
+Before refactoring:
+
+```java
+public class MyResource {
+  // Non-heap resources
+  private Connection conn;
+  private Statement stmt;
+  
+  // ... constructor, methods, etc.
+  
+  @Override
+  protected void finalize() throws Throwable {
+    try {
+      stmt.close();
+    } finally {
+      conn.close();
+    }
+    super.finalize();
+  }
+}
+```
+
+After refactoring:
+
+```java
+public class MyResource implements AutoCloseable {
+  // Non-heap resources
+  private Connection conn;
+  private Statement stmt;
+  
+  private static final Cleaner CLEANER = Cleaner.create();
+  private final Cleaner.Cleanable cleanable;
+  
+  // ... constructor, methods, etc.
+  
+  private void cleanUp() {
+    try {
+      stmt.close();
+    } finally {
+      conn.close();
+    }
+  }
+  
+  @Override
+  public void close() throws Exception {
+    cleanable.clean();
+  }
+  
+  public MyResource() {
+    // ... initialization of resources
+    cleanable = CLEANER.register(this, this::cleanUp);
+  }
+}
+```
+
+In the refactored code, we've removed the `finalize()` method and instead implemented the `AutoCloseable` interface. The `cleanUp()` method is responsible for releasing resources and is called by the `Cleaner` object when the object becomes unreachable. The `close()` method is used to explicitly release the resources and is called by the user of the class. The `Cleaner` object is created statically and used to register the object for cleaning up when it becomes unreachable.
+
+By using `Cleaner` instead of `finalize()`, we have more control over the timing and order of resource cleanup, as well as avoiding potential performance issues, deadlocks, and hangs caused by `finalize()`.

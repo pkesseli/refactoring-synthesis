@@ -1,0 +1,17 @@
+# Response Time: 10.997793674468994
+Sure, here's an example of how you could refactor your code to avoid using the deprecated `getMenuBar()` method in `javax.swing.JInternalFrame`:
+
+```
+// Old code using deprecated getMenuBar() method
+JInternalFrame myFrame = new JInternalFrame("My Frame", true, true, true, true);
+JMenuBar myMenuBar = myFrame.getMenuBar();
+myMenuBar.add(myMenuItem);
+
+// Refactored code using setJMenuBar() method
+JInternalFrame myFrame = new JInternalFrame("My Frame", true, true, true, true);
+JMenuBar myMenuBar = new JMenuBar();
+myMenuBar.add(myMenuItem);
+myFrame.setJMenuBar(myMenuBar);
+```
+
+In the refactored code, we create a new `JMenuBar` object and add our menu item to it. Then, instead of using the deprecated `getMenuBar()` method to retrieve the internal frame's menu bar, we use the non-deprecated `setJMenuBar()` method to set our newly created menu bar to the internal frame. This ensures that our code remains up to date and compatible with future versions of Java.

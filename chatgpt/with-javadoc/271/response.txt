@@ -1,0 +1,79 @@
+# Response Time: 172.93999099731445
+
+
+Sure, here's an example of how you can refactor your code to avoid using the `finalize()` method and use alternative cleanup mechanisms:
+
+Original code with deprecated `finalize()` method:
+
+```java
+import javax.imageio.stream.FileImageOutputStream;
+import java.io.File;
+import java.io.IOException;
+
+public class ImageWriter {
+    private FileImageOutputStream outputStream;
+    
+    public ImageWriter(File file) throws IOException {
+        outputStream = new FileImageOutputStream(file);
+    }
+    
+    @Override
+    protected void finalize() throws IOException {
+        outputStream.close();
+    }
+    
+    // other methods to write images...
+}
+```
+
+Refactored code without `finalize()` method:
+
+```java
+import javax.imageio.stream.FileImageOutputStream;
+import java.io.File;
+import java.io.IOException;
+
+public class ImageWriter {
+    private FileImageOutputStream outputStream;
+    private File outputFile;
+    
+    public ImageWriter(File file) throws IOException {
+        outputFile = file;
+        outputStream = new FileImageOutputStream(outputFile);
+    }
+    
+    public void close() throws IOException {
+        outputStream.close();
+    }
+    
+    // other methods to write images...
+}
+```
+
+In the refactored code, we've introduced a `close()` method to explicitly close the `FileImageOutputStream`. This method can be called by the user of the class when they're done writing images to the output file. 
+
+It's important to note that if the `ImageWriter` class is used in a try-with-resources block, then the `close()` method will be called automatically when the block is exited. 
+
+Here's an example of how the refactored code can be used:
+
+```java
+import java.io.File;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            File outputFile = new File("output.png");
+            
+            // Using try-with-resources to automatically close the ImageWriter
+            try (ImageWriter writer = new ImageWriter(outputFile)) {
+                // Write images using writer methods...
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+In this example, the `ImageWriter` instance is created inside a try-with-resources block, which automatically calls the `close()` method when the block is exited, ensuring that the `FileImageOutputStream` is properly closed.

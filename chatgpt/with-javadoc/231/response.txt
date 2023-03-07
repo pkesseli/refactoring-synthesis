@@ -1,0 +1,22 @@
+# Response Time: 96.14444851875305
+
+
+Sure, here is an example of how you can refactor your code to remove the usage of the deprecated `getYear()` method in `java.sql.Time`:
+
+Before refactoring:
+
+```java
+Time time = new Time(System.currentTimeMillis());
+int year = time.getYear(); // deprecated method
+```
+
+After refactoring:
+
+```java
+LocalDateTime localDateTime = time.toLocalDateTime();
+int year = localDateTime.getYear();
+```
+
+In the refactored code, we first create a `LocalDateTime` object from the `Time` object using the `toLocalDateTime()` method. Then we retrieve the year from the `LocalDateTime` object using the non-deprecated `getYear()` method. This gives us the same functionality as the deprecated `getYear()` method without using any deprecated methods.
+
+Note: `java.sql.Time` is a time-of-day representation, and does not contain any date information. Therefore, when converting to a `LocalDateTime`, the date will be set to the epoch day (1970-01-01). If you need to work with both the time and date, you may need to consider using a different class such as `java.sql.Timestamp` or `java.time.LocalDateTime`.

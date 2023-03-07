@@ -1,0 +1,32 @@
+# Response Time: 11.883949041366577
+Sure, here is an example of refactoring code that uses `DataInputStream.readLine()` to use `BufferedReader.readLine()` instead:
+
+Before refactoring:
+```java
+try {
+    FileInputStream fileInputStream = new FileInputStream("example.txt");
+    DataInputStream dataInputStream = new DataInputStream(fileInputStream);
+    String line;
+    while ((line = dataInputStream.readLine()) != null) {
+        System.out.println(line);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+```
+
+After refactoring:
+```java
+try {
+    FileInputStream fileInputStream = new FileInputStream("example.txt");
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+    String line;
+    while ((line = bufferedReader.readLine()) != null) {
+        System.out.println(line);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+```
+
+In the refactored code, we have replaced `DataInputStream` with `BufferedReader` and wrapped `FileInputStream` with `InputStreamReader` to convert bytes to characters. Now the code should read lines of text correctly.

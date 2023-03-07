@@ -1,0 +1,18 @@
+# Response Time: 61.20003271102905
+Sure, here's an example of how to refactor code that uses the deprecated `setLoopbackMode` method of `MulticastSocket` to use the recommended `setOption` method instead:
+
+Before refactoring:
+```java
+MulticastSocket socket = new MulticastSocket();
+socket.setLoopbackMode(false);
+```
+
+After refactoring:
+```java
+MulticastSocket socket = new MulticastSocket();
+socket.setOption(StandardSocketOptions.IP_MULTICAST_LOOP, false);
+```
+
+In the refactored code, we use the `setOption` method with the `IP_MULTICAST_LOOP` option from the `StandardSocketOptions` enum, which replaces the deprecated `setLoopbackMode` method. The `setOption` method takes two parameters: the option to set, and the value to set it to. In this case, we pass `StandardSocketOptions.IP_MULTICAST_LOOP` as the option, and `false` as the value to disable loopback mode.
+
+Note that in the refactored code, we don't need to specify the option's data type explicitly, since it is inferred from the type of the value we pass to `setOption`.

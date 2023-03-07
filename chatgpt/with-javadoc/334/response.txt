@@ -1,0 +1,50 @@
+# Response Time: 115.75271320343018
+Sure! Here's an example of refactoring the deprecated method `javax.swing.plaf.basic.BasicSplitPaneUI.createKeyboardUpLeftListener()` using the recommended approach.
+
+Deprecated code:
+
+```java
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+import java.awt.event.KeyEvent;
+
+public class MySplitPane extends JSplitPane {
+
+    public MySplitPane(int orientation) {
+        super(orientation);
+        BasicSplitPaneUI ui = (BasicSplitPaneUI) getUI();
+        ui.getDivider().addKeyListener(ui.createKeyboardUpLeftListener());
+    }
+    
+    // Other methods
+}
+```
+
+Refactored code:
+
+```java
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyAdapter;
+
+public class MySplitPane extends JSplitPane {
+
+    public MySplitPane(int orientation) {
+        super(orientation);
+        BasicSplitPaneUI ui = (BasicSplitPaneUI) getUI();
+        ui.getDivider().addKeyListener(new KeyboardUpLeftListener());
+    }
+    
+    private class KeyboardUpLeftListener extends KeyAdapter {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
+                // Handle key event
+            }
+        }
+    }
+    
+    // Other methods
+}
+```
+
+In the refactored code, we create a new `KeyboardUpLeftListener` class that extends `KeyAdapter` and overrides the `keyPressed` method. This method checks whether the pressed key is either `VK_UP` or `VK_LEFT` and handles the key event accordingly. We then instantiate this listener class and add it to the divider using the `addKeyListener` method. This approach avoids using the deprecated `createKeyboardUpLeftListener()` method and provides a cleaner, more modern solution.

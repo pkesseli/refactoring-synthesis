@@ -1,0 +1,45 @@
+# Response Time: 20.784879207611084
+Sure, here's an example of refactoring code that uses `java.net.URLDecoder.decode(String)` to use the recommended replacement method:
+
+Before refactoring:
+
+```java
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+public class Example {
+    public static void main(String[] args) {
+        String encodedString = "Hello%2C+World%21";
+        String decodedString;
+        try {
+            decodedString = URLDecoder.decode(encodedString, "UTF-8");
+            System.out.println(decodedString);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
+public class Example {
+    public static void main(String[] args) {
+        String encodedString = "Hello%2C+World%21";
+        String decodedString = URLDecoder.decode(encodedString, StandardCharsets.UTF_8);
+        System.out.println(decodedString);
+    }
+}
+```
+
+In the refactored code, we've made the following changes:
+
+1. Import `StandardCharsets` from `java.nio.charset` instead of using `"UTF-8"` directly.
+2. Remove the `try`/`catch` block and replace it with a simple call to `URLDecoder.decode()` using the `StandardCharsets.UTF_8` constant. This is because the `UnsupportedEncodingException` that could be thrown by the deprecated method is now unchecked in the new method, so there's no need to catch it.
+
+Note that if you're using an older version of Java that doesn't have `StandardCharsets`, you can replace it with `Charset.forName("UTF-8")`.

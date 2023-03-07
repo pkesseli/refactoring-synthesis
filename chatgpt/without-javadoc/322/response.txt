@@ -1,0 +1,16 @@
+# Response Time: 8.869070291519165
+Sure! 
+
+Instead of using the deprecated method `getComponentAtIndex(int)`, you can refactor your code to use the `getComponent(int)` method of the `javax.swing.JPopupMenu` class. 
+
+Here's an example:
+
+```
+// Deprecated method
+Component component = popupMenu.getComponentAtIndex(index);
+
+// Refactored code
+Component component = popupMenu.getComponent(index);
+```
+
+In the refactored code, we are using the non-deprecated `getComponent(int)` method instead of the deprecated `getComponentAtIndex(int)` method. This change will ensure that our code continues to work correctly even if the deprecated method is removed in future versions of Java.

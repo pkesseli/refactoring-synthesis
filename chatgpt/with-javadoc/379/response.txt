@@ -1,0 +1,41 @@
+# Response Time: 57.952316761016846
+
+
+Sure, here's an example of how you could refactor code that uses the deprecated method `javax.swing.text.WrappedPlainView.drawUnselectedText(Graphics, int, int, int, int)` to use the replacement method `WrappedPlainView.drawUnselectedText(Graphics2D, float, float, int, int)`:
+
+Before refactoring:
+
+```java
+public class MyView extends WrappedPlainView {
+    
+    // Other methods...
+    
+    @Override
+    protected void drawUnselectedText(Graphics g, int startOffset, int endOffset, int x, int y) {
+        // Do something with g...
+        super.drawUnselectedText(g, startOffset, endOffset, x, y);
+    }
+}
+```
+
+After refactoring:
+
+```java
+public class MyView extends WrappedPlainView {
+    
+    // Other methods...
+    
+    @Override
+    protected void drawUnselectedText(Graphics g, int startOffset, int endOffset, int x, int y) {
+        Graphics2D g2d = (Graphics2D) g.create();
+        try {
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            super.drawUnselectedText(g2d, (float) x, (float) y, startOffset, endOffset);
+        } finally {
+            g2d.dispose();
+        }
+    }
+}
+```
+
+In this example, we create a new `Graphics2D` object from the original `Graphics` object using the `create()` method, which allows us to set the desired rendering hints. We then call the replacement method `drawUnselectedText(Graphics2D, float, float, int, int)` with the appropriate arguments, casting `x` and `y` to floats to match the new method signature. Finally, we dispose of the `Graphics2D` object to free up resources.

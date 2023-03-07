@@ -1,0 +1,36 @@
+# Response Time: 33.26866579055786
+Sure! Here's an example of how to refactor code that uses the deprecated `newInstance` method to use the new `newFactory` method instead:
+
+Before refactoring:
+
+```
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+
+public class MyParser {
+    private XMLInputFactory factory = XMLInputFactory.newInstance("javax.xml.stream.XMLInputFactory",
+            ClassLoader.getSystemClassLoader());
+    
+    public void parse(String xml) throws XMLStreamException {
+        // use factory to create XMLStreamReader and parse XML
+    }
+}
+```
+
+After refactoring:
+
+```
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+
+public class MyParser {
+    private XMLInputFactory factory = XMLInputFactory.newFactory("javax.xml.stream.XMLInputFactory",
+            ClassLoader.getSystemClassLoader());
+    
+    public void parse(String xml) throws XMLStreamException {
+        // use factory to create XMLStreamReader and parse XML
+    }
+}
+```
+
+As you can see, the only change that needs to be made is to replace the `newInstance` method with the `newFactory` method. The `newFactory` method has the same signature as the `newInstance` method, so the arguments passed to it can remain the same. The behavior of the code remains unchanged.

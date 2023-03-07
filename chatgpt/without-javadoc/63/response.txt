@@ -1,0 +1,20 @@
+# Response Time: 14.120150327682495
+Sure, I can provide an example of how to refactor the deprecated `getMaxDecent()` method in Java's `FontMetrics` class.
+
+Instead of using `getMaxDecent()`, you can use the `getDescent()` method, which provides the same functionality. Here's an example of how you can modify your code to use `getDescent()` instead:
+
+Before refactoring:
+
+```
+FontMetrics fm = ...; // obtain a FontMetrics object
+int descent = fm.getMaxDecent();
+```
+
+After refactoring:
+
+```
+FontMetrics fm = ...; // obtain a FontMetrics object
+int descent = fm.getDescent();
+```
+
+As you can see, the only change needed is to replace the deprecated `getMaxDecent()` method with `getDescent()`. This will ensure that your code continues to work correctly, even as Java evolves and changes over time.

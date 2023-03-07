@@ -1,0 +1,24 @@
+# Response Time: 10.71822476387024
+Sure! Here's an example of how you can refactor your code to avoid using the deprecated `enableResizedPosting()` method:
+
+```java
+// Deprecated code
+TableColumn column = table.getColumnModel().getColumn(index);
+column.setResizable(true);
+column.enableResizedPosting();
+
+// Refactored code
+TableColumn column = table.getColumnModel().getColumn(index);
+column.setResizable(true);
+column.addPropertyChangeListener(new PropertyChangeListener() {
+    public void propertyChange(PropertyChangeEvent e) {
+        if ("width".equals(e.getPropertyName())) {
+            // Do something when the column is resized
+        }
+    }
+});
+```
+
+In the refactored code, we replace the `enableResizedPosting()` method with a `PropertyChangeListener`. This listener is notified whenever the column's width changes, allowing us to perform any necessary actions in response to the resize event.
+
+Note that you can customize the behavior of the listener to suit your needs, for example, by checking the old and new column widths to see how much the column has been resized.

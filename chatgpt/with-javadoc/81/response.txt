@@ -1,0 +1,40 @@
+# Response Time: 12.17679476737976
+
+
+Sure! Here is an example of how to refactor the `minimumSize(int)` method to use `getMinimumSize(int)` instead, in Java:
+
+Before refactoring:
+
+```
+import java.awt.List;
+
+public class MyList extends List {
+    public MyList(int numRows, boolean multipleMode) {
+        super(numRows, multipleMode);
+    }
+
+    public void doSomething() {
+        int minSize = minimumSize(10);
+        // Do something with minSize...
+    }
+}
+```
+
+After refactoring:
+
+```
+import java.awt.List;
+
+public class MyList extends List {
+    public MyList(int numRows, boolean multipleMode) {
+        super(numRows, multipleMode);
+    }
+
+    public void doSomething() {
+        int minSize = getMinimumSize(10);
+        // Do something with minSize...
+    }
+}
+```
+
+As you can see, the only change is to replace the call to the `minimumSize(int)` method with a call to `getMinimumSize(int)`. This ensures that your code will continue to work as expected, even as new versions of Java are released.

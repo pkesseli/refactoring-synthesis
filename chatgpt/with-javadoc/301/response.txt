@@ -1,0 +1,34 @@
+# Response Time: 49.515846729278564
+Sure, here's an example of how you could refactor code that uses the deprecated `getPeerCertificateChain()` method to use the recommended `getPeerCertificates()` method instead:
+
+Before refactoring:
+
+```java
+import javax.net.ssl.SSLSession;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
+
+SSLSession session = ... // obtain SSLSession object
+X509Certificate[] peerCertificates = (X509Certificate[]) session.getPeerCertificateChain();
+// do something with peerCertificates
+```
+
+After refactoring:
+
+```java
+import javax.net.ssl.SSLSession;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
+
+SSLSession session = ... // obtain SSLSession object
+Certificate[] peerCertificates = session.getPeerCertificates();
+X509Certificate[] x509PeerCertificates = new X509Certificate[peerCertificates.length];
+for (int i = 0; i < peerCertificates.length; i++) {
+    x509PeerCertificates[i] = (X509Certificate) peerCertificates[i];
+}
+// do something with x509PeerCertificates
+```
+
+In the refactored code, we first obtain the `Certificate[]` array using the `getPeerCertificates()` method, which is the recommended replacement for `getPeerCertificateChain()`. However, this method returns an array of `Certificate` objects, which we then need to convert to an array of `X509Certificate` objects before we can use them. 
+
+We achieve this by creating a new `X509Certificate[]` array with the same length as the `Certificate[]` array, and then iterating over each element in the `Certificate[]` array and casting it to an `X509Certificate`. Finally, we can use the resulting `X509Certificate[]` array as needed.

@@ -1,0 +1,63 @@
+# Response Time: 31.14847183227539
+Sure, here's an example of how you could refactor code that uses `java.awt.Polygon.getBoundingBox()`:
+
+Before refactoring:
+
+```java
+import java.awt.Polygon;
+import java.awt.Rectangle;
+
+public class PolygonExample {
+    public static void main(String[] args) {
+        Polygon polygon = new Polygon(new int[]{0, 10, 20}, new int[]{0, 20, 0}, 3);
+        Rectangle boundingBox = polygon.getBoundingBox();
+        System.out.println("Bounding box: " + boundingBox);
+    }
+}
+```
+
+After refactoring:
+
+```java
+import java.awt.Polygon;
+import java.awt.Rectangle;
+
+public class PolygonExample {
+    public static void main(String[] args) {
+        Polygon polygon = new Polygon(new int[]{0, 10, 20}, new int[]{0, 20, 0}, 3);
+        Rectangle boundingBox = getBoundingBox(polygon);
+        System.out.println("Bounding box: " + boundingBox);
+    }
+    
+    private static Rectangle getBoundingBox(Polygon polygon) {
+        int xMin = Integer.MAX_VALUE;
+        int yMin = Integer.MAX_VALUE;
+        int xMax = Integer.MIN_VALUE;
+        int yMax = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < polygon.npoints; i++) {
+            int x = polygon.xpoints[i];
+            int y = polygon.ypoints[i];
+            
+            if (x < xMin) {
+                xMin = x;
+            }
+            if (x > xMax) {
+                xMax = x;
+            }
+            if (y < yMin) {
+                yMin = y;
+            }
+            if (y > yMax) {
+                yMax = y;
+            }
+        }
+        
+        return new Rectangle(xMin, yMin, xMax - xMin, yMax - yMin);
+    }
+}
+```
+
+In the refactored code, we replace the use of `polygon.getBoundingBox()` with a new method called `getBoundingBox()` that we define ourselves. This new method calculates the bounding box of the polygon by iterating over its points and finding the minimum and maximum x and y values. It then returns a new `Rectangle` object with those values.
+
+Note that the `getBoundingBox()` method could be made more efficient by using a single loop instead of four separate loops, but this implementation should be sufficient for most purposes.

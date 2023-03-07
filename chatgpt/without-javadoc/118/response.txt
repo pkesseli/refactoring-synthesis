@@ -1,0 +1,42 @@
+# Response Time: 25.896347284317017
+Sure, here's an example of how you could refactor the deprecated `java.awt.Toolkit.getFontMetrics(Font)` method to use the recommended alternative:
+
+Before refactoring:
+
+```
+import java.awt.*;
+
+public class Example {
+
+    public void calculateTextWidth(String text, Font font) {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        FontMetrics metrics = toolkit.getFontMetrics(font);
+        int width = metrics.stringWidth(text);
+        System.out.println("Text width: " + width);
+    }
+}
+```
+
+After refactoring:
+
+```
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
+
+public class Example {
+
+    public void calculateTextWidth(String text, Font font) {
+        FontRenderContext frc = new FontRenderContext(null, true, true);
+        Rectangle2D bounds = font.getStringBounds(text, frc);
+        int width = (int) Math.ceil(bounds.getWidth());
+        System.out.println("Text width: " + width);
+    }
+}
+```
+
+In the refactored code, we use the `java.awt.font.FontRenderContext` class to obtain the text bounds instead of the deprecated `java.awt.Toolkit.getFontMetrics(Font)` method. 
+
+Note that the `FontRenderContext` class takes care of antialiasing and other rendering hints, so we pass `null` for the `graphics` argument to create a default instance. We also pass `true` for the `isAntiAliased` and `usesFractionalMetrics` arguments to enable antialiasing and fractional metrics, respectively.
+
+Finally, we use `Math.ceil()` to round up the text width to the nearest integer.
