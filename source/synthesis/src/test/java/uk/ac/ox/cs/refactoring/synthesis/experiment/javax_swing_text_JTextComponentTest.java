@@ -1,4 +1,3 @@
-
 package uk.ac.ox.cs.refactoring.synthesis.experiment;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -7,10 +6,9 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 
 import org.junit.jupiter.api.Test;
 
-class javax_swing_JComponentTest {
+class javax_swing_text_JTextComponentTest {
   @Test
-  void reshape() throws Exception {
-    assertThat(synthesiseAlias("javax.swing.JComponent", "reshape", "int", "int", "int", "int"),
-        contains("setBounds"));
+  void viewToModel() throws Exception {
+    assertThat(synthesiseAlias("javax.swing.text.JTextComponent", "viewToModel", "java.awt.Point"), contains("viewToModel2D"));
   }
 }
