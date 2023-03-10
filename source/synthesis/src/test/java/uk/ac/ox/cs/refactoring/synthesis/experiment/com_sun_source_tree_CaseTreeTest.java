@@ -6,17 +6,12 @@ import static org.hamcrest.Matchers.anyOf;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-class java_security_SignatureTest {
+class com_sun_source_tree_CaseTreeTest {
+  // Is it counted as a change of return type?
   @Test
-  @Disabled("Empty javadoc")
-  void getParameter() throws Exception {
-  }
-
-  @Test
-  void setParameter() throws Exception {
-    assertThat(synthesiseAlias("java.security.Signature", "setParameter", "java.lang.String", "java.lang.Object"), anyOf(contains("setParameter")));
+  void getExpression() throws Exception {
+    assertThat(synthesiseAlias("com.sun.source.tree.CaseTree", "getExpression"), anyOf(contains("getExpressions")));
   }
 }

@@ -6,17 +6,11 @@ import static org.hamcrest.Matchers.anyOf;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-class java_security_SignatureTest {
+class java_rmi_server_UnicastRemoteObjectTest {
   @Test
-  @Disabled("Empty javadoc")
-  void getParameter() throws Exception {
-  }
-
-  @Test
-  void setParameter() throws Exception {
-    assertThat(synthesiseAlias("java.security.Signature", "setParameter", "java.lang.String", "java.lang.Object"), anyOf(contains("setParameter")));
+  void exportObject() throws Exception {
+    assertThat(synthesiseAlias("java.rmi.server.UnicastRemoteObject", "exportObject", "java.rmi.Remote"), anyOf(contains("exportObject")));
   }
 }

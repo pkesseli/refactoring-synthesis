@@ -9,14 +9,14 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-class java_security_SignatureTest {
+class java_security_SignatureSpiTest {
   @Test
   @Disabled("Empty javadoc")
-  void getParameter() throws Exception {
+  void engineGetParameter() throws Exception {
   }
 
   @Test
-  void setParameter() throws Exception {
-    assertThat(synthesiseAlias("java.security.Signature", "setParameter", "java.lang.String", "java.lang.Object"), anyOf(contains("setParameter")));
+  void engineSetParameter() throws Exception {
+    assertThat(synthesiseAlias("java.security.SignatureSpi", "engineSetParameter", "java.lang.String", "java.lang.Object"), anyOf(contains("engineSetParameter")));
   }
 }
