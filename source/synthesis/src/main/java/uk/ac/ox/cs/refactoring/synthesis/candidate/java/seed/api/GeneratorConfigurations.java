@@ -17,6 +17,9 @@ import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserFactory;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.AncestorSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.ConstantSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.ConsumerSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.FactorySeed;
@@ -93,21 +96,23 @@ public final class GeneratorConfigurations {
     final ClassLoader classLoader = ClassLoaders.createIsolated();
     final ComponentDirectory components = new ComponentDirectory();
 
+    final ParserContext parserContext = ParserFactory.create(classLoader);
     final boolean useJavaDoc = getBoolean(USE_JAVADOC, true);
-    final JavaDocSeed javaDocSeed = new JavaDocSeed(classLoader, methodToRefactor);
+    final JavaDocSeed javaDocSeed = new JavaDocSeed(parserContext, classLoader, methodToRefactor);
     final TypeSeed typeSeed = new TypeSeed(classLoader, methodToRefactor);
     final SignatureSeed signatureSeed = new SignatureSeed(classLoader, methodToRefactor);
     final FactorySeed factorySeed = new FactorySeed(classLoader);
     final ConsumerSeed consumerSeed = new ConsumerSeed(classLoader);
     final ConstantSeed constantSeed = new ConstantSeed();
     final StatementSeed statementSeed = new StatementSeed();
+    final AncestorSeed ancestorSeed = new AncestorSeed(parserContext);
 
     boolean foundCodeHints = false;
     if (useJavaDoc) {
       seed(components, javaDocSeed);
       foundCodeHints = components.size() > 0;
       if (foundCodeHints)
-        seed(components, signatureSeed, constantSeed, factorySeed, consumerSeed, statementSeed);
+        seed(components, signatureSeed, ancestorSeed, factorySeed, constantSeed, consumerSeed, statementSeed);
     }
     if (components.size() == 0)
       seed(components, typeSeed, signatureSeed, constantSeed, statementSeed);

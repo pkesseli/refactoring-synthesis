@@ -14,6 +14,8 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserFactory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.JavaDocSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
@@ -25,7 +27,8 @@ public class FactorySeedTest {
     final String fullyQualifiedClassName = "java.util.Date";
     final MethodIdentifier methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, "getHours",
         Collections.emptyList());
-    final JavaDocSeed javaDoc = new JavaDocSeed(classLoader, methodToRefactor);
+    final ParserContext parserContext = ParserFactory.create(classLoader);
+    final JavaDocSeed javaDoc = new JavaDocSeed(parserContext, classLoader, methodToRefactor);
     final ComponentDirectory components = new ComponentDirectory();
     javaDoc.seed(components);
 

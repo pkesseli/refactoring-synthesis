@@ -57,6 +57,11 @@ public class ComponentDirectory {
         .map(component -> (Component<K, V>) component);
   }
 
+  @SuppressWarnings("unchecked")
+  public <K, V> Stream<Component<K, V>> get(final K key) {
+    return components.get(key).values().stream().flatMap(List::stream).map(component -> (Component<K, V>) component);
+  }
+
   /**
    * Registers a given component in the directory.
    * 

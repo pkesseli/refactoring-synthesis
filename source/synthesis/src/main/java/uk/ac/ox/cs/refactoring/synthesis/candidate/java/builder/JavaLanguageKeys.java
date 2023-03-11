@@ -7,7 +7,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IStatement;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.LeftHandSideExpression;
 
 public final class JavaLanguageKeys {
-  
+
   private JavaLanguageKeys() {
   }
 
@@ -27,4 +27,7 @@ public final class JavaLanguageKeys {
     return new JavaLanguageKey(IExpression.class, type, true);
   }
 
+  public static JavaLanguageKey duplicate(final JavaLanguageKey key, final Type type) {
+    return new JavaLanguageKey(key.Kind, type, key.Nonnull);
+  }
 }
