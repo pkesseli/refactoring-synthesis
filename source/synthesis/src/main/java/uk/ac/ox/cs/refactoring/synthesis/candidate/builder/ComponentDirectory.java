@@ -57,11 +57,15 @@ public class ComponentDirectory {
         .map(component -> (Component<K, V>) component);
   }
 
+  @SuppressWarnings("unchecked")
+  public <K, V> Stream<Component<K, V>> get(final K key) {
+    return components.get(key).values().stream().flatMap(List::stream).map(component -> (Component<K, V>) component);
+  }
+
   /**
    * Registers a given component in the directory.
    * 
    * @param <K>       Key type.
-   * @param <V>       Component type.
    * @param key       Category under which to store the component.
    * @param component Component to register.
    */
@@ -70,6 +74,19 @@ public class ComponentDirectory {
     @SuppressWarnings("unchecked")
     final List<Component<K, ?>> converted = (List<Component<K, ?>>) bucket;
     converted.add(component);
+  }
+
+  /**
+   * Removes a previously registered component.
+   * 
+   * @param <K>       Key type.
+   * @param key       Category under which the component is stored.
+   * @param component Component to remove.
+   * @return {@link List#remove(Object)}
+   */
+  public <K> boolean remove(final K key, final Component<K, ?> component) {
+    final List<? extends Component<?, ?>> bucket = getOrCreate(key, component.size());
+    return bucket.remove(component);
   }
 
   /**

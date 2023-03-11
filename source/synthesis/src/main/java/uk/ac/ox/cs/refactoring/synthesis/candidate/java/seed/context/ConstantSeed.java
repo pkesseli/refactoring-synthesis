@@ -14,15 +14,17 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
  */
 public class ConstantSeed implements InstructionSetSeed {
 
+  /** Types for which we have already inserted constants. */
+  private final Set<Type> seededConstantTypes = new HashSet<>();
+
   @Override
   public void seed(final ComponentDirectory components) throws ClassNotFoundException, NoSuchMethodException {
     final Set<JavaLanguageKey> keys = components.parameterKeySet(JavaLanguageKey.class);
     final JavaComponents javaComponents = new JavaComponents(components);
-    final Set<Type> processedTypes = new HashSet<>();
     for (final JavaLanguageKey key : keys) {
       final Type type = key.Type;
-      if (!processedTypes.contains(type) && seed(javaComponents, key))
-        processedTypes.add(type);
+      if (seededConstantTypes.add(type))
+        seed(javaComponents, key);
     }
   }
 
@@ -37,34 +39,34 @@ public class ConstantSeed implements InstructionSetSeed {
     final Type keyType = key.Type;
     if (keyType.isPrimitiveType()) {
       switch (keyType.asPrimitiveType().getType()) {
-      case BOOLEAN:
-        javaComponents.literal(keyType, false);
-        javaComponents.literal(keyType, true);
-        break;
-      case BYTE:
-        javaComponents.literal(keyType, (byte) 0);
-        break;
-      case CHAR:
-        javaComponents.literal(keyType, '\0');
-        break;
-      case DOUBLE:
-        javaComponents.literal(keyType, 0.0);
-        break;
-      case FLOAT:
-        javaComponents.literal(keyType, 0.0f);
-        break;
-      case INT:
-        javaComponents.literal(keyType, 0);
-        javaComponents.literal(keyType, 11);
-        break;
-      case LONG:
-        javaComponents.literal(keyType, 0L);
-        break;
-      case SHORT:
-        javaComponents.literal(keyType, (short) 0);
-        break;
-      default:
-        return false;
+        case BOOLEAN:
+          javaComponents.literal(keyType, false);
+          javaComponents.literal(keyType, true);
+          break;
+        case BYTE:
+          javaComponents.literal(keyType, (byte) 0);
+          break;
+        case CHAR:
+          javaComponents.literal(keyType, '\0');
+          break;
+        case DOUBLE:
+          javaComponents.literal(keyType, 0.0);
+          break;
+        case FLOAT:
+          javaComponents.literal(keyType, 0.0f);
+          break;
+        case INT:
+          javaComponents.literal(keyType, 0);
+          javaComponents.literal(keyType, 11);
+          break;
+        case LONG:
+          javaComponents.literal(keyType, 0L);
+          break;
+        case SHORT:
+          javaComponents.literal(keyType, (short) 0);
+          break;
+        default:
+          return false;
       }
       return true;
     }

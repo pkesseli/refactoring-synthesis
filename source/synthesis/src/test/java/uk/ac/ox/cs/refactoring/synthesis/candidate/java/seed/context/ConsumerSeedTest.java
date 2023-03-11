@@ -13,6 +13,8 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserFactory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.JavaDocSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
@@ -24,11 +26,12 @@ public class ConsumerSeedTest {
     final MethodIdentifier methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, "getHours",
         Collections.emptyList());
     final ComponentDirectory components = new ComponentDirectory();
-    final JavaDocSeed javaDoc = new JavaDocSeed(classLoader, methodToRefactor);
+    final ParserContext parserContext = ParserFactory.create(classLoader);
+    final JavaDocSeed javaDoc = new JavaDocSeed(parserContext, classLoader, methodToRefactor);
     javaDoc.seed(components);
     final SignatureSeed signature = new SignatureSeed(classLoader, methodToRefactor);
     signature.seed(components);
-    final FactorySeed factory = new FactorySeed(classLoader);
+    final FactorySeed factory = new FactorySeed(classLoader, new ConstantSeed());
     factory.seed(components);
 
     final ConsumerSeed consumer = new ConsumerSeed(classLoader);

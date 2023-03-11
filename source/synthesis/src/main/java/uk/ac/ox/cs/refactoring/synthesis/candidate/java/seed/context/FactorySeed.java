@@ -19,15 +19,16 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
  */
 public class FactorySeed implements InstructionSetSeed {
 
-  /** Used as a fallback for primitive types. */
-  private final ConstantSeed constantSeed = new ConstantSeed();
-
   /** Used to analyse class types reflectively. */
   private final ClassLoader classLoader;
 
+  /** Used as a fallback for primitive types. */
+  private final ConstantSeed constantSeed;
+
   /** @param classLoader {@link #classLoader} */
-  public FactorySeed(final ClassLoader classLoader) {
+  public FactorySeed(final ClassLoader classLoader, final ConstantSeed constantSeed) {
     this.classLoader = classLoader;
+    this.constantSeed = constantSeed;
   }
 
   @Override
