@@ -7,9 +7,9 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 
 import org.junit.jupiter.api.Test;
 
-class javax_net_ssl_HandshakeCompletedEventTest {
+class javax_sql_rowset_BaseRowSetTest {
   @Test
-  void getPeerCertificateChain() throws Exception {
-    assertThat(synthesiseAlias("javax.net.ssl.HandshakeCompletedEvent", "getPeerCertificateChain"), contains("getPeerCertificates"));
+  void setUnicodeStream() throws Exception {
+    assertThat(synthesiseAlias("javax.sql.rowset.BaseRowSet", "setUnicodeStream", "int", "java.io.InputStream", "int"), contains("getCharacterStream"));
   }
 }

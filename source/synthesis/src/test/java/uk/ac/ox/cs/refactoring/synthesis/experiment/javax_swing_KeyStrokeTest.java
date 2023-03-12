@@ -7,9 +7,9 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 
 import org.junit.jupiter.api.Test;
 
-class javax_net_ssl_HandshakeCompletedEventTest {
+class javax_swing_KeyStrokeTest {
   @Test
-  void getPeerCertificateChain() throws Exception {
-    assertThat(synthesiseAlias("javax.net.ssl.HandshakeCompletedEvent", "getPeerCertificateChain"), contains("getPeerCertificates"));
+  void getKeyStroke() throws Exception {
+    assertThat(synthesiseAlias("javax.swing.KeyStroke", "getKeyStroke", "char", "boolean"), contains("getKeyStroke"));
   }
 }

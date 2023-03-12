@@ -8,14 +8,14 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 
 import org.junit.jupiter.api.Test;
 
-class javax_swing_JPasswordFieldTest {
+class javax_swing_JViewportTest {
   @Test
-  void getText1() throws Exception {
-    assertThat(synthesiseAlias("javax.swing.JPasswordField", "getText"), anyOf(contains("getPassword")));
+  void isBackingStoreEnabled() throws Exception {
+    assertThat(synthesiseAlias("javax.swing.JViewport", "isBackingStoreEnabled"), anyOf(contains("getScrollMode")));
   }
 
   @Test
-  void getText2() throws Exception {
-    assertThat(synthesiseAlias("javax.swing.JPasswordField", "getText", "int", "int"), anyOf(contains("getPassword")));
+  void setBackingStoreEnabled() throws Exception {
+    assertThat(synthesiseAlias("javax.swing.JViewport", "setBackingStoreEnabled", "boolean"), anyOf(contains("setScrollMode")));
   }
 }

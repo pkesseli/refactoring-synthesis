@@ -8,6 +8,20 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 import org.junit.jupiter.api.Test;
 
 class javax_management_monitor_MonitorMBeanTest {
+  @Test
+  void getDerivedGauge() throws Exception {
+    assertThat(synthesiseAlias("javax.management.monitor.CounterMonitor", "getDerivedGauge"), contains("getDerivedGauge"));
+  }
+
+  @Test
+  void getDerivedGaugeTimeStamp() throws Exception {
+    assertThat(synthesiseAlias("javax.management.monitor.CounterMonitor", "getDerivedGaugeTimeStamp"), contains("getDerivedGaugeTimeStamp"));
+  }
+
+  @Test
+  void getThreshold() throws Exception {
+    assertThat(synthesiseAlias("javax.management.monitor.CounterMonitor", "getThreshold"), contains("getThreshold"));
+  }
 
   @Test
   void setObservedObject() throws Exception {

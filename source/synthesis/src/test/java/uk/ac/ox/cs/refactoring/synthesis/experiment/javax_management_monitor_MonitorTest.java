@@ -9,6 +9,11 @@ import org.junit.jupiter.api.Test;
 
 class javax_management_monitor_MonitorTest {
   @Test
+  void getObservedObject() throws Exception {
+    assertThat(synthesiseAlias("javax.management.monitor.Monitor", "getObservedObject"), contains("getObservedObjects"));
+  }
+
+  @Test
   void setObservedObject() throws Exception {
     assertThat(synthesiseAlias("javax.management.monitor.Monitor", "setObservedObject", "javax.management.ObjectName"),
         contains("addObservedObject"));
