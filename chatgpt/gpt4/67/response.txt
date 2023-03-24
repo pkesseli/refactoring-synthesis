@@ -1,0 +1,41 @@
+# Response Time: 27.986929178237915
+Sure, here's an example of how to refactor code that uses the deprecated `getClipRect()` method in Java's AWT Graphics class:
+
+<<< Before refactoring:
+```
+import java.awt.Graphics;
+
+public class MyPanel extends JPanel {
+  
+  public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    
+    // Get the clipping rectangle for the graphics context
+    Rectangle clip = g.getClipRect();
+    
+    // Draw a rectangle using the clipping rectangle's dimensions
+    g.drawRect(clip.x, clip.y, clip.width, clip.height);
+  }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
+public class MyPanel extends JPanel {
+  
+  public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    
+    // Get the clipping bounds for the graphics context
+    Rectangle clip = g.getClipBounds();
+    
+    // Draw a rectangle using the clipping bounds' dimensions
+    g.drawRect(clip.x, clip.y, clip.width, clip.height);
+  }
+}
+```
+
+As you can see, we simply replaced `getClipRect()` with `getClipBounds()`, which achieves the same result and avoids using the deprecated method. We also added an import statement for `java.awt.Rectangle` since that class is used in the refactored code.

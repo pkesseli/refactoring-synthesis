@@ -1,0 +1,36 @@
+# Response Time: 20.380324602127075
+Sure! Here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.awt.Container;
+
+public class MyContainer extends Container {
+    public MyContainer() {
+        // ...
+    }
+
+    public Component locate(int x, int y) {
+        // This method is deprecated - replace with getComponentAt(x, y)
+        return getComponentAt(x, y);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.Container;
+
+public class MyContainer extends Container {
+    public MyContainer() {
+        // ...
+    }
+
+    @Override
+    public Component getComponentAt(int x, int y) {
+        return super.getComponentAt(x, y);
+    }
+}
+```
+
+In this example, we've updated the `locate` method to use the non-deprecated `getComponentAt` method instead. We've also added the `@Override` annotation to the `getComponentAt` method to ensure that we're actually overriding the superclass method.

@@ -1,0 +1,6 @@
+The method java.sql.CallableStatement.getBigDecimal​(int, int) is deprecated.
+ The related deprecation comment in Javadoc is "use getBigDecimal(int parameterIndex)
+             or getBigDecimal(String parameterName)"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

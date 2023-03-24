@@ -1,0 +1,16 @@
+# Response Time: 17.16944432258606
+Sure, here's an executable refactoring example for you:
+
+Before refactoring:
+```java
+javax.swing.JInternalFrame internalFrame = new javax.swing.JInternalFrame("My Internal Frame");
+JMenuBar menuBar = internalFrame.getMenuBar();
+```
+
+After refactoring:
+```java
+javax.swing.JInternalFrame internalFrame = new javax.swing.JInternalFrame("My Internal Frame");
+JMenuBar menuBar = internalFrame.getJMenuBar();
+``` 
+
+In the refactored code, we have replaced the deprecated `getMenuBar()` method with the recommended `getJMenuBar()` method. This will ensure that our code continues to work as expected with newer versions of Swing.

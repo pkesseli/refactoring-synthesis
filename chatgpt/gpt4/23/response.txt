@@ -1,0 +1,39 @@
+# Response Time: 31.502878189086914
+Sure! Here's an example:
+
+<<< Before refactoring: 
+```java
+import java.awt.Button;
+
+public class MyButton extends Button {
+    public MyButton(String label) {
+        super(label);
+    }
+
+    public boolean isMyButtonFocusable() {
+        return isFocusTraversable();
+    }
+}
+```
+
+>>> After refactoring:
+```java
+import java.awt.Button;
+
+public class MyButton extends Button {
+    public MyButton(String label) {
+        super(label);
+    }
+
+    @Override
+    public boolean isFocusable() {
+        return true;
+    }
+}
+```
+
+In this example, we have a custom button class called `MyButton` that extends the `java.awt.Button` class. The `isMyButtonFocusable` method in this class simply returns the result of calling the `isFocusTraversable` method, which is now deprecated.
+
+To refactor this code, we need to replace the deprecated `isFocusTraversable` method with the new `isFocusable` method. We can also mark this method as an override using the `@Override` annotation to indicate that we're replacing the behavior of the superclass method.
+
+In the refactored code, we've replaced the `isMyButtonFocusable` method with an overridden `isFocusable` method that always returns `true`, indicating that this button is focusable. This achieves the same behavior as the original code, but without using the deprecated method.

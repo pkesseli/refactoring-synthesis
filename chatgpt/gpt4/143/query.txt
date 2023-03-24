@@ -1,0 +1,9 @@
+The method java.lang.Runtime.Version.major() is deprecated.
+ The related deprecation comment in Javadoc is "As of Java SE 10, the first element of a version
+ number is not the major-release number but the feature-release
+ counter, incremented for every time-based release.  Use the Runtime.Version.feature() method in preference to this method.  For compatibility,
+ this method returns the value of the feature
+ element."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

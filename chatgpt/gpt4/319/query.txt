@@ -1,0 +1,5 @@
+The method javax.swing.JMenuBar.getComponentAtIndex​(int) is deprecated.
+ The related deprecation comment in Javadoc is "replaced by getComponent(int i)"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

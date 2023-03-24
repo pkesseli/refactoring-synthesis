@@ -1,0 +1,7 @@
+The method org.ietf.jgss.GSSContext.verifyMIC​(InputStream, InputStream, MessageProp) is deprecated.
+ The related deprecation comment in Javadoc is "The stream-based methods have been removed from RFC 8353.
+ Use GSSContext.verifyMIC(byte[], int, int, byte[], int, int, MessageProp)
+ instead."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

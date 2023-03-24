@@ -1,0 +1,40 @@
+# Response Time: 22.531996965408325
+Sure! Here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.awt.*;
+
+public class MyFrame extends Frame {
+    public MyFrame() {
+        Button b1 = new Button("Button 1");
+        Button b2 = new Button("Button 2");
+
+        add(b1);
+        add(b2);
+
+        setLayout(new FlowLayout());
+        layout();
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.*;
+
+public class MyFrame extends Frame {
+    public MyFrame() {
+        Button b1 = new Button("Button 1");
+        Button b2 = new Button("Button 2");
+
+        add(b1);
+        add(b2);
+
+        setLayout(new FlowLayout());
+        doLayout();
+    }
+}
+```
+
+In the original code, the `layout()` method is called on the container, even though it's deprecated. In the refactored code, the `doLayout()` method is used instead, as suggested in the deprecation comment. This will ensure that the container's children are laid out correctly, without using a deprecated method.

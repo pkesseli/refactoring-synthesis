@@ -1,0 +1,30 @@
+# Response Time: 22.142242670059204
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.util.Date;
+
+public class Example {
+  public static void main(String[] args) {
+    Date now = new Date();
+    int minutes = now.getMinutes();
+    System.out.println("Current minute: " + minutes);
+  }
+}
+```
+
+>>> After refactoring:
+```
+import java.util.Calendar;
+
+public class Example {
+  public static void main(String[] args) {
+    Calendar calendar = Calendar.getInstance();
+    int minutes = calendar.get(Calendar.MINUTE);
+    System.out.println("Current minute: " + minutes);
+  }
+}
+```
+
+In the above refactored code, we have replaced the deprecated `getMinutes()` method with `Calendar.get(Calendar.MINUTE)`. This is a recommended approach by the Javadoc comment to use the `Calendar` class instead of the `Date` class for more comprehensive and robust functionality.

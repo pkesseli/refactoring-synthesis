@@ -1,0 +1,5 @@
+The method java.awt.BorderLayout.addLayoutComponent​(String, Component) is deprecated.
+ The related deprecation comment in Javadoc is "replaced by addLayoutComponent(Component, Object)."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

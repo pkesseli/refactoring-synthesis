@@ -48,13 +48,16 @@ fn main() {
             })
             .unwrap_or_else(|| "".to_owned());
 
-        let mut query = format!("The method {method_name} is deprecated.");
+        let mut query = format!("The method {method_name} is deprecated.\n");
         if args.javadoc {
             query += &format!(
                 " The related deprecation comment in Javadoc is \"{deprecation_comment}\"\n"
             );
         }
-        query += "Show me a refactoring example.";
+        // query += "Show me a refactoring example.";
+        query += "Give me an executable refactoring example in the following format:\n";
+        query += "<<< Before refactoring: <code here>\n";
+        query += ">>> After refactoring: <code here>\n";
 
         let query_dir = queries_dir.join(&idx.to_string());
         if !query_dir.is_dir() {

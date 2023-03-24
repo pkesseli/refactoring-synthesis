@@ -1,0 +1,34 @@
+# Response Time: 26.915154218673706
+Sure, here's an example of how you could refactor code that uses the deprecated `setMenuBar` method to instead use the recommended `setJMenuBar` method:
+
+<<< Before refactoring:
+```
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JRootPane;
+
+public class MenuBarExample extends JFrame {
+    public MenuBarExample() {
+        JMenuBar menuBar = new JMenuBar();
+        // ...
+        JRootPane rootPane = this.getRootPane();
+        rootPane.setMenuBar(menuBar);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+
+public class MenuBarExample extends JFrame {
+    public MenuBarExample() {
+        JMenuBar menuBar = new JMenuBar();
+        // ...
+        this.setJMenuBar(menuBar);
+    }
+}
+```
+
+In the refactored version, we're simply calling `setJMenuBar` directly on the JFrame instance rather than accessing the root pane and calling the deprecated `setMenuBar` method on it. This should achieve the same result without using deprecated methods.

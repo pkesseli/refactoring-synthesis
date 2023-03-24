@@ -1,0 +1,52 @@
+# Response Time: 38.225359201431274
+<<< Before refactoring: 
+
+```java
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class MyServer {
+   public static void main(String args[]) {
+      try {
+         MyRemoteImpl obj = new MyRemoteImpl();
+         MyRemote stub = (MyRemote) UnicastRemoteObject.exportObject(obj, 0);
+         
+         Registry registry = LocateRegistry.getRegistry();
+         registry.bind("MyRemote", stub);
+         
+         System.out.println("MyServer ready.");
+      } catch (Exception e) {
+         System.err.println("MyServer exception: " + e.toString());
+         e.printStackTrace();
+      }
+   }
+}
+```
+
+>>> After refactoring:
+
+```java
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class MyServer {
+   public static void main(String args[]) {
+      try {
+         MyRemoteImpl obj = new MyRemoteImpl();
+         MyRemote stub = (MyRemote) UnicastRemoteObject.exportObject(obj, 0);
+         
+         Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+         registry.bind("MyRemote", stub);
+         
+         System.out.println("MyServer ready.");
+      } catch (Exception e) {
+         System.err.println("MyServer exception: " + e.toString());
+         e.printStackTrace();
+      }
+   }
+}
+```
+
+In the refactored code, we replaced the deprecated `LocateRegistry.getRegistry()` method with the `LocateRegistry.createRegistry()` method to create a new registry. We passed the `Registry.REGISTRY_PORT` constant as an argument to `createRegistry()` method to use the default RMI registry port. This ensures that the code works correctly without using the deprecated `RegistryHandler.registryImpl(int)` method.

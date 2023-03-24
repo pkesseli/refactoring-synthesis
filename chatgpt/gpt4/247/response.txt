@@ -1,0 +1,30 @@
+# Response Time: 26.130569458007812
+Sure, here's an example of refactoring the use of `java.util.Date.getMonth()` to `Calendar.get(Calendar.MONTH)`:
+
+<<< Before refactoring:
+```
+import java.util.Date;
+
+public class DateExample {
+    public static void main(String[] args) {
+        Date date = new Date();
+        int month = date.getMonth();
+        System.out.println("Month: " + month);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.util.Calendar;
+
+public class CalendarExample {
+    public static void main(String[] args) {
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH);
+        System.out.println("Month: " + month);
+    }
+}
+```
+
+In the refactored example, we've replaced the use of `Date.getMonth()` with `Calendar.get(Calendar.MONTH)` to follow the deprecation comment in the Javadoc. Instead of creating a `Date` object, we create a `Calendar` object using `Calendar.getInstance()`. We then get the month value using `get(Calendar.MONTH)` and print it out.

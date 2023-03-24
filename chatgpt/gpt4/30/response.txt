@@ -1,0 +1,35 @@
+# Response Time: 21.51512122154236
+As an AI language model, I don't have access to an actual codebase to demonstrate refactoring examples. However, I can provide a hypothetical example based on the given deprecation message.
+
+Assuming you have the following code that uses `minimumSize()` method:
+
+<<< Before refactoring:
+```
+import java.awt.Component;
+
+public class MyComponent extends Component {
+    public void someMethod() {
+        // ...
+        Dimension minSize = minimumSize();
+        // ...
+    }
+}
+```
+
+You can refactor it by replacing `minimumSize()` with `getMinimumSize()` method:
+
+>>> After refactoring:
+```
+import java.awt.Component;
+import java.awt.Dimension;
+
+public class MyComponent extends Component {
+    public void someMethod() {
+        // ...
+        Dimension minSize = getMinimumSize();
+        // ...
+    }
+}
+```
+
+By doing so, your code will no longer use the deprecated `minimumSize()` method, and will be compatible with JDK versions 1.1 and above.

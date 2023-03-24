@@ -1,0 +1,13 @@
+# Response Time: 14.67041015625
+Before refactoring:
+```
+MulticastSocket socket = new MulticastSocket(4446);
+socket.setLoopbackMode(true);
+```
+
+After refactoring:
+```
+MulticastSocket socket = new MulticastSocket(4446);
+socket.setOption(StandardSocketOptions.IP_MULTICAST_LOOP, true);
+```
+Note that in the refactored code, the `setOption` method of the `MulticastSocket` class is used instead of the deprecated `setLoopbackMode` method. The `IP_MULTICAST_LOOP` option from the `StandardSocketOptions` enum is passed as the first argument, and `true` is passed as the second argument to enable loopback mode.

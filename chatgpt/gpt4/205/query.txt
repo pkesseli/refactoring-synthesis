@@ -1,0 +1,5 @@
+The method java.rmi.server.Skeleton.dispatch​(Remote, RemoteCall, int, long) is deprecated.
+ The related deprecation comment in Javadoc is "no replacement"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

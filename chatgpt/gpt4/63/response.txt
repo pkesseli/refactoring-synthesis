@@ -1,0 +1,10 @@
+# Response Time: 8.503945589065552
+Sure, here is an example of refactoring code that uses the deprecated method java.awt.FontMetrics.getMaxDecent():
+
+<<< Before refactoring:
+FontMetrics fm = graphics.getFontMetrics(font);
+int descent = fm.getMaxDecent();
+
+>>> After refactoring:
+FontMetrics fm = graphics.getFontMetrics(font);
+int descent = fm.getMaxDescent(); // corrected method name

@@ -1,0 +1,46 @@
+# Response Time: 31.64761972427368
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+
+```
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+
+public class MyConnection {
+
+  public static void main(String[] args) {
+    URL url = new URL("http://www.example.com");
+    URLConnection conn = url.openConnection();
+    conn.setDefaultRequestProperty("User-Agent", "Mozilla/5.0");
+    conn.connect();
+    // rest of code to read response
+  }
+}
+```
+
+>>> After refactoring:
+
+```
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+
+public class MyConnection {
+
+  public static void main(String[] args) {
+    try {
+      URL url = new URL("http://www.example.com");
+      URLConnection conn = url.openConnection();
+      conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+      conn.connect();
+      // rest of code to read response
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+In the refactored code, we use the `setRequestProperty` method on the `conn` instance after it is obtained from `url.openConnection()`, rather than using `setDefaultRequestProperty` on the `URLConnection` class. This approach follows the deprecation comment's suggestion to use the instance-specific method, and should have the same effect as the original code. We also added a try-catch block to handle any `IOException` that may occur.

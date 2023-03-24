@@ -1,0 +1,6 @@
+The method javax.swing.ScrollPaneLayout.getViewportBorderBounds​(JScrollPane) is deprecated.
+ The related deprecation comment in Javadoc is "As of JDK version Swing1.1
+    replaced by JScrollPane.getViewportBorderBounds()."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

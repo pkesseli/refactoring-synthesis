@@ -1,0 +1,23 @@
+# Response Time: 19.218448400497437
+<<< Before refactoring:
+```
+try {
+    ObjectInputStream ois = new ObjectInputStream(inputStream);
+    String line = ois.readLine();
+} catch (IOException e) {
+    // handle exception
+}
+```
+
+>>> After refactoring:
+```
+try {
+    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+    String line = br.readLine();
+} catch (IOException e) {
+    // handle exception
+}
+``` 
+
+Explanation:
+The `ObjectInputStream.readLine()` method is deprecated because it doesn't properly convert bytes to characters. Instead, we should use a `BufferedReader` with an `InputStreamReader` to read the characters from the input stream. The `InputStreamReader` constructor allows us to specify the character encoding to be used, which in this case is `UTF-8`. We can then use the `readLine()` method of the `BufferedReader` to read a line of text from the input stream.

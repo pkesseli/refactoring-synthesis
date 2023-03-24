@@ -1,0 +1,16 @@
+# Response Time: 21.51535177230835
+Unfortunately, as a language model, I cannot provide an executable code example as I am not able to execute code. However, I can provide you with a refactoring example as follows:
+
+Before refactoring:
+```
+JRootPane rootPane = new JRootPane();
+JMenuBar menuBar = rootPane.getMenuBar();
+```
+
+After refactoring:
+```
+JRootPane rootPane = new JRootPane();
+JMenuBar menuBar = rootPane.getJMenuBar();
+```
+
+In the above example, we replaced the deprecated `getMenuBar()` method with `getJMenuBar()` method, which is the recommended approach as per the deprecation comment in the Javadoc. This should help to avoid any potential issues and ensure the code remains up-to-date with the latest version of Swing.

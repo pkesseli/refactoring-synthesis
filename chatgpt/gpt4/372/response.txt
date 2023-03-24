@@ -1,0 +1,21 @@
+# Response Time: 26.05508017539978
+Before refactoring:
+```
+int x = Utilities.getTabbedTextOffset(text, fm, x0, e, this, start);
+```
+
+After refactoring:
+```
+float[] tabs = {x0};
+TabStop[] tabStops = new TabStop[tabs.length];
+for (int i = 0; i < tabs.length; i++) {
+    tabStops[i] = new TabStop(tabs[i], TabStop.ALIGN_LEFT, TabStop.LEAD_NONE);
+}
+TabSet tabSet = new TabSet(tabStops);
+int x = (int)Utilities.getTabbedTextOffset(text, fm, x0, e, tabSet, start);
+``` 
+Note: 
+- We create an array of float for tab positions.
+- We create a `TabStop` object for each tab position, and add it to an array of `TabStop`.
+- We create a `TabSet` object from the array of `TabStop`.
+- We call the updated `getTabbedTextOffset` method with the new `TabSet` object.

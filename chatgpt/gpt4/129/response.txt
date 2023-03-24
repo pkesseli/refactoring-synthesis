@@ -1,0 +1,16 @@
+# Response Time: 19.00816011428833
+Before refactoring:
+```
+File file = new File("path/to/file");
+URL url = file.toURL();
+```
+
+After refactoring:
+```
+File file = new File("path/to/file");
+URI uri = file.toURI();
+URL url = uri.toURL();
+``` 
+
+Explanation:
+The `toURL()` method is deprecated because it does not handle characters that are illegal in URLs. The recommended way to convert a file path to a URL is to first convert it to a URI using the `toURI()` method, and then convert the URI to a URL using the `toURL()` method. Therefore, the refactored code first creates a `File` object for the file path, then converts it to a `URI` using the `toURI()` method, and finally converts the `URI` to a `URL` using the `toURL()` method. This will properly handle any illegal characters in the file path.

@@ -1,0 +1,18 @@
+# Response Time: 16.127607345581055
+Sure, here's an example of how you could refactor code using the deprecated `java.awt.Rectangle.move(int, int)` method:
+
+<<< Before refactoring:
+
+```java
+Rectangle rect = new Rectangle(10, 10, 100, 100);
+rect.move(20, 20);
+```
+
+>>> After refactoring:
+
+```java
+Rectangle rect = new Rectangle(10, 10, 100, 100);
+rect.setLocation(30, 30);
+```
+
+In the refactored code, the `move` method has been replaced with `setLocation` to achieve the same result. The `setLocation` method is recommended over the deprecated `move` method since it explicitly sets the new position of the rectangle rather than just moving it by a relative distance.

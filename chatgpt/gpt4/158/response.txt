@@ -1,0 +1,18 @@
+# Response Time: 16.38634991645813
+Sure! Here's an example refactoring using the deprecated `setScale(int, int)` method:
+
+<<< Before refactoring:
+```
+BigDecimal value = new BigDecimal("10.123456");
+value = value.setScale(2, BigDecimal.ROUND_HALF_UP);
+System.out.println(value);
+```
+
+>>> After refactoring:
+```
+BigDecimal value = new BigDecimal("10.123456");
+value = value.setScale(2, RoundingMode.HALF_UP);
+System.out.println(value);
+```
+
+In the refactored code, we replaced the second argument (`int`) of the `setScale` method with a `RoundingMode` constant (`RoundingMode.HALF_UP`) to use the recommended method `setScale(int, RoundingMode)` instead.

@@ -1,0 +1,34 @@
+# Response Time: 24.551342010498047
+Sure! Here's an example of how to refactor the deprecated `setTTL` method in `java.net.DatagramSocketImpl` to use `setTimeToLive` instead:
+
+<<< Before refactoring:
+```
+import java.net.*;
+
+public class MyDatagramSocket {
+    private DatagramSocket socket;
+    
+    public MyDatagramSocket(int port) throws SocketException {
+        socket = new DatagramSocket(port);
+        // set TTL to 64
+        socket.getImpl().setTTL((byte) 64);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.net.*;
+
+public class MyDatagramSocket {
+    private DatagramSocket socket;
+    
+    public MyDatagramSocket(int port) throws SocketException {
+        socket = new DatagramSocket(port);
+        // set TTL to 64
+        socket.setTimeToLive(64);
+    }
+}
+```
+
+In the refactored code, we have replaced the deprecated `setTTL` method with the recommended `setTimeToLive` method, which achieves the same functionality of setting the TTL value for the socket to 64.

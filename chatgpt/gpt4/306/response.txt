@@ -1,0 +1,12 @@
+# Response Time: 17.33817458152771
+Assuming that we have an instance of the FocusManager called "focusManager", here is an executable refactoring example:
+
+<<< Before refactoring:
+boolean isFocusEnabled = focusManager.isFocusManagerEnabled();
+
+>>> After refactoring:
+KeyboardFocusManager kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+FocusTraversalPolicy policy = kfm.getDefaultFocusTraversalPolicy();
+boolean isFocusEnabled = policy.getImplicitDownCycleTraversal(); 
+
+Note: The replacement method returns a FocusTraversalPolicy, which can be used to retrieve various properties related to focus management. In this example, we retrieve the implicit down-cycle traversal property to get the same result as the deprecated method.

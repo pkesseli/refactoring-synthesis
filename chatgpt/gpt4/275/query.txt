@@ -1,0 +1,6 @@
+The method javax.management.MBeanServer.deserialize​(String, byte[]) is deprecated.
+ The related deprecation comment in Javadoc is "Use MBeanServer.getClassLoaderRepository() to obtain the
+ class loader repository and use it to deserialize."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

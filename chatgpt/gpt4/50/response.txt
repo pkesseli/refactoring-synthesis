@@ -1,0 +1,56 @@
+# Response Time: 34.329519271850586
+Sure, here is an example of refactoring a piece of Java code that uses the deprecated `java.awt.Container.insets()` method:
+
+<<< Before refactoring:
+```java
+import java.awt.*;
+
+public class ExampleFrame extends Frame {
+    public ExampleFrame() {
+        // Create a new panel and add it to the frame
+        Panel panel = new Panel();
+        add(panel);
+
+        // Get the insets of the frame
+        Insets insets = insets();
+
+        // Set the size of the panel based on the insets
+        panel.setSize(getWidth() - insets.left - insets.right, getHeight() - insets.top - insets.bottom);
+
+        // Make the frame visible
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new ExampleFrame();
+    }
+}
+```
+
+>>> After refactoring:
+```java
+import java.awt.*;
+
+public class ExampleFrame extends Frame {
+    public ExampleFrame() {
+        // Create a new panel and add it to the frame
+        Panel panel = new Panel();
+        add(panel);
+
+        // Get the insets of the frame
+        Insets insets = getInsets();
+
+        // Set the size of the panel based on the insets
+        panel.setSize(getWidth() - insets.left - insets.right, getHeight() - insets.top - insets.bottom);
+
+        // Make the frame visible
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new ExampleFrame();
+    }
+}
+```
+
+In this refactoring, we simply replaced the call to the deprecated `insets()` method with the recommended replacement method `getInsets()`. This should ensure that our code will continue to function correctly in future versions of Java.

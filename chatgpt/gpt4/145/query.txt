@@ -1,0 +1,10 @@
+The method java.lang.Runtime.Version.security() is deprecated.
+ The related deprecation comment in Javadoc is "As of Java SE 10, the third element of a version
+ number is not the security level but the update-release counter,
+ incremented for every update release.  Use the Runtime.Version.update()
+ method in preference to this method.  For compatibility, this method
+ returns the value of the update element, or
+ zero if it is absent."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

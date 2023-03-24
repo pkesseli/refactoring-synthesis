@@ -1,0 +1,5 @@
+The method javax.swing.plaf.basic.BasicSplitPaneUI.createKeyboardDownRightListener() is deprecated.
+ The related deprecation comment in Javadoc is "As of Java 2 platform v1.3."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

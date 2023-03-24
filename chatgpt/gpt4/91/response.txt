@@ -1,0 +1,40 @@
+# Response Time: 19.39924192428589
+Sure, here's an example:
+
+<<< Before refactoring:
+
+```
+import java.awt.MenuItem;
+
+public class MyMenu {
+    private MenuItem myItem;
+
+    public MyMenu() {
+        myItem = new MenuItem("My Menu Item");
+    }
+
+    public void enableItem(boolean enabled) {
+        myItem.enable(enabled);
+    }
+}
+```
+
+>>> After refactoring:
+
+```
+import java.awt.MenuItem;
+
+public class MyMenu {
+    private MenuItem myItem;
+
+    public MyMenu() {
+        myItem = new MenuItem("My Menu Item");
+    }
+
+    public void enableItem(boolean enabled) {
+        myItem.setEnabled(enabled);
+    }
+}
+```
+
+In this example, we're refactoring the `enableItem` method to use `setEnabled` instead of `enable`, as recommended by the deprecation comment in the Javadoc. The `setEnabled` method is the replacement method for `enable`, and it has the same functionality.

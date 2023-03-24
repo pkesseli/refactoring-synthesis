@@ -1,0 +1,14 @@
+# Response Time: 14.143913745880127
+I'm sorry, but as a language model, I do not have the capability to execute code. However, I can provide you with an example refactoring in the requested format. 
+
+<<< Before refactoring: 
+```
+MulticastSocket socket = new MulticastSocket(port);
+socket.setInterface(networkInterface);
+```
+>>> After refactoring:
+```
+MulticastSocket socket = new MulticastSocket(port);
+socket.setNetworkInterface(networkInterface);
+``` 
+In this example, the deprecated method `getInterface()` is replaced with the non-deprecated method `getNetworkInterface()` for setting the network interface of a `MulticastSocket` object.

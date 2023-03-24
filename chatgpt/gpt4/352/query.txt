@@ -1,0 +1,7 @@
+The method javax.swing.RepaintManager.addDirtyRegion​(Applet, int, int, int, int) is deprecated.
+ The related deprecation comment in Javadoc is "The Applet API is deprecated. See the
+  java.applet package
+ documentation for further information."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

@@ -1,0 +1,46 @@
+# Response Time: 26.613557815551758
+Sorry, as an AI language model, I cannot provide executable code examples. However, I can provide you with a refactoring suggestion as follows:
+
+Before refactoring: 
+
+```
+import java.awt.*;
+import java.applet.*;
+
+public class MyTextField extends Applet {
+
+    private TextField textField;
+
+    public void init() {
+        textField = new TextField(20);
+        add(textField);
+    }
+
+    public Dimension minimumSize() {
+        return new Dimension(100, textField.preferredSize().height);
+    }
+}
+```
+
+After refactoring:
+
+```
+import java.awt.*;
+import java.applet.*;
+
+public class MyTextField extends Applet {
+
+    private TextField textField;
+
+    public void init() {
+        textField = new TextField(20);
+        add(textField);
+    }
+
+    public Dimension getMinimumSize(int rows) {
+        return new Dimension(100, textField.getPreferredSize().height * rows);
+    }
+}
+```
+
+In the refactored code, we replaced the deprecated method `minimumSize()` with the suggested replacement method `getMinimumSize(int rows)`. We also updated the use of `preferredSize()` to the suggested replacement `getPreferredSize()`. Finally, we added the `int rows` parameter to the method to comply with the new API.

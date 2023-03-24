@@ -1,0 +1,5 @@
+The method java.awt.List.addItem​(String) is deprecated.
+ The related deprecation comment in Javadoc is "replaced by add(String)."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

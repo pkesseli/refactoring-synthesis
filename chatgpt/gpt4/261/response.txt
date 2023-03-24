@@ -1,0 +1,36 @@
+# Response Time: 34.51217603683472
+Sure, here's an example of how to refactor a call to the deprecated `Logger.logrb` method in Java:
+
+Before refactoring:
+
+```
+import java.util.logging.Logger;
+
+public class MyLogger {
+    private static final Logger logger = Logger.getLogger(MyLogger.class.getName());
+
+    public void logMessage(String message) {
+        logger.logrb(Level.INFO, null, "MyLogger", "logMessage", message);
+    }
+}
+```
+
+After refactoring:
+
+```
+import java.util.logging.Logger;
+import java.util.ResourceBundle;
+
+public class MyLogger {
+    private static final Logger logger = Logger.getLogger(MyLogger.class.getName());
+
+    public void logMessage(String message) {
+        ResourceBundle bundle = ResourceBundle.getBundle("myresourcebundle");
+        logger.logrb(Level.INFO, null, "MyLogger", "logMessage", bundle, message);
+    }
+}
+```
+
+In the refactored code, we've replaced the fifth argument (which was a string message) with a ResourceBundle object, as specified in the deprecation comment. We've also added a call to `ResourceBundle.getBundle` to obtain the ResourceBundle, and passed it as the new fifth argument to the `logrb` method. 
+
+Note that in this example, we've assumed that the name of the ResourceBundle is "myresourcebundle" and that it contains the message we want to log. In practice, you would need to create the ResourceBundle file and populate it with the appropriate messages.

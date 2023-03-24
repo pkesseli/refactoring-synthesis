@@ -1,0 +1,22 @@
+# Response Time: 13.980497360229492
+Sure, here's an example:
+
+<<< Before refactoring:
+```
+java.awt.List myList = new java.awt.List();
+int index = 0;
+if (myList.isSelected(index)) {
+   // Do something
+}
+```
+
+>>> After refactoring:
+```
+java.awt.List myList = new java.awt.List();
+int index = 0;
+if (myList.isIndexSelected(index)) {
+   // Do something
+}
+``` 
+
+In the refactored code, the deprecated `isSelected(int)` method has been replaced with the recommended `isIndexSelected(int)` method. This ensures that the code is up-to-date with the latest Java standards and best practices.

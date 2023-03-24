@@ -1,0 +1,9 @@
+The method java.rmi.server.RemoteStub.setRef​(RemoteStub, RemoteRef) is deprecated.
+ The related deprecation comment in Javadoc is "No replacement.  The setRef method
+ was intended for setting the remote reference of a remote
+ stub. This is unnecessary, since RemoteStubs can be created
+ and initialized with a remote reference through use of
+ the RemoteStub(RemoteRef) constructor."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

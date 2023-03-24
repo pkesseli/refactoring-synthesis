@@ -1,0 +1,38 @@
+# Response Time: 32.336493492126465
+Sure, here's an example of how to refactor code that uses the deprecated `isAccessible()` method in Java:
+
+<<< Before refactoring:
+```java
+import java.lang.reflect.Method;
+
+public class ExampleClass {
+  public static void main(String[] args) {
+    Method method = ExampleClass.class.getMethod("exampleMethod");
+    boolean isAccessible = method.isAccessible();
+    System.out.println("Is method accessible? " + isAccessible);
+  }
+
+  private void exampleMethod() {
+    System.out.println("This is an example method");
+  }
+}
+```
+
+>>> After refactoring:
+```java
+import java.lang.reflect.Method;
+
+public class ExampleClass {
+  public static void main(String[] args) throws NoSuchMethodException {
+    Method method = ExampleClass.class.getDeclaredMethod("exampleMethod");
+    boolean canAccess = method.canAccess(new ExampleClass());
+    System.out.println("Can method be accessed? " + canAccess);
+  }
+
+  private void exampleMethod() {
+    System.out.println("This is an example method");
+  }
+}
+```
+
+In the refactored code, we use the `getDeclaredMethod()` method instead of `getMethod()`, because `getMethod()` only returns public methods, whereas `getDeclaredMethod()` returns all methods, including private ones. Then, instead of using the deprecated `isAccessible()` method, we use the `canAccess()` method to determine whether the method can be accessed based on Java access control rules. Note that we also need to pass an instance of the class (in this case, an instance of `ExampleClass`) to `canAccess()`.

@@ -1,0 +1,48 @@
+# Response Time: 23.97872805595398
+Before refactoring:
+
+```
+import java.awt.*;
+
+public class TextFieldDemo extends Frame {
+    private TextField textField;
+
+    public TextFieldDemo() {
+        textField = new TextField();
+        add(textField);
+        setSize(200, 200);
+        setVisible(true);
+        System.out.println(textField.minimumSize());
+    }
+
+    public static void main(String[] args) {
+        new TextFieldDemo();
+    }
+}
+```
+
+After refactoring:
+
+```
+import java.awt.*;
+
+public class TextFieldDemo extends Frame {
+    private TextField textField;
+
+    public TextFieldDemo() {
+        textField = new TextField();
+        add(textField);
+        setSize(200, 200);
+        setVisible(true);
+        System.out.println(textField.getMinimumSize());
+    }
+
+    public static void main(String[] args) {
+        new TextFieldDemo();
+    }
+}
+```
+
+Explanation:
+
+The `minimumSize()` method in `java.awt.TextField` has been deprecated since JDK 1.1 and replaced by `getMinimumSize()`. To refactor the code, we simply need to replace the deprecated method call `textField.minimumSize()` with `textField.getMinimumSize()`. The rest of the code remains the same.

@@ -1,0 +1,41 @@
+# Response Time: 54.05868315696716
+Sure, here's an example of how to refactor a call to `PlainView.drawLine()` to use the recommended replacement method:
+
+<<< Before refactoring:
+```
+public class MyPlainView extends PlainView {
+    // ...
+    @Override
+    protected int drawLine(int lineIndex, Graphics g, int x, int y) {
+        // ...
+        drawLine(lineIndex, g, x, y, getColor(lineIndex), getThickness(lineIndex));
+        // ...
+    }
+    private void drawLine(int lineIndex, Graphics g, int x, int y, Color color, float thickness) {
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setColor(color);
+        g2.setStroke(new BasicStroke(thickness));
+        g2.drawLine(x, y, x + getWidth(), y);
+    }
+}
+```
+
+>>> After refactoring:
+```
+public class MyPlainView extends PlainView {
+    // ...
+    @Override
+    protected int drawLine(int lineIndex, Graphics g, int x, int y) {
+        // ...
+        drawLine(lineIndex, (Graphics2D)g, x, y, getColor(lineIndex), getThickness(lineIndex));
+        // ...
+    }
+    private void drawLine(int lineIndex, Graphics2D g2, int x, int y, Color color, float thickness) {
+        g2.setColor(color);
+        g2.setStroke(new BasicStroke(thickness));
+        g2.drawLine(x, y, x + getWidth(), y);
+    }
+}
+```
+
+In the refactored code, we update the signature of the `drawLine()` method to take a `Graphics2D` object instead of a `Graphics` object, as recommended in the deprecation comment. We then cast the `Graphics` object to a `Graphics2D` object in the calling code and pass it to the updated `drawLine()` method. This ensures that we are using the correct method and should prevent any issues related to the deprecated method.

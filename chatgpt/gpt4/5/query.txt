@@ -1,0 +1,5 @@
+The method com.sun.source.tree.CaseTree.getExpression() is deprecated.
+ The related deprecation comment in Javadoc is "Please use CaseTree.getExpressions()."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

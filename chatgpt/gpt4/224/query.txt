@@ -1,0 +1,6 @@
+The method java.sql.ResultSet.getBigDecimal​(int, int) is deprecated.
+ The related deprecation comment in Javadoc is "Use getBigDecimal(int columnIndex)
+             or getBigDecimal(String columnLabel)"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

@@ -1,0 +1,36 @@
+# Response Time: 41.0273118019104
+Sure, here's an example of how you can refactor code that uses the deprecated `java.awt.event.InputEvent.getModifiers()` method to use the recommended `InputEvent.getModifiersEx()` method:
+
+<<< Before refactoring:
+```
+import java.awt.event.InputEvent;
+
+public class Example {
+    public static void main(String[] args) {
+        int modifiers = InputEvent.SHIFT_MASK | InputEvent.CTRL_MASK;
+        boolean shiftDown = (modifiers & InputEvent.SHIFT_MASK) != 0;
+        boolean ctrlDown = (modifiers & InputEvent.CTRL_MASK) != 0;
+
+        System.out.println("Shift is " + (shiftDown ? "down" : "up"));
+        System.out.println("Ctrl is " + (ctrlDown ? "down" : "up"));
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.event.InputEvent;
+
+public class Example {
+    public static void main(String[] args) {
+        int modifiers = InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK;
+        boolean shiftDown = (modifiers & InputEvent.SHIFT_DOWN_MASK) != 0;
+        boolean ctrlDown = (modifiers & InputEvent.CTRL_DOWN_MASK) != 0;
+
+        System.out.println("Shift is " + (shiftDown ? "down" : "up"));
+        System.out.println("Ctrl is " + (ctrlDown ? "down" : "up"));
+    }
+}
+```
+
+In the refactored code, we replaced the deprecated `InputEvent.SHIFT_MASK` and `InputEvent.CTRL_MASK` constants with the recommended `InputEvent.SHIFT_DOWN_MASK` and `InputEvent.CTRL_DOWN_MASK` constants, respectively. This allows us to use the `InputEvent.getModifiersEx()` method instead of the deprecated `InputEvent.getModifiers()` method to check for extended modifier keys like `SHIFT_DOWN_MASK` and `CTRL_DOWN_MASK`.

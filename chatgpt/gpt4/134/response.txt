@@ -1,0 +1,20 @@
+# Response Time: 13.474181413650513
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+char myChar = ' ';
+if (Character.isSpace(myChar)) {
+    System.out.println("This is a space character.");
+}
+```
+
+>>> After refactoring:
+```
+char myChar = ' ';
+if (Character.isWhitespace(myChar)) {
+    System.out.println("This is a whitespace character.");
+}
+```
+
+In this example, we have refactored the code to replace the deprecated `isSpace(char)` method with the recommended `isWhitespace(char)` method. This change is simply a matter of updating the method name in the code.

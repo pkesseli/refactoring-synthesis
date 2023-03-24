@@ -1,0 +1,18 @@
+# Response Time: 15.91856837272644
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+MulticastSocket socket = new MulticastSocket();
+byte ttl = 2;
+socket.setTTL(ttl);
+```
+
+>>> After refactoring:
+```
+MulticastSocket socket = new MulticastSocket();
+int ttl = 2;
+socket.setTimeToLive(ttl);
+``` 
+
+In the refactored code, we've replaced the deprecated `setTTL(byte)` method with the recommended `setTimeToLive(int)` method, which uses an `int` instead of a `byte` for the `ttl` parameter. This ensures that the code is up to date with current best practices and avoids any potential issues that might arise from using deprecated code.

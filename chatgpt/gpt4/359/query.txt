@@ -1,0 +1,6 @@
+The method javax.swing.text.JTextComponent.viewToModel​(Point) is deprecated.
+ The related deprecation comment in Javadoc is "replaced by
+     JTextComponent.viewToModel2D(Point2D)"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

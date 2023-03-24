@@ -1,0 +1,5 @@
+The method com.sun.jdi.VirtualMachine.canUnrestrictedlyRedefineClasses() is deprecated.
+ The related deprecation comment in Javadoc is "A JVM TI based JDWP back-end will never set this capability to true."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

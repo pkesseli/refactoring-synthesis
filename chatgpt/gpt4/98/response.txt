@@ -1,0 +1,30 @@
+# Response Time: 20.932183980941772
+Sure, here's an example refactoring to replace the deprecated `resize` method with the recommended `setSize` method:
+
+<<< Before refactoring:
+```
+import java.awt.Rectangle;
+
+public class Example {
+    public static void main(String[] args) {
+        Rectangle rect = new Rectangle(10, 10, 100, 100);
+        rect.resize(50, 50);
+        System.out.println(rect);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.Rectangle;
+
+public class Example {
+    public static void main(String[] args) {
+        Rectangle rect = new Rectangle(10, 10, 100, 100);
+        rect.setSize(50, 50);
+        System.out.println(rect);
+    }
+}
+```
+
+In this refactored code, we replaced the deprecated `resize` method with the recommended `setSize` method. This should avoid any issues that may arise due to using deprecated functionality and ensure that our code remains compatible with future versions of Java.

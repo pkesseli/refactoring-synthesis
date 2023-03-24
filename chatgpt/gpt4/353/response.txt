@@ -1,0 +1,31 @@
+# Response Time: 26.65250015258789
+Before refactoring:
+```java
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneLayout;
+import java.awt.Rectangle;
+
+public class MyScrollPaneLayout extends ScrollPaneLayout {
+
+    public Rectangle getViewportBorderBounds(JScrollPane scrollpane) {
+        return super.getViewportBorderBounds(scrollpane);
+    }
+}
+```
+
+After refactoring:
+```java
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneLayout;
+import java.awt.Rectangle;
+
+public class MyScrollPaneLayout extends ScrollPaneLayout {
+
+    public Rectangle getViewportBorderBounds(JScrollPane scrollpane) {
+        return scrollpane.getViewportBorderBounds();
+    }
+}
+```
+
+Explanation:
+Instead of using the deprecated `getViewportBorderBounds()` method in `ScrollPaneLayout`, the new implementation should use the non-deprecated `getViewportBorderBounds()` method in `JScrollPane`. This can be done simply by replacing the `super.getViewportBorderBounds(scrollpane)` call with `scrollpane.getViewportBorderBounds()`.

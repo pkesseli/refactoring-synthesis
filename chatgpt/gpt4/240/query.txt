@@ -1,0 +1,9 @@
+The method java.util.concurrent.atomic.AtomicReference.weakCompareAndSet​(V, V) is deprecated.
+ The related deprecation comment in Javadoc is "This method has plain memory effects but the method
+ name implies volatile memory effects (see methods such as
+ AtomicReference.compareAndExchange(V, V) and AtomicReference.compareAndSet(V, V)).  To avoid
+ confusion over plain or volatile memory effects it is recommended that
+ the method AtomicReference.weakCompareAndSetPlain(V, V) be used instead."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

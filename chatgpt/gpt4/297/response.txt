@@ -1,0 +1,36 @@
+# Response Time: 34.976584672927856
+Before refactoring: 
+
+```java
+import javax.management.monitor.StringMonitorMBean;
+
+public class StringMonitorExample {
+    private StringMonitorMBean stringMonitor;
+
+    public long getLastUpdatedTimestamp() {
+        return stringMonitor.getDerivedGaugeTimeStamp();
+    }
+}
+```
+
+After refactoring:
+
+```java
+import javax.management.ObjectName;
+import javax.management.monitor.StringMonitorMBean;
+
+public class StringMonitorExample {
+    private StringMonitorMBean stringMonitor;
+
+    public long getLastUpdatedTimestamp() {
+        ObjectName objectName = stringMonitor.getObservedObject();
+        return stringMonitor.getDerivedGaugeTimeStamp(objectName);
+    }
+}
+```
+
+Explanation:
+
+The `getDerivedGaugeTimeStamp()` method of the `StringMonitorMBean` class is deprecated and has been replaced by the `getDerivedGaugeTimeStamp(ObjectName)` method. The new method requires an `ObjectName` parameter, which represents the MBean that is being monitored. Therefore, we need to refactor our code to use this new method.
+
+In the refactored code, we first obtain the `ObjectName` of the MBean being monitored by calling the `getObservedObject()` method of the `StringMonitorMBean` class. We then pass this `ObjectName` as a parameter to the `getDerivedGaugeTimeStamp(ObjectName)` method to obtain the last updated timestamp of the derived gauge.

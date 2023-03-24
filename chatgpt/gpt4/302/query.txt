@@ -1,0 +1,5 @@
+The method javax.sql.rowset.BaseRowSet.setUnicodeStream​(int, InputStream, int) is deprecated.
+ The related deprecation comment in Javadoc is "getCharacterStream should be used in its place"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

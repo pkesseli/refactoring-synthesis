@@ -1,0 +1,6 @@
+The method java.awt.Scrollbar.getLineIncrement() is deprecated.
+ The related deprecation comment in Javadoc is "As of JDK version 1.1,
+ replaced by getUnitIncrement()."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

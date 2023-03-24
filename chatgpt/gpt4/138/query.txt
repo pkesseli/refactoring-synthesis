@@ -1,0 +1,8 @@
+The method java.lang.invoke.MethodHandles.Lookup.hasPrivateAccess() is deprecated.
+ The related deprecation comment in Javadoc is "This method was originally designed to test PRIVATE access
+ that implies full privilege access but MODULE access has since become
+ independent of PRIVATE access.  It is recommended to call
+ MethodHandles.Lookup.hasFullPrivilegeAccess() instead."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

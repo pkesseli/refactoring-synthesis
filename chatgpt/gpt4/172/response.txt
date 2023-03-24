@@ -1,0 +1,33 @@
+# Response Time: 25.420602798461914
+Sure, here's an example:
+
+<<< Before refactoring:
+
+```
+import java.net.URLDecoder;
+
+public class MyClass {
+    public static void main(String[] args) {
+        String encodedUrl = "https%3A%2F%2Fwww.example.com%2F%3Fq%3Djava%26t%3Durl";
+        String decodedUrl = URLDecoder.decode(encodedUrl);
+        System.out.println(decodedUrl);
+    }
+}
+```
+
+>>> After refactoring:
+
+```
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
+public class MyClass {
+    public static void main(String[] args) {
+        String encodedUrl = "https%3A%2F%2Fwww.example.com%2F%3Fq%3Djava%26t%3Durl";
+        String decodedUrl = URLDecoder.decode(encodedUrl, StandardCharsets.UTF_8);
+        System.out.println(decodedUrl);
+    }
+}
+```
+
+In the refactored code, the `decode` method is called with a specific encoding (`StandardCharsets.UTF_8`) instead of relying on the platform's default encoding. This ensures that the resulting string will always be the same, regardless of the platform.

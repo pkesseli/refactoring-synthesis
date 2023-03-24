@@ -1,0 +1,52 @@
+# Response Time: 37.32220387458801
+Sure, here is an example of how to refactor the deprecated `java.sql.ResultSet.getBigDecimal(String, int)` method to use the recommended alternatives:
+
+<<< Before refactoring:
+```
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.math.BigDecimal;
+
+public class Example {
+    public BigDecimal getData(Connection connection, int id) throws SQLException {
+        String sql = "SELECT data FROM table WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getBigDecimal("data", 2);
+                }
+            }
+        }
+        return null;
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.math.BigDecimal;
+
+public class Example {
+    public BigDecimal getData(Connection connection, int id) throws SQLException {
+        String sql = "SELECT data FROM table WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getBigDecimal("data");
+                }
+            }
+        }
+        return null;
+    }
+}
+```
+
+In the refactored code, we replaced the deprecated `resultSet.getBigDecimal("data", 2)` call with `resultSet.getBigDecimal("data")`, as recommended in the Javadoc comment. This change will help ensure that the code remains maintainable and up-to-date with the latest best practices.

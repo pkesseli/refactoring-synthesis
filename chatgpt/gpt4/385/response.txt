@@ -1,0 +1,14 @@
+# Response Time: 11.69722056388855
+Before refactoring:
+```
+import javax.xml.stream.XMLOutputFactory;
+
+XMLOutputFactory factory = XMLOutputFactory.newInstance("javax.xml.stream.XMLOutputFactory", null);
+```
+
+After refactoring:
+```
+import javax.xml.stream.XMLOutputFactory;
+
+XMLOutputFactory factory = XMLOutputFactory.newFactory("javax.xml.stream.XMLOutputFactory", null);
+```

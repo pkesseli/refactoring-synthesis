@@ -1,0 +1,6 @@
+The method javax.swing.text.PasswordView.drawEchoCharacter​(Graphics, int, int, char) is deprecated.
+ The related deprecation comment in Javadoc is "replaced by
+     PasswordView.drawEchoCharacter(Graphics2D, float, float, char)"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

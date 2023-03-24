@@ -1,0 +1,18 @@
+# Response Time: 23.91870665550232
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+ValueExp valueExp = new AttributeValueExp("AttributeName");
+valueExp.setMBeanServer(mbeanServer);
+```
+
+>>> After refactoring:
+```
+ValueExp valueExp = new AttributeValueExp("AttributeName");
+QueryEval queryEval = QueryEval.fromMBeanServer(mbeanServer);
+queryEval.setMBeanServer(mbeanServer);
+valueExp.setQuery(queryEval);
+```
+
+In the refactored code, instead of setting the MBean server directly on the `ValueExp` instance, we create a `QueryEval` instance from the MBean server and set the MBean server on that. Then we set the `QueryEval` instance on the `ValueExp` using the `setQuery()` method. This way, the `ValueExp` can access the MBean server via the `QueryEval` instance when it is evaluated.

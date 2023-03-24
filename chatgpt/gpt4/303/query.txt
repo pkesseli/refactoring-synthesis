@@ -1,0 +1,5 @@
+The method javax.swing.AbstractButton.getLabel() is deprecated.
+ The related deprecation comment in Javadoc is "- Replaced by getText"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

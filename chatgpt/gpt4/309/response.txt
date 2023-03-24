@@ -1,0 +1,22 @@
+# Response Time: 19.589041471481323
+Sure, here is an example of how to refactor the deprecated `javax.swing.JComponent.enable()` method using `java.awt.Component.setEnabled(boolean)`:
+
+<<< Before refactoring:
+```
+// Get the component
+JButton myButton = new JButton("Click me!");
+
+// Enable the component
+myButton.enable();
+```
+
+>>> After refactoring:
+```
+// Get the component
+JButton myButton = new JButton("Click me!");
+
+// Enable the component
+myButton.setEnabled(true);
+```
+
+In this example, we simply replace the deprecated `enable()` method with the recommended `setEnabled()` method, passing a `true` boolean value to enable the component.

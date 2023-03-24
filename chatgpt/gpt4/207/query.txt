@@ -1,0 +1,8 @@
+The method java.rmi.server.UnicastRemoteObject.exportObject​(Remote) is deprecated.
+ The related deprecation comment in Javadoc is "This method is deprecated because it supports only static stubs.
+ Use exportObject(Remote, port) or
+ exportObject(Remote, port, csf, ssf)
+ instead."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

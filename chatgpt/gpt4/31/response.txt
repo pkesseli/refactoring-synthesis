@@ -1,0 +1,21 @@
+# Response Time: 19.339540004730225
+<<< Before refactoring:
+```
+public void mouseDown(Event evt, int x, int y) {
+   // Handle mouse down event
+}
+```
+
+>>> After refactoring:
+```
+@Override
+public void processMouseEvent(MouseEvent evt) {
+    super.processMouseEvent(evt);
+    if (evt.getID() == MouseEvent.MOUSE_PRESSED) {
+        // Handle mouse down event
+    }
+}
+```
+
+Explanation:
+The `java.awt.Component.mouseDown(Event, int, int)` method is deprecated and has been replaced by `java.awt.Component.processMouseEvent(MouseEvent)`. Therefore, in the refactored code, we override `processMouseEvent()` method instead of `mouseDown()` method to handle mouse down events. We also check the event ID to make sure that it's a mouse press event before handling it.

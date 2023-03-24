@@ -1,0 +1,30 @@
+# Response Time: 21.805027723312378
+As a language model, I do not have access to your code or environment, so I cannot provide an executable example. However, I can provide a refactoring example in pseudocode:
+
+Assuming you have the following code:
+
+```
+CallableStatement stmt = conn.prepareCall("{call my_stored_proc(?, ?)}");
+stmt.setInt(1, id);
+stmt.registerOutParameter(2, java.sql.Types.NUMERIC, 2);
+stmt.execute();
+BigDecimal result = stmt.getBigDecimal(2, 2);
+```
+
+Before refactoring:
+```
+stmt.getBigDecimal(2, 2);
+```
+
+After refactoring:
+```
+stmt.getBigDecimal("2");
+```
+
+or
+
+```
+stmt.getBigDecimal(2);
+```
+
+Explanation: The `getBigDecimal(int, int)` method is deprecated, so it's recommended to use `getBigDecimal(int)` or `getBigDecimal(String)` instead. In this case, we can use either of these methods as a replacement for the deprecated one.

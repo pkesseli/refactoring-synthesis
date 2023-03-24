@@ -1,0 +1,7 @@
+The method javax.net.ssl.SSLSession.getPeerCertificateChain() is deprecated.
+ The related deprecation comment in Javadoc is "The SSLSession.getPeerCertificates() method that returns an
+               array of java.security.cert.Certificate should
+               be used instead."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

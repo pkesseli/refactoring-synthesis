@@ -1,0 +1,44 @@
+# Response Time: 35.71945881843567
+Before refactoring:
+```java
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class MyServerImpl extends UnicastRemoteObject implements MyServer {
+    public MyServerImpl() throws RemoteException {
+        super();
+    }
+
+    public static void main(String[] args) throws RemoteException {
+        Registry registry = LocateRegistry.createRegistry(1099);
+        MyServerImpl server = new MyServerImpl();
+        registry.rebind("MyServer", server);
+        System.out.println("Server running...");
+    }
+}
+```
+
+After refactoring:
+```java
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class MyServerImpl extends UnicastRemoteObject implements MyServer {
+    public MyServerImpl() throws RemoteException {
+        super();
+    }
+
+    public static void main(String[] args) throws RemoteException {
+        MyServerImpl server = new MyServerImpl();
+        Registry registry = LocateRegistry.createRegistry(1099);
+        registry.bind("MyServer", server);
+        System.out.println("Server running...");
+    }
+}
+``` 
+
+In the refactored code, we replace `registry.rebind("MyServer", server)` with `registry.bind("MyServer", server)`. This change is made because `UnicastRemoteObject.exportObject(Remote)` is deprecated and it supports only static stubs. We are now using `registry.bind("MyServer", server)`, which will create a new stub for the specified remote object, using a dynamically generated port.

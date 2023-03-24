@@ -1,0 +1,7 @@
+The method java.util.logging.Logger.logrb​(Level, String, String, String, String, Object) is deprecated.
+ The related deprecation comment in Javadoc is "Use Logger.logrb(java.util.logging.Level, java.lang.String,
+   java.lang.String, java.util.ResourceBundle, java.lang.String,
+   java.lang.Object...) instead"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

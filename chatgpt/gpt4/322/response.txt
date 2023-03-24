@@ -1,0 +1,17 @@
+# Response Time: 16.860740661621094
+Sure, here is an executable refactoring example as per your requirements:
+
+Before refactoring:
+```
+JPopupMenu popupMenu = new JPopupMenu();
+Component component = popupMenu.getComponentAtIndex(0);
+```
+
+After refactoring:
+```
+JPopupMenu popupMenu = new JPopupMenu();
+Component component = popupMenu.getComponent(0);
+```
+
+Explanation:
+The `getComponentAtIndex` method in `JPopupMenu` class is deprecated and should be replaced with `getComponent` method from its parent class `Container`. So, the refactored code replaces the deprecated method with its suggested replacement.

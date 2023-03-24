@@ -1,0 +1,40 @@
+# Response Time: 37.53183078765869
+Sure, here's an example of how you could refactor code that uses the deprecated `getSystemCpuLoad()` method:
+
+<<< Before refactoring:
+```
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+
+public class Example {
+    public static void main(String[] args) {
+        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+        double cpuLoad = osBean.getSystemCpuLoad();
+        System.out.println("CPU Load: " + cpuLoad);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+
+public class Example {
+    public static void main(String[] args) {
+        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+        double cpuLoad = osBean.getCpuLoad();
+        System.out.println("CPU Load: " + cpuLoad);
+    }
+}
+```
+
+In the refactored code, we've made the following changes:
+
+1. We've updated the import statements to use the standard `java.lang.management` package instead of the `com.sun.management` package.
+
+2. We've replaced the call to `ManagementFactory.getOperatingSystemMXBean()` with `ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class)`. This returns a platform-specific implementation of `OperatingSystemMXBean` that we can use to get the CPU load.
+
+3. We've replaced the call to the deprecated `osBean.getSystemCpuLoad()` method with the recommended `osBean.getCpuLoad()` method.
+
+These changes should make the code more future-proof, as it now uses the recommended method for getting the CPU load and avoids using deprecated functionality.

@@ -1,0 +1,9 @@
+The method java.io.File.toURL() is deprecated.
+ The related deprecation comment in Javadoc is "This method does not automatically escape characters that
+ are illegal in URLs.  It is recommended that new code convert an
+ abstract pathname into a URL by first converting it into a URI, via the
+ toURI method, and then converting the URI into a URL
+ via the URI.toURL method."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

@@ -1,0 +1,32 @@
+# Response Time: 25.271170616149902
+Sure, here's an executable refactoring example for the deprecation of the `java.awt.List.minimumSize​(int)` method:
+
+<<< Before refactoring:
+```
+import java.awt.List;
+
+public class Example {
+  public static void main(String[] args) {
+    List list = new List(5, true);
+    int minWidth = list.minimumSize(0).width;
+    int minHeight = list.minimumSize(0).height;
+    System.out.println("Minimum size: " + minWidth + "x" + minHeight);
+  }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.List;
+
+public class Example {
+  public static void main(String[] args) {
+    List list = new List(5, true);
+    int minWidth = list.getMinimumSize(0).width;
+    int minHeight = list.getMinimumSize(0).height;
+    System.out.println("Minimum size: " + minWidth + "x" + minHeight);
+  }
+}
+```
+
+In this example, we've simply replaced the deprecated `minimumSize(int)` method with the recommended `getMinimumSize(int)` method. This change should have no impact on the behavior of the code, but it ensures that the code remains compatible with future versions of Java.

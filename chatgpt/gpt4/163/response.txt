@@ -1,0 +1,18 @@
+# Response Time: 18.944514513015747
+Unfortunately, as an AI language model, I cannot provide an executable refactoring example. However, I can provide you with a code snippet that demonstrates the refactoring from using the deprecated `getTTL()` method to using the recommended `getTimeToLive()` method:
+
+Before refactoring:
+```java
+MulticastSocket multicastSocket = new MulticastSocket();
+byte ttl = multicastSocket.getTTL();
+System.out.println("TTL value: " + ttl);
+```
+
+After refactoring:
+```java
+MulticastSocket multicastSocket = new MulticastSocket();
+int ttl = multicastSocket.getTimeToLive();
+System.out.println("TTL value: " + ttl);
+```
+
+As you can see, the only change required is to replace the `getTTL()` method with the `getTimeToLive()` method and change the variable type from `byte` to `int`.

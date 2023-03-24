@@ -1,0 +1,6 @@
+The method javax.swing.text.PlainView.drawSelectedText​(Graphics, int, int, int, int) is deprecated.
+ The related deprecation comment in Javadoc is "replaced by
+     PlainView.drawSelectedText(Graphics2D, float, float, int, int)"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

@@ -1,0 +1,30 @@
+# Response Time: 18.172261714935303
+Sure! Here's an example refactoring for replacing the deprecated method `java.awt.Window.show()` with `java.awt.Window.setVisible(boolean)`:
+
+<<< Before refactoring:
+```
+import java.awt.Frame;
+
+public class MyFrame extends Frame {
+    public MyFrame() {
+        setTitle("My Frame");
+        setSize(400, 300);
+        show(); // deprecated method
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.Frame;
+
+public class MyFrame extends Frame {
+    public MyFrame() {
+        setTitle("My Frame");
+        setSize(400, 300);
+        setVisible(true); // replaced with setVisible()
+    }
+}
+```
+
+In the refactored code, we simply replaced the deprecated `show()` method call with the recommended `setVisible(true)` method call. This should have the same effect of displaying the window on the screen.

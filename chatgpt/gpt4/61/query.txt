@@ -1,0 +1,6 @@
+The method java.awt.event.KeyEvent.getKeyModifiersText​(int) is deprecated.
+ The related deprecation comment in Javadoc is "It is recommended that extended modifier keys and
+             InputEvent.getModifiersExText(int) be used instead"
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

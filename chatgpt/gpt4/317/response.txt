@@ -1,0 +1,18 @@
+# Response Time: 16.715801000595093
+Sure, here is an example refactoring:
+
+<<< Before refactoring:
+```
+JInternalFrame myFrame = new JInternalFrame("My Frame", true, true, true, true);
+JMenuBar myMenuBar = new JMenuBar();
+myFrame.setMenuBar(myMenuBar);
+```
+
+>>> After refactoring:
+```
+JInternalFrame myFrame = new JInternalFrame("My Frame", true, true, true, true);
+JMenuBar myMenuBar = new JMenuBar();
+myFrame.setJMenuBar(myMenuBar);
+``` 
+
+Explanation: We simply replaced the deprecated `setMenuBar()` method with the recommended `setJMenuBar()` method, which achieves the same functionality.

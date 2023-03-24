@@ -1,0 +1,18 @@
+# Response Time: 24.753963470458984
+Sure, here's an example:
+
+<<< Before refactoring: 
+```
+Time time = new Time(0);
+time.setYear(2022);
+```
+
+>>> After refactoring: 
+```
+LocalDateTime dateTime = LocalDateTime.now();
+Time time = Time.valueOf(LocalTime.from(dateTime));
+time = new Time(time.getTime() + TimeUnit.DAYS.toMillis(365));
+```
+
+Explanation:
+The `java.sql.Time` class is used to represent time values (hours, minutes, seconds) and has a deprecated `setYear(int)` method. Instead of using this method, we can refactor the code to use the modern `java.time` API which offers better functionality and is recommended by the Java documentation. In the refactored code, we first create a `LocalDateTime` object to get the current date and time, then we create a `Time` object from the current time using the `LocalTime.from()` method. Finally, we add a year to the `Time` object using the `TimeUnit` class to avoid the deprecated method.

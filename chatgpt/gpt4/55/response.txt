@@ -1,0 +1,20 @@
+# Response Time: 17.14110493659973
+Sure, here's an example of refactoring the usage of `java.awt.datatransfer.DataFlavor.equals(String)` method to `DataFlavor.isMimeTypeEqual(String)` method:
+
+<<< Before refactoring:
+```
+DataFlavor flavor = ...
+if (flavor.equals("text/plain")) {
+    // do something
+}
+```
+
+>>> After refactoring:
+```
+DataFlavor flavor = ...
+if (flavor.isMimeTypeEqual("text/plain")) {
+    // do something
+}
+``` 
+
+In this example, we replace the usage of `equals(String)` with `isMimeTypeEqual(String)` to address the inconsistency with the `hashCode()` contract. The new method performs the same comparison but also considers the `charset` parameter and is consistent with the `hashCode()` method.

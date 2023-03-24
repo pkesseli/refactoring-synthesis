@@ -1,0 +1,6 @@
+The method java.awt.datatransfer.DataFlavor.equals​(String) is deprecated.
+ The related deprecation comment in Javadoc is "As inconsistent with hashCode() contract, use
+             DataFlavor.isMimeTypeEqual(String) instead."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

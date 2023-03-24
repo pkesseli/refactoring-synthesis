@@ -1,0 +1,52 @@
+# Response Time: 25.645346879959106
+<<< Before refactoring:
+```
+import java.awt.List;
+
+public class Example {
+
+    public static void main(String[] args) {
+        List list = new List(3);
+        list.add("Item 1");
+        list.add("Item 2");
+        list.add("Item 3");
+        list.add("Item 4");
+
+        if (list.allowsMultipleSelections()) {
+            list.setMultipleMode(true);
+        }
+
+        // Perform some action with the selected items
+        String[] selectedItems = list.getSelectedItems();
+        for (String item : selectedItems) {
+            System.out.println(item);
+        }
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.List;
+
+public class Example {
+
+    public static void main(String[] args) {
+        List list = new List(3);
+        list.add("Item 1");
+        list.add("Item 2");
+        list.add("Item 3");
+        list.add("Item 4");
+
+        if (list.isMultipleMode()) {
+            list.setMultipleMode(true);
+        }
+
+        // Perform some action with the selected items
+        String[] selectedItems = list.getSelectedItems();
+        for (String item : selectedItems) {
+            System.out.println(item);
+        }
+    }
+}
+```

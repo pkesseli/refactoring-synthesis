@@ -1,0 +1,7 @@
+The method java.util.Date.toGMTString() is deprecated.
+ The related deprecation comment in Javadoc is "As of JDK version 1.1,
+ replaced by DateFormat.format(Date date), using a
+ GMT TimeZone."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

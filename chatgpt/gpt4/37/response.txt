@@ -1,0 +1,30 @@
+# Response Time: 14.831140995025635
+Sure, here's an example:
+
+<<< Before refactoring: 
+
+```java
+import java.awt.Component;
+
+public class Example {
+    public static void main(String[] args) {
+        Component component = new Component();
+        component.move(100, 100);
+    }
+}
+```
+
+>>> After refactoring: 
+
+```java
+import java.awt.Component;
+
+public class Example {
+    public static void main(String[] args) {
+        Component component = new Component();
+        component.setLocation(100, 100);
+    }
+}
+``` 
+
+In the above example, the deprecated `move()` method is replaced with `setLocation()` method, which achieves the same result.

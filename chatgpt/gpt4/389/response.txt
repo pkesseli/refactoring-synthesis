@@ -1,0 +1,37 @@
+# Response Time: 41.05908727645874
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import org.ietf.jgss.GSSContext;
+import org.ietf.jgss.MessageProp;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public class GssContextWrapper {
+    public byte[] unwrap(InputStream is, OutputStream os, MessageProp messageProp) throws Exception {
+        GSSContext context = GSSContext.getInstance();
+        byte[] token = new byte[is.available()];
+        is.read(token);
+        byte[] unwrapped = context.unwrap(token, 0, token.length, messageProp);
+        os.write(unwrapped);
+        return unwrapped;
+    }
+}
+```
+
+>>> After refactoring:
+```
+import org.ietf.jgss.GSSContext;
+import org.ietf.jgss.MessageProp;
+
+public class GssContextWrapper {
+    public byte[] unwrap(byte[] inputToken, MessageProp messageProp) throws Exception {
+        GSSContext context = GSSContext.getInstance();
+        byte[] unwrapped = context.unwrap(inputToken, 0, inputToken.length, messageProp);
+        return unwrapped;
+    }
+}
+```
+
+In this refactoring example, the deprecated `org.ietf.jgss.GSSContext.unwrap(InputStream, OutputStream, MessageProp)` method has been replaced with the non-deprecated `org.ietf.jgss.GSSContext.unwrap(byte[], int, int, MessageProp)` method. The `InputStream` and `OutputStream` parameters have been removed and replaced with a single `byte[]` parameter representing the input token. The `InputStream` read and `OutputStream` write operations have been replaced with a simple return statement that returns the unwrapped byte array.

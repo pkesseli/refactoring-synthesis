@@ -1,0 +1,40 @@
+# Response Time: 25.92109179496765
+Sure, here's an example of how to refactor code that uses the deprecated `hasPrivateAccess()` method in Java:
+
+<<< Before refactoring:
+```
+import java.lang.invoke.MethodHandles;
+
+public class ExampleClass {
+   public static void main(String[] args) throws Throwable {
+      MethodHandles.Lookup lookup = MethodHandles.lookup();
+
+      boolean hasPrivateAccess = lookup.hasPrivateAccess();
+      if (hasPrivateAccess) {
+         // do something
+      } else {
+         // do something else
+      }
+   }
+}
+```
+
+>>> After refactoring:
+```
+import java.lang.invoke.MethodHandles;
+
+public class ExampleClass {
+   public static void main(String[] args) throws Throwable {
+      MethodHandles.Lookup lookup = MethodHandles.lookup();
+
+      boolean hasFullPrivilegeAccess = lookup.hasFullPrivilegeAccess();
+      if (hasFullPrivilegeAccess) {
+         // do something
+      } else {
+         // do something else
+      }
+   }
+}
+```
+
+In this example, we've simply replaced the call to `hasPrivateAccess()` with a call to `hasFullPrivilegeAccess()`, as recommended by the deprecation comment in the Javadoc. This change ensures that our code is up-to-date with the latest best practices and will continue to work properly as Java evolves.

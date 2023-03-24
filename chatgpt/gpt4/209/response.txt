@@ -1,0 +1,15 @@
+# Response Time: 10.565571784973145
+<<< Before refactoring:
+```
+String algorithm = "DES";
+String property = "IV_SIZE";
+String ivSizeStr = Security.getAlgorithmProperty(algorithm, property);
+int ivSize = Integer.parseInt(ivSizeStr);
+```
+
+>>> After refactoring:
+```
+String algorithm = "DES";
+AlgorithmParameters algorithmParameters = AlgorithmParameters.getInstance(algorithm);
+int ivSize = algorithmParameters.getParameterSpec(IvParameterSpec.class).getIV().length;
+```

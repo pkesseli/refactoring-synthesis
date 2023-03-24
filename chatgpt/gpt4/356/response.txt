@@ -1,0 +1,21 @@
+# Response Time: 25.070582389831543
+As an AI language model, I cannot provide an executable example as I do not have access to a Java development environment. However, I can provide a refactoring suggestion based on the deprecation comment you provided.
+
+Before refactoring: 
+
+```java
+TableColumn column = new TableColumn(columnIndex);
+column.setResizable(true);
+column.enableResizedPosting();
+```
+
+After refactoring:
+
+```java
+TableColumn column = new TableColumn(columnIndex);
+column.setResizable(true);
+// Instead of enableResizedPosting, use the following line to set the resize behavior
+column.setResizedPostingWidth(1);
+```
+
+By replacing the deprecated `enableResizedPosting()` method with `setResizedPostingWidth(1)`, the same functionality can be achieved without using a deprecated method. This should suppress any deprecation warnings and ensure compatibility with Java 2 platform v1.3 and newer versions.

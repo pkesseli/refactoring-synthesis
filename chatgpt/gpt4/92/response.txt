@@ -1,0 +1,33 @@
+# Response Time: 27.263077974319458
+Sure! Here's an example of how to refactor code that uses the deprecated `getBoundingBox()` method of the `java.awt.Polygon` class:
+
+<<< Before refactoring:
+
+```java
+import java.awt.Polygon;
+
+public class Example {
+    public static void main(String[] args) {
+        Polygon p = new Polygon(new int[] {0, 1, 2}, new int[] {0, 1, 0}, 3);
+        java.awt.Rectangle boundingBox = p.getBoundingBox();
+        System.out.println("Polygon bounding box: " + boundingBox);
+    }
+}
+```
+
+>>> After refactoring:
+
+```java
+import java.awt.Polygon;
+import java.awt.Rectangle;
+
+public class Example {
+    public static void main(String[] args) {
+        Polygon p = new Polygon(new int[] {0, 1, 2}, new int[] {0, 1, 0}, 3);
+        Rectangle boundingBox = p.getBounds();
+        System.out.println("Polygon bounding box: " + boundingBox);
+    }
+}
+```
+
+In the refactored code, we have replaced the deprecated `getBoundingBox()` method with the recommended replacement, `getBounds()`. We have also changed the import statement for `Rectangle` to `java.awt.Rectangle`, since it is now used instead of the deprecated `BoundingBox` class.

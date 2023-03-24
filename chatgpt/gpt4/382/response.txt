@@ -1,0 +1,32 @@
+# Response Time: 36.635008573532104
+Sure, here's an example of refactoring code that uses the deprecated method `javax.tools.ToolProvider.getSystemToolClassLoader()`:
+
+<<< Before refactoring:
+```
+import javax.tools.Tool;
+import javax.tools.ToolProvider;
+
+public class MyTool {
+
+    public static void main(String[] args) {
+        Tool myTool = ToolProvider.getSystemToolClassLoader().loadClass("com.example.MyToolImpl").newInstance();
+        myTool.run(System.in, System.out, System.err, args);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import javax.tools.Tool;
+import javax.tools.ToolProvider;
+
+public class MyTool {
+
+    public static void main(String[] args) {
+        Tool myTool = ToolProvider.findFirst(args[0]).orElseThrow(() -> new IllegalArgumentException("Could not find tool: " + args[0]));
+        myTool.run(System.in, System.out, System.err, args);
+    }
+}
+```
+
+In this refactored version, we're using `ToolProvider.findFirst(String)` instead of `ToolProvider.getSystemToolClassLoader().loadClass(String)` to load the tool. This method returns an `Optional<Tool>` instance, so we use `orElseThrow()` to throw an exception if the tool could not be found. We're also passing the tool name as a command line argument, so we can locate it dynamically at runtime. This is just one possible way to refactor the code - depending on your specific requirements, you may need to use a different approach.

@@ -1,0 +1,36 @@
+# Response Time: 32.050387144088745
+Sure! Here's an example refactoring of code that uses the deprecated `java.util.Date.setYear(int)` method:
+
+<<< Before refactoring:
+
+```java
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        date.setYear(122); // Deprecated method
+        System.out.println(date);
+    }
+}
+```
+
+>>> After refactoring:
+
+```java
+import java.util.Calendar;
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.YEAR, 2022); // Updated code
+        date.setTime(cal.getTimeInMillis());
+        System.out.println(date);
+    }
+}
+```
+
+In the refactored code, we've replaced the deprecated `setYear(int)` method with `Calendar.set(Calendar.YEAR, year + 1900)`. We create a `Calendar` instance, set its time to the current `Date`, update the year using `set(Calendar.YEAR, year + 1900)`, and then update the `Date` with the new time using `date.setTime(cal.getTimeInMillis())`. This avoids using the deprecated method and ensures that the code will work with future versions of Java.

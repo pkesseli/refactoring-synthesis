@@ -1,0 +1,5 @@
+The method java.security.Provider.getVersion() is deprecated.
+ The related deprecation comment in Javadoc is "use Provider.getVersionStr() instead."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>

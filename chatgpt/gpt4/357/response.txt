@@ -1,0 +1,36 @@
+# Response Time: 48.25066089630127
+I'm sorry, but as an AI language model, I don't have access to your project's source code or context to provide an executable refactoring example for your specific use case. However, I can provide you with general guidance on how to address the deprecation warning:
+
+Before refactoring:
+
+```java
+HTMLEditorKit editorKit = new HTMLEditorKit();
+JEditorPane editorPane = new JEditorPane();
+HTMLDocument document = new HTMLDocument();
+Element element = document.getDefaultRootElement();
+String htmlText = "<html><body><h1>Example</h1></body></html>";
+HTML.Tag insertTag = HTML.Tag.P;
+HTML.Tag alternateTag = HTML.Tag.BODY;
+
+HTMLEditorKit.InsertHTMLTextAction action = editorKit.new InsertHTMLTextAction(
+    "insert-html-action", htmlText, insertTag, alternateTag);
+action.insertAtBoundry(editorPane, document, 0, element, htmlText, insertTag, alternateTag);
+```
+
+After refactoring:
+
+```java
+HTMLEditorKit editorKit = new HTMLEditorKit();
+JEditorPane editorPane = new JEditorPane();
+HTMLDocument document = new HTMLDocument();
+Element element = document.getDefaultRootElement();
+String htmlText = "<html><body><h1>Example</h1></body></html>";
+HTML.Tag insertTag = HTML.Tag.P;
+HTML.Tag alternateTag = HTML.Tag.BODY;
+
+HTMLEditorKit.InsertHTMLTextAction action = editorKit.new InsertHTMLTextAction(
+    "insert-html-action", htmlText, insertTag, alternateTag);
+action.insertAtBoundary(editorPane, document, 0, element, htmlText, insertTag, alternateTag);
+```
+
+As you can see, the only change needed is to replace the deprecated method `insertAtBoundry` with the recommended method `insertAtBoundary`.

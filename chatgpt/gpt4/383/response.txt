@@ -1,0 +1,14 @@
+# Response Time: 17.666240692138672
+Sure, here's an example of refactoring code that uses the deprecated `javax.xml.stream.XMLEventFactory.newInstance` method:
+
+<<< Before refactoring:
+```java
+XMLEventFactory eventFactory = XMLEventFactory.newInstance("default");
+```
+
+>>> After refactoring:
+```java
+XMLEventFactory eventFactory = XMLEventFactory.newFactory().newInstance();
+```
+
+In the refactored code, we use the `newFactory()` method to get an instance of `XMLEventFactory` and then call `newInstance()` on that instance to create a new event factory. This is the recommended approach for creating an `XMLEventFactory` instance and avoids using the deprecated `newInstance` method.

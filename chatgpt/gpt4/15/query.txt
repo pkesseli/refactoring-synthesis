@@ -1,0 +1,6 @@
+The method java.awt.Component.deliverEvent​(Event) is deprecated.
+ The related deprecation comment in Javadoc is "As of JDK version 1.1,
+ replaced by dispatchEvent(AWTEvent e)."
+Give me an executable refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
