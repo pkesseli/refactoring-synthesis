@@ -3,10 +3,8 @@ package uk.ac.ox.cs.refactoring.synthesis.cli;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +52,9 @@ public class SynthesisResultListener implements TestExecutionListener {
 
   @Override
   public void executionFinished(final TestIdentifier testIdentifier, final TestExecutionResult testExecutionResult) {
+    if (!isExperimentClass(testIdentifier))
+      return;
+
     final Run run = getLastRun(testIdentifier);
     if (run == null)
       return;
@@ -82,12 +83,29 @@ public class SynthesisResultListener implements TestExecutionListener {
 
   @Override
   public void executionSkipped(final TestIdentifier testIdentifier, final String reason) {
+    if (!isExperimentClass(testIdentifier))
+      return;
+
     final String benchmarkName = getBenchmarkName(testIdentifier);
     if (benchmarkName == null)
       return;
 
     final List<Run> runs = report.Benchmarks.computeIfAbsent(benchmarkName, _1 -> new ArrayList<>());
     runs.add(new Run());
+  }
+
+  private static boolean isExperimentClass(final TestIdentifier testIdentifier) {
+    final Optional<TestSource> testSource = testIdentifier.getSource();
+    if (!testSource.isPresent())
+      return false;
+    final TestSource source = testSource.get();
+    if (!(source instanceof MethodSource))
+      return false;
+
+    final MethodSource methodTestSource = (MethodSource) source;
+    final String packageName = methodTestSource.getJavaClass().getPackageName();
+    final String expectedPackageName = "uk.ac.ox.cs.refactoring.synthesis.experiment";
+    return expectedPackageName.equals(packageName);
   }
 
   private static String getBenchmarkName(final TestIdentifier testIdentifier) {

@@ -1,6 +1,5 @@
 package uk.ac.ox.cs.refactoring.synthesis.cli;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.DirectoryStream;

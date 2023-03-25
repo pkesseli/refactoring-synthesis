@@ -3,13 +3,11 @@ package uk.ac.ox.cs.refactoring.synthesis.guidance;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.Random;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
