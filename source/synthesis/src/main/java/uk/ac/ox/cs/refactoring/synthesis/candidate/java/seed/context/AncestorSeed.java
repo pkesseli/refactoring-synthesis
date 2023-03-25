@@ -1,6 +1,5 @@
 package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
