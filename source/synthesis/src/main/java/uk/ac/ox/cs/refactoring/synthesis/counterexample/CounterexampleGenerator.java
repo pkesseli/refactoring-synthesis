@@ -28,6 +28,9 @@ import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.random.RandomnessAccessor;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Fields;
@@ -64,6 +67,10 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
    * counterexample.
    */
   private final List<ResolvedType> parameterTypes;
+
+  private final ClassGraph classGraph = new ClassGraph().enableSystemJarsAndModules().enableClassInfo();
+
+  private final ScanResult scanResult = classGraph.scan();
 
   /**
    * @param repository     {@link #repository}
@@ -185,20 +192,30 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       return array;
     }
 
-    final Object createdCollection;
     try {
-      createdCollection = CollectionsGenerator.createCollection(random, typeResolver, generateElement, type);
+      final Object createdCollection = CollectionsGenerator.createCollection(random, typeResolver, generateElement,
+          type);
       if (createdCollection != null)
         return createdCollection;
     } catch (final Throwable e) {
       logger.trace("Error when creating well-known collection type.", e);
     }
 
-    if (!type.isInterface() && !type.isAbstract()) {
+    ResolvedType createdType = type;
+    Class<?> createdClass = cls;
+    if (type.isInterface() || type.isAbstract()) {
+      final Class<?> subclass = getRandomConcreteSubclass(classLoader, cls, random);
+      if (subclass != null) {
+        createdClass = subclass;
+        createdType = typeResolver.resolve(createdClass);
+      }
+    }
+
+    if (!createdType.isInterface() && !createdType.isAbstract()) {
       // TODO: Handle collection types explicitly and re-enable this.
       final boolean tryPublicConstructor = false /* random.nextBoolean() */;
       if (tryPublicConstructor) {
-        final ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(type, null, null);
+        final ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(createdType, null, null);
         final Optional<ResolvedConstructor> constructorWithMostArguments = Arrays
             .stream(typeWithMembers.getConstructors()).filter(c -> c.isPublic())
             .max(CounterexampleGenerator::orderConstructorsByNumberOfParameters);
@@ -210,8 +227,8 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
               .toArray(Object[]::new);
           try {
             final Object constructed = constructor.getRawMember().newInstance(arguments);
-            postProcess(memberResolver, type, constructed);
-            System.out.println("Constructed: " + type);
+            postProcess(memberResolver, createdType, constructed);
+            System.out.println("Constructed: " + createdType);
             return constructed;
           } catch (final Throwable e) {
             logger.warn("Could not use native constructor", e);
@@ -222,12 +239,12 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
 
     final Object object;
     try {
-      object = objenesis.apply(cls);
+      object = objenesis.apply(createdClass);
     } catch (final MockitoException e) {
       logger.warn("Could not instantiate part of counterexample.", e);
-      return getDefaultValue(cls);
+      return getDefaultValue(createdClass);
     }
-    for (final ResolvedField field : Fields.getInstance(memberResolver, type)) {
+    for (final ResolvedField field : Fields.getInstance(memberResolver, createdType)) {
       final ResolvedType fieldType = field.getType();
       if (!isSupported(fieldType))
         continue;
@@ -235,7 +252,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       final Object value = generate(random, status, classLoader, objenesis, fieldType,
           visitedTypesInBranch, depth - 1);
       try {
-        Fields.set(cls, object, field.getName(), value);
+        Fields.set(createdClass, object, field.getName(), value);
       } catch (final NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
         logger.warn("Could not set counterexample member.", e);
       }
@@ -246,6 +263,38 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
   @Override
   public Generator<Counterexample> copy() {
     return new CounterexampleGenerator(repository, instanceType, parameterTypes);
+  }
+
+  /**
+   * Selects a random subclass of {@code cls} to instantiate.
+   * 
+   * @param classLoader        Used to load the identified class.
+   * @param cls                Abstract parent class for which to find a concrete
+   *                           subclass.
+   * @param sourceOfRandomness Used to select a subclass at random.
+   * @return Random concrete subclass of {@code cls} or {@code null} if no
+   *         applicable class was found.
+   */
+  private Class<?> getRandomConcreteSubclass(final ClassLoader classLoader, final Class<?> cls,
+      final SourceOfRandomness sourceOfRandomness) {
+    final ClassInfoList classInfos = scanResult.getSubclasses(cls.getName())
+        .filter(classInfo -> {
+          if (classInfo.isAbstract() || classInfo.isInterface())
+            return false;
+          final String packageName = classInfo.getPackageName();
+          return !packageName.startsWith("sun.") && !packageName.startsWith("com.sun.");
+        });
+    if (classInfos.isEmpty())
+      return null;
+
+    final int index = RandomnessAccessor.nextInt(sourceOfRandomness, classInfos.size() - 1);
+    final String className = classInfos.get(index).getName();
+    try {
+      return classLoader.loadClass(className);
+    } catch (final Throwable e) {
+      logger.error("Could not load subclass.", e);
+    }
+    return null;
   }
 
   /**
