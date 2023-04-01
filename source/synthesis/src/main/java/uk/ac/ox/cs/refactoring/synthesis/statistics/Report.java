@@ -13,4 +13,11 @@ public class Report {
   public FuzzedInputs TotalCandidates = new FuzzedInputs();
 
   public Map<String, List<Run>> Benchmarks = new TreeMap<>();
+
+  public void clear() {
+    TotalRuntimeInMilliseconds = 0;
+    TotalCounterexamples = new FuzzedInputs();
+    TotalCandidates = new FuzzedInputs();
+    Benchmarks.clear();
+  }
 }

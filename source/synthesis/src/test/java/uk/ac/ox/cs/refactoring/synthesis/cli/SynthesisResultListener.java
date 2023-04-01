@@ -75,6 +75,7 @@ public class SynthesisResultListener implements TestExecutionListener {
     } catch (final IOException e) {
       e.printStackTrace();
     }
+    report.clear();
   }
 
   private static boolean isAssertionViolation(final Throwable throwable) {
