@@ -30,46 +30,46 @@ import uk.ac.ox.cs.refactoring.synthesis.state.StateFactory;
 import uk.ac.ox.cs.refactoring.synthesis.verification.FuzzingVerification;
 
 public final class GPT {
-    public static boolean verify(SnippetCandidate candidate, final String benchmarkName,
-        final String fullyQualifiedClassName, final String methodName, final String... fullyQualifiedParameterClassNames)
-        throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException, NoSuchElementException, IOException {
+  public static boolean verify(final String code, final String fullyQualifiedClassName, final String methodName,
+      final String... fullyQualifiedParameterClassNames) throws ClassNotFoundException, IllegalAccessException,
+      NoSuchElementException, NoSuchFieldException, NoSuchMethodException, IOException {
+    final var methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, methodName,
+      Arrays.asList(fullyQualifiedParameterClassNames));
+    final var generatorConfiguration = GeneratorConfigurations.experimentConfiguration(methodToRefactor);
 
 
-        final MethodIdentifier methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, methodName,
-            Arrays.asList(fullyQualifiedParameterClassNames));
+    final SnippetCandidate candidate = synthesise(code, generatorConfiguration, methodToRefactor);
 
 
-        final StateFactory stateFactory = new ClassLoaderClonerStateFactory();
-        final SnippetCandidateExecutor executor = new SnippetCandidateExecutor(stateFactory);
-        final Invoker invoker = new Invoker(methodToRefactor);
+    final StateFactory stateFactory = new ClassLoaderClonerStateFactory();
+    final SnippetCandidateExecutor executor = new SnippetCandidateExecutor(stateFactory);
+    final Invoker invoker = new Invoker(methodToRefactor);
+    final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
+    final GeneratorRepository baseRepository = new GeneratorRepository(sourceOfRandomness)
+        .register(new ObjectGenerator())
+        .register(new ServiceLoaderGeneratorSource())
+        .register(new ClassGenerator())
+        .register(new MethodHandlesLookupGenerator())
+        .register(new OperatingSystemMXBeanGenerator())
+        .register(new AffineTransformGenerator())
+        .register(new FontMetricsGenerator())
+        .register(new OfflineMulticastSocketGenerator());
+    baseRepository.register(new RuntimeVersionGenerator(baseRepository))
+        .register(new TextAreaGenerator(baseRepository));
+    final GeneratorRepository verificationRepository = new GeneratorRepository(sourceOfRandomness)
+        .register(new ServiceLoaderGeneratorSource())
+        .register(new CounterexampleGenerator(baseRepository, generatorConfiguration.InstanceType,
+            generatorConfiguration.ParameterTypes));
 
-        GeneratorConfiguration generatorConfiguration = GeneratorConfigurations.experimentConfiguration(methodToRefactor);
+    final var verification = new FuzzingVerification<>(generatorConfiguration, verificationRepository, executor, invoker,
+        null);
 
-        final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
-        final GeneratorRepository baseRepository = new GeneratorRepository(sourceOfRandomness)
-            .register(new ObjectGenerator())
-            .register(new ServiceLoaderGeneratorSource())
-            .register(new ClassGenerator())
-            .register(new MethodHandlesLookupGenerator())
-            .register(new OperatingSystemMXBeanGenerator())
-            .register(new AffineTransformGenerator())
-            .register(new FontMetricsGenerator())
-            .register(new OfflineMulticastSocketGenerator());
-        baseRepository.register(new RuntimeVersionGenerator(baseRepository))
-            .register(new TextAreaGenerator(baseRepository));
-        final GeneratorRepository verificationRepository = new GeneratorRepository(sourceOfRandomness)
-            .register(new ServiceLoaderGeneratorSource())
-            .register(new CounterexampleGenerator(baseRepository, generatorConfiguration.InstanceType,
-                generatorConfiguration.ParameterTypes));
+    return verification.verify(candidate).isEmpty();
+  }
 
-
-        FuzzingVerification<SnippetCandidate> verification = new FuzzingVerification<>(generatorConfiguration, verificationRepository, executor, invoker,
-            null);
-
-
-        // TODO candidate?
-
-        return verification.verify(null).isEmpty();
-
-    }
+  public static SnippetCandidate synthesise(final String code, final GeneratorConfiguration generatorConfiguration,
+      final MethodIdentifier methodToRefactor) {
+    
+    return null;
+  }
 }
