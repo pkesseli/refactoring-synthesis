@@ -9,9 +9,11 @@ import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.internal.generator.ServiceLoaderGeneratorSource;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
+import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidateExecutor;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserFactory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfigurations;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.AffineTransformGenerator;
@@ -24,6 +26,7 @@ import uk.ac.ox.cs.refactoring.synthesis.cegis.OperatingSystemMXBeanGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.RuntimeVersionGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.TextAreaGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.CounterexampleGenerator;
+import uk.ac.ox.cs.refactoring.synthesis.induction.GPTSynthesis;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
 import uk.ac.ox.cs.refactoring.synthesis.state.ClassLoaderClonerStateFactory;
 import uk.ac.ox.cs.refactoring.synthesis.state.StateFactory;
@@ -69,7 +72,10 @@ public final class GPT {
 
   public static SnippetCandidate synthesise(final String code, final GeneratorConfiguration generatorConfiguration,
       final MethodIdentifier methodToRefactor) {
-    
-    return null;
+    final ClassLoader classLoader = ClassLoaders.createIsolated();
+    final var parserContext = ParserFactory.create(classLoader);
+    // FIXME is it ok to use a different class loader?
+    final var synthesis = new GPTSynthesis(classLoader, parserContext.JavaParser);
+    return synthesis.synthesise(code);
   }
 }
