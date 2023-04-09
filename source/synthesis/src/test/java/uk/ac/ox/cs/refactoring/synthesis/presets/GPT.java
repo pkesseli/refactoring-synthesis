@@ -10,12 +10,14 @@ import com.pholser.junit.quickcheck.internal.generator.ServiceLoaderGeneratorSou
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidateExecutor;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserFactory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfigurations;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GPTConfigurations;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.AffineTransformGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.ClassGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.FontMetricsGenerator;
@@ -30,6 +32,7 @@ import uk.ac.ox.cs.refactoring.synthesis.induction.GPTSynthesis;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
 import uk.ac.ox.cs.refactoring.synthesis.state.ClassLoaderClonerStateFactory;
 import uk.ac.ox.cs.refactoring.synthesis.state.StateFactory;
+import uk.ac.ox.cs.refactoring.synthesis.statistics.GPTVerificationListener;
 import uk.ac.ox.cs.refactoring.synthesis.verification.FuzzingVerification;
 
 public final class GPT {
@@ -38,11 +41,11 @@ public final class GPT {
       NoSuchElementException, NoSuchFieldException, NoSuchMethodException, IOException {
     final var methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, methodName,
       Arrays.asList(fullyQualifiedParameterClassNames));
-    final var generatorConfiguration = GeneratorConfigurations.experimentConfiguration(methodToRefactor);
+    final ClassLoader classLoader = ClassLoaders.createIsolated();
+    final var parserContext = ParserFactory.create(classLoader);
+    final var generatorConfiguration = GPTConfigurations.experimentConfiguration(methodToRefactor, classLoader, parserContext);
 
-
-    final SnippetCandidate candidate = synthesise(code, generatorConfiguration, methodToRefactor);
-
+    final SnippetCandidate candidate = synthesise(code, classLoader, parserContext, generatorConfiguration, methodToRefactor);
 
     final StateFactory stateFactory = new ClassLoaderClonerStateFactory();
     final SnippetCandidateExecutor executor = new SnippetCandidateExecutor(stateFactory);
@@ -64,18 +67,17 @@ public final class GPT {
         .register(new CounterexampleGenerator(baseRepository, generatorConfiguration.InstanceType,
             generatorConfiguration.ParameterTypes));
 
+    final var listener = new GPTVerificationListener<SnippetCandidate>();
     final var verification = new FuzzingVerification<>(generatorConfiguration, verificationRepository, executor, invoker,
-        null);
-
+        listener);
+  
     return verification.verify(candidate).isEmpty();
   }
 
-  public static SnippetCandidate synthesise(final String code, final GeneratorConfiguration generatorConfiguration,
+  public static SnippetCandidate synthesise(final String code, final ClassLoader classLoader, final ParserContext parserContext, final GeneratorConfiguration generatorConfiguration,
       final MethodIdentifier methodToRefactor) {
-    final ClassLoader classLoader = ClassLoaders.createIsolated();
-    final var parserContext = ParserFactory.create(classLoader);
-    // FIXME is it ok to use a different class loader?
-    final var synthesis = new GPTSynthesis(classLoader, parserContext.JavaParser);
+    final ComponentDirectory components = generatorConfiguration.Components;
+    final var synthesis = new GPTSynthesis(classLoader, parserContext, components);
     return synthesis.synthesise(code);
   }
 }
