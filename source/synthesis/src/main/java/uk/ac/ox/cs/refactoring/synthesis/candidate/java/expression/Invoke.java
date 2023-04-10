@@ -35,7 +35,21 @@ public final class Invoke {
    * @param method
    */
   public static void register(final JavaComponents components, final Method method) {
-    if (!Modifier.isPublic(method.getModifiers()))
+    register(components, method, false);
+  }
+
+  /**
+   * Helper to register invoke method expressions in Java candidate builders.
+   * 
+   * @param components     Directory in which to register all invoke method
+   *                       expressions.
+   * @param method         Method whose invocation to add to the instruction set.
+   * @param allowNonPublic Indicates whether the method should be added even if it
+   *                       is not public. We would only set this to {@code true}
+   *                       for methods found in code hints.
+   */
+  public static void register(final JavaComponents components, final Method method, final boolean allowNonPublic) {
+    if (!allowNonPublic && !Modifier.isPublic(method.getModifiers()))
       return;
 
     final Type type = TypeFactory.create(method.getReturnType());

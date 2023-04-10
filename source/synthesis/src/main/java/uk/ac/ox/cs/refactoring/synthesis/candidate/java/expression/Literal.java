@@ -46,6 +46,7 @@ public class Literal implements IExpression {
         case CHAR:
           expression = new CharLiteralExpr((char) value);
           break;
+        case FLOAT:
         case DOUBLE:
           expression = new DoubleLiteralExpr(value.toString());
           break;
