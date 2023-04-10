@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
@@ -52,17 +51,11 @@ import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterf
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 
-import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.JavaLanguage;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaComponents;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifiers;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.InstructionSetSeed;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
 /** Literally a copy of {@link JavaDocSeed} but with fields and methods made public */
 public class SourceFinder {
@@ -98,7 +91,7 @@ public class SourceFinder {
     }
   }
 
-  private static boolean isEqual(final ResolvedMethodDeclaration resolvedMethodDeclaration,
+  public static boolean isEqual(final ResolvedMethodDeclaration resolvedMethodDeclaration,
       final MethodDeclaration methodDeclaration) {
     final ResolvedMethodDeclaration other;
     try {
@@ -197,7 +190,7 @@ public class SourceFinder {
 //     }
 //   }
 
-  private ResolvedMethodDeclaration getResolvedMethodDeclarationFromLink(final JavaSymbolSolver symbolResolver,
+  public ResolvedMethodDeclaration getResolvedMethodDeclarationFromLink(final JavaSymbolSolver symbolResolver,
       final CombinedTypeSolver typeSolver, final JavaParser javaParser, final Type defaultType,
       final ParseResult<CompilationUnit> parseResult, final MethodDeclaration method, final String code) {
     final Expression expression;
@@ -241,7 +234,7 @@ public class SourceFinder {
    * @param typeSolver Used for resolution.
    * @return Declaring type or {@code null}, if not found.
    */
-  private static ResolvedReferenceTypeDeclaration getDeclaringClass(final MethodCallExpr methodCall,
+  public static ResolvedReferenceTypeDeclaration getDeclaringClass(final MethodCallExpr methodCall,
       final TypeSolver typeSolver) {
     final Optional<Expression> scope = methodCall.getScope();
     if (scope.isPresent()) {
@@ -363,7 +356,7 @@ public class SourceFinder {
    * @param javadoc Comment in which to search.
    * @return {@link Javadoc} link reference.
    */
-  private static Set<String> getLink(final Javadoc javadoc) {
+  public static Set<String> getLink(final Javadoc javadoc) {
     return getDeprecatedInlineTags(javadoc).filter(tag -> JavadocInlineTag.Type.LINK == tag.getType())
         .map(JavadocInlineTag::getContent).map(Links::getLink).collect(Collectors.toSet());
   }
@@ -380,7 +373,7 @@ public class SourceFinder {
    * @param javadoc         Comment from which to extract the example.
    * @return Code example to replace the method call.
    */
-  private Expression parseDeprecatedCodeExample(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
+  public Expression parseDeprecatedCodeExample(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
       final JavaParser javaParser, final Type defaultType, final ParseResult<CompilationUnit> compilationUnit,
       final MethodDeclaration method, final Javadoc javadoc) {
 

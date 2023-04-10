@@ -2,33 +2,17 @@ package uk.ac.ox.cs.refactoring.synthesis.induction;
 
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.SystemUtils;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.comments.CommentsCollection;
-import com.github.javaparser.ast.expr.Expression;
+
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
-import uk.ac.ox.cs.refactoring.classloader.JavaLanguage;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
@@ -90,8 +74,8 @@ public class GPTSynthesis {
     for (final var suggestedStatement: block.getResult().get().getStatements()) {
 
       // TODO maybe re-parse within the method context?
-      // final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method, suggestedStatement);
-      final var statement = suggestedStatement;
+      final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method, suggestedStatement);
+      // final var statement = suggestedStatement;
       final var expression = statement.asExpressionStmt().getExpression();
 
       System.out.println("parsed expression: " + expression.toString());
@@ -100,7 +84,7 @@ public class GPTSynthesis {
 
     }
 
-    // System.out.println(candidate.Block.toNode().toString());
+    System.out.println(candidate.Block.toNode().toString());
     System.out.println("done");
     return candidate;
   }
