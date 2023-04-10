@@ -77,7 +77,7 @@ public final class GPT {
   public static SnippetCandidate synthesise(final String code, final ClassLoader classLoader, final ParserContext parserContext, final GeneratorConfiguration generatorConfiguration,
       final MethodIdentifier methodToRefactor) {
     final ComponentDirectory components = generatorConfiguration.Components;
-    final var synthesis = new GPTSynthesis(classLoader, parserContext, components);
+    final var synthesis = new GPTSynthesis(methodToRefactor, classLoader, parserContext, components);
     return synthesis.synthesise(code);
   }
 }
