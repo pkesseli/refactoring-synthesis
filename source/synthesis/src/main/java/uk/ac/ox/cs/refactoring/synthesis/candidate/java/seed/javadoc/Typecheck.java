@@ -2,6 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
@@ -10,7 +11,6 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -88,15 +88,44 @@ class Typecheck extends VoidVisitorAdapter<Void> {
     replacementsForParent.put(n, new TypeExpr(getType(n)));
   }
 
+  /**
+   * Maps the given name to a type. Will manually resolve well-known, unambiguous
+   * where the GitHub JavaParser fails.
+   * 
+   * TODO: Not being able to resolve "Graphics2D" to "java.awt.Graphics2D" despite
+   * "java.awt.*" being imported is an issue in JavaParsers which is likely
+   * resolved in more recent versions. We should upgrade the library in follow-up
+   * projects.
+   * 
+   * @param n Name to resolve to a type.
+   * @return Resolved type if available, otherwise {@link #defaultType}.
+   */
   private Type getType(final NameExpr n) {
-    final ResolvedType resolvedType;
-    try {
-      resolvedType = facade.getType(n);
-    } catch (final UnsolvedSymbolException e) {
-      return defaultType;
-    }
+    final ResolvedType resolvedType = getResolvedType(n);
+    if (resolvedType != null)
+      return TypeFactory.create(javaParser, resolvedType);
 
-    return TypeFactory.create(javaParser, resolvedType);
+    if ("Graphics2D".equals(n.getNameAsString())) {
+      final Optional<Type> parseResult = javaParser.parseType("java.awt.Graphics2D").getResult();
+      if (parseResult.isPresent())
+        return parseResult.get();
+    }
+    return defaultType;
+  }
+
+  /**
+   * Uses {@link #facade} to provide a {@link ResolvedType} for the given name.
+   * Will never throw.
+   * 
+   * @param n Name to resolve.
+   * @return Type provided by {@code #facade} or {@code null} on failure.
+   */
+  private ResolvedType getResolvedType(final NameExpr n) {
+    try {
+      return facade.getType(n);
+    } catch (final Throwable e) {
+      return null;
+    }
   }
 
   /**
@@ -109,7 +138,7 @@ class Typecheck extends VoidVisitorAdapter<Void> {
   private boolean canBeResolved(final Expression expression) {
     try {
       facade.getType(expression, false);
-    } catch (final UnsolvedSymbolException e) {
+    } catch (final Throwable e) {
       return false;
     }
     return true;
