@@ -230,7 +230,7 @@ public class JavaDocSeed implements InstructionSetSeed {
   private static void register(final ClassLoader classLoader, final JavaComponents javaComponents,
       final ResolvedMethodDeclaration methodDeclaration) throws ClassNotFoundException, NoSuchMethodException {
     final Method methodToRegister = Methods.getMethod(classLoader, MethodIdentifiers.create(methodDeclaration));
-    Invoke.register(javaComponents, methodToRegister);
+    Invoke.register(javaComponents, methodToRegister, true);
   }
 
   /**
