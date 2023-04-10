@@ -1,3 +1,5 @@
+- Camel-case code hints
+- Missed code hints
 - Run each benchmark in isolation
 - Fuzzing loop with increasing sizes
 - Consider subclasses
