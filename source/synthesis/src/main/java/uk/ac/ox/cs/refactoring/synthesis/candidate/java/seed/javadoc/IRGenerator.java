@@ -8,12 +8,12 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 
-public class SourceCodeConvertor {
-  private final AnotherSnippetComponentVisitor visitor;
+public class IRGenerator {
+  private final IRGenerationVisitor visitor;
 
-  public SourceCodeConvertor(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
+  public IRGenerator(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
       final Set<String> involvedClasses) {
-    this.visitor = new AnotherSnippetComponentVisitor(classLoader, javaParser, typeSolver, involvedClasses);
+    this.visitor = new IRGenerationVisitor(classLoader, javaParser, typeSolver, involvedClasses);
   }
 
   public IExpression convertExpression(Expression expr) {

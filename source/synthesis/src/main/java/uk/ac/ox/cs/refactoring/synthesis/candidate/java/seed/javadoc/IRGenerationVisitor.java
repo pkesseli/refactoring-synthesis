@@ -48,7 +48,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 /**
  * Extending {@link SnippetComponentVisitor} with `this` expression
  */
-class AnotherSnippetComponentVisitor extends VoidVisitorAdapter<Void> {
+class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
 
   /** Used to look up a method by its identifier. */
   private final ClassLoader classLoader;
@@ -80,7 +80,7 @@ class AnotherSnippetComponentVisitor extends VoidVisitorAdapter<Void> {
    * @param typeSolver      {@link #typeSolver}
    * @param involvedClasses {@link #involvedClasses}
    */
-  AnotherSnippetComponentVisitor(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
+  IRGenerationVisitor(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
       final Set<String> involvedClasses) {
     this.classLoader = classLoader;
     this.javaParser = javaParser;

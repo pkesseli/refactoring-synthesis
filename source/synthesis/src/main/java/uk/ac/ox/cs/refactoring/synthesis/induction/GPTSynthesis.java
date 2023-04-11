@@ -17,7 +17,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.SourceCodeConvertor;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.IRGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.SourceFinder;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
@@ -79,12 +79,13 @@ public class GPTSynthesis {
       final var expression = statement.asExpressionStmt().getExpression();
 
       System.out.println("parsed expression: " + expression.toString());
-      final var convertor = new SourceCodeConvertor(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses);
+      final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses);
       candidate.Block.Statements.add(new ExpressionStatement(convertor.convertExpression(expression)));
 
     }
 
-    System.out.println(candidate.Block.toNode().toString());
+    // May contain place holders
+    // System.out.println(candidate.Block.toNode().toString());
     System.out.println("done");
     return candidate;
   }
