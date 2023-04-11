@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
@@ -33,16 +35,20 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IStatement;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeMethod;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Literal;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.SymbolExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.This;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.VarArgsObjectArrayExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifiers;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
 /**
@@ -74,6 +80,15 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
   /** Child expressions of {@link #expression} discovered during visiting. */
   final LinkedList<IExpression> stack = new LinkedList<>();
 
+  /** Mapping local names to {@link SymbolExpression} */
+  final Map<String, IExpression> environment;
+
+  /** 
+   * Partially constructed candidate. Keep a reference here to store 
+   * intermediate statements
+   */
+  final SnippetCandidate candidate;
+
   /**
    * @param classLoader     {@link #classLoader}
    * @param javaParser      {@link #javaParser}
@@ -81,11 +96,14 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
    * @param involvedClasses {@link #involvedClasses}
    */
   IRGenerationVisitor(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
-      final Set<String> involvedClasses) {
+      final Set<String> involvedClasses, final Map<String, IExpression> environment,
+      final SnippetCandidate candidate) {
     this.classLoader = classLoader;
     this.javaParser = javaParser;
     this.typeSolver = typeSolver;
     this.involvedClasses = involvedClasses;
+    this.environment = environment;
+    this.candidate = candidate;
   }
 
   /**
@@ -257,9 +275,13 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
 
   @Override
   public void visit(final NameExpr n, final Void arg) {
-    // TODO: Currently local names in Javadoc snippets unsupported, always treated
-    // as unresolved.
-    addPlaceholder(n, getType(n));
+    try {
+      final IExpression expr = environment.get(n.getNameAsString());
+      stack.add(expr);
+    } catch (final NullPointerException e) {
+      addPlaceholder(n, getType(n));
+    }
+
   }
 
   @Override
@@ -269,7 +291,26 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
 
   @Override
   public void visit(final VariableDeclarationExpr n, final Void arg) {
-    addPlaceholder(n, n.getVariable(0).getType());
+    if (n.getVariables().size() != 1) {
+      throw new IllegalArgumentException();
+    }
+    final VariableDeclarator declaration = n.getVariable(0);
+    final String name = declaration.getNameAsString();
+    final Expression initialiser = declaration.getInitializer().get();
+
+    initialiser.accept(this, null);
+    final IExpression rhs = stack.removeLast();
+
+    // TODO is this better?
+    // if (rhs instanceof SymbolExpression) {
+    //   stack.add(rhs);
+    // } else {
+    final IStatement rhsStmt = new ExpressionStatement(rhs);
+    candidate.Block.Statements.add(rhsStmt);
+    final IExpression rhsRepr = rhsStmt.getSymbolExpression().get();
+    environment.put(name, rhsRepr);
+    stack.add(rhsRepr);
+    // }
   }
 
   /**

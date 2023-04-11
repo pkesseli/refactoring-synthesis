@@ -2,6 +2,8 @@ package uk.ac.ox.cs.refactoring.synthesis.induction;
 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -14,6 +16,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
@@ -69,23 +72,24 @@ public class GPTSynthesis {
 
     var block = parserContext.JavaParser.parseBlock(code);
     final var candidate = new SnippetCandidate();
+    // TODO initialise environment with parameters mapping
+    final Map<String, IExpression> environment = new HashMap<>();
+    final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses,
+        environment, candidate);
 
 
     for (final var suggestedStatement: block.getResult().get().getStatements()) {
 
-      // TODO maybe re-parse within the method context?
-      final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method, suggestedStatement);
-      // final var statement = suggestedStatement;
+      final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
+          method, suggestedStatement);
       final var expression = statement.asExpressionStmt().getExpression();
 
       System.out.println("parsed expression: " + expression.toString());
-      final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses);
       candidate.Block.Statements.add(new ExpressionStatement(convertor.convertExpression(expression)));
 
     }
 
-    // May contain place holders
-    // System.out.println(candidate.Block.toNode().toString());
+    System.out.println(candidate.Block.toNode().toString());
     System.out.println("done");
     return candidate;
   }
