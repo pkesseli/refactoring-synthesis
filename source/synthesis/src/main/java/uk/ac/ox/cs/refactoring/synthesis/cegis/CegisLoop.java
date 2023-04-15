@@ -17,6 +17,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfig
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.CounterexampleGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.induction.FuzzingSynthesis;
+import uk.ac.ox.cs.refactoring.synthesis.induction.GPTSynthesis;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
 import uk.ac.ox.cs.refactoring.synthesis.verification.FuzzingVerification;
@@ -59,7 +60,7 @@ public class CegisLoop<Candidate> {
    */
   public CegisLoop(final CandidateExecutor<Candidate> executor, final Invoker invoker,
       final GeneratorConfiguration generatorConfiguration, final Class<Candidate> candidateType,
-      final CegisLoopListener<Candidate> listener) {
+      final CegisLoopListener<Candidate> listener, final GPTHints hints) {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
     final GeneratorRepository baseRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ObjectGenerator())
@@ -83,8 +84,13 @@ public class CegisLoop<Candidate> {
     final Method fuzzingSynthesisFrameworkMethod = SnippetCandidateGenerator.TestClass
         .getFrameworkMethodPlaceholder(null);
 
-    synthesis = new FuzzingSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
-        fuzzingSynthesisFrameworkMethod, executor, listener);
+    if (hints == null) {
+      synthesis = new FuzzingSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
+          fuzzingSynthesisFrameworkMethod, executor, listener);
+    } else {
+      synthesis = new GPTSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
+          fuzzingSynthesisFrameworkMethod, executor, listener, hints);
+    }
     verification = new FuzzingVerification<>(generatorConfiguration, verificationRepository, executor, invoker,
         listener);
   }

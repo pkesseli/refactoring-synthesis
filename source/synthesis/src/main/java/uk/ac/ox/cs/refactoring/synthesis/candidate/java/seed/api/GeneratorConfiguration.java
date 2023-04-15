@@ -5,9 +5,17 @@ import java.util.List;
 import com.fasterxml.classmate.ResolvedType;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
 
 /** Configures candidate generators. */
 public class GeneratorConfiguration {
+
+  public final ClassLoader classLoader;
+
+  public final ParserContext parserContext;
+
+  public final MethodIdentifier methodToRefactor;
 
   /** Instruction set to use. */
   public final ComponentDirectory Components;
@@ -63,11 +71,14 @@ public class GeneratorConfiguration {
    * @param stage2MaxCounterexamples {@link #Stage2MaxCounterexamples}
    * @param stage2MaxInputs          {@link #Stage2MaxInputs}
    */
-  public GeneratorConfiguration(final ComponentDirectory components, final byte minInstructions,
+  public GeneratorConfiguration(final ClassLoader classLoader, final ParserContext parserContext, final MethodIdentifier methodToRefactor, final ComponentDirectory components, final byte minInstructions,
       final byte maxInstructions, final byte maxInstructionLength, final boolean foundCodeHints,
       final ResolvedType instanceType, final List<ResolvedType> parameterTypes, final ResolvedType resultType,
       final boolean useRandomGuidance, final long stage1MaxCounterexamples, final long stage1MaxInputs,
       final long stage2MaxCounterexamples, final long stage2MaxInputs) {
+    this.classLoader = classLoader;
+    this.parserContext = parserContext;
+    this.methodToRefactor = methodToRefactor;
     Components = components;
     MinInstructions = minInstructions;
     MaxInstructions = maxInstructions;
