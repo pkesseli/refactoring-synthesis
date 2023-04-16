@@ -77,25 +77,28 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       return null;
     }
 
-
-    var original = generatorConfiguration.parserContext.JavaParser.parseBlock(hints.before);
-    final var remapper = new ParameterMapping(generatorConfiguration.methodToRefactor, javaParser);
-
-    for (final var originalStatement: original.getResult().get().getStatements()) {
-
-      final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
-          method, originalStatement);
-      final var expression = statement.asExpressionStmt().getExpression();
-
-      remapper.checkExpression(expression);
-    }
-
     var block = generatorConfiguration.parserContext.JavaParser.parseBlock(hints.after);
     final var candidate = new SnippetCandidate();
-
-    // TODO initialise environment with parameters mapping
     final Map<String, IExpression> environment = new HashMap<>();
-    environment.putAll(remapper.arguments);
+
+
+    if (hints.before != null) {
+      var original = generatorConfiguration.parserContext.JavaParser.parseBlock(hints.before);
+      final var remapper = new ParameterMapping(generatorConfiguration.methodToRefactor, javaParser);
+
+      for (final var originalStatement: original.getResult().get().getStatements()) {
+
+        final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
+            method, originalStatement);
+        final var expression = statement.asExpressionStmt().getExpression();
+
+        remapper.checkExpression(expression);
+      }
+
+
+
+      environment.putAll(remapper.arguments);
+    }
 
     final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses,
         environment, candidate);
