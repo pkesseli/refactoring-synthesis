@@ -24,6 +24,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.IRGenerator;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.ParameterMapping;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.SourceFinder;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
@@ -77,10 +78,25 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     }
 
 
+    var original = generatorConfiguration.parserContext.JavaParser.parseBlock(hints.before);
+    final var remapper = new ParameterMapping(generatorConfiguration.methodToRefactor, javaParser);
+
+    for (final var originalStatement: original.getResult().get().getStatements()) {
+
+      final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
+          method, originalStatement);
+      final var expression = statement.asExpressionStmt().getExpression();
+
+      remapper.checkExpression(expression);
+    }
+
     var block = generatorConfiguration.parserContext.JavaParser.parseBlock(hints.after);
     final var candidate = new SnippetCandidate();
+
     // TODO initialise environment with parameters mapping
     final Map<String, IExpression> environment = new HashMap<>();
+    environment.putAll(remapper.arguments);
+
     final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses,
         environment, candidate);
 
@@ -92,6 +108,10 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       final var expression = statement.asExpressionStmt().getExpression();
 
       System.out.println("parsed expression: " + expression.toString());
+      final var instructionExpression = convertor.convertExpression(expression);
+      if (instructionExpression == null) {
+        continue;
+      }
       candidate.Block.Statements.add(new ExpressionStatement(convertor.convertExpression(expression)));
 
     }

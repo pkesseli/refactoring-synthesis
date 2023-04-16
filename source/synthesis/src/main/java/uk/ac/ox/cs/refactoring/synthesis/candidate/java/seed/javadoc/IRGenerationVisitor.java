@@ -18,6 +18,8 @@ import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.expr.TypeExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
@@ -40,6 +42,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKey;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.builder.JavaLanguageKeys;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.FieldAccess;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeConstructor;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.InvokeMethod;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Literal;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.SymbolExpression;
@@ -113,12 +116,19 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
    * @return Instruction set expression.
    */
   IExpression getExpression() {
+    // TODO `null` represent noop. It is appropriate?
     return stack.peek();
   }
 
   @Override
   public void visit(final IntegerLiteralExpr n, final Void arg) {
     stack.add(new Literal(n.asNumber(), getType(n)));
+  }
+
+  @Override
+  public void visit(final StringLiteralExpr n, final Void arg) {
+    // TODO
+    throw new IllegalArgumentException("string literals are not supported");
   }
 
   @Override
@@ -215,6 +225,23 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
     stack.add(This.create(TypeFactory.create(javaParser, n.calculateResolvedType())));
   }
 
+
+  @Override
+  public void visit(final ObjectCreationExpr n, final Void unused) {
+    super.visit(n, unused);
+    final int numberOfArguments = n.getArguments().size();
+    final List<IExpression> arguments = new ArrayList<>(numberOfArguments);
+    for (int i = 0; i < numberOfArguments; ++i)
+      arguments.add(stack.removeLast());
+
+    Collections.reverse(arguments);
+    
+    final List<IExpression> invocationArguments = arguments;
+
+    // FIXME find constructor
+    stack.add(new InvokeConstructor(invocationArguments, null));
+  }
+
   @Override
   public void visit(final MethodCallExpr n, final Void unused) {
     super.visit(n, unused);
@@ -296,6 +323,13 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
     }
     final VariableDeclarator declaration = n.getVariable(0);
     final String name = declaration.getNameAsString();
+
+    if (environment.containsKey(name)) {
+      // converting parameters to proper ones.
+      System.out.println("Discarding declaration of " + name);
+      return;
+    }
+
     final Expression initialiser = declaration.getInitializer().get();
 
     initialiser.accept(this, null);
