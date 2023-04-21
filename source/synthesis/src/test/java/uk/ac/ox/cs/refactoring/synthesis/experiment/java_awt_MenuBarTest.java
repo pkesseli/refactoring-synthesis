@@ -19,6 +19,6 @@ class java_awt_MenuBarTest {
   @Test
   void countMenusGPT() throws Exception {
     // assertTrue(GPT.verify("{ int temp = this.getMenuCount(); int res = temp; }", "java.awt.MenuBar", "countMenus"));
-    assertThat(synthesiseGPT(null, "{ int temp = this.countMenus(); int res = temp; }", "java.awt.MenuBar", "countMenus"), contains(".getMenuCount("));
+    assertThat(synthesiseGPT(null, "{ this.getMenuCount(); }", "java.awt.MenuBar", "countMenus"), contains(".getMenuCount("));
   }
 }

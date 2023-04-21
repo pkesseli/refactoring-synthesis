@@ -303,7 +303,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
    * @return {@code true} if the type is allowed in counterexamples, {@code false}
    *         otherwise.
    */
-  private static boolean isSupported(final ResolvedType type) {
+  public static boolean isSupported(final ResolvedType type) {
     final Class<?> cls = type.getErasedType();
     return !Reference.class.isAssignableFrom(cls) && !type.getTypeName().equals("sun.awt.AppContext");
   }
