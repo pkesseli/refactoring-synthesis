@@ -22,6 +22,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserFactory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.IRGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.ParameterMapping;
@@ -38,6 +39,9 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
   public SourceFinder sourceFinder;
 
+  private final ClassLoader classLoader;
+  private final ParserContext parserContext;
+
   public GPTSynthesis(final GeneratorConfiguration generatorConfiguration,
       final GeneratorRepository generatorRepository, final SourceOfRandomness sourceOfRandomness,
       final Class<Candidate> candidateType, final Method frameworkMethodPlaceholder,
@@ -45,17 +49,21 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       final GPTHints hints) {
     super(generatorConfiguration, generatorRepository, sourceOfRandomness, candidateType, frameworkMethodPlaceholder, executor, listener);
     this.hints = hints;
-    this.sourceFinder = new SourceFinder(generatorConfiguration.parserContext, generatorConfiguration.classLoader, generatorConfiguration.methodToRefactor);
+    final ClassLoader classLoader = ClassLoaders.createIsolated();
+    final ParserContext parserContext = ParserFactory.create(classLoader);
+    this.classLoader = classLoader;
+    this.parserContext = parserContext;
+    this.sourceFinder = new SourceFinder(parserContext, classLoader, hints.methodToRefactor);
   }
 
   @Override
   public Candidate getDefault() {
 
-    final ClassLoader classLoader = generatorConfiguration.classLoader;
-    final ParserContext parserContext = generatorConfiguration.parserContext;
+    // final ClassLoader classLoader = generatorConfiguration.classLoader;
+    // final ParserContext parserContext = generatorConfiguration.parserContext;
     final ComponentDirectory components = generatorConfiguration.Components;
 
-    final String className = generatorConfiguration.methodToRefactor.FullyQualifiedClassName;
+    final String className = hints.methodToRefactor.FullyQualifiedClassName;
     final SymbolResolver symbolResolver = parserContext.SymbolResolver;
     final TypeSolver typeSolver = parserContext.TypeSolver;
     final JavaParser javaParser = parserContext.JavaParser;
@@ -77,14 +85,14 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       return null;
     }
 
-    var block = generatorConfiguration.parserContext.JavaParser.parseBlock(hints.after);
+    var block = parserContext.JavaParser.parseBlock(hints.after);
     final var candidate = new SnippetCandidate();
     final Map<String, IExpression> environment = new HashMap<>();
 
 
     if (hints.before != null) {
-      var original = generatorConfiguration.parserContext.JavaParser.parseBlock(hints.before);
-      final var remapper = new ParameterMapping(generatorConfiguration.methodToRefactor, javaParser);
+      var original = parserContext.JavaParser.parseBlock(hints.before);
+      final var remapper = new ParameterMapping(hints.methodToRefactor, javaParser);
 
       for (final var originalStatement: original.getResult().get().getStatements()) {
 
@@ -122,12 +130,15 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     System.out.println(candidate.Block.toNode().toString());
     System.out.println("done");
 
-    // Hmmmm
-    Candidate res = (Candidate) candidate;
 
-    listener.initial(res);
-    
-    return res;
+    try {
+      @SuppressWarnings("unchecked")
+      Candidate res = (Candidate) candidate;
+      listener.initial(res);
+      return res;
+    } catch (ClassCastException e) {
+      throw new NoSuchElementException("only SnippetCandidate is supported");
+    }
   }
 
   @Override

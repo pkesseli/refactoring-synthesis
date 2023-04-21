@@ -34,7 +34,7 @@ public final class Deprecation {
     final MethodIdentifier methodToRefactor = new MethodIdentifier(fullyQualifiedClassName, methodName,
         Arrays.asList(fullyQualifiedParameterClassNames)); 
 
-    final GPTHints hints = new GPTHints(before, after);
+    final GPTHints hints = new GPTHints(before, after, methodToRefactor);
     return Synthesis.synthesise(GeneratorConfigurations.experimentConfiguration(methodToRefactor), methodToRefactor,
         null, hints);
   }

@@ -136,13 +136,13 @@ public final class HeapComparison {
     }
 
     // TODO maybe put it here
-    // if (!isRelevant(lhsClass.getName())
-    //       || Polymorphism.isMockitoCodegen(lhsClass)
-    //       // || !CounterexampleGenerator.isSupported(typeResolver.resolve(declaringClass))
-    //       || Polymorphism.isDynamic(lhsClass)) {
-    //         // System.out.println("Skipping " + lhsClass.getName());
-    //         return true;
-    //       }
+    if (!isRelevant(lhsClass.getName())
+          || Polymorphism.isMockitoCodegen(lhsClass)
+          // || !CounterexampleGenerator.isSupported(typeResolver.resolve(declaringClass))
+          || Polymorphism.isDynamic(lhsClass)) {
+            // System.out.println("Skipping " + lhsClass.getName());
+            return true;
+          }
 
     if (shouldUseNativeEquals(lhsClassLoader, lhsClass))
       try {
@@ -221,7 +221,7 @@ public final class HeapComparison {
       lhsField.setAccessible(true);
       rhsField.setAccessible(true);
       if (!equals(comparator, lhsClassLoader, lhsField.get(lhs), rhsClassLoader, rhsField.get(rhs))) {
-        // System.out.println(lhs.getClass().toString() + " -> " + lhsField.toString());
+        System.out.println(lhs.getClass().toString() + " -> " + lhsField.toString());
         // System.out.println("here");
         // System.out.println("LHS: " + lhsField.get(lhs).toString() + ", RHS: " + rhsField.get(rhs));
         return false;
