@@ -1,4 +1,0 @@
-The method java.net.MulticastSocket.leaveGroup​(InetAddress) is deprecated. The related deprecation comment in Javadoc is "This method does not accept the network interface on which
-             to leave the multicast group. Use
-             MulticastSocket.leaveGroup(SocketAddress, NetworkInterface) instead."
-Show me a refactoring example.

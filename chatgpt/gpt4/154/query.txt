@@ -1,6 +1,0 @@
-The method java.lang.ThreadGroup.stop() is deprecated.
- The related deprecation comment in Javadoc is "This method is inherently unsafe.  See
-     Thread.stop() for details."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

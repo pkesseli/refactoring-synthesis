@@ -1,0 +1,20 @@
+# Response Time: 15.313591003417969
+Sure, here's an example refactoring:
+
+<<< Before refactoring: 
+```
+Font font = new Font("Arial", Font.PLAIN, 12);
+Toolkit toolkit = Toolkit.getDefaultToolkit();
+FontMetrics fontMetrics = toolkit.getFontMetrics(font);
+int stringWidth = fontMetrics.stringWidth("Hello, world!");
+```
+
+>>> After refactoring: 
+```
+Font font = new Font("Arial", Font.PLAIN, 12);
+FontRenderContext frc = new FontRenderContext(null, true, true);
+LineMetrics lineMetrics = font.getLineMetrics("Hello, world!", frc);
+int stringWidth = (int) font.getStringBounds("Hello, world!", frc).getWidth();
+``` 
+
+In this example, we've replaced the deprecated `getFontMetrics` method with the `getLineMetrics` and `getStringBounds` methods on the `Font` class. We've also created a `FontRenderContext` object to pass to these methods. This refactored code should produce the same result as the original code, but without using the deprecated method.

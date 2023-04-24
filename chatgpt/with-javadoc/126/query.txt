@@ -1,6 +1,0 @@
-The method java.beans.Beans.instantiate​(ClassLoader, String, BeanContext, AppletInitializer) is deprecated. The related deprecation comment in Javadoc is "It is recommended to use
- Beans.instantiate(ClassLoader, String, BeanContext),
- because the Applet API is deprecated. See the
-  java.applet package
- documentation for further information."
-Show me a refactoring example.

@@ -1,0 +1,15 @@
+# Response Time: 6.947742223739624
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+HandshakeCompletedEvent event = ...;
+X509Certificate[] peerCertificates = (X509Certificate[]) event.getPeerCertificateChain();
+```
+
+>>> After refactoring:
+```
+HandshakeCompletedEvent event = ...;
+Certificate[] peerCertificates = event.getPeerCertificates();
+X509Certificate[] x509Certificates = Arrays.copyOf(peerCertificates, peerCertificates.length, X509Certificate[].class);
+```

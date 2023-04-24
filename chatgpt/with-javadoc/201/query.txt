@@ -1,8 +1,0 @@
-The method java.rmi.server.RemoteRef.newCall​(RemoteObject, Operation[], int, long) is deprecated. The related deprecation comment in Javadoc is "1.2 style stubs no longer use this method. Instead of
- using a sequence of method calls on the stub's the remote reference
- (newCall, invoke, and done), a
- stub uses a single method, invoke(Remote, Method, Object[],
- int), on the remote reference to carry out parameter
- marshalling, remote method executing and unmarshalling of the return
- value."
-Show me a refactoring example.

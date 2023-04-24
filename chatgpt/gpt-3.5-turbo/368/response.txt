@@ -1,0 +1,26 @@
+# Response Time: 17.676307916641235
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+Segment text = new Segment("Hello\tworld", 0, 11);
+int x = 0;
+int y = 0;
+Graphics g = new Graphics();
+TabExpander expander = new MyTabExpander();
+int startOffset = 0;
+Utilities.drawTabbedText(text, startOffset, x, y, g, expander, startOffset);
+```
+
+>>> After refactoring:
+```
+Segment text = new Segment("Hello\tworld", 0, 11);
+float x = 0;
+float y = 0;
+Graphics2D g2d = (Graphics2D) g;
+TabExpander expander = new MyTabExpander();
+int startOffset = 0;
+Utilities.drawTabbedText(text, x, y, g2d, expander, startOffset);
+```
+
+In this example, we've updated the deprecated `Utilities.drawTabbedText` method to use the new replacement method. We've changed the `Graphics` object to a `Graphics2D` object, and we've changed the `x` and `y` parameters from `int` to `float`.

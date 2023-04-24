@@ -1,0 +1,9 @@
+The method java.awt.List.delItems​(int, int) is deprecated.
+ The related deprecation comment in Javadoc is "As of JDK version 1.1,
+ Not for public use in the future.
+ This method is expected to be retained only as a package
+ private method."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

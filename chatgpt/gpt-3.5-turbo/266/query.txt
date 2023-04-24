@@ -1,0 +1,9 @@
+The method java.util.logging.LogRecord.setMillis​(long) is deprecated.
+ The related deprecation comment in Javadoc is "LogRecord maintains timestamps with nanosecond resolution,
+             using Instant values. For this reason,
+             setInstant()
+             should be used in preference to setMillis()."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

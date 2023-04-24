@@ -1,6 +1,0 @@
-The method java.awt.datatransfer.DataFlavor.normalizeMimeType​(String) is deprecated.
- The related deprecation comment in Javadoc is "This method is never invoked by this implementation from 1.1
-             onwards"
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

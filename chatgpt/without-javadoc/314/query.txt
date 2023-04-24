@@ -1,1 +1,0 @@
-The method javax.swing.JComponent.reshape​(int, int, int, int) is deprecated.Show me a refactoring example.

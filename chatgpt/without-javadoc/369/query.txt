@@ -1,1 +1,0 @@
-The method javax.swing.text.Utilities.getBreakLocation​(Segment, FontMetrics, int, int, TabExpander, int) is deprecated.Show me a refactoring example.

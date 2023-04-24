@@ -1,2 +1,0 @@
-The method javax.swing.JList.getSelectedValues() is deprecated. The related deprecation comment in Javadoc is "As of JDK 1.7, replaced by JList.getSelectedValuesList()"
-Show me a refactoring example.

@@ -1,1 +1,0 @@
-The method java.lang.reflect.Proxy.getProxyClass​(ClassLoader, Class&lt;?&gt;...) is deprecated.Show me a refactoring example.

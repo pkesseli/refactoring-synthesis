@@ -1,0 +1,15 @@
+# Response Time: 7.151946067810059
+Sure, here's an example refactoring:
+
+<<< Before refactoring: 
+```
+String className = "com.example.MyClass";
+Class<?> clazz = RMIClassLoader.loadClass(className);
+```
+
+>>> After refactoring: 
+```
+String className = "com.example.MyClass";
+String codebase = null; // or specify a codebase URL if needed
+Class<?> clazz = RMIClassLoader.loadClass(codebase, className);
+```

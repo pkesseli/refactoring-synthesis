@@ -1,0 +1,26 @@
+# Response Time: 10.094839811325073
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.awt.Component;
+
+public class MyComponent extends Component {
+    public Dimension getPreferredSize() {
+        return preferredSize();
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.Component;
+
+public class MyComponent extends Component {
+    public Dimension getPreferredSize() {
+        return getPreferredSize();
+    }
+}
+```
+
+In the original code, the `getPreferredSize()` method is calling the deprecated `preferredSize()` method. In the refactored code, the `getPreferredSize()` method is calling the non-deprecated `getPreferredSize()` method instead.

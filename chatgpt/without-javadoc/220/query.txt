@@ -1,1 +1,0 @@
-The method java.sql.Date.setSeconds​(int) is deprecated.Show me a refactoring example.

@@ -1,2 +1,0 @@
-The method java.lang.Character.isJavaLetterOrDigit​(char) is deprecated. The related deprecation comment in Javadoc is "Replaced by isJavaIdentifierPart(char)."
-Show me a refactoring example.

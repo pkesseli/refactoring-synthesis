@@ -1,3 +1,0 @@
-The method java.awt.datatransfer.DataFlavor.equals​(String) is deprecated. The related deprecation comment in Javadoc is "As inconsistent with hashCode() contract, use
-             DataFlavor.isMimeTypeEqual(String) instead."
-Show me a refactoring example.

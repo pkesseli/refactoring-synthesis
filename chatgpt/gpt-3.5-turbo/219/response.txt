@@ -1,0 +1,19 @@
+# Response Time: 13.381211042404175
+Sure, here's an example refactoring for the deprecated method `java.sql.Date.setMinutes(int)`:
+
+<<< Before refactoring:
+```
+java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+date.setMinutes(30);
+```
+
+>>> After refactoring:
+```
+java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+java.util.Calendar calendar = java.util.Calendar.getInstance();
+calendar.setTime(date);
+calendar.set(java.util.Calendar.MINUTE, 30);
+date.setTime(calendar.getTimeInMillis());
+``` 
+
+In this refactored code, we create a `java.util.Calendar` object and set its time to the `java.sql.Date` object. We then use the `set` method of the `Calendar` object to set the minute field to 30. Finally, we set the time of the `java.sql.Date` object to the time of the `Calendar` object using `setTimeInMillis`. This achieves the same result as the deprecated `setMinutes` method.

@@ -1,0 +1,40 @@
+# Response Time: 24.309707164764404
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+public void handleEvent(Event event) {
+    if (event.id == Event.MOUSE_DOWN) {
+        // handle mouse down event
+    } else if (event.id == Event.MOUSE_UP) {
+        // handle mouse up event
+    } else if (event.id == Event.KEY_PRESS) {
+        // handle key press event
+    } else if (event.id == Event.KEY_RELEASE) {
+        // handle key release event
+    }
+}
+```
+
+>>> After refactoring:
+```
+public void processEvent(AWTEvent event) {
+    if (event instanceof MouseEvent) {
+        MouseEvent mouseEvent = (MouseEvent) event;
+        if (mouseEvent.getID() == MouseEvent.MOUSE_PRESSED) {
+            // handle mouse down event
+        } else if (mouseEvent.getID() == MouseEvent.MOUSE_RELEASED) {
+            // handle mouse up event
+        }
+    } else if (event instanceof KeyEvent) {
+        KeyEvent keyEvent = (KeyEvent) event;
+        if (keyEvent.getID() == KeyEvent.KEY_PRESSED) {
+            // handle key press event
+        } else if (keyEvent.getID() == KeyEvent.KEY_RELEASED) {
+            // handle key release event
+        }
+    }
+}
+```
+
+In this refactoring, we've replaced the deprecated `handleEvent` method with the recommended `processEvent` method. We've also updated the code to use the newer `MouseEvent` and `KeyEvent` classes instead of the old `Event` class. This makes the code more modern and easier to maintain.

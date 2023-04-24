@@ -1,5 +1,0 @@
-The method javax.swing.plaf.metal.MetalComboBoxUI.editablePropertyChanged​(PropertyChangeEvent) is deprecated.
- The related deprecation comment in Javadoc is "As of Java 2 platform v1.4."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

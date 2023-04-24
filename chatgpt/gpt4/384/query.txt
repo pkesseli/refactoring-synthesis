@@ -1,8 +1,0 @@
-The method javax.xml.stream.XMLInputFactory.newInstance​(String, ClassLoader) is deprecated.
- The related deprecation comment in Javadoc is "This method has been deprecated to maintain API consistency.
-              All newInstance methods have been replaced with corresponding
-              newFactory methods. The replacement XMLInputFactory.newFactory(java.lang.String, java.lang.ClassLoader) method
-              defines no changes in behavior."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

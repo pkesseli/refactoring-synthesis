@@ -1,1 +1,0 @@
-The method javax.tools.ToolProvider.getSystemToolClassLoader() is deprecated.Show me a refactoring example.

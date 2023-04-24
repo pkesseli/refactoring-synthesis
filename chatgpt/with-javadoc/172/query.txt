@@ -1,4 +1,0 @@
-The method java.net.URLDecoder.decode​(String) is deprecated. The related deprecation comment in Javadoc is "The resulting string may vary depending on the platform's
-          default encoding. Instead, use the decode(String,String) method
-          to specify the encoding."
-Show me a refactoring example.

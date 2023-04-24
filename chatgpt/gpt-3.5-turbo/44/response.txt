@@ -1,0 +1,12 @@
+# Response Time: 3.043003797531128
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+myComponent.show();
+```
+
+>>> After refactoring:
+```
+myComponent.setVisible(true);
+```

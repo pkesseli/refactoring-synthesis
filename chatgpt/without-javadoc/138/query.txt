@@ -1,1 +1,0 @@
-The method java.lang.invoke.MethodHandles.Lookup.hasPrivateAccess() is deprecated.Show me a refactoring example.

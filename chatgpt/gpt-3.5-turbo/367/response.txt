@@ -1,0 +1,22 @@
+# Response Time: 6.264064073562622
+Sure, here's an example:
+
+<<< Before refactoring:
+```
+public class MyTableView extends TableView {
+    @Override
+    protected TableCell createTableCell(Element elem) {
+        return super.createTableCell(elem);
+    }
+}
+```
+
+>>> After refactoring:
+```
+public class MyTableView extends TableView {
+    @Override
+    public View create(Element elem) {
+        return getFactory().create(elem);
+    }
+}
+```

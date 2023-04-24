@@ -1,0 +1,20 @@
+# Response Time: 11.414274215698242
+Sure, here's an example refactoring for the deprecated method:
+
+<<< Before refactoring:
+```
+public void gotFocus(Event evt, Object obj) {
+    // do something when component gains focus
+}
+```
+
+>>> After refactoring:
+```
+public void processFocusEvent(FocusEvent evt) {
+    if (evt.getID() == FocusEvent.FOCUS_GAINED) {
+        // do something when component gains focus
+    }
+}
+```
+
+In the refactored code, we've replaced the deprecated `gotFocus` method with the recommended `processFocusEvent` method. We've also added a check to make sure we're only handling the `FOCUS_GAINED` event, since that's the equivalent of the old `gotFocus` method.

@@ -1,5 +1,0 @@
-The method javax.swing.KeyStroke.getKeyStroke​(char, boolean) is deprecated.
- The related deprecation comment in Javadoc is "use getKeyStroke(char)"
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

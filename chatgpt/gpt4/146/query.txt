@@ -1,5 +1,0 @@
-The method java.lang.SecurityManager.checkMulticast​(InetAddress, byte) is deprecated.
- The related deprecation comment in Javadoc is "Use #checkPermission(java.security.Permission) instead"
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

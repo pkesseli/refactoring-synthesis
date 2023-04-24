@@ -1,0 +1,10 @@
+The method java.beans.Beans.instantiate​(ClassLoader, String, BeanContext, AppletInitializer) is deprecated.
+ The related deprecation comment in Javadoc is "It is recommended to use
+ Beans.instantiate(ClassLoader, String, BeanContext),
+ because the Applet API is deprecated. See the
+  java.applet package
+ documentation for further information."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

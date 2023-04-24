@@ -1,0 +1,15 @@
+# Response Time: 5.593698740005493
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+String str = "Hello, world!";
+byte[] bytes = new byte[str.length()];
+str.getBytes(0, str.length(), bytes, 0);
+```
+
+>>> After refactoring:
+```
+String str = "Hello, world!";
+byte[] bytes = str.getBytes();
+```

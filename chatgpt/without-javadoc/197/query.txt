@@ -1,1 +1,0 @@
-The method java.rmi.server.RemoteCall.releaseInputStream() is deprecated.Show me a refactoring example.

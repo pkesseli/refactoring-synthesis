@@ -1,1 +1,0 @@
-The method java.rmi.server.LogStream.parseLevel​(String) is deprecated.Show me a refactoring example.

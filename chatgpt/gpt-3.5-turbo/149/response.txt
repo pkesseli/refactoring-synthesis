@@ -1,0 +1,20 @@
+# Response Time: 10.475266218185425
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+Thread thread = new Thread();
+thread.suspend();
+// do some work
+thread.resume();
+```
+
+>>> After refactoring:
+```
+Thread thread = new Thread();
+thread.start();
+// do some work
+thread.interrupt();
+```
+
+In the original code, `Thread.suspend()` and `Thread.resume()` are used to pause and resume the execution of a thread. However, these methods are deprecated because they can cause deadlocks. Instead, we can use `Thread.start()` to start the thread and `Thread.interrupt()` to interrupt it when we want to pause its execution. This is a safer and more reliable way to control the execution of a thread.

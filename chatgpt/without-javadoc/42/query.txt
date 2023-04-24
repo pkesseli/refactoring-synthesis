@@ -1,1 +1,0 @@
-The method java.awt.Component.resize​(int, int) is deprecated.Show me a refactoring example.

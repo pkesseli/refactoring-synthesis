@@ -1,3 +1,0 @@
-The method javax.swing.JRootPane.setMenuBar​(JMenuBar) is deprecated. The related deprecation comment in Javadoc is "As of Swing version 1.0.3
-  replaced by setJMenuBar(JMenuBar menu)."
-Show me a refactoring example.

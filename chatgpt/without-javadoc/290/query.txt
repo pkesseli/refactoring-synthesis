@@ -1,1 +1,0 @@
-The method javax.management.monitor.Monitor.getObservedObject() is deprecated.Show me a refactoring example.

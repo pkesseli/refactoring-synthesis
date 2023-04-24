@@ -1,1 +1,0 @@
-The method java.rmi.server.RemoteRef.invoke​(RemoteCall) is deprecated.Show me a refactoring example.

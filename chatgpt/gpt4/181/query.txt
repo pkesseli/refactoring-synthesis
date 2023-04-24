@@ -1,5 +1,0 @@
-The method java.rmi.server.LogStream.getDefaultStream() is deprecated.
- The related deprecation comment in Javadoc is "no replacement"
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

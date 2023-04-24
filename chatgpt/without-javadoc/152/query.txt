@@ -1,1 +1,0 @@
-The method java.lang.ThreadGroup.allowThreadSuspension​(boolean) is deprecated.Show me a refactoring example.

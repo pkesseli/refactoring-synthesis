@@ -1,1 +1,0 @@
-The method java.io.DataInputStream.readLine() is deprecated.Show me a refactoring example.

@@ -1,1 +1,0 @@
-The method java.awt.event.KeyEvent.getKeyModifiersText​(int) is deprecated.Show me a refactoring example.

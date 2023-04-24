@@ -1,0 +1,14 @@
+# Response Time: 4.3124449253082275
+Sure, here's an example refactoring:
+
+<<< Before refactoring: 
+```
+JComponent myComponent = new JComponent();
+myComponent.enable();
+```
+
+>>> After refactoring: 
+```
+JComponent myComponent = new JComponent();
+myComponent.setEnabled(true);
+```

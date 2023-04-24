@@ -1,1 +1,0 @@
-The method java.lang.Class.newInstance() is deprecated.Show me a refactoring example.

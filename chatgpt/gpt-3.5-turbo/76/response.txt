@@ -1,0 +1,14 @@
+# Response Time: 5.4166340827941895
+Sure, here's an example refactoring for the deprecated method java.awt.List.countItems():
+
+<<< Before refactoring:
+```
+java.awt.List myList = new java.awt.List();
+int itemCount = myList.countItems();
+```
+
+>>> After refactoring:
+```
+java.awt.List myList = new java.awt.List();
+int itemCount = myList.getItemCount();
+```

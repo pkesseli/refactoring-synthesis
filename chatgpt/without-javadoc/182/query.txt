@@ -1,1 +1,0 @@
-The method java.rmi.server.LogStream.getOutputStream() is deprecated.Show me a refactoring example.

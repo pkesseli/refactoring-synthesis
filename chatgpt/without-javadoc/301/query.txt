@@ -1,1 +1,0 @@
-The method javax.net.ssl.SSLSession.getPeerCertificateChain() is deprecated.Show me a refactoring example.

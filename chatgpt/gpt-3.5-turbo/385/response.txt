@@ -1,0 +1,15 @@
+# Response Time: 5.852447986602783
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+XMLOutputFactory factory = XMLOutputFactory.newInstance();
+```
+
+>>> After refactoring:
+```
+XMLOutputFactory factory = XMLOutputFactory.newFactory(
+    XMLOutputFactory.DEFAULT_FACTORY_CLASS_NAME, 
+    Thread.currentThread().getContextClassLoader()
+);
+```

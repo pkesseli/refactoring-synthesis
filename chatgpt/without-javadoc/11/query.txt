@@ -1,1 +1,0 @@
-The method java.awt.Choice.countItems() is deprecated.Show me a refactoring example.

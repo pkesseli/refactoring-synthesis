@@ -1,7 +1,0 @@
-The method java.security.Security.getAlgorithmProperty​(String, String) is deprecated. The related deprecation comment in Javadoc is "This method used to return the value of a proprietary
- property in the master file of the "SUN" Cryptographic Service
- Provider in order to determine how to parse algorithm-specific
- parameters. Use the new provider-based and algorithm-independent
- AlgorithmParameters and KeyFactory engine
- classes (introduced in the J2SE version 1.2 platform) instead."
-Show me a refactoring example.

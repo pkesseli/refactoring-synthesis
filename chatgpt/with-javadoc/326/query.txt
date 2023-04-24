@@ -1,3 +1,0 @@
-The method javax.swing.JTable.sizeColumnsToFit​(boolean) is deprecated. The related deprecation comment in Javadoc is "As of Swing version 1.0.3,
- replaced by doLayout()."
-Show me a refactoring example.

@@ -1,0 +1,14 @@
+# Response Time: 5.635580062866211
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JButton button = new JButton("Click me");
+button.reshape(10, 10, 100, 50);
+```
+
+>>> After refactoring:
+```
+JButton button = new JButton("Click me");
+button.setBounds(10, 10, 100, 50);
+```

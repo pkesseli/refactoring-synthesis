@@ -1,0 +1,23 @@
+# Response Time: 16.5601909160614
+I'm sorry, but as an AI language model, I don't have access to a specific codebase to provide a refactoring example. However, I can give you some general guidance on how to refactor the deprecated method.
+
+Before refactoring:
+```
+MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+ObjectName name = new ObjectName("com.example:type=MyMBean");
+byte[] serializedObject = getSerializedObject();
+Object obj = mbs.deserialize(name, serializedObject);
+```
+
+After refactoring:
+```
+MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+ObjectName name = new ObjectName("com.example:type=MyMBean");
+byte[] serializedObject = getSerializedObject();
+ClassLoader cl = mbs.getClassLoaderFor(name);
+ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(serializedObject));
+Object obj = in.readObject();
+in.close();
+``` 
+
+In the refactored code, we use the `getClassLoaderFor` method to obtain the appropriate class loader for deserialization. Then, we create an `ObjectInputStream` from the serialized byte array and use it to read the object. Finally, we close the input stream to release any resources it holds.

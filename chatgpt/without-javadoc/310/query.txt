@@ -1,1 +1,0 @@
-The method javax.swing.JComponent.getNextFocusableComponent() is deprecated.Show me a refactoring example.

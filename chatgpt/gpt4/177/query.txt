@@ -1,7 +1,0 @@
-The method java.rmi.registry.RegistryHandler.registryStub​(String, int) is deprecated.
- The related deprecation comment in Javadoc is "no replacement.  As of the Java 2 platform v1.2, RMI no
- longer uses the RegistryHandler to obtain the registry's
- stub."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

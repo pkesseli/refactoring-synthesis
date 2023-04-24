@@ -1,0 +1,9 @@
+The method java.lang.ThreadGroup.resume() is deprecated.
+ The related deprecation comment in Javadoc is "This method is used solely in conjunction with
+       Thread.suspend and ThreadGroup.suspend,
+       both of which have been deprecated, as they are inherently
+       deadlock-prone.  See Thread.suspend() for details."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

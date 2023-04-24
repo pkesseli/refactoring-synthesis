@@ -1,3 +1,0 @@
-The method java.awt.Dialog.hide() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.5, replaced by
- setVisible(boolean)."
-Show me a refactoring example.

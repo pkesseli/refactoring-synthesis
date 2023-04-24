@@ -1,0 +1,27 @@
+The method java.lang.Class.newInstance() is deprecated.
+ The related deprecation comment in Javadoc is "This method propagates any exception thrown by the
+ nullary constructor, including a checked exception.  Use of
+ this method effectively bypasses the compile-time exception
+ checking that would otherwise be performed by the compiler.
+ The Constructor.newInstance method avoids this problem by wrapping
+ any exception thrown by the constructor in a (checked) InvocationTargetException.
+
+ The call
+
+ 
+ clazz.newInstance()
+ 
+
+ can be replaced by
+
+ 
+ clazz.getDeclaredConstructor().newInstance()
+ 
+
+ The latter sequence of calls is inferred to be able to throw
+ the additional exception types InvocationTargetException and NoSuchMethodException. Both of these exception types are
+ subclasses of ReflectiveOperationException."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

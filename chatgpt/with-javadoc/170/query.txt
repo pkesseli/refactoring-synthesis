@@ -1,4 +1,0 @@
-The method java.net.URLConnection.getDefaultRequestProperty​(String) is deprecated. The related deprecation comment in Javadoc is "The instance specific getRequestProperty method
- should be used after an appropriate instance of URLConnection
- is obtained."
-Show me a refactoring example.

@@ -1,0 +1,8 @@
+The method java.net.MulticastSocket.joinGroup​(InetAddress) is deprecated.
+ The related deprecation comment in Javadoc is "This method does not accept the network interface on
+             which to join the multicast group. Use
+             MulticastSocket.joinGroup(SocketAddress, NetworkInterface) instead."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

@@ -1,0 +1,30 @@
+# Response Time: 12.284725904464722
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.rmi.server.LogStream;
+
+public class MyClass {
+    public void myMethod() {
+        LogStream logStream = LogStream.log("myLog");
+        String logString = logStream.toString();
+        System.out.println(logString);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.rmi.server.LogStream;
+
+public class MyClass {
+    public void myMethod() {
+        LogStream logStream = LogStream.log("myLog");
+        String logString = logStream.getLog();
+        System.out.println(logString);
+    }
+}
+```
+
+In the refactored code, we replace the deprecated `toString()` method with the `getLog()` method, which returns the log message as a string. This allows us to continue using the `LogStream` class without relying on a deprecated method.

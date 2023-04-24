@@ -1,3 +1,0 @@
-The method java.net.MulticastSocket.getTTL() is deprecated. The related deprecation comment in Javadoc is "use the getTimeToLive method instead, which returns
- an int instead of a byte."
-Show me a refactoring example.

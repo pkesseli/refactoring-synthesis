@@ -1,0 +1,16 @@
+# Response Time: 5.513701915740967
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+MulticastSocket socket = new MulticastSocket();
+byte ttl = 2;
+socket.setTTL(ttl);
+```
+
+>>> After refactoring:
+```
+MulticastSocket socket = new MulticastSocket();
+int ttl = 2;
+socket.setTimeToLive(ttl);
+```

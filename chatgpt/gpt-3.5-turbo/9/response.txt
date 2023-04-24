@@ -1,0 +1,18 @@
+# Response Time: 8.639961957931519
+Sure, here's an example refactoring:
+
+<<< Before refactoring: 
+```
+CheckboxGroup group = new CheckboxGroup();
+Checkbox checkbox1 = new Checkbox("Option 1", group, true);
+Checkbox checkbox2 = new Checkbox("Option 2", group, false);
+Checkbox selectedCheckbox = group.getCurrent();
+```
+
+>>> After refactoring:
+```
+CheckboxGroup group = new CheckboxGroup();
+Checkbox checkbox1 = new Checkbox("Option 1", group, true);
+Checkbox checkbox2 = new Checkbox("Option 2", group, false);
+Checkbox selectedCheckbox = group.getSelectedCheckbox();
+```

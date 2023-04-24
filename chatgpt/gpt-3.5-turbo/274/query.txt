@@ -1,0 +1,7 @@
+The method javax.management.AttributeValueExp.setMBeanServer​(MBeanServer) is deprecated.
+ The related deprecation comment in Javadoc is "This method has no effect.  The MBean Server used to
+ obtain an attribute value is QueryEval.getMBeanServer()."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

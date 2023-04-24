@@ -1,2 +1,0 @@
-The method javax.swing.JComponent.getNextFocusableComponent() is deprecated. The related deprecation comment in Javadoc is "As of 1.4, replaced by FocusTraversalPolicy."
-Show me a refactoring example.

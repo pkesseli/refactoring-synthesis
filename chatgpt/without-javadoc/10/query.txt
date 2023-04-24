@@ -1,1 +1,0 @@
-The method java.awt.CheckboxGroup.setCurrent​(Checkbox) is deprecated.Show me a refactoring example.

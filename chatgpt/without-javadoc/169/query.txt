@@ -1,1 +1,0 @@
-The method java.net.MulticastSocket.setTTL​(byte) is deprecated.Show me a refactoring example.

@@ -1,6 +1,0 @@
-The method java.util.concurrent.atomic.AtomicReferenceArray.weakCompareAndSet​(int, E, E) is deprecated. The related deprecation comment in Javadoc is "This method has plain memory effects but the method
- name implies volatile memory effects (see methods such as
- AtomicReferenceArray.compareAndExchange(int, E, E) and AtomicReferenceArray.compareAndSet(int, E, E)).  To avoid
- confusion over plain or volatile memory effects it is recommended that
- the method AtomicReferenceArray.weakCompareAndSetPlain(int, E, E) be used instead."
-Show me a refactoring example.

@@ -1,1 +1,0 @@
-The method javax.swing.JTable.createScrollPaneForTable​(JTable) is deprecated.Show me a refactoring example.

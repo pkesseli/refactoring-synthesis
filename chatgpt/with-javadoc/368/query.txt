@@ -1,3 +1,0 @@
-The method javax.swing.text.Utilities.drawTabbedText​(Segment, int, int, Graphics, TabExpander, int) is deprecated. The related deprecation comment in Javadoc is "replaced by
- Utilities.drawTabbedText(Segment, float, float, Graphics2D, TabExpander, int)"
-Show me a refactoring example.

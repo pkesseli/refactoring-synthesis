@@ -1,0 +1,19 @@
+# Response Time: 6.383770942687988
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+public void keyUp(Event event, int key) {
+    // do something
+}
+```
+
+>>> After refactoring:
+```
+public void processKeyEvent(KeyEvent event) {
+    if (event.getID() == KeyEvent.KEY_RELEASED) {
+        int key = event.getKeyCode();
+        // do something
+    }
+}
+```

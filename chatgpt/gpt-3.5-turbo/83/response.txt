@@ -1,0 +1,14 @@
+# Response Time: 5.587985038757324
+Sure, here's an example refactoring for the deprecated `java.awt.List.preferredSize(int)` method:
+
+<<< Before refactoring:
+```
+List myList = new List();
+Dimension preferredSize = myList.preferredSize(100);
+```
+
+>>> After refactoring:
+```
+List myList = new List();
+Dimension preferredSize = myList.getPreferredSize(100);
+```

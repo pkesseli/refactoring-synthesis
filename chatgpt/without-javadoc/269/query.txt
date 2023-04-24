@@ -1,1 +1,0 @@
-The method javax.imageio.stream.FileCacheImageInputStream.finalize() is deprecated.Show me a refactoring example.

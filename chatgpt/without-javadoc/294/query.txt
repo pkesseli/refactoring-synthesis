@@ -1,1 +1,0 @@
-The method javax.management.monitor.StringMonitor.getDerivedGauge() is deprecated.Show me a refactoring example.

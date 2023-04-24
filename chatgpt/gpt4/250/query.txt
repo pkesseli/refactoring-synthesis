@@ -1,6 +1,0 @@
-The method java.util.Date.getYear() is deprecated.
- The related deprecation comment in Javadoc is "As of JDK version 1.1,
- replaced by Calendar.get(Calendar.YEAR) - 1900."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

@@ -1,0 +1,27 @@
+# Response Time: 15.296865940093994
+I'm sorry, but as a language model, I don't have access to your codebase or development environment. However, I can provide you with an example of how to refactor the deprecated method `java.awt.Window.applyResourceBundle(String)` to the recommended method `Component.applyComponentOrientation()`.
+
+<<< Before refactoring:
+```
+import java.awt.Window;
+
+public class MyWindow extends Window {
+    public MyWindow() {
+        applyResourceBundle("myResourceBundle");
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.Window;
+import java.awt.ComponentOrientation;
+
+public class MyWindow extends Window {
+    public MyWindow() {
+        applyComponentOrientation(ComponentOrientation.getOrientation(getLocale()));
+    }
+}
+```
+
+In the refactored code, we have replaced the deprecated method `applyResourceBundle()` with the recommended method `applyComponentOrientation()`. We have also used the `ComponentOrientation.getOrientation()` method to get the appropriate orientation for the window based on the locale.

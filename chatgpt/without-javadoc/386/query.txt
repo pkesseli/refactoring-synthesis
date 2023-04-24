@@ -1,1 +1,0 @@
-The method org.ietf.jgss.GSSContext.acceptSecContext​(InputStream, OutputStream) is deprecated.Show me a refactoring example.

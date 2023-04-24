@@ -1,2 +1,0 @@
-The method java.rmi.server.RMIClassLoader.loadClass​(String) is deprecated. The related deprecation comment in Javadoc is "replaced by loadClass(String,String) method"
-Show me a refactoring example.

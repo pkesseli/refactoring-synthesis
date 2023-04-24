@@ -1,1 +1,0 @@
-The method java.awt.PrintJob.finalize() is deprecated.Show me a refactoring example.

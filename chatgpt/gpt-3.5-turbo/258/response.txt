@@ -1,0 +1,35 @@
+# Response Time: 16.83441996574402
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        String gmtString = date.toGMTString();
+        System.out.println(gmtString);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String gmtString = dateFormat.format(date);
+        System.out.println(gmtString);
+    }
+}
+```
+
+In the refactored code, we've replaced the deprecated `toGMTString()` method with a `DateFormat` object that formats the date in the desired format and timezone. We've also used a `SimpleDateFormat` object to specify the format string, and set the timezone to GMT using `setTimeZone()`.

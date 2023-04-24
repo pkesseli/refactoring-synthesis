@@ -1,1 +1,0 @@
-The method java.awt.image.ColorModel.finalize() is deprecated.Show me a refactoring example.

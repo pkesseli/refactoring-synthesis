@@ -1,3 +1,0 @@
-The method java.awt.event.InputEvent.getModifiers() is deprecated. The related deprecation comment in Javadoc is "It is recommended that extended modifier keys and
-             InputEvent.getModifiersEx() be used instead"
-Show me a refactoring example.

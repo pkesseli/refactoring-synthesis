@@ -1,0 +1,34 @@
+# Response Time: 14.787160873413086
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.awt.TextArea;
+
+public class Example {
+    public static void main(String[] args) {
+        TextArea textArea = new TextArea();
+        int minWidth = textArea.minimumSize().width;
+        int minHeight = textArea.minimumSize().height;
+        System.out.println("Minimum width: " + minWidth);
+        System.out.println("Minimum height: " + minHeight);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.TextArea;
+import java.awt.Dimension;
+
+public class Example {
+    public static void main(String[] args) {
+        TextArea textArea = new TextArea();
+        Dimension minimumSize = textArea.getMinimumSize();
+        int minWidth = minimumSize.width;
+        int minHeight = minimumSize.height;
+        System.out.println("Minimum width: " + minWidth);
+        System.out.println("Minimum height: " + minHeight);
+    }
+}
+```

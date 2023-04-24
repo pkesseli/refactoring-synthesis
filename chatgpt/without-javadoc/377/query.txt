@@ -1,1 +1,0 @@
-The method javax.swing.text.WrappedPlainView.drawLine​(int, int, Graphics, int, int) is deprecated.Show me a refactoring example.

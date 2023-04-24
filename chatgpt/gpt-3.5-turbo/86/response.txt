@@ -1,0 +1,22 @@
+# Response Time: 6.538759231567383
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.awt.MenuBar;
+
+public class MyMenuBar extends MenuBar {
+    public int countMenus() {
+        return getMenuCount();
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.MenuBar;
+
+public class MyMenuBar extends MenuBar {
+    // No need to override countMenus() anymore
+}
+```

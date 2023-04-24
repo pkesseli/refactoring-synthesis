@@ -1,1 +1,0 @@
-The method com.sun.jdi.VirtualMachine.canUnrestrictedlyRedefineClasses() is deprecated.Show me a refactoring example.

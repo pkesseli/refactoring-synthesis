@@ -1,1 +1,0 @@
-The method java.util.logging.Logger.logrb​(Level, String, String, String, String, Throwable) is deprecated.Show me a refactoring example.

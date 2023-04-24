@@ -1,2 +1,0 @@
-The method java.awt.Toolkit.getFontList() is deprecated. The related deprecation comment in Javadoc is "see GraphicsEnvironment.getAvailableFontFamilyNames()"
-Show me a refactoring example.

@@ -1,0 +1,16 @@
+# Response Time: 6.1524269580841064
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JButton button = new JButton("Click me");
+String label = button.getLabel();
+System.out.println("Button label: " + label);
+```
+
+>>> After refactoring:
+```
+JButton button = new JButton("Click me");
+String text = button.getText();
+System.out.println("Button text: " + text);
+```

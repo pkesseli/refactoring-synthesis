@@ -1,1 +1,0 @@
-The method java.awt.TextArea.insertText​(String, int) is deprecated.Show me a refactoring example.

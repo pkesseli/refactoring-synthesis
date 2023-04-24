@@ -1,6 +1,0 @@
-The method javax.swing.plaf.TextUI.viewToModel​(JTextComponent, Point) is deprecated.
- The related deprecation comment in Javadoc is "replaced by
-     TextUI.viewToModel2D(JTextComponent, Point2D, Position.Bias[])"
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

@@ -1,0 +1,15 @@
+# Response Time: 5.823287010192871
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+MulticastSocket socket = new MulticastSocket(port);
+socket.setLoopbackMode(false);
+```
+
+>>> After refactoring:
+```
+MulticastSocket socket = new MulticastSocket();
+socket.setOption(StandardSocketOptions.IP_MULTICAST_LOOP, false);
+socket.bind(new InetSocketAddress(port));
+```

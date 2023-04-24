@@ -1,5 +1,0 @@
-The method javax.management.monitor.StringMonitorMBean.getDerivedGauge() is deprecated.
- The related deprecation comment in Javadoc is "As of JMX 1.2, replaced by StringMonitorMBean.getDerivedGauge(ObjectName)"
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

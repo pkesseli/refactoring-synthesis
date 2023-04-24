@@ -1,1 +1,0 @@
-The method java.awt.Container.preferredSize() is deprecated.Show me a refactoring example.

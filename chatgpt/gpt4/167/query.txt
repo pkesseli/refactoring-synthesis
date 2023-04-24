@@ -1,7 +1,0 @@
-The method java.net.MulticastSocket.setInterface​(InetAddress) is deprecated.
- The related deprecation comment in Javadoc is "The InetAddress may not uniquely identify
-             the network interface. Use
-             MulticastSocket.setNetworkInterface(NetworkInterface) instead."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

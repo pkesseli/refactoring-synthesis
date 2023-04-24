@@ -1,1 +1,0 @@
-The method javax.imageio.spi.ServiceRegistry.finalize() is deprecated.Show me a refactoring example.

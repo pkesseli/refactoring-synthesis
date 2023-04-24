@@ -1,1 +1,0 @@
-The method javax.swing.FocusManager.isFocusManagerEnabled() is deprecated.Show me a refactoring example.

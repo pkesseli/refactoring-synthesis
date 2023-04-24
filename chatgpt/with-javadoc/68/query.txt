@@ -1,9 +1,0 @@
-The method java.awt.image.ColorModel.finalize() is deprecated. The related deprecation comment in Javadoc is "The finalize method has been deprecated.
-     Subclasses that override finalize in order to perform cleanup
-     should be modified to use alternative cleanup mechanisms and
-     to remove the overriding finalize method.
-     When overriding the finalize method, its implementation must explicitly
-     ensure that super.finalize() is invoked as described in Object.finalize().
-     See the specification for Object.finalize() for further
-     information about migration options."
-Show me a refactoring example.

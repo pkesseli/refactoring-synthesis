@@ -1,0 +1,14 @@
+# Response Time: 5.051845073699951
+Sure, here's an example refactoring for the deprecated method java.awt.Choice.countItems():
+
+<<< Before refactoring:
+```
+Choice myChoice = new Choice();
+int itemCount = myChoice.countItems();
+```
+
+>>> After refactoring:
+```
+Choice myChoice = new Choice();
+int itemCount = myChoice.getItemCount();
+```

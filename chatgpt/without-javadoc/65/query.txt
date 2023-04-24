@@ -1,1 +1,0 @@
-The method java.awt.Frame.setCursor​(int) is deprecated.Show me a refactoring example.

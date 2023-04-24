@@ -1,1 +1,0 @@
-The method java.awt.Graphics.getClipRect() is deprecated.Show me a refactoring example.

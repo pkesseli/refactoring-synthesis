@@ -1,0 +1,16 @@
+# Response Time: 11.36650538444519
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+RemoteCall remoteCall = ...;
+OutputStream outputStream = remoteCall.getOutputStream();
+```
+
+>>> After refactoring:
+```
+RemoteCall remoteCall = ...;
+OutputStream outputStream = new ByteArrayOutputStream();
+``` 
+
+In this refactoring, we replace the call to `remoteCall.getOutputStream()` with the creation of a new `ByteArrayOutputStream`. This is because the `getOutputStream()` method is deprecated and has no replacement, so we need to find an alternative way to write data to the remote call's output stream. By using a `ByteArrayOutputStream`, we can write data to an in-memory buffer and then send that buffer over the network using the `RemoteCall` object's other methods.

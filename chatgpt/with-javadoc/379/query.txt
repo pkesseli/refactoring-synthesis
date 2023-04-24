@@ -1,3 +1,0 @@
-The method javax.swing.text.WrappedPlainView.drawUnselectedText​(Graphics, int, int, int, int) is deprecated. The related deprecation comment in Javadoc is "replaced by
-     WrappedPlainView.drawUnselectedText(Graphics2D, float, float, int, int)"
-Show me a refactoring example.

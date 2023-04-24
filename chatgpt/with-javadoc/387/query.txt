@@ -1,3 +1,0 @@
-The method org.ietf.jgss.GSSContext.getMIC​(InputStream, OutputStream, MessageProp) is deprecated. The related deprecation comment in Javadoc is "The stream-based methods have been removed from RFC 8353.
- Use GSSContext.getMIC(byte[], int, int, MessageProp) instead."
-Show me a refactoring example.

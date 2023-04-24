@@ -1,1 +1,0 @@
-The method java.util.logging.LogRecord.setMillis​(long) is deprecated.Show me a refactoring example.

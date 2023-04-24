@@ -1,9 +1,0 @@
-The method java.lang.Thread.resume() is deprecated.
- The related deprecation comment in Javadoc is "This method exists solely for use with Thread.suspend(),
-     which has been deprecated because it is deadlock-prone.
-     For more information, see
-     Why
-     are Thread.stop, Thread.suspend and Thread.resume Deprecated?."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

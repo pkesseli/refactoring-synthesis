@@ -1,0 +1,21 @@
+# Response Time: 7.972751140594482
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JTextComponent textComponent = new JTextArea();
+int pos = 10;
+Rectangle rect = null;
+try {
+    rect = textComponent.modelToView(pos);
+} catch (BadLocationException e) {
+    e.printStackTrace();
+}
+```
+
+>>> After refactoring:
+```
+JTextComponent textComponent = new JTextArea();
+int pos = 10;
+Rectangle2D rect = textComponent.modelToView2D(pos);
+```

@@ -1,6 +1,0 @@
-The method javax.swing.plaf.multi.MultiTextUI.modelToView​(JTextComponent, int, Position.Bias) is deprecated.
- The related deprecation comment in Javadoc is "replaced by
-     TextUI.modelToView2D(JTextComponent, int, Position.Bias)"
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

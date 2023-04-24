@@ -1,2 +1,0 @@
-The method javax.swing.table.TableColumn.disableResizedPosting() is deprecated. The related deprecation comment in Javadoc is "as of Java 2 platform v1.3"
-Show me a refactoring example.

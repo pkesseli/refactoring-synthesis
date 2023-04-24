@@ -1,1 +1,0 @@
-The method javax.swing.text.TableView.createTableCell​(Element) is deprecated.Show me a refactoring example.

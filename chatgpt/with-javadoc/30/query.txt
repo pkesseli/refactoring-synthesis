@@ -1,3 +1,0 @@
-The method java.awt.Component.minimumSize() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1,
- replaced by getMinimumSize()."
-Show me a refactoring example.

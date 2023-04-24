@@ -1,3 +1,0 @@
-The method javax.swing.JInternalFrame.getMenuBar() is deprecated. The related deprecation comment in Javadoc is "As of Swing version 1.0.3,
- replaced by getJMenuBar()."
-Show me a refactoring example.

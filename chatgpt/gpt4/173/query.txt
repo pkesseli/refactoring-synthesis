@@ -1,7 +1,0 @@
-The method java.net.URLEncoder.encode​(String) is deprecated.
- The related deprecation comment in Javadoc is "The resulting string may vary depending on the platform's
-             default encoding. Instead, use the encode(String,String)
-             method to specify the encoding."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

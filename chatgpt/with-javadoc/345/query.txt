@@ -1,2 +1,0 @@
-The method javax.swing.plaf.multi.MultiTextUI.viewToModel​(JTextComponent, Point) is deprecated. The related deprecation comment in Javadoc is ""
-Show me a refactoring example.

@@ -1,0 +1,17 @@
+# Response Time: 12.12374210357666
+Sure, here's an example refactoring for the deprecated method `java.security.Signature.getParameter(String)`:
+
+<<< Before refactoring:
+```
+Signature signature = Signature.getInstance("SHA256withRSA");
+AlgorithmParameters params = signature.getParameters("SHA256withRSA");
+```
+
+>>> After refactoring:
+```
+Signature signature = Signature.getInstance("SHA256withRSA");
+AlgorithmParameters params = AlgorithmParameters.getInstance(signature.getAlgorithm());
+params.init(signature.getParameters());
+``` 
+
+In the refactored code, we use the `AlgorithmParameters` class to obtain the parameters for the signature algorithm. We first get the algorithm name from the `Signature` instance, then create a new `AlgorithmParameters` instance using that name. Finally, we initialize the parameters using the `Signature` instance's parameters. This avoids using the deprecated `getParameter` method.

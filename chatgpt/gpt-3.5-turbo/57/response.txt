@@ -1,0 +1,18 @@
+# Response Time: 13.039286136627197
+I'm happy to help! Here's an example of how you could refactor the deprecated method:
+
+<<< Before refactoring:
+```
+String mimeType = "text/plain; charset=utf-8";
+String parameterName = "charset";
+String normalizedParameter = DataFlavor.normalizeMimeTypeParameter(mimeType, parameterName);
+```
+
+>>> After refactoring:
+```
+String mimeType = "text/plain; charset=utf-8";
+String parameterName = "charset";
+String normalizedParameter = mimeType.substring(mimeType.indexOf(parameterName + "=") + parameterName.length() + 1);
+``` 
+
+In this refactored code, we're using the `substring()` method to extract the value of the `charset` parameter from the `mimeType` string. This achieves the same result as the deprecated `normalizeMimeTypeParameter()` method, but without using the deprecated method.

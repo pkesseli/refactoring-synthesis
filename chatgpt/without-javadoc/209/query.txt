@@ -1,1 +1,0 @@
-The method java.security.Security.getAlgorithmProperty​(String, String) is deprecated.Show me a refactoring example.

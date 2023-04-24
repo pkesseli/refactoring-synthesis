@@ -1,6 +1,0 @@
-The method java.awt.Toolkit.getMenuShortcutKeyMask() is deprecated.
- The related deprecation comment in Javadoc is "It is recommended that extended modifier keys and
-             Toolkit.getMenuShortcutKeyMaskEx() be used instead"
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

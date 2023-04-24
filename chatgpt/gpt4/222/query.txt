@@ -1,5 +1,0 @@
-The method java.sql.DriverManager.setLogStream​(PrintStream) is deprecated.
- The related deprecation comment in Javadoc is "Use setLogWriter"
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

@@ -1,2 +1,0 @@
-The method java.rmi.server.LogStream.log​(String) is deprecated. The related deprecation comment in Javadoc is "no replacement"
-Show me a refactoring example.

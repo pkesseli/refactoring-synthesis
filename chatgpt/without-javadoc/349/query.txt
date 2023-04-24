@@ -1,1 +1,0 @@
-The method javax.swing.plaf.TextUI.modelToView​(JTextComponent, int, Position.Bias) is deprecated.Show me a refactoring example.

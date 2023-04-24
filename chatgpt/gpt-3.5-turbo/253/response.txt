@@ -1,0 +1,34 @@
+# Response Time: 17.284862995147705
+Sure, here's an example refactoring:
+
+<<< Before refactoring: 
+```
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        date.setHours(10);
+        System.out.println(date);
+    }
+}
+```
+
+>>> After refactoring: 
+```
+import java.util.Calendar;
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        date = calendar.getTime();
+        System.out.println(date);
+    }
+}
+```
+
+In this example, we've refactored the code to use the recommended `Calendar` class instead of the deprecated `Date.setHours` method. We create a new `Calendar` instance and set its time to the `Date` object. Then, we set the hour of the day using the `Calendar.set` method with the `Calendar.HOUR_OF_DAY` field. Finally, we get the updated `Date` object from the `Calendar` instance and print it out.

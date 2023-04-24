@@ -1,0 +1,15 @@
+# Response Time: 4.953965187072754
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JPasswordField passwordField = new JPasswordField();
+String password = passwordField.getText();
+```
+
+>>> After refactoring:
+```
+JPasswordField passwordField = new JPasswordField();
+char[] passwordChars = passwordField.getPassword();
+String password = new String(passwordChars);
+```

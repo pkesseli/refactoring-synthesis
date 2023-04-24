@@ -1,1 +1,0 @@
-The method com.sun.source.tree.CaseTree.getExpression() is deprecated.Show me a refactoring example.

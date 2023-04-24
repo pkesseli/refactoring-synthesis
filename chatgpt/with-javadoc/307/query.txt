@@ -1,3 +1,0 @@
-The method javax.swing.InputVerifier.shouldYieldFocus​(JComponent) is deprecated. The related deprecation comment in Javadoc is "use InputVerifier.shouldYieldFocus(JComponent, JComponent)
- instead."
-Show me a refactoring example.

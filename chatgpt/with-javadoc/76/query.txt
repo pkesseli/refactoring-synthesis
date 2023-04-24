@@ -1,3 +1,0 @@
-The method java.awt.List.countItems() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1,
- replaced by getItemCount()."
-Show me a refactoring example.

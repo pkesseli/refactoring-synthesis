@@ -1,0 +1,16 @@
+# Response Time: 12.200652837753296
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+int breakLocation = Utilities.getBreakLocation(segment, fontMetrics, x0, x1, tabExpander, startOffset);
+```
+
+>>> After refactoring:
+```
+float x0f = (float) x0;
+float x1f = (float) x1;
+int breakLocation = Utilities.getBreakLocation(segment, fontMetrics, x0f, x1f, tabExpander, startOffset);
+``` 
+
+In this refactoring example, we're updating a call to the deprecated `Utilities.getBreakLocation` method to use the new version of the method that takes `float` parameters instead of `int` parameters. We're simply casting the `x0` and `x1` parameters to `float` before passing them to the new method.

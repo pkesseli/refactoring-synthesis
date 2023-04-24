@@ -1,1 +1,0 @@
-The method java.util.Date.getDay() is deprecated.Show me a refactoring example.

@@ -1,0 +1,22 @@
+# Response Time: 17.082629919052124
+Sorry, as an AI language model, I don't have access to your codebase. However, I can provide you with an example of how to refactor the deprecated method `java.sql.CallableStatement.getBigDecimal​(int, int)` based on the deprecation comment in the Javadoc.
+
+Before refactoring:
+```
+CallableStatement cs = conn.prepareCall("{call my_stored_proc(?, ?)}");
+cs.registerOutParameter(1, Types.NUMERIC);
+cs.registerOutParameter(2, Types.NUMERIC);
+cs.execute();
+BigDecimal result = cs.getBigDecimal(1, 2);
+```
+
+After refactoring:
+```
+CallableStatement cs = conn.prepareCall("{call my_stored_proc(?, ?)}");
+cs.registerOutParameter(1, Types.NUMERIC);
+cs.registerOutParameter(2, Types.NUMERIC);
+cs.execute();
+BigDecimal result = cs.getBigDecimal(1);
+``` 
+
+In the refactored code, we replaced the deprecated method `cs.getBigDecimal(1, 2)` with the recommended method `cs.getBigDecimal(1)`. This change should not affect the functionality of the code and will ensure that the codebase is up-to-date with the latest best practices.

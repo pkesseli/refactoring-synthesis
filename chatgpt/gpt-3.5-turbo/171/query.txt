@@ -1,0 +1,8 @@
+The method java.net.URLConnection.setDefaultRequestProperty​(String, String) is deprecated.
+ The related deprecation comment in Javadoc is "The instance specific setRequestProperty method
+ should be used after an appropriate instance of URLConnection
+ is obtained. Invoking this method will have no effect."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

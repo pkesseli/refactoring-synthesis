@@ -1,6 +1,0 @@
-The method com.sun.management.OperatingSystemMXBean.getFreePhysicalMemorySize() is deprecated.
- The related deprecation comment in Javadoc is "Use OperatingSystemMXBean.getFreeMemorySize() instead of
- this historically named method."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

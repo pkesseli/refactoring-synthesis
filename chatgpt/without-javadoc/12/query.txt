@@ -1,1 +1,0 @@
-The method java.awt.color.ICC_Profile.finalize() is deprecated.Show me a refactoring example.

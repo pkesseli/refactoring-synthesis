@@ -1,4 +1,0 @@
-The method javax.net.ssl.HandshakeCompletedEvent.getPeerCertificateChain() is deprecated. The related deprecation comment in Javadoc is "The HandshakeCompletedEvent.getPeerCertificates() method that returns an
-               array of java.security.cert.Certificate should
-               be used instead."
-Show me a refactoring example.

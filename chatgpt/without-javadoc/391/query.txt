@@ -1,1 +1,0 @@
-The method org.ietf.jgss.GSSContext.wrap​(InputStream, OutputStream, MessageProp) is deprecated.Show me a refactoring example.

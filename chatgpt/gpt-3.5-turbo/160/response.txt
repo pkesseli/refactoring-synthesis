@@ -1,0 +1,14 @@
+# Response Time: 4.755418062210083
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+DatagramSocket socket = new DatagramSocket();
+socket.setTTL((byte) 64);
+```
+
+>>> After refactoring:
+```
+DatagramSocket socket = new DatagramSocket();
+socket.setTimeToLive(64);
+```

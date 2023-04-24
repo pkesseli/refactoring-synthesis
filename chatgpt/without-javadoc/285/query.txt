@@ -1,1 +1,0 @@
-The method javax.management.monitor.CounterMonitorMBean.setThreshold​(Number) is deprecated.Show me a refactoring example.

@@ -1,0 +1,22 @@
+# Response Time: 14.271491050720215
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+ObjectName name = new ObjectName("com.example:type=MyMBean");
+byte[] serializedObject = getSerializedObjectFromSomewhere();
+Object deserializedObject = mbs.deserialize("com.example.MyMBean", name, serializedObject);
+```
+
+>>> After refactoring:
+```
+MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+ObjectName name = new ObjectName("com.example:type=MyMBean");
+byte[] serializedObject = getSerializedObjectFromSomewhere();
+ClassLoader cl = Thread.currentThread().getContextClassLoader();
+ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(serializedObject));
+Object deserializedObject = in.readObject();
+``` 
+
+In the refactored code, we obtain the class loader using `Thread.currentThread().getContextClassLoader()` and use it to create an `ObjectInputStream` to deserialize the object. This avoids using the deprecated `MBeanServer.deserialize` method.

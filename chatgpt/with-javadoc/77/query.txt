@@ -1,3 +1,0 @@
-The method java.awt.List.delItem​(int) is deprecated. The related deprecation comment in Javadoc is "replaced by remove(String)
-             and remove(int)."
-Show me a refactoring example.

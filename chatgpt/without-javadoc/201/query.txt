@@ -1,1 +1,0 @@
-The method java.rmi.server.RemoteRef.newCall​(RemoteObject, Operation[], int, long) is deprecated.Show me a refactoring example.

@@ -1,0 +1,24 @@
+# Response Time: 8.573503971099854
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+TextUI textUI = textComponent.getUI();
+Rectangle rectangle;
+try {
+    rectangle = textUI.modelToView(textComponent, pos);
+} catch (BadLocationException e) {
+    // handle exception
+}
+```
+
+>>> After refactoring:
+```
+TextUI textUI = textComponent.getUI();
+Rectangle2D rectangle;
+try {
+    rectangle = textUI.modelToView2D(textComponent, pos, Position.Bias.Forward);
+} catch (BadLocationException e) {
+    // handle exception
+}
+```

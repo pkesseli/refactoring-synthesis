@@ -1,1 +1,0 @@
-The method javax.swing.text.Utilities.getPositionAbove​(JTextComponent, int, int) is deprecated.Show me a refactoring example.

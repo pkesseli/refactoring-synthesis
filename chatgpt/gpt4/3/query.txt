@@ -1,6 +1,0 @@
-The method com.sun.management.OperatingSystemMXBean.getSystemCpuLoad() is deprecated.
- The related deprecation comment in Javadoc is "Use OperatingSystemMXBean.getCpuLoad() instead of
- this historically named method."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

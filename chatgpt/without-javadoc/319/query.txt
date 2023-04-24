@@ -1,1 +1,0 @@
-The method javax.swing.JMenuBar.getComponentAtIndex​(int) is deprecated.Show me a refactoring example.

@@ -1,1 +1,0 @@
-The method javax.management.AttributeValueExp.setMBeanServer​(MBeanServer) is deprecated.Show me a refactoring example.

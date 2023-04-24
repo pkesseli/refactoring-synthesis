@@ -1,1 +1,0 @@
-The method java.rmi.server.LogStream.setDefaultStream​(PrintStream) is deprecated.Show me a refactoring example.

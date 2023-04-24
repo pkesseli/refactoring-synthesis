@@ -1,6 +1,0 @@
-The method java.util.concurrent.atomic.AtomicBoolean.weakCompareAndSet​(boolean, boolean) is deprecated. The related deprecation comment in Javadoc is "This method has plain memory effects but the method
- name implies volatile memory effects (see methods such as
- AtomicBoolean.compareAndExchange(boolean, boolean) and AtomicBoolean.compareAndSet(boolean, boolean)).  To avoid
- confusion over plain or volatile memory effects it is recommended that
- the method AtomicBoolean.weakCompareAndSetPlain(boolean, boolean) be used instead."
-Show me a refactoring example.

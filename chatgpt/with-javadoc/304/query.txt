@@ -1,2 +1,0 @@
-The method javax.swing.AbstractButton.setLabel​(String) is deprecated. The related deprecation comment in Javadoc is "- Replaced by setText(text)"
-Show me a refactoring example.

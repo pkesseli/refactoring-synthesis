@@ -1,0 +1,16 @@
+# Response Time: 5.60940408706665
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+MonitorMBean monitor = ...;
+ObjectName observedObject = ...;
+monitor.setObservedObject(observedObject);
+```
+
+>>> After refactoring:
+```
+MonitorMBean monitor = ...;
+ObjectName observedObject = ...;
+monitor.addObservedObject(observedObject);
+```

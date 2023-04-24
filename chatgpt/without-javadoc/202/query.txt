@@ -1,1 +1,0 @@
-The method java.rmi.server.RemoteStub.setRef​(RemoteStub, RemoteRef) is deprecated.Show me a refactoring example.

@@ -1,1 +1,0 @@
-The method java.awt.Toolkit.getFontMetrics​(Font) is deprecated.Show me a refactoring example.

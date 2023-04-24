@@ -1,2 +1,0 @@
-The method javax.swing.plaf.metal.MetalComboBoxUI.removeListeners() is deprecated. The related deprecation comment in Javadoc is "As of Java 2 platform v1.4."
-Show me a refactoring example.

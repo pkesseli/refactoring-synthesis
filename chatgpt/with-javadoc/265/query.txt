@@ -1,5 +1,0 @@
-The method java.util.logging.LogManager.getLoggingMXBean() is deprecated. The related deprecation comment in Javadoc is "java.util.logging.LoggingMXBean is deprecated and
-      replaced with java.lang.management.PlatformLoggingMXBean. Use
-      ManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class)
-      instead."
-Show me a refactoring example.

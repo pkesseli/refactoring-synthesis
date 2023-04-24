@@ -1,0 +1,15 @@
+# Response Time: 5.733260154724121
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+MulticastSocket socket = new MulticastSocket(port);
+socket.setInterface(address);
+```
+
+>>> After refactoring:
+```
+MulticastSocket socket = new MulticastSocket(port);
+NetworkInterface networkInterface = NetworkInterface.getByInetAddress(address);
+socket.setNetworkInterface(networkInterface);
+```

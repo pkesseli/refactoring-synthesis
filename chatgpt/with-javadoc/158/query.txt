@@ -1,3 +1,0 @@
-The method java.math.BigDecimal.setScale​(int, int) is deprecated. The related deprecation comment in Javadoc is "The method BigDecimal.setScale(int, RoundingMode) should
- be used in preference to this legacy method."
-Show me a refactoring example.

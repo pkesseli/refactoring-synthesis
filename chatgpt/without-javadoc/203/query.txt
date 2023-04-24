@@ -1,1 +1,0 @@
-The method java.rmi.server.RMIClassLoader.getSecurityContext​(ClassLoader) is deprecated.Show me a refactoring example.

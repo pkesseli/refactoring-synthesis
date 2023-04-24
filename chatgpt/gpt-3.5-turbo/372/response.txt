@@ -1,0 +1,13 @@
+# Response Time: 6.277068138122559
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+int offset = Utilities.getTabbedTextOffset(segment, fm, x, tabOffset, expander, start);
+```
+
+>>> After refactoring:
+```
+float[] tabStops = { tabOffset };
+int offset = Utilities.getTabbedTextOffset(segment, fm, x, null, expander, start, false, tabStops);
+```

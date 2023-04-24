@@ -1,1 +1,0 @@
-The method java.awt.Component.bounds() is deprecated.Show me a refactoring example.

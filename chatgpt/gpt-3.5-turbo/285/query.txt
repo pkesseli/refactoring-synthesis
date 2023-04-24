@@ -1,0 +1,6 @@
+The method javax.management.monitor.CounterMonitorMBean.setThreshold​(Number) is deprecated.
+ The related deprecation comment in Javadoc is "As of JMX 1.2, replaced by CounterMonitorMBean.setInitThreshold(java.lang.Number)"
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

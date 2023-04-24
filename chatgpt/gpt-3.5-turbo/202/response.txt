@@ -1,0 +1,15 @@
+# Response Time: 5.01270604133606
+Sure, here's an example refactoring for the deprecated method:
+
+<<< Before refactoring:
+```
+RemoteStub stub = ...;
+RemoteRef ref = ...;
+stub.setRef(ref);
+```
+
+>>> After refactoring:
+```
+RemoteRef ref = ...;
+RemoteStub stub = new RemoteStub(ref);
+```

@@ -1,0 +1,19 @@
+# Response Time: 12.207494020462036
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+URL url = new URL("http://example.com/myclass.jar");
+String className = "com.example.MyClass";
+Class<?> clazz = java.rmi.server.LoaderHandler.loadClass(url, className);
+```
+
+>>> After refactoring:
+```
+URL url = new URL("http://example.com/myclass.jar");
+String className = "com.example.MyClass";
+ClassLoader classLoader = URLClassLoader.newInstance(new URL[] { url });
+Class<?> clazz = Class.forName(className, true, classLoader);
+```
+
+In the refactored code, we use a `URLClassLoader` to load the class from the specified URL, and then use `Class.forName()` to actually load the class. This avoids using the deprecated `java.rmi.server.LoaderHandler.loadClass()` method.

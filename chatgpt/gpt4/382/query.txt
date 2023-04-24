@@ -1,9 +1,0 @@
-The method javax.tools.ToolProvider.getSystemToolClassLoader() is deprecated.
- The related deprecation comment in Javadoc is "This method is subject to removal in a future version of
- Java SE.
- Use the system tool provider or
- service loader mechanisms to
- locate system tools as well as user-installed tools."
-Give me an executable refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>

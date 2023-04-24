@@ -1,0 +1,18 @@
+# Response Time: 5.805875062942505
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+public void someMethod(Event event) {
+  Container container = new Container();
+  container.deliverEvent(event);
+}
+```
+
+>>> After refactoring:
+```
+public void someMethod(Event event) {
+  Container container = new Container();
+  container.dispatchEvent(event);
+}
+```

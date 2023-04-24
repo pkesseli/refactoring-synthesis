@@ -1,1 +1,0 @@
-The method javax.swing.plaf.basic.BasicTextUI.viewToModel​(JTextComponent, Point) is deprecated.Show me a refactoring example.

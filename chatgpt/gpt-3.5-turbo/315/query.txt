@@ -1,0 +1,6 @@
+The method javax.swing.JComponent.setNextFocusableComponent​(Component) is deprecated.
+ The related deprecation comment in Javadoc is "As of 1.4, replaced by FocusTraversalPolicy"
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

@@ -1,1 +1,0 @@
-The method javax.tools.StandardJavaFileManager.getJavaFileObjectsFromPaths​(Iterable&lt;? extends Path&gt;) is deprecated.Show me a refactoring example.

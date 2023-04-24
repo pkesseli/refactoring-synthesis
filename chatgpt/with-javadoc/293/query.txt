@@ -1,2 +1,0 @@
-The method javax.management.monitor.MonitorMBean.setObservedObject​(ObjectName) is deprecated. The related deprecation comment in Javadoc is "As of JMX 1.2, replaced by MonitorMBean.addObservedObject(javax.management.ObjectName)"
-Show me a refactoring example.

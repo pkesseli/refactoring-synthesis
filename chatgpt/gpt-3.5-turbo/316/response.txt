@@ -1,0 +1,14 @@
+# Response Time: 4.933842897415161
+Sure, here's an example refactoring:
+
+<<< Before refactoring: 
+```
+JInternalFrame frame = new JInternalFrame();
+JMenuBar menuBar = frame.getMenuBar();
+```
+
+>>> After refactoring: 
+```
+JInternalFrame frame = new JInternalFrame();
+JMenuBar menuBar = frame.getJMenuBar();
+```
