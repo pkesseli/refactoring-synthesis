@@ -385,20 +385,16 @@ entire \texttt{java.lang} could be considered when synthesising the
 refactoring.  In order to prune the search space, we make use of type information and Javadoc code hints.
 
 
-As mentioned in Section~\ref{sec:intro}, our approach employs program synthesis
-in order to generate a refactoring that
-%is semantically equivalent to
-preserves the behaviour of the original code and
-does not use deprecated APIs.
+%% As mentioned in Section~\ref{sec:intro}, our approach employs program synthesis
+%% in order to generate a refactoring that
+%% preserves the behaviour of the original code and
+%% does not use deprecated APIs.
 At a high level, the new code is obtained by composing methods
 that are accessible from that respective location. 
 Consequently, we take inspiration from component-based program synthesis,
 which weaves together components from a library
 (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
-%Component-based program synthesis allows us to 
 
-%% While powerful, program synthesis is very hard due to the vast
-%% search space. In particular,
 For component-based synthesis, real-world
 APIs can quickly lead to very large component libraries. %, making synthesis infeasible.
 For illustration, in our setting, indiscriminately adding all members
@@ -2014,31 +2010,6 @@ to identify a code hint. Next, we discuss the results of our experiments,
 as captured by Table~\ref{tab:configuration-results-ch}.
 %, further highlighting the importance of Javadoc code hints.
 
-\begin{table}[h]
-\begin{tabular} {|l|r|r|r|r|r|}
-\hline
-Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-Zest-Types     &         55 &     28 &  8         & 60 & 234.7 \\ 
-Zest-CodeHints &         85 &      5 &  1         & 93 & 206.8 \\ 
-Rand-Types     &         60 &     23 &  8         & 65 & 224.9 \\ 
-Rand-CodeHints &         83 &      7 &  1         & 91 & 209.7 \\  \hline\hline
-\hline
-\end{tabular} 
-\caption{Results when code hints were present.}
-\label{tab:configuration-results-ch}   
-\end{table}
-
-\paragraph{Successful refactorings for CodeHints vs Types}
-Using the CodeHints-library enables our technique to find more refactorings
-than with the Type-library.
-In particular, when code hints are present, the success rate of our
-refactoring technique is 93\% with Zest-CodeHints.
-%% Excluding failures due to missing code hints, our success rate
-%% increases from 65\% to 75\% for the Zest Ty/CH configuration.
-The higher quality of the instructions in the CodeHints-library compared to the
-Types-library leads to  a reduction in 
-the number of both unsound and missed refactorings.
-
 \paragraph{Missed refactorings}
 Out of the refactorings missed by both Zest-CodeHints and Rand-CodeHints, 
 2 were missed because the method return
@@ -2055,25 +2026,6 @@ were due to fuzzing timeouts. Particularly in the case of Zest-Types and Rand-Ty
 the timeouts are likely due to the Types-library missing some
 needed instructions.
 
-
-
-%% 3 refactorings were
-%% missed because our engine does not yet consider polymorphic or generic type
-%% relations
-
-%% 13 out of the refactorings missed by both Zest-CodeHints and Rand-CodeHints
-%% were missed because the component library was too conservative.
-%% For all these cases, the correct refactoring requires constructing an object whose type
-%% does not occur in the code hints, the signature of the original code
-%% or the class containing the deprecated code.
-%% Furthermore, 
-%% All the other refactoring opportunities were missed due to fuzzing
-%% timeouts.
-
-%% When inspecting the results obtained with the Types-library, the additional
-%% refactorings missed
-%% by Zest-Types and Rand-Types were due to missing library components.
-
 As explained in Section~\ref{sec:components-seeding}, one option 
 for increasing the size of our libraries 
 is allowing unrealisable generators and transformers to
@@ -2083,8 +2035,6 @@ be added and iterating phases 2 and 3 a given number of times (potentially until
 \paragraph{Unsound refactorings}
 In order to catch the unsound refactorings (for both the CodeHints-library and the
 Types-library), we can either  
-%in Zest Ty and Zest Ty/CH are almost all
-%caused by insufficient counterexamples. This could have been addressed by
 increase the fuzzing timeout for the verification phase (resulting in
 more counterexamples), or attempt to produce higher quality
 counterexamples. For the latter, one solution is to stop relying on libraries
@@ -2096,9 +2046,38 @@ One solution was unsound
 because the method to refactor was a default method with an empty body, meant
 to be overridden by subclasses. To find a sound refactoring in these cases our
 algorithm should expand its equivalence constraint to types who override the
-method to refactor. %% Tab.~\ref{tab:configuration-results} also highlights that
-%% Javadoc Code Hints significantly reduce the likelihood of unsound refactorings
-%% in this context.
+method to refactor. 
+
+
+\begin{table}[h]
+\begin{tabular} {|l|r|r|r|r|r|}
+\hline
+Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
+Zest-Types     &         55 &     28 &  8         & 60 & 234.7 \\ 
+Zest-CodeHints &         85 &      5 &  1         & 93 & 206.8 \\ 
+Rand-Types     &         60 &     23 &  8         & 65 & 224.9 \\ 
+Rand-CodeHints &         83 &      7 &  1         & 91 & 209.7 \\  \hline\hline
+\hline
+\end{tabular} 
+\caption{Results when code hints were present.}
+\label{tab:configuration-results-ch}   
+\end{table}
+
+\paragraph{{\bf (RQ1) How does a symbolic refactoring method based on program synthesis compare against one based on LLMs?}}
+\paragraph{{\bf (RQ2) Is type information alone sufficient for the the refactoring generation task (for both the symbolic and neural approach)?}}
+\paragraph{{\bf (RQ3) Do code hints help generating the refactoring (again for both approaches)?}}
+
+\paragraph{Successful refactorings for CodeHints vs Types}
+Using the CodeHints-library enables our technique to find more refactorings
+than with the Type-library.
+In particular, when code hints are present, the success rate of our
+refactoring technique is 93\% with Zest-CodeHints.
+%% Excluding failures due to missing code hints, our success rate
+%% increases from 65\% to 75\% for the Zest Ty/CH configuration.
+The higher quality of the instructions in the CodeHints-library compared to the
+Types-library leads to  a reduction in 
+the number of both unsound and missed refactorings.
+
 
 \paragraph{Zest vs Rand guidance}
 %% We couldn't find a big difference between Rand and Zest, although we expected
