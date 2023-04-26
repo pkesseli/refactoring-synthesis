@@ -28,15 +28,19 @@ import org.slf4j.LoggerFactory;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -136,39 +140,10 @@ public class JavaDocSeed implements InstructionSetSeed {
     final JavaComponents javaComponents = new JavaComponents(components);
     final Expression deprecatedCodeExample = parseDeprecatedCodeExample(symbolResolver, typeSolver, javaParser,
         defaultType, parseResult, method, javadoc);
-    if (deprecatedCodeExample != null) {
-      try {
-        final ResolvedType resolvedType = deprecatedCodeExample.calculateResolvedType();
-        final Type type = TypeFactory.create(javaParser, resolvedType);
-
-        final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, typeSolver,
-            deprecatedCodeExample, components.InvolvedClasses);
-        if (!snippetComponent.isUnresolved())
-          javaComponents.nonnull(type, snippetComponent);
-      } catch (final RuntimeException e) {
-        logger.warn("Could not parse JavaDoc code example.", e);
-
-        if (deprecatedCodeExample instanceof MethodCallExpr) {
-          final MethodCallExpr methodCallExpr = (MethodCallExpr) deprecatedCodeExample;
-          final ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = getDeclaringClass(methodCallExpr,
-              typeSolver);
-          if (resolvedReferenceTypeDeclaration != null) {
-            final Set<ResolvedMethodDeclaration> methods = resolvedReferenceTypeDeclaration.getDeclaredMethods()
-                .stream()
-                .filter(new MatchesMethodName(methodCallExpr.getNameAsString())).collect(Collectors.toSet());
-            if (methods.size() == 1) {
-              final ResolvedMethodDeclaration methodInCodeTag = IterableUtils.first(methods);
-              if (!isEqual(methodInCodeTag, method)) {
-                register(classLoader, javaComponents, methodInCodeTag);
-                return;
-              }
-            }
-          }
-        }
-      }
-    }
+    addToComponents(deprecatedCodeExample, javaParser, typeSolver, components, javaComponents, method);
 
     final Set<String> deprecatedLinks = getLink(javadoc);
+    boolean foundMethod = false;
     for (final String deprecatedLink : deprecatedLinks) {
       final StringBuilder code = new StringBuilder(deprecatedLink.replace('#', JavaLanguage.PACKAGE_SEPARATOR).trim());
       if (code.charAt(0) == '.') {
@@ -189,11 +164,121 @@ public class JavaDocSeed implements InstructionSetSeed {
         resolvedMethodDeclaration = getResolvedMethodDeclarationFromLink(symbolResolver, typeSolver, javaParser,
             defaultType, parseResult, method, codeAsType);
       }
+      if (resolvedMethodDeclaration == null) {
+        resolvedMethodDeclaration = parseUnqualifiedJavaDocMethodReference(method, code.toString());
+      }
       if (resolvedMethodDeclaration != null) {
         register(classLoader, javaComponents, resolvedMethodDeclaration);
+        foundMethod = true;
         break;
       }
     }
+
+    if (!foundMethod) {
+      final List<JavadocDescriptionElement> deprecatedElements = getDeprecatedElements(javadoc).collect(Collectors.toList());
+      for (final JavadocDescriptionElement javadocDescriptionElement : deprecatedElements) {
+        final String javadocText;
+        if (javadocDescriptionElement instanceof JavadocInlineTag) {
+          final JavadocInlineTag inlineTag = (JavadocInlineTag) javadocDescriptionElement;
+          javadocText = inlineTag.getContent();
+        } else
+          javadocText = javadocDescriptionElement.toText();
+
+        final String codeExample = CamelCaseDetector.getMethodInvocation(javadocText);
+        if (codeExample == null)
+          continue;
+        final Expression refactoringExample = parseDeprecatedCodeExample(symbolResolver, typeSolver, javaParser,
+            defaultType, parseResult, method, codeExample);
+        if (addToComponents(refactoringExample, javaParser, typeSolver, components, javaComponents, method))
+          return;
+      }
+
+      for (final JavadocDescriptionElement javadocDescriptionElement : deprecatedElements) {
+        final String javadocText;
+        if (javadocDescriptionElement instanceof JavadocInlineTag) {
+          final JavadocInlineTag inlineTag = (JavadocInlineTag) javadocDescriptionElement;
+          javadocText = inlineTag.getContent();
+        } else
+          javadocText = javadocDescriptionElement.toText();
+
+        final String codeExample = CamelCaseDetector.getMethodName(javadocText);
+        if (codeExample == null)
+          continue;
+        final ResolvedMethodDeclaration resolvedMethodDeclaration = parseUnqualifiedJavaDocMethodReference(method,
+            codeExample);
+        if (resolvedMethodDeclaration != null) {
+          register(classLoader, javaComponents, resolvedMethodDeclaration);
+          return;
+        }
+      }
+    }
+  }
+
+  private boolean addToComponents(final Expression deprecatedCodeExample, final JavaParser javaParser,
+      final TypeSolver typeSolver, final ComponentDirectory components, final JavaComponents javaComponents,
+      final MethodDeclaration deprecatedMethod) throws ClassNotFoundException, NoSuchMethodException {
+    if (deprecatedCodeExample != null) {
+      try {
+        final ResolvedType resolvedType = deprecatedCodeExample.calculateResolvedType();
+        final Type type = TypeFactory.create(javaParser, resolvedType);
+
+        final SnippetComponent snippetComponent = new SnippetComponent(classLoader, javaParser, typeSolver,
+            deprecatedCodeExample, components.InvolvedClasses);
+        if (!snippetComponent.isUnresolved()) {
+          javaComponents.nonnull(type, snippetComponent);
+          return true;
+        }
+      } catch (final RuntimeException e) {
+        logger.warn("Could not parse JavaDoc code example.", e);
+
+        if (deprecatedCodeExample instanceof MethodCallExpr) {
+          final MethodCallExpr methodCallExpr = (MethodCallExpr) deprecatedCodeExample;
+          final ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = getDeclaringClass(methodCallExpr,
+              typeSolver);
+          if (resolvedReferenceTypeDeclaration != null) {
+            final Set<ResolvedMethodDeclaration> methods = resolvedReferenceTypeDeclaration.getDeclaredMethods()
+                .stream()
+                .filter(new MatchesMethodName(methodCallExpr.getNameAsString())).collect(Collectors.toSet());
+            if (methods.size() == 1) {
+              final ResolvedMethodDeclaration methodInCodeTag = IterableUtils.first(methods);
+              if (!isEqual(methodInCodeTag, deprecatedMethod)) {
+                register(classLoader, javaComponents, methodInCodeTag);
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Tries to parse references like {@link #getResolvedMethodDeclarationFromLink}
+   * which lack the full signature. Only returns a non-null result if a method can
+   * be identified unambiguously, i.e. will return {@code null} in case of
+   * overloads.
+   * 
+   * @return Unambiguously identified method or {@code null}.
+   */
+  private ResolvedMethodDeclaration parseUnqualifiedJavaDocMethodReference(final MethodDeclaration deprecatedMethod,
+      final String link) {
+    final Optional<Node> parentNode = deprecatedMethod.getParentNode();
+    if (!parentNode.isPresent())
+      return null;
+    final Node container = parentNode.get();
+    if (!(container instanceof NodeWithMembers))
+      return null;
+
+    final NodeWithMembers<?> nodeWithMembers = (NodeWithMembers<?>) container;
+    final List<MethodDeclaration> matchingMethods = nodeWithMembers.getMethods().stream()
+        .filter(method -> method.getName().getIdentifier().equals(link)).limit(2)
+        .collect(Collectors.toList());
+    if (matchingMethods.size() > 1) {
+      logger.info("Could not find a unique match for link: {}", link);
+      return null;
+    }
+    return matchingMethods.get(0).resolve();
   }
 
   private ResolvedMethodDeclaration getResolvedMethodDeclarationFromLink(final JavaSymbolSolver symbolResolver,
@@ -333,7 +418,15 @@ public class JavaDocSeed implements InstructionSetSeed {
       final JavaParser javaParser, final Type defaultType, final ParseResult<CompilationUnit> compilationUnit,
       final MethodDeclaration method, final String code) {
     final ParseResult<Expression> textExpression = javaParser.parseExpression("__RESYNTH(" + code + ")");
-    method.getBody().get().addStatement(0, textExpression.getResult().get());
+    final Expression newStatement = textExpression.getResult().get();
+    final Optional<BlockStmt> optionalBody = method.getBody();
+    if (optionalBody.isPresent())
+      optionalBody.get().addStatement(0, newStatement);
+    else {
+      final BlockStmt newBody = new BlockStmt();
+      newBody.addStatement(0, newStatement);
+      method.setBody(newBody);
+    }
     final ParseResult<CompilationUnit> parseResult = javaParser.parse(compilationUnit.getResult().get().toString());
     final MethodDeclaration container = findMethod(symbolResolver, typeSolver, parseResult);
     final Expression result = container.getBody().get().getStatement(0).asExpressionStmt().getExpression()
@@ -376,13 +469,37 @@ public class JavaDocSeed implements InstructionSetSeed {
         .filter(tag -> JavadocInlineTag.Type.CODE == tag.getType()).collect(Collectors.toList());
     for (final JavadocInlineTag javadocInlineTag : tags) {
       final String code = javadocInlineTag.getContent();
-      final Expression expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType,
+      final Expression expression = parseDeprecatedCodeExample(symbolResolver, typeSolver, javaParser, defaultType,
           compilationUnit, method, code);
-      if (!containsDeprectedMethodCalls(classLoader, expression))
+      if (expression != null)
         return expression;
     }
 
     return null;
+  }
+
+  /**
+   * Equivalent to
+   * {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)},
+   * but also checks if the resulting expression contains deprecated methods. If
+   * so, it is not returned.
+   * 
+   * @param symbolResolver  {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+   * @param typeSolver      {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+   * @param javaParser      {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+   * @param defaultType     {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+   * @param compilationUnit {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+   * @param method          {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+   * @param codeExample     Code example string to parse.
+   * @return {@code null} if example contains deprecated methods or could not be
+   *         parsed, otherwise the parsed expression.
+   */
+  private Expression parseDeprecatedCodeExample(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
+      final JavaParser javaParser, final Type defaultType, final ParseResult<CompilationUnit> compilationUnit,
+      final MethodDeclaration method, final String codeExample) {
+    final Expression expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType,
+        compilationUnit, method, codeExample);
+    return containsDeprectedMethodCalls(classLoader, expression) ? null : expression;
   }
 
   /**
@@ -427,9 +544,12 @@ public class JavaDocSeed implements InstructionSetSeed {
    * @return {@link Stream} of matching {@link JavadocInlineTag}.
    */
   private static Stream<JavadocInlineTag> getDeprecatedInlineTags(final Javadoc javadoc) {
+    return getDeprecatedElements(javadoc).filter(JavadocInlineTag.class::isInstance).map(JavadocInlineTag.class::cast);
+  }
+
+  private static Stream<JavadocDescriptionElement> getDeprecatedElements(final Javadoc javadoc) {
     return javadoc.getBlockTags().stream().filter(b -> JavadocBlockTag.Type.DEPRECATED == b.getType())
-        .map(JavadocBlockTag::getContent).map(JavadocDescription::getElements).flatMap(Collection::stream)
-        .filter(JavadocInlineTag.class::isInstance).map(JavadocInlineTag.class::cast);
+        .map(JavadocBlockTag::getContent).map(JavadocDescription::getElements).flatMap(Collection::stream);
   }
 
   /**
