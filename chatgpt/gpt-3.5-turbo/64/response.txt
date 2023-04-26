@@ -1,0 +1,17 @@
+# Response Time: 11.321266174316406
+I'm sorry, but as an AI language model, I cannot provide code examples in a straight-line code block format. However, I can provide you with a refactoring example in a conversational format:
+
+Before refactoring:
+```
+Frame myFrame = new Frame();
+int cursorType = myFrame.getCursorType();
+```
+
+After refactoring:
+```
+Frame myFrame = new Frame();
+Cursor cursor = myFrame.getCursor();
+int cursorType = cursor.getType();
+```
+
+In the refactored code, we replaced the deprecated `getCursorType()` method with the `getCursor()` method from the `Component` class. We then retrieved the cursor type from the `Cursor` object returned by the `getCursor()` method.

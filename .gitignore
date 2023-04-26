@@ -18,3 +18,4 @@
 /paper/*.synctex.gz
 
 target/
+zest.bin

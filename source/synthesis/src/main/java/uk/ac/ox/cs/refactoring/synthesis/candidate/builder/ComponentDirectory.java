@@ -35,7 +35,7 @@ public class ComponentDirectory {
   private final Map<Object, SortedMap<Integer, List<? extends Component<?, ?>>>> components = new HashMap<>();
 
   /**
-   * Maps component keys to the minimux size necessary to construct it.
+   * Maps component keys to the minimum size necessary to construct it.
    */
   private final Map<Object, Integer> minSizes = new HashMap<>();
 
@@ -57,11 +57,15 @@ public class ComponentDirectory {
         .map(component -> (Component<K, V>) component);
   }
 
+  @SuppressWarnings("unchecked")
+  public <K, V> Stream<Component<K, V>> get(final K key) {
+    return components.get(key).values().stream().flatMap(List::stream).map(component -> (Component<K, V>) component);
+  }
+
   /**
    * Registers a given component in the directory.
    * 
    * @param <K>       Key type.
-   * @param <V>       Component type.
    * @param key       Category under which to store the component.
    * @param component Component to register.
    */
@@ -70,6 +74,41 @@ public class ComponentDirectory {
     @SuppressWarnings("unchecked")
     final List<Component<K, ?>> converted = (List<Component<K, ?>>) bucket;
     converted.add(component);
+  }
+
+  /**
+   * Removes a previously registered component.
+   * 
+   * @param <K>       Key type.
+   * @param key       Category under which the component is stored.
+   * @param component Component to remove.
+   * @return {@link List#remove(Object)}
+   */
+  public <K> boolean remove(final K key, final Component<K, ?> component) {
+    final int size = component.size();
+    final SortedMap<Integer, List<? extends Component<?, ?>>> sizeAndComponentsForKey = components.get(key);
+    final List<? extends Component<?, ?>> componentsAtSize = sizeAndComponentsForKey.get(size);
+    final boolean removed = componentsAtSize.remove(component);
+    if (componentsAtSize.isEmpty()) {
+      sizeAndComponentsForKey.remove(size);
+      if (sizeAndComponentsForKey.isEmpty())
+        components.remove(key);
+      else
+        minSizes.put(key, sizeAndComponentsForKey.firstKey());
+    }
+    return removed;
+  }
+
+  public <K> void recomputeMinSizes(final Iterable<K> keys) {
+    for (final K key : keys) {
+      final SortedMap<Integer, List<? extends Component<?, ?>>> sizeAndComponentsForKey = components.get(key);
+      if (sizeAndComponentsForKey.isEmpty()) {
+        components.remove(key);
+        minSizes.remove(key);
+      } else {
+        minSizes.put(key, sizeAndComponentsForKey.firstKey());
+      }
+    }
   }
 
   /**

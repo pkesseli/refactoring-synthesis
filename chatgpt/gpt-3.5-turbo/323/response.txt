@@ -1,0 +1,14 @@
+# Response Time: 4.904003858566284
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JRootPane rootPane = new JRootPane();
+JMenuBar menuBar = rootPane.getMenuBar();
+```
+
+>>> After refactoring:
+```
+JRootPane rootPane = new JRootPane();
+JMenuBar menuBar = rootPane.getJMenuBar();
+```

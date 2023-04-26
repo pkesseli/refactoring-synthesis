@@ -1,0 +1,28 @@
+# Response Time: 9.07999587059021
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+try {
+    ResultSet rs = statement.executeQuery(query);
+    while (rs.next()) {
+        InputStream is = rs.getUnicodeStream(1);
+        // do something with the input stream
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+```
+
+>>> After refactoring:
+```
+try {
+    ResultSet rs = statement.executeQuery(query);
+    while (rs.next()) {
+        Reader reader = rs.getCharacterStream(1);
+        // do something with the reader
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+```

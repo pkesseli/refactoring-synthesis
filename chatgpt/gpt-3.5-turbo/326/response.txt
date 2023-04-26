@@ -1,0 +1,14 @@
+# Response Time: 4.183361768722534
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JTable table = new JTable(data, columnNames);
+table.sizeColumnsToFit(true);
+```
+
+>>> After refactoring:
+```
+JTable table = new JTable(data, columnNames);
+table.doLayout();
+```

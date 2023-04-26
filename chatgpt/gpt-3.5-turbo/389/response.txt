@@ -1,0 +1,35 @@
+# Response Time: 16.1889591217041
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import org.ietf.jgss.GSSContext;
+import org.ietf.jgss.MessageProp;
+
+GSSContext context = ...;
+InputStream in = ...;
+OutputStream out = ...;
+MessageProp prop = ...;
+
+context.unwrap(in, out, prop);
+```
+
+>>> After refactoring:
+```
+import org.ietf.jgss.GSSContext;
+import org.ietf.jgss.MessageProp;
+
+GSSContext context = ...;
+InputStream in = ...;
+OutputStream out = ...;
+MessageProp prop = ...;
+byte[] buffer = new byte[1024];
+int bytesRead;
+
+while ((bytesRead = in.read(buffer)) != -1) {
+    context.unwrap(buffer, 0, bytesRead, prop);
+    out.write(buffer, 0, bytesRead);
+}
+``` 
+
+In this refactored code, we've replaced the deprecated `unwrap(InputStream, OutputStream, MessageProp)` method with the recommended `unwrap(byte[], int, int, MessageProp)` method. We've also added a loop to read from the input stream in chunks and write to the output stream, since the `unwrap` method now operates on byte arrays instead of streams.

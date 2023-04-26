@@ -1,0 +1,20 @@
+# Response Time: 8.64041781425476
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JList<String> myList = new JList<>(new String[]{"apple", "banana", "cherry"});
+Object[] selectedValues = myList.getSelectedValues();
+for (Object value : selectedValues) {
+    System.out.println(value);
+}
+```
+
+>>> After refactoring:
+```
+JList<String> myList = new JList<>(new String[]{"apple", "banana", "cherry"});
+List<String> selectedValues = myList.getSelectedValuesList();
+for (String value : selectedValues) {
+    System.out.println(value);
+}
+```

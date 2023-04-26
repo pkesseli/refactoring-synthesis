@@ -1,0 +1,17 @@
+# Response Time: 12.345553159713745
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+GaugeMonitor gaugeMonitor = new GaugeMonitor(mBeanServerConnection, objectName, gaugeMBean);
+Number derivedGauge = gaugeMonitor.getDerivedGauge();
+```
+
+>>> After refactoring:
+```
+GaugeMonitor gaugeMonitor = new GaugeMonitor(mBeanServerConnection, objectName, gaugeMBean);
+ObjectName derivedGaugeObjectName = gaugeMonitor.getDerivedGaugeObjectName();
+Number derivedGauge = (Number) mBeanServerConnection.getAttribute(derivedGaugeObjectName, "Value");
+``` 
+
+In the refactored code, we use the `getDerivedGaugeObjectName()` method instead of the deprecated `getDerivedGauge()` method. This returns an `ObjectName` that we can use to retrieve the derived gauge value using the `getAttribute()` method on the `MBeanServerConnection`.

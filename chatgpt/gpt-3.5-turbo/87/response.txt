@@ -1,0 +1,16 @@
+# Response Time: 6.125667095184326
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+MenuComponent menuComponent = new MenuComponent();
+Event event = new Event(menuComponent, 0, null);
+menuComponent.postEvent(event);
+```
+
+>>> After refactoring:
+```
+MenuComponent menuComponent = new MenuComponent();
+Event event = new Event(menuComponent, 0, null);
+menuComponent.dispatchEvent(event);
+```

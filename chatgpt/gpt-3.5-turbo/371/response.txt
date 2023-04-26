@@ -1,0 +1,15 @@
+# Response Time: 8.829824924468994
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+int pos = Utilities.getPositionBelow(textComponent, offset, 10);
+```
+
+>>> After refactoring:
+```
+float maxDescent = 10f;
+int pos = Utilities.getPositionBelow(textComponent, offset, maxDescent);
+``` 
+
+In the refactored code, we've replaced the deprecated method call with the new one that takes a `float` instead of an `int` for the maximum descent. We've also updated the code to pass in a `float` value for `maxDescent` instead of an `int`.

@@ -1,0 +1,16 @@
+# Response Time: 9.946934700012207
+Sure, here's an example refactoring for the deprecated `java.awt.Rectangle.move(int, int)` method:
+
+<<< Before refactoring:
+```
+Rectangle rect = new Rectangle(10, 10, 20, 20);
+rect.move(5, 5);
+```
+
+>>> After refactoring:
+```
+Rectangle rect = new Rectangle(10, 10, 20, 20);
+rect.setLocation(15, 15);
+```
+
+In the refactored code, we've replaced the deprecated `move` method with the recommended `setLocation` method. This achieves the same result of moving the rectangle by 5 units in both the x and y directions, but uses the updated API.

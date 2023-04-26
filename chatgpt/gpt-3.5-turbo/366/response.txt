@@ -1,0 +1,29 @@
+# Response Time: 20.095272064208984
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+public void paint(Graphics g, Shape a) {
+    Rectangle r = (Rectangle) a;
+    JTextComponent c = (JTextComponent) getContainer();
+    TextUI mapper = c.getUI();
+    Rectangle vr = c.getVisibleRect();
+    int startOffset = mapper.viewToModel(c, new Point(r.x, r.y));
+    int endOffset = mapper.viewToModel(c, new Point(r.x + r.width, r.y + r.height));
+    drawUnselectedText(g, r.x, r.y, startOffset, endOffset);
+}
+```
+
+>>> After refactoring:
+```
+public void paint(Graphics g, Shape a) {
+    Rectangle r = (Rectangle) a;
+    JTextComponent c = (JTextComponent) getContainer();
+    TextUI mapper = c.getUI();
+    Rectangle2D vr = c.getVisibleRect();
+    int startOffset = mapper.viewToModel(c, new Point2D.Float(r.x, r.y));
+    int endOffset = mapper.viewToModel(c, new Point2D.Float(r.x + r.width, r.y + r.height));
+    Graphics2D g2d = (Graphics2D) g;
+    drawUnselectedText(g2d, (float) r.x, (float) r.y, startOffset, endOffset);
+}
+```

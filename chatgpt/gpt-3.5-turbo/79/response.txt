@@ -1,0 +1,18 @@
+# Response Time: 9.585891723632812
+Sure, here's an example refactoring for the deprecated method java.awt.List.isSelected(int):
+
+<<< Before refactoring:
+```
+List myList = new List();
+int selectedIndex = 2;
+boolean isSelected = myList.isSelected(selectedIndex);
+```
+
+>>> After refactoring:
+```
+List myList = new List();
+int selectedIndex = 2;
+boolean isSelected = myList.isIndexSelected(selectedIndex);
+```
+
+In the refactored code, the deprecated method isSelected(int) has been replaced with the recommended method isIndexSelected(int). This will ensure that the code remains compatible with newer versions of Java and avoids any potential issues that may arise from using deprecated methods.

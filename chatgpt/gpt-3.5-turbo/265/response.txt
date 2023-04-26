@@ -1,0 +1,30 @@
+# Response Time: 14.378829956054688
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.util.logging.LogManager;
+import java.util.logging.LoggingMXBean;
+
+public class MyClass {
+    public void myMethod() {
+        LoggingMXBean loggingMXBean = LogManager.getLoggingMXBean();
+        // rest of the code
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.lang.management.ManagementFactory;
+import java.lang.management.PlatformLoggingMXBean;
+
+public class MyClass {
+    public void myMethod() {
+        PlatformLoggingMXBean loggingMXBean = ManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class);
+        // rest of the code
+    }
+}
+``` 
+
+In the refactored code, we've replaced the deprecated `LogManager.getLoggingMXBean()` method with `ManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class)`. This change ensures that we're using the updated `PlatformLoggingMXBean` class instead of the deprecated `LoggingMXBean` class.

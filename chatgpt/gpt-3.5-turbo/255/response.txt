@@ -1,0 +1,34 @@
+# Response Time: 15.3332359790802
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        date.setMonth(5);
+        System.out.println(date);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.util.Calendar;
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MONTH, 5);
+        date = cal.getTime();
+        System.out.println(date);
+    }
+}
+```
+
+In this example, we've replaced the deprecated `setMonth` method with the recommended `Calendar` class. We create a new `Calendar` instance and set its time to the `Date` object. Then we use the `set` method on the `Calendar` object to set the month, and finally we get the updated `Date` object from the `Calendar` instance.

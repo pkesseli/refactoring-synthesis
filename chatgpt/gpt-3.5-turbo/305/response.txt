@@ -1,0 +1,12 @@
+# Response Time: 4.392428159713745
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+javax.swing.FocusManager.disableSwingFocusManager();
+```
+
+>>> After refactoring:
+```
+KeyboardFocusManager.getCurrentKeyboardFocusManager().setDefaultFocusTraversalPolicy(FocusTraversalPolicy);
+```

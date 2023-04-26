@@ -1,0 +1,27 @@
+# Response Time: 12.616004943847656
+Sure, here's an example refactoring for the deprecated method `java.awt.Frame.setCursor(int)`:
+
+<<< Before refactoring:
+```
+import java.awt.Frame;
+
+public class MyFrame extends Frame {
+    public MyFrame() {
+        setCursor(Frame.HAND_CURSOR);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.Cursor;
+import java.awt.Frame;
+
+public class MyFrame extends Frame {
+    public MyFrame() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+}
+```
+
+In the refactored code, we've replaced the deprecated `setCursor(int)` method with the recommended `setCursor(Cursor)` method. We've also imported the `Cursor` class and used its `getPredefinedCursor(int)` method to get a `Cursor` object representing the `HAND_CURSOR` constant.

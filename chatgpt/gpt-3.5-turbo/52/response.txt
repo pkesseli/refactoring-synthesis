@@ -1,0 +1,18 @@
+# Response Time: 6.707843780517578
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+Container container = new Container();
+int x = 10;
+int y = 20;
+Component component = container.locate(x, y);
+```
+
+>>> After refactoring:
+```
+Container container = new Container();
+int x = 10;
+int y = 20;
+Component component = container.getComponentAt(x, y);
+```

@@ -1,0 +1,18 @@
+# Response Time: 6.688190937042236
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+char c = 'a';
+if (Character.isJavaLetterOrDigit(c)) {
+    System.out.println(c + " is a Java letter or digit.");
+}
+```
+
+>>> After refactoring:
+```
+char c = 'a';
+if (Character.isJavaIdentifierPart(c)) {
+    System.out.println(c + " is a Java identifier part.");
+}
+```

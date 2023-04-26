@@ -1,0 +1,2 @@
+# Response Time: 3.7306251525878906
+Sorry, as an AI language model, I cannot provide a refactoring example without knowing the specific code that needs to be refactored. Can you please provide me with the code snippet that needs to be refactored?

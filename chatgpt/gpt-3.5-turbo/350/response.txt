@@ -1,0 +1,21 @@
+# Response Time: 14.119698762893677
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JTextComponent textComponent = new JTextComponent();
+Point point = new Point(10, 20);
+TextUI textUI = textComponent.getUI();
+int modelIndex = textUI.viewToModel(textComponent, point);
+```
+
+>>> After refactoring:
+```
+JTextComponent textComponent = new JTextComponent();
+Point2D point = new Point2D.Double(10, 20);
+TextUI textUI = textComponent.getUI();
+Position.Bias[] bias = new Position.Bias[1];
+int modelIndex = textUI.viewToModel2D(textComponent, point, bias);
+``` 
+
+In this example, we've replaced the deprecated `TextUI.viewToModel` method with the recommended `TextUI.viewToModel2D` method. We've also updated the `Point` object to a `Point2D` object and added a `Position.Bias` array to the method call.

@@ -1,0 +1,21 @@
+# Response Time: 8.665152072906494
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JButton button1 = new JButton("Button 1");
+JButton button2 = new JButton("Button 2");
+button1.setNextFocusableComponent(button2);
+```
+
+>>> After refactoring:
+```
+JButton button1 = new JButton("Button 1");
+JButton button2 = new JButton("Button 2");
+button1.setFocusTraversalPolicyProvider(true);
+button1.setFocusTraversalPolicy(new LayoutFocusTraversalPolicy() {
+    public Component getDefaultComponent(Container focusCycleRoot) {
+        return button2;
+    }
+});
+```

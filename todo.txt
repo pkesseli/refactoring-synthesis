@@ -1,7 +1,25 @@
-- Executable and Java AST-convertible candidate type - done
-- Class-loader-independent counterexample type - done
-- Invoke method to replace in isolated class loader against counterexample - done
-- Generate Java candidates based on JQF `SourceOfRandomness` - done
-- Class-loader-independent parameter expressions for candidates
-- Invoke candidate in isolated class loader against counterexample
-- Compare execution results from two different class loaders - ok
+- Camel-case code hints
+- Missed code hints
+- Run each benchmark in isolation
+- Fuzzing loop with increasing sizes
+- Consider subclasses
+
+1. Replacement suggestions are in plain text
+- `java.awt.Component#postEvent`
+- `java.lang.Character#isJavaLetter`
+- `java.net.DatagramSocketImpl#getTTL`
+- `java.net.URLDecoder#decode`
+- `javax.sql.rowset.BaseRowSet#setUnicodeStream`
+- and many other benchmarks with sound results
+2. Replacement suggestions are in proper code blocks. Should've found Code Hints
+- `java.util.concurrent.*` - TODO: Treat as simple name, see if unambiguous
+- `javax.management.monitor.CounterMonitorMBean#setThreshold` (requires `ObjectName`)
+- `javax.management.monitor.GaugeMonitorMBean#getDerivedGauge` (requires `ObjectName`)
+- `javax.management.monitor.StringMonitorMBean#getDerivedGauge` (requires `ObjectName`)
+- `javax.swing.plaf.metal.MetalScrollPaneUI#uninstallListeners` - protected, fixed
+- `javax.swing.text.PasswordView#drawEchoCharacter` - protected, fixed
+- `javax.swing.text.WrappedPlainView#*` - JavaParser cannot look up java.awt.Graphics2D, manually fixed
+- `org.ietf.jgss.GSSContext#*` (hard cases with IOStream)
+3. Unsound even if code hints found
+- `javax.swing.JTable#sizeColumnsToFit`
+

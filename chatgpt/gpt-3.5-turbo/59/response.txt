@@ -1,0 +1,14 @@
+# Response Time: 4.990274906158447
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+Dialog dialog = new Dialog(parent, "Title", true);
+dialog.show();
+```
+
+>>> After refactoring:
+```
+Dialog dialog = new Dialog(parent, "Title", true);
+dialog.setVisible(true);
+```

@@ -1,0 +1,26 @@
+# Response Time: 8.17202377319336
+Sure, here's an example refactoring for the deprecated `java.awt.ScrollPane.layout()` method:
+
+<<< Before refactoring:
+```
+import java.awt.ScrollPane;
+
+public class MyScrollPane extends ScrollPane {
+    public MyScrollPane() {
+        super();
+        layout(); // deprecated method
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.awt.ScrollPane;
+
+public class MyScrollPane extends ScrollPane {
+    public MyScrollPane() {
+        super();
+        doLayout(); // recommended replacement method
+    }
+}
+```

@@ -1,0 +1,34 @@
+# Response Time: 16.619466304779053
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        date.setDate(15);
+        System.out.println(date);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.util.Calendar;
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH, 15);
+        date = calendar.getTime();
+        System.out.println(date);
+    }
+}
+```
+
+In this example, we've replaced the deprecated `java.util.Date.setDate(int)` method with the recommended `java.util.Calendar.set(int, int)` method. We first create a `Calendar` instance and set its time to the `Date` object. Then we set the day of the month using the `Calendar.DAY_OF_MONTH` constant and the desired date. Finally, we get the updated `Date` object from the `Calendar` instance and print it out.

@@ -19,10 +19,14 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.commons.collections4.IterableUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -45,15 +49,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
-import org.apache.commons.collections4.IterableUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.JavaLanguage;
@@ -63,6 +59,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.expression.Invoke;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifiers;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.Methods;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.InstructionSetSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 
@@ -71,6 +68,9 @@ public class JavaDocSeed implements InstructionSetSeed {
 
   /** Sink for errors about accessing the source files. */
   private static final Logger logger = LoggerFactory.getLogger(JavaDocSeed.class);
+
+  /** Used to parse JavaDoc hints. */
+  private final ParserContext parserContext;
 
   /** Used to load pre-configured classes. */
   private final ClassLoader classLoader;
@@ -85,7 +85,9 @@ public class JavaDocSeed implements InstructionSetSeed {
    * @param classLoader      {@link #classLoader}
    * @param methodIdentifier {@link #methodToRefactor}
    */
-  public JavaDocSeed(final ClassLoader classLoader, final MethodIdentifier methodIdentifier) {
+  public JavaDocSeed(final ParserContext parserContext, final ClassLoader classLoader,
+      final MethodIdentifier methodIdentifier) {
+    this.parserContext = parserContext;
     this.classLoader = classLoader;
     this.methodToRefactor = methodIdentifier;
     final Path javaHome = Paths.get(SystemUtils.JAVA_HOME);
@@ -95,18 +97,25 @@ public class JavaDocSeed implements InstructionSetSeed {
     }
   }
 
+  private static boolean isEqual(final ResolvedMethodDeclaration resolvedMethodDeclaration,
+      final MethodDeclaration methodDeclaration) {
+    final ResolvedMethodDeclaration other;
+    try {
+      other = methodDeclaration.resolve();
+    } catch (final Exception e) {
+      return false;
+    }
+
+    return resolvedMethodDeclaration.getQualifiedSignature().equals(other.getQualifiedSignature());
+  }
+
   @Override
   public void seed(final ComponentDirectory components)
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
     final String className = methodToRefactor.FullyQualifiedClassName;
-    final ParserConfiguration parserConfiguration = new ParserConfiguration();
-    parserConfiguration.setLanguageLevel(LanguageLevel.JAVA_15);
-    final CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(),
-        new ClassLoaderTypeSolver(classLoader));
-    typeSolver.setExceptionHandler(SecurityException.class::isInstance);
-    final JavaSymbolSolver symbolResolver = new JavaSymbolSolver(typeSolver);
-    parserConfiguration.setSymbolResolver(symbolResolver);
-    final JavaParser javaParser = new JavaParser(parserConfiguration);
+    final CombinedTypeSolver typeSolver = parserContext.TypeSolver;
+    final JavaSymbolSolver symbolResolver = parserContext.SymbolResolver;
+    final JavaParser javaParser = parserContext.JavaParser;
     final ParseResult<CompilationUnit> parseResult;
     try {
       parseResult = findSource(javaParser, className);
@@ -148,36 +157,65 @@ public class JavaDocSeed implements InstructionSetSeed {
                 .stream()
                 .filter(new MatchesMethodName(methodCallExpr.getNameAsString())).collect(Collectors.toSet());
             if (methods.size() == 1) {
-              register(classLoader, javaComponents, IterableUtils.first(methods));
-              return;
+              final ResolvedMethodDeclaration methodInCodeTag = IterableUtils.first(methods);
+              if (!isEqual(methodInCodeTag, method)) {
+                register(classLoader, javaComponents, methodInCodeTag);
+                return;
+              }
             }
           }
         }
       }
     }
 
-    final String deprecatedLink = getLink(javadoc);
-    if (deprecatedLink == null)
-      return;
+    final Set<String> deprecatedLinks = getLink(javadoc);
+    for (final String deprecatedLink : deprecatedLinks) {
+      final StringBuilder code = new StringBuilder(deprecatedLink.replace('#', JavaLanguage.PACKAGE_SEPARATOR).trim());
+      if (code.charAt(0) == '.') {
+        code.deleteCharAt(0);
+      }
 
-    final StringBuilder code = new StringBuilder(deprecatedLink.replace('#', JavaLanguage.PACKAGE_SEPARATOR).trim());
-    if (code.charAt(0) == '.') {
-      code.deleteCharAt(0);
+      final String codeWithParametersAsExpressions = code.toString();
+      ResolvedMethodDeclaration resolvedMethodDeclaration = getResolvedMethodDeclarationFromLink(symbolResolver,
+          typeSolver, javaParser, defaultType, parseResult, method, codeWithParametersAsExpressions);
+      if (resolvedMethodDeclaration == null) {
+        String codeAsType = code.toString().replaceAll("([,)])", " raw_param$1");
+        int paramIndex = 0;
+        String previous = "";
+        while (!codeAsType.equals(previous)) {
+          previous = codeAsType;
+          codeAsType = codeAsType.replaceFirst("raw_param", "param" + paramIndex);
+        }
+        resolvedMethodDeclaration = getResolvedMethodDeclarationFromLink(symbolResolver, typeSolver, javaParser,
+            defaultType, parseResult, method, codeAsType);
+      }
+      if (resolvedMethodDeclaration != null) {
+        register(classLoader, javaComponents, resolvedMethodDeclaration);
+        break;
+      }
     }
+  }
+
+  private ResolvedMethodDeclaration getResolvedMethodDeclarationFromLink(final JavaSymbolSolver symbolResolver,
+      final CombinedTypeSolver typeSolver, final JavaParser javaParser, final Type defaultType,
+      final ParseResult<CompilationUnit> parseResult, final MethodDeclaration method, final String code) {
     final Expression expression;
     try {
-      expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method,
-          code.toString());
+      expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method, code);
     } catch (final Exception e) {
       logger.warn("Could not identify method linked in JavaDoc", e);
-      return;
+      return null;
     }
 
     if (!(expression instanceof MethodCallExpr))
-      return;
+      return null;
     final MethodCallExpr methodCall = (MethodCallExpr) expression;
-    final ResolvedMethodDeclaration methodDeclaration = methodCall.resolve();
-    register(classLoader, javaComponents, methodDeclaration);
+    try {
+      return methodCall.resolve();
+    } catch (final Exception e) {
+      logger.warn("Could not resolved method linked in JavaDoc", e);
+      return null;
+    }
   }
 
   /**
@@ -192,7 +230,7 @@ public class JavaDocSeed implements InstructionSetSeed {
   private static void register(final ClassLoader classLoader, final JavaComponents javaComponents,
       final ResolvedMethodDeclaration methodDeclaration) throws ClassNotFoundException, NoSuchMethodException {
     final Method methodToRegister = Methods.getMethod(classLoader, MethodIdentifiers.create(methodDeclaration));
-    Invoke.register(javaComponents, methodToRegister);
+    Invoke.register(javaComponents, methodToRegister, true);
   }
 
   /**
@@ -313,9 +351,9 @@ public class JavaDocSeed implements InstructionSetSeed {
    * @param javadoc Comment in which to search.
    * @return {@link Javadoc} link reference.
    */
-  private static String getLink(final Javadoc javadoc) {
+  private static Set<String> getLink(final Javadoc javadoc) {
     return getDeprecatedInlineTags(javadoc).filter(tag -> JavadocInlineTag.Type.LINK == tag.getType())
-        .map(JavadocInlineTag::getContent).map(Links::getLink).findAny().orElse(null);
+        .map(JavadocInlineTag::getContent).map(Links::getLink).collect(Collectors.toSet());
   }
 
   /**

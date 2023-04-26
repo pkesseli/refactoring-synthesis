@@ -1,0 +1,16 @@
+# Response Time: 4.839639663696289
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+try {
+    remoteCall.releaseOutputStream();
+} catch (IOException e) {
+    // handle exception
+}
+```
+
+>>> After refactoring:
+```
+// no-op, since there is no replacement for releaseOutputStream()
+```

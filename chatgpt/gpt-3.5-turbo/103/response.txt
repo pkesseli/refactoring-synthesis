@@ -1,0 +1,14 @@
+# Response Time: 4.725975036621094
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+Scrollbar scrollbar = new Scrollbar();
+scrollbar.setPageIncrement(10);
+```
+
+>>> After refactoring:
+```
+Scrollbar scrollbar = new Scrollbar();
+scrollbar.setBlockIncrement(10);
+```

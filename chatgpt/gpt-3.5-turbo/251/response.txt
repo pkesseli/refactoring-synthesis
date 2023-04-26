@@ -1,0 +1,15 @@
+# Response Time: 5.734750986099243
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+String dateString = "2022-01-01";
+Date date = new Date(Date.parse(dateString));
+```
+
+>>> After refactoring:
+```
+String dateString = "2022-01-01";
+DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+Date date = dateFormat.parse(dateString);
+```

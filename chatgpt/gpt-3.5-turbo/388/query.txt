@@ -1,0 +1,7 @@
+The method org.ietf.jgss.GSSContext.initSecContext​(InputStream, OutputStream) is deprecated.
+ The related deprecation comment in Javadoc is "The stream-based methods have been removed from RFC 8353.
+ Use GSSContext.initSecContext(byte[], int, int) instead."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

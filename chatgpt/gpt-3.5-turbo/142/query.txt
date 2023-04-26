@@ -1,0 +1,12 @@
+The method java.lang.reflect.Proxy.getProxyClass​(ClassLoader, Class&lt;?&gt;...) is deprecated.
+ The related deprecation comment in Javadoc is "Proxy classes generated in a named module are encapsulated
+      and not accessible to code outside its module.
+      Constructor.newInstance
+      will throw IllegalAccessException when it is called on
+      an inaccessible proxy class.
+      Use Proxy.newProxyInstance(ClassLoader, Class[], InvocationHandler)
+      to create a proxy instance instead."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

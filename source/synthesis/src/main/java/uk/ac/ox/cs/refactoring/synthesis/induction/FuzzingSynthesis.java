@@ -27,7 +27,7 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 public class FuzzingSynthesis<Candidate> {
 
   /** Sink for logging candidates. */
-  private final CegisLoopListener<Candidate> listener;
+  protected final CegisLoopListener<Candidate> listener;
 
   /** Used to look up JQF generators necessary to construct candidates. */
   private final GeneratorRepository generatorRepository;
@@ -39,7 +39,7 @@ public class FuzzingSynthesis<Candidate> {
   private final Class<Candidate> candidateType;
 
   /** Confiugration for guidance. */
-  private final GeneratorConfiguration generatorConfiguration;
+  protected final GeneratorConfiguration generatorConfiguration;
 
   /**
    * JUnit method instance which describes the API to invoke using fuzzed inputs.

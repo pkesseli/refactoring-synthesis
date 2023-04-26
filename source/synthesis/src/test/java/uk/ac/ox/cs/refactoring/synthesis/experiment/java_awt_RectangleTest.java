@@ -2,6 +2,7 @@ package uk.ac.ox.cs.refactoring.synthesis.experiment;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assert.assertTrue;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.mapsTo;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
@@ -9,6 +10,7 @@ import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAl
 import java.awt.Rectangle;
 
 import org.junit.jupiter.api.Test;
+
 
 class java_awt_RectangleTest {
 
@@ -35,5 +37,11 @@ class java_awt_RectangleTest {
   @Test
   void resize() throws Exception {
     assertThat(synthesiseAlias("java.awt.Rectangle", "resize", "int", "int"), contains(".setSize("));
+  }
+
+
+  @Test
+  void moveGPT() throws Exception {
+    // assertTrue(GPT.verify("{\n    java.awt.Rectangle tmp224085112 = this;\n    java.awt.Rectangle tmp221055169 = this;\n    tmp224085112.setLocation(param0, param1);\n}", "java.awt.Rectangle", "move", "int", "int"));
   }
 }

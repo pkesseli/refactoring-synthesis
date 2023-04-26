@@ -1,0 +1,35 @@
+# Response Time: 18.91301202774048
+I'm happy to help! Here's an example of how you can refactor the deprecated `java.sql.Time.getYear()` method:
+
+<<< Before refactoring:
+```
+import java.sql.Time;
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Time time = new Time(new Date().getTime());
+        int year = time.getYear();
+        System.out.println("Year: " + year);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Time time = new Time(new Date().getTime());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        int year = calendar.get(Calendar.YEAR);
+        System.out.println("Year: " + year);
+    }
+}
+```
+
+In the refactored code, we replaced the deprecated `getYear()` method with `Calendar.YEAR` to get the year from the `Time` object. We created a `Calendar` instance and set its time to the `Time` object using `calendar.setTime(time)`. Finally, we used `calendar.get(Calendar.YEAR)` to get the year value.

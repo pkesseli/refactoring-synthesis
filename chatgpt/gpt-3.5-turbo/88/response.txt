@@ -1,0 +1,16 @@
+# Response Time: 4.780632972717285
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+MenuContainer menuContainer = ...;
+Event event = ...;
+menuContainer.postEvent(event);
+```
+
+>>> After refactoring:
+```
+MenuContainer menuContainer = ...;
+Event event = ...;
+menuContainer.dispatchEvent(event);
+```

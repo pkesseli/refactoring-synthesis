@@ -1,0 +1,40 @@
+# Response Time: 19.09823989868164
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import org.ietf.jgss.GSSContext;
+import org.ietf.jgss.MessageProp;
+
+GSSContext context = ...;
+InputStream in = ...;
+OutputStream out = ...;
+MessageProp prop = ...;
+
+byte[] buffer = new byte[1024];
+int bytesRead;
+while ((bytesRead = in.read(buffer)) != -1) {
+    byte[] mic = context.getMIC(buffer, 0, bytesRead, prop);
+    out.write(mic);
+}
+```
+
+>>> After refactoring:
+```
+import org.ietf.jgss.GSSContext;
+import org.ietf.jgss.MessageProp;
+
+GSSContext context = ...;
+InputStream in = ...;
+OutputStream out = ...;
+MessageProp prop = ...;
+
+byte[] buffer = new byte[1024];
+int bytesRead;
+while ((bytesRead = in.read(buffer)) != -1) {
+    context.getMIC(buffer, 0, bytesRead, prop);
+    out.write(buffer, 0, bytesRead);
+}
+``` 
+
+In the refactored code, we've replaced the call to `context.getMIC()` with the recommended method `context.getMIC(byte[], int, int, MessageProp)`. We've also removed the unnecessary creation of a `mic` byte array and instead write the original `buffer` to the output stream.

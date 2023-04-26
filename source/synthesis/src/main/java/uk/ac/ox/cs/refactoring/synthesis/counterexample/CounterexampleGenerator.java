@@ -13,6 +13,10 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import org.mockito.exceptions.base.MockitoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.classmate.MemberResolver;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
@@ -23,10 +27,6 @@ import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
-
-import org.mockito.exceptions.base.MockitoException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.random.RandomnessAccessor;
@@ -109,6 +109,34 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
     return generate(random, status, classLoader, objenesis, type, new HashSet<>(), depth);
   }
 
+  private static Object getDefaultValue(final Class<?> cls) {
+    if (cls == byte.class || cls == Byte.class) {
+      return (byte) 0;
+    }
+    if (cls == short.class || cls == Short.class) {
+      return (short) 0;
+    }
+    if (cls == int.class || cls == Integer.class) {
+      return 0;
+    }
+    if (cls == long.class || cls == Long.class) {
+      return 0L;
+    }
+    if (cls == char.class || cls == Character.class) {
+      return '\0';
+    }
+    if (cls == float.class || cls == Float.class) {
+      return 0.0f;
+    }
+    if (cls == double.class || cls == Double.class) {
+      return 0.0;
+    }
+    if (cls == boolean.class || cls == Boolean.class) {
+      return false;
+    }
+    return null;
+  }
+
   /**
    * Recursive handler of
    * {@link #generate(SourceOfRandomness, GenerationStatus, ClassLoader, Function, Class)},
@@ -130,12 +158,12 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
     final Class<?> cls = type.getErasedType();
     if (!Literals.isLiteralType(cls)) {
       if (depth <= 0)
-        return null;
+        return getDefaultValue(cls);
     }
 
     final Set<Class<?>> visitedTypesInBranch = new HashSet<Class<?>>(visitedClasses);
     if (!isSupported(type) || !visitedTypesInBranch.add(cls))
-      return null;
+      return getDefaultValue(cls);
 
     try {
       return repository.type(cls).generate(random, status);
@@ -143,15 +171,27 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       logger.trace("Could not use JQF native generator.", e);
     }
 
+    final Function<ResolvedType, Object> generateElement = elementType -> generate(random, status, classLoader,
+        objenesis, elementType, visitedTypesInBranch, depth - 1);
     if (type.isArray()) {
-      final int length = getRandomArrayLength(random);
-      final Object array = Array.newInstance(type.getArrayElementType().getErasedType(), length);
+      final int length = CollectionsGenerator.getRandomArrayLength(random);
+      final Class<?> componentClass = type.getArrayElementType().getErasedType();
+      final Object array = Array.newInstance(componentClass, length);
+      final ResolvedType componentType = typeResolver.resolve(componentClass);
       for (int i = 0; i < length; ++i) {
-        final Object value = generate(random, status, classLoader, objenesis, type, visitedTypesInBranch,
-            depth - 1);
+        final Object value = generateElement.apply(componentType);
         Array.set(array, i, value);
       }
       return array;
+    }
+
+    final Object createdCollection;
+    try {
+      createdCollection = CollectionsGenerator.createCollection(random, typeResolver, generateElement, type);
+      if (createdCollection != null)
+        return createdCollection;
+    } catch (final Throwable e) {
+      logger.trace("Error when creating well-known collection type.", e);
     }
 
     if (!type.isInterface() && !type.isAbstract()) {
@@ -185,7 +225,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       object = objenesis.apply(cls);
     } catch (final MockitoException e) {
       logger.warn("Could not instantiate part of counterexample.", e);
-      return null;
+      return getDefaultValue(cls);
     }
     for (final ResolvedField field : Fields.getInstance(memberResolver, type)) {
       final ResolvedType fieldType = field.getType();
@@ -201,16 +241,6 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
       }
     }
     return object;
-  }
-
-  /**
-   * Provides a random length for a collection or array to use.
-   * 
-   * @param random Random source.
-   * @return Length to use.
-   */
-  private static int getRandomArrayLength(final SourceOfRandomness random) {
-    return (int) random.nextByte(Byte.MIN_VALUE, Byte.MAX_VALUE) - (int) Byte.MIN_VALUE;
   }
 
   @Override
@@ -273,7 +303,7 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
    * @return {@code true} if the type is allowed in counterexamples, {@code false}
    *         otherwise.
    */
-  private static boolean isSupported(final ResolvedType type) {
+  public static boolean isSupported(final ResolvedType type) {
     final Class<?> cls = type.getErasedType();
     return !Reference.class.isAssignableFrom(cls) && !type.getTypeName().equals("sun.awt.AppContext");
   }

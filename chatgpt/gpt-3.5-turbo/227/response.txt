@@ -1,0 +1,14 @@
+# Response Time: 4.601789951324463
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+ResultSet rs = statement.executeQuery(query);
+InputStream is = rs.getUnicodeStream("column_name");
+```
+
+>>> After refactoring:
+```
+ResultSet rs = statement.executeQuery(query);
+Reader reader = rs.getCharacterStream("column_name");
+```

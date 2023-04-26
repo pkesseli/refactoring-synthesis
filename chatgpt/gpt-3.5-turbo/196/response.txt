@@ -1,0 +1,20 @@
+# Response Time: 6.990312814712524
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+RemoteCall call = ...;
+InputStream resultStream = call.getResultStream(true);
+```
+
+>>> After refactoring:
+```
+RemoteCall call = ...;
+Object result = call.getResult();
+if (result instanceof InputStream) {
+    InputStream resultStream = (InputStream) result;
+    // use resultStream as needed
+} else {
+    // handle error case
+}
+```

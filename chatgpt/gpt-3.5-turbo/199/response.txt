@@ -1,0 +1,19 @@
+# Response Time: 8.420489072799683
+Sure, here's an example refactoring for the deprecated method:
+
+<<< Before refactoring:
+```
+RemoteRef ref = ...;
+RemoteCall call = ref.newCall(...);
+// do something with the call
+ref.done(call);
+```
+
+>>> After refactoring:
+```
+RemoteRef ref = ...;
+Object[] args = ...; // arguments to the remote method
+Method method = ...; // the method to invoke remotely
+Object result = ref.invoke(this, method, args, 0);
+// do something with the result
+```

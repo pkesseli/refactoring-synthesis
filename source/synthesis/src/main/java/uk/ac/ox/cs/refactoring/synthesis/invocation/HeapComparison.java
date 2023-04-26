@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.classloader.IsolatedClassLoader;
+import uk.ac.ox.cs.refactoring.synthesis.counterexample.CounterexampleGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Literals;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Polymorphism;
 
@@ -134,6 +135,15 @@ public final class HeapComparison {
       return false;
     }
 
+    // TODO maybe put it here
+    if (!isRelevant(lhsClass.getName())
+          || Polymorphism.isMockitoCodegen(lhsClass)
+          // || !CounterexampleGenerator.isSupported(typeResolver.resolve(declaringClass))
+          || Polymorphism.isDynamic(lhsClass)) {
+            // System.out.println("Skipping " + lhsClass.getName());
+            return true;
+          }
+
     if (shouldUseNativeEquals(lhsClassLoader, lhsClass))
       try {
         return lhs.equals(rhs);
@@ -201,14 +211,19 @@ public final class HeapComparison {
     for (int i = 0; i < lhsFields.length; ++i) {
       final Field lhsField = lhsFields[i];
       final Class<?> declaringClass = lhsField.getDeclaringClass();
+      final com.fasterxml.classmate.TypeResolver typeResolver = new com.fasterxml.classmate.TypeResolver();
       if (!isRelevant(declaringClass.getName())
           || Polymorphism.isMockitoCodegen(declaringClass)
-          || Polymorphism.isDynamic(declaringClass))
-        continue;
+          || !CounterexampleGenerator.isSupported(typeResolver.resolve(declaringClass))
+          || Polymorphism.isDynamic(declaringClass)) 
+          continue;
       final Field rhsField = rhsFields[i];
       lhsField.setAccessible(true);
       rhsField.setAccessible(true);
       if (!equals(comparator, lhsClassLoader, lhsField.get(lhs), rhsClassLoader, rhsField.get(rhs))) {
+        System.out.println(lhs.getClass().toString() + " -> " + lhsField.toString());
+        // System.out.println("here");
+        // System.out.println("LHS: " + lhsField.get(lhs).toString() + ", RHS: " + rhsField.get(rhs));
         return false;
       }
     }

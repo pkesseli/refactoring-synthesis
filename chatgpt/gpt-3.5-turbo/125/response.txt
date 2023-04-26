@@ -1,0 +1,14 @@
+# Response Time: 4.241185188293457
+Sure, here's an example refactoring:
+
+<<< Before refactoring: 
+```
+Window myWindow = new Window();
+myWindow.show();
+```
+
+>>> After refactoring: 
+```
+Window myWindow = new Window();
+myWindow.setVisible(true);
+```

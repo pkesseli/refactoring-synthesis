@@ -1,9 +1,12 @@
 package uk.ac.ox.cs.refactoring.synthesis.guidance;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.function.Consumer;
 
@@ -32,7 +35,14 @@ class CloseableZestGuidance implements CloseableGuidance {
    * @throws IOException {@link Path#toFile()}
    */
   CloseableZestGuidance(final String phaseName, final Duration timeout) throws IOException {
-    guidance = new ZestGuidance(phaseName, timeout, outputDirectory.toFile());
+    final File seedInputFile;
+    try {
+      seedInputFile = Paths.get(CloseableZestGuidance.class.getResource("/seed/zest.bin").toURI()).toFile();
+    } catch (final URISyntaxException e) {
+      throw new IllegalStateException("Missing seed.", e);
+    }
+    guidance = new ZestGuidance(phaseName, timeout, outputDirectory.toFile(), new File[] { seedInputFile });
+    Seeds.setSeed(guidance);
   }
 
   @Override

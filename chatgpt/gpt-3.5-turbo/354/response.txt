@@ -1,0 +1,12 @@
+# Response Time: 4.296110153198242
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+Component focusOwner = SwingUtilities.findFocusOwner(this);
+```
+
+>>> After refactoring:
+```
+Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+```

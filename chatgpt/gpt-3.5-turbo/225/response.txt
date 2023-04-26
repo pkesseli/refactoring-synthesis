@@ -1,0 +1,16 @@
+# Response Time: 7.243826150894165
+Sure, here's an example:
+
+<<< Before refactoring:
+```
+ResultSet rs = statement.executeQuery(query);
+BigDecimal value = rs.getBigDecimal("column_name", 2);
+```
+
+>>> After refactoring:
+```
+ResultSet rs = statement.executeQuery(query);
+BigDecimal value = rs.getBigDecimal(2);
+```
+
+In the refactored code, we are using the `getBigDecimal(int columnIndex)` method instead of the deprecated `getBigDecimal(String columnLabel, int scale)` method. This is recommended by the Javadoc comment.

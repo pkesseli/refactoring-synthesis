@@ -1,0 +1,12 @@
+# Response Time: 3.721283197402954
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+int numComponents = myContainer.countComponents();
+```
+
+>>> After refactoring:
+```
+int numComponents = myContainer.getComponentCount();
+```

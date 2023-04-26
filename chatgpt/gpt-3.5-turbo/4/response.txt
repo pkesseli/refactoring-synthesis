@@ -1,0 +1,32 @@
+# Response Time: 16.476189851760864
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+
+public class MemoryInfo {
+    public static void main(String[] args) {
+        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+        long physicalMemorySize = osBean.getTotalPhysicalMemorySize();
+        System.out.println("Total physical memory size: " + physicalMemorySize);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+
+public class MemoryInfo {
+    public static void main(String[] args) {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        long totalMemorySize = memoryBean.getTotalMemory();
+        System.out.println("Total memory size: " + totalMemorySize);
+    }
+}
+``` 
+
+In this refactored code, we've replaced the deprecated `getTotalPhysicalMemorySize()` method with `getTotalMemory()` from the `MemoryMXBean` class. We've also removed the import for `OperatingSystemMXBean` since it's no longer needed.

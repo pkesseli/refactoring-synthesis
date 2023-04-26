@@ -1,0 +1,13 @@
+# Response Time: 13.288423776626587
+I'm sorry, but as a language model, I don't have access to your codebase or know what programming language you are using. However, I can provide you with a general example of how to refactor deprecated code:
+
+<<< Before refactoring: 
+javax.swing.text.PlainView.drawSelectedText​(graphics, x, y, start, end);
+ 
+>>> After refactoring: 
+Graphics2D g2d = (Graphics2D) graphics;
+float fx = (float) x;
+float fy = (float) y;
+view.drawSelectedText(g2d, fx, fy, start, end); 
+
+In this example, we cast the Graphics object to a Graphics2D object and use the new method drawSelectedText(Graphics2D, float, float, int, int) to draw the selected text. This avoids using the deprecated method and ensures that our code will continue to work with future versions of the library.

@@ -1,0 +1,14 @@
+# Response Time: 8.818996906280518
+I'm sorry, but as a language model, I don't have access to your codebase or development environment. However, I can provide you with an example of how to refactor the deprecated method `java.awt.event.InputEvent.getModifiers()` to use the recommended method `InputEvent.getModifiersEx()`.
+
+<<< Before refactoring:
+```
+int modifiers = event.getModifiers();
+```
+
+>>> After refactoring:
+```
+int modifiers = event.getModifiersEx();
+``` 
+
+This will ensure that the extended modifier keys are used instead of the deprecated method.

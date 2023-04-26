@@ -1,0 +1,12 @@
+The method java.rmi.server.RemoteRef.done​(RemoteCall) is deprecated.
+ The related deprecation comment in Javadoc is "1.2 style stubs no longer use this method. Instead of
+ using a sequence of method calls to the remote reference
+ (newCall, invoke, and done), a
+ stub uses a single method, invoke(Remote, Method, Object[],
+ int), on the remote reference to carry out parameter
+ marshalling, remote method executing and unmarshalling of the return
+ value."
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

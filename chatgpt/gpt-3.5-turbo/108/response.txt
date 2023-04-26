@@ -1,0 +1,18 @@
+# Response Time: 13.371587991714478
+Sorry, as an AI language model, I don't have access to your codebase or development environment. However, I can provide you with some general guidance on how to refactor the deprecated method.
+
+The deprecation warning suggests using the `getMinimumSize(int, int)` method instead of `minimumSize(int, int)`. Therefore, you can refactor your code as follows:
+
+<<< Before refactoring:
+```
+TextArea textArea = new TextArea();
+Dimension minimumSize = textArea.minimumSize(100, 100);
+```
+
+>>> After refactoring:
+```
+TextArea textArea = new TextArea();
+Dimension minimumSize = textArea.getMinimumSize(100, 100);
+```
+
+By using the `getMinimumSize(int, int)` method, you can avoid using the deprecated method and ensure that your code is compatible with the latest version of Java.

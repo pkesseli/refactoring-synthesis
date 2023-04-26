@@ -1,0 +1,6 @@
+The method javax.swing.tree.DefaultTreeSelectionModel.notifyPathChange​(Vector&lt;?&gt;, TreePath) is deprecated.
+ The related deprecation comment in Javadoc is "As of JDK version 1.7"
+Give me a refactoring example in the following format:
+<<< Before refactoring: <code here>
+>>> After refactoring: <code here>
+Example code should be a straight-line code block.

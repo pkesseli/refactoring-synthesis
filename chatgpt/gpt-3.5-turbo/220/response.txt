@@ -1,0 +1,19 @@
+# Response Time: 17.470189094543457
+Sure, here's an example refactoring for the deprecated method `java.sql.Date.setSeconds(int)`:
+
+<<< Before refactoring:
+```
+java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+date.setSeconds(30);
+```
+
+>>> After refactoring:
+```
+java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+java.util.Calendar calendar = java.util.Calendar.getInstance();
+calendar.setTime(date);
+calendar.set(java.util.Calendar.SECOND, 30);
+date.setTime(calendar.getTimeInMillis());
+```
+
+In this refactored code, we use a `java.util.Calendar` object to set the seconds of the `java.sql.Date` object. We first get the current time in milliseconds using `System.currentTimeMillis()`, create a new `java.sql.Date` object with that time, and then create a `java.util.Calendar` object and set its time to the `java.sql.Date` object. We then use the `set` method of the `java.util.Calendar` object to set the seconds to 30, and finally set the time of the `java.sql.Date` object to the time in milliseconds of the `java.util.Calendar` object. This achieves the same result as the deprecated `setSeconds` method, but using a non-deprecated method.

@@ -49,9 +49,12 @@ public final class GuidanceFactory {
    */
   private static CloseableGuidance getBaseGuidance(final GeneratorConfiguration generatorConfiguration,
       final String phaseName, final Duration timeout) throws IOException {
-    return generatorConfiguration.UseRandomGuidance
-        ? new CloseableGuidanceAdapter(new TimeLimitedGuidance(timeout, new NoGuidance(Long.MAX_VALUE, null)))
-        : new CloseableZestGuidance(phaseName, timeout);
+    if (generatorConfiguration.UseRandomGuidance) {
+      final NoGuidance noGuidance = new NoGuidance(Long.MAX_VALUE, null);
+      Seeds.setSeed(noGuidance);
+      return new CloseableGuidanceAdapter(new TimeLimitedGuidance(timeout, noGuidance));
+    }
+    return new CloseableZestGuidance(phaseName, timeout);
   }
 
   private GuidanceFactory() {

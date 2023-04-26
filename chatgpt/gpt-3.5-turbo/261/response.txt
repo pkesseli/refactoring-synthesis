@@ -1,0 +1,15 @@
+# Response Time: 6.998628854751587
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+Logger logger = Logger.getLogger("myLogger");
+logger.logrb(Level.INFO, null, "myClass", "myBundle", "myMessage");
+```
+
+>>> After refactoring:
+```
+Logger logger = Logger.getLogger("myLogger");
+ResourceBundle bundle = ResourceBundle.getBundle("myBundle");
+logger.logrb(Level.INFO, null, "myClass", bundle, "myMessage");
+```

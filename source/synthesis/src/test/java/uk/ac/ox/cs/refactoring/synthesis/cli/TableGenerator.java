@@ -11,17 +11,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.commons.lang3.math.NumberUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import uk.ac.ox.cs.refactoring.synthesis.statistics.Report;
 import uk.ac.ox.cs.refactoring.synthesis.statistics.Run;
@@ -79,21 +81,16 @@ public class TableGenerator {
     if (jsonFiles.length == 0)
       return Collections.emptyList();
 
-    final ObjectMapper objectMapper = new ObjectMapper();
     final List<List<String>> cells = new ArrayList<>();
     final int numberOfConfigurations = jsonFiles.length;
     final int numberOfColumns = numberOfConfigurations + 1;
     int numberOfRows = -1;
-    final Map<String, Report> reports = new HashMap<>();
+    final List<Report> reports = getReports(jsonFiles);
+    ;
     final Map<String, Boolean> benchmarkNameToFoundCodeHints = new HashMap<>();
     for (int column = 0; column < numberOfConfigurations; ++column) {
       final Path jsonFile = jsonFiles[column];
-      final Report report;
-      try (final InputStream is = Files.newInputStream(jsonFile)) {
-        report = objectMapper.readValue(is, Report.class);
-      }
-      reports.put(jsonFiles[column].toString(), report);
-
+      final Report report = reports.get(column);
       final int numberOfBenchmarks = report.Benchmarks.size();
       numberOfRows = numberOfBenchmarks + NUMBER_OF_SUMMARY_COLUMNS + 1;
       if (cells.isEmpty()) {
@@ -111,18 +108,19 @@ public class TableGenerator {
         final List<String> row = cells.get(rowIndex++);
         final List<Run> runs = benchmark.getValue();
 
-        if (row.get(0) == null) {
-          final String name = benchmark.getKey();
-          final String shortName = name.substring(name.indexOf('#') + 1);
-          final Pattern pattern = Pattern.compile(shortName + "\\d*");
-          final long count = cells.stream().map(r -> r.get(0)).filter(Objects::nonNull).map(pattern::matcher)
-              .filter(Matcher::matches).count();
-          final String label = count <= 0 ? shortName : shortName + Long.toString(count + 1);
-          final boolean hasCodeHints = runs.stream().anyMatch(run -> run.FoundCodeHints);
-          final String annotatedLabel = hasCodeHints ? label + '*' : label;
-          row.set(0, annotatedLabel);
-          benchmarkNameToFoundCodeHints.put(annotatedLabel, hasCodeHints);
-        }
+        final String name = benchmark.getKey();
+        final String shortName = name.substring(name.indexOf('#') + 1);
+        final Pattern pattern = Pattern.compile(shortName + "\\d*");
+        final long count = cells.stream().map(r -> r.get(0)).filter(Objects::nonNull).map(pattern::matcher)
+            .filter(Matcher::matches).count();
+        final String label = count <= 0 ? shortName : shortName + Long.toString(count + 1);
+        final boolean hasCodeHints = runs.stream().anyMatch(run -> run.FoundCodeHints);
+        final String annotatedLabel = hasCodeHints ? label + '*' : label;
+        if (hasCodeHints)
+          row.set(0, label + '*');
+        else if (row.get(0) == null)
+          row.set(0, label);
+        benchmarkNameToFoundCodeHints.merge(annotatedLabel, hasCodeHints, (lhs, rhs) -> lhs || rhs);
 
         final boolean isUnsound = runs.stream().anyMatch(run -> run.Unsound);
         if (isUnsound) {
@@ -205,5 +203,33 @@ public class TableGenerator {
       final List<List<String>> cells, final int column) {
     return cells.stream().skip(1).filter(row -> Boolean.TRUE.equals(benchmarkNameToFoundCodeHints.get(row.get(0))))
         .map(row -> row.get(column));
+  }
+
+  private static List<Report> getReports(final Path[] jsonFiles) throws IOException {
+    final List<Report> reports = new ArrayList<>();
+    final Set<String> benchmarks = new HashSet<>();
+    final ObjectMapper objectMapper = new ObjectMapper();
+    for (final Path jsonFile : jsonFiles) {
+      final Report report;
+      try (final InputStream is = Files.newInputStream(jsonFile)) {
+        report = objectMapper.readValue(is, Report.class);
+      }
+      reports.add(report);
+
+      for (final Map.Entry<String, List<Run>> benchmark : report.Benchmarks.entrySet())
+        benchmarks.add(benchmark.getKey());
+    }
+
+    final List<Run> missingPlaceholder = new ArrayList<>();
+    final Run placeholderRun = new Run();
+    placeholderRun.Rounds = -1;
+    missingPlaceholder.add(placeholderRun);
+    for (final Report report : reports) {
+      final Set<String> missingBenchmarks = new HashSet<>(benchmarks);
+      missingBenchmarks.removeAll(report.Benchmarks.keySet());
+      for (final String missingBenchmark : missingBenchmarks)
+        report.Benchmarks.put(missingBenchmark, missingPlaceholder);
+    }
+    return reports;
   }
 }

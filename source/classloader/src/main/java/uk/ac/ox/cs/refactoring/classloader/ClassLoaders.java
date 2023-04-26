@@ -59,8 +59,7 @@ public final class ClassLoaders {
 
     if (name.endsWith("[]")) {
       final String element = name.substring(0, name.length() - 2);
-      final Class<?> elementClass = loadClass(classLoader, element);
-      return elementClass.arrayType();
+      return loadClass(classLoader, element).arrayType();
     }
 
     return classLoader.loadClass(name);
@@ -79,7 +78,11 @@ public final class ClassLoaders {
   public static Class<?> loadClass(final ClassLoader classLoader, final Class<?> cls) throws ClassNotFoundException {
     if (!isUserClass(classLoader, cls))
       return cls;
-    return loadClass(classLoader, cls.getName());
+
+    final String canonicalName = cls.getCanonicalName();
+    final String name = cls.getName();
+    final boolean isInnerClass = cls.getName().contains("$");
+    return loadClass(classLoader, canonicalName == null || isInnerClass ? name : canonicalName);
   }
 
   /**

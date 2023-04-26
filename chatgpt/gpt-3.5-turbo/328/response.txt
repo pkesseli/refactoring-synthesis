@@ -1,0 +1,14 @@
+# Response Time: 4.210360050201416
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+JViewport viewport = new JViewport();
+viewport.setBackingStoreEnabled(false);
+```
+
+>>> After refactoring:
+```
+JViewport viewport = new JViewport();
+viewport.setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
+```

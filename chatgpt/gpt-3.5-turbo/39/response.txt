@@ -1,0 +1,14 @@
+# Response Time: 4.803278207778931
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+Event event = new Event(this, Event.ACTION_EVENT, null);
+postEvent(event);
+```
+
+>>> After refactoring:
+```
+Event event = new Event(this, Event.ACTION_EVENT, null);
+dispatchEvent(event);
+```

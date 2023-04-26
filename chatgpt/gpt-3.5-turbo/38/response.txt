@@ -1,0 +1,15 @@
+# Response Time: 4.696167945861816
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+Component nextComponent = componentToFocus.nextFocus();
+if (nextComponent != null) {
+    nextComponent.requestFocus();
+}
+```
+
+>>> After refactoring:
+```
+componentToFocus.transferFocus();
+```

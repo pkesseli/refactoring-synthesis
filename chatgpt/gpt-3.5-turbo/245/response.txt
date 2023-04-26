@@ -1,0 +1,28 @@
+# Response Time: 8.774806022644043
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+import java.util.Date;
+
+public class Example {
+    public static void main(String[] args) {
+        Date date = new Date();
+        int hours = date.getHours();
+        System.out.println("Hours: " + hours);
+    }
+}
+```
+
+>>> After refactoring:
+```
+import java.util.Calendar;
+
+public class Example {
+    public static void main(String[] args) {
+        Calendar calendar = Calendar.getInstance();
+        int hours = calendar.get(Calendar.HOUR_OF_DAY);
+        System.out.println("Hours: " + hours);
+    }
+}
+```

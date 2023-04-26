@@ -1,0 +1,18 @@
+# Response Time: 8.83620810508728
+Sure, here's an example refactoring:
+
+<<< Before refactoring:
+```
+DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
+Vector<TreePath> paths = new Vector<>();
+TreePath path = new TreePath(new Object[] { "root", "child1" });
+paths.add(path);
+selectionModel.notifyPathChange(paths, path);
+```
+
+>>> After refactoring:
+```
+DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
+TreePath path = new TreePath(new Object[] { "root", "child1" });
+selectionModel.setSelectionPath(path);
+```
