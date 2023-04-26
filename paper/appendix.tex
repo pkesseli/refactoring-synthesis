@@ -1,0 +1,27 @@
+Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
+%
+The vast search space is particularly a challenge in the current
+setting given that, in the absence of any additional guidance, the
+entire \texttt{java.lang} could be considered when synthesising the
+refactoring.  In order to prune the search space, we start by
+investigating the information available to our refactoring procedure.
+
+
+{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient to solve the problem. 
+
+{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
+  comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show in Section~\ref{sec:overview}, these hints
+  don't provide the whole refactoring, but can be used to guide the search process.
+While code hints have been previously used to generate change rules~\cite{DBLP:conf/kbse/Huang0PW021}, our aim is to generate complete refactorings.
+  
+  {\bf (3)} Finally, the key criterion we have for the code to be generated is that it needs to be {\em semantically equivalent to the original}, meaning that they must preserve its behaviour. 
+  However, formally proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
+In this work, instead of aiming for a formal proof,  we use fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
+While we can't provide full correctness guarantees,
+our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
+
+
+To add to related work:
+
+Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.

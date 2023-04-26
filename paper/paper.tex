@@ -244,29 +244,19 @@ of the project's API.  Instead, such elements can be tagged with the
 %% what can be used in place.
 
 
-%Even in the presence of such recommendations,
-The transformation of existing code such that it doesn't use deprecated APIs
-%to the recommended format
-is not always straightforward,
-as illustrated in Fig.~\ref{ex:deprecated-method-other}. In the example, we
-make use of the \texttt{getHours} method of the \texttt{Date} class,
-which is deprecated.
-%% with the 
-%% recommendation to use \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)} instead.
-In this situation, in order to replace the use of the deprecated method,
-we must first obtain a \texttt{Calendar} object.
-However, we can't use the \texttt{Calendar} constructor as it is protected,
-and we must instead call \texttt{getInstance}.
-Furthermore, in order to be able to use this \texttt{Calendar} object for our purpose,
-we must first set its time using the existing \texttt{date}.
-We do this by calling \texttt{setTime} with \texttt{date} as argument.
-%% followed by setting the date using \texttt{set}
-%% and returning a Date object by invoking \texttt{getTime}.
-%% Alternatively, the \texttt{GregorianCalendar} class may be used with
-%% similar difficulties.
-Finally, we can retrieve the hour by calling
-%Only after all this set up, we can finally make use of the recommendation
-\texttt{calendar.get(Calendar.HOUR\_OF\_DAY)}.
+The transformation of existing code such that it doesn't use
+deprecated APIs is not always straightforward, as illustrated in
+Fig.~\ref{ex:deprecated-method-other}. In the example, we make use of
+the \texttt{getHours} method of the \texttt{Date} class, which is
+deprecated.  In this situation, in order to replace the use of the
+deprecated method, we must first obtain a \texttt{Calendar} object.
+However, we can't use the \texttt{Calendar} constructor as it is
+protected, and we must instead call \texttt{getInstance}.
+Furthermore, in order to be able to use this \texttt{Calendar} object
+for our purpose, we must first set its time using the existing
+\texttt{date}.  We do this by calling \texttt{setTime} with
+\texttt{date} as argument.  Finally, we can retrieve the hour by
+calling \texttt{calendar.get(Calendar.HOUR\_OF\_DAY)}.
 
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -284,7 +274,7 @@ void main(String[] args) {
 \label{ex:deprecated-method-other}
 \end{figure}
 
-
+\todo{update IDE.}
 While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to
 recognise the use of deprecated APIs and warn the programmer about it,
 refactoring the code to a preferred API is significantly more
@@ -293,8 +283,6 @@ any attempt to suggest an alternative to the user.
 
 With respect to the work pursued by the academic community, 
 the closest paper to our current proposal
-%aims to replace the
-%deprecated usages,
 replaces calls
 to deprecated methods by their
 bodies~\cite{DBLP:conf/paste/Perkins05}.  The issue is that, this
@@ -315,339 +303,87 @@ Another closely related class of works focuses on API adaptation after library u
 manually: for instance, she has to figure out lines 6--8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
 responsibility of guaranteeing that the refactored code maintains the original behaviour
 is left to the programmer.
-%% programmer
-%% is left to guarantee that the way in which she performed the replacement
-%% does not change the functionality of
-%% the code. Indeed, the hardest part about such refactorings is that they must preserve observational equivalence, i.e. they must preserve the code's behaviour.
-
-%% For instance, in~\cite{}, Huang et al. attempt to find replacements for missing APIs
-%% (an API is considered as a public method in a public class). This includes APIs
-%% that have been deprecated.
-%% A crucial remark is that, in general, API adaptation can be decomposed into two tasks; i.e., the first is to find what is the replacement of a missing API (e.g., [13, 18, 89, 95]),
-%% and the second is to identify how usages of a missing API are actually replaced by usages of its replacement API (e.g., [24, 81]).
-%% Basically, this means that the former task only finds alternative APIs, but without providing ways in which these alternatives can
-%% be used. For instance, for the motivational example, it might say that the code hint needs to be used, but not how.
-
-%% In the current work, we perform both tasks, meaning that we provide the exact lines of code
-%% to replace the deprecated usage. While we do not provide absolute guarantees about
-%% the correctness of our suggestion, our suggestions have been tested on a minimum of X inputs.
-
-%%usually such change rules only fix the syntactic difference
 
 
+For illustration, when referring back to the example in
+Figure~\ref{ex:deprecated-method-other}, it's not immediately obvious
+that the original and the refactored code behave in the same manner.
+One needs a good understanding of the code's semantics in order to
+reach such a conclusion.  Indeed, refactorings that rely solely on a
+program's syntax and do not consider its semantics end up being overly
+conservative, mostly addressing structural changes to the program.
+The observation that refactoring generally benefits from semantic
+analyses of a program is not new, e.g. previous works made use of
+program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or
+types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
 
-%% Consequently, the majority of
-%% refactorings removing deprecated instances are done manually, which is a costly,
-%% time-intensive, and not least error-prone process.  This situation is
-%% also a real issue for legacy code that makes use of deprecated APIs
-%% that need to be replaced with latest APIs/libraries.
-
-%% The main cause of difficulty when replacing deprecated instances lies
-%% with the fact that refactorings should not change the functionality of
-%% the code, i.e., they must preserve observational equivalence.
-%% Ensuring observational equivalence is far from trivial.
-
-
-For
-illustration, when referring back to the example in
-Figure~\ref{ex:deprecated-method-other}, it's not immediately
-obvious that the original and the refactored code behave in the same manner.
-One needs a good understanding of the
-code's semantics in order to reach such a conclusion.
-%
-%% For instance,
-%% inlining calls to deprecated methods can break equivalence if the
-%% original function was synchronised.  While it is not possible for two
-%% invocations  on the same object of the synchronised original method to
-%% interleave, this is not guaranteed after inlining the method's body.
-%% Fig.~\ref{ex:unsound-refactoring-original} and
-%% Fig.~\ref{ex:unsound-refactoring-refactored} illustrate an example where
-%% the "Extract Local Variable..." refactoring integrated in Eclipse 4.21.0
-%% inadvertently removes synchronisation for the evaluation of the expression
-%% $x > 0$.
-%
-%% \begin{minipage}{.23\textwidth}
-%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
-%
-%% synchronized (this) {
-%%   if (x > 0) {
-%%     foo();
-%%   }
-%% }
-%% // ...
-%% synchronized (this) {
-%%   if (x > 0) {
-%%     bar();
-%%   }
-%% }
-%% \end{lstlisting}
-%% \captionof{figure}{Concurrent example.}
-%% \label{ex:unsound-refactoring-original}
-%% \end{minipage}
-%% \begin{minipage}{.23\textwidth}
-%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
-%% boolean tmp = x > 0;
-%% synchronized (this) {
-%%   if (tmp) {
-%%     foo();
-%%   }
-%% }
-%% // ...
-%% synchronized (this) {
-%%   if (tmp) {
-%%     bar();
-%%   }
-%% }
-%% \end{lstlisting}
-%% \captionof{figure}{Unsound refactoring.}
-%% \label{ex:unsound-refactoring-refactored}
-%% \end{minipage}
-%% \vspace{0.8em}
-%
-%% Another example of a refactoring that unintuitively breaks
-%% observational equivalence is given in Figure~\ref{}.
-%% \todo{add example here.}
-%
-Indeed, refactorings that rely solely on a program's syntax
-and do not consider its semantics end up
-being overly conservative, mostly addressing structural changes
-to the program.  
-The observation that 
-%Ohter works have made the observation that 
-refactoring generally benefits from semantic analyses of a program is not new, e.g. previous works made use of program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
-%% Notably, the limitations of syntax-driven refactorings have been observed
-%% in several works, resulting in an emerging trend to incorporate more {\em semantic}
-%% information into refactoring decisions, such as Abstract Syntax Tree (AST) 
-%% type information,
-%% further preventing compilation errors and behaviour changes
-%% \cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
-
-
-%
-%% such refactorings are based on semantics rather
-%% than syntax. For illustration, let's refer back to the example in
-%% Figure~\ref{ex:deprecated-method}.  A {\em syntax-driven refactoring}
-%% addresses structural changes to the program requiring only limited
-%% information about a program's semantics, whereas a {\em
-%%   semantics-driven refactoring} requires detailed understanding of the
-%% program semantics in order to be applied soundly.  Clearly, the
-%% refactoring of the call to the deprecated \texttt{Date} constructor
-%% falls into the latter category. 
-%
-%\subsection{From the previous introduction:}
-%% Refactorings are structured changes to existing software which leave its
-%% externally observable behaviour unchanged.  They improve non-functional
-%% properties of the program code, such as testability, maintainability and
-%% extensibility while retaining the semantics of the program.  Ultimately,
-%% refactorings can improve the design of code, help finding bugs as well
-%% as increase development speed and are therefore seen as an integral part
-%% of agile software engineering processes~\cite{DBLP:conf/xpu/Kerievsky04b,
-%% Fowler1999}.
-%
-%% However, manual refactorings are a costly, time-intensive, and not least
-%% error-prone process.  This has motivated work on automating specific
-%% refactorings, which promises safe application to large code bases at low
-%% cost.  We differentiate in this context between {\em syntax-driven} and {\em
-%% semantics-driven} refactorings.  While the former address structural changes
-%% to the program requiring only limited information about a program's
-%% semantics, the latter require detailed understanding of the program
-%% semantics in order to be applied soundly.  An example of a refactoring that
-%% requires a semantics-driven approach is {\em Substitute Algorithm}, where an
-%% algorithm is replaced by a clearer, but equivalent
-%% version~\cite{Fowler1999}.
-%
-%AST-based constraints 
-%
-%% A syntax-driven approach is insufficient to perform such substantial
-%% transformations.  Figure~\ref{ex:syntax-limits} illustrates this using an
-%% example: Both loops in the code implement the same behaviour.  In order to
-%% recognise this and apply {\em Substitute Algorithm}, pattern-based
-%% approaches need explicit patterns for vastly different syntaxes implementing
-%% the same semantics, which is infeasible for practical applications.
-%
-%% \todo{I've removed the reference to Move Field as it's a bit controversial given that
-%% Steinmann uses it to explain that purely syntactic approaches are not enough.}
-%
-%% use constraints involving the abstract syntax tree type 
-%% information in order to handle the {\em Move Field} (when a field
-%% is used by another class more than the class on which it is defined)
-%% of syntax-driven, e.g.  
-%% An example 
-%% of a refactoring that is well handled by the syntax-driven approach 
-%% implemented using constraints over the program's abstract syntax tree
-%% There is an emerging trend to incorporate more {\em semantic}
-%% information into refactoring decisions, such as AST type information,
-%% further preventing compilation errors and behaviour changes
-%% \cite{Steimann2011}.
-
-\paragraph{Program refactoring via program synthesis} In this paper, we propose an
-automated refactoring technique for replacing uses of deprecated APIs. 
-The proposed technique makes use of program synthesis in order to
-incorporate semantic information about the
-code into the refactoring process.
-%take a step further in this direction by proposing a
-%semantics-driven refactoring technique that makes use of program synthesis.
+\paragraph{Current solution.}  In this paper, we investigate two new directions for automatically generating refactorings that replace uses of deprecated APIs, a symbolic one based on program synthesis, and a neural one using Large Language Models (LLMs).
 While we focus on the refactoring of deprecated methods, the same
 technique can be applied to deprecated fields and classes.
-%Our goal is to design a refactoring techniques for deprecated instances that computes refactorings fast, thus allowing integration with an IDE.
 
-%% As explained in more detail in the overview in Section~\ref{sec:overview},
-%% the program synthesis technique will be guided by {\em code hints}
-%% and {\em types}, as well 
+%The first one is a symbolic approach based on Counter-Example Guided Inductive Synthesis (CEGIS), whereas the second is neural approach based on Large 
+%
+%propose an
+%automated refactoring technique for replacing uses of deprecated APIs that offers guarantees about the preservation of semantics.
+%Additionally, we investigate its abilities to those of LLMs from the perspective of 
+
+1. {\em Program synthesis based refactoring:} 
+We employ Counter-Example Guided Inductive Synthesis (CEGIS) to generate program refactorings. Additionally we integrate a 
 
 Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
 %
-The vast search space is particularly a challenge in the current setting given that, in the absence of any additional guidance, the entire \texttt{java.lang} could be considered when synthesising the refactoring.
-In order to prune the search space, we start by investigating the information available to our refactoring procedure.
-%The information that we are going to use to direct
-%\begin{itemize}
+The vast search space is particularly a challenge in the current
+setting given that, in the absence of any additional guidance, the
+entire \texttt{java.lang} could be considered when synthesising the
+refactoring.  In order to prune the search space, we make use of type information and Javadoc code hints.
 
-{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
-However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient to solve the problem. %, where the number of possible programs where considering \texttt{java.lang} %\cite{DBLP:conf/popl/FengM0DR17} \todo{add more citations}.
-
-{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
-  comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show in Section~\ref{sec:overview}, these hints
-  don't provide the whole refactoring, but can be used to guide the search process.
-While code hints have been previously used to generate change rules~\cite{DBLP:conf/kbse/Huang0PW021}, our aim is to generate complete refactorings.
-  
-  {\bf (3)} Finally, the key criterion we have for the code to be generated is that it needs to be {\em semantically equivalent to the original}, meaning that they must preserve its behaviour. %While this does provide us with the {\em semantics of the
-  %code to be generated}, it's not easy to use. 
-%* This is not enough to decide semantic equivalence, which, as discussed above, is one of the main difficulties in this refactoring.
-  However, formally proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
-%Even when theoretically possible, the process of proving semantic equivalence is very expensive as it generally requires full understanding of the code's semantics.
-%Moreover, it generally requires full understanding of a program's internal structure, which is expensive.
-%This contradicts our aforementioned goal to design a technique that is fast. In a bid to obtain good performance,
-%we investigated using greybox testing for checking program equivalence, rather than formally proving it.
-In this work, instead of aiming for a formal proof,  we use fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
-While we can't provide full correctness guarantees,
-our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
-
-%Then, we choose a compromise between performance and ease of use and soundness. We use ...
-
-%{\em Following the same principle, we design a greybox synthesis technique that is guided by code hints and types.}
-
-
-%% For this purpose, we make use of component-based program synthesis, which assembles programs
-%% from a library of existing components, e.g. methods provided by an API.
-%% One of the challenges in component-based synthesis is the large number of components
-%% when considering real-world APIs. Specifically for our use case, when generating Java code, we have
-%% access to the whole of Java standard library.
-%% We address this challenge by using the code hints provided in the Javadoc comments
-%% (under the Javadoc \texttt{@code} tag) and type information to prune the component
-%% library before the actual synthesis process.
-
-%% With respect to the synthesis process, we propose using greybox
-%% synthesis. Traditionally, synthesis techniques are either based
-%% on whitebox or blackbox approaches.  The former are fully aware of the
-%% internal structure of the program being synthesised, whereas the
-%% latter only examine its functionality. In this paper, we use a greybox
-%% approach, which relies on coverage-guided property-based testing. 
-%% For this purpose, we provide an encoding for the synthesis problem, which
-%% makes it amenable to solving via coverage-guided property-based testing.
-
-
-%% In this paper, we follow a two-step procedure to address this challenge:
-%% \begin{itemize}
-%% \item[{\bf Step 1}] We start from the code hints provided as Javadoc comments, and use
-%%   type guidance to seed a components library to be used during Step 2. 
-
-%% \item[{\bf Step 2}] Based on the components library built during the first step, we use program synthesis to find a refactoring that is semantically equivalent to the original code.
-%% \end{itemize}
-
-%% syntax and semantics based approach based on program
-%% synthesis.  Essentially, we make use of syntactic information from the
-%% original code as well as the Javadoc comments to seed a components
-%% library, which is then used by a program synthesis engine.
-%% Notably, the synthesiser automatically generates refactorings
-%% that are guaranteed to be semantically equivalent to the original
-%% code.  With respect to the actual program synthesis technique, we use
-%% a coverage-based, type and example guided synthesis.
-
-
-%% fully semantic refactoring approach for removing deprecated elements.
-%% There is a very broad space of methods that are able to reason about
-%% program semantics.  The desire to perform refactorings safely suggests
-%% the use of techniques that overapproximate program behaviours.  As one
-%% possible embodiment of semantics-driven refactoring, we leverage
-%% software verification technologies with the goal of reliably
-%% automating refactoring decisions based on program semantics.
-%% Our research
-%% hypothesis is that semantics-driven refactorings are more precise and
-%% can handle more complex code scenarios in comparison with
-%% syntax-driven refactorings.
-
-%% \todo{revise the next two paragraphs}
-%% \paragraph{Goal of the paper} 
-%% Our goal in this paper is to design a fully automated refactoring
-%% technique for eliminating deprecated fields, methods and classes. Our
-%% technique will make use of Java library comments to find components
-%% for seeding the refactoring. Then, it will use program synthesis to
-%% generate code that is semantically equivalent to the original but does not use
-%% the deprecated elements.
-
-%% One interesting aspect when using a fully semantics-driven approach is
-%% that it allows introducing the notion of {\em refactoring context}.
-%% The refactoring context is the context (of the code to be refactored)
-%% taken into consideration when looking for a refactoring. Varying the
-%% context enables the user to control the generality of the refactoring.
-%% \todo{Are we going to cover context?}
-
+2. {\em LLMs based refactoring:} 
+%We leverage (investigate the use of different techniques and infrmation) different techniques to generate semantics preserving refactorings:
+Recently, large pre-trained language models have made a lot of progress in code generation tasks. 
+These models gain remarkable capabilities on a host of language tasks when prompted with just a problem description.
+Thus, we are interesting in investigating how the refactorings generated by such models compare to those generated by program synthesis,
+especially with respect to guaranteeing the preservation of semantics. In this work, we use GPT4.
 %
-%% For illustration, for the refactoring in Figure~\ref{ex:deprecated-method-other}...
-%% \todo{hmm, what context do we consider for the standard library?}
-%
-%\todo{Should we also discuss our choice of synthesis in the intro?}
+For the prompt, we use the same information provided to the program synthesiser, namely the signature of the deprecated method (which includes the types) and the JAvadoc code hints.
+Should we also use LLM with allow-list?
 
-%% In this paper, we are interested in refactoring Java code handing
-%% collections through external iteration to use streams. Our refactoring
-%% procedure is based on the program semantics and makes use of program
-%% synthesis.
+%However, the responsibility of guaranteeing that the generated code obeys the specification is left to
+%the programmer.
 
-\paragraph{Contributions:}
-
+We are interested in answering the following research questions:
 \begin{itemize}
+\item[RQ1] How does a symbolic refactoring method based on program synthesis compare against one based on LLMs?
+\item[RQ2] Is type information alone sufficient for the the refactoring generation task (for both the symbolic and neural approach)?
+\item[RQ3] Do code hints help generating the refactoring (again for both approaches)?
+\end{itemize}
 
-\item We propose a program synthesis based technique for refactoring uses of deprecated APIs, which incorporates semantic information about the code. In particular, the program synthesis is guided by code hints and type information.
+We believe RQ1 is particularly important given the high computational cost of LLMs. Our results highlight the fact that there is ample room for
+symbolic code generation methods to outperform general-purpose LLMs at a low budget.
 
-\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
+%% \paragraph{Contributions:}
 
-  %% propose a program synthesis technique that is driven by type information and code hints, and relies on coverage-guided property-based testing.
-  
-%\item We provide a technique for building the component library that is guided by code hints and types.
-  
-%\item We propose greybox program synthesis by encoding the code generation problem as a verification problem that can be solved by coverage-guided property-based testing.
-  %% introduce the notion of coverage based CEGIS, which makes use of coverage-guided property-based testing in order to generate counterexamples for a type and example guided synthesiser.
-  
-%% \item We provide an encoding of the synthesis problem as the problem of verifying the safety of a program, which is then solved by fuzzing.
-
-%% \item We introduce the concept of refactoring context. %% The refactoring context is different from the
-%%   %% actual code to be refactored.
-%%   Our refactoring technique generally starts 
-%%   with no context and gradually increase the amount of context we take into consideration
-%%   until a desirable refactoring is found.
-
-\item We implemented our technique and used it to refactor deprecated methods from the Oracle
-JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
-  %refactor deprecated instances in X open source projects.
-  
-\end{itemize}  
-
-%
 %% \begin{itemize}
-%% %
-%% \item We present a program synthesis based refactoring procedure for Java
-%% code that handles collections through external loop iteration.
-%% %
-%% \item We have implemented our refactoring method in the tool \tool. Our
-%% experimental results support our conjecture that semantics-driven
-%% refactorings are more precise and can handle more complex code scenarios
-%% than syntax-driven refactorings.
-%% %
-%% \end{itemize}
+
+%% \item We propose a program synthesis based technique for refactoring uses of deprecated APIs, which incorporates semantic information about the code. In particular, the program synthesis is guided by code hints and type information.
+
+%% \item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
+
+%% \item We implemented our technique and used it to refactor deprecated methods from the Oracle
+%% JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
+  
+%% \end{itemize}  
 
 
 
-\section{Overview of our approach} \label{sec:overview}
+\section{Program synthesis based refactoring} \label{sec:overview}
+
+Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
+%
+The vast search space is particularly a challenge in the current
+setting given that, in the absence of any additional guidance, the
+entire \texttt{java.lang} could be considered when synthesising the
+refactoring.  In order to prune the search space, we make use of type information and Javadoc code hints.
+
 
 As mentioned in Section~\ref{sec:intro}, our approach employs program synthesis
 in order to generate a refactoring that
