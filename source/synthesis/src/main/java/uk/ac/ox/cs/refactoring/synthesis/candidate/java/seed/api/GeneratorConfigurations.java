@@ -28,6 +28,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.ConstantSee
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.ConsumerSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.FactorySeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.InstructionSetSeed;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.NumericCastSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.SignatureSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.StatementSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.context.TypeSeed;
@@ -107,6 +108,7 @@ public final class GeneratorConfigurations {
     final TypeSeed typeSeed = new TypeSeed(classLoader, methodToRefactor);
     final SignatureSeed signatureSeed = new SignatureSeed(classLoader, methodToRefactor);
     final ConstantSeed constantSeed = new ConstantSeed();
+    final NumericCastSeed numericCastSeed = new NumericCastSeed(classLoader, methodToRefactor);
     final FactorySeed factorySeed = new FactorySeed(classLoader, constantSeed);
     final ConsumerSeed consumerSeed = new ConsumerSeed(classLoader);
     final StatementSeed statementSeed = new StatementSeed();
@@ -119,8 +121,8 @@ public final class GeneratorConfigurations {
       seed(components, javaDocSeed);
       foundCodeHints = components.size() > 0;
       if (foundCodeHints)
-        seed(components, signatureSeed, ancestorSeed, factorySeed, constantSeed, unusedSeed, consumerSeed,
-            statementSeed);
+        seed(components, signatureSeed, ancestorSeed, numericCastSeed, factorySeed, constantSeed, unusedSeed,
+            consumerSeed, statementSeed);
     }
     if (components.size() == 0)
       seed(components, typeSeed, signatureSeed, constantSeed, statementSeed);
