@@ -1,15 +1,10 @@
-# Response Time: 6.947742223739624
-Sure, here's an example refactoring:
+# Response Time: 5.763627290725708
+```
+// Code before refactoring
+javax.net.ssl.SSLSession session = event.getSession();
+javax.security.cert.X509Certificate[] certificates = session.getPeerCertificateChain();
 
-<<< Before refactoring:
-```
-HandshakeCompletedEvent event = ...;
-X509Certificate[] peerCertificates = (X509Certificate[]) event.getPeerCertificateChain();
-```
-
->>> After refactoring:
-```
-HandshakeCompletedEvent event = ...;
-Certificate[] peerCertificates = event.getPeerCertificates();
-X509Certificate[] x509Certificates = Arrays.copyOf(peerCertificates, peerCertificates.length, X509Certificate[].class);
+// Code after refactoring
+javax.net.ssl.SSLSession session = event.getSession();
+java.security.cert.Certificate[] certificates = session.getPeerCertificates();
 ```

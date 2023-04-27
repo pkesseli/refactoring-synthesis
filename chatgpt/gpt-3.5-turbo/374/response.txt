@@ -1,20 +1,8 @@
-# Response Time: 16.213096857070923
-Sure, here's an example refactoring:
+# Response Time: 5.9848620891571045
+```
+// Code before refactoring
+int width = Utilities.getTabbedTextWidth(segment, fontMetrics, x, tabExpander, startOffset);
 
-<<< Before refactoring:
+// Code after refactoring
+float width = Utilities.getTabbedTextWidth(segment, fontMetrics, (float) x, tabExpander, startOffset);
 ```
-int tabWidth = 50;
-FontMetrics fontMetrics = new FontMetrics(new Font("Arial", Font.PLAIN, 12));
-Segment text = new Segment("Hello\tworld", 0, 11);
-int width = Utilities.getTabbedTextWidth(text, fontMetrics, tabWidth, null, 0);
-```
-
->>> After refactoring:
-```
-float tabWidth = 50.0f;
-FontMetrics fontMetrics = new FontMetrics(new Font("Arial", Font.PLAIN, 12));
-Segment text = new Segment("Hello\tworld", 0, 11);
-int width = (int) Utilities.getTabbedTextWidth(text, fontMetrics, tabWidth, null, 0);
-```
-
-In this example, we've updated the call to `Utilities.getTabbedTextWidth` to use the new method signature that takes a `float` for the tab width instead of an `int`. We've also added a cast to the result of the method call to convert the `float` result to an `int`, since the method still returns a `float`.

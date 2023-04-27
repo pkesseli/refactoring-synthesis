@@ -1,14 +1,14 @@
-# Response Time: 14.038486957550049
-I'm sorry, but as an AI language model, I don't have access to a specific codebase to provide a refactoring example. However, I can provide you with some general guidance on how to refactor deprecated code:
+# Response Time: 11.376250267028809
+```
+// Code before refactoring
+HTMLEditorKit editorKit = new HTMLEditorKit();
+JEditorPane editorPane = new JEditorPane();
+HTMLDocument document = (HTMLDocument) editorPane.getDocument();
+editorKit.insertHTML(document, document.getLength(), "<b>Hello World!</b>", 0, 0, HTML.Tag.B);
 
-1. Identify the deprecated code and the recommended replacement.
-2. Replace the deprecated code with the recommended replacement.
-3. Test the refactored code to ensure that it works as expected.
-
-Here's an example of how you could refactor the deprecated code you mentioned:
-
-<<< Before refactoring: 
-javax.swing.text.html.HTMLEditorKit.InsertHTMLTextAction.insertAtBoundry​(JEditorPane, HTMLDocument, int, Element, String, HTML.Tag, HTML.Tag)
- 
->>> After refactoring: 
-javax.swing.text.html.HTMLEditorKit.InsertHTMLTextAction.insertAtBoundary​(JEditorPane, HTMLDocument, int, Element, String, HTML.Tag, HTML.Tag)
+// Code after refactoring
+HTMLEditorKit editorKit = new HTMLEditorKit();
+JEditorPane editorPane = new JEditorPane();
+HTMLDocument document = (HTMLDocument) editorPane.getDocument();
+editorKit.insertHTML(document, document.getLength(), "<b>Hello World!</b>", 0, 0, HTML.Tag.BR);
+```

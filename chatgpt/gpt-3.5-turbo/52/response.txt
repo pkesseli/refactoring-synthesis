@@ -1,18 +1,10 @@
-# Response Time: 6.707843780517578
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.117021560668945
 ```
+// Code before refactoring
 Container container = new Container();
-int x = 10;
-int y = 20;
 Component component = container.locate(x, y);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 Container container = new Container();
-int x = 10;
-int y = 20;
 Component component = container.getComponentAt(x, y);
 ```

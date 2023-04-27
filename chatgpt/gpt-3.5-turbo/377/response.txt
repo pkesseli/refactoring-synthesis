@@ -1,32 +1,15 @@
-# Response Time: 19.08897829055786
-I'm sorry, but as a language model, I don't have access to your codebase or know what programming language you are using. However, I can provide you with a general example of how to refactor deprecated code:
-
-<<< Before refactoring: 
+# Response Time: 10.609970092773438
 ```
-import javax.swing.text.WrappedPlainView;
-
-public class MyView extends WrappedPlainView {
-    @Override
-    public void paint(Graphics g, Shape a) {
-        super.paint(g, a);
-        drawLine(0, 0, g, 10, 10);
-    }
+// Code before refactoring
+public void drawLine(int x, int y, Graphics g, int startOffset, int endOffset) {
+    WrappedPlainView view = (WrappedPlainView) getContainer();
+    view.drawLine(x, y, g, startOffset, endOffset);
 }
 ```
-
->>> After refactoring: 
 ```
-import javax.swing.text.WrappedPlainView;
-import java.awt.Graphics2D;
-
-public class MyView extends WrappedPlainView {
-    @Override
-    public void paint(Graphics g, Shape a) {
-        super.paint(g, a);
-        Graphics2D g2d = (Graphics2D) g;
-        drawLine(0, 0, g2d, 10f, 10f);
-    }
+// Code after refactoring
+public void drawLine(int x, int y, Graphics2D g, float startOffset, float endOffset) {
+    WrappedPlainView view = (WrappedPlainView) getContainer();
+    view.drawLine(x, y, g, startOffset, endOffset);
 }
-``` 
-
-In this example, we have refactored the deprecated `drawLine` method by replacing the `Graphics` parameter with a `Graphics2D` parameter and replacing the `int` coordinates with `float` coordinates. This is in line with the updated method signature provided in the deprecation comment.
+```

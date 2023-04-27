@@ -1,14 +1,10 @@
-# Response Time: 5.478118181228638
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 5.1898815631866455
 ```
+// Code before refactoring
 File file = new File("path/to/file");
 URL url = file.toURL();
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 File file = new File("path/to/file");
 URI uri = file.toURI();
 URL url = uri.toURL();

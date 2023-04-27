@@ -1,18 +1,12 @@
-# Response Time: 7.39028000831604
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.8393266201019287
 ```
+// Before refactoring
 if (component.isFocusTraversable()) {
-    component.requestFocus();
+    // do something
 }
-```
 
->>> After refactoring:
-```
+// After refactoring
 if (component.isFocusable()) {
-    component.requestFocus();
+    // do something
 }
-``` 
-
-In this example, we've replaced the deprecated `isFocusTraversable()` method with the recommended `isFocusable()` method. This ensures that the code will continue to work as expected in future versions of Java.
+```

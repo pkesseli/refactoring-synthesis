@@ -1,32 +1,17 @@
-# Response Time: 17.91493797302246
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 8.554033756256104
 ```
-import org.ietf.jgss.*;
-import java.io.*;
+// Code before refactoring
+InputStream inStream = ...;
+OutputStream outStream = ...;
+MessageProp msgProp = ...;
+byte[] token = context.wrap(inStream, outStream, msgProp);
 
-public class GSSContextExample {
-    public void wrapData(InputStream inStream, OutputStream outStream, GSSContext context) throws GSSException, IOException {
-        MessageProp msgProp = new MessageProp(0, true);
-        context.wrap(inStream, outStream, msgProp);
-    }
-}
+// Code after refactoring
+InputStream inStream = ...;
+OutputStream outStream = ...;
+MessageProp msgProp = ...;
+byte[] buffer = new byte[1024];
+int bytesRead = inStream.read(buffer);
+byte[] token = context.wrap(buffer, 0, bytesRead, msgProp);
+outStream.write(token);
 ```
-
->>> After refactoring:
-```
-import org.ietf.jgss.*;
-import java.io.*;
-
-public class GSSContextExample {
-    public void wrapData(InputStream inStream, OutputStream outStream, GSSContext context) throws GSSException, IOException {
-        MessageProp msgProp = new MessageProp(0, true);
-        byte[] inBytes = inStream.readAllBytes();
-        byte[] wrappedBytes = context.wrap(inBytes, 0, inBytes.length, msgProp);
-        outStream.write(wrappedBytes);
-    }
-}
-```
-
-In this refactored code, we've replaced the deprecated `context.wrap(InputStream, OutputStream, MessageProp)` method with the recommended `context.wrap(byte[], int, int, MessageProp)` method. We've also updated the code to read all bytes from the input stream and write the wrapped bytes to the output stream.

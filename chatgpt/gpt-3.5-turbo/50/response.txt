@@ -1,14 +1,8 @@
-# Response Time: 5.195976257324219
-Sure, here's an example refactoring for the deprecated method `java.awt.Container.insets()`:
+# Response Time: 2.921353578567505
+```
+// Code before refactoring
+Insets insets = myContainer.insets();
 
-<<< Before refactoring:
-```
-Container container = new Container();
-Insets insets = container.insets();
-```
-
->>> After refactoring:
-```
-Container container = new Container();
-Insets insets = container.getInsets();
+// Code after refactoring
+Insets insets = myContainer.getInsets();
 ```

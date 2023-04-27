@@ -1,11 +1,18 @@
-# Response Time: 11.843614339828491
-I'm sorry, but as a language model, I don't have access to your codebase or know what programming language you are using. However, I can provide you with a general example of how to refactor deprecated code:
-
-<<< Before refactoring: 
-javax.swing.text.WrappedPlainView.drawUnselectedText​(g, x, y, startOffset, endOffset);
- 
->>> After refactoring: 
-Graphics2D g2d = (Graphics2D) g;
-javax.swing.text.WrappedPlainView.drawUnselectedText(g2d, x, y, startOffset, endOffset); 
-
-In this example, we cast the Graphics object to a Graphics2D object and pass it to the new method. This will ensure that the new method is used instead of the deprecated one.
+# Response Time: 15.251071691513062
+```
+// Code before refactoring
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    WrappedPlainView view = (WrappedPlainView) getEditor().getUI().getRootView(getEditor()).getView(0);
+    view.drawUnselectedText(g, getInsets().left, getInsets().top, getVisibleRect().width, getVisibleRect().height);
+}
+```
+```
+// Code after refactoring
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    WrappedPlainView view = (WrappedPlainView) getEditor().getUI().getRootView(getEditor()).getView(0);
+    Graphics2D g2d = (Graphics2D) g;
+    view.drawUnselectedText(g2d, (float) getInsets().left, (float) getInsets().top, getVisibleRect().width, getVisibleRect().height);
+}
+```

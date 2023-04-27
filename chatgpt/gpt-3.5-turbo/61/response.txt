@@ -1,35 +1,8 @@
-# Response Time: 22.115051984786987
-Sorry, as an AI language model, I don't have access to your codebase or programming language. However, I can provide you with some general guidance on how to refactor your code based on the deprecation comment you mentioned.
-
-The deprecation comment suggests that you should use `InputEvent.getModifiersExText(int)` instead of `java.awt.event.KeyEvent.getKeyModifiersText​(int)` to get the text description of the extended modifier keys.
-
-Here's an example of how you can refactor your code:
-
-<<< Before refactoring:
+# Response Time: 3.61818790435791
 ```
-import java.awt.event.KeyEvent;
+// Code before refactoring
+String modifiers = KeyEvent.getKeyModifiersText(event.getModifiers());
 
-public class MyKeyListener implements KeyListener {
-    public void keyPressed(KeyEvent e) {
-        int modifiers = e.getModifiers();
-        String modifiersText = KeyEvent.getKeyModifiersText(modifiers);
-        System.out.println("Modifiers: " + modifiersText);
-    }
-}
+// Code after refactoring
+String modifiers = InputEvent.getModifiersExText(event.getModifiers());
 ```
-
->>> After refactoring:
-```
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-
-public class MyKeyListener implements KeyListener {
-    public void keyPressed(KeyEvent e) {
-        int modifiers = e.getModifiers();
-        String modifiersText = InputEvent.getModifiersExText(modifiers);
-        System.out.println("Modifiers: " + modifiersText);
-    }
-}
-``` 
-
-In the refactored code, we import `java.awt.event.InputEvent` and use `InputEvent.getModifiersExText(int)` instead of `java.awt.event.KeyEvent.getKeyModifiersText​(int)` to get the text description of the extended modifier keys.

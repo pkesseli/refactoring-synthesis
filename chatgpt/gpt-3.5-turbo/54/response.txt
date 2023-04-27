@@ -1,16 +1,8 @@
-# Response Time: 6.948927879333496
-Sure, here's an example refactoring for the deprecated `java.awt.Container.preferredSize()` method:
-
-<<< Before refactoring:
+# Response Time: 3.111449956893921
 ```
-Container container = new Container();
+// Code before refactoring
 Dimension preferredSize = container.preferredSize();
-```
 
->>> After refactoring:
-```
-Container container = new Container();
+// Code after refactoring
 Dimension preferredSize = container.getPreferredSize();
-``` 
-
-This refactoring simply replaces the deprecated `preferredSize()` method with the recommended `getPreferredSize()` method.
+```

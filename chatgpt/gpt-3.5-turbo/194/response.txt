@@ -1,16 +1,8 @@
-# Response Time: 7.943378925323486
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.264490842819214
 ```
-RemoteCall remoteCall = ...;
+// Code before refactoring
 InputStream inputStream = remoteCall.getInputStream();
-```
 
->>> After refactoring:
+// Code after refactoring
+throw new UnsupportedOperationException("This method is deprecated and has no replacement.");
 ```
-RemoteCall remoteCall = ...;
-InputStream inputStream = remoteCall.getDataStream();
-``` 
-
-In this refactoring, we've replaced the deprecated `getInputStream()` method with a new method called `getDataStream()`. This new method serves the same purpose as the old one, but is not deprecated and can be used safely.

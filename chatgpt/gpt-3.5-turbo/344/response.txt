@@ -1,22 +1,8 @@
-# Response Time: 15.316775798797607
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.500526666641235
 ```
-JTextComponent textComponent = new JTextComponent();
-MultiTextUI multiTextUI = new MultiTextUI();
-int pos = 5;
-Position.Bias bias = Position.Bias.Forward;
+// Code before refactoring
 Rectangle rect = multiTextUI.modelToView(textComponent, pos, bias);
-```
 
->>> After refactoring:
+// Code after refactoring
+Rectangle2D rect = textUI.modelToView2D(textComponent, pos, bias);
 ```
-JTextComponent textComponent = new JTextComponent();
-TextUI textUI = textComponent.getUI();
-int pos = 5;
-Position.Bias bias = Position.Bias.Forward;
-Rectangle rect = textUI.modelToView2D(textComponent, pos, bias);
-```
-
-In the refactored code, we first get the `TextUI` object from the `JTextComponent` using the `getUI()` method. Then, we call the `modelToView2D()` method on the `TextUI` object, passing in the `JTextComponent`, position, and bias as parameters. This replaces the deprecated `modelToView()` method on the `MultiTextUI` object.

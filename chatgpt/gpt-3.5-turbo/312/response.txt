@@ -1,16 +1,12 @@
-# Response Time: 4.295476198196411
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.314009189605713
 ```
+// Code before refactoring
 if (myComponent.isManagingFocus()) {
     // do something
 }
-```
 
->>> After refactoring:
-```
-if (myComponent.isFocusCycleRoot()) {
+// Code after refactoring
+if (myComponent.getFocusTraversalKeysEnabled()) {
     // do something
 }
 ```

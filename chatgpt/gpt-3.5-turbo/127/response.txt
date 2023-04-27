@@ -1,16 +1,12 @@
-# Response Time: 6.601437091827393
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 6.265953540802002
 ```
+// Code before refactoring
 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-outputStream.write("Hello, world!".getBytes());
-String outputString = outputStream.toString(0);
-```
+outputStream.write("Hello World".getBytes());
+String output = outputStream.toString(StandardCharsets.UTF_8);
 
->>> After refactoring:
-```
+// Code after refactoring
 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-outputStream.write("Hello, world!".getBytes());
-String outputString = outputStream.toString(StandardCharsets.UTF_8);
+outputStream.write("Hello World".getBytes());
+String output = outputStream.toString(StandardCharsets.UTF_8.name());
 ```

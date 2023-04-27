@@ -1,20 +1,8 @@
-# Response Time: 14.07577395439148
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.3094823360443115
 ```
-JTextComponent textComponent = new JTextComponent();
-Point point = new Point(10, 20);
-Position.Bias[] bias = new Position.Bias[1];
-int modelIndex = textComponent.getUI().viewToModel(textComponent, point, bias);
-```
+// Code before refactoring
+int offset = textComponent.viewToModel(point, bias);
 
->>> After refactoring:
+// Code after refactoring
+int offset = textComponent.getUI().viewToModel2D(textComponent, point, bias);
 ```
-JTextComponent textComponent = new JTextComponent();
-Point2D point = new Point2D.Double(10, 20);
-Position.Bias[] bias = new Position.Bias[1];
-int modelIndex = textComponent.getUI().viewToModel2D(textComponent, point, bias);
-``` 
-
-In this example, we've updated the code to use the `viewToModel2D` method instead of the deprecated `viewToModel` method. We've also updated the `Point` object to a `Point2D` object, which is required by the new method.

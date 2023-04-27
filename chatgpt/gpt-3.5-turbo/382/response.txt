@@ -1,14 +1,9 @@
-# Response Time: 6.266526937484741
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.5603528022766113
 ```
+// Code before refactoring
 ClassLoader toolClassLoader = ToolProvider.getSystemToolClassLoader();
 ```
-
->>> After refactoring:
 ```
+// Code after refactoring
 ClassLoader toolClassLoader = ClassLoader.getSystemClassLoader();
-``` 
-
-Note: This is just a simple example and may not be applicable in all cases. It's important to carefully consider the specific use case and follow the guidance provided in the deprecation comment.
+```

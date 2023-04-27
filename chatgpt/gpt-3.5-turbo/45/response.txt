@@ -1,12 +1,8 @@
-# Response Time: 3.858880043029785
-Sure, here's an example refactoring for the deprecated `show()` method in Java:
-
-<<< Before refactoring:
+# Response Time: 2.4574086666107178
 ```
+// Code before refactoring
 myComponent.show(true);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 myComponent.setVisible(true);
 ```

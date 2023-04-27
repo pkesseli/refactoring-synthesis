@@ -1,36 +1,11 @@
-# Response Time: 16.7069091796875
-Sure, here's an example refactoring for the deprecated `java.sql.Time.getMonth()` method:
-
-<<< Before refactoring:
+# Response Time: 5.22175407409668
 ```
-import java.sql.Time;
-import java.util.Calendar;
+// Code before refactoring
+java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
+int month = time.getMonth();
 
-public class Example {
-    public static void main(String[] args) {
-        Time time = new Time(System.currentTimeMillis());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(time);
-        int month = time.getMonth();
-        System.out.println("Month: " + month);
-    }
-}
+// Code after refactoring
+java.util.Calendar calendar = java.util.Calendar.getInstance();
+calendar.setTimeInMillis(System.currentTimeMillis());
+int month = calendar.get(java.util.Calendar.MONTH);
 ```
-
->>> After refactoring:
-```
-import java.sql.Time;
-import java.util.Calendar;
-
-public class Example {
-    public static void main(String[] args) {
-        Time time = new Time(System.currentTimeMillis());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(time);
-        int month = calendar.get(Calendar.MONTH);
-        System.out.println("Month: " + month);
-    }
-}
-```
-
-In this refactored code, we've replaced the deprecated `getMonth()` method with the `get(Calendar.MONTH)` method on the `Calendar` object. This will give us the same result as before, but using a non-deprecated method.

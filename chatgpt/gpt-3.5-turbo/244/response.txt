@@ -1,30 +1,10 @@
-# Response Time: 12.779155254364014
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.8719301223754883
 ```
-import java.util.Date;
+// Code before refactoring
+Date date = new Date();
+int dayOfWeek = date.getDay();
 
-public class Example {
-    public static void main(String[] args) {
-        Date date = new Date();
-        int dayOfWeek = date.getDay();
-        System.out.println("Today is day " + dayOfWeek);
-    }
-}
+// Code after refactoring
+Calendar calendar = Calendar.getInstance();
+int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 ```
-
->>> After refactoring:
-```
-import java.util.Calendar;
-
-public class Example {
-    public static void main(String[] args) {
-        Calendar calendar = Calendar.getInstance();
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        System.out.println("Today is day " + dayOfWeek);
-    }
-}
-``` 
-
-In this example, we've replaced the deprecated `Date.getDay()` method with `Calendar.get(Calendar.DAY_OF_WEEK)`. We've also updated the code to use `Calendar.getInstance()` to get a `Calendar` instance instead of creating a new `Date` object.

@@ -1,2 +1,12 @@
-# Response Time: 3.072740077972412
-I'm sorry, but as an AI language model, I cannot provide code refactoring examples without a specific codebase to work with. Could you please provide me with the code you want to refactor?
+# Response Time: 5.597071409225464
+```
+// Code before refactoring
+ThreadPoolExecutor executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+executor.execute(task);
+executor.finalize();
+
+// Code after refactoring
+ExecutorService executor = Executors.newFixedThreadPool(corePoolSize);
+executor.execute(task);
+executor.shutdown();
+```

@@ -1,14 +1,10 @@
-# Response Time: 4.803278207778931
-Sure, here's an example refactoring:
+# Response Time: 5.1244378089904785
+```
+// Code before refactoring
+Event event = new Event(component, Event.ACTION_EVENT, null);
+component.postEvent(event);
 
-<<< Before refactoring:
-```
-Event event = new Event(this, Event.ACTION_EVENT, null);
-postEvent(event);
-```
-
->>> After refactoring:
-```
-Event event = new Event(this, Event.ACTION_EVENT, null);
-dispatchEvent(event);
+// Code after refactoring
+AWTEvent event = new ActionEvent(component, ActionEvent.ACTION_PERFORMED, null);
+component.dispatchEvent(event);
 ```

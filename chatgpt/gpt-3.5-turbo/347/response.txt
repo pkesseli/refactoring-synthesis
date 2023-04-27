@@ -1,15 +1,8 @@
-# Response Time: 10.69512128829956
-I'm happy to help you with that! Here's an example of how you can refactor the deprecated method:
-
-<<< Before refactoring:
+# Response Time: 4.015031337738037
 ```
+// Code before refactoring
 String tooltip = textUI.getToolTipText(textComponent, point);
-```
 
->>> After refactoring:
+// Code after refactoring
+String tooltip = textUI.getToolTipText2D(textComponent, point);
 ```
-Point2D point2D = new Point2D.Float(point.x, point.y);
-String tooltip = textUI.getToolTipText2D(textComponent, point2D);
-```
-
-In the refactored code, we create a new `Point2D` object using the `x` and `y` coordinates from the original `Point` object. Then, we use the `getToolTipText2D` method instead of the deprecated `getToolTipText` method to get the tooltip text.

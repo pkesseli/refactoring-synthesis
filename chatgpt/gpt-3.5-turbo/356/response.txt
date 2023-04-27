@@ -1,20 +1,13 @@
-# Response Time: 15.978025913238525
-I'm sorry, but as a language model, I don't have access to your codebase or development environment. However, I can provide you with some general guidance on how to refactor deprecated code.
-
-When a method or class is deprecated, it means that it is no longer recommended for use and may be removed in future versions of the software. To refactor deprecated code, you should replace the deprecated method or class with a recommended alternative.
-
-In the case of the javax.swing.table.TableColumn.enableResizedPosting() method, the recommended alternative is to use the setResizingAllowed() method instead. Here's an example of how you could refactor your code:
-
-<<< Before refactoring:
+# Response Time: 5.610058069229126
 ```
+// Code before refactoring
 TableColumn column = table.getColumnModel().getColumn(columnIndex);
+column.setResizable(true);
+column.sizeWidthToFit();
 column.enableResizedPosting();
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 TableColumn column = table.getColumnModel().getColumn(columnIndex);
-column.setResizingAllowed(true);
+column.setResizable(true);
+column.sizeWidthToFit();
 ```
-
-In this example, we've replaced the deprecated enableResizedPosting() method with the recommended setResizingAllowed() method. This will ensure that your code continues to work correctly and is compatible with future versions of Java.

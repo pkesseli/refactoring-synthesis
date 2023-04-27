@@ -1,18 +1,8 @@
-# Response Time: 10.034027099609375
-Sure, here's an example refactoring for using the new `Runtime.Version.interim()` method instead of the deprecated `Runtime.Version.minor()` method:
-
-<<< Before refactoring:
+# Response Time: 3.3658156394958496
 ```
-Runtime.Version version = Runtime.version();
-int minorVersion = version.minor();
-System.out.println("Minor version: " + minorVersion);
-```
+// Code before refactoring
+int minorVersion = Runtime.version().minor();
 
->>> After refactoring:
+// Code after refactoring
+int minorVersion = Runtime.version().interim();
 ```
-Runtime.Version version = Runtime.version();
-int interimVersion = version.interim();
-System.out.println("Interim version: " + interimVersion);
-``` 
-
-This code now uses the `Runtime.Version.interim()` method instead of the deprecated `Runtime.Version.minor()` method to retrieve the interim release counter.

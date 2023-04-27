@@ -1,17 +1,11 @@
-# Response Time: 10.72462511062622
-Sure, here's an example refactoring for the deprecated method `java.sql.Date.setHours(int)`:
-
-<<< Before refactoring:
+# Response Time: 5.643990993499756
 ```
+// Code before refactoring
 java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 date.setHours(10);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 java.sql.Timestamp timestamp = new java.sql.Timestamp(System.currentTimeMillis());
 timestamp.setHours(10);
 java.sql.Date date = new java.sql.Date(timestamp.getTime());
 ```
-
-In this refactored code, we use the `java.sql.Timestamp` class instead of `java.sql.Date` to set the hours. We then convert the `Timestamp` object to a `Date` object using the `getTime()` method. This allows us to set the hours without using the deprecated `setHours()` method.

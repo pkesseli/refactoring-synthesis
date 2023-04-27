@@ -1,14 +1,8 @@
-# Response Time: 4.3124449253082275
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 2.4565749168395996
 ```
-JComponent myComponent = new JComponent();
+// Code before refactoring
 myComponent.enable();
-```
 
->>> After refactoring: 
-```
-JComponent myComponent = new JComponent();
+// Code after refactoring
 myComponent.setEnabled(true);
 ```

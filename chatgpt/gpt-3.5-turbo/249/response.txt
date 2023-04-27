@@ -1,16 +1,10 @@
-# Response Time: 10.132797956466675
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 5.458650350570679
 ```
+// Code before refactoring
 Date date = new Date();
 int timezoneOffset = date.getTimezoneOffset();
-```
 
->>> After refactoring: 
-```
+// Code after refactoring
 Calendar calendar = Calendar.getInstance();
 int timezoneOffset = -(calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET)) / (60 * 1000);
-``` 
-
-In this refactoring example, we replace the deprecated `getTimezoneOffset()` method with the recommended `Calendar` method. We create a new `Calendar` instance using `Calendar.getInstance()`, and then calculate the timezone offset using the formula provided in the deprecation comment.
+```

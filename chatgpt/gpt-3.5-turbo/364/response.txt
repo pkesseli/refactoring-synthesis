@@ -1,18 +1,17 @@
-# Response Time: 14.029935121536255
-Sorry, as an AI language model, I don't have access to your codebase or development environment. However, I can provide you with an example of how to refactor the deprecated method call based on the information you provided:
+# Response Time: 11.06783652305603
+```
+// Code before refactoring
+public void paint(Graphics g, Shape a) {
+    Rectangle r = (Rectangle) a;
+    g.setColor(Color.BLACK);
+    g.drawLine(r.x, r.y, r.x + r.width, r.y + r.height);
+}
 
-<<< Before refactoring: 
+// Code after refactoring
+public void paint(Graphics g, Shape a) {
+    Rectangle r = (Rectangle) a;
+    Graphics2D g2d = (Graphics2D) g;
+    g2d.setColor(Color.BLACK);
+    g2d.drawLine(r.x, r.y, r.x + r.width, r.y + r.height);
+}
 ```
-PlainView view = new PlainView();
-Graphics graphics = new Graphics();
-view.drawLine(0, graphics, 10, 10);
-```
-
->>> After refactoring: 
-```
-PlainView view = new PlainView();
-Graphics2D graphics = (Graphics2D) graphics;
-view.drawLine(0, graphics, 10.0f, 10.0f);
-```
-
-In the refactored code, we have replaced the deprecated `drawLine(int, Graphics, int, int)` method with the new `drawLine(int, Graphics2D, float, float)` method. We have also cast the `Graphics` object to `Graphics2D` to use the new method.

@@ -1,15 +1,8 @@
-# Response Time: 6.05059027671814
-Sure, here's an example refactoring:
+# Response Time: 4.094653129577637
+```
+// Code before refactoring
+long timeStamp = counterMonitor.getDerivedGaugeTimeStamp();
 
-<<< Before refactoring:
-```
-CounterMonitor counterMonitor = new CounterMonitor();
-long derivedGaugeTimeStamp = counterMonitor.getDerivedGaugeTimeStamp();
-```
-
->>> After refactoring:
-```
-CounterMonitor counterMonitor = new CounterMonitor();
-ObjectName objectName = counterMonitor.getObservedObject();
-long derivedGaugeTimeStamp = counterMonitor.getDerivedGaugeTimeStamp(objectName);
+// Code after refactoring
+long timeStamp = counterMonitor.getDerivedGaugeTimeStamp(counterMonitor.getObservedObject());
 ```

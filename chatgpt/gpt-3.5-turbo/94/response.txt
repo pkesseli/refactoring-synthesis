@@ -1,2 +1,10 @@
-# Response Time: 3.495465040206909
-I'm sorry, but as an AI language model, I cannot provide code refactoring examples without a specific code block to work with. Could you please provide me with a code block that you would like me to refactor?
+# Response Time: 5.796684980392456
+```
+// Code before refactoring
+PrintJob printJob = Toolkit.getDefaultToolkit().getPrintJob(frame, "Print Job", null, null);
+printJob.finalize();
+
+// Code after refactoring
+PrintJob printJob = Toolkit.getDefaultToolkit().getPrintJob(frame, "Print Job", null, null);
+printJob.dispose();
+```

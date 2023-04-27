@@ -2,7 +2,12 @@ The method javax.swing.text.TableView.createTableCell​(Element) is deprecated.
  The related deprecation comment in Javadoc is "Table cells can now be any arbitrary
  View implementation and should be produced by the
  ViewFactory rather than the table."
-Give me a refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>
-Example code should be a straight-line code block.
+I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

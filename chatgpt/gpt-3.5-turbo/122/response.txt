@@ -1,26 +1,8 @@
-# Response Time: 10.557708978652954
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.4294233322143555
 ```
-import java.awt.Window;
+// Code before refactoring
+myWindow.hide();
 
-public class MyWindow extends Window {
-    public void hideWindow() {
-        hide();
-    }
-}
+// Code after refactoring
+myWindow.setVisible(false);
 ```
-
->>> After refactoring:
-```
-import java.awt.Window;
-
-public class MyWindow extends Window {
-    public void hideWindow() {
-        setVisible(false);
-    }
-}
-```
-
-In the original code, the `hide()` method is called to hide the window, but this method is deprecated. The refactored code replaces the call to `hide()` with a call to `setVisible(false)`, which is the recommended way to hide a window in newer versions of Java.

@@ -1,15 +1,10 @@
-# Response Time: 6.815201997756958
-Sure, here's an example refactoring:
+# Response Time: 5.478233337402344
+```
+// Code before refactoring
+StringValueExp stringValueExp = new StringValueExp("someValue");
+stringValueExp.setMBeanServer(mBeanServer);
 
-<<< Before refactoring:
-```
-MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-StringValueExp exp = new StringValueExp("someValue");
-exp.setMBeanServer(mbs);
-```
-
->>> After refactoring:
-```
-MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-StringValueExp exp = new StringValueExp("someValue", mbs);
+// Code after refactoring
+StringValueExp stringValueExp = new StringValueExp("someValue");
+stringValueExp.setMBeanServerName(mBeanServer.getDefaultDomain());
 ```

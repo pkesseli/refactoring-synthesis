@@ -1,15 +1,9 @@
-# Response Time: 5.01270604133606
-Sure, here's an example refactoring for the deprecated method:
+# Response Time: 4.6408610343933105
+```
+// Code before refactoring
+RemoteStub stub = (RemoteStub) UnicastRemoteObject.exportObject(obj, 0);
+stub.setRef(stub, remoteRef);
 
-<<< Before refactoring:
-```
-RemoteStub stub = ...;
-RemoteRef ref = ...;
-stub.setRef(ref);
-```
-
->>> After refactoring:
-```
-RemoteRef ref = ...;
-RemoteStub stub = new RemoteStub(ref);
+// Code after refactoring
+RemoteStub stub = new RemoteStub(remoteRef);
 ```

@@ -1,20 +1,14 @@
-# Response Time: 11.000920057296753
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 6.2344067096710205
 ```
+// Code before refactoring
 char c = 'a';
 if (Character.isJavaLetter(c)) {
-    System.out.println(c + " is a Java letter.");
+    System.out.println("This is a Java letter");
 }
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 char c = 'a';
 if (Character.isJavaIdentifierStart(c)) {
-    System.out.println(c + " is a Java identifier start.");
+    System.out.println("This is a Java identifier start");
 }
-``` 
-
-In the refactored code, we've replaced the deprecated `isJavaLetter` method with the recommended `isJavaIdentifierStart` method. This change ensures that our code is up-to-date with the latest Java API and will continue to work as expected in future versions of Java.
+```

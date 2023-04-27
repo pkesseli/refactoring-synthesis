@@ -1,25 +1,14 @@
-# Response Time: 15.197482109069824
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 6.795230150222778
 ```
+// Code before refactoring
 Properties props = new Properties();
-props.setProperty("key1", "value1");
-props.setProperty("key2", "value2");
+props.setProperty("key", "value");
 FileOutputStream out = new FileOutputStream("config.properties");
-props.save(out, "My Config");
-```
+props.save(out, "My Config File");
 
->>> After refactoring:
-```
+// Code after refactoring
 Properties props = new Properties();
-props.setProperty("key1", "value1");
-props.setProperty("key2", "value2");
-try (FileOutputStream out = new FileOutputStream("config.properties")) {
-    props.store(out, "My Config");
-} catch (IOException e) {
-    // handle the exception
-}
+props.setProperty("key", "value");
+FileOutputStream out = new FileOutputStream("config.properties");
+props.store(out, "My Config File");
 ```
-
-In the refactored code, we've replaced the deprecated `save` method with the `store` method, which is the preferred way to save a properties list. We've also wrapped the `FileOutputStream` in a try-with-resources block to ensure that it's properly closed, and added exception handling in case an I/O error occurs while saving the properties list.

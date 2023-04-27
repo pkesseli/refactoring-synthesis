@@ -1,20 +1,26 @@
-# Response Time: 18.00860095024109
-I'm sorry, but as an AI language model, I don't have access to your codebase or development environment. However, I can provide you with some general guidance on how to refactor deprecated code.
-
-When you encounter deprecated code, you should first check the documentation to see if there is a recommended replacement. If there is, you should use the recommended replacement. If there isn't, you should try to find an alternative solution that achieves the same functionality.
-
-In the case of the deprecated method javax.swing.plaf.basic.BasicSplitPaneUI.createKeyboardResizeToggleListener(), you could try using the method createToggleKeyBinding() instead. Here's an example of how you could refactor your code:
-
-<<< Before refactoring:
+# Response Time: 17.506227493286133
 ```
-BasicSplitPaneUI splitPaneUI = new BasicSplitPaneUI();
-splitPaneUI.createKeyboardResizeToggleListener();
-```
+// Code before refactoring
+splitPane.setOneTouchExpandable(true);
+splitPane.setDividerSize(10);
+splitPane.setResizeWeight(0.5);
+splitPane.addKeyListener(new BasicSplitPaneUI().createKeyboardResizeToggleListener());
 
->>> After refactoring:
+// Code after refactoring
+splitPane.setOneTouchExpandable(true);
+splitPane.setDividerSize(10);
+splitPane.setResizeWeight(0.5);
+splitPane.addKeyListener(new KeyAdapter() {
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_F8) {
+            BasicSplitPaneUI ui = (BasicSplitPaneUI) splitPane.getUI();
+            BasicSplitPaneDivider divider = ui.getDivider();
+            if (divider != null && divider.isEnabled()) {
+                int orientation = splitPane.getOrientation();
+                int resizeDirection = (orientation == JSplitPane.HORIZONTAL_SPLIT) ? BasicSplitPaneUI.RIGHT : BasicSplitPaneUI.DOWN;
+                ui.getHandler().actionPerformed(new ActionEvent(divider, 0, "" + resizeDirection));
+            }
+        }
+    }
+});
 ```
-BasicSplitPaneUI splitPaneUI = new BasicSplitPaneUI();
-splitPaneUI.createToggleKeyBinding(KeyEvent.VK_TAB, 0, false);
-```
-
-This code creates a new instance of BasicSplitPaneUI and then uses the createToggleKeyBinding() method to create a toggle key binding for the TAB key. This achieves the same functionality as the deprecated createKeyboardResizeToggleListener() method.

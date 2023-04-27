@@ -1,2 +1,20 @@
-# Response Time: 3.6006269454956055
-I'm sorry, but as an AI language model, I cannot provide code refactoring examples without a specific code block to work with. Could you please provide me with a code block that you would like me to refactor?
+# Response Time: 6.076666831970215
+```
+// Code before refactoring
+public void finalize() {
+    super.finalize();
+    // Perform cleanup
+    // ...
+}
+
+// Code after refactoring
+@Override
+protected void finalize() throws Throwable {
+    try {
+        // Perform cleanup
+        // ...
+    } finally {
+        super.finalize();
+    }
+}
+```

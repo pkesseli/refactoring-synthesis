@@ -1,12 +1,8 @@
-# Response Time: 3.9872310161590576
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.485226631164551
 ```
+// Code before refactoring
 myComponent.reshape(x, y, width, height);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 myComponent.setBounds(x, y, width, height);
 ```

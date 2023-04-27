@@ -1,15 +1,8 @@
-# Response Time: 5.852447986602783
-Sure, here's an example refactoring:
+# Response Time: 6.045896291732788
+```
+// Code before refactoring
+XMLOutputFactory outputFactory = XMLOutputFactory.newInstance("javax.xml.stream.XMLOutputFactory", null);
 
-<<< Before refactoring:
-```
-XMLOutputFactory factory = XMLOutputFactory.newInstance();
-```
-
->>> After refactoring:
-```
-XMLOutputFactory factory = XMLOutputFactory.newFactory(
-    XMLOutputFactory.DEFAULT_FACTORY_CLASS_NAME, 
-    Thread.currentThread().getContextClassLoader()
-);
+// Code after refactoring
+XMLOutputFactory outputFactory = XMLOutputFactory.newFactory("javax.xml.stream.XMLOutputFactory", null);
 ```

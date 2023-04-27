@@ -1,14 +1,10 @@
-# Response Time: 3.884248733520508
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.908351182937622
 ```
+// Code before refactoring
 MenuItem menuItem = new MenuItem("Example");
 menuItem.enable(false);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 MenuItem menuItem = new MenuItem("Example");
 menuItem.setEnabled(false);
 ```

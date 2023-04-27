@@ -1,12 +1,10 @@
-# Response Time: 4.5172951221466064
-Sure, here's an example refactoring:
+# Response Time: 5.097378492355347
+```
+// Before refactoring
+ClassLoader classLoader = getClass().getClassLoader();
+Package pkg = classLoader.getPackage("com.example.package");
 
-<<< Before refactoring:
-```
-Package myPackage = getClass().getPackage("com.example.myPackage");
-```
-
->>> After refactoring:
-```
-Package myPackage = getClass().getClassLoader().getDefinedPackage("com.example.myPackage");
+// After refactoring
+ClassLoader classLoader = getClass().getClassLoader();
+Package pkg = classLoader.getDefinedPackage("com.example.package");
 ```

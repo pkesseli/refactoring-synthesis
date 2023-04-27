@@ -1,24 +1,15 @@
-# Response Time: 8.573503971099854
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 7.828855991363525
 ```
+// Code before refactoring
 TextUI textUI = textComponent.getUI();
-Rectangle rectangle;
+Rectangle rectangle = null;
 try {
     rectangle = textUI.modelToView(textComponent, pos);
 } catch (BadLocationException e) {
-    // handle exception
+    e.printStackTrace();
 }
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 TextUI textUI = textComponent.getUI();
-Rectangle2D rectangle;
-try {
-    rectangle = textUI.modelToView2D(textComponent, pos, Position.Bias.Forward);
-} catch (BadLocationException e) {
-    // handle exception
-}
+Rectangle2D rectangle = textUI.modelToView2D(textComponent, pos, Position.Bias.Forward);
 ```

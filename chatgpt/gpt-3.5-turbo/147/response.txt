@@ -1,15 +1,11 @@
-# Response Time: 5.593698740005493
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 5.081698417663574
 ```
-String str = "Hello, world!";
+// Code before refactoring
+String str = "Hello World";
 byte[] bytes = new byte[str.length()];
 str.getBytes(0, str.length(), bytes, 0);
-```
 
->>> After refactoring:
-```
-String str = "Hello, world!";
+// Code after refactoring
+String str = "Hello World";
 byte[] bytes = str.getBytes();
 ```

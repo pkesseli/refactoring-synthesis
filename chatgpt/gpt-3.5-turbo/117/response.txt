@@ -1,34 +1,8 @@
-# Response Time: 15.164335250854492
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.237628698348999
 ```
-import java.awt.Font;
-import java.awt.Toolkit;
+// Code before refactoring
+String[] fontList = Toolkit.getDefaultToolkit().getFontList();
 
-public class FontListExample {
-    public static void main(String[] args) {
-        String[] fontList = Toolkit.getDefaultToolkit().getFontList();
-        for (String font : fontList) {
-            System.out.println(font);
-        }
-    }
-}
+// Code after refactoring
+String[] fontList = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 ```
-
->>> After refactoring:
-```
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-
-public class FontListExample {
-    public static void main(String[] args) {
-        String[] fontList = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-        for (String font : fontList) {
-            System.out.println(font);
-        }
-    }
-}
-```
-
-In this refactored code, we've replaced the deprecated `Toolkit.getFontList()` method with the recommended `GraphicsEnvironment.getAvailableFontFamilyNames()` method. This should ensure that our code continues to work as expected, even as Java evolves and changes over time.

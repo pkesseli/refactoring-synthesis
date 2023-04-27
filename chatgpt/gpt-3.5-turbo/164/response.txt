@@ -1,20 +1,14 @@
-# Response Time: 14.928920030593872
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 9.37000322341919
 ```
+// Code before refactoring
 InetAddress group = InetAddress.getByName("224.0.0.1");
 MulticastSocket socket = new MulticastSocket(1234);
 socket.joinGroup(group);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 InetAddress group = InetAddress.getByName("224.0.0.1");
 MulticastSocket socket = new MulticastSocket();
 SocketAddress address = new InetSocketAddress(group, 1234);
 NetworkInterface networkInterface = NetworkInterface.getByName("eth0");
 socket.joinGroup(address, networkInterface);
 ```
-
-In the refactored code, we create a `MulticastSocket` without specifying a port number, and instead create a `SocketAddress` object with the group address and port number. We also specify the network interface to use with the `joinGroup` method. This is the recommended way to join a multicast group in Java, as the `joinGroup` method that takes an `InetAddress` is now deprecated.

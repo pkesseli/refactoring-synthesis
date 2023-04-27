@@ -1,14 +1,10 @@
-# Response Time: 5.028026103973389
-Sure, here's an example refactoring:
+# Response Time: 5.056567907333374
+```
+// Code before refactoring
+JTable myTable = new JTable();
+JScrollPane scrollPane = myTable.createScrollPaneForTable(myTable);
 
-<<< Before refactoring:
-```
-JTable table = new JTable(data, columnNames);
-JScrollPane scrollPane = table.createScrollPaneForTable(table);
-```
-
->>> After refactoring:
-```
-JTable table = new JTable(data, columnNames);
-JScrollPane scrollPane = new JScrollPane(table);
+// Code after refactoring
+JTable myTable = new JTable();
+JScrollPane scrollPane = new JScrollPane(myTable);
 ```

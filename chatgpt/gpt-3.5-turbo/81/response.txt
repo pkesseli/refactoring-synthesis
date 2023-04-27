@@ -1,14 +1,10 @@
-# Response Time: 6.058496952056885
-Sure, here's an example refactoring for the deprecated method:
-
-<<< Before refactoring: 
+# Response Time: 4.634339094161987
 ```
+// Code before refactoring
 java.awt.List myList = new java.awt.List();
-int minWidth = myList.minimumSize(1).width;
-```
+myList.minimumSize(10);
 
->>> After refactoring: 
-```
+// Code after refactoring
 java.awt.List myList = new java.awt.List();
-int minWidth = myList.getMinimumSize(1).width;
+myList.getMinimumSize(10);
 ```

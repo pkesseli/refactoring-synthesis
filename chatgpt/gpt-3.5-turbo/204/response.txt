@@ -1,15 +1,8 @@
-# Response Time: 7.151946067810059
-Sure, here's an example refactoring:
+# Response Time: 4.835947513580322
+```
+// Code before refactoring
+Class<?> myClass = java.rmi.server.RMIClassLoader.loadClass("my.package.MyClass");
 
-<<< Before refactoring: 
-```
-String className = "com.example.MyClass";
-Class<?> clazz = RMIClassLoader.loadClass(className);
-```
-
->>> After refactoring: 
-```
-String className = "com.example.MyClass";
-String codebase = null; // or specify a codebase URL if needed
-Class<?> clazz = RMIClassLoader.loadClass(codebase, className);
+// Code after refactoring
+Class<?> myClass = java.rmi.server.RMIClassLoader.loadClass("my.package", "MyClass");
 ```

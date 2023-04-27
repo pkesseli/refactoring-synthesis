@@ -1,14 +1,10 @@
-# Response Time: 5.890071630477905
-Sure, here's an example refactoring for the deprecated method `java.awt.Scrollbar.setLineIncrement(int)`:
-
-<<< Before refactoring: 
+# Response Time: 4.340579986572266
 ```
+// Code before refactoring
 Scrollbar scrollbar = new Scrollbar();
 scrollbar.setLineIncrement(10);
-```
 
->>> After refactoring: 
-```
+// Code after refactoring
 Scrollbar scrollbar = new Scrollbar();
 scrollbar.setUnitIncrement(10);
 ```

@@ -1,16 +1,12 @@
-# Response Time: 6.205676078796387
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 5.8440635204315186
 ```
-JInternalFrame frame = new JInternalFrame("My Frame");
+// Code before refactoring
+JInternalFrame frame = new JInternalFrame();
 JMenuBar menuBar = new JMenuBar();
 frame.setMenuBar(menuBar);
-```
 
->>> After refactoring:
-```
-JInternalFrame frame = new JInternalFrame("My Frame");
+// Code after refactoring
+JInternalFrame frame = new JInternalFrame();
 JMenuBar menuBar = new JMenuBar();
 frame.setJMenuBar(menuBar);
 ```

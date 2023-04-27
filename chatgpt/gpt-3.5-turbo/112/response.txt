@@ -1,34 +1,10 @@
-# Response Time: 19.783007860183716
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 5.1141197681427
 ```
-import java.awt.TextField;
+// Code before refactoring
+java.awt.TextField textField = new java.awt.TextField();
+Dimension minimumSize = textField.minimumSize();
 
-public class Example {
-    public static void main(String[] args) {
-        TextField textField = new TextField();
-        int minWidth = textField.minimumSize().width;
-        int minHeight = textField.minimumSize().height;
-        System.out.println("Minimum size: " + minWidth + "x" + minHeight);
-    }
-}
+// Code after refactoring
+java.awt.TextField textField = new java.awt.TextField();
+Dimension minimumSize = textField.getMinimumSize();
 ```
-
->>> After refactoring: 
-```
-import java.awt.TextField;
-import java.awt.Dimension;
-
-public class Example {
-    public static void main(String[] args) {
-        TextField textField = new TextField();
-        Dimension minimumSize = textField.getMinimumSize();
-        int minWidth = minimumSize.width;
-        int minHeight = minimumSize.height;
-        System.out.println("Minimum size: " + minWidth + "x" + minHeight);
-    }
-}
-``` 
-
-In the original code, the `minimumSize()` method is used to get the minimum size of a `TextField` object. However, this method is deprecated and should be replaced with `getMinimumSize()`. In the refactored code, we import the `Dimension` class and use the `getMinimumSize()` method to get the minimum size of the `TextField` object. We then extract the width and height from the `Dimension` object and print them out.

@@ -1,2 +1,9 @@
-# Response Time: 7.080311059951782
-I'm sorry, but as a language model, I cannot provide code refactoring examples without a specific context or code snippet. Could you please provide me with more information or a code snippet to work with?
+# Response Time: 4.130770444869995
+```
+// Code before refactoring
+RegistryHandler registryHandler = new RegistryHandler();
+Registry registry = registryHandler.registryImpl(1099);
+
+// Code after refactoring
+Registry registry = LocateRegistry.getRegistry(1099);
+```

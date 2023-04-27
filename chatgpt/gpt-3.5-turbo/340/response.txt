@@ -1,32 +1,10 @@
-# Response Time: 18.49435782432556
-I'm happy to help! Here's an example of how you could refactor the deprecated method:
+# Response Time: 4.49128270149231
+```
+// Code before refactoring
+MetalComboBoxUI ui = new MetalComboBoxUI();
+ui.editablePropertyChanged(propertyChangeEvent);
 
-<<< Before refactoring:
+// Code after refactoring
+MetalComboBoxUI ui = new MetalComboBoxUI();
+ui.propertyChange(propertyChangeEvent);
 ```
-public void editablePropertyChanged(PropertyChangeEvent e) {
-    if (e.getPropertyName().equals("editable")) {
-        JComboBox comboBox = (JComboBox) e.getSource();
-        boolean editable = comboBox.isEditable();
-        comboBox.setEditable(!editable);
-    }
-}
-```
-
->>> After refactoring:
-```
-public void editablePropertyChanged(PropertyChangeEvent e) {
-    if (e.getPropertyName().equals("editable")) {
-        JComboBox comboBox = (JComboBox) e.getSource();
-        boolean editable = comboBox.isEditable();
-        comboBox.setEditor(new BasicComboBoxEditor() {
-            @Override
-            public void setEditable(boolean isEditable) {
-                super.setEditable(isEditable);
-                comboBox.setEditable(!isEditable);
-            }
-        });
-    }
-}
-```
-
-In this refactored code, we're using the `setEditor` method to set a new editor for the `JComboBox`. The new editor is an instance of `BasicComboBoxEditor`, which we've extended to override the `setEditable` method. In the overridden method, we call the superclass implementation to set the editable state of the editor, and then we toggle the editable state of the `JComboBox` itself. This achieves the same functionality as the original code, but without using the deprecated method.

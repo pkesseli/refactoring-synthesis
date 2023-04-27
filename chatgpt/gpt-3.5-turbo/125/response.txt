@@ -1,14 +1,8 @@
-# Response Time: 4.241185188293457
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 2.5059921741485596
 ```
-Window myWindow = new Window();
+// Code before refactoring
 myWindow.show();
-```
 
->>> After refactoring: 
-```
-Window myWindow = new Window();
+// Code after refactoring
 myWindow.setVisible(true);
 ```

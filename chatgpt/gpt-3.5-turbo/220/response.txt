@@ -1,19 +1,13 @@
-# Response Time: 17.470189094543457
-Sure, here's an example refactoring for the deprecated method `java.sql.Date.setSeconds(int)`:
+# Response Time: 7.402318954467773
+Sure, here's an example of how you can refactor your code to avoid using the deprecated `setSeconds` method:
 
-<<< Before refactoring:
 ```
+// Code before refactoring
 java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 date.setSeconds(30);
-```
 
->>> After refactoring:
+// Code after refactoring
+java.sql.Timestamp timestamp = new java.sql.Timestamp(System.currentTimeMillis());
+timestamp.setSeconds(30);
+java.sql.Date date = new java.sql.Date(timestamp.getTime());
 ```
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-java.util.Calendar calendar = java.util.Calendar.getInstance();
-calendar.setTime(date);
-calendar.set(java.util.Calendar.SECOND, 30);
-date.setTime(calendar.getTimeInMillis());
-```
-
-In this refactored code, we use a `java.util.Calendar` object to set the seconds of the `java.sql.Date` object. We first get the current time in milliseconds using `System.currentTimeMillis()`, create a new `java.sql.Date` object with that time, and then create a `java.util.Calendar` object and set its time to the `java.sql.Date` object. We then use the `set` method of the `java.util.Calendar` object to set the seconds to 30, and finally set the time of the `java.sql.Date` object to the time in milliseconds of the `java.util.Calendar` object. This achieves the same result as the deprecated `setSeconds` method, but using a non-deprecated method.

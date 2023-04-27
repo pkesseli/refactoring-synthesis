@@ -1,26 +1,12 @@
-# Response Time: 10.942707777023315
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 5.3767664432525635
 ```
-JFrame frame = new JFrame("My App");
+// Code before refactoring
+JFrame frame = new JFrame();
 JMenuBar menuBar = new JMenuBar();
-JMenu fileMenu = new JMenu("File");
-JMenuItem openItem = new JMenuItem("Open");
-fileMenu.add(openItem);
-menuBar.add(fileMenu);
+frame.setMenuBar(menuBar);
+
+// Code after refactoring
+JFrame frame = new JFrame();
+JMenuBar menuBar = new JMenuBar();
 frame.setJMenuBar(menuBar);
 ```
-
->>> After refactoring:
-```
-JFrame frame = new JFrame("My App");
-JMenuBar menuBar = new JMenuBar();
-JMenu fileMenu = new JMenu("File");
-JMenuItem openItem = new JMenuItem("Open");
-fileMenu.add(openItem);
-menuBar.add(fileMenu);
-frame.setJMenuBar(menuBar);
-``` 
-
-The code is the same before and after refactoring because the recommended replacement method `setJMenuBar()` was already being used.

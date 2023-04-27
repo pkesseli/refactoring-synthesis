@@ -1,22 +1,17 @@
-# Response Time: 6.264064073562622
-Sure, here's an example:
-
-<<< Before refactoring:
+# Response Time: 6.700682640075684
 ```
+// Code before refactoring
 public class MyTableView extends TableView {
-    @Override
-    protected TableCell createTableCell(Element elem) {
+    public TableCell createTableCell(Element elem) {
         return super.createTableCell(elem);
     }
 }
 ```
-
->>> After refactoring:
 ```
+// Code after refactoring
 public class MyTableView extends TableView {
-    @Override
-    public View create(Element elem) {
-        return getFactory().create(elem);
+    public View createRow() {
+        return new BoxView(null, View.Y_AXIS);
     }
 }
 ```

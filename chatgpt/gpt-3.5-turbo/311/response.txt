@@ -1,12 +1,8 @@
-# Response Time: 3.5872530937194824
-Sure, here's an example refactoring for the deprecated method javax.swing.JComponent.hide():
-
-<<< Before refactoring:
+# Response Time: 2.4910764694213867
 ```
+// Code before refactoring
 myComponent.hide();
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 myComponent.setVisible(false);
 ```

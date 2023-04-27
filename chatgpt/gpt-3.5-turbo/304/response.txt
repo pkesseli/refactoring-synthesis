@@ -1,14 +1,10 @@
-# Response Time: 4.361745357513428
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 3.6707067489624023
 ```
+// Code before refactoring
 JButton button = new JButton();
 button.setLabel("Click me");
-```
 
->>> After refactoring: 
-```
+// Code after refactoring
 JButton button = new JButton();
 button.setText("Click me");
 ```

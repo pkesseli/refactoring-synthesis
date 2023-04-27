@@ -1,18 +1,10 @@
-# Response Time: 10.58823299407959
-Sure, here's an example refactoring for the deprecated method:
-
-<<< Before refactoring:
+# Response Time: 4.485843658447266
 ```
+// Code before refactoring
 Signature signature = Signature.getInstance("SHA256withRSA");
 signature.setParameter("key", privateKey);
-signature.setParameter("format", "DER");
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 Signature signature = Signature.getInstance("SHA256withRSA");
-signature.setParameter(Signature.Parameter.KEY, privateKey);
-signature.setParameter(Signature.Parameter.FORMAT, "DER");
+signature.setParameter(SignatureParameter.KEY, privateKey);
 ```
-
-In the refactored code, we're using the `setParameter` method with the `Signature.Parameter` enum instead of passing in a string for the parameter name. This is the recommended way to use the method now that the old way is deprecated.

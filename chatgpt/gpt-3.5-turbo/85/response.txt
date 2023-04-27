@@ -1,14 +1,10 @@
-# Response Time: 5.460510015487671
-Sure, here's an example refactoring for the deprecated method java.awt.Menu.countItems():
-
-<<< Before refactoring:
+# Response Time: 4.089111804962158
 ```
+// Code before refactoring
 Menu menu = new Menu("File");
 int count = menu.countItems();
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 Menu menu = new Menu("File");
 int count = menu.getItemCount();
 ```

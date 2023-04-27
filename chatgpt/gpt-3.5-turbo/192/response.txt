@@ -1,16 +1,8 @@
-# Response Time: 10.844255924224854
-Sure, here's an example refactoring for the deprecated method `java.rmi.server.RemoteCall.done()`:
-
-<<< Before refactoring:
+# Response Time: 2.918891191482544
 ```
-RemoteCall remoteCall = ...;
+// Code before refactoring
 remoteCall.done();
-```
 
->>> After refactoring:
+// Code after refactoring
+// The method has no replacement, so it can be safely removed
 ```
-RemoteCall remoteCall = ...;
-// Do something else instead of calling remoteCall.done()
-``` 
-
-Since there is no replacement for the `done()` method and the Javadoc comment states that there is no alternative, the best approach would be to simply remove the call to `done()` and replace it with some other code that achieves the same result. The specific replacement code would depend on the context in which `done()` was being called and what it was being used for.

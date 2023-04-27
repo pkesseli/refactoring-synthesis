@@ -1,16 +1,8 @@
-# Response Time: 4.780632972717285
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.577474355697632
 ```
-MenuContainer menuContainer = ...;
-Event event = ...;
+// Code before refactoring
 menuContainer.postEvent(event);
-```
 
->>> After refactoring:
-```
-MenuContainer menuContainer = ...;
-Event event = ...;
+// Code after refactoring
 menuContainer.dispatchEvent(event);
 ```

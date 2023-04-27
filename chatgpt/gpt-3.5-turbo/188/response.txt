@@ -1,34 +1,26 @@
-# Response Time: 15.968355894088745
-Sure, here's an example refactoring for the deprecated `java.rmi.server.LogStream.write​(byte[], int, int)` method:
-
-<<< Before refactoring:
+# Response Time: 10.358086109161377
 ```
+// Code before refactoring
 import java.rmi.server.LogStream;
 
-public class MyServer {
-  private LogStream logStream;
-
-  public void writeToLog(byte[] data) {
-    logStream.write(data, 0, data.length);
-  }
+public class MyClass {
+    public void myMethod() {
+        LogStream logStream = LogStream.log("myLog");
+        byte[] bytes = "Hello World".getBytes();
+        logStream.write(bytes, 0, bytes.length);
+    }
 }
 ```
-
->>> After refactoring:
 ```
-import java.rmi.server.LogStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+// Code after refactoring
+import java.util.logging.Logger;
 
-public class MyServer {
-  private LogStream logStream;
+public class MyClass {
+    private static final Logger LOGGER = Logger.getLogger(MyClass.class.getName());
 
-  public void writeToLog(byte[] data) throws IOException {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    baos.write(data);
-    logStream.write(baos.toByteArray());
-  }
+    public void myMethod() {
+        byte[] bytes = "Hello World".getBytes();
+        LOGGER.info(new String(bytes));
+    }
 }
 ```
-
-In this refactored code, we use a `ByteArrayOutputStream` to write the `byte[]` data to a byte array, which we then pass to the `LogStream.write(byte[])` method. This avoids using the deprecated `LogStream.write(byte[], int, int)` method and ensures that our code will continue to work with future versions of Java.

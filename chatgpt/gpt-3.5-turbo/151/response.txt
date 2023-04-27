@@ -1,31 +1,21 @@
-# Response Time: 11.392405033111572
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 7.959858655929565
 ```
-Thread thread = new Thread(() -> {
-    // do some work
-});
+// Code before refactoring
+Thread thread = new Thread();
 thread.start();
 thread.suspend();
-```
 
->>> After refactoring:
-```
-Thread thread = new Thread(() -> {
-    synchronized (this) {
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    // do some work
-});
+// Code after refactoring
+Thread thread = new Thread();
 thread.start();
-synchronized (this) {
-    notify();
+// Use a boolean flag to control the thread's execution
+boolean isRunning = true;
+while (isRunning) {
+    // Do some work here
+    try {
+        Thread.sleep(1000);
+    } catch (InterruptedException e) {
+        // Handle the exception
+    }
 }
 ```
-
-In this refactored code, we use the `wait()` and `notify()` methods to pause and resume the thread instead of using `suspend()` and `resume()`. This avoids the deadlock-prone behavior of `suspend()` and ensures that the thread can be safely paused and resumed without causing frozen processes.

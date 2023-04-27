@@ -1,39 +1,8 @@
-# Response Time: 17.069498777389526
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.0905301570892334
 ```
-import java.sql.DriverManager;
-import java.io.PrintStream;
+// Code before refactoring
+DriverManager.setLogStream(System.out);
 
-public class Example {
-  public static void main(String[] args) {
-    try {
-      PrintStream logStream = new PrintStream("log.txt");
-      DriverManager.setLogStream(logStream);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-}
+// Code after refactoring
+DriverManager.setLogWriter(new PrintWriter(System.out));
 ```
-
->>> After refactoring:
-```
-import java.sql.DriverManager;
-import java.io.PrintWriter;
-import java.io.FileWriter;
-
-public class Example {
-  public static void main(String[] args) {
-    try {
-      PrintWriter logWriter = new PrintWriter(new FileWriter("log.txt"));
-      DriverManager.setLogWriter(logWriter);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-In this refactored code, we've replaced the deprecated `setLogStream` method with the recommended `setLogWriter` method. We've also updated the code to use a `PrintWriter` instead of a `PrintStream`, since that's what `setLogWriter` expects. Finally, we've wrapped the `FileWriter` in a `PrintWriter` to make it easier to write to the log file.

@@ -1,15 +1,10 @@
-# Response Time: 4.953965187072754
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.5360941886901855
 ```
+// Code before refactoring
 JPasswordField passwordField = new JPasswordField();
 String password = passwordField.getText();
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 JPasswordField passwordField = new JPasswordField();
-char[] passwordChars = passwordField.getPassword();
-String password = new String(passwordChars);
+char[] password = passwordField.getPassword();
 ```

@@ -1,14 +1,8 @@
-# Response Time: 13.205812931060791
-I'm sorry, but as a language model, I don't have access to your codebase or context. However, I can provide you with some general guidance on how to refactor deprecated code.
+# Response Time: 3.8731067180633545
+```
+// Code before refactoring
+int offset = multiTextUI.viewToModel(textComponent, point, bias);
 
-When a method is deprecated, it means that it is no longer recommended for use and may be removed in future versions of the library or framework. To refactor deprecated code, you should replace the deprecated method with a recommended alternative.
-
-In the case of the deprecated method javax.swing.plaf.multi.MultiTextUI.viewToModel​(JTextComponent, Point, Position.Bias[]), you should use the method javax.swing.text.JTextComponent.viewToModel​(Point, Position.Bias[]) instead.
-
-Here's an example of how you could refactor your code:
-
-<<< Before refactoring:
-int pos = multiTextUI.viewToModel(textComponent, point, bias);
-
->>> After refactoring:
-int pos = textComponent.viewToModel(point, bias);
+// Code after refactoring
+int offset = textComponent.viewToModel(point, bias);
+```

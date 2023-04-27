@@ -1,22 +1,8 @@
-# Response Time: 9.489894151687622
-Sure, here's an example refactoring for the deprecated `java.awt.List.clear()` method:
-
-<<< Before refactoring:
+# Response Time: 2.414461612701416
 ```
-List myList = new List();
-myList.add("item1");
-myList.add("item2");
-myList.add("item3");
+// Code before refactoring
 myList.clear();
-```
 
->>> After refactoring:
-```
-List myList = new List();
-myList.add("item1");
-myList.add("item2");
-myList.add("item3");
+// Code after refactoring
 myList.removeAll();
-``` 
-
-This refactoring replaces the deprecated `clear()` method with the recommended `removeAll()` method, which achieves the same result of removing all items from the list.
+```

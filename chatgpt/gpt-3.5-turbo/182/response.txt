@@ -1,58 +1,10 @@
-# Response Time: 23.47358202934265
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.919189453125
 ```
-import java.rmi.server.LogStream;
-import java.io.IOException;
-import java.io.OutputStream;
+// Code before refactoring
+LogStream logStream = LogStream.getDefaultStream();
+PrintStream printStream = new PrintStream(logStream.getOutputStream());
 
-public class MyServer {
-  private LogStream logStream;
-
-  public MyServer() {
-    try {
-      logStream = LogStream.log("myserver.log");
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void doSomething() {
-    OutputStream out = logStream.getOutputStream();
-    // do something with the output stream
-  }
-}
+// Code after refactoring
+LogStream logStream = LogStream.getDefaultStream();
+PrintStream printStream = new PrintStream(System.out);
 ```
-
->>> After refactoring:
-```
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
-public class MyServer {
-  private Logger logger;
-
-  public MyServer() {
-    try {
-      FileHandler fileHandler = new FileHandler("myserver.log");
-      SimpleFormatter formatter = new SimpleFormatter();
-      fileHandler.setFormatter(formatter);
-      logger = Logger.getLogger("MyServer");
-      logger.addHandler(fileHandler);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void doSomething() {
-    OutputStream out = logger.addHandler();
-    // do something with the output stream
-  }
-}
-```
-
-In this refactored code, we've replaced the deprecated `java.rmi.server.LogStream` class with the `java.util.logging.Logger` class. We create a `FileHandler` to write log messages to a file, and add it to the logger. Then, in the `doSomething()` method, we get an output stream from the logger and use it to write log messages.

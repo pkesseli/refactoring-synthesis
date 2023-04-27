@@ -1,30 +1,8 @@
-# Response Time: 13.230130910873413
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 5.761001110076904
 ```
-import com.sun.management.OperatingSystemMXBean;
-import java.lang.management.ManagementFactory;
+// Code before refactoring
+long freeMemory = ((com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getFreePhysicalMemorySize();
 
-public class MemoryChecker {
-    public static void main(String[] args) {
-        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-        long freeMemory = osBean.getFreePhysicalMemorySize();
-        System.out.println("Free memory: " + freeMemory);
-    }
-}
-```
-
->>> After refactoring: 
-```
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
-
-public class MemoryChecker {
-    public static void main(String[] args) {
-        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-        long freeMemory = osBean.getFreeMemorySize();
-        System.out.println("Free memory: " + freeMemory);
-    }
-}
+// Code after refactoring
+long freeMemory = ((com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getFreeMemorySize();
 ```

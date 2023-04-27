@@ -1,36 +1,23 @@
-# Response Time: 12.972413063049316
-Sure, here's an example refactoring for the deprecated `java.awt.TextField.preferredSize()` method:
-
-<<< Before refactoring:
+# Response Time: 7.617268800735474
 ```
+// Code before refactoring
 import java.awt.TextField;
 
-public class MyTextField extends TextField {
-    public MyTextField(int columns) {
-        super(columns);
-    }
-
-    @Override
-    public Dimension preferredSize() {
-        return super.preferredSize();
+public class Example {
+    public static void main(String[] args) {
+        TextField textField = new TextField();
+        textField.preferredSize();
     }
 }
 ```
-
->>> After refactoring:
 ```
+// Code after refactoring
 import java.awt.TextField;
 
-public class MyTextField extends TextField {
-    public MyTextField(int columns) {
-        super(columns);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return super.getPreferredSize();
+public class Example {
+    public static void main(String[] args) {
+        TextField textField = new TextField();
+        textField.getPreferredSize();
     }
 }
 ```
-
-In the refactored code, we've simply changed the method name from `preferredSize()` to `getPreferredSize()`, which is the replacement method recommended in the deprecation comment.

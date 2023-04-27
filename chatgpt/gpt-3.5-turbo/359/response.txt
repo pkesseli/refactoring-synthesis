@@ -1,16 +1,8 @@
-# Response Time: 7.252626895904541
-Sure, here's an example refactoring:
+# Response Time: 3.346571922302246
+```
+// Code before refactoring
+int offset = textComponent.viewToModel(point);
 
-<<< Before refactoring:
-```
-JTextComponent textComponent = new JTextComponent();
-Point point = new Point(10, 20);
-int modelIndex = textComponent.viewToModel(point);
-```
-
->>> After refactoring:
-```
-JTextComponent textComponent = new JTextComponent();
-Point2D point = new Point2D.Double(10, 20);
-int modelIndex = textComponent.viewToModel2D(point);
+// Code after refactoring
+int offset = textComponent.viewToModel2D(point);
 ```

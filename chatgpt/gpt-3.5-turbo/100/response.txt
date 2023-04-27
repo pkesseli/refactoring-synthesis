@@ -1,14 +1,8 @@
-# Response Time: 5.456540822982788
-Sure, here's an example refactoring for the deprecated method java.awt.Scrollbar.getPageIncrement():
+# Response Time: 3.1950137615203857
+```
+// Code before refactoring
+int pageIncrement = myScrollbar.getPageIncrement();
 
-<<< Before refactoring:
-```
-Scrollbar scrollbar = new Scrollbar();
-int pageIncrement = scrollbar.getPageIncrement();
-```
-
->>> After refactoring:
-```
-Scrollbar scrollbar = new Scrollbar();
-int blockIncrement = scrollbar.getBlockIncrement();
+// Code after refactoring
+int pageIncrement = myScrollbar.getBlockIncrement();
 ```

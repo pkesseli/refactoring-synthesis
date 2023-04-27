@@ -1,16 +1,8 @@
-# Response Time: 6.782207012176514
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.9931578636169434
 ```
-Component myComponent = new Component();
-Event myEvent = new Event(myComponent, 0, 1);
+// Code before refactoring
 myComponent.deliverEvent(myEvent);
-```
 
->>> After refactoring:
-```
-Component myComponent = new Component();
-Event myEvent = new Event(myComponent, 0, 1);
+// Code after refactoring
 myComponent.dispatchEvent(myEvent);
 ```

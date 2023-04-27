@@ -1,2 +1,10 @@
-# Response Time: 3.2246620655059814
-I'm happy to help you with that! However, I need more context to provide a specific refactoring example. Could you please provide me with the code snippet where you are encountering this issue?
+# Response Time: 6.163919925689697
+```
+// Code before refactoring
+javax.swing.RepaintManager.addDirtyRegion(myApplet, x, y, width, height);
+
+// Code after refactoring
+JComponent comp = (JComponent) myApplet.getContentPane();
+Rectangle dirtyRegion = new Rectangle(x, y, width, height);
+comp.repaint(dirtyRegion);
+```

@@ -1,15 +1,10 @@
-# Response Time: 7.075778245925903
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 5.185992479324341
 ```
+// Code before refactoring
 SSLSession session = sslSocket.getSession();
 X509Certificate[] peerCertificates = (X509Certificate[]) session.getPeerCertificateChain();
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 SSLSession session = sslSocket.getSession();
 Certificate[] peerCertificates = session.getPeerCertificates();
-X509Certificate[] x509Certificates = Arrays.copyOf(peerCertificates, peerCertificates.length, X509Certificate[].class);
 ```

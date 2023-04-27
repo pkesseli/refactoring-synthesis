@@ -1,14 +1,10 @@
-# Response Time: 5.183245897293091
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 4.305472373962402
 ```
+// Code before refactoring
 DatagramSocket socket = new DatagramSocket();
 int ttl = socket.getTTL();
-```
 
->>> After refactoring: 
-```
+// Code after refactoring
 DatagramSocket socket = new DatagramSocket();
 int ttl = socket.getTimeToLive();
 ```

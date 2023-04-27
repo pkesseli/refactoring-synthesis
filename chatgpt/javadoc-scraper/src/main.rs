@@ -54,10 +54,10 @@ fn main() {
                 " The related deprecation comment in Javadoc is \"{deprecation_comment}\"\n"
             );
         }
-        query += "Give me a refactoring example in the following format:\n";
-        query += "<<< Before refactoring: <code here>\n";
-        query += ">>> After refactoring: <code here>\n";
-        query += "Example code should be a straight-line code block.";
+        query += "I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:\n";
+        query += "```\n<code before refactoring here>\n```\n";
+        query += "```\n<code after refactoring here>\n```\n\n";
+        query += "Example code should be a straight-line code block. Don't provide extra explanation.";
 
         let query_dir = queries_dir.join(&idx.to_string());
         if !query_dir.is_dir() {

@@ -1,20 +1,10 @@
-# Response Time: 10.29596734046936
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.800258636474609
 ```
+// Code before refactoring
 JMenuBar menuBar = new JMenuBar();
-JMenu fileMenu = new JMenu("File");
-menuBar.add(fileMenu);
 Component component = menuBar.getComponentAtIndex(0);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 JMenuBar menuBar = new JMenuBar();
-JMenu fileMenu = new JMenu("File");
-menuBar.add(fileMenu);
 Component component = menuBar.getComponent(0);
 ```
-
-In the refactored code, the deprecated `getComponentAtIndex` method has been replaced with the recommended `getComponent` method. This should ensure that the code continues to work correctly and avoids any issues that may arise from using deprecated methods.

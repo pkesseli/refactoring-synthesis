@@ -1,16 +1,8 @@
-# Response Time: 5.835381031036377
-Sure, here's an example refactoring:
+# Response Time: 3.529883623123169
+```
+// Code before refactoring
+myComponent.requestDefaultFocus();
 
-<<< Before refactoring:
-```
-JButton myButton = new JButton("Click me");
-myButton.requestDefaultFocus();
-```
-
->>> After refactoring:
-```
-JButton myButton = new JButton("Click me");
-FocusTraversalPolicy policy = myButton.getFocusTraversalPolicy();
-Component defaultComponent = policy.getDefaultComponent(myButton);
-defaultComponent.requestFocus();
+// Code after refactoring
+myComponent.getFocusTraversalPolicy().getDefaultComponent(myComponent.getParent()).requestFocus();
 ```

@@ -1,44 +1,19 @@
-# Response Time: 17.041316032409668
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 6.684497833251953
 ```
-Thread myThread = new Thread(() -> {
-    while (true) {
-        // do some work
-    }
-});
+// Code before refactoring
+Thread thread = new Thread();
+thread.start();
+// Some code here
+thread.stop();
 
-myThread.start();
-
-// stop the thread after 5 seconds
-try {
-    Thread.sleep(5000);
-    myThread.stop(); // deprecated method
-} catch (InterruptedException e) {
-    e.printStackTrace();
-}
-```
-
->>> After refactoring:
-```
+// Code after refactoring
 volatile boolean stopThread = false;
-
-Thread myThread = new Thread(() -> {
+Thread thread = new Thread(() -> {
     while (!stopThread) {
-        // do some work
+        // Code to be executed repeatedly
     }
 });
-
-myThread.start();
-
-// stop the thread after 5 seconds
-try {
-    Thread.sleep(5000);
-    stopThread = true;
-} catch (InterruptedException e) {
-    e.printStackTrace();
-}
+thread.start();
+// Some code here
+stopThread = true;
 ```
-
-In this refactored code, we've replaced the deprecated `Thread.stop()` method with a boolean flag `stopThread`. The thread's `while` loop now checks this flag to determine whether to continue running or not. When we want to stop the thread, we simply set the flag to `true`. This allows the thread to exit its `while` loop and terminate gracefully.

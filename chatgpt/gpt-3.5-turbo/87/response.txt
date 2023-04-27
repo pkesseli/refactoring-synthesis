@@ -1,16 +1,10 @@
-# Response Time: 6.125667095184326
-Sure, here's an example refactoring:
+# Response Time: 4.529176712036133
+```
+// Code before refactoring
+Event event = new Event(this, Event.ACTION_EVENT, null);
+postEvent(event);
 
-<<< Before refactoring:
-```
-MenuComponent menuComponent = new MenuComponent();
-Event event = new Event(menuComponent, 0, null);
-menuComponent.postEvent(event);
-```
-
->>> After refactoring:
-```
-MenuComponent menuComponent = new MenuComponent();
-Event event = new Event(menuComponent, 0, null);
-menuComponent.dispatchEvent(event);
+// Code after refactoring
+Event event = new Event(this, Event.ACTION_EVENT, null);
+dispatchEvent(event);
 ```

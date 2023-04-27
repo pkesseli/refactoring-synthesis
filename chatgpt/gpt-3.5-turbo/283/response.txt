@@ -1,17 +1,8 @@
-# Response Time: 12.668549060821533
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.074296712875366
 ```
-CounterMonitorMBean counterMonitor = new CounterMonitor();
-long derivedGaugeTimeStamp = counterMonitor.getDerivedGaugeTimeStamp();
-```
+// Code before refactoring
+long timeStamp = counterMonitorMBean.getDerivedGaugeTimeStamp();
 
->>> After refactoring:
+// Code after refactoring
+long timeStamp = counterMonitorMBean.getDerivedGaugeTimeStamp(objectName);
 ```
-CounterMonitorMBean counterMonitor = new CounterMonitor();
-ObjectName objectName = counterMonitor.getObservedObject();
-long derivedGaugeTimeStamp = counterMonitor.getDerivedGaugeTimeStamp(objectName);
-``` 
-
-In the refactored code, we first get the `ObjectName` of the observed object using the `getObservedObject()` method. Then, we pass this `ObjectName` to the `getDerivedGaugeTimeStamp()` method to get the derived gauge timestamp. This is in line with the deprecation comment in the Javadoc, which recommends using the `getDerivedGaugeTimeStamp(ObjectName)` method instead of the deprecated `getDerivedGaugeTimeStamp()` method.

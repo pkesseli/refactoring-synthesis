@@ -1,15 +1,9 @@
-# Response Time: 11.525415897369385
-Sure, here's an example refactoring for the deprecated method `java.awt.event.KeyEvent.setModifiers(int)`:
-
-<<< Before refactoring:
+# Response Time: 5.9321534633636475
 ```
-KeyEvent event = new KeyEvent(source, id, when, modifiers, keyCode, keyChar, keyLocation);
-event.setModifiers(KeyEvent.SHIFT_MASK);
-```
+// Code before refactoring
+KeyEvent event = new KeyEvent(component, id, when, modifiers, keyCode, keyChar, keyLocation);
+event.setModifiers(KeyEvent.CTRL_MASK);
 
->>> After refactoring:
+// Code after refactoring
+KeyEvent event = new KeyEvent(component, id, when, KeyEvent.CTRL_MASK | modifiers, keyCode, keyChar, keyLocation);
 ```
-KeyEvent event = new KeyEvent(source, id, when, modifiers | KeyEvent.SHIFT_MASK, keyCode, keyChar, keyLocation);
-``` 
-
-In the refactored code, we use the bitwise OR operator (`|`) to combine the existing `modifiers` value with the `KeyEvent.SHIFT_MASK` constant, which represents the shift key modifier. This achieves the same result as calling the deprecated `setModifiers` method.

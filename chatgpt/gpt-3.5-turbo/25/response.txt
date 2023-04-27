@@ -1,19 +1,16 @@
-# Response Time: 6.383770942687988
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 6.881869316101074
 ```
-public void keyUp(Event event, int key) {
-    // do something
+// Code before refactoring
+public void keyPressed(KeyEvent e) {
+    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        myComponent.keyUp(e, e.getKeyCode());
+    }
 }
-```
 
->>> After refactoring:
-```
-public void processKeyEvent(KeyEvent event) {
-    if (event.getID() == KeyEvent.KEY_RELEASED) {
-        int key = event.getKeyCode();
-        // do something
+// Code after refactoring
+public void keyPressed(KeyEvent e) {
+    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        myComponent.processKeyEvent(e);
     }
 }
 ```

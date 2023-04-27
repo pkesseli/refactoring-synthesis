@@ -1,14 +1,10 @@
-# Response Time: 5.582529067993164
-Sure, here's an example refactoring:
+# Response Time: 4.356215238571167
+```
+// Code before refactoring
+CounterMonitor counterMonitor = new CounterMonitor();
+counterMonitor.setThreshold(10);
 
-<<< Before refactoring:
-```
-CounterMonitor counterMonitor = new CounterMonitor(mbeanServer, objectName, counterAttribute);
-counterMonitor.setThreshold(threshold);
-```
-
->>> After refactoring:
-```
-CounterMonitor counterMonitor = new CounterMonitor(mbeanServer, objectName, counterAttribute);
-counterMonitor.setInitThreshold(threshold);
+// Code after refactoring
+CounterMonitor counterMonitor = new CounterMonitor();
+counterMonitor.setInitThreshold(10);
 ```

@@ -1,12 +1,8 @@
-# Response Time: 3.6640610694885254
-Sure, here's an example refactoring:
+# Response Time: 3.8448524475097656
+```
+// Code before refactoring
+KeyStroke keyStroke = KeyStroke.getKeyStroke('A', true);
 
-<<< Before refactoring:
-```
-KeyStroke keyStroke = KeyStroke.getKeyStroke('A', false);
-```
-
->>> After refactoring:
-```
+// Code after refactoring
 KeyStroke keyStroke = KeyStroke.getKeyStroke('A');
 ```

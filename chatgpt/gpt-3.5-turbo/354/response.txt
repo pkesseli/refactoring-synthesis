@@ -1,12 +1,8 @@
-# Response Time: 4.296110153198242
-Sure, here's an example refactoring:
+# Response Time: 3.811718702316284
+```
+// Code before refactoring
+Component focusOwner = SwingUtilities.findFocusOwner(component);
 
-<<< Before refactoring:
-```
-Component focusOwner = SwingUtilities.findFocusOwner(this);
-```
-
->>> After refactoring:
-```
+// Code after refactoring
 Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 ```

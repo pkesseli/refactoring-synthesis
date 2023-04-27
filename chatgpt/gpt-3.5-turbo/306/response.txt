@@ -1,24 +1,12 @@
-# Response Time: 15.913081884384155
-I'm sorry, but as an AI language model, I cannot provide code refactoring examples in a straight-line code block format. However, I can provide you with some general guidance on how to refactor code that uses deprecated methods:
-
-1. Identify the deprecated method and its replacement.
-2. Replace all instances of the deprecated method with the replacement method.
-3. Test the refactored code to ensure that it still works as expected.
-
-In the case of the javax.swing.FocusManager.isFocusManagerEnabled() method, you would replace it with KeyboardFocusManager.getDefaultFocusTraversalPolicy(). Here's an example of how you might refactor code that uses the deprecated method:
-
-Before refactoring:
+# Response Time: 4.799908876419067
 ```
+// Code before refactoring
 if (FocusManager.isFocusManagerEnabled()) {
     // do something
 }
-```
 
-After refactoring:
-```
-if (KeyboardFocusManager.getDefaultFocusTraversalPolicy() != null) {
+// Code after refactoring
+if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalPolicy() != null) {
     // do something
 }
-``` 
-
-Note that this is just an example, and the specific refactoring you need to do will depend on the context in which the deprecated method is being used.
+```

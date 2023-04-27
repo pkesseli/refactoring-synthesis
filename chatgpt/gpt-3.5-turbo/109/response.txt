@@ -1,29 +1,10 @@
-# Response Time: 12.538658142089844
-Sure, here's an example refactoring for the deprecated method:
-
-<<< Before refactoring: 
+# Response Time: 4.276709079742432
 ```
-import java.awt.TextArea;
+// Code before refactoring
+TextArea textArea = new TextArea();
+Dimension preferredSize = textArea.preferredSize();
 
-public class Example {
-    public static void main(String[] args) {
-        TextArea textArea = new TextArea();
-        textArea.preferredSize();
-    }
-}
+// Code after refactoring
+TextArea textArea = new TextArea();
+Dimension preferredSize = textArea.getPreferredSize();
 ```
-
->>> After refactoring: 
-```
-import java.awt.TextArea;
-import java.awt.Dimension;
-
-public class Example {
-    public static void main(String[] args) {
-        TextArea textArea = new TextArea();
-        Dimension preferredSize = textArea.getPreferredSize();
-    }
-}
-```
-
-In the refactored code, we've replaced the deprecated `preferredSize()` method with the recommended `getPreferredSize()` method. We've also added an import statement for the `Dimension` class, which is the return type of `getPreferredSize()`.

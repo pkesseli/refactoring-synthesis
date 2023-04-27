@@ -1,14 +1,10 @@
-# Response Time: 4.725975036621094
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.198779821395874
 ```
+// Code before refactoring
 Scrollbar scrollbar = new Scrollbar();
 scrollbar.setPageIncrement(10);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 Scrollbar scrollbar = new Scrollbar();
 scrollbar.setBlockIncrement(10);
 ```

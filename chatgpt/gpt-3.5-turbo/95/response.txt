@@ -1,20 +1,14 @@
-# Response Time: 10.119688034057617
-Sure, here's an example refactoring for the deprecated method:
-
-<<< Before refactoring:
+# Response Time: 8.33424162864685
 ```
+// Code before refactoring
 Rectangle rect = new Rectangle(10, 10, 50, 50);
 if (rect.inside(20, 20)) {
     System.out.println("Point is inside rectangle");
 }
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 Rectangle rect = new Rectangle(10, 10, 50, 50);
 if (rect.contains(20, 20)) {
     System.out.println("Point is inside rectangle");
 }
 ```
-
-In the refactored code, we've replaced the deprecated `inside` method with the recommended `contains` method. This will ensure that our code remains compatible with future versions of Java.

@@ -1,14 +1,10 @@
-# Response Time: 6.613978862762451
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 6.690323114395142
 ```
+// Code before refactoring
 Rectangle rect = new Rectangle(10, 10, 50, 50);
 rect.reshape(20, 20, 60, 60);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 Rectangle rect = new Rectangle(10, 10, 50, 50);
 rect.setBounds(20, 20, 60, 60);
 ```

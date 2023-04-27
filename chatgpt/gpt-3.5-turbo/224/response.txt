@@ -1,14 +1,10 @@
-# Response Time: 4.591311931610107
-Sure, here's an example:
-
-<<< Before refactoring:
+# Response Time: 4.64387845993042
 ```
+// Code before refactoring
 ResultSet rs = statement.executeQuery(query);
-BigDecimal bigDecimal = rs.getBigDecimal(1, 2);
-```
+BigDecimal result = rs.getBigDecimal(1, 2);
 
->>> After refactoring:
-```
+// Code after refactoring
 ResultSet rs = statement.executeQuery(query);
-BigDecimal bigDecimal = rs.getBigDecimal("column_name");
+BigDecimal result = rs.getBigDecimal("column_name");
 ```

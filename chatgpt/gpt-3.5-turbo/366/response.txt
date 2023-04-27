@@ -1,29 +1,39 @@
-# Response Time: 20.095272064208984
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 25.04921245574951
 ```
-public void paint(Graphics g, Shape a) {
-    Rectangle r = (Rectangle) a;
-    JTextComponent c = (JTextComponent) getContainer();
-    TextUI mapper = c.getUI();
-    Rectangle vr = c.getVisibleRect();
-    int startOffset = mapper.viewToModel(c, new Point(r.x, r.y));
-    int endOffset = mapper.viewToModel(c, new Point(r.x + r.width, r.y + r.height));
-    drawUnselectedText(g, r.x, r.y, startOffset, endOffset);
+// Code before refactoring
+public void paint(Graphics g, Shape shape) {
+    int start = getStartOffset();
+    int end = getEndOffset();
+    Rectangle r;
+    try {
+        r = shape.getBounds();
+        for (int i = start; i < end; i++) {
+            Shape s = modelToView(i, Position.Bias.Forward, shape);
+            if (s.intersects(r)) {
+                drawUnselectedText((Graphics2D) g, i, s);
+            }
+        }
+    } catch (BadLocationException e) {
+        e.printStackTrace();
+    }
 }
-```
 
->>> After refactoring:
-```
-public void paint(Graphics g, Shape a) {
-    Rectangle r = (Rectangle) a;
-    JTextComponent c = (JTextComponent) getContainer();
-    TextUI mapper = c.getUI();
-    Rectangle2D vr = c.getVisibleRect();
-    int startOffset = mapper.viewToModel(c, new Point2D.Float(r.x, r.y));
-    int endOffset = mapper.viewToModel(c, new Point2D.Float(r.x + r.width, r.y + r.height));
-    Graphics2D g2d = (Graphics2D) g;
-    drawUnselectedText(g2d, (float) r.x, (float) r.y, startOffset, endOffset);
+// Code after refactoring
+public void paint(Graphics g, Shape shape) {
+    int start = getStartOffset();
+    int end = getEndOffset();
+    Rectangle r;
+    try {
+        r = shape.getBounds();
+        Graphics2D g2d = (Graphics2D) g;
+        for (int i = start; i < end; i++) {
+            Shape s = modelToView(i, Position.Bias.Forward, shape);
+            if (s.intersects(r)) {
+                drawUnselectedText(g2d, (float) s.getBounds2D().getX(), (float) s.getBounds2D().getY(), i, i + 1);
+            }
+        }
+    } catch (BadLocationException e) {
+        e.printStackTrace();
+    }
 }
 ```

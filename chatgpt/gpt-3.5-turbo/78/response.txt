@@ -1,23 +1,12 @@
-# Response Time: 13.991492748260498
-Sure, here's an example refactoring for the deprecated method java.awt.List.delItems​(int, int):
-
-<<< Before refactoring:
+# Response Time: 6.751376152038574
 ```
-List myList = new List();
-myList.add("Item 1");
-myList.add("Item 2");
-myList.add("Item 3");
-myList.delItems(1, 2);
+// Code before refactoring
+myList.delItems(2, 5);
 ```
-
->>> After refactoring:
 ```
-List myList = new List();
-myList.add("Item 1");
-myList.add("Item 2");
-myList.add("Item 3");
-myList.remove(1);
-myList.remove(1);
+// Code after refactoring
+int[] indicesToDelete = {2, 3, 4, 5};
+for (int i = indicesToDelete.length - 1; i >= 0; i--) {
+    myList.remove(indicesToDelete[i]);
+}
 ```
-
-In this refactoring, we've replaced the deprecated delItems method with the remove method, which is not deprecated and achieves the same result. We've also split the original call to delItems into two separate calls to remove, since the delItems method removed multiple items at once, whereas remove only removes one item at a time.

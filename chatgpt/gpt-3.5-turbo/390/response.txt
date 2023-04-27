@@ -1,2 +1,14 @@
-# Response Time: 3.595503807067871
-Sorry, as an AI language model, I cannot provide a refactoring example in the format you requested without any context or code to work with. Could you please provide me with more information or code so that I can assist you better?
+# Response Time: 7.28335428237915
+```
+// Code before refactoring
+InputStream message = ...;
+InputStream token = ...;
+MessageProp prop = new MessageProp(0, false);
+context.verifyMIC(message, token, prop);
+
+// Code after refactoring
+byte[] message = ...;
+byte[] token = ...;
+MessageProp prop = new MessageProp(0, false);
+context.verifyMIC(message, 0, message.length, token, 0, token.length, prop);
+```

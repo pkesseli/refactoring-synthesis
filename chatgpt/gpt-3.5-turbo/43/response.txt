@@ -1,29 +1,8 @@
-# Response Time: 10.77818489074707
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.453094959259033
 ```
-import java.awt.Component;
-import java.awt.Dimension;
+// Code before refactoring
+myComponent.resize(new Dimension(500, 300));
 
-public class MyComponent extends Component {
-    public void resize(Dimension d) {
-        setSize(d);
-    }
-}
+// Code after refactoring
+myComponent.setSize(new Dimension(500, 300));
 ```
-
->>> After refactoring:
-```
-import java.awt.Component;
-import java.awt.Dimension;
-
-public class MyComponent extends Component {
-    @Override
-    public void setSize(Dimension d) {
-        super.setSize(d);
-    }
-}
-```
-
-In the refactored code, we've replaced the deprecated `resize` method with an overridden `setSize` method. This is the recommended replacement according to the deprecation comment in the Javadoc.

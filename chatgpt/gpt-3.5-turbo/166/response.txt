@@ -1,19 +1,15 @@
-# Response Time: 9.924211978912354
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 9.156482458114624
 ```
-MulticastSocket mcastSocket = new MulticastSocket();
+// Code before refactoring
+byte ttl = (byte) 64;
 DatagramPacket packet = new DatagramPacket(data, data.length, group, port);
-mcastSocket.send(packet, ttl);
-```
+multicastSocket.send(packet, ttl);
 
->>> After refactoring:
-```
-MulticastSocket mcastSocket = new MulticastSocket();
+// Code after refactoring
+byte ttl = (byte) 64;
+int currentTTL = multicastSocket.getTimeToLive();
+multicastSocket.setTimeToLive(ttl);
 DatagramPacket packet = new DatagramPacket(data, data.length, group, port);
-int oldTTL = mcastSocket.getTimeToLive();
-mcastSocket.setTimeToLive(newTTL);
-mcastSocket.send(packet);
-mcastSocket.setTimeToLive(oldTTL);
+multicastSocket.send(packet);
+multicastSocket.setTimeToLive(currentTTL);
 ```

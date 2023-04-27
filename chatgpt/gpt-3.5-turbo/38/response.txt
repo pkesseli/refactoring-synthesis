@@ -1,15 +1,8 @@
-# Response Time: 4.696167945861816
-Sure, here's an example refactoring:
+# Response Time: 2.5348727703094482
+```
+// Code before refactoring
+myComponent.nextFocus();
 
-<<< Before refactoring:
-```
-Component nextComponent = componentToFocus.nextFocus();
-if (nextComponent != null) {
-    nextComponent.requestFocus();
-}
-```
-
->>> After refactoring:
-```
-componentToFocus.transferFocus();
+// Code after refactoring
+myComponent.transferFocus();
 ```

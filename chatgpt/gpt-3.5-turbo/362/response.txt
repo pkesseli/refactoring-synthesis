@@ -1,26 +1,16 @@
-# Response Time: 16.400599241256714
-I'm sorry, but as a language model, I don't have access to your codebase or know what programming language you are using. However, I can provide you with a general example of how to refactor deprecated code:
-
-<<< Before refactoring: 
+# Response Time: 9.749009847640991
 ```
-import javax.swing.text.PasswordView;
+// Code before refactoring
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    PasswordView passwordView = new PasswordView();
+    passwordView.drawSelectedText(g, 0, 0, 10, 10);
+}
 
-public class Example {
-    public void drawPasswordView(PasswordView passwordView, Graphics graphics, int x, int y, int width, int height) {
-        passwordView.drawSelectedText(graphics, x, y, width, height);
-    }
+// Code after refactoring
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    PlainView plainView = new PlainView();
+    plainView.drawSelectedText((Graphics2D) g, 0, 0, 10, 10);
 }
 ```
-
->>> After refactoring: 
-```
-import javax.swing.text.PlainView;
-
-public class Example {
-    public void drawPasswordView(PlainView plainView, Graphics2D graphics, float x, float y, int startOffset, int endOffset) {
-        plainView.drawSelectedText(graphics, x, y, startOffset, endOffset);
-    }
-}
-```
-
-In this example, we replaced the deprecated `PasswordView.drawSelectedText` method with the recommended `PlainView.drawSelectedText` method. We also updated the method signature to match the new method's parameters.

@@ -1,12 +1,8 @@
-# Response Time: 4.122082948684692
-Sure, here's an example refactoring for the deprecated `move` method in Java:
-
-<<< Before refactoring:
+# Response Time: 2.8329451084136963
 ```
+// Code before refactoring
 myComponent.move(x, y);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 myComponent.setLocation(x, y);
 ```

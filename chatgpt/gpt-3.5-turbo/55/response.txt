@@ -1,20 +1,14 @@
-# Response Time: 13.730726957321167
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 5.301966905593872
 ```
-DataFlavor flavor = new DataFlavor("text/plain;charset=utf-8");
-if (flavor.equals("text/plain;charset=utf-8")) {
+// Code before refactoring
+DataFlavor flavor = ...
+if (flavor.equals("text/plain")) {
+    // do something
+}
+
+// Code after refactoring
+DataFlavor flavor = ...
+if (flavor.isMimeTypeEqual("text/plain")) {
     // do something
 }
 ```
-
->>> After refactoring:
-```
-DataFlavor flavor = new DataFlavor("text/plain;charset=utf-8");
-if (flavor.isMimeTypeEqual("text/plain;charset=utf-8")) {
-    // do something
-}
-``` 
-
-In the original code, the `equals` method is used to compare a `DataFlavor` object to a `String`. This is now deprecated, and the Javadoc recommends using the `isMimeTypeEqual` method instead. In the refactored code, we've replaced the `equals` method with `isMimeTypeEqual` to comply with the updated API.

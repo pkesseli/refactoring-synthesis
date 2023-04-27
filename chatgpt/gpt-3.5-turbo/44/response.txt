@@ -1,12 +1,8 @@
-# Response Time: 3.043003797531128
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.267387866973877
 ```
+// Code before refactoring
 myComponent.show();
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 myComponent.setVisible(true);
 ```

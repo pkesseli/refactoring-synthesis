@@ -1,18 +1,12 @@
-# Response Time: 13.095848083496094
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 8.354488611221313
 ```
-URL url = new URL("http", "www.example.com", 80, "/path/to/resource");
+// Code before refactoring
+URL url = new URL("https://example.com");
 URLStreamHandler handler = url.getURLStreamHandler();
-handler.setURL(url, "http", "www.example.com", 80, "/path/to/resource", null);
-```
+handler.setURL(url, "https", "example.com", 443, null, null);
 
->>> After refactoring:
-```
-URL url = new URL("http", "www.example.com", 80, "/path/to/resource");
+// Code after refactoring
+URL url = new URL("https://example.com");
 URLStreamHandler handler = url.getURLStreamHandler();
-handler.setURL(url, "http", "www.example.com", 80, null, "/path/to/resource", null, null);
-``` 
-
-In the refactored code, the `setURL` method is called with two additional `null` parameters to match the updated method signature.
+handler.setURL(url, "https", "example.com", 443, null, null, null, null);
+```
