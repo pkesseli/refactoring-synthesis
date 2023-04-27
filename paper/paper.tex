@@ -915,8 +915,36 @@ synthesis techniques.
 %%\end{figure}
 
 %% As future work we aim to also collect components and sketches from the  unit tests for the updated library.
- 
-\section{Synthesising the refactoring}\label{sec:encoding}
+
+\section{Program synthesis based refactoring} \label{sec:encoding}
+
+Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
+%
+The vast search space is particularly a challenge in the current
+setting given that, in the absence of any additional guidance, the
+entire \texttt{java.lang} could be considered when synthesising the
+refactoring.  In order to prune the search space, we make use of type information and Javadoc code hints.
+
+
+At a high level, the new code is obtained by composing methods
+that are accessible from that respective location. 
+Consequently, we take inspiration from component-based program synthesis,
+which weaves together components from a library
+(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
+
+For component-based synthesis, real-world
+APIs can quickly lead to very large component libraries. %, making synthesis infeasible.
+For illustration, in our setting, indiscriminately adding all members
+found in \texttt{java.lang} would make synthesis infeasible. % (see experimental results in Section~\ref{sec:experimental-results}).
+%
+Previous works have used type information to make components-based synthesis
+feasible in the presence of large component
+libraries~\cite{DBLP:conf/popl/FengM0DR17}.  However, as shown by our
+experimental results in
+Section~\ref{sec:experimental-results}, the use of types in our setting is still insufficient.
+
+
+%\section{Synthesising the refactoring}\label{sec:encoding}
 
 We make use of a CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, where we
 iteratively improve a candidate refactoring (generated using one of the component libraries) until it obeys a given specification.
