@@ -729,39 +729,31 @@ synthesis techniques.
 
 \section{Program synthesis based refactoring} \label{sec:encoding}
 
-Once the component library is built, for the actual synthesis,
-we use a counterexample-guided iterative process that enables us
-to keep refining a candidate refactoring until we are happy with it.
-The refinement is based on the results provided by 
-fuzz testing.
-We provide more details about %
-the synthesis process in Section~\ref{sec:encoding}.
+%% Once the component library is built, for the actual synthesis,
+%% we use a counterexample-guided iterative process that enables us
+%% to keep refining a candidate refactoring until we are happy with it.
+%% The refinement is based on the results provided by 
+%% fuzz testing.
+%% We provide more details about %
+%% the synthesis process in Section~\ref{sec:encoding}.
 
 
-Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
-%
-The vast search space is particularly a challenge in the current
-setting given that, in the absence of any additional guidance, the
-entire \texttt{java.lang} could be considered when synthesising the
-refactoring.  In order to prune the search space, we make use of type information and Javadoc code hints.
+%% At a high level, the new code is obtained by composing methods
+%% that are accessible from that respective location. 
+%% Consequently, we take inspiration from component-based program synthesis,
+%% which weaves together components from a library
+%% (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
 
-
-At a high level, the new code is obtained by composing methods
-that are accessible from that respective location. 
-Consequently, we take inspiration from component-based program synthesis,
-which weaves together components from a library
-(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
-
-For component-based synthesis, real-world
-APIs can quickly lead to very large component libraries. %, making synthesis infeasible.
-For illustration, in our setting, indiscriminately adding all members
-found in \texttt{java.lang} would make synthesis infeasible. % (see experimental results in Section~\ref{sec:experimental-results}).
-%
-Previous works have used type information to make components-based synthesis
-feasible in the presence of large component
-libraries~\cite{DBLP:conf/popl/FengM0DR17}.  However, as shown by our
-experimental results in
-Section~\ref{sec:experimental-results}, the use of types in our setting is still insufficient.
+%% For component-based synthesis, real-world
+%% APIs can quickly lead to very large component libraries. %, making synthesis infeasible.
+%% For illustration, in our setting, indiscriminately adding all members
+%% found in \texttt{java.lang} would make synthesis infeasible. % (see experimental results in Section~\ref{sec:experimental-results}).
+%% %
+%% Previous works have used type information to make components-based synthesis
+%% feasible in the presence of large component
+%% libraries~\cite{DBLP:conf/popl/FengM0DR17}.  However, as shown by our
+%% experimental results in
+%% Section~\ref{sec:experimental-results}, the use of types in our setting is still insufficient.
 
 
 %\section{Synthesising the refactoring}\label{sec:encoding}
@@ -783,7 +775,6 @@ In each iteration of the synthesis process, there are two phases, a synthesis ph
 the original code on a finite set of inputs. Then, the verification phase tries to find a new {\em counterexample input} that distinguishes between the current candidate refactoring and the original code. If it manages, this input is added to the set of finite inputs used by the next synthesis phase, and if it fails, then the current candidate is indeed a solution refactoring.
 
 We next show how we encode the problem corresponding to each of the two phases so that it can be solved with fuzz testing. 
-% As we want to start with a high level view
 
 \paragraph{The synthesis phase} In this phase, we have 
 a finite set of input examples $\{\vec{i_1} \cdots \vec{i_n}\}$ and we must find a candidate refactoring
@@ -869,53 +860,13 @@ which means that we may fail to find a distinguishing input even if one
 exists.
 
 
-%% notion of program equivalence.  While this is undecidable in
-%% general, our synthesis procedure in the verification phase this problem is restricted to
-%% checking that \var{Orig} and \var{Candidate} are equivalent for a .
-
-
-%% The fuzzer will find an input for which the original and refactored code
-%% produce a different result.
-
-
-
-%% - Performing the synthesis. Complex bit: synthesising method invocations for methods that contain loops.
-
-%% \begin{enumerate}
-%% \item We seed the templates/snippets for the synthesis library using the following two strategies:
-%%   \begin{itemize}
-%% \item Use deprecated block messages.
-%% \item Use the unit tests for the new library. As opposed to the comments in libraries,
-%%   the unit tests are syntactically valid.
-%%   \end{itemize}
-
-%% \item Use the seeded templates to generate the refactoring.
-%%   \begin{itemize}
-%% \item Look at checking equivalence in the presence of loops.
-%%   \end{itemize}
-%%   \end{enumerate}
-
-\subsection{Checking program equivalence for a certain input}\label{sec:equiv}
+\section{Checking program equivalence for a certain input}\label{sec:equiv}
 
 A core part of the synthesis procedure is the $equivalent(P_1(\vec{i}), P_2(\vec{i}))$ predicate,
 which checks that the original code $P_1$ and a candidate refactoring $P_2$
 are equivalent for a given input $\vec{i}$.
-%% Naively, this would be checked by comparing the results returned by the
-%% \var{Orig} and \var{Candidate}. However, that is not enough as
-%% we must also consider the heap representation. We will discuss this in
-%% Section~\ref{sec:equiv}.
-%% In Section~\ref{sec:encoding}, we use \var{equivalent(Orig(x),
-%%   Candidate(x))} to denote equivalence checking for \var{Orig} and
-%% \var{Candidate} on concrete input \var{x}.
+This is used for both the symbolic and the neural approach.
 In this section, we provide details on how we check this equivalence.
-
-
-%% First, this function needs
-%% to check whether for input \var{x}, the outputs of the original and
-%% candidate refactored programs are the same.  Moreover, any realistic
-%% Java program makes modifications to the heap. Consequently,
-%% \var{equivalent} must check that heap is being handled in the same
-%% manner in both programs.
 
 
 We start by introducing some notation:
@@ -1143,17 +1094,20 @@ static fields of the classes loaded by both programs.
 For \var{P_1} and \var{P_2}, there are no aliases, therefore:
 \[
 \begin{aligned}[t]
-  \var{aliasEquivClass(liveVar(P_1) \cup staticFields(loadedClasses(P_1))} &= \emptyset\\
-  \var{aliasEquivClass(liveVar(P_2) \cup staticFields(loadedClasses(P_2))} &= \emptyset
+  &\var{aliasEquivClass(liveVar(P_1)} ~\cup \\
+   & \var{staticFields(loadedClasses(P_1))} = \emptyset\\
+  &\var{aliasEquivClass(liveVar(P_2)} ~\cup \\
+   & \var{staticFields(loadedClasses(P_2))} = \emptyset 
 \end{aligned}
 \]
 %
 However, for \var{P_3} and \var{P_4} we have:
 \[
 \begin{aligned}[t]
-  \var{aliasEquivClass(liveVar(P_3) \cup staticFields(loadedClasses(P_3))} &= \emptyset\\
-  \var{aliasEquivClass(liveVar(P_4) \cup staticFields(loadedClasses(P_4))} &= \\
-  \qquad \{\{dim1, dim2\}\} &
+  &\var{aliasEquivClass(liveVar(P_3)}~ \cup\\
+  &\var{staticFields(loadedClasses(P_3))} = \emptyset\\
+  &\var{aliasEquivClass(liveVar(P_4)} ~\cup\\
+  &\var{staticFields(loadedClasses(P_4))} = \{\{dim1, dim2\}\} 
 \end{aligned}
 \]
 In \var{P_4}, the alising relation induces one equivalence class, namely \var{\{dim1, dim2\}}.
