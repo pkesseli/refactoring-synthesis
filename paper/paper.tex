@@ -42,7 +42,8 @@
   language={Java},
   numbers=left,
   stepnumber=1,
-  basicstyle=\footnotesize
+  basicstyle=\footnotesize,
+  xleftmargin=5.0ex
 }
 \usepackage{enumitem}      % adjust spacing in enums
 %\usepackage[colorlinks=true,allcolors=blue,breaklinks,draft=false]{hyperref}   % hyperlinks, including DOIs and URLs in bibliography
@@ -372,7 +373,8 @@ symbolic code generation methods to outperform general-purpose LLMs at a much lo
 
 
 
-\section{Overview of the problem} \label{sec:overview}
+\section{Overview of the problem and seeding of the component library} \label{sec:components-seeding}
+% \label{sec:overview}
 
 %% At a high level, the new code is obtained by composing methods
 %% that are accessible from that respective location. 
@@ -380,8 +382,8 @@ symbolic code generation methods to outperform general-purpose LLMs at a much lo
 %% which weaves together components from a library
 %% (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
 
-As mentioned in Section~\ref{sec:intro}, we take advantage of 
-the code hints provided in the Javadoc comments when generating the refactoring. In particular, we use them to build a library of components that we can then use to generate the refactoring.
+As mentioned in Section~\ref{sec:intro}, for both approaches, we want to use  
+the code hints provided in the Javadoc. In particular, we use these code hints to build a library of components that we can then use to generate the refactoring.
 For our running example in Figure~\ref{ex:deprecated-method-other}, the source code for the \texttt{getHours} method in class \texttt{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests replacing the deprecated \texttt{getHours}
 with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
 
@@ -392,7 +394,8 @@ with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
  * @return  the hour represented by this date.
  * @see     java.util.Calendar
  * @deprecated As of JDK version 1.1,
- * replaced by {@code Calendar.get(Calendar.HOUR_OF_DAY)}.
+ * replaced by {@code Calendar.get
+ *              (Calendar.HOUR_OF_DAY)}.
  */  
 \end{lstlisting}
 \caption{Code hints for the running example.}
@@ -429,22 +432,17 @@ and/or the current object. Adding the latter components to the library will
 significantly slow down the code generation process by
 adding infeasible programs to the search space.
 
-In Section~\ref{sec:components-seeding}, we provide in-depth details about the
-seeding of the component library and how to tackle the above challenges. 
-At a high level, the process is guided by types and code hints.
+%% In Section~\ref{sec:components-seeding}, we provide in-depth details about the
+%% seeding of the component library and how to tackle the above challenges. 
+%% At a high level, the process is guided by types and code hints.
 
-\section{{\bf Seeding of the component library}}\label{sec:components-seeding}
-% Our synthesis engine is component based, meaning that, in order to generate new code, it makes use of a library of components.
-As mentioned in Section~\ref{sec:overview}, a critical aspect of our technique is the construction
-of the component library. 
-%For each required refactoring, we start by building the components library.
-%This step is critical as
-%% the size of the component library has a direct impact
-%% on the size of the search space for the respective refactoring.
-If the component library is too small, meaning that it doesn't contain all
-the required components, then synthesis will fail to find a refactoring.
-Similarly, if it contains too many components, then synthesis quickly becomes infeasible
-due to the large search space.
+%% \section{{\bf Seeding of the component library}}\label{sec:components-seeding}
+%% As mentioned in Section~\ref{sec:overview}, a critical aspect of our technique is the construction
+%% of the component library. 
+%% If the component library is too small, meaning that it doesn't contain all
+%% the required components, then synthesis will fail to find a refactoring.
+%% Similarly, if it contains too many components, then synthesis quickly becomes infeasible
+%% due to the large search space.
 
 Consequently, in our approach, the component library is dynamically built for each refactoring
 such that it only contains components specific to that particular use case.
@@ -454,13 +452,8 @@ We designed two versions of the library, differentiated by the seeding guidance:
   by both Javadoc code hints and types.
 \item For the {\bf Types-library} the seeding is only guided by types.
 \end{itemize}  
-%% two versions of the component library
-%% To further increase our chances of finding a refactoring fast, we start with a restricted {\em core library} (see Section~\ref{sec:core-library}).
-%% If we fail to find a refactoring within a given amount of time, we then increase the size of the library by adding additional components (see Section~\ref{sec:extend-library}).
-
 
 \subsection{CodeHints-library} \label{sec:core-library}
-%As mentioned before, we make use of type and code hints to seed the component library.
 In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \texttt{date} of type \texttt{Date} as the input to the code to be refactored, and the integer \texttt{hour} as the output. Generally speaking, the refactoring technique will weave together components from the component library that consume the inputs and generate the required outputs.
 
 Throughout the seeding process, we keep track of the following sets:
