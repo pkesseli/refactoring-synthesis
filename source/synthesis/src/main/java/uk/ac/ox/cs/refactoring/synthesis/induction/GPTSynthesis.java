@@ -5,13 +5,13 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Map.Entry;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -89,7 +89,7 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
 
     var before = parseHints(hints.before);
-    var after = parseHints(hints.after);
+    // var after = parseHints(hints.after);
 
     if (before instanceof BlockStmt) {
       final Map<String, IExpression> environment = new HashMap<>();
@@ -106,6 +106,12 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       }
       environment.putAll(remapper.arguments);
 
+
+      var arguments = resolveArguments(environment);
+      var resolvedHints = arguments + hints.after;
+      System.out.println("resolved hints:\n" + resolvedHints);
+      var after = parseHints(resolvedHints);
+
       final var candidate = new SnippetCandidate();
       final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses,
           environment, candidate);
@@ -121,7 +127,7 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
         if (instructionExpression == null) {
           continue;
         }
-        candidate.Block.Statements.add(new ExpressionStatement(convertor.convertExpression(expression)));
+        candidate.Block.Statements.add(new ExpressionStatement(instructionExpression));
   
       }
 
@@ -173,5 +179,16 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
 
     throw new NoSuchElementException("hints not parsable");
+  }
+
+  private String resolveArguments(final Map<String, IExpression> environment) {
+  
+    var result = "";
+
+    for (Entry<String, IExpression> entry : environment.entrySet()) {
+      result += entry.getValue().getType().asString() + " " + entry.getKey() + ";\n";
+    }
+
+    return result;
   }
 }

@@ -39,31 +39,35 @@ public class ParameterMappingVisitor extends VoidVisitorAdapter<Void> {
   @Override
   public void visit(final MethodCallExpr n, final Void unused) {
     super.visit(n, unused);
-    final ResolvedMethodDeclaration method = n.resolve();
+    // final ResolvedMethodDeclaration method = n.resolve();
 
-    final MethodIdentifier methodIdentifier = MethodIdentifiers.create(method);
+    // final MethodIdentifier methodIdentifier = MethodIdentifiers.create(method);
 
-    if (!methodToRefactor.FullyQualifiedClassName.equals(methodIdentifier.FullyQualifiedClassName)) {
+    // if (!methodToRefactor.FullyQualifiedClassName.equals(methodIdentifier.FullyQualifiedClassName)) {
+    //   return;
+    // }
+    // if (!methodToRefactor.MethodName.equals(methodIdentifier.MethodName)) {
+    //   return;
+    // }
+    // // no zip function
+    // if (methodToRefactor.FullyQualifiedParameterTypeNames.size() != methodIdentifier.FullyQualifiedParameterTypeNames.size()) {
+    //   return;
+    // }
+    // for (int i = 0; i < methodToRefactor.FullyQualifiedParameterTypeNames.size(); i++) {
+    //   if (!methodToRefactor.FullyQualifiedParameterTypeNames.get(i).equals(methodIdentifier.FullyQualifiedParameterTypeNames.get(i))) {
+    //     return;
+    //   }
+    // }
+    if (!n.getName().asString().equals(methodToRefactor.MethodName)) {
       return;
-    }
-    if (!methodToRefactor.MethodName.equals(methodIdentifier.MethodName)) {
-      return;
-    }
-    // no zip function
-    if (methodToRefactor.FullyQualifiedParameterTypeNames.size() != methodIdentifier.FullyQualifiedParameterTypeNames.size()) {
-      return;
-    }
-    for (int i = 0; i < methodToRefactor.FullyQualifiedParameterTypeNames.size(); i++) {
-      if (!methodToRefactor.FullyQualifiedParameterTypeNames.get(i).equals(methodIdentifier.FullyQualifiedParameterTypeNames.get(i))) {
-        return;
-      }
     }
 
     final List<Expression> arguments = n.getArguments();
     for (int index = 0; index < arguments.size(); index++) {
       if (arguments.get(index) instanceof NameExpr) {
         final NameExpr argument = (NameExpr) arguments.get(index);
-        final IExpression argumentExpr = new Parameter(index, getType(argument));
+        // final IExpression argumentExpr = new Parameter(index, getType(argument));
+        final IExpression argumentExpr = new Parameter(index, javaParser.parseType(methodToRefactor.FullyQualifiedParameterTypeNames.get(index)).getResult().get());
         this.arguments.put(argument.getNameAsString(), argumentExpr);
       }
     }
@@ -72,7 +76,8 @@ public class ParameterMappingVisitor extends VoidVisitorAdapter<Void> {
       final Expression scope = n.getScope().get();
       if (scope instanceof NameExpr) {
         final NameExpr receiver = (NameExpr) scope;
-        final IExpression receiverExpr = This.create(getType(receiver));
+        // final IExpression receiverExpr = This.create(getType(receiver));
+        final IExpression receiverExpr = This.create(javaParser.parseType(methodToRefactor.FullyQualifiedClassName).getResult().get());
         this.arguments.put(receiver.getNameAsString(), receiverExpr);
       }
     }

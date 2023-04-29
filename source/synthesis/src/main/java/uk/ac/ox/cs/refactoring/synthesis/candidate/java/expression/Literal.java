@@ -6,6 +6,7 @@ import com.github.javaparser.ast.expr.DoubleLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.type.Type;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.ExecutionContext;
@@ -62,6 +63,18 @@ public class Literal implements IExpression {
     } else {
       expression = new NullLiteralExpr();
     }
+    this.type = type;
+    this.value = value;
+  }
+
+  /**
+   * Generate a String literal expression
+   * @param value {@link #value}
+   * @param type {@link #type}
+   * @param unused An unused placeholder to distinguish this constructor with the regular one
+   */
+  public Literal(final String value, final Type type, final Void unused) {
+    expression = new StringLiteralExpr(value);
     this.type = type;
     this.value = value;
   }

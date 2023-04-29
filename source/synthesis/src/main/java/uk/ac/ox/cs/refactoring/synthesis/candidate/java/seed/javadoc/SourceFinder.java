@@ -300,7 +300,7 @@ public class SourceFinder {
         .flatMap(SourceFinder::expandInnerTypes)
         .filter(new MatchesMethodIdentifier(symbolResolver, typeSolver, methodToRefactor))
         .map(TypeDeclaration::getMethods).flatMap(Collection::stream)
-        .filter(new MatchesSignature(typeSolver, methodToRefactor)).findAny().orElse(null);
+        .filter(new SimplyMatchesSignature(typeSolver, methodToRefactor)).findAny().get();
   }
 
   private static Stream<TypeDeclaration<?>> expandInnerTypes(final TypeDeclaration<?> type) {

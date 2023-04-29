@@ -128,7 +128,9 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
   @Override
   public void visit(final StringLiteralExpr n, final Void arg) {
     // TODO
-    throw new IllegalArgumentException("string literals are not supported");
+    // System.out.println(n.asString());
+    stack.add(new Literal(n.asString(), getType(n), null));
+    // throw new IllegalArgumentException("string literals are not supported");
   }
 
   @Override
@@ -244,12 +246,15 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
 
   @Override
   public void visit(final MethodCallExpr n, final Void unused) {
-    super.visit(n, unused);
+    // super.visit(n, unused);
     final ResolvedMethodDeclaration method = n.resolve();
     final IExpression instance;
     if (method.isStatic()) {
+      // do not visit scope when the method call is static
+      n.getArguments().forEach(p -> p.accept(this, unused));
       instance = null;
     } else {
+      super.visit(n, unused);
       if (!n.getScope().isPresent()) {
         final ResolvedReferenceTypeDeclaration typeDeclaration = method.declaringType();
         final ResolvedReferenceType type = ReferenceTypeImpl.undeterminedParameters(typeDeclaration, typeSolver);

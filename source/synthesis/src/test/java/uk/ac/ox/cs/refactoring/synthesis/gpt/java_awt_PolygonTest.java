@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 class java_awt_PolygonTest {
   @Test
   void getBoundingBox() throws Exception {
-    assertThat(synthesiseGPT("Polygon polygon = new Polygon(new int[]{0, 5, 10}, new int[]{0, 10, 5}, 3);\nRectangle boundingBox = polygon.getBoundingBox();\n\n", "Polygon polygon = new Polygon(new int[]{0, 5, 10}, new int[]{0, 10, 5}, 3);\nRectangle boundingBox = polygon.getBounds();\n", "java.awt.Polygon", "getBoundingBox"), anyOf(contains("getBounds")));
+    assertThat(synthesiseGPT("this.getBoundingBox();\n\n", "this.getBounds();\n", "java.awt.Polygon", "getBoundingBox"), anyOf(contains("getBounds")));
   }
 
   @Test
   void inside() throws Exception {
-    assertThat(synthesiseGPT("Polygon polygon = new Polygon(xPoints, yPoints, nPoints);\nboolean isInside = polygon.inside(x, y);\n\n", "Polygon polygon = new Polygon(xPoints, yPoints, nPoints);\nboolean isInside = polygon.contains(x, y);\n", "java.awt.Polygon", "inside", "int", "int"), anyOf(contains("contains")));
+    assertThat(synthesiseGPT("if (this.inside(a, b)) {\n    // do something\n}\n\n", "if (this.contains(a, b)) {\n    // do something\n}\n", "java.awt.Polygon", "inside", "int", "int"), anyOf(contains("contains")));
   }
 }
