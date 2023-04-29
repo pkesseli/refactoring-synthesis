@@ -10,6 +10,8 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -85,16 +87,16 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       return null;
     }
 
-    var block = parserContext.JavaParser.parseBlock(hints.after);
-    final var candidate = new SnippetCandidate();
-    final Map<String, IExpression> environment = new HashMap<>();
+
+    var before = parseHints(hints.before);
+    var after = parseHints(hints.after);
+
+    if (before instanceof BlockStmt) {
+      final Map<String, IExpression> environment = new HashMap<>();
 
 
-    if (hints.before != null) {
-      var original = parserContext.JavaParser.parseBlock(hints.before);
       final var remapper = new ParameterMapping(hints.methodToRefactor, javaParser);
-
-      for (final var originalStatement: original.getResult().get().getStatements()) {
+      for (final var originalStatement: ((BlockStmt) before).getStatements()) {
 
         final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
             method, originalStatement);
@@ -102,42 +104,42 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
         remapper.checkExpression(expression);
       }
-
-
-
       environment.putAll(remapper.arguments);
-    }
 
-    final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses,
-        environment, candidate);
+      final var candidate = new SnippetCandidate();
+      final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses,
+          environment, candidate);
 
+      for (final var suggestedStatement: ((BlockStmt) after).getStatements()) {
 
-    for (final var suggestedStatement: block.getResult().get().getStatements()) {
-
-      final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
-          method, suggestedStatement);
-      final var expression = statement.asExpressionStmt().getExpression();
-
-      System.out.println("parsed expression: " + expression.toString());
-      final var instructionExpression = convertor.convertExpression(expression);
-      if (instructionExpression == null) {
-        continue;
+        final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
+            method, suggestedStatement);
+        final var expression = statement.asExpressionStmt().getExpression();
+  
+        System.out.println("parsed expression: " + expression.toString());
+        final var instructionExpression = convertor.convertExpression(expression);
+        if (instructionExpression == null) {
+          continue;
+        }
+        candidate.Block.Statements.add(new ExpressionStatement(convertor.convertExpression(expression)));
+  
       }
-      candidate.Block.Statements.add(new ExpressionStatement(convertor.convertExpression(expression)));
 
-    }
+      System.out.println(candidate.Block.toNode().toString());
+      System.out.println("done");
 
-    System.out.println(candidate.Block.toNode().toString());
-    System.out.println("done");
+      try {
+        @SuppressWarnings("unchecked")
+        Candidate res = (Candidate) candidate;
+        listener.initial(res);
+        return res;
+      } catch (ClassCastException e) {
+        throw new NoSuchElementException("only SnippetCandidate is supported");
+      }
 
 
-    try {
-      @SuppressWarnings("unchecked")
-      Candidate res = (Candidate) candidate;
-      listener.initial(res);
-      return res;
-    } catch (ClassCastException e) {
-      throw new NoSuchElementException("only SnippetCandidate is supported");
+    } else {
+      throw new NoSuchElementException("not implemented");
     }
   }
 
@@ -145,5 +147,31 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples)
       throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchElementException, NoSuchFieldException {
     throw new NoSuchElementException();
+  }
+
+  /**
+   * 
+   * @param hints
+   * @return either a {@link BlockStmt} or a {@link CompilationUnit}
+   */
+  private Object parseHints(final String hints) {
+
+    ParseResult<BlockStmt> block = parserContext.JavaParser.parseBlock(hints);
+    if (block.getResult().isPresent()) {
+      return block.getResult().get();
+    }
+
+    block = parserContext.JavaParser.parseBlock("{" + hints + "}");
+    if (block.getResult().isPresent()) {
+      return block.getResult().get();
+    }
+
+    final ParseResult<CompilationUnit> unit = parserContext.JavaParser.parse(hints);
+    if (unit.getResult().isPresent()) {
+      return unit.getResult().get();
+    }
+
+
+    throw new NoSuchElementException("hints not parsable");
   }
 }
