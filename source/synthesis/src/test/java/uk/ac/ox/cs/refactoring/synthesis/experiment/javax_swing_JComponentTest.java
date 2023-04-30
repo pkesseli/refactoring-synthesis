@@ -23,7 +23,7 @@ class javax_swing_JComponentTest {
     assertThat(synthesiseAlias("javax.swing.JComponent", "getNextFocusableComponent"), anyOf(contains("FocusTraversalPolicy")));
   }
 
-  // @Test
+  // (at)Test
   // void hide() throws Exception {
   //   assertThat(synthesiseAlias("javax.swing.JComponent", "hide"));
   // }
