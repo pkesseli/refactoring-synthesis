@@ -13,6 +13,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
@@ -123,6 +124,11 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
   @Override
   public void visit(final IntegerLiteralExpr n, final Void arg) {
     stack.add(new Literal(n.asNumber(), getType(n)));
+  }
+
+  @Override
+  public void visit(final BooleanLiteralExpr n, final Void arg) {
+    stack.add(new Literal(n.getValue(), getType(n)));
   }
 
   @Override
