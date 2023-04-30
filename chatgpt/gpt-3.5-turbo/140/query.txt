@@ -10,7 +10,7 @@ The method java.lang.Package.getPackage​(String) is deprecated.
  a child loader.  A more robust approach is to use the
  ClassLoader.getDefinedPackage(java.lang.String) method which returns
  a Package for the specified class loader."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.getPackage​(a)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

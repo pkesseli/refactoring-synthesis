@@ -1,11 +1,8 @@
-# Response Time: 6.151596546173096
+# Response Time: 3.0597193241119385
 ```
 // Code before refactoring
-int pos = 10;
-Rectangle rect = textUI.modelToView(textComponent, pos);
+Rectangle rect = textUI.modelToView(a, b);
 
 // Code after refactoring
-int pos = 10;
-Position.Bias[] bias = new Position.Bias[1];
-Rectangle rect = textUI.modelToView2D(textComponent, pos, bias);
+Rectangle2D rect = textUI.modelToView2D(a, b, Position.Bias.Forward);
 ```

@@ -1,12 +1,9 @@
-# Response Time: 6.159945011138916
+# Response Time: 2.2476868629455566
 ```
 // Code before refactoring
-Monitor monitor = new Monitor();
-ObjectName objectName = new ObjectName("com.example:type=MyMonitor");
-monitor.setObservedObject(objectName);
-
+this.setObservedObject(a);
+```
+```
 // Code after refactoring
-Monitor monitor = new Monitor();
-ObjectName objectName = new ObjectName("com.example:type=MyMonitor");
-monitor.addObservedObject(objectName);
+this.addObservedObject(a);
 ```

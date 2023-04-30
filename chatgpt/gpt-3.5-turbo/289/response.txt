@@ -1,8 +1,10 @@
-# Response Time: 3.716106414794922
+# Response Time: 4.760926961898804
 ```
 // Code before refactoring
-long timeStamp = gaugeMonitorMBean.getDerivedGaugeTimeStamp();
+long timeStamp = this.getDerivedGaugeTimeStamp();
 
 // Code after refactoring
-long timeStamp = gaugeMonitorMBean.getDerivedGaugeTimeStamp(objectName);
+ObjectName objectName = this.getObservedObject();
+long timeStamp = ((GaugeMonitorMBean) this.getMBeanServerConnection().newProxyInstance(objectName,
+                GaugeMonitorMBean.class, false)).getDerivedGaugeTimeStamp(objectName);
 ```

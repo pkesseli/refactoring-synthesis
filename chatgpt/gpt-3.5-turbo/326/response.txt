@@ -1,8 +1,8 @@
-# Response Time: 2.655822515487671
+# Response Time: 1.7920756340026855
 ```
 // Code before refactoring
-myTable.sizeColumnsToFit(true);
+this.sizeColumnsToFit(a);
 
 // Code after refactoring
-myTable.doLayout();
+this.doLayout();
 ```

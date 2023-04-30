@@ -1,9 +1,9 @@
-# Response Time: 5.076064825057983
+# Response Time: 3.568446636199951
 ```
 // Code before refactoring
-Object observedObject = monitorMBean.getObservedObject();
+Object observedObject = this.getObservedObject();
 
 // Code after refactoring
-Object[] observedObjects = monitorMBean.getObservedObjects();
+Object[] observedObjects = this.getObservedObjects();
 Object observedObject = observedObjects.length > 0 ? observedObjects[0] : null;
 ```

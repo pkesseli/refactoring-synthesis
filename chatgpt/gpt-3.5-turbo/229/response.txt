@@ -1,12 +1,9 @@
-# Response Time: 6.124607563018799
+# Response Time: 2.5015594959259033
 ```
 // Code before refactoring
-java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-int day = time.getDay();
+int day = this.getDay();
 
 // Code after refactoring
-java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-java.util.Calendar calendar = java.util.Calendar.getInstance();
-calendar.setTime(time);
-int day = calendar.get(java.util.Calendar.DAY_OF_WEEK);
+LocalDate localDate = LocalDate.now();
+int day = localDate.getDayOfMonth();
 ```

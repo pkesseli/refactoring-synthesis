@@ -1,9 +1,9 @@
-# Response Time: 3.8881943225860596
+# Response Time: 2.6506199836730957
 ```
 // Code before refactoring
-int cursorType = myFrame.getCursorType();
+int cursorType = this.getCursorType();
 
 // Code after refactoring
-Cursor cursor = myFrame.getCursor();
+Cursor cursor = this.getCursor();
 int cursorType = cursor.getType();
 ```

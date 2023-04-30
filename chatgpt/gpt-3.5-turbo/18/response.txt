@@ -1,8 +1,8 @@
-# Response Time: 2.5911383628845215
+# Response Time: 1.6089401245117188
 ```
 // Code before refactoring
-myComponent.enable(false);
+this.enable(a);
 
 // Code after refactoring
-myComponent.setEnabled(false);
+this.setEnabled(a);
 ```

@@ -1,23 +1,8 @@
-# Response Time: 7.617268800735474
+# Response Time: 2.1908788681030273
 ```
 // Code before refactoring
-import java.awt.TextField;
+Dimension preferredSize = this.preferredSize();
 
-public class Example {
-    public static void main(String[] args) {
-        TextField textField = new TextField();
-        textField.preferredSize();
-    }
-}
-```
-```
 // Code after refactoring
-import java.awt.TextField;
-
-public class Example {
-    public static void main(String[] args) {
-        TextField textField = new TextField();
-        textField.getPreferredSize();
-    }
-}
+Dimension preferredSize = this.getPreferredSize();
 ```

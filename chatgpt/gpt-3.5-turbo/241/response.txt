@@ -1,10 +1,9 @@
-# Response Time: 7.504015207290649
+# Response Time: 2.842005491256714
 ```
 // Code before refactoring
-AtomicReferenceArray<String> array = new AtomicReferenceArray<>(new String[]{"foo", "bar", "baz"});
-array.weakCompareAndSet(1, "bar", "qux");
-
+this.weakCompareAndSet(a, b, c);
+```
+```
 // Code after refactoring
-AtomicReferenceArray<String> array = new AtomicReferenceArray<>(new String[]{"foo", "bar", "baz"});
-array.weakCompareAndSetPlain(1, "bar", "qux");
+this.weakCompareAndSetPlain(a, b, c);
 ```

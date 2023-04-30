@@ -1,10 +1,9 @@
-# Response Time: 5.759467124938965
+# Response Time: 2.916846990585327
 ```
 // Code before refactoring
-AtomicIntegerArray arr = new AtomicIntegerArray(10);
-arr.weakCompareAndSet(0, 1, 2);
-
+this.weakCompareAndSet(a, b, c);
+```
+```
 // Code after refactoring
-AtomicIntegerArray arr = new AtomicIntegerArray(10);
-arr.weakCompareAndSetPlain(0, 1, 2);
+this.weakCompareAndSetPlain(a, b, c);
 ```

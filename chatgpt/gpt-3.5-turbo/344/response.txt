@@ -1,8 +1,8 @@
-# Response Time: 4.500526666641235
+# Response Time: 2.4225080013275146
 ```
 // Code before refactoring
-Rectangle rect = multiTextUI.modelToView(textComponent, pos, bias);
+this.modelToView(a, b, c);
 
 // Code after refactoring
-Rectangle2D rect = textUI.modelToView2D(textComponent, pos, bias);
+this.modelToView2D(a, b, c);
 ```

@@ -1,10 +1,15 @@
-# Response Time: 5.478233337402344
+# Response Time: 4.576196193695068
 ```
-// Code before refactoring
-StringValueExp stringValueExp = new StringValueExp("someValue");
-stringValueExp.setMBeanServer(mBeanServer);
-
-// Code after refactoring
-StringValueExp stringValueExp = new StringValueExp("someValue");
-stringValueExp.setMBeanServerName(mBeanServer.getDefaultDomain());
+<code before refactoring here>
+```
+```
+this.setMBeanServer(a);
+```
+```
+<code after refactoring here>
+```
+```
+// Use MBeanServerFactory to get the platform MBeanServer
+MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+this.setMBeanServer(mbs);
 ```

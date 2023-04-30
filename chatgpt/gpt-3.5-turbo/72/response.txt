@@ -1,14 +1,9 @@
-# Response Time: 6.166721820831299
+# Response Time: 1.9208834171295166
 ```
 // Code before refactoring
-List myList = new List();
-myList.addItem("item1");
-myList.addItem("item2");
-myList.addItem("item3");
-
+this.addItem(a);
+```
+```
 // Code after refactoring
-List myList = new List();
-myList.add("item1");
-myList.add("item2");
-myList.add("item3");
+this.add(a);
 ```

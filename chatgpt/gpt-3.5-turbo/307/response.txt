@@ -1,22 +1,8 @@
-# Response Time: 9.630989074707031
+# Response Time: 2.299816846847534
 ```
 // Code before refactoring
-InputVerifier verifier = new InputVerifier() {
-    public boolean verify(JComponent input) {
-        // verification logic
-    }
-    public boolean shouldYieldFocus(JComponent input) {
-        return verify(input);
-    }
-};
+this.shouldYieldFocus(a);
 
 // Code after refactoring
-InputVerifier verifier = new InputVerifier() {
-    public boolean verify(JComponent input) {
-        // verification logic
-    }
-    public boolean shouldYieldFocus(JComponent input, JComponent target) {
-        return verify(input);
-    }
-};
+InputVerifier.shouldYieldFocus(this, a);
 ```

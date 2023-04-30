@@ -4,7 +4,7 @@ The method java.rmi.server.RemoteStub.setRef​(RemoteStub, RemoteRef) is deprec
  stub. This is unnecessary, since RemoteStubs can be created
  and initialized with a remote reference through use of
  the RemoteStub(RemoteRef) constructor."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.setRef​(a, b)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

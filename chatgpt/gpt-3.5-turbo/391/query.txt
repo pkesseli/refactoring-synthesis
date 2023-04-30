@@ -1,7 +1,7 @@
 The method org.ietf.jgss.GSSContext.wrap​(InputStream, OutputStream, MessageProp) is deprecated.
  The related deprecation comment in Javadoc is "The stream-based methods have been removed from RFC 8353.
  Use GSSContext.wrap(byte[], int, int, MessageProp) instead."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.wrap​(a, b, c)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

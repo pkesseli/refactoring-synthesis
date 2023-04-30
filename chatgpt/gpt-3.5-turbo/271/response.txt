@@ -1,12 +1,17 @@
-# Response Time: 5.265233039855957
+# Response Time: 3.834123134613037
 ```
 // Code before refactoring
-FileImageOutputStream output = new FileImageOutputStream(new File("image.jpg"));
-output.write(imageBytes);
-output.finalize();
-
+public void cleanup() {
+    try {
+        this.finalize();
+    } catch (Throwable t) {
+        // handle exception
+    }
+}
+```
+```
 // Code after refactoring
-FileImageOutputStream output = new FileImageOutputStream(new File("image.jpg"));
-output.write(imageBytes);
-output.close();
+public void cleanup() {
+    // alternative cleanup mechanism
+}
 ```

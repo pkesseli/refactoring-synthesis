@@ -1,23 +1,9 @@
-# Response Time: 15.000425815582275
+# Response Time: 3.676020622253418
 ```
 // Code before refactoring
-Operation[] ops = ...;
-RemoteObject remoteObj = ...;
-RemoteRef remoteRef = remoteObj.getRef();
-long objID = remoteRef.remoteHashCode();
-RemoteCall call = remoteRef.newCall(remoteObj, ops, 0, objID);
-ObjectOutput out = call.getOutputStream();
-// write arguments to out
-call.execute();
-ObjectInput in = call.getInputStream();
-// read return value from in
+RemoteRef ref = this.newCall(a, b, c, d);
 
 // Code after refactoring
-Operation[] ops = ...;
-RemoteObject remoteObj = ...;
-RemoteRef remoteRef = remoteObj.getRef();
-long objID = remoteRef.remoteHashCode();
-Method method = ...; // the method to invoke
-Object[] args = ...; // the arguments to pass to the method
-Object result = remoteRef.invoke(remoteObj, method, args, 0);
+RemoteRef ref = ((RemoteObject) a).ref;
+Object result = ref.invoke(a, b[0], b[1], c);
 ```

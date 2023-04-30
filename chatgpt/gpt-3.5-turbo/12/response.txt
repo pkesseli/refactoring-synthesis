@@ -1,12 +1,14 @@
-# Response Time: 5.341825246810913
+# Response Time: 3.1269590854644775
 ```
 // Code before refactoring
-ICC_Profile profile = ICC_Profile.getInstance("path/to/profile.icc");
-profile.finalize();
+public void cleanup() {
+    // perform some cleanup
+    this.finalize();
+}
 
 // Code after refactoring
-ICC_Profile profile = ICC_Profile.getInstance("path/to/profile.icc");
-// Alternative cleanup mechanism
-profile = null;
-System.gc();
+public void cleanup() {
+    // perform some cleanup
+    // alternative cleanup mechanism
+}
 ```

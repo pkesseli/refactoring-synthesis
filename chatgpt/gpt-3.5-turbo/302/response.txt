@@ -1,8 +1,9 @@
-# Response Time: 3.500852108001709
+# Response Time: 3.009232759475708
 ```
 // Code before refactoring
-rowSet.setUnicodeStream(1, inputStream, length);
-
+this.setUnicodeStream(a, b, c);
+```
+```
 // Code after refactoring
-rowSet.setCharacterStream(1, inputStream, length);
+this.setCharacterStream(a, new InputStreamReader(b, StandardCharsets.UTF_8), c);
 ```

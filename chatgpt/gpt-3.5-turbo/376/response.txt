@@ -1,8 +1,9 @@
-# Response Time: 6.004916191101074
+# Response Time: 3.4943668842315674
 ```
 // Code before refactoring
-int offset = ((javax.swing.text.View) myView).viewToModel(x, y, bounds, bias);
+int pos = this.viewToModel(a, b, c);
 
 // Code after refactoring
-int offset = ((javax.swing.text.View) myView).viewToModel(new Point2D.Float(x, y), bounds, bias);
+Point2D.Float point = new Point2D.Float(a, b);
+pos = this.viewToModel(point, c);
 ```

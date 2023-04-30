@@ -1,11 +1,9 @@
-# Response Time: 5.905080080032349
+# Response Time: 3.568023681640625
 ```
 // Code before refactoring
-JComponent component = new JComponent();
-JComponent nextComponent = component.getNextFocusableComponent();
+Component nextFocusableComponent = this.getNextFocusableComponent();
 
 // Code after refactoring
-JComponent component = new JComponent();
-FocusTraversalPolicy policy = component.getFocusTraversalPolicy();
-JComponent nextComponent = policy.getComponentAfter(component, null);
+FocusTraversalPolicy policy = this.getFocusTraversalPolicy();
+Component nextFocusableComponent = policy.getComponentAfter(this, null);
 ```

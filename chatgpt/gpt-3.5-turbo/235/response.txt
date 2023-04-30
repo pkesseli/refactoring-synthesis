@@ -1,10 +1,9 @@
-# Response Time: 4.997062683105469
+# Response Time: 2.70634388923645
 ```
 // Code before refactoring
-AtomicBoolean myBoolean = new AtomicBoolean(false);
-myBoolean.weakCompareAndSet(true, false);
-
+this.weakCompareAndSet(a, b);
+```
+```
 // Code after refactoring
-AtomicBoolean myBoolean = new AtomicBoolean(false);
-myBoolean.weakCompareAndSetPlain(false, true);
+this.weakCompareAndSetPlain(a, b);
 ```

@@ -1,10 +1,8 @@
-# Response Time: 4.9724602699279785
+# Response Time: 1.880291223526001
 ```
 // Code before refactoring
-ResultSet rs = statement.executeQuery(query);
-BigDecimal value = rs.getBigDecimal("column_name", scale);
+this.getBigDecimal(a, b);
 
 // Code after refactoring
-ResultSet rs = statement.executeQuery(query);
-BigDecimal value = rs.getBigDecimal(columnIndex).setScale(scale);
+this.getBigDecimal(b);
 ```

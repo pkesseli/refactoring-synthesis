@@ -1,12 +1,8 @@
-# Response Time: 6.265953540802002
+# Response Time: 2.400614023208618
 ```
 // Code before refactoring
-ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-outputStream.write("Hello World".getBytes());
-String output = outputStream.toString(StandardCharsets.UTF_8);
+String str = this.toString(a);
 
 // Code after refactoring
-ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-outputStream.write("Hello World".getBytes());
-String output = outputStream.toString(StandardCharsets.UTF_8.name());
+String str = new String(this.toByteArray(), StandardCharsets.UTF_8);
 ```

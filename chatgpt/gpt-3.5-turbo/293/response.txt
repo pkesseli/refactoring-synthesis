@@ -1,12 +1,9 @@
-# Response Time: 5.153965711593628
+# Response Time: 2.252902030944824
 ```
 // Code before refactoring
-MonitorMBean monitor = ...;
-ObjectName observedObject = ...;
-monitor.setObservedObject(observedObject);
-
+this.setObservedObject(a);
+```
+```
 // Code after refactoring
-MonitorMBean monitor = ...;
-ObjectName observedObject = ...;
-monitor.addObservedObject(observedObject);
+this.addObservedObject(a);
 ```

@@ -5,7 +5,7 @@ The method java.lang.reflect.AccessibleObject.isAccessible() is deprecated.
  This method may return false on a reflected object that is
  accessible to the caller. To test if this reflected object is accessible,
  it should use AccessibleObject.canAccess(Object)."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.isAccessible()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

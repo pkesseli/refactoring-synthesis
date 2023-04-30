@@ -1,26 +1,14 @@
-# Response Time: 17.506227493286133
+# Response Time: 4.678170919418335
 ```
 // Code before refactoring
-splitPane.setOneTouchExpandable(true);
-splitPane.setDividerSize(10);
-splitPane.setResizeWeight(0.5);
-splitPane.addKeyListener(new BasicSplitPaneUI().createKeyboardResizeToggleListener());
+this.createKeyboardResizeToggleListener();
 
 // Code after refactoring
-splitPane.setOneTouchExpandable(true);
-splitPane.setDividerSize(10);
-splitPane.setResizeWeight(0.5);
-splitPane.addKeyListener(new KeyAdapter() {
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_F8) {
-            BasicSplitPaneUI ui = (BasicSplitPaneUI) splitPane.getUI();
-            BasicSplitPaneDivider divider = ui.getDivider();
-            if (divider != null && divider.isEnabled()) {
-                int orientation = splitPane.getOrientation();
-                int resizeDirection = (orientation == JSplitPane.HORIZONTAL_SPLIT) ? BasicSplitPaneUI.RIGHT : BasicSplitPaneUI.DOWN;
-                ui.getHandler().actionPerformed(new ActionEvent(divider, 0, "" + resizeDirection));
-            }
-        }
-    }
-});
+// Use the new method createToggleKeyBinding() instead
+this.createToggleKeyBinding(
+    KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+    "focusOutForward",
+    "negativeIncrement",
+    "toggleFocus"
+);
 ```

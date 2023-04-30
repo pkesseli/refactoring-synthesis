@@ -1,8 +1,8 @@
-# Response Time: 4.082496881484985
+# Response Time: 2.415431499481201
 ```
 // Code before refactoring
-BigDecimal result = dividend.divide(divisor, scale, BigDecimal.ROUND_HALF_UP);
+this.divide(a, b);
 
 // Code after refactoring
-BigDecimal result = dividend.divide(divisor, RoundingMode.HALF_UP);
+this.divide(a, b, RoundingMode.HALF_UP);
 ```

@@ -1,8 +1,8 @@
-# Response Time: 3.872030258178711
+# Response Time: 2.5011138916015625
 ```
 // Code before refactoring
-myComponent.lostFocus(event, someObject);
+this.lostFocus(a, b);
 
 // Code after refactoring
-myComponent.processFocusEvent(new FocusEvent(myComponent, FocusEvent.FOCUS_LOST));
+this.processFocusEvent(new FocusEvent(this, FocusEvent.FOCUS_LOST));
 ```

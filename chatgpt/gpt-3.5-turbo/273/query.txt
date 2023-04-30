@@ -7,7 +7,7 @@ The method javax.imageio.stream.MemoryCacheImageInputStream.finalize() is deprec
      ensure that super.finalize() is invoked as described in Object.finalize().
      See the specification for Object.finalize() for further
      information about migration options."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.finalize()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

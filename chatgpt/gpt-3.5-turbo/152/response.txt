@@ -1,10 +1,8 @@
-# Response Time: 4.572127819061279
+# Response Time: 2.8701024055480957
 ```
 // Code before refactoring
-ThreadGroup group = new ThreadGroup("myThreadGroup");
-group.allowThreadSuspension(true);
+this.allowThreadSuspension​(true);
 
 // Code after refactoring
-ThreadGroup group = new ThreadGroup("myThreadGroup");
-group.setDaemon(true);
+// The method is deprecated and its behavior was never specified, so it's safe to remove the call
 ```

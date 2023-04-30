@@ -1,8 +1,8 @@
-# Response Time: 2.996572732925415
+# Response Time: 2.13997745513916
 ```
 // Code before refactoring
-remoteCall.executeCall();
+this.executeCall();
 
 // Code after refactoring
-throw new UnsupportedOperationException("This method is deprecated and has no replacement.");
+throw new UnsupportedOperationException("executeCall() is deprecated and has no replacement");
 ```

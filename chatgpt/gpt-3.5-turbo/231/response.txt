@@ -1,10 +1,9 @@
-# Response Time: 4.817901849746704
+# Response Time: 3.1961610317230225
 ```
 // Code before refactoring
-java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-int year = time.getYear();
+int year = this.getYear() + 1900;
 
 // Code after refactoring
-java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-int year = time.toLocalTime().getYear();
+LocalDateTime dateTime = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault());
+int year = dateTime.getYear();
 ```

@@ -1,8 +1,9 @@
-# Response Time: 2.8329451084136963
+# Response Time: 2.1175806522369385
 ```
 // Code before refactoring
-myComponent.move(x, y);
-
+this.move(a, b);
+```
+```
 // Code after refactoring
-myComponent.setLocation(x, y);
+this.setLocation(a, b);
 ```

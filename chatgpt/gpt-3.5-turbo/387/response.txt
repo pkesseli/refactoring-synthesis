@@ -1,26 +1,10 @@
-# Response Time: 13.595250368118286
+# Response Time: 3.6664509773254395
 ```
 // Code before refactoring
-GSSContext context = ...;
-InputStream in = ...;
-OutputStream out = ...;
-MessageProp prop = ...;
-byte[] buffer = new byte[1024];
-int bytesRead;
-while ((bytesRead = in.read(buffer)) != -1) {
-    byte[] token = context.getMIC(buffer, 0, bytesRead, prop);
-    out.write(token);
-}
-
+this.getMIC​(a, b, c);
+```
+```
 // Code after refactoring
-GSSContext context = ...;
-InputStream in = ...;
-OutputStream out = ...;
-MessageProp prop = ...;
-byte[] buffer = new byte[1024];
-int bytesRead;
-while ((bytesRead = in.read(buffer)) != -1) {
-    byte[] token = context.getMIC(buffer, 0, bytesRead, prop);
-    out.write(token, 0, token.length);
-}
+byte[] mic = this.getMIC(a, 0, a.length, new MessageProp(0, true));
+b.write(mic);
 ```

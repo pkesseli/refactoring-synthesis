@@ -1,10 +1,9 @@
-# Response Time: 4.529176712036133
+# Response Time: 2.5226402282714844
 ```
 // Code before refactoring
-Event event = new Event(this, Event.ACTION_EVENT, null);
-postEvent(event);
-
+this.postEvent(a);
+```
+```
 // Code after refactoring
-Event event = new Event(this, Event.ACTION_EVENT, null);
-dispatchEvent(event);
+Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(a);
 ```

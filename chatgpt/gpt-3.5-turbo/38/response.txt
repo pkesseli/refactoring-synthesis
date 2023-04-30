@@ -1,8 +1,8 @@
-# Response Time: 2.5348727703094482
+# Response Time: 1.6385293006896973
 ```
 // Code before refactoring
-myComponent.nextFocus();
+this.nextFocus();
 
 // Code after refactoring
-myComponent.transferFocus();
+this.transferFocus();
 ```

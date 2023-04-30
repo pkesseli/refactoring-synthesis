@@ -1,8 +1,9 @@
-# Response Time: 2.6947667598724365
+# Response Time: 2.707651376724243
 ```
 // Code before refactoring
-LogStream.setDefaultStream(System.out);
-
+this.setDefaultStream(a);
+```
+```
 // Code after refactoring
-System.setOut(LogStream.log());
+// There is no replacement for this method, so you can simply remove the call
 ```

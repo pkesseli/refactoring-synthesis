@@ -1,10 +1,8 @@
-# Response Time: 7.9390411376953125
+# Response Time: 1.6107745170593262
 ```
 // Code before refactoring
-Polygon polygon = new Polygon(new int[]{0, 5, 10}, new int[]{0, 10, 5}, 3);
-Rectangle boundingBox = polygon.getBoundingBox();
+this.getBoundingBox();
 
 // Code after refactoring
-Polygon polygon = new Polygon(new int[]{0, 5, 10}, new int[]{0, 10, 5}, 3);
-Rectangle boundingBox = polygon.getBounds();
+this.getBounds();
 ```

@@ -1,4 +1,4 @@
-# Response Time: 4.9674413204193115
+# Response Time: 3.3614203929901123
 ```
 // Code before refactoring
 RegistryHandler registryHandler = new RegistryHandler();

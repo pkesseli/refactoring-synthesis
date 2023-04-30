@@ -1,13 +1,11 @@
-# Response Time: 9.33294939994812
+# Response Time: 5.819275379180908
 ```
 // Code before refactoring
 Font font = new Font("Arial", Font.PLAIN, 12);
-Toolkit toolkit = Toolkit.getDefaultToolkit();
-FontMetrics fontMetrics = toolkit.getFontMetrics(font);
-int stringWidth = fontMetrics.stringWidth("Hello World");
+int fontWidth = this.getFontMetrics(font).stringWidth("Hello World");
 
 // Code after refactoring
 Font font = new Font("Arial", Font.PLAIN, 12);
 FontRenderContext frc = new FontRenderContext(null, true, true);
-int stringWidth = (int) font.getLineMetrics("Hello World", frc).getBounds().getWidth();
+int fontWidth = (int) font.getLineMetrics("Hello World", frc).getBounds().getWidth();
 ```

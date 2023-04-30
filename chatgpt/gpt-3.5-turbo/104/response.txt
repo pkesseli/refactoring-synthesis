@@ -1,10 +1,8 @@
-# Response Time: 3.624011993408203
+# Response Time: 1.689795732498169
 ```
 // Code before refactoring
-ScrollPane scrollPane = new ScrollPane();
-scrollPane.layout();
+this.layout();
 
 // Code after refactoring
-ScrollPane scrollPane = new ScrollPane();
-scrollPane.doLayout();
+this.doLayout();
 ```

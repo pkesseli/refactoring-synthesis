@@ -1,13 +1,9 @@
-# Response Time: 9.392892122268677
+# Response Time: 3.346853494644165
 ```
 // Code before refactoring
-GaugeMonitor monitor = new GaugeMonitor(mBeanServer, gaugeObjName, gaugeObservedAttribute, lowThreshold, highThreshold);
-Double derivedGauge = monitor.getDerivedGauge();
+double derivedGauge = gaugeMonitor.getDerivedGauge();
 
 // Code after refactoring
-GaugeMonitor monitor = new GaugeMonitor();
-monitor.addObservedObject(gaugeObjName);
-monitor.addObservedAttribute(gaugeObservedAttribute);
-monitor.setThresholds(lowThreshold, highThreshold);
-Double derivedGauge = (Double) monitor.getDerivedGauge(gaugeObjName);
+ObjectName objectName = gaugeMonitor.getObservedObject();
+double derivedGauge = gaugeMonitor.getDerivedGauge(objectName);
 ```

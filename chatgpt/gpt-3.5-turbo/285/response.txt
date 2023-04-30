@@ -1,12 +1,9 @@
-# Response Time: 5.172252416610718
+# Response Time: 2.1620280742645264
 ```
 // Code before refactoring
-CounterMonitorMBean counterMonitor = ...;
-Number threshold = ...;
-counterMonitor.setThreshold(threshold);
-
+this.setThreshold(a);
+```
+```
 // Code after refactoring
-CounterMonitorMBean counterMonitor = ...;
-Number threshold = ...;
-counterMonitor.setInitThreshold(threshold);
+this.setInitThreshold(a);
 ```

@@ -1,16 +1,8 @@
-# Response Time: 9.97367548942566
+# Response Time: 1.8950982093811035
 ```
 // Code before refactoring
-CallableStatement cs = conn.prepareCall("{call my_stored_proc(?, ?)}");
-cs.registerOutParameter(1, Types.NUMERIC);
-cs.registerOutParameter(2, Types.NUMERIC);
-cs.execute();
-BigDecimal result = cs.getBigDecimal(1, 2);
+this.getBigDecimal(a, b);
 
 // Code after refactoring
-CallableStatement cs = conn.prepareCall("{call my_stored_proc(?, ?)}");
-cs.registerOutParameter(1, Types.NUMERIC);
-cs.registerOutParameter(2, Types.NUMERIC);
-cs.execute();
-BigDecimal result = cs.getBigDecimal(1);
+this.getBigDecimal(a);
 ```

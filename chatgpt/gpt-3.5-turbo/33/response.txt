@@ -1,14 +1,9 @@
-# Response Time: 5.7583167552948
+# Response Time: 3.682159185409546
 ```
 // Code before refactoring
-public void mouseEntered(MouseEvent e) {
-    Component c = e.getComponent();
-    c.mouseEnter(e, c.getX(), c.getY());
-}
+this.mouseEnter(a, b, c);
 
 // Code after refactoring
-public void mouseEntered(MouseEvent e) {
-    Component c = e.getComponent();
-    c.processMouseEvent(e);
-}
+MouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(), 0, a, b, 0, false);
+this.processMouseEvent(event);
 ```

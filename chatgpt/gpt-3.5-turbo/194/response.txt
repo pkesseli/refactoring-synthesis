@@ -1,7 +1,7 @@
-# Response Time: 3.264490842819214
+# Response Time: 2.2086613178253174
 ```
 // Code before refactoring
-InputStream inputStream = remoteCall.getInputStream();
+InputStream inputStream = this.getInputStream();
 
 // Code after refactoring
 throw new UnsupportedOperationException("This method is deprecated and has no replacement.");

@@ -1,13 +1,10 @@
-# Response Time: 9.803623914718628
+# Response Time: 4.240201473236084
 ```
 // Code before refactoring
-JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromPaths(Arrays.asList(sourceFilePath));
-```
-```
+Iterable<Path> a = ...;
+Iterable<JavaFileObject> javaFileObjects = this.getJavaFileObjectsFromPaths(a);
+
 // Code after refactoring
-JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-Collection<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromPaths(Collections.singleton(sourceFilePath));
+Collection<Path> a = ...;
+Iterable<JavaFileObject> javaFileObjects = this.getJavaFileManager().getJavaFileObjectsFromPaths(a);
 ```

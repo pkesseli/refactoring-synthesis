@@ -6,7 +6,7 @@ The method java.net.MulticastSocket.send​(DatagramPacket, byte) is deprecated.
   mcastSocket.send(p);
   mcastSocket.setTimeToLive(ttl);
   ......"
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.send​(a, b)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

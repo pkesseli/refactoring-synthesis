@@ -1,14 +1,8 @@
-# Response Time: 6.2344067096710205
+# Response Time: 1.8900127410888672
 ```
 // Code before refactoring
-char c = 'a';
-if (Character.isJavaLetter(c)) {
-    System.out.println("This is a Java letter");
-}
+this.isJavaLetter(a);
 
 // Code after refactoring
-char c = 'a';
-if (Character.isJavaIdentifierStart(c)) {
-    System.out.println("This is a Java identifier start");
-}
+Character.isJavaIdentifierStart(a);
 ```

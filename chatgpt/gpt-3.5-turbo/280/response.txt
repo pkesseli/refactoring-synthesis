@@ -1,8 +1,8 @@
-# Response Time: 4.13675594329834
+# Response Time: 1.9398319721221924
 ```
 // Code before refactoring
-double threshold = ((CounterMonitor) monitor).getThreshold();
+this.getThreshold();
 
 // Code after refactoring
-double threshold = ((CounterMonitor) monitor).getThreshold(monitor.getMBean()); 
+counterMonitor.getThreshold(monitor.getMBean()); 
 ```

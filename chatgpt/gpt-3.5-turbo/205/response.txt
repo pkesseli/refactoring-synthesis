@@ -1,19 +1,9 @@
-# Response Time: 11.421191215515137
+# Response Time: 2.708386182785034
 ```
 // Code before refactoring
-public void someMethod() throws RemoteException {
-    RemoteCall call = // some code to get RemoteCall object
-    Skeleton skeleton = // some code to get Skeleton object
-    Remote remote = // some code to get Remote object
-    skeleton.dispatch(remote, call, 0, 0);
-}
+this.dispatch(a, b, c, d);
 ```
 ```
 // Code after refactoring
-public void someMethod() throws RemoteException {
-    RemoteCall call = // some code to get RemoteCall object
-    Remote remote = // some code to get Remote object
-    UnicastServerRef serverRef = (UnicastServerRef) UnicastRemoteObject.exportObject(remote, 0);
-    serverRef.dispatch(call);
-}
+throw new UnsupportedOperationException("This method is deprecated and has no replacement.");
 ```

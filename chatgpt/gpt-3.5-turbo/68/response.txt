@@ -1,19 +1,14 @@
-# Response Time: 7.506957769393921
+# Response Time: 3.2282190322875977
 ```
 // Code before refactoring
-public void someMethod() {
-    ColorModel colorModel = new ColorModel();
-    // some code here
-    colorModel.finalize();
+public void cleanup() {
+    // perform some cleanup
+    this.finalize();
 }
-```
-```
+
 // Code after refactoring
-public void someMethod() {
-    ColorModel colorModel = new ColorModel();
-    // some code here
+public void cleanup() {
+    // perform some cleanup
     // alternative cleanup mechanism
-    colorModel = null;
-    System.gc();
 }
 ```

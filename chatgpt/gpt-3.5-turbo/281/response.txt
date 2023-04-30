@@ -1,10 +1,9 @@
-# Response Time: 4.356215238571167
+# Response Time: 2.08732271194458
 ```
 // Code before refactoring
-CounterMonitor counterMonitor = new CounterMonitor();
-counterMonitor.setThreshold(10);
-
+this.setThreshold(a);
+```
+```
 // Code after refactoring
-CounterMonitor counterMonitor = new CounterMonitor();
-counterMonitor.setInitThreshold(10);
+this.setInitThreshold(a);
 ```

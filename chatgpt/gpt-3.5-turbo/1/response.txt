@@ -1,21 +1,8 @@
-# Response Time: 8.827054023742676
+# Response Time: 2.0588653087615967
 ```
 // Code before refactoring
-VirtualMachine vm = ...;
-if (vm.canUnrestrictedlyRedefineClasses()) {
-    // do something
-}
+this.canUnrestrictedlyRedefineClasses();
 
 // Code after refactoring
-VirtualMachine vm = ...;
-try {
-    vm.redefineClasses(new ClassDefinition[] { /* classes to redefine */ });
-    // do something
-} catch (UnsupportedOperationException e) {
-    // handle unsupported operation
-} catch (ClassNotFoundException e) {
-    // handle class not found
-} catch (IOException e) {
-    // handle I/O exception
-}
+false;
 ```

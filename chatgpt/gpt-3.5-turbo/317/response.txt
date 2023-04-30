@@ -1,12 +1,9 @@
-# Response Time: 5.8440635204315186
+# Response Time: 2.1490652561187744
 ```
 // Code before refactoring
-JInternalFrame frame = new JInternalFrame();
-JMenuBar menuBar = new JMenuBar();
-frame.setMenuBar(menuBar);
-
+this.setMenuBar(a);
+```
+```
 // Code after refactoring
-JInternalFrame frame = new JInternalFrame();
-JMenuBar menuBar = new JMenuBar();
-frame.setJMenuBar(menuBar);
+this.setJMenuBar(a);
 ```

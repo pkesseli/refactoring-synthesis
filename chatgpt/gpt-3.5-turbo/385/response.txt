@@ -1,8 +1,8 @@
-# Response Time: 6.045896291732788
+# Response Time: 4.539770841598511
 ```
 // Code before refactoring
-XMLOutputFactory outputFactory = XMLOutputFactory.newInstance("javax.xml.stream.XMLOutputFactory", null);
+XMLOutputFactory factory = XMLOutputFactory.newInstance("javax.xml.stream.XMLOutputFactory", getClass().getClassLoader());
 
 // Code after refactoring
-XMLOutputFactory outputFactory = XMLOutputFactory.newFactory("javax.xml.stream.XMLOutputFactory", null);
+XMLOutputFactory factory = XMLOutputFactory.newFactory("javax.xml.stream.XMLOutputFactory", getClass().getClassLoader());
 ```

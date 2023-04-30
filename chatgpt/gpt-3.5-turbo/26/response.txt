@@ -1,8 +1,8 @@
-# Response Time: 2.4873838424682617
+# Response Time: 1.6018471717834473
 ```
 // Code before refactoring
-myComponent.layout();
+this.layout();
 
 // Code after refactoring
-myComponent.doLayout();
+this.doLayout();
 ```

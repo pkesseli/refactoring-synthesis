@@ -1,10 +1,8 @@
-# Response Time: 4.503663778305054
+# Response Time: 2.072910785675049
 ```
 // Code before refactoring
-TableColumn column = table.getColumnModel().getColumn(columnIndex);
-column.disableResizedPosting();
+this.disableResizedPosting();
 
 // Code after refactoring
-TableColumn column = table.getColumnModel().getColumn(columnIndex);
-column.setResizingAllowed(false);
+this.setResizingAllowed(false);
 ```

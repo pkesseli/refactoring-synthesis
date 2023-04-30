@@ -1,10 +1,8 @@
-# Response Time: 5.7099387645721436
+# Response Time: 2.7703521251678467
 ```
 // Code before refactoring
-MulticastSocket socket = new MulticastSocket(port);
-boolean loopbackMode = socket.getLoopbackMode();
+boolean loopbackMode = this.getLoopbackMode();
 
 // Code after refactoring
-DatagramSocket socket = new DatagramSocket(port);
-boolean loopbackMode = socket.getOption(StandardSocketOptions.IP_MULTICAST_LOOP);
+boolean loopbackMode = this.getOption(StandardSocketOptions.IP_MULTICAST_LOOP);
 ```

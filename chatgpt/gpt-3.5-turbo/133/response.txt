@@ -1,14 +1,17 @@
-# Response Time: 6.808858633041382
+# Response Time: 3.7757394313812256
 ```
-// Code before refactoring
-char c = 'a';
-if (Character.isJavaLetterOrDigit(c)) {
-    System.out.println(c + " is a Java letter or digit.");
+<code before refactoring here>
+```
+```
+if (Character.isJavaLetterOrDigit(a)) {
+    // do something
 }
-
-// Code after refactoring
-char c = 'a';
-if (Character.isJavaIdentifierPart(c)) {
-    System.out.println(c + " is a Java identifier part.");
+```
+```
+<code after refactoring here>
+```
+```
+if (Character.isJavaIdentifierPart(a)) {
+    // do something
 }
 ```

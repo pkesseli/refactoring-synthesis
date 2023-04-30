@@ -1,19 +1,9 @@
-# Response Time: 10.556056261062622
+# Response Time: 5.074846029281616
 ```
 // Code before refactoring
-splitPane.getTopComponent().registerKeyboardAction(
-    new UpLeftArrowAction(splitPane, true),
-    KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0),
-    JComponent.WHEN_IN_FOCUSED_WINDOW
-);
+this.createKeyboardUpLeftListener();
 
 // Code after refactoring
-splitPane.getTopComponent().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-    KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0),
-    "upLeftArrow"
-);
-splitPane.getTopComponent().getActionMap().put(
-    "upLeftArrow",
-    new UpLeftArrowAction(splitPane, true)
-);
+this.getHandler().keyPressed(new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_UP, KeyEvent.CHAR_UNDEFINED));
+this.getHandler().keyPressed(new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, KeyEvent.CHAR_UNDEFINED));
 ```

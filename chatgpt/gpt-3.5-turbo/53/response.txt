@@ -1,8 +1,8 @@
-# Response Time: 3.0952155590057373
+# Response Time: 1.7876312732696533
 ```
 // Code before refactoring
-Dimension minimumSize = container.minimumSize();
+this.minimumSize();
 
 // Code after refactoring
-Dimension minimumSize = container.getMinimumSize();
+this.getMinimumSize();
 ```

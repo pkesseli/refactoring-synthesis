@@ -1,12 +1,10 @@
-# Response Time: 4.351635694503784
+# Response Time: 4.051008701324463
 ```
 // Code before refactoring
-public boolean keyDown(Event evt, int key) {
-    // do something
-}
-
+this.keyDown(a, b);
+```
+```
 // Code after refactoring
-public boolean processKeyEvent(KeyEvent evt) {
-    // do something
-}
+KeyEvent keyEvent = new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_UNKNOWN, false);
+this.processKeyEvent(keyEvent);
 ```

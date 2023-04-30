@@ -1,13 +1,9 @@
-# Response Time: 7.402318954467773
-Sure, here's an example of how you can refactor your code to avoid using the deprecated `setSeconds` method:
-
+# Response Time: 2.7999587059020996
 ```
 // Code before refactoring
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-date.setSeconds(30);
+this.setSeconds(a);
 
 // Code after refactoring
-java.sql.Timestamp timestamp = new java.sql.Timestamp(System.currentTimeMillis());
-timestamp.setSeconds(30);
-java.sql.Date date = new java.sql.Date(timestamp.getTime());
+this.setTime(this.getTime() + (a - this.getSeconds()) * 1000);
+this.setSeconds(0);
 ```

@@ -1,8 +1,8 @@
-# Response Time: 4.835947513580322
+# Response Time: 1.9349210262298584
 ```
 // Code before refactoring
-Class<?> myClass = java.rmi.server.RMIClassLoader.loadClass("my.package.MyClass");
+this.loadClass(a);
 
 // Code after refactoring
-Class<?> myClass = java.rmi.server.RMIClassLoader.loadClass("my.package", "MyClass");
+this.loadClass(a, null);
 ```

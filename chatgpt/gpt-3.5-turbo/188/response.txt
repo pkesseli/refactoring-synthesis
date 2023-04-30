@@ -1,26 +1,15 @@
-# Response Time: 10.358086109161377
+# Response Time: 4.456526517868042
 ```
 // Code before refactoring
-import java.rmi.server.LogStream;
-
-public class MyClass {
-    public void myMethod() {
-        LogStream logStream = LogStream.log("myLog");
-        byte[] bytes = "Hello World".getBytes();
-        logStream.write(bytes, 0, bytes.length);
-    }
-}
+this.write(a, b, c);
 ```
 ```
 // Code after refactoring
-import java.util.logging.Logger;
-
-public class MyClass {
-    private static final Logger LOGGER = Logger.getLogger(MyClass.class.getName());
-
-    public void myMethod() {
-        byte[] bytes = "Hello World".getBytes();
-        LOGGER.info(new String(bytes));
-    }
+try {
+    byte[] bytes = Arrays.copyOfRange(a, b, b + c);
+    String message = new String(bytes, StandardCharsets.UTF_8);
+    System.out.println(message);
+} catch (Exception e) {
+    e.printStackTrace();
 }
 ```

@@ -1,10 +1,8 @@
-# Response Time: 5.047788858413696
+# Response Time: 2.39068603515625
 ```
 // Code before refactoring
-JRootPane rootPane = frame.getRootPane();
-JMenuBar menuBar = rootPane.getMenuBar();
+JMenuBar menuBar = this.getMenuBar();
 
 // Code after refactoring
-JRootPane rootPane = frame.getRootPane();
-JMenuBar menuBar = rootPane.getJMenuBar();
+JMenuBar menuBar = this.getJMenuBar();
 ```

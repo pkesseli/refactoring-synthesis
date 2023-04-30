@@ -1,8 +1,8 @@
-# Response Time: 3.111449956893921
+# Response Time: 2.265097141265869
 ```
 // Code before refactoring
-Dimension preferredSize = container.preferredSize();
+Dimension preferredSize = this.preferredSize();
 
 // Code after refactoring
-Dimension preferredSize = container.getPreferredSize();
+Dimension preferredSize = this.getPreferredSize();
 ```

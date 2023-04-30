@@ -1,8 +1,18 @@
-# Response Time: 4.049981117248535
+# Response Time: 5.6364219188690186
 ```
 // Code before refactoring
-java.security.AccessControlContext acc = java.rmi.server.RMIClassLoader.getSecurityContext(classLoader);
+SecurityContext context = this.getSecurityContext(a);
 
 // Code after refactoring
-java.security.AccessControlContext acc = java.security.AccessController.getContext();
+SecurityManager securityManager = System.getSecurityManager();
+if (securityManager != null) {
+    securityManager.checkPermission(new RuntimePermission("getClassLoader"));
+}
+SecurityContext context = AccessController.doPrivileged(
+    new PrivilegedAction<SecurityContext>() {
+        public SecurityContext run() {
+            return AccessController.getContext();
+        }
+    }
+);
 ```

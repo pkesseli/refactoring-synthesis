@@ -1,10 +1,8 @@
-# Response Time: 3.7236080169677734
+# Response Time: 1.891831874847412
 ```
 // Code before refactoring
-TextField textField = new TextField();
-textField.minimumSize(10);
+this.minimumSize(a);
 
 // Code after refactoring
-TextField textField = new TextField();
-textField.getMinimumSize(10);
+this.getMinimumSize(a);
 ```

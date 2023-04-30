@@ -1,18 +1,8 @@
-# Response Time: 14.385416507720947
+# Response Time: 2.1683712005615234
 ```
 // Code before refactoring
-CardLayout cardLayout = new CardLayout();
-JPanel cardPanel = new JPanel(cardLayout);
-cardPanel.add("card1", new JLabel("Card 1"));
-cardPanel.add("card2", new JLabel("Card 2"));
-cardLayout.addLayoutComponent("card1", new JLabel("Card 1"));
-cardLayout.addLayoutComponent("card2", new JLabel("Card 2"));
+this.addLayoutComponent(a, b);
 
 // Code after refactoring
-CardLayout cardLayout = new CardLayout();
-JPanel cardPanel = new JPanel(cardLayout);
-cardPanel.add("card1", new JLabel("Card 1"));
-cardPanel.add("card2", new JLabel("Card 2"));
-cardLayout.addLayoutComponent(new JLabel("Card 1"), "card1");
-cardLayout.addLayoutComponent(new JLabel("Card 2"), "card2");
+this.addLayoutComponent(b, a);
 ```

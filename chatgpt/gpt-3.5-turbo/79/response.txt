@@ -1,14 +1,13 @@
-# Response Time: 7.477041721343994
+# Response Time: 2.6480770111083984
 ```
-// Code before refactoring
-java.awt.List myList = new java.awt.List();
-myList.add("Item 1");
-myList.add("Item 2");
-boolean isSelected = myList.isSelected(1);
-
-// Code after refactoring
-java.awt.List myList = new java.awt.List();
-myList.add("Item 1");
-myList.add("Item 2");
-boolean isSelected = myList.isIndexSelected(1);
+<code before refactoring here>
+```
+```
+this.isSelected(a)
+```
+```
+<code after refactoring here>
+```
+```
+this.isIndexSelected(a)
 ```

@@ -1,11 +1,10 @@
-# Response Time: 5.362568378448486
+# Response Time: 3.3200314044952393
 ```
 // Code before refactoring
-String property = Security.getAlgorithmProperty("algorithm", "prop");
-```
-```
+String property = Security.getAlgorithmProperty(a, b);
+
 // Code after refactoring
 Provider provider = Security.getProvider("SUN");
-AlgorithmParameters params = AlgorithmParameters.getInstance("algorithm", provider);
-params.getParameterSpec(AlgorithmParameterSpec.class);
+AlgorithmParameters params = AlgorithmParameters.getInstance(a, provider);
+params.init(property.getBytes());
 ```

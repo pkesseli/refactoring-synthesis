@@ -1,7 +1,7 @@
-# Response Time: 3.811718702316284
+# Response Time: 2.745778799057007
 ```
 // Code before refactoring
-Component focusOwner = SwingUtilities.findFocusOwner(component);
+Component focusOwner = this.findFocusOwner(a);
 
 // Code after refactoring
 Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();

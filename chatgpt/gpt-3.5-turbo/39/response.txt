@@ -1,10 +1,9 @@
-# Response Time: 5.1244378089904785
+# Response Time: 1.9704208374023438
 ```
 // Code before refactoring
-Event event = new Event(component, Event.ACTION_EVENT, null);
-component.postEvent(event);
-
+this.postEvent(a);
+```
+```
 // Code after refactoring
-AWTEvent event = new ActionEvent(component, ActionEvent.ACTION_PERFORMED, null);
-component.dispatchEvent(event);
+this.dispatchEvent(a);
 ```

@@ -1,8 +1,8 @@
-# Response Time: 3.2834131717681885
+# Response Time: 2.1771535873413086
 ```
 // Code before refactoring
-int lineIncrement = myScrollbar.getLineIncrement();
+int lineIncrement = this.getLineIncrement();
 
 // Code after refactoring
-int lineIncrement = myScrollbar.getUnitIncrement();
+int lineIncrement = this.getUnitIncrement();
 ```

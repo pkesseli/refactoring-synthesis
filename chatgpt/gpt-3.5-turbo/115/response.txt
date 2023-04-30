@@ -1,10 +1,8 @@
-# Response Time: 4.390275478363037
+# Response Time: 1.9361681938171387
 ```
 // Code before refactoring
-java.awt.TextField textField = new java.awt.TextField();
-textField.preferredSize(100);
+this.preferredSize(a);
 
 // Code after refactoring
-java.awt.TextField textField = new java.awt.TextField();
-textField.getPreferredSize(100);
+this.getPreferredSize(a);
 ```

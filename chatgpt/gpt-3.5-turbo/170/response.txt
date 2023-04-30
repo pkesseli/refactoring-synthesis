@@ -1,11 +1,8 @@
-# Response Time: 6.456026554107666
+# Response Time: 2.476120710372925
 ```
 // Code before refactoring
-URLConnection connection = new URL("https://example.com").openConnection();
-connection.setDefaultRequestProperty("User-Agent", "Mozilla/5.0");
-```
-```
+String property = this.getDefaultRequestProperty(a);
+
 // Code after refactoring
-URLConnection connection = new URL("https://example.com").openConnection();
-connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+String property = this.getRequestProperty(a);
 ```

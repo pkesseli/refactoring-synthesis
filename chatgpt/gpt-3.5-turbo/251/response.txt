@@ -1,11 +1,9 @@
-# Response Time: 5.346451997756958
+# Response Time: 3.240244150161743
 ```
 // Code before refactoring
-String dateString = "2022-01-01";
-Date date = new Date(Date.parse(dateString));
+Date date = new Date.parse("2022-01-01");
 
 // Code after refactoring
-String dateString = "2022-01-01";
 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-Date date = dateFormat.parse(dateString);
+Date date = dateFormat.parse("2022-01-01");
 ```

@@ -1,10 +1,8 @@
-# Response Time: 5.1141197681427
+# Response Time: 1.7515361309051514
 ```
 // Code before refactoring
-java.awt.TextField textField = new java.awt.TextField();
-Dimension minimumSize = textField.minimumSize();
+this.minimumSize();
 
 // Code after refactoring
-java.awt.TextField textField = new java.awt.TextField();
-Dimension minimumSize = textField.getMinimumSize();
+this.getMinimumSize();
 ```

@@ -1,13 +1,11 @@
-# Response Time: 7.905823707580566
+# Response Time: 4.308039665222168
 ```
 // Code before refactoring
-InetAddress group = InetAddress.getByName("224.0.0.1");
-MulticastSocket socket = new MulticastSocket(1234);
-socket.setInterface(group);
+InetAddress a = InetAddress.getByName("224.0.0.1");
+this.setInterface(a);
 
 // Code after refactoring
-InetAddress group = InetAddress.getByName("224.0.0.1");
-MulticastSocket socket = new MulticastSocket(1234);
-NetworkInterface networkInterface = NetworkInterface.getByInetAddress(group);
-socket.setNetworkInterface(networkInterface);
+InetAddress a = InetAddress.getByName("224.0.0.1");
+NetworkInterface ni = NetworkInterface.getByInetAddress(a);
+this.setNetworkInterface(ni);
 ```

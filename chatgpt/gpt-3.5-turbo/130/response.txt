@@ -1,9 +1,9 @@
-# Response Time: 3.80547833442688
+# Response Time: 2.4701757431030273
 ```
 // Code before refactoring
-String line = objectInputStream.readLine();
+String line = this.readLine();
 
 // Code after refactoring
-BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(objectInputStream));
-String line = bufferedReader.readLine();
+BufferedReader reader = new BufferedReader(new InputStreamReader(this));
+String line = reader.readLine();
 ```

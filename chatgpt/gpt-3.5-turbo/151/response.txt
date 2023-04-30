@@ -1,21 +1,8 @@
-# Response Time: 7.959858655929565
+# Response Time: 1.8020362854003906
 ```
 // Code before refactoring
-Thread thread = new Thread();
-thread.start();
-thread.suspend();
+this.suspend();
 
 // Code after refactoring
-Thread thread = new Thread();
-thread.start();
-// Use a boolean flag to control the thread's execution
-boolean isRunning = true;
-while (isRunning) {
-    // Do some work here
-    try {
-        Thread.sleep(1000);
-    } catch (InterruptedException e) {
-        // Handle the exception
-    }
-}
+Thread.currentThread().suspend();
 ```

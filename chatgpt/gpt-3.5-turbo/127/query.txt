@@ -5,7 +5,7 @@ The method java.io.ByteArrayOutputStream.toString​(int) is deprecated.
  method, which takes an encoding-name or charset argument,
  or the toString() method, which uses the platform's default
  character encoding."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.toString​(a)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

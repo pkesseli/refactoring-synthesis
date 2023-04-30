@@ -4,7 +4,7 @@ The method java.util.concurrent.atomic.AtomicReferenceArray.weakCompareAndSet​
  AtomicReferenceArray.compareAndExchange(int, E, E) and AtomicReferenceArray.compareAndSet(int, E, E)).  To avoid
  confusion over plain or volatile memory effects it is recommended that
  the method AtomicReferenceArray.weakCompareAndSetPlain(int, E, E) be used instead."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.weakCompareAndSet​(a, b, c)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

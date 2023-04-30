@@ -1,6 +1,6 @@
 The method java.lang.ClassLoader.defineClass​(byte[], int, int) is deprecated.
  The related deprecation comment in Javadoc is "Replaced by defineClass(String, byte[], int, int)"
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.defineClass​(a, b, c)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

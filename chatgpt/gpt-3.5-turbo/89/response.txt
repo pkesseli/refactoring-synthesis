@@ -1,10 +1,8 @@
-# Response Time: 3.699136734008789
+# Response Time: 1.6679933071136475
 ```
 // Code before refactoring
-MenuItem menuItem = new MenuItem("File");
-menuItem.disable();
+this.disable();
 
 // Code after refactoring
-MenuItem menuItem = new MenuItem("File");
-menuItem.setEnabled(false);
+this.setEnabled(false);
 ```

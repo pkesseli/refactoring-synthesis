@@ -1,10 +1,8 @@
-# Response Time: 4.634339094161987
+# Response Time: 1.8379721641540527
 ```
 // Code before refactoring
-java.awt.List myList = new java.awt.List();
-myList.minimumSize(10);
+this.minimumSize(a);
 
 // Code after refactoring
-java.awt.List myList = new java.awt.List();
-myList.getMinimumSize(10);
+this.getMinimumSize(a);
 ```

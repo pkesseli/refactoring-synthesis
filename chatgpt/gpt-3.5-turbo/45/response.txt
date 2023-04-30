@@ -1,8 +1,8 @@
-# Response Time: 2.4574086666107178
+# Response Time: 1.6737613677978516
 ```
 // Code before refactoring
-myComponent.show(true);
+this.show(a);
 
 // Code after refactoring
-myComponent.setVisible(true);
+this.setVisible(a);
 ```

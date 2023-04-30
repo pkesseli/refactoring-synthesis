@@ -1,8 +1,8 @@
-# Response Time: 5.620292663574219
+# Response Time: 4.452103614807129
 ```
 // Code before refactoring
-XMLEventFactory eventFactory = XMLEventFactory.newInstance("javax.xml.stream.events.XMLEventFactory", null);
+XMLEventFactory eventFactory = XMLEventFactory.newInstance("javax.xml.stream.events.XMLEventFactory", this.getClass().getClassLoader());
 
 // Code after refactoring
-XMLEventFactory eventFactory = XMLEventFactory.newFactory("javax.xml.stream.events.XMLEventFactory", null);
+XMLEventFactory eventFactory = XMLEventFactory.newFactory("javax.xml.stream.events.XMLEventFactory", this.getClass().getClassLoader());
 ```

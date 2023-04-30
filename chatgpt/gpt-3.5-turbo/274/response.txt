@@ -1,11 +1,9 @@
-# Response Time: 6.06917667388916
+# Response Time: 2.522920846939087
 ```
 // Code before refactoring
-AttributeValueExp attrExp = new AttributeValueExp();
-attrExp.setMBeanServer(mbeanServer);
+this.setMBeanServer(a);
 ```
 ```
 // Code after refactoring
-AttributeValueExp attrExp = new AttributeValueExp();
-// No need to set MBeanServer, it will be obtained from QueryEval.getMBeanServer()
+// No action needed as the method has no effect
 ```

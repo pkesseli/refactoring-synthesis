@@ -1,10 +1,8 @@
-# Response Time: 5.068909168243408
+# Response Time: 1.9633862972259521
 ```
 // Code before refactoring
-MethodHandles.Lookup lookup = MethodHandles.lookup();
-boolean hasPrivateAccess = lookup.hasPrivateAccess();
+this.hasPrivateAccess();
 
 // Code after refactoring
-MethodHandles.Lookup lookup = MethodHandles.lookup();
-boolean hasFullPrivilegeAccess = lookup.hasFullPrivilegeAccess();
+this.lookup().hasFullPrivilegeAccess();
 ```

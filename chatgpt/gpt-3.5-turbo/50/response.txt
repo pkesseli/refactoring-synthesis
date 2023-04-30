@@ -1,8 +1,8 @@
-# Response Time: 2.921353578567505
+# Response Time: 2.0055904388427734
 ```
 // Code before refactoring
-Insets insets = myContainer.insets();
+Insets insets = this.insets();
 
 // Code after refactoring
-Insets insets = myContainer.getInsets();
+Insets insets = this.getInsets();
 ```

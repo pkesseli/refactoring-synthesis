@@ -1,10 +1,17 @@
-# Response Time: 4.12413215637207
+# Response Time: 3.8801722526550293
 ```
 // Code before refactoring
-ImageInputStreamImpl stream = new ImageInputStreamImpl(file);
-stream.finalize();
-
+public void cleanup() {
+    try {
+        this.finalize();
+    } catch (Throwable t) {
+        // handle exception
+    }
+}
+```
+```
 // Code after refactoring
-ImageInputStreamImpl stream = new ImageInputStreamImpl(file);
-stream.close();
+public void cleanup() {
+    // alternative cleanup mechanism
+}
 ```

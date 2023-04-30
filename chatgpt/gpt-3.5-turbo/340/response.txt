@@ -1,10 +1,10 @@
-# Response Time: 4.49128270149231
+# Response Time: 2.360334873199463
 ```
 // Code before refactoring
-MetalComboBoxUI ui = new MetalComboBoxUI();
-ui.editablePropertyChanged(propertyChangeEvent);
+this.editablePropertyChanged(a);
 
 // Code after refactoring
-MetalComboBoxUI ui = new MetalComboBoxUI();
-ui.propertyChange(propertyChangeEvent);
+if ("editable".equals(a.getPropertyName())) {
+    editableChanged();
+}
 ```

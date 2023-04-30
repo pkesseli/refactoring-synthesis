@@ -1,8 +1,8 @@
-# Response Time: 3.8731067180633545
+# Response Time: 2.7308812141418457
 ```
 // Code before refactoring
-int offset = multiTextUI.viewToModel(textComponent, point, bias);
+int pos = this.viewToModel(a, b, c);
 
 // Code after refactoring
-int offset = textComponent.viewToModel(point, bias);
+int pos = a.getUI().viewToModel(a, b, c);
 ```

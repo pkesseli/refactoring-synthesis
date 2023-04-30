@@ -1,9 +1,9 @@
-# Response Time: 5.066742420196533
+# Response Time: 3.1309971809387207
 ```
 // Code before refactoring
-SecurityContext context = LoaderHandler.getSecurityContext(classLoader);
+SecurityContext context = LoaderHandler.getSecurityContext(a);
 
 // Code after refactoring
-SecurityManager securityManager = System.getSecurityManager();
-SecurityContext context = (securityManager != null) ? securityManager.getSecurityContext() : null;
+SecurityManager sm = System.getSecurityManager();
+SecurityContext context = (sm != null) ? sm.getSecurityContext() : null;
 ```

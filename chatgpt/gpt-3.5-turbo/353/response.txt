@@ -1,11 +1,8 @@
-# Response Time: 6.181059837341309
+# Response Time: 2.0390233993530273
 ```
 // Code before refactoring
-JScrollPane scrollPane = new JScrollPane();
-ScrollPaneLayout layout = (ScrollPaneLayout) scrollPane.getLayout();
-Rectangle viewportBorderBounds = layout.getViewportBorderBounds(scrollPane);
+this.getViewportBorderBounds(a);
 
 // Code after refactoring
-JScrollPane scrollPane = new JScrollPane();
-Rectangle viewportBorderBounds = scrollPane.getViewportBorderBounds();
+a.getViewportBorderBounds();
 ```

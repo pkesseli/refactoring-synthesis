@@ -1,24 +1,8 @@
-# Response Time: 13.236217975616455
+# Response Time: 2.1209118366241455
 ```
 // Code before refactoring
-splitPane.getTopComponent().addKeyListener(new KeyAdapter() {
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            splitPane.setDividerLocation(0.5);
-        }
-    }
-});
+this.createKeyboardEndListener();
 
 // Code after refactoring
-splitPane.getTopComponent().addKeyListener(new KeyAdapter() {
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            int location = splitPane.getDividerLocation();
-            int maximum = splitPane.getMaximumDividerLocation();
-            int minimum = splitPane.getMinimumDividerLocation();
-            int newLocation = (location == maximum) ? minimum : maximum;
-            splitPane.setDividerLocation(newLocation);
-        }
-    }
-});
+this.getHandler().createKeyboardEndHandler();
 ```

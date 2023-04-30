@@ -1,14 +1,11 @@
-# Response Time: 6.795230150222778
+# Response Time: 2.8294131755828857
 ```
 // Code before refactoring
-Properties props = new Properties();
-props.setProperty("key", "value");
-FileOutputStream out = new FileOutputStream("config.properties");
-props.save(out, "My Config File");
-
+this.save(a, b);
+```
+```
 // Code after refactoring
-Properties props = new Properties();
-props.setProperty("key", "value");
-FileOutputStream out = new FileOutputStream("config.properties");
-props.store(out, "My Config File");
+try (OutputStream outputStream = new FileOutputStream(a)) {
+    this.store(outputStream, b);
+}
 ```

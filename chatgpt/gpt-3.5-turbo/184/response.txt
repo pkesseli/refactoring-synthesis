@@ -1,10 +1,10 @@
-# Response Time: 4.727679491043091
+# Response Time: 2.624788761138916
 ```
 // Code before refactoring
-String levelString = "INFO";
-int level = java.rmi.server.LogStream.parseLevel(levelString);
+String a = "INFO";
+int level = parseLevel(a);
 
 // Code after refactoring
-String levelString = "INFO";
-int level = java.util.logging.Level.parse(levelString).intValue();
+String a = "INFO";
+int level = Level.parse(a).intValue();
 ```

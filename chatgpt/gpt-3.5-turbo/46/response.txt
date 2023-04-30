@@ -1,8 +1,8 @@
-# Response Time: 2.953538179397583
+# Response Time: 1.5822596549987793
 ```
 // Code before refactoring
-Dimension componentSize = myComponent.size();
+this.size();
 
 // Code after refactoring
-Dimension componentSize = myComponent.getSize();
+this.getSize();
 ```

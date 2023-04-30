@@ -1,10 +1,8 @@
-# Response Time: 4.1368842124938965
+# Response Time: 3.0229742527008057
 ```
 // Code before refactoring
-Time time = new Time(System.currentTimeMillis());
-time.setDate(1);
+this.setDate(a);
 
 // Code after refactoring
-Time time = new Time(System.currentTimeMillis());
-time.toLocalDate().withDayOfMonth(1);
+this.setTime(new java.sql.Time(a * 24L * 60L * 60L * 1000L).getTime());
 ```

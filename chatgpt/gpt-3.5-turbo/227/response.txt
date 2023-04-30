@@ -1,10 +1,8 @@
-# Response Time: 4.365028142929077
+# Response Time: 7.319090366363525
 ```
 // Code before refactoring
-ResultSet rs = statement.executeQuery(query);
-InputStream is = rs.getUnicodeStream("columnName");
+InputStream inputStream = resultSet.getUnicodeStream(a);
 
 // Code after refactoring
-ResultSet rs = statement.executeQuery(query);
-Reader reader = rs.getCharacterStream("columnName");
+Reader reader = resultSet.getCharacterStream(a);
 ```

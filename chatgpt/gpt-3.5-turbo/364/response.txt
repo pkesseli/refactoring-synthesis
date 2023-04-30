@@ -1,17 +1,9 @@
-# Response Time: 11.06783652305603
+# Response Time: 3.4033758640289307
 ```
 // Code before refactoring
-public void paint(Graphics g, Shape a) {
-    Rectangle r = (Rectangle) a;
-    g.setColor(Color.BLACK);
-    g.drawLine(r.x, r.y, r.x + r.width, r.y + r.height);
-}
+this.drawLine(a, b, c, d);
 
 // Code after refactoring
-public void paint(Graphics g, Shape a) {
-    Rectangle r = (Rectangle) a;
-    Graphics2D g2d = (Graphics2D) g;
-    g2d.setColor(Color.BLACK);
-    g2d.drawLine(r.x, r.y, r.x + r.width, r.y + r.height);
-}
+Graphics2D g2d = (Graphics2D) b;
+this.drawLine(a, g2d, c, d);
 ```

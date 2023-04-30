@@ -1,10 +1,8 @@
-# Response Time: 4.800258636474609
+# Response Time: 1.8095078468322754
 ```
 // Code before refactoring
-JMenuBar menuBar = new JMenuBar();
-Component component = menuBar.getComponentAtIndex(0);
+this.getComponentAtIndex(a);
 
 // Code after refactoring
-JMenuBar menuBar = new JMenuBar();
-Component component = menuBar.getComponent(0);
+this.getComponent(a);
 ```

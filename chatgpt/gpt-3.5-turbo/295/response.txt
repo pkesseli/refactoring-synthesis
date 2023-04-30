@@ -1,11 +1,9 @@
-# Response Time: 6.558680772781372
+# Response Time: 3.423288345336914
 ```
 // Code before refactoring
-StringMonitor stringMonitor = new StringMonitor(mBeanServerConnection, monitorName);
-long timeStamp = stringMonitor.getDerivedGaugeTimeStamp();
+long timeStamp = this.getDerivedGaugeTimeStamp();
 
 // Code after refactoring
-ObjectName objectName = new ObjectName(monitorName);
-StringMonitor stringMonitor = new StringMonitor(mBeanServerConnection, objectName);
-long timeStamp = stringMonitor.getDerivedGaugeTimeStamp();
+ObjectName objectName = this.getObservedObject();
+long timeStamp = ((StringMonitor) this.getMonitor()).getDerivedGaugeTimeStamp(objectName);
 ```

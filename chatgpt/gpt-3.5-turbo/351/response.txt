@@ -1,8 +1,8 @@
-# Response Time: 4.782058954238892
+# Response Time: 2.8913426399230957
 ```
 // Code before refactoring
-int offset = textComponent.getUI().viewToModel(textComponent, point, bias);
+int pos = this.viewToModel(a, b, c);
 
 // Code after refactoring
-int offset = textComponent.getUI().viewToModel2D(textComponent, point, bias);
+int pos = this.viewToModel2D(a, b, c);
 ```

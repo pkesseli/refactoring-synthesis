@@ -21,7 +21,7 @@ The method java.lang.Class.newInstance() is deprecated.
  The latter sequence of calls is inferred to be able to throw
  the additional exception types InvocationTargetException and NoSuchMethodException. Both of these exception types are
  subclasses of ReflectiveOperationException."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.newInstance()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

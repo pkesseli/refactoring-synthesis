@@ -1,4 +1,4 @@
-# Response Time: 4.237628698348999
+# Response Time: 3.0499284267425537
 ```
 // Code before refactoring
 String[] fontList = Toolkit.getDefaultToolkit().getFontList();

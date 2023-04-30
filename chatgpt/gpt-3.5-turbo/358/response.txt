@@ -1,10 +1,8 @@
-# Response Time: 4.497814178466797
+# Response Time: 2.5468170642852783
 ```
 // Code before refactoring
-int pos = 10;
-Rectangle rect = textComponent.modelToView(pos);
+Rectangle rect = this.modelToView(a);
 
 // Code after refactoring
-int pos = 10;
-Rectangle2D rect = textComponent.modelToView2D(pos);
+Rectangle2D rect = this.modelToView2D(a);
 ```

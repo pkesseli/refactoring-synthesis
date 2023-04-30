@@ -1,10 +1,8 @@
-# Response Time: 4.961783170700073
+# Response Time: 2.107898712158203
 ```
 // Code before refactoring
-TextArea textArea = new TextArea();
-Dimension preferredSize = textArea.preferredSize(500, 500);
+this.preferredSize(a, b);
 
 // Code after refactoring
-TextArea textArea = new TextArea();
-Dimension preferredSize = textArea.getPreferredSize(500, 500);
+this.getPreferredSize(a, b);
 ```

@@ -1,10 +1,9 @@
-# Response Time: 4.828166246414185
+# Response Time: 3.0353379249572754
 ```
 // Code before refactoring
-JViewport viewport = new JViewport();
-viewport.setBackingStoreEnabled(true);
-
+this.setBackingStoreEnabled(a);
+```
+```
 // Code after refactoring
-JViewport viewport = new JViewport();
-viewport.setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
+this.setScrollMode(a ? JViewport.BACKINGSTORE_SCROLL_MODE : JViewport.BLIT_SCROLL_MODE);
 ```

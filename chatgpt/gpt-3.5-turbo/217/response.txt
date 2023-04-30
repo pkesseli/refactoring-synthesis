@@ -1,10 +1,8 @@
-# Response Time: 5.911606550216675
+# Response Time: 1.8638107776641846
 ```
 // Code before refactoring
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-int seconds = date.getSeconds();
+this.getSeconds();
 
 // Code after refactoring
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-int seconds = java.time.LocalDateTime.ofInstant(date.toInstant(), java.time.ZoneId.systemDefault()).getSecond();
+this.toLocalDateTime().getSecond();
 ```

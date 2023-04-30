@@ -1,10 +1,8 @@
-# Response Time: 4.829066753387451
+# Response Time: 2.124380588531494
 ```
 // Code before refactoring
-FontMetrics fontMetrics = graphics.getFontMetrics();
-int maxDescent = fontMetrics.getMaxDecent();
+int descent = this.getMaxDecent();
 
 // Code after refactoring
-FontMetrics fontMetrics = graphics.getFontMetrics();
-int maxDescent = fontMetrics.getMaxDescent();
+int descent = this.getMaxDescent();
 ```

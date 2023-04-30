@@ -1,8 +1,8 @@
-# Response Time: 2.414461612701416
+# Response Time: 1.566798210144043
 ```
 // Code before refactoring
-myList.clear();
+this.clear();
 
 // Code after refactoring
-myList.removeAll();
+this.removeAll();
 ```

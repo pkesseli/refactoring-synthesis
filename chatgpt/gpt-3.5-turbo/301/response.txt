@@ -1,10 +1,10 @@
-# Response Time: 5.185992479324341
+# Response Time: 4.512728929519653
 ```
 // Code before refactoring
-SSLSession session = sslSocket.getSession();
-X509Certificate[] peerCertificates = (X509Certificate[]) session.getPeerCertificateChain();
+javax.net.ssl.SSLSession session = // get SSLSession object
+javax.security.cert.X509Certificate[] certs = session.getPeerCertificateChain();
 
 // Code after refactoring
-SSLSession session = sslSocket.getSession();
-Certificate[] peerCertificates = session.getPeerCertificates();
+javax.net.ssl.SSLSession session = // get SSLSession object
+java.security.cert.Certificate[] certs = session.getPeerCertificates();
 ```

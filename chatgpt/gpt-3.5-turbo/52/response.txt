@@ -1,10 +1,8 @@
-# Response Time: 4.117021560668945
+# Response Time: 2.381577491760254
 ```
 // Code before refactoring
-Container container = new Container();
-Component component = container.locate(x, y);
+Component component = this.locate(a, b);
 
 // Code after refactoring
-Container container = new Container();
-Component component = container.getComponentAt(x, y);
+Component component = this.getComponentAt(a, b);
 ```

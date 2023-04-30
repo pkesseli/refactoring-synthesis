@@ -1,8 +1,8 @@
-# Response Time: 2.567298173904419
+# Response Time: 1.6798272132873535
 ```
 // Code before refactoring
-DriverManager.getLogStream();
+this.getLogStream();
 
 // Code after refactoring
-DriverManager.getLogWriter();
+this.getLogWriter();
 ```

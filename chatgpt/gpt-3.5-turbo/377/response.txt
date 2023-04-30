@@ -1,15 +1,10 @@
-# Response Time: 10.609970092773438
+# Response Time: 4.128014087677002
 ```
 // Code before refactoring
-public void drawLine(int x, int y, Graphics g, int startOffset, int endOffset) {
-    WrappedPlainView view = (WrappedPlainView) getContainer();
-    view.drawLine(x, y, g, startOffset, endOffset);
-}
+this.drawLine(a, b, c, d, e);
 ```
 ```
 // Code after refactoring
-public void drawLine(int x, int y, Graphics2D g, float startOffset, float endOffset) {
-    WrappedPlainView view = (WrappedPlainView) getContainer();
-    view.drawLine(x, y, g, startOffset, endOffset);
-}
+Graphics2D g2d = (Graphics2D) c;
+this.drawLine(a, b, g2d, (float) d, (float) e);
 ```

@@ -1,18 +1,11 @@
-# Response Time: 15.251071691513062
+# Response Time: 4.718793869018555
 ```
 // Code before refactoring
-public void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    WrappedPlainView view = (WrappedPlainView) getEditor().getUI().getRootView(getEditor()).getView(0);
-    view.drawUnselectedText(g, getInsets().left, getInsets().top, getVisibleRect().width, getVisibleRect().height);
-}
+this.drawUnselectedText(a, b, c, d, e);
 ```
 ```
 // Code after refactoring
-public void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    WrappedPlainView view = (WrappedPlainView) getEditor().getUI().getRootView(getEditor()).getView(0);
-    Graphics2D g2d = (Graphics2D) g;
-    view.drawUnselectedText(g2d, (float) getInsets().left, (float) getInsets().top, getVisibleRect().width, getVisibleRect().height);
-}
+((Graphics2D) a).setFont(getFont());
+((Graphics2D) a).setColor(getForeground());
+((Graphics2D) a).drawString(getText().substring(d, e), b, c);
 ```

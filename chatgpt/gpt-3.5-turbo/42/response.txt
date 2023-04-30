@@ -1,8 +1,9 @@
-# Response Time: 3.0754916667938232
+# Response Time: 2.1328482627868652
 ```
 // Code before refactoring
-myComponent.resize(500, 300);
-
+this.resize(a, b);
+```
+```
 // Code after refactoring
-myComponent.setSize(500, 300);
+this.setSize(a, b);
 ```

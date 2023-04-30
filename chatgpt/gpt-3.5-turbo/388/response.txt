@@ -1,34 +1,10 @@
-# Response Time: 18.6778621673584
+# Response Time: 3.1989665031433105
 ```
 // Code before refactoring
-GSSContext context = GSSManager.getInstance().createContext(serverCreds);
-context.requestMutualAuth(true);
-context.requestConf(true);
-context.requestInteg(true);
-InputStream inStream = ...;
-OutputStream outStream = ...;
-context.initSecContext(inStream, outStream);
+this.initSecContext​(a, b);
 
 // Code after refactoring
-GSSContext context = GSSManager.getInstance().createContext(serverCreds);
-context.requestMutualAuth(true);
-context.requestConf(true);
-context.requestInteg(true);
-InputStream inStream = ...;
-OutputStream outStream = ...;
-byte[] token = new byte[0];
-while (!context.isEstablished()) {
-    token = context.initSecContext(token, 0, token.length);
-    outStream.write(token);
-    outStream.flush();
-    if (!context.isEstablished()) {
-        byte[] buffer = new byte[4096];
-        int bytesRead = inStream.read(buffer);
-        if (bytesRead < 0) {
-            throw new EOFException("Cannot read from input stream.");
-        }
-        token = new byte[bytesRead];
-        System.arraycopy(buffer, 0, token, 0, bytesRead);
-    }
-}
+byte[] token = this.initSecContext(a, 0, a.length);
+OutputStream out = ...;
+out.write(token);
 ```

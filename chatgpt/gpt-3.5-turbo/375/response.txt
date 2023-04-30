@@ -1,9 +1,8 @@
-# Response Time: 3.878852605819702
+# Response Time: 2.3517227172851562
 ```
 // Code before refactoring
-Rectangle rect = new Rectangle();
-view.modelToView(10, rect);
+Rectangle rect = this.modelToView(a, b);
 
 // Code after refactoring
-Rectangle rect = view.modelToView(10);
+Rectangle rect = this.modelToView(a);
 ```

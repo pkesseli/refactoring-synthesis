@@ -1,13 +1,13 @@
-# Response Time: 7.2454493045806885
+# Response Time: 5.397573709487915
 ```
 // Code before refactoring
 StringMonitor stringMonitor = new StringMonitor(monitorMBean);
 stringMonitor.start();
-String derivedGauge = stringMonitor.getDerivedGauge();
+double derivedGauge = stringMonitor.getDerivedGauge();
 
 // Code after refactoring
 StringMonitor stringMonitor = new StringMonitor(monitorMBean);
 stringMonitor.start();
 ObjectName objectName = new ObjectName(monitorMBean);
-String derivedGauge = stringMonitor.getDerivedGauge(objectName);
+double derivedGauge = stringMonitor.getDerivedGauge(objectName);
 ```

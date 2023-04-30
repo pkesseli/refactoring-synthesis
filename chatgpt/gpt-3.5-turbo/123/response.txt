@@ -1,8 +1,9 @@
-# Response Time: 2.6553397178649902
+# Response Time: 2.033393621444702
 ```
 // Code before refactoring
-myWindow.postEvent(myEvent);
-
+this.postEvent(a);
+```
+```
 // Code after refactoring
-myWindow.dispatchEvent(myEvent);
+this.dispatchEvent(a);
 ```

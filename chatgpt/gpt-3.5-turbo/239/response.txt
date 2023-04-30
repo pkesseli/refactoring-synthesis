@@ -1,16 +1,9 @@
-# Response Time: 8.942654609680176
+# Response Time: 2.8377585411071777
 ```
 // Code before refactoring
-AtomicLongArray array = new AtomicLongArray(10);
-int index = 5;
-long expectedValue = 100;
-long newValue = 200;
-boolean result = array.weakCompareAndSet(index, expectedValue, newValue);
-
+this.weakCompareAndSet(a, b, c);
+```
+```
 // Code after refactoring
-AtomicLongArray array = new AtomicLongArray(10);
-int index = 5;
-long expectedValue = 100;
-long newValue = 200;
-boolean result = array.weakCompareAndSetPlain(index, expectedValue, newValue);
+this.weakCompareAndSetPlain(a, b, c);
 ```

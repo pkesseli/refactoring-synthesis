@@ -1,13 +1,8 @@
-# Response Time: 6.3818700313568115
+# Response Time: 2.3519399166107178
 ```
 // Code before refactoring
-GSSContext context = ...;
-InputStream inStream = ...;
-OutputStream outStream = ...;
-context.acceptSecContext(inStream, outStream);
+this.acceptSecContext​(a, b);
 
 // Code after refactoring
-GSSContext context = ...;
-byte[] token = readTokenFromInputStream(inStream);
-context.acceptSecContext(token, 0, token.length);
+this.acceptSecContext(a, 0, a.length);
 ```

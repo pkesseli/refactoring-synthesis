@@ -1,11 +1,11 @@
-# Response Time: 5.060309886932373
+# Response Time: 2.912118434906006
 ```
 // Code before refactoring
-Time time = new Time(System.currentTimeMillis());
-time.setMonth(5);
+this.setMonth(a);
 
 // Code after refactoring
-LocalDateTime localDateTime = time.toLocalDateTime();
-localDateTime = localDateTime.withMonth(5);
-time = Time.valueOf(localDateTime.toLocalTime());
+Calendar cal = Calendar.getInstance();
+cal.setTime(this);
+cal.set(Calendar.MONTH, a-1);
+this.setTime(cal.getTime().getTime());
 ```

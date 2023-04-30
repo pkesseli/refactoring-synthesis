@@ -1,7 +1,7 @@
-# Response Time: 3.456439733505249
+# Response Time: 2.442990779876709
 ```
 // Code before refactoring
-remoteCall.releaseInputStream();
+this.releaseInputStream();
 
 // Code after refactoring
 // There is no replacement for this method, so you can simply remove the call

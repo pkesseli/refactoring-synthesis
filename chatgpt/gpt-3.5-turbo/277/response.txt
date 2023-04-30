@@ -1,16 +1,12 @@
-# Response Time: 11.932015180587769
+# Response Time: 3.6701056957244873
 ```
 // Code before refactoring
-MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-ObjectName name = new ObjectName("com.example:type=MyMBean");
-byte[] serializedObject = getSerializedObject();
-Object deserializedObject = mbs.deserialize(name, serializedObject);
-
+this.deserialize(a, b);
+```
+```
 // Code after refactoring
-MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-ObjectName name = new ObjectName("com.example:type=MyMBean");
-byte[] serializedObject = getSerializedObject();
-ClassLoader cl = mbs.getClassLoaderFor(name);
-ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(serializedObject));
-Object deserializedObject = in.readObject();
+ClassLoader cl = getClassLoaderFor(a);
+ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(b));
+Object obj = in.readObject();
+in.close();
 ```

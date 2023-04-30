@@ -1,8 +1,8 @@
-# Response Time: 3.198248863220215
+# Response Time: 2.0431530475616455
 ```
 // Code before refactoring
-int majorVersion = Runtime.version().major();
+int major = Runtime.version().major();
 
 // Code after refactoring
-int majorVersion = Runtime.version().feature();
+int major = Runtime.version().feature();
 ```

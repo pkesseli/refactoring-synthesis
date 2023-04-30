@@ -3,7 +3,7 @@ The method javax.swing.JComponent.reshape​(int, int, int, int) is deprecated.
  replaced by Component.setBounds(int, int, int, int).
  
  Moves and resizes this component."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.reshape​(a, b, c, d)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

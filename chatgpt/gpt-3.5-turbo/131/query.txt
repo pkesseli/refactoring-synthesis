@@ -5,7 +5,7 @@ The method java.io.ObjectOutputStream.PutField.write​(ObjectOutput) is depreca
          correct way to write PutField data is by
          calling the ObjectOutputStream.writeFields()
          method."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.write​(a)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

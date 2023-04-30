@@ -1,16 +1,13 @@
-# Response Time: 10.058058023452759
+# Response Time: 4.610984802246094
 ```
 // Code before refactoring
-byte[] serializedObject = ...;
-MBeanServer mBeanServer = ...;
-ObjectName objectName = ...;
-Object deserializedObject = mBeanServer.deserialize(objectName.toString(), objectName, serializedObject);
-
+this.deserialize(a, b, c);
+```
+```
 // Code after refactoring
-byte[] serializedObject = ...;
-MBeanServer mBeanServer = ...;
-ObjectName objectName = ...;
-ClassLoader classLoader = mBeanServer.getClassLoader(objectName);
-ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(serializedObject));
-Object deserializedObject = objectInputStream.readObject();
+ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(c));
+Object obj = in.readObject();
+in.close();
+this.getMBeanServer().registerMBean(obj, b);
 ```

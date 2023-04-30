@@ -1,16 +1,13 @@
-# Response Time: 9.749009847640991
+# Response Time: 6.037600040435791
 ```
 // Code before refactoring
-public void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    PasswordView passwordView = new PasswordView();
-    passwordView.drawSelectedText(g, 0, 0, 10, 10);
-}
-
+this.drawSelectedText(a, b, c, d, e);
+```
+```
 // Code after refactoring
-public void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    PlainView plainView = new PlainView();
-    plainView.drawSelectedText((Graphics2D) g, 0, 0, 10, 10);
-}
+((Graphics2D) a).setColor(this.getSelectedTextColor());
+((Graphics2D) a).setBackground(this.getBackground());
+((Graphics2D) a).fill(this.getVisibleEditorRect());
+((Graphics2D) a).setColor(this.getForeground());
+((Graphics2D) a).drawString(this.getSelectedText().toString(), b, c);
 ```

@@ -1,10 +1,9 @@
-# Response Time: 3.824566125869751
+# Response Time: 2.3024511337280273
 ```
 // Code before refactoring
-List myList = new List();
-myList.setMultipleSelections(true);
-
+this.setMultipleSelections(a);
+```
+```
 // Code after refactoring
-List myList = new List();
-myList.setMultipleMode(true);
+this.setMultipleMode(a);
 ```

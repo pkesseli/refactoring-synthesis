@@ -1,12 +1,9 @@
-# Response Time: 6.3919289112091064
+# Response Time: 2.671926975250244
 ```
 // Code before refactoring
-JScrollPane scrollPane = new JScrollPane();
-MetalScrollPaneUI metalScrollPaneUI = new MetalScrollPaneUI();
-metalScrollPaneUI.uninstallListeners(scrollPane);
+this.uninstallListeners(a);
 
 // Code after refactoring
-JScrollPane scrollPane = new JScrollPane();
-BasicScrollPaneUI basicScrollPaneUI = new BasicScrollPaneUI();
-basicScrollPaneUI.uninstallListeners(scrollPane);
+BasicScrollPaneUI ui = (BasicScrollPaneUI) a.getUI();
+ui.uninstallListeners(a);
 ```

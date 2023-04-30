@@ -1,10 +1,8 @@
-# Response Time: 5.914276361465454
+# Response Time: 1.702899694442749
 ```
 // Code before refactoring
-java.rmi.dgc.VMID vmid = new java.rmi.dgc.VMID();
-boolean isUnique = vmid.isUnique();
+this.isUnique();
 
 // Code after refactoring
-java.rmi.dgc.VMID vmid = new java.rmi.dgc.VMID();
-boolean isUnique = true;
+UUID.randomUUID().toString();
 ```

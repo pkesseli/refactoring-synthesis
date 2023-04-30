@@ -1,13 +1,10 @@
-# Response Time: 8.098868131637573
+# Response Time: 3.22251558303833
 ```
 // Code before refactoring
-DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
-Vector<TreePath> paths = new Vector<>();
-paths.add(new TreePath("path/to/node"));
-selectionModel.notifyPathChange(paths, new TreePath("path/to/node"));
-
+this.notifyPathChange(a, b);
+```
+```
 // Code after refactoring
-DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
-TreePath[] paths = {new TreePath("path/to/node")};
-selectionModel.setSelectionPaths(paths);
+TreeSelectionEvent event = new TreeSelectionEvent(this, b, true, null, null);
+this.fireValueChanged(event);
 ```

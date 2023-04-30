@@ -1,18 +1,10 @@
-# Response Time: 8.349694013595581
+# Response Time: 3.7213263511657715
 ```
 // Code before refactoring
-public void mousePressed(MouseEvent e) {
-    Component c = e.getComponent();
-    if (c instanceof MyComponent) {
-        ((MyComponent) c).mouseDown(e, e.getX(), e.getY());
-    }
-}
-
+this.mouseDown(a, b, c);
+```
+```
 // Code after refactoring
-public void mousePressed(MouseEvent e) {
-    Component c = e.getComponent();
-    if (c instanceof MyComponent) {
-        ((MyComponent) c).processMouseEvent(e);
-    }
-}
+MouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_PRESSED, System.currentTimeMillis(), 0, a, b, c, false);
+this.processMouseEvent(event);
 ```

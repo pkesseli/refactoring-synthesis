@@ -1,10 +1,10 @@
-# Response Time: 5.024617671966553
+# Response Time: 3.2417938709259033
 ```
 // Code before refactoring
 java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-java.util.Date date = time.getDate();
+Date date = time.getDate();
 
 // Code after refactoring
 java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-java.util.Date date = new java.util.Date(time.getTime());
+Date date = new Date(time.getTime());
 ```

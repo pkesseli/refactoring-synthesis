@@ -1,12 +1,9 @@
-# Response Time: 7.619075298309326
+# Response Time: 2.6529457569122314
 ```
 // Code before refactoring
-splitPane.setDividerLocation(0.5);
-BasicSplitPaneUI ui = (BasicSplitPaneUI) splitPane.getUI();
-ui.createKeyboardDownRightListener();
+this.createKeyboardDownRightListener();
 
 // Code after refactoring
-splitPane.setDividerLocation(0.5);
-BasicSplitPaneUI ui = (BasicSplitPaneUI) splitPane.getUI();
-ui.getHandler().getKeyboardDownRightListener();
+// Use the new method createDownRightListener() instead
+this.createDownRightListener();
 ```

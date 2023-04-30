@@ -1,11 +1,8 @@
-# Response Time: 5.98163628578186
+# Response Time: 2.4851884841918945
 ```
 // Code before refactoring
-JList myList = new JList();
-Object[] selectedValues = myList.getSelectedValues();
+Object[] selectedValues = this.getSelectedValues();
 
 // Code after refactoring
-JList myList = new JList();
-List<Object> selectedValuesList = myList.getSelectedValuesList();
-Object[] selectedValues = selectedValuesList.toArray(new Object[selectedValuesList.size()]);
+List<Object> selectedValuesList = this.getSelectedValuesList();
 ```

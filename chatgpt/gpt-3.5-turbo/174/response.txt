@@ -1,12 +1,8 @@
-# Response Time: 8.354488611221313
+# Response Time: 3.093808174133301
 ```
 // Code before refactoring
-URL url = new URL("https://example.com");
-URLStreamHandler handler = url.getURLStreamHandler();
-handler.setURL(url, "https", "example.com", 443, null, null);
+this.setURL(a, b, c, d, e, f);
 
 // Code after refactoring
-URL url = new URL("https://example.com");
-URLStreamHandler handler = url.getURLStreamHandler();
-handler.setURL(url, "https", "example.com", 443, null, null, null, null);
+this.setURL(a, b, c, d, e, f, null, null);
 ```

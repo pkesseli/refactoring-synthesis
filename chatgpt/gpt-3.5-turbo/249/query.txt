@@ -2,7 +2,7 @@ The method java.util.Date.getTimezoneOffset() is deprecated.
  The related deprecation comment in Javadoc is "As of JDK version 1.1,
  replaced by -(Calendar.get(Calendar.ZONE_OFFSET) +
  Calendar.get(Calendar.DST_OFFSET)) / (60 * 1000)."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.getTimezoneOffset()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

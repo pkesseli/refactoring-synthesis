@@ -1,10 +1,14 @@
-# Response Time: 5.796684980392456
+# Response Time: 3.301705837249756
 ```
 // Code before refactoring
-PrintJob printJob = Toolkit.getDefaultToolkit().getPrintJob(frame, "Print Job", null, null);
-printJob.finalize();
+public void cleanup() {
+    // perform some cleanup
+    this.finalize();
+}
 
 // Code after refactoring
-PrintJob printJob = Toolkit.getDefaultToolkit().getPrintJob(frame, "Print Job", null, null);
-printJob.dispose();
+public void cleanup() {
+    // perform some cleanup
+    // alternative cleanup mechanism
+}
 ```

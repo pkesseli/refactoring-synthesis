@@ -1,4 +1,4 @@
-# Response Time: 3.7057085037231445
+# Response Time: 2.861605644226074
 ```
 // Code before refactoring
 Date date = new Date();

@@ -1,19 +1,8 @@
-# Response Time: 6.684497833251953
+# Response Time: 1.6141941547393799
 ```
 // Code before refactoring
-Thread thread = new Thread();
-thread.start();
-// Some code here
-thread.stop();
+this.stop();
 
 // Code after refactoring
-volatile boolean stopThread = false;
-Thread thread = new Thread(() -> {
-    while (!stopThread) {
-        // Code to be executed repeatedly
-    }
-});
-thread.start();
-// Some code here
-stopThread = true;
+this.interrupt();
 ```

@@ -1,7 +1,7 @@
 The method java.awt.image.renderable.RenderContext.preConcetenateTransform​(AffineTransform) is deprecated.
  The related deprecation comment in Javadoc is "replaced by
                  preConcatenateTransform(AffineTransform)."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.preConcetenateTransform​(a)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

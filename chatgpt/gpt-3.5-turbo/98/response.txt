@@ -1,10 +1,9 @@
-# Response Time: 5.90009069442749
+# Response Time: 2.170590877532959
 ```
 // Code before refactoring
-Rectangle rect = new Rectangle(10, 10, 50, 50);
-rect.resize(20, 20);
-
+this.resize(a, b);
+```
+```
 // Code after refactoring
-Rectangle rect = new Rectangle(10, 10, 50, 50);
-rect.setSize(70, 70);
+this.setSize(a, b);
 ```

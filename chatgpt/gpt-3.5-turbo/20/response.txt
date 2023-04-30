@@ -1,12 +1,13 @@
-# Response Time: 4.5294349193573
+# Response Time: 2.9177489280700684
 ```
 // Code before refactoring
-public boolean handleEvent(Event evt) {
-    // event handling logic here
+public void someMethod(Event a) {
+    this.handleEvent(a);
 }
-
+```
+```
 // Code after refactoring
-public boolean processEvent(AWTEvent evt) {
-    // event handling logic here
+public void someMethod(Event a) {
+    this.processEvent(a);
 }
 ```

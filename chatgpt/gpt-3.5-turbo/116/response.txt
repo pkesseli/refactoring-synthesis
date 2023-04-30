@@ -1,10 +1,9 @@
-# Response Time: 3.9794015884399414
+# Response Time: 2.2548911571502686
 ```
 // Code before refactoring
-TextField passwordField = new TextField();
-passwordField.setEchoCharacter('*');
-
+this.setEchoCharacter(a);
+```
+```
 // Code after refactoring
-TextField passwordField = new TextField();
-passwordField.setEchoChar('*');
+this.setEchoChar(a);
 ```

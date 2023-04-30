@@ -1,15 +1,9 @@
-# Response Time: 10.199066162109375
+# Response Time: 3.795417547225952
 ```
 // Code before refactoring
-public void drawPasswordChar(Graphics g, int x, int y, char c) {
-    PasswordView passwordView = new PasswordView();
-    passwordView.drawEchoCharacter(g, x, y, c);
-}
+this.drawEchoCharacter(a, b, c, d);
 
 // Code after refactoring
-public void drawPasswordChar(Graphics g, int x, int y, char c) {
-    PasswordView passwordView = new PasswordView();
-    Graphics2D g2d = (Graphics2D) g;
-    passwordView.drawEchoCharacter(g2d, (float) x, (float) y, c);
-}
+Graphics2D g2d = (Graphics2D) a;
+this.drawEchoCharacter(g2d, (float) b, (float) c, d);
 ```

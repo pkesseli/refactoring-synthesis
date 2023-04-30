@@ -1,8 +1,9 @@
-# Response Time: 2.577474355697632
+# Response Time: 2.525360345840454
 ```
 // Code before refactoring
-menuContainer.postEvent(event);
-
+this.postEvent(a);
+```
+```
 // Code after refactoring
-menuContainer.dispatchEvent(event);
+Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(a);
 ```

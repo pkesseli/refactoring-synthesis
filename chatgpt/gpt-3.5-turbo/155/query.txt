@@ -1,7 +1,7 @@
 The method java.lang.ThreadGroup.suspend() is deprecated.
  The related deprecation comment in Javadoc is "This method is inherently deadlock-prone.  See
      Thread.suspend() for details."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.suspend()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

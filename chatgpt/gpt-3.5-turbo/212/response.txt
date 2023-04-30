@@ -1,18 +1,17 @@
-# Response Time: 9.389299154281616
+# Response Time: 6.062184810638428
 ```
 // Code before refactoring
-Signature signature = Signature.getInstance("SHA256withRSA");
-signature.initSign(privateKey);
-byte[] data = "Hello, world!".getBytes();
-signature.update(data);
-byte[] signatureBytes = signature.sign();
-byte[] params = signature.engineGetParameter("params");
-
+public byte[] sign(byte[] data) throws SignatureException {
+    AlgorithmParameters params = this.engineGetParameters();
+    byte[] a = params.getEncoded();
+    return this.engineSign(data);
+}
+```
+```
 // Code after refactoring
-Signature signature = Signature.getInstance("SHA256withRSA");
-signature.initSign(privateKey);
-byte[] data = "Hello, world!".getBytes();
-signature.update(data);
-byte[] signatureBytes = signature.sign();
-byte[] params = signature.getParameters().getEncoded();
+public byte[] sign(byte[] data) throws SignatureException {
+    AlgorithmParameters params = this.engineGetParameters();
+    byte[] a = params.getEncoded("ASN.1");
+    return this.engineSign(data);
+}
 ```

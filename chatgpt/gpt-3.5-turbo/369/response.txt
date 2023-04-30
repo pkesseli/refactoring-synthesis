@@ -1,8 +1,8 @@
-# Response Time: 5.506819248199463
+# Response Time: 3.9225785732269287
 ```
 // Code before refactoring
-int breakLocation = Utilities.getBreakLocation(segment, fontMetrics, x, startOffset, tabExpander, direction);
+int breakLocation = Utilities.getBreakLocation(a, b, c, d, e, f);
 
 // Code after refactoring
-float breakLocation = Utilities.getBreakLocation(segment, fontMetrics, x, startOffset, tabExpander, direction);
+float breakLocation = Utilities.getBreakLocation(a, b, (float) c, (float) d, e, f);
 ```

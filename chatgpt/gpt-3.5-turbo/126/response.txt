@@ -1,8 +1,8 @@
-# Response Time: 6.057136058807373
+# Response Time: 3.0930755138397217
 ```
 // Code before refactoring
-MyBean bean = (MyBean) Beans.instantiate(classLoader, "com.example.MyBean", beanContext, appletInitializer);
+Object obj = Beans.instantiate(classLoader, className, beanContext, appletInitializer);
 
 // Code after refactoring
-MyBean bean = (MyBean) Beans.instantiate(classLoader, "com.example.MyBean", beanContext);
+Object obj = Beans.instantiate(classLoader, className, beanContext);
 ```

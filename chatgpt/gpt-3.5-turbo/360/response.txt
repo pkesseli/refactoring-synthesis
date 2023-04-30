@@ -1,12 +1,8 @@
-# Response Time: 6.956209659576416
+# Response Time: 2.696255683898926
 ```
 // Code before refactoring
-FontMetrics fontMetrics = getFontMetrics(getFont());
+FontMetrics fontMetrics = this.getFontMetrics();
 
 // Code after refactoring
-FontRenderContext frc = getGraphics().getFontRenderContext();
-Font font = getFont();
-Rectangle2D bounds = font.getStringBounds(getText(), frc);
-int width = (int) Math.ceil(bounds.getWidth());
-int height = (int) Math.ceil(bounds.getHeight());
+FontMetrics fontMetrics = this.getFont().getFontMetrics(this.getFontRenderContext());
 ```

@@ -1,14 +1,12 @@
-# Response Time: 4.931588411331177
+# Response Time: 4.008412599563599
 ```
 // Code before refactoring
-VirtualMachine vm = ...;
-if (vm.canAddMethod()) {
+if (this.canAddMethod()) {
     // do something
 }
 
 // Code after refactoring
-VirtualMachine vm = ...;
-if (vm.capabilities().canAddMethod()) {
-    // do something
-}
+// The method is always returning false, so the condition is unnecessary
+// Remove the if statement and the call to the deprecated method
+// do something
 ```

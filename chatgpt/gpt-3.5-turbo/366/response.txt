@@ -1,39 +1,10 @@
-# Response Time: 25.04921245574951
+# Response Time: 4.665395498275757
 ```
 // Code before refactoring
-public void paint(Graphics g, Shape shape) {
-    int start = getStartOffset();
-    int end = getEndOffset();
-    Rectangle r;
-    try {
-        r = shape.getBounds();
-        for (int i = start; i < end; i++) {
-            Shape s = modelToView(i, Position.Bias.Forward, shape);
-            if (s.intersects(r)) {
-                drawUnselectedText((Graphics2D) g, i, s);
-            }
-        }
-    } catch (BadLocationException e) {
-        e.printStackTrace();
-    }
-}
-
+this.drawUnselectedText(a, b, c, d, e);
+```
+```
 // Code after refactoring
-public void paint(Graphics g, Shape shape) {
-    int start = getStartOffset();
-    int end = getEndOffset();
-    Rectangle r;
-    try {
-        r = shape.getBounds();
-        Graphics2D g2d = (Graphics2D) g;
-        for (int i = start; i < end; i++) {
-            Shape s = modelToView(i, Position.Bias.Forward, shape);
-            if (s.intersects(r)) {
-                drawUnselectedText(g2d, (float) s.getBounds2D().getX(), (float) s.getBounds2D().getY(), i, i + 1);
-            }
-        }
-    } catch (BadLocationException e) {
-        e.printStackTrace();
-    }
-}
+Graphics2D g2d = (Graphics2D) a;
+this.drawUnselectedText(g2d, (float) b, (float) c, d, e);
 ```

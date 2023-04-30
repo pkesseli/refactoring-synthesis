@@ -1,8 +1,8 @@
-# Response Time: 2.898664951324463
+# Response Time: 2.396634101867676
 ```
 // Code before refactoring
-someAccessibleObject.isAccessible();
+boolean isAccessible = this.isAccessible();
 
 // Code after refactoring
-someAccessibleObject.canAccess(someObject);
+boolean isAccessible = AccessibleObject.canAccess(this, null);
 ```

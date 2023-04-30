@@ -1,12 +1,10 @@
-# Response Time: 5.054631471633911
+# Response Time: 2.4030890464782715
 ```
 // Code before refactoring
-myThreadGroup.resume();
-
+this.resume();
+```
+```
 // Code after refactoring
-for (Thread thread : Thread.getAllStackTraces().keySet()) {
-    if (thread.getThreadGroup() == myThreadGroup) {
-        thread.resume();
-    }
-}
+// Deprecated method replaced with alternative
+Thread.currentThread().resume();
 ```

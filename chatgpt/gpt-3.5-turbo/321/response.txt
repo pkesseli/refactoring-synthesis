@@ -1,11 +1,9 @@
-# Response Time: 5.6512768268585205
+# Response Time: 2.9342377185821533
 ```
 // Code before refactoring
-JPasswordField passwordField = new JPasswordField();
-String password = passwordField.getText(0, passwordField.getPassword().length);
+String password = this.getText(a, b);
 
 // Code after refactoring
-JPasswordField passwordField = new JPasswordField();
-char[] passwordChars = passwordField.getPassword();
-String password = new String(passwordChars);
+char[] passwordChars = this.getPassword();
+String password = new String(passwordChars, a, b-a);
 ```

@@ -1,42 +1,12 @@
-# Response Time: 26.01560139656067
+# Response Time: 4.117289066314697
 ```
 // Code before refactoring
-try {
-    InetAddress group = InetAddress.getByName("224.0.0.1");
-    SecurityManager securityManager = System.getSecurityManager();
-    if (securityManager != null) {
-        securityManager.checkMulticast(group, (byte) 0);
-    }
-    MulticastSocket socket = new MulticastSocket(4446);
-    socket.joinGroup(group);
-    byte[] buf = new byte[256];
-    DatagramPacket packet = new DatagramPacket(buf, buf.length);
-    socket.receive(packet);
-    String received = new String(packet.getData(), 0, packet.getLength());
-    System.out.println("Received message: " + received);
-    socket.leaveGroup(group);
-    socket.close();
-} catch (IOException e) {
-    e.printStackTrace();
-}
-
+this.checkMulticast(a, b);
+```
+```
 // Code after refactoring
-try {
-    InetAddress group = InetAddress.getByName("224.0.0.1");
-    SecurityManager securityManager = System.getSecurityManager();
-    if (securityManager != null) {
-        securityManager.checkPermission(new MulticastPermission("joinGroup"));
-    }
-    MulticastSocket socket = new MulticastSocket(4446);
-    socket.joinGroup(group);
-    byte[] buf = new byte[256];
-    DatagramPacket packet = new DatagramPacket(buf, buf.length);
-    socket.receive(packet);
-    String received = new String(packet.getData(), 0, packet.getLength());
-    System.out.println("Received message: " + received);
-    socket.leaveGroup(group);
-    socket.close();
-} catch (IOException e) {
-    e.printStackTrace();
+SecurityManager securityManager = System.getSecurityManager();
+if (securityManager != null) {
+    securityManager.checkPermission(new java.net.SocketPermission(a.getHostAddress(), "accept,connect,listen,resolve"));
 }
 ```

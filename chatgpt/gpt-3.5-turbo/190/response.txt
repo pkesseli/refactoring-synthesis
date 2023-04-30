@@ -1,9 +1,8 @@
-# Response Time: 3.9705429077148438
+# Response Time: 2.4479920864105225
 ```
 // Code before refactoring
-Operation op = myObject.getOperation();
+this.getOperation();
 
 // Code after refactoring
-// The method has no replacement, so you can simply remove the call to it
-Operation op = null;
+// There is no replacement for this method, so you can simply remove the call
 ```

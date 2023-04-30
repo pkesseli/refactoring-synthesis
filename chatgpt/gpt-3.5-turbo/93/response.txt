@@ -1,10 +1,12 @@
-# Response Time: 5.580772399902344
+# Response Time: 3.040768623352051
 ```
 // Code before refactoring
-Polygon polygon = new Polygon(xPoints, yPoints, nPoints);
-boolean isInside = polygon.inside(x, y);
+if (this.inside(a, b)) {
+    // do something
+}
 
 // Code after refactoring
-Polygon polygon = new Polygon(xPoints, yPoints, nPoints);
-boolean isInside = polygon.contains(x, y);
+if (this.contains(a, b)) {
+    // do something
+}
 ```

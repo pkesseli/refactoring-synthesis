@@ -1,11 +1,8 @@
-# Response Time: 5.081698417663574
+# Response Time: 2.2886223793029785
 ```
 // Code before refactoring
-String str = "Hello World";
-byte[] bytes = new byte[str.length()];
-str.getBytes(0, str.length(), bytes, 0);
+this.getBytes(a, b, c, d);
 
 // Code after refactoring
-String str = "Hello World";
-byte[] bytes = str.getBytes();
+this.substring(a, b).getBytes(c, d);
 ```

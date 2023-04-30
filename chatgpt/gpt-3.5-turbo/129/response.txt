@@ -1,11 +1,8 @@
-# Response Time: 5.1898815631866455
+# Response Time: 2.091097354888916
 ```
 // Code before refactoring
-File file = new File("path/to/file");
 URL url = file.toURL();
 
 // Code after refactoring
-File file = new File("path/to/file");
-URI uri = file.toURI();
-URL url = uri.toURL();
+URL url = file.toURI().toURL();
 ```

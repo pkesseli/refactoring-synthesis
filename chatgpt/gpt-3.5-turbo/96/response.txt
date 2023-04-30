@@ -1,10 +1,8 @@
-# Response Time: 5.733810901641846
+# Response Time: 2.0329909324645996
 ```
 // Code before refactoring
-Rectangle rect = new Rectangle(10, 10, 50, 50);
-rect.move(20, 20);
+this.move(a, b);
 
 // Code after refactoring
-Rectangle rect = new Rectangle(10, 10, 50, 50);
-rect.setLocation(20, 20);
+this.setLocation(a, b);
 ```

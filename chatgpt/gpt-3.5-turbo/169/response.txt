@@ -1,10 +1,8 @@
-# Response Time: 4.678228139877319
+# Response Time: 2.091254949569702
 ```
 // Code before refactoring
-MulticastSocket socket = new MulticastSocket();
-socket.setTTL((byte) 5);
+this.setTTL(a);
 
 // Code after refactoring
-MulticastSocket socket = new MulticastSocket();
-socket.setTimeToLive(5);
+this.setTimeToLive((int) a);
 ```

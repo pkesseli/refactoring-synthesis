@@ -1,11 +1,9 @@
-# Response Time: 7.697486639022827
+# Response Time: 3.3454418182373047
 ```
 // Code before refactoring
-Logger logger = Logger.getLogger("myLogger");
-logger.logrb(Level.INFO, null, "MyClass", "MyBundle", "myKey", new Object[] {arg1, arg2});
-
+this.logrb(a, b, c, d, e, f);
+```
+```
 // Code after refactoring
-Logger logger = Logger.getLogger("myLogger");
-ResourceBundle bundle = ResourceBundle.getBundle("MyBundle");
-logger.logrb(Level.INFO, null, "MyClass", bundle, "myKey", arg1, arg2);
+this.logrb(a, b, c, ResourceBundle.getBundle(d), e, f);
 ```

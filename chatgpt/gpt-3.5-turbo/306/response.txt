@@ -1,12 +1,8 @@
-# Response Time: 4.799908876419067
+# Response Time: 2.437133550643921
 ```
 // Code before refactoring
-if (FocusManager.isFocusManagerEnabled()) {
-    // do something
-}
+this.isFocusManagerEnabled();
 
 // Code after refactoring
-if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalPolicy() != null) {
-    // do something
-}
+KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalPolicy();
 ```

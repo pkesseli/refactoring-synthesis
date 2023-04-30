@@ -1,10 +1,8 @@
-# Response Time: 4.438099384307861
+# Response Time: 2.134101152420044
 ```
 // Code before refactoring
-BorderLayout layout = new BorderLayout();
-layout.addLayoutComponent(BorderLayout.NORTH, myComponent);
+this.addLayoutComponent(a, b);
 
 // Code after refactoring
-BorderLayout layout = new BorderLayout();
-layout.addLayoutComponent(myComponent, BorderLayout.NORTH);
+this.addLayoutComponent(b, a);
 ```

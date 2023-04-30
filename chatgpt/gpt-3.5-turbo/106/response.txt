@@ -1,10 +1,8 @@
-# Response Time: 4.592791318893433
+# Response Time: 2.0268561840057373
 ```
 // Code before refactoring
-TextArea textArea = new TextArea();
-textArea.insertText("Hello World", 0);
+this.insertText(a, b);
 
 // Code after refactoring
-TextArea textArea = new TextArea();
-textArea.insert("Hello World", 0);
+this.insert(a, b);
 ```

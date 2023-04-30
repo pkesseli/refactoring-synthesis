@@ -1,9 +1,21 @@
-# Response Time: 5.414376497268677
+# Response Time: 5.8651793003082275
 ```
 // Code before refactoring
-javax.swing.plaf.metal.MetalComboBoxUI.removeListeners();
+public class MyComboBox extends JComboBox<String> {
+    public MyComboBox() {
+        this.removeListeners();
+    }
+}
 
 // Code after refactoring
-javax.swing.plaf.metal.MetalComboBoxUI metalComboBoxUI = new javax.swing.plaf.metal.MetalComboBoxUI();
-metalComboBoxUI.uninstallListeners();
+public class MyComboBox extends JComboBox<String> {
+    public MyComboBox() {
+        for (ActionListener listener : getActionListeners()) {
+            removeActionListener(listener);
+        }
+        for (ItemListener listener : getItemListeners()) {
+            removeItemListener(listener);
+        }
+    }
+}
 ```

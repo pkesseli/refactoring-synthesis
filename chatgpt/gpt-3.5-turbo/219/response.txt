@@ -1,11 +1,13 @@
-# Response Time: 5.667716979980469
+# Response Time: 2.933347702026367
 ```
-// Code before refactoring
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-date.setMinutes(30);
-
-// Code after refactoring
-java.sql.Timestamp timestamp = new java.sql.Timestamp(System.currentTimeMillis());
-timestamp.setMinutes(30);
-java.sql.Date date = new java.sql.Date(timestamp.getTime());
+<code before refactoring here>
+```
+```
+this.setMinutes(a);
+```
+```
+<code after refactoring here>
+```
+```
+this.setTime(this.getTime() + TimeUnit.MINUTES.toMillis(a));
 ```

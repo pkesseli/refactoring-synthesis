@@ -1,10 +1,8 @@
-# Response Time: 4.488248586654663
+# Response Time: 2.1371827125549316
 ```
 // Code before refactoring
-RenderContext context = new RenderContext(transform);
-context.preConcatenateTransform(anotherTransform);
+this.preConcetenateTransform(a);
 
 // Code after refactoring
-RenderContext context = new RenderContext(transform);
-context.preConcatenate(anotherTransform);
+this.preConcatenateTransform(a);
 ```

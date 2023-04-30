@@ -1,8 +1,9 @@
-# Response Time: 2.3251006603240967
+# Response Time: 2.056931972503662
 ```
 // Code before refactoring
-container.deliverEvent(event);
-
+this.deliverEvent(a);
+```
+```
 // Code after refactoring
-container.dispatchEvent(event);
+this.dispatchEvent(a);
 ```

@@ -1,14 +1,8 @@
-# Response Time: 7.284310340881348
+# Response Time: 3.106865406036377
 ```
 // Code before refactoring
-Rectangle rect = null;
-try {
-    rect = textComponent.getUI().modelToView(textComponent, pos);
-} catch (BadLocationException e) {
-    e.printStackTrace();
-}
+Rectangle rect = this.modelToView(a, b);
 
 // Code after refactoring
-Rectangle2D rect2D = textComponent.getUI().modelToView2D(textComponent, pos, Position.Bias.Forward);
-Rectangle rect = rect2D.getBounds();
+Rectangle2D rect = this.modelToView2D(a, b, Position.Bias.Forward);
 ```

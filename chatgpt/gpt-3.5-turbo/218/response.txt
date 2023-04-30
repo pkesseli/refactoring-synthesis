@@ -1,11 +1,9 @@
-# Response Time: 5.643990993499756
+# Response Time: 2.772566556930542
 ```
 // Code before refactoring
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-date.setHours(10);
+this.setHours(a);
 
 // Code after refactoring
-java.sql.Timestamp timestamp = new java.sql.Timestamp(System.currentTimeMillis());
-timestamp.setHours(10);
-java.sql.Date date = new java.sql.Date(timestamp.getTime());
+LocalDateTime localDateTime = this.toLocalDateTime().withHour(a);
+this.setTime(Timestamp.valueOf(localDateTime).getTime());
 ```

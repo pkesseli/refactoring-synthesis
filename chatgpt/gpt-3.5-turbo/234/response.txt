@@ -1,13 +1,10 @@
-# Response Time: 8.68727445602417
+# Response Time: 3.4992682933807373
 ```
 // Code before refactoring
-Time time = new Time(System.currentTimeMillis());
-time.setYear(2021);
+this.setYear(a);
 
 // Code after refactoring
-LocalDateTime localDateTime = LocalDateTime.now();
-LocalTime localTime = localDateTime.toLocalTime();
-LocalDate localDate = LocalDate.of(2021, localDateTime.getMonth(), localDateTime.getDayOfMonth());
-Time time = Time.valueOf(LocalTime.of(localTime.getHour(), localTime.getMinute(), localTime.getSecond()));
-time.setYear(localDate.getYear() - 1900);
+LocalDateTime ldt = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault());
+ldt = ldt.withYear(a);
+this.setTime(Time.valueOf(ldt.toLocalTime()));
 ```

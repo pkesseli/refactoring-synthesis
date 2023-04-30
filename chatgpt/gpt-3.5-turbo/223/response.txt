@@ -1,12 +1,8 @@
-# Response Time: 8.827622175216675
+# Response Time: 2.6857690811157227
 ```
 // Code before refactoring
-PreparedStatement ps = conn.prepareStatement("INSERT INTO my_table (my_column) VALUES (?)");
-InputStream inputStream = new ByteArrayInputStream("my string".getBytes(StandardCharsets.UTF_8));
-ps.setUnicodeStream(1, inputStream, "my string".length());
+this.setUnicodeStream(a, b, c);
 
 // Code after refactoring
-PreparedStatement ps = conn.prepareStatement("INSERT INTO my_table (my_column) VALUES (?)");
-Reader reader = new StringReader("my string");
-ps.setCharacterStream(1, reader, "my string".length());
+this.setCharacterStream(a, new InputStreamReader(b, StandardCharsets.UTF_8), c);
 ```

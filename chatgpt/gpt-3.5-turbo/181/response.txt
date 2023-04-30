@@ -1,12 +1,23 @@
-# Response Time: 4.019552230834961
+# Response Time: 5.243967056274414
 ```
 // Code before refactoring
 import java.rmi.server.LogStream;
 
-LogStream logStream = LogStream.getDefaultStream();
-
+public class MyClass {
+    public void myMethod() {
+        LogStream logStream = this.getDefaultStream();
+        // rest of the code
+    }
+}
+```
+```
 // Code after refactoring
 import java.util.logging.Logger;
 
-Logger logger = Logger.getGlobal();
+public class MyClass {
+    public void myMethod() {
+        Logger logger = Logger.getGlobal();
+        // rest of the code
+    }
+}
 ```

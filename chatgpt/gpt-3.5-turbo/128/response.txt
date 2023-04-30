@@ -1,4 +1,4 @@
-# Response Time: 4.395914554595947
+# Response Time: 2.9090332984924316
 ```
 // Code before refactoring
 DataInputStream in = new DataInputStream(socket.getInputStream());

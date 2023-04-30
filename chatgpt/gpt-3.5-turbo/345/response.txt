@@ -1,8 +1,8 @@
-# Response Time: 3.9582316875457764
+# Response Time: 2.3845298290252686
 ```
 // Code before refactoring
-int viewToModel = multiTextUI.viewToModel(textComponent, point);
+int pos = this.viewToModel(a, b);
 
 // Code after refactoring
-int viewToModel = textComponent.viewToModel(point);
+int pos = a.viewToModel(b);
 ```

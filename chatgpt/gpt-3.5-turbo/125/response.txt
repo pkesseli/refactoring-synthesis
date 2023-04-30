@@ -1,8 +1,8 @@
-# Response Time: 2.5059921741485596
+# Response Time: 1.646662712097168
 ```
 // Code before refactoring
-myWindow.show();
+this.show();
 
 // Code after refactoring
-myWindow.setVisible(true);
+this.setVisible(true);
 ```

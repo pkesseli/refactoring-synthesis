@@ -1,8 +1,8 @@
-# Response Time: 2.8588199615478516
+# Response Time: 2.0365653038024902
 ```
 // Code before refactoring
-String label = myButton.getLabel();
+String label = this.getLabel();
 
 // Code after refactoring
-String text = myButton.getText();
+String text = this.getText();
 ```

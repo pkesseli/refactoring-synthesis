@@ -1,23 +1,8 @@
-# Response Time: 17.177801609039307
+# Response Time: 2.2449166774749756
 ```
 // Code before refactoring
-splitPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0), "Home");
-splitPane.getActionMap().put("Home", new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-        BasicSplitPaneUI ui = (BasicSplitPaneUI) splitPane.getUI();
-        ui.getHandler().home();
-    }
-});
+this.createKeyboardHomeListener();
 
 // Code after refactoring
-splitPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0), "Home");
-splitPane.getActionMap().put("Home", new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-        BasicSplitPaneUI ui = (BasicSplitPaneUI) splitPane.getUI();
-        BasicSplitPaneUI.KeyboardHomeHandler handler = ui.getKeyboardHomeHandler();
-        if (handler != null) {
-            handler.actionPerformed(e);
-        }
-    }
-});
+this.getHandler().getHomeHandler().run(); 
 ```

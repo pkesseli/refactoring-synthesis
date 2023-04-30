@@ -1,9 +1,9 @@
-# Response Time: 3.801237106323242
+# Response Time: 2.6486363410949707
 ```
 // Code before refactoring
-myComponent.reshape(x, y, width, height);
+this.reshape(a, b, c, d);
 ```
 ```
 // Code after refactoring
-myComponent.setBounds(x, y, width, height);
+this.setBounds(a, b, c, d);
 ```

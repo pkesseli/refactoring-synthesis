@@ -5,7 +5,7 @@ The method java.lang.Runtime.Version.security() is deprecated.
  method in preference to this method.  For compatibility, this method
  returns the value of the update element, or
  zero if it is absent."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.security()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

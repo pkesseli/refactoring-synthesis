@@ -5,7 +5,7 @@ The method java.security.Security.getAlgorithmProperty​(String, String) is dep
  parameters. Use the new provider-based and algorithm-independent
  AlgorithmParameters and KeyFactory engine
  classes (introduced in the J2SE version 1.2 platform) instead."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.getAlgorithmProperty​(a, b)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

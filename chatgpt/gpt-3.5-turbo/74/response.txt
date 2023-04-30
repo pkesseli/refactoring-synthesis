@@ -1,20 +1,8 @@
-# Response Time: 11.196635723114014
+# Response Time: 2.5619301795959473
 ```
 // Code before refactoring
-List myList = new List(5, true);
-myList.add("Item 1");
-myList.add("Item 2");
-myList.add("Item 3");
-myList.add("Item 4");
-myList.add("Item 5");
-myList.allowsMultipleSelections();
+boolean allowMultipleSelections = this.allowsMultipleSelections();
 
 // Code after refactoring
-List myList = new List(5, true);
-myList.add("Item 1");
-myList.add("Item 2");
-myList.add("Item 3");
-myList.add("Item 4");
-myList.add("Item 5");
-myList.isMultipleMode();
+boolean allowMultipleSelections = this.isMultipleMode();
 ```

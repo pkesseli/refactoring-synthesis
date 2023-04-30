@@ -1,12 +1,13 @@
-# Response Time: 4.314009189605713
+# Response Time: 3.1289963722229004
 ```
 // Code before refactoring
-if (myComponent.isManagingFocus()) {
+if (this.isManagingFocus()) {
     // do something
 }
-
+```
+```
 // Code after refactoring
-if (myComponent.getFocusTraversalKeysEnabled()) {
+if (this.isFocusCycleRoot()) {
     // do something
 }
 ```

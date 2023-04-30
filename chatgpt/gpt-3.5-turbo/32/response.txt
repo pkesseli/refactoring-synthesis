@@ -1,14 +1,9 @@
-# Response Time: 5.606187105178833
+# Response Time: 3.6204464435577393
 ```
 // Code before refactoring
-public void mouseDrag(Event evt, int x, int y) {
-    // Do something
-    super.mouseDrag(evt, x, y);
-}
+this.mouseDrag(a, b, c);
 
 // Code after refactoring
-public void mouseDrag(MouseEvent evt) {
-    // Do something
-    super.processMouseMotionEvent(evt);
-}
+MouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_DRAGGED, System.currentTimeMillis(), 0, a, b, c, false);
+this.processMouseMotionEvent(event);
 ```

@@ -1,9 +1,8 @@
-# Response Time: 3.3411169052124023
+# Response Time: 1.9214293956756592
 ```
 // Code before refactoring
-Point location = myComponent.location();
-```
-```
+Point location = this.location();
+
 // Code after refactoring
-Point location = myComponent.getLocation();
+Point location = this.getLocation();
 ```

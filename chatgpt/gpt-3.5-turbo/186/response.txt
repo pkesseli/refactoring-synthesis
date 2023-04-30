@@ -1,10 +1,9 @@
-# Response Time: 5.073526382446289
+# Response Time: 2.384878158569336
 ```
 // Code before refactoring
-LogStream logStream = LogStream.log("myLog");
-logStream.setOutputStream(System.out);
-
+this.setOutputStream(a);
+```
+```
 // Code after refactoring
-LogStream logStream = LogStream.log("myLog");
-logStream.setOutputStream(new PrintStream(System.out));
+// Deprecated method has no replacement, so we can simply remove the call
 ```

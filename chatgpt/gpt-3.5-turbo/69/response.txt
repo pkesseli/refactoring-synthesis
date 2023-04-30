@@ -1,12 +1,19 @@
-# Response Time: 8.384064197540283
+# Response Time: 4.512206077575684
 ```
 // Code before refactoring
-java.awt.image.IndexColorModel colorModel = new java.awt.image.IndexColorModel(8, 256, reds, greens, blues, 0);
-colorModel.finalize();
-
+public class MyClass {
+    public void cleanup() {
+        // perform cleanup
+        this.finalize();
+    }
+}
+```
+```
 // Code after refactoring
-java.awt.image.IndexColorModel colorModel = new java.awt.image.IndexColorModel(8, 256, reds, greens, blues, 0);
-// Alternative cleanup mechanism
-colorModel = null;
-System.gc();
+public class MyClass {
+    public void cleanup() {
+        // perform cleanup
+        // remove the call to this.finalize()
+    }
+}
 ```

@@ -1,26 +1,8 @@
-# Response Time: 9.671025276184082
+# Response Time: 2.0628833770751953
 ```
 // Code before refactoring
-import java.awt.Cursor;
-import java.awt.Frame;
+this.setCursor(a);
 
-public class Example {
-    public static void main(String[] args) {
-        Frame frame = new Frame();
-        frame.setCursor(Frame.HAND_CURSOR);
-    }
-}
-```
-```
 // Code after refactoring
-import java.awt.Cursor;
-import java.awt.Frame;
-
-public class Example {
-    public static void main(String[] args) {
-        Frame frame = new Frame();
-        Cursor cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-        frame.setCursor(cursor);
-    }
-}
+this.setCursor(Cursor.getPredefinedCursor(a));
 ```

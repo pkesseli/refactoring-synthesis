@@ -1,10 +1,16 @@
-# Response Time: 5.992246627807617
+# Response Time: 3.7186098098754883
 ```
 // Code before refactoring
-java.rmi.server.LogStream logStream = new java.rmi.server.LogStream(System.out);
-String logString = logStream.toString();
+public class MyClass {
+    public String myMethod() {
+        return this.toString();
+    }
+}
 
 // Code after refactoring
-java.rmi.server.LogStream logStream = new java.rmi.server.LogStream(System.out);
-String logString = logStream.getLog().toString();
+public class MyClass {
+    public String myMethod() {
+        return getClass().getName() + "@" + Integer.toHexString(hashCode());
+    }
+}
 ```

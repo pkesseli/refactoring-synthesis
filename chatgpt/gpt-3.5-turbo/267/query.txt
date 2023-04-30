@@ -4,7 +4,7 @@ The method java.util.Properties.save​(OutputStream, String) is deprecated.
  properties list is via the store(OutputStream out,
  String comments) method or the
  storeToXML(OutputStream os, String comment) method."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.save​(a, b)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

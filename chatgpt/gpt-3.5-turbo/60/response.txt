@@ -1,12 +1,8 @@
-# Response Time: 4.9529712200164795
+# Response Time: 2.077683448791504
 ```
 // Code before refactoring
-if ((event.getModifiers() & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
-    // do something
-}
+int modifiers = this.getModifiers();
 
 // Code after refactoring
-if (event.isControlDown()) {
-    // do something
-}
+int modifiers = this.getModifiersEx();
 ```

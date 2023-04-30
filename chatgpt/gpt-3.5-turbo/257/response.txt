@@ -1,11 +1,11 @@
-# Response Time: 4.112534999847412
+# Response Time: 3.175233840942383
 ```
 // Code before refactoring
-Date date = new Date();
-date.setYear(2021);
+this.setYear(a);
 
 // Code after refactoring
-Calendar calendar = Calendar.getInstance();
-calendar.set(Calendar.YEAR, 2021);
-Date date = calendar.getTime();
+Calendar cal = Calendar.getInstance();
+cal.setTime(this);
+cal.set(Calendar.YEAR, a + 1900);
+this.setTime(cal.getTime().getTime());
 ```

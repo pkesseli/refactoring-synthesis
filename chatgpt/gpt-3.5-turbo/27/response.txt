@@ -1,8 +1,8 @@
-# Response Time: 3.535463809967041
+# Response Time: 2.2894606590270996
 ```
 // Code before refactoring
-Component component = myPanel.locate(x, y);
+Point location = this.locate(a, b);
 
 // Code after refactoring
-Component component = myPanel.getComponentAt(x, y);
+Point location = this.getComponentAt(a, b).getLocation();
 ```

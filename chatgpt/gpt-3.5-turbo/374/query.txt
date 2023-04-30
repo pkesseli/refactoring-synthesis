@@ -1,7 +1,7 @@
 The method javax.swing.text.Utilities.getTabbedTextWidth​(Segment, FontMetrics, int, TabExpander, int) is deprecated.
  The related deprecation comment in Javadoc is "replaced by
      Utilities.getTabbedTextWidth(Segment, FontMetrics, float, TabExpander, int)"
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.getTabbedTextWidth​(a, b, c, d, e)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

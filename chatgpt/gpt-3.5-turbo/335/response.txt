@@ -1,9 +1,9 @@
-# Response Time: 6.137304306030273
+# Response Time: 3.757456064224243
 ```
 // Code before refactoring
-int dividerBorderSize = ((BasicSplitPaneUI) splitPane.getUI()).getDividerBorderSize();
+int borderSize = this.getDividerBorderSize();
 
 // Code after refactoring
-Border dividerBorder = splitPane.getDividerBorder();
-int dividerBorderSize = (dividerBorder != null) ? dividerBorder.getBorderInsets(splitPane).left : 0;
+Border border = this.getDivider().getBorder();
+int borderSize = (border != null) ? border.getBorderInsets(this.getDivider()).left : 0;
 ```

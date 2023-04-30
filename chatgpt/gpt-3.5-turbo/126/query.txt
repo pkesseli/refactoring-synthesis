@@ -4,7 +4,7 @@ The method java.beans.Beans.instantiate​(ClassLoader, String, BeanContext, App
  because the Applet API is deprecated. See the
   java.applet package
  documentation for further information."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.instantiate​(a, b, c, d)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

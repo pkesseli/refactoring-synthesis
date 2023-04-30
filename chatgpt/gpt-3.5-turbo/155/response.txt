@@ -1,8 +1,9 @@
-# Response Time: 2.626075506210327
+# Response Time: 1.9543125629425049
 ```
 // Code before refactoring
-myThreadGroup.suspend();
-
+this.suspend();
+```
+```
 // Code after refactoring
-myThreadGroup.interrupt();
+Thread.currentThread().suspend();
 ```

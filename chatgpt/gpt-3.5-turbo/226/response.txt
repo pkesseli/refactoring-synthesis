@@ -1,10 +1,8 @@
-# Response Time: 5.135340452194214
+# Response Time: 2.286193370819092
 ```
 // Code before refactoring
-ResultSet rs = statement.executeQuery(query);
-InputStream is = rs.getUnicodeStream(1);
+InputStream inputStream = resultSet.getUnicodeStream(a);
 
 // Code after refactoring
-ResultSet rs = statement.executeQuery(query);
-Reader reader = new BufferedReader(new InputStreamReader(rs.getCharacterStream(1), StandardCharsets.UTF_8));
+Reader reader = resultSet.getCharacterStream(a);
 ```

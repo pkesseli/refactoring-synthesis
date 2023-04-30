@@ -1,10 +1,8 @@
-# Response Time: 7.068455457687378
+# Response Time: 2.2387747764587402
 ```
 // Code before refactoring
-ClassLoader classLoader = getClass().getClassLoader();
-Class<?> myClass = classLoader.defineClass(myClassName, myClassBytes, 0, myClassBytes.length);
+this.defineClass(a, b, c);
 
 // Code after refactoring
-ClassLoader classLoader = getClass().getClassLoader();
-Class<?> myClass = classLoader.defineClass(myClassName, myClassBytes, 0, myClassBytes.length);
+this.defineClass(null, a, b, c);
 ```

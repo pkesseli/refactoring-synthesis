@@ -1,8 +1,8 @@
-# Response Time: 3.2284913063049316
+# Response Time: 2.07488751411438
 ```
 // Code before refactoring
 int securityLevel = Runtime.version().security();
 
 // Code after refactoring
-int updateReleaseCounter = Runtime.version().update();
+int securityLevel = Runtime.version().update();
 ```

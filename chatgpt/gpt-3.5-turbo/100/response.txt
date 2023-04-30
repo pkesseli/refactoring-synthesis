@@ -1,8 +1,8 @@
-# Response Time: 3.1950137615203857
+# Response Time: 2.220399856567383
 ```
 // Code before refactoring
-int pageIncrement = myScrollbar.getPageIncrement();
+int pageIncrement = this.getPageIncrement();
 
 // Code after refactoring
-int pageIncrement = myScrollbar.getBlockIncrement();
+int pageIncrement = this.getBlockIncrement();
 ```

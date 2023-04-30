@@ -1,9 +1,10 @@
-# Response Time: 4.6408610343933105
+# Response Time: 3.0554778575897217
 ```
 // Code before refactoring
-RemoteStub stub = (RemoteStub) UnicastRemoteObject.exportObject(obj, 0);
-stub.setRef(stub, remoteRef);
-
+this.setRef(a, b);
+```
+```
 // Code after refactoring
-RemoteStub stub = new RemoteStub(remoteRef);
+// Use the RemoteStub(RemoteRef) constructor instead
+this.ref = new RemoteStub(b);
 ```

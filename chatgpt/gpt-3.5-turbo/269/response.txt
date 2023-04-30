@@ -1,14 +1,14 @@
-# Response Time: 6.603633403778076
+# Response Time: 3.5112383365631104
 ```
 // Code before refactoring
-FileCacheImageInputStream input = new FileCacheImageInputStream(new FileInputStream(file), null);
-// Some code here
-input.finalize();
+public void cleanup() throws IOException {
+    // some code here
+    this.finalize();
+}
 
 // Code after refactoring
-try (FileCacheImageInputStream input = new FileCacheImageInputStream(new FileInputStream(file), null)) {
-    // Some code here
-} catch (IOException e) {
-    // Handle exception
+public void cleanup() throws IOException {
+    // some code here
+    // alternative cleanup mechanism
 }
 ```

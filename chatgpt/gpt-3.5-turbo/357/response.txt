@@ -1,14 +1,8 @@
-# Response Time: 11.376250267028809
+# Response Time: 3.284017324447632
 ```
 // Code before refactoring
-HTMLEditorKit editorKit = new HTMLEditorKit();
-JEditorPane editorPane = new JEditorPane();
-HTMLDocument document = (HTMLDocument) editorPane.getDocument();
-editorKit.insertHTML(document, document.getLength(), "<b>Hello World!</b>", 0, 0, HTML.Tag.B);
+this.insertAtBoundry(a, b, c, d, e, f, g);
 
 // Code after refactoring
-HTMLEditorKit editorKit = new HTMLEditorKit();
-JEditorPane editorPane = new JEditorPane();
-HTMLDocument document = (HTMLDocument) editorPane.getDocument();
-editorKit.insertHTML(document, document.getLength(), "<b>Hello World!</b>", 0, 0, HTML.Tag.BR);
+this.insertAtBoundary(a, b, c, d, e, f, g);
 ```

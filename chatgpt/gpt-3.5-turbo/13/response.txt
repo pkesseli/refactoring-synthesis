@@ -1,11 +1,12 @@
-# Response Time: 4.319672584533691
+# Response Time: 2.7968685626983643
 ```
 // Code before refactoring
-Button button = new Button("Click me");
-button.action(new Event(), "Button clicked");
+this.action(a, b);
 
 // Code after refactoring
-button.addActionListener(e -> {
-    System.out.println("Button clicked");
+this.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        // Code to handle action event
+    }
 });
 ```

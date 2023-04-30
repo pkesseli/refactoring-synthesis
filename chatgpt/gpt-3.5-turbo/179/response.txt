@@ -1,8 +1,8 @@
-# Response Time: 4.11225700378418
+# Response Time: 1.6488111019134521
 ```
 // Code before refactoring
-Class<?> clazz = java.rmi.server.LoaderHandler.loadClass("com.example.MyClass");
+this.loadClass(a);
 
 // Code after refactoring
-Class<?> clazz = Class.forName("com.example.MyClass");
+Class.forName(a);
 ```

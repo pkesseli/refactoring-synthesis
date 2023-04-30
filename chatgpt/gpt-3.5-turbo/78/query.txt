@@ -3,7 +3,7 @@ The method java.awt.List.delItems​(int, int) is deprecated.
  Not for public use in the future.
  This method is expected to be retained only as a package
  private method."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.delItems​(a, b)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

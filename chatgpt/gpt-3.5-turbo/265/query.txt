@@ -3,7 +3,7 @@ The method java.util.logging.LogManager.getLoggingMXBean() is deprecated.
       replaced with java.lang.management.PlatformLoggingMXBean. Use
       ManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class)
       instead."
-I have a call to this deprecated method in my codebase, show me Give me how to refactor my code in the following format:
+I have a call to this deprecated method in my codebase `this.getLoggingMXBean()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>
 ```

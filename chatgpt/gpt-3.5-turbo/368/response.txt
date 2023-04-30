@@ -1,20 +1,9 @@
-# Response Time: 16.099712371826172
+# Response Time: 3.801781177520752
 ```
 // Code before refactoring
-javax.swing.text.Segment segment = new javax.swing.text.Segment();
-int x = 0;
-int y = 0;
-Graphics graphics = new Graphics();
-javax.swing.text.TabExpander tabExpander = new javax.swing.text.TabExpander();
-int tabOffset = 0;
-javax.swing.text.Utilities.drawTabbedText(segment, x, y, graphics, tabExpander, tabOffset);
-
+this.drawTabbedText(a, b, c, d, e, f);
+```
+```
 // Code after refactoring
-javax.swing.text.Segment segment = new javax.swing.text.Segment();
-float x = 0;
-float y = 0;
-Graphics2D graphics2D = (Graphics2D) graphics;
-javax.swing.text.TabExpander tabExpander = new javax.swing.text.TabExpander();
-int tabOffset = 0;
-javax.swing.text.Utilities.drawTabbedText(segment, x, y, graphics2D, tabExpander, tabOffset);
+Utilities.drawTabbedText(a, (float)b, (float)c, (Graphics2D)d, e, f);
 ```

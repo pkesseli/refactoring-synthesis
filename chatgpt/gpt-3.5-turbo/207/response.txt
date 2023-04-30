@@ -1,11 +1,8 @@
-# Response Time: 7.999675750732422
+# Response Time: 2.005695343017578
 ```
 // Code before refactoring
-MyRemoteObject obj = new MyRemoteObject();
-MyRemoteInterface stub = (MyRemoteInterface) UnicastRemoteObject.exportObject(obj, 0);
+this.exportObject(a);
 
 // Code after refactoring
-MyRemoteObject obj = new MyRemoteObject();
-MyRemoteInterface stub = (MyRemoteInterface) UnicastRemoteObject.exportObject(obj, 0);
+this.exportObject(a, 0);
 ```
-(Note: The code remains the same as the deprecated method is being used correctly in this case.)

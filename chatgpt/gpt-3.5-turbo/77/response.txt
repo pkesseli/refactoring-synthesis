@@ -1,8 +1,13 @@
-# Response Time: 2.8222453594207764
+# Response Time: 2.730760335922241
 ```
-// Code before refactoring
-myList.delItem(3);
-
-// Code after refactoring
-myList.remove(3);
+<code before refactoring here>
+```
+```
+this.delItem(a);
+```
+```
+<code after refactoring here>
+```
+```
+this.remove(a);
 ```

@@ -1,11 +1,8 @@
-# Response Time: 6.651321649551392
+# Response Time: 2.576749801635742
 ```
 // Code before refactoring
-String encodedString = "Hello%20World%21";
-String decodedString = java.net.URLDecoder.decode(encodedString);
+String decodedString = URLDecoder.decode(a);
 
 // Code after refactoring
-String encodedString = "Hello%20World%21";
-String charset = java.nio.charset.StandardCharsets.UTF_8.name();
-String decodedString = java.net.URLDecoder.decode(encodedString, charset);
+String decodedString = URLDecoder.decode(a, StandardCharsets.UTF_8.toString());
 ```

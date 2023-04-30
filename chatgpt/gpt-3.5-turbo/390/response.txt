@@ -1,14 +1,10 @@
-# Response Time: 7.28335428237915
+# Response Time: 4.338824510574341
 ```
 // Code before refactoring
-InputStream message = ...;
-InputStream token = ...;
-MessageProp prop = new MessageProp(0, false);
-context.verifyMIC(message, token, prop);
+this.verifyMIC(a, b, c);
 
 // Code after refactoring
-byte[] message = ...;
-byte[] token = ...;
-MessageProp prop = new MessageProp(0, false);
-context.verifyMIC(message, 0, message.length, token, 0, token.length, prop);
+byte[] aBytes = a.readAllBytes();
+byte[] bBytes = b.readAllBytes();
+this.verifyMIC(aBytes, 0, aBytes.length, bBytes, 0, bBytes.length, c);
 ```

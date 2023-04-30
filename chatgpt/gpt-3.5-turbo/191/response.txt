@@ -1,8 +1,13 @@
-# Response Time: 3.245835304260254
+# Response Time: 2.745448350906372
 ```
 // Code before refactoring
-String operationString = operation.toString();
-
+public String myMethod() {
+    return this.toString();
+}
+```
+```
 // Code after refactoring
-String operationString = "Operation: " + operation.getClass().getName();
+public String myMethod() {
+    return super.toString();
+}
 ```

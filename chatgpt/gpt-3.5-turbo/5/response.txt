@@ -1,4 +1,4 @@
-# Response Time: 6.287172079086304
+# Response Time: 4.0216169357299805
 ```
 // Code before refactoring
 CaseTree caseTree = ...;
@@ -6,6 +6,6 @@ ExpressionTree expressionTree = caseTree.getExpression();
 
 // Code after refactoring
 CaseTree caseTree = ...;
-List<? extends ExpressionTree> expressionTrees = caseTree.getExpressions();
-ExpressionTree expressionTree = expressionTrees.get(0);
+List<? extends ExpressionTree> expressions = caseTree.getExpressions();
+ExpressionTree expressionTree = expressions.get(0);
 ```

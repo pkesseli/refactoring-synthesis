@@ -1,11 +1,32 @@
-# Response Time: 3.495823383331299
+# Response Time: 7.747589349746704
 ```
 // Code before refactoring
-Thread thread = new Thread();
-thread.resume();
+this.resume();
 ```
 ```
 // Code after refactoring
-Thread thread = new Thread();
-thread.start();
+// Instead of using Thread.suspend() and Thread.resume(),
+// use a boolean flag to control the execution of the thread.
+private boolean isPaused = false;
+
+public void pauseThread() {
+    isPaused = true;
+}
+
+public void resumeThread() {
+    isPaused = false;
+}
+
+public void run() {
+    while (true) {
+        if (!isPaused) {
+            // Your thread code here
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
 ```

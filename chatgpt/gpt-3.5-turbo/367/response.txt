@@ -1,17 +1,8 @@
-# Response Time: 6.700682640075684
+# Response Time: 2.448185920715332
 ```
 // Code before refactoring
-public class MyTableView extends TableView {
-    public TableCell createTableCell(Element elem) {
-        return super.createTableCell(elem);
-    }
-}
-```
-```
+TableCell cell = this.createTableCell(a);
+
 // Code after refactoring
-public class MyTableView extends TableView {
-    public View createRow() {
-        return new BoxView(null, View.Y_AXIS);
-    }
-}
+TableCell cell = getEditorKit().getViewFactory().create(a);
 ```

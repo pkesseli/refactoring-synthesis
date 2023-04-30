@@ -1,8 +1,8 @@
-# Response Time: 4.169947862625122
+# Response Time: 2.8182084560394287
 ```
 // Code before refactoring
-int pos = Utilities.getPositionAbove(textComponent, offset, height);
+int position = Utilities.getPositionAbove(a, b, c);
 
 // Code after refactoring
-int pos = Utilities.getPositionAbove(textComponent, offset, (float) height);
+int position = Utilities.getPositionAbove(a, b, (float) c);
 ```

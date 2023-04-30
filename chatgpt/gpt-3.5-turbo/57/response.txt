@@ -1,12 +1,8 @@
-# Response Time: 8.282564640045166
+# Response Time: 2.4753336906433105
 ```
 // Code before refactoring
-String mimeType = "text/plain; charset=utf-8";
-String parameterName = "charset";
-String normalizedValue = DataFlavor.normalizeMimeTypeParameter(mimeType, parameterName);
+String normalized = DataFlavor.normalizeMimeTypeParameter(a, b);
 
 // Code after refactoring
-String mimeType = "text/plain; charset=utf-8";
-String parameterName = "charset";
-String normalizedValue = mimeType.replaceAll("(?i)" + parameterName + " *= *([\\w-]+)", "$1");
+String normalized = a + "=" + b;
 ```

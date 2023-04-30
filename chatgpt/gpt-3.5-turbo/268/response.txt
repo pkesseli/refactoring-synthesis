@@ -1,11 +1,33 @@
-# Response Time: 3.878347635269165
+# Response Time: 7.007544994354248
 ```
 // Code before refactoring
-ServiceRegistry registry = ...;
-registry.finalize();
-
+public class MyClass {
+    // ...
+    public void cleanup() {
+        // ...
+        try {
+            ServiceRegistry registry = // ...
+            registry.finalize();
+        } catch (Throwable t) {
+            // ...
+        }
+    }
+    // ...
+}
+```
+```
 // Code after refactoring
-ServiceRegistry registry = ...;
-// Alternative cleanup mechanism
-registry.deregisterAllProviders();
+public class MyClass {
+    // ...
+    public void cleanup() {
+        // ...
+        try {
+            ServiceRegistry registry = // ...
+            registry.dispose();
+        } catch (Throwable t) {
+            // ...
+        }
+    }
+    // ...
+}
 ```

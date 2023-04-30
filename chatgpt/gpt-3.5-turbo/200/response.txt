@@ -1,15 +1,12 @@
-# Response Time: 6.413225173950195
+# Response Time: 3.332367420196533
 ```
 // Code before refactoring
-RemoteRef ref = ...;
-RemoteCall call = ref.newCall(...);
-call.setMethod(...);
-call.set...(...);
-Object result = ref.invoke(call);
+this.invoke(a);
 
 // Code after refactoring
-Remote ref = ...;
-Method method = ...;
-Object[] args = ...;
-Object result = ref.invoke(method, args);
+RemoteCall call = new RemoteCallImpl(method.hashCode());
+call.setMethodHash(method.hashCode());
+Object[] args = {a};
+call.setArguments(args);
+this.newCall(call);
 ```

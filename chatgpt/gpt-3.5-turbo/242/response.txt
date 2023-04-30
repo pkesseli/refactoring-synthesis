@@ -1,12 +1,28 @@
-# Response Time: 5.597071409225464
+# Response Time: 5.757434606552124
 ```
 // Code before refactoring
-ThreadPoolExecutor executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-executor.execute(task);
-executor.finalize();
+public class MyClass {
+    // ...
+    public void finalize() {
+        try {
+            // do some cleanup
+        } finally {
+            super.finalize();
+        }
+    }
+    // ...
+}
 
 // Code after refactoring
-ExecutorService executor = Executors.newFixedThreadPool(corePoolSize);
-executor.execute(task);
-executor.shutdown();
+public class MyClass {
+    // ...
+    protected void finalize() throws Throwable {
+        try {
+            // do some cleanup
+        } finally {
+            super.finalize();
+        }
+    }
+    // ...
+}
 ```

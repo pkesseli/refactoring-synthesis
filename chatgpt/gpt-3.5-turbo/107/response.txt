@@ -1,10 +1,8 @@
-# Response Time: 4.3940346240997314
+# Response Time: 1.8982203006744385
 ```
 // Code before refactoring
-TextArea textArea = new TextArea();
-Dimension minimumSize = textArea.minimumSize();
+this.minimumSize();
 
 // Code after refactoring
-TextArea textArea = new TextArea();
-Dimension minimumSize = textArea.getMinimumSize();
+this.getMinimumSize();
 ```

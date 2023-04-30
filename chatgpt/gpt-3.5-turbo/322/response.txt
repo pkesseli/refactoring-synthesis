@@ -1,8 +1,8 @@
-# Response Time: 3.192721128463745
+# Response Time: 2.1596176624298096
 ```
 // Code before refactoring
-Component component = popupMenu.getComponentAtIndex(index);
+Component c = this.getComponentAtIndex(a);
 
 // Code after refactoring
-Component component = popupMenu.getComponent(index);
+Component c = this.getComponent(a);
 ```

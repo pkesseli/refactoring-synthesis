@@ -1,10 +1,8 @@
-# Response Time: 5.309784412384033
+# Response Time: 1.9133756160736084
 ```
 // Code before refactoring
-List myList = new List();
-Dimension preferredSize = myList.preferredSize(10);
+this.preferredSize(a);
 
 // Code after refactoring
-List myList = new List();
-Dimension preferredSize = myList.getPreferredSize(10);
+this.getPreferredSize(a);
 ```

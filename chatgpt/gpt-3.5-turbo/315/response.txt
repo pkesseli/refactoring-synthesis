@@ -1,18 +1,15 @@
-# Response Time: 16.5439190864563
+# Response Time: 9.126153945922852
 ```
 // Code before refactoring
-JButton button1 = new JButton("Button 1");
-JButton button2 = new JButton("Button 2");
-button1.setNextFocusableComponent(button2);
-
+this.setNextFocusableComponent(a);
+```
+```
 // Code after refactoring
-JButton button1 = new JButton("Button 1");
-JButton button2 = new JButton("Button 2");
-button1.setFocusTraversalPolicyProvider(true);
-button1.setFocusTraversalPolicy(new FocusTraversalPolicy() {
+this.setFocusTraversalPolicyProvider(true);
+this.setFocusTraversalPolicy(new FocusTraversalPolicy() {
     @Override
     public Component getComponentAfter(Container container, Component component) {
-        return button2;
+        return a;
     }
 
     @Override
@@ -22,17 +19,17 @@ button1.setFocusTraversalPolicy(new FocusTraversalPolicy() {
 
     @Override
     public Component getDefaultComponent(Container container) {
-        return button1;
+        return a;
     }
 
     @Override
     public Component getLastComponent(Container container) {
-        return button2;
+        return a;
     }
 
     @Override
     public Component getFirstComponent(Container container) {
-        return button1;
+        return a;
     }
 });
 ```

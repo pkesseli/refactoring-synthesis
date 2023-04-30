@@ -1,10 +1,8 @@
-# Response Time: 5.874427318572998
+# Response Time: 2.3833675384521484
 ```
 // Code before refactoring
-AtomicReference<String> ref = new AtomicReference<>("initial value");
-ref.weakCompareAndSet("initial value", "new value");
+this.weakCompareAndSet(a, b);
 
 // Code after refactoring
-AtomicReference<String> ref = new AtomicReference<>("initial value");
-ref.weakCompareAndSetPlain("initial value", "new value");
+this.weakCompareAndSetPlain(a, b);
 ```

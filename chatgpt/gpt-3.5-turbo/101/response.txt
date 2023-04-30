@@ -1,8 +1,14 @@
-# Response Time: 3.2184619903564453
+# Response Time: 3.5257623195648193
 ```
-// Code before refactoring
-int visible = myScrollbar.getVisible();
-
-// Code after refactoring
-int visible = myScrollbar.getVisibleAmount();
+<code before refactoring here>
+```
+```
+boolean visible = this.getVisible();
+```
+```
+<code after refactoring here>
+```
+```
+int visibleAmount = this.getVisibleAmount();
+boolean visible = visibleAmount > 0;
 ```

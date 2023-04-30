@@ -1,10 +1,8 @@
-# Response Time: 5.458650350570679
+# Response Time: 3.0985653400421143
 ```
 // Code before refactoring
-Date date = new Date();
-int timezoneOffset = date.getTimezoneOffset();
+this.getTimezoneOffset();
 
 // Code after refactoring
-Calendar calendar = Calendar.getInstance();
-int timezoneOffset = -(calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET)) / (60 * 1000);
+-(Calendar.getInstance().get(Calendar.ZONE_OFFSET) + Calendar.getInstance().get(Calendar.DST_OFFSET)) / (60 * 1000);
 ```

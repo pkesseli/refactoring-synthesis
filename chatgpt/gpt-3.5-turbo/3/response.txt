@@ -1,10 +1,8 @@
-# Response Time: 6.380870342254639
+# Response Time: 4.380049467086792
 ```
 // Code before refactoring
-OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-double cpuLoad = osBean.getSystemCpuLoad();
+double cpuLoad = ((com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getSystemCpuLoad();
 
 // Code after refactoring
-OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-double cpuLoad = osBean.getCpuLoad();
+double cpuLoad = ((com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getCpuLoad();
 ```

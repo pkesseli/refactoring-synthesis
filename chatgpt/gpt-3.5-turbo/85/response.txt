@@ -1,10 +1,8 @@
-# Response Time: 4.089111804962158
+# Response Time: 2.0603113174438477
 ```
 // Code before refactoring
-Menu menu = new Menu("File");
-int count = menu.countItems();
+int itemCount = this.countItems();
 
 // Code after refactoring
-Menu menu = new Menu("File");
-int count = menu.getItemCount();
+int itemCount = this.getItemCount();
 ```

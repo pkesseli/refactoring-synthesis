@@ -1,17 +1,9 @@
-# Response Time: 8.554033756256104
+# Response Time: 3.1053292751312256
 ```
 // Code before refactoring
-InputStream inStream = ...;
-OutputStream outStream = ...;
-MessageProp msgProp = ...;
-byte[] token = context.wrap(inStream, outStream, msgProp);
+this.wrap(a, b, c);
 
 // Code after refactoring
-InputStream inStream = ...;
-OutputStream outStream = ...;
-MessageProp msgProp = ...;
-byte[] buffer = new byte[1024];
-int bytesRead = inStream.read(buffer);
-byte[] token = context.wrap(buffer, 0, bytesRead, msgProp);
-outStream.write(token);
+byte[] wrappedData = this.wrap(a, 0, a.length, c);
+b.write(wrappedData);
 ```

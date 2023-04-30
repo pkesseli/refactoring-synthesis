@@ -1,10 +1,8 @@
-# Response Time: 4.7709128856658936
+# Response Time: 2.427093982696533
 ```
 // Code before refactoring
-ResourceBundle bundle = ResourceBundle.getBundle("myBundle");
-ComponentOrientation orientation = ComponentOrientation.getOrientation(bundle);
+ComponentOrientation orientation = this.getOrientation(a);
 
 // Code after refactoring
-Locale locale = Locale.getDefault();
-ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
+ComponentOrientation orientation = ComponentOrientation.getOrientation(a.getLocale());
 ```

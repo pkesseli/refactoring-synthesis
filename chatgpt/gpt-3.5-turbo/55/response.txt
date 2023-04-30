@@ -1,14 +1,9 @@
-# Response Time: 5.301966905593872
+# Response Time: 2.2509853839874268
 ```
 // Code before refactoring
-DataFlavor flavor = ...
-if (flavor.equals("text/plain")) {
-    // do something
-}
-
+this.equals(a);
+```
+```
 // Code after refactoring
-DataFlavor flavor = ...
-if (flavor.isMimeTypeEqual("text/plain")) {
-    // do something
-}
+this.isMimeTypeEqual(a.getMimeType());
 ```

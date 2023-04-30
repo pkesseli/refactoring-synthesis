@@ -1,8 +1,8 @@
-# Response Time: 2.7287793159484863
+# Response Time: 1.879636287689209
 ```
 // Code before refactoring
-Rectangle bounds = component.bounds();
+Rectangle bounds = this.bounds();
 
 // Code after refactoring
-Rectangle bounds = component.getBounds();
+Rectangle bounds = this.getBounds();
 ```

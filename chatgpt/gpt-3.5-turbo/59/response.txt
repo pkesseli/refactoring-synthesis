@@ -1,10 +1,8 @@
-# Response Time: 4.774258136749268
+# Response Time: 1.721675157546997
 ```
 // Code before refactoring
-Dialog myDialog = new Dialog(myFrame, "My Dialog", true);
-myDialog.show();
+this.show();
 
 // Code after refactoring
-Dialog myDialog = new Dialog(myFrame, "My Dialog", true);
-myDialog.setVisible(true);
+this.setVisible(true);
 ```

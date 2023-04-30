@@ -1,10 +1,8 @@
-# Response Time: 5.565895080566406
+# Response Time: 2.1319918632507324
 ```
 // Code before refactoring
-BigDecimal value = new BigDecimal("123.456");
-value = value.setScale(2, BigDecimal.ROUND_HALF_UP);
+this.setScale(a, b);
 
 // Code after refactoring
-BigDecimal value = new BigDecimal("123.456");
-value = value.setScale(2, RoundingMode.HALF_UP);
+this.setScale(a, RoundingMode.valueOf(b));
 ```

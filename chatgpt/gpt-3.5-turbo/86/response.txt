@@ -1,8 +1,8 @@
-# Response Time: 3.24980092048645
+# Response Time: 2.2585525512695312
 ```
 // Code before refactoring
-int menuCount = myMenuBar.countMenus();
+int menuCount = this.countMenus();
 
 // Code after refactoring
-int menuCount = myMenuBar.getMenuCount();
+int menuCount = this.getMenuCount();
 ```

@@ -1,12 +1,9 @@
-# Response Time: 5.426682233810425
+# Response Time: 2.406000852584839
 ```
 // Code before refactoring
-LogRecord record = new LogRecord(Level.INFO, "Log message");
-record.setMillis(System.currentTimeMillis());
-logger.log(record);
-
+this.setMillis(a);
+```
+```
 // Code after refactoring
-LogRecord record = new LogRecord(Level.INFO, "Log message");
-record.setInstant(Instant.now());
-logger.log(record);
+this.setInstant(Instant.ofEpochMilli(a));
 ```

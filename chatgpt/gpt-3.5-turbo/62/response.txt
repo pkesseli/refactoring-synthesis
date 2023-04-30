@@ -1,9 +1,8 @@
-# Response Time: 5.9321534633636475
+# Response Time: 1.886629581451416
 ```
 // Code before refactoring
-KeyEvent event = new KeyEvent(component, id, when, modifiers, keyCode, keyChar, keyLocation);
-event.setModifiers(KeyEvent.CTRL_MASK);
+this.setModifiers(a);
 
 // Code after refactoring
-KeyEvent event = new KeyEvent(component, id, when, KeyEvent.CTRL_MASK | modifiers, keyCode, keyChar, keyLocation);
+this.setModifiersEx(a);
 ```

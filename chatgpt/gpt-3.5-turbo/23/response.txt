@@ -1,12 +1,8 @@
-# Response Time: 3.8393266201019287
+# Response Time: 1.8234875202178955
 ```
-// Before refactoring
-if (component.isFocusTraversable()) {
-    // do something
-}
+// Code before refactoring
+this.isFocusTraversable();
 
-// After refactoring
-if (component.isFocusable()) {
-    // do something
-}
+// Code after refactoring
+this.isFocusable();
 ```

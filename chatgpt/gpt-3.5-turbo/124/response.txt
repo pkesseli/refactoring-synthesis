@@ -1,8 +1,9 @@
-# Response Time: 3.5607550144195557
+# Response Time: 2.6749327182769775
 ```
 // Code before refactoring
-myWindow.reshape(x, y, width, height);
-
+this.reshape(a, b, c, d);
+```
+```
 // Code after refactoring
-myWindow.setBounds(x, y, width, height);
+this.setBounds(a, b, c, d);
 ```

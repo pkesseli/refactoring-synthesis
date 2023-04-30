@@ -1,10 +1,9 @@
-# Response Time: 4.198779821395874
+# Response Time: 2.0739388465881348
 ```
 // Code before refactoring
-Scrollbar scrollbar = new Scrollbar();
-scrollbar.setPageIncrement(10);
-
+this.setPageIncrement(a);
+```
+```
 // Code after refactoring
-Scrollbar scrollbar = new Scrollbar();
-scrollbar.setBlockIncrement(10);
+this.setBlockIncrement(a);
 ```
