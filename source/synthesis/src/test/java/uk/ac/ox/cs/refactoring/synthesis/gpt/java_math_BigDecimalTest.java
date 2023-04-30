@@ -6,12 +6,11 @@ import static org.hamcrest.Matchers.anyOf;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseGPT;
 
-import org.junit.jupiter.api.Disabled;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 class java_math_BigDecimalTest {
   @Test
-  @Disabled("Unsupported operations")
   void divide1() throws Exception {
     assertThat(synthesiseGPT("this.divide(a, b);\n\n", "this.divide(a, b, RoundingMode.HALF_UP);\n", "java.math.BigDecimal", "divide", "java.math.BigDecimal", "int"), anyOf(contains("divide")));
   }
