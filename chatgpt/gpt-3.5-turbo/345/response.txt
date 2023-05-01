@@ -1,16 +1,8 @@
-# Response Time: 10.94356083869934
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.3845298290252686
 ```
-Point point = new Point(x, y);
-int pos = textComponent.viewToModel(point);
-```
+// Code before refactoring
+int pos = this.viewToModel(a, b);
 
->>> After refactoring:
+// Code after refactoring
+int pos = a.viewToModel(b);
 ```
-Point point = new Point(x, y);
-int pos = textComponent.getUI().viewToModel(textComponent, point);
-``` 
-
-In the refactored code, we're using the `getUI()` method to get the `TextUI` object associated with the `JTextComponent`, and then calling the `viewToModel()` method on that object instead of directly on the `JTextComponent`. This avoids using the deprecated `MultiTextUI` class and ensures that the code will continue to work correctly in future versions of Java.

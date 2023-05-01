@@ -1,19 +1,9 @@
-# Response Time: 12.865993022918701
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.434696912765503
 ```
-CounterMonitor counterMonitor = new CounterMonitor(mBeanServerConnection, new ObjectName("mydomain:type=MyCounter"));
-counterMonitor.start();
+// Code before refactoring
 double derivedGauge = counterMonitor.getDerivedGauge();
-```
 
->>> After refactoring:
+// Code after refactoring
+ObjectName objectName = counterMonitor.getObservedObject();
+double derivedGauge = counterMonitor.getDerivedGauge(objectName);
 ```
-CounterMonitor counterMonitor = new CounterMonitor();
-counterMonitor.addObservedObject(new ObjectName("mydomain:type=MyCounter"));
-counterMonitor.start();
-double derivedGauge = (double) mBeanServerConnection.getAttribute(counterMonitor.getObservedObject(), "DerivedGauge");
-``` 
-
-In the refactored code, we create a new `CounterMonitor` object and add the observed object using the `addObservedObject` method. Then, we start the monitor and retrieve the `DerivedGauge` attribute using the `getAttribute` method on the `MBeanServerConnection` object. This avoids using the deprecated `getDerivedGauge` method.

@@ -1,16 +1,8 @@
-# Response Time: 9.832693099975586
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.8701024055480957
 ```
-ThreadGroup group = new ThreadGroup("myGroup");
-group.allowThreadSuspension(true);
-```
+// Code before refactoring
+this.allowThreadSuspension​(true);
 
->>> After refactoring:
+// Code after refactoring
+// The method is deprecated and its behavior was never specified, so it's safe to remove the call
 ```
-ThreadGroup group = new ThreadGroup("myGroup");
-group.setDaemon(true);
-``` 
-
-Explanation: Instead of using the deprecated `allowThreadSuspension` method, we can use the `setDaemon` method to achieve a similar effect. Setting a thread group as a daemon group means that any threads created within that group will automatically be marked as daemon threads, which can be suspended by the JVM if necessary. This achieves the same effect as calling `allowThreadSuspension(true)`.

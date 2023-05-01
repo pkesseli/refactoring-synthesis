@@ -1,20 +1,8 @@
-# Response Time: 13.127368927001953
-Sure, here's an example refactoring:
+# Response Time: 2.005695343017578
+```
+// Code before refactoring
+this.exportObject(a);
 
-<<< Before refactoring:
+// Code after refactoring
+this.exportObject(a, 0);
 ```
-Remote remoteObj = new MyRemoteObject();
-MyRemoteInterface stub = (MyRemoteInterface) UnicastRemoteObject.exportObject(remoteObj, 0);
-Registry registry = LocateRegistry.getRegistry();
-registry.bind("MyRemoteObject", stub);
-```
-
->>> After refactoring:
-```
-Remote remoteObj = new MyRemoteObject();
-MyRemoteInterface stub = (MyRemoteInterface) UnicastRemoteObject.exportObject(remoteObj, 0);
-Registry registry = LocateRegistry.getRegistry();
-registry.bind("MyRemoteObject", stub);
-```
-
-The code doesn't change at all! This is because the deprecation warning is just telling us to use a different method signature for `exportObject`, but the original code was already using the recommended signature. So in this case, no refactoring is necessary.

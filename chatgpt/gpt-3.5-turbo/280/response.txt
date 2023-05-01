@@ -1,21 +1,8 @@
-# Response Time: 15.07270097732544
-I'm sorry, but as a language model, I don't have access to your codebase or development environment. However, I can provide you with some guidance on how to refactor your code based on the deprecation message you provided.
-
-The deprecation message suggests that you should replace the usage of `javax.management.monitor.CounterMonitor.getThreshold()` with `CounterMonitor.getThreshold(ObjectName)`. Here's an example of how you can refactor your code:
-
-<<< Before refactoring:
+# Response Time: 1.9398319721221924
 ```
-CounterMonitor monitor = new CounterMonitor();
-monitor.setThreshold(100);
-long threshold = monitor.getThreshold();
-```
+// Code before refactoring
+this.getThreshold();
 
->>> After refactoring:
+// Code after refactoring
+counterMonitor.getThreshold(monitor.getMBean()); 
 ```
-CounterMonitor monitor = new CounterMonitor();
-monitor.setThreshold(100);
-ObjectName objectName = new ObjectName("your.package.name:type=YourType");
-long threshold = monitor.getThreshold(objectName);
-```
-
-In the refactored code, we are using the `getThreshold(ObjectName)` method instead of the deprecated `getThreshold()` method. We are also passing an `ObjectName` parameter to the `getThreshold()` method, which is required in JMX 1.2 and later versions.

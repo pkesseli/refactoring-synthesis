@@ -1,12 +1,8 @@
-# Response Time: 4.588090181350708
-Sure, here's an example refactoring:
+# Response Time: 2.5549731254577637
+```
+// Code before refactoring
+String encodedString = URLEncoder.encode(a);
 
-<<< Before refactoring:
-```
-String encodedString = URLEncoder.encode("Hello, world!");
-```
-
->>> After refactoring:
-```
-String encodedString = URLEncoder.encode("Hello, world!", StandardCharsets.UTF_8.toString());
+// Code after refactoring
+String encodedString = URLEncoder.encode(a, StandardCharsets.UTF_8.toString());
 ```

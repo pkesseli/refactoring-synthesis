@@ -1,15 +1,15 @@
-# Response Time: 6.815201997756958
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.576196193695068
 ```
+<code before refactoring here>
+```
+```
+this.setMBeanServer(a);
+```
+```
+<code after refactoring here>
+```
+```
+// Use MBeanServerFactory to get the platform MBeanServer
 MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-StringValueExp exp = new StringValueExp("someValue");
-exp.setMBeanServer(mbs);
-```
-
->>> After refactoring:
-```
-MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-StringValueExp exp = new StringValueExp("someValue", mbs);
+this.setMBeanServer(mbs);
 ```

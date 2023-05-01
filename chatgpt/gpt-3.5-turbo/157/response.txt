@@ -1,18 +1,8 @@
-# Response Time: 10.48274302482605
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.494622230529785
 ```
-BigDecimal dividend = new BigDecimal("10");
-BigDecimal divisor = new BigDecimal("3");
-BigDecimal result = dividend.divide(divisor, 2, BigDecimal.ROUND_HALF_UP);
-```
+// Code before refactoring
+this.divide(a, b, c);
 
->>> After refactoring:
+// Code after refactoring
+this.divide(a, b, RoundingMode.valueOf(c));
 ```
-BigDecimal dividend = new BigDecimal("10");
-BigDecimal divisor = new BigDecimal("3");
-BigDecimal result = dividend.divide(divisor, 2, RoundingMode.HALF_UP);
-``` 
-
-In the refactored code, we replaced `BigDecimal.ROUND_HALF_UP` with `RoundingMode.HALF_UP` to use the recommended `RoundingMode` enum instead of the deprecated `int` constant.

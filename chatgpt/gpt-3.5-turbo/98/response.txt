@@ -1,16 +1,9 @@
-# Response Time: 13.50869107246399
-Sure, here's an example refactoring for the deprecated `java.awt.Rectangle.resize(int, int)` method:
-
-<<< Before refactoring:
+# Response Time: 2.170590877532959
 ```
-Rectangle rect = new Rectangle(10, 10, 50, 50);
-rect.resize(20, 20);
+// Code before refactoring
+this.resize(a, b);
 ```
-
->>> After refactoring:
 ```
-Rectangle rect = new Rectangle(10, 10, 50, 50);
-rect.setSize(70, 70);
+// Code after refactoring
+this.setSize(a, b);
 ```
-
-In the original code, the `resize` method is called on a `Rectangle` object to increase its width and height by 20 pixels each. However, this method has been deprecated and replaced by `setSize(int, int)`. In the refactored code, we simply call `setSize` with the new width and height values (which are the original values plus 20 pixels each). This achieves the same result as the original code, but using the recommended method instead.

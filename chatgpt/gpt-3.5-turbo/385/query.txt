@@ -3,7 +3,12 @@ The method javax.xml.stream.XMLOutputFactory.newInstance​(String, ClassLoader)
               instance of XMLInputFactory, which is of the wrong class.
               Use the new method XMLOutputFactory.newFactory(java.lang.String,
               java.lang.ClassLoader) instead."
-Give me a refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>
-Example code should be a straight-line code block.
+I have a call to this deprecated method in my codebase `this.newInstance​(a, b)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

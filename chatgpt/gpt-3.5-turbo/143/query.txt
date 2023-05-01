@@ -4,7 +4,12 @@ The method java.lang.Runtime.Version.major() is deprecated.
  counter, incremented for every time-based release.  Use the Runtime.Version.feature() method in preference to this method.  For compatibility,
  this method returns the value of the feature
  element."
-Give me a refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>
-Example code should be a straight-line code block.
+I have a call to this deprecated method in my codebase `this.major()`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

@@ -1,12 +1,8 @@
-# Response Time: 3.927678346633911
-Sure, here's an example refactoring:
+# Response Time: 4.452103614807129
+```
+// Code before refactoring
+XMLEventFactory eventFactory = XMLEventFactory.newInstance("javax.xml.stream.events.XMLEventFactory", this.getClass().getClassLoader());
 
-<<< Before refactoring:
-```
-XMLEventFactory eventFactory = XMLEventFactory.newInstance();
-```
-
->>> After refactoring:
-```
-XMLEventFactory eventFactory = XMLEventFactory.newFactory();
+// Code after refactoring
+XMLEventFactory eventFactory = XMLEventFactory.newFactory("javax.xml.stream.events.XMLEventFactory", this.getClass().getClassLoader());
 ```

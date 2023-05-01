@@ -1,8 +1,8 @@
-# Response Time: 5.908529758453369
-Sorry, as an AI language model, I don't have access to your codebase or development environment. However, I can provide you with an example of how to refactor the deprecated method using the suggested replacement.
+# Response Time: 2.427093982696533
+```
+// Code before refactoring
+ComponentOrientation orientation = this.getOrientation(a);
 
-<<< Before refactoring: 
-java.awt.ComponentOrientation.getOrientation(resourceBundle);
-
->>> After refactoring: 
-java.awt.ComponentOrientation.getOrientation(Locale.getDefault());
+// Code after refactoring
+ComponentOrientation orientation = ComponentOrientation.getOrientation(a.getLocale());
+```

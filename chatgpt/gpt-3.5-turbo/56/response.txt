@@ -1,2 +1,8 @@
-# Response Time: 3.306227922439575
-I'm happy to help! However, I'm not sure what specific code you would like me to refactor. Could you please provide me with the code you would like me to work with?
+# Response Time: 3.037442684173584
+```
+// Code before refactoring
+String normalizedMimeType = normalizeMimeType(a);
+
+// Code after refactoring
+String normalizedMimeType = DataFlavor.selectBestTextFlavor(DataFlavor.getTextFlavor(a)).getMimeType();
+```

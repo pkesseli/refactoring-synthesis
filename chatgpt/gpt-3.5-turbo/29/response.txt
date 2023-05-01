@@ -1,18 +1,8 @@
-# Response Time: 6.256563901901245
-Sure, here's an example refactoring:
+# Response Time: 2.5011138916015625
+```
+// Code before refactoring
+this.lostFocus(a, b);
 
-<<< Before refactoring:
-```
-public void lostFocus(Event evt, Object obj) {
-    // do something when component loses focus
-}
-```
-
->>> After refactoring:
-```
-public void processFocusEvent(FocusEvent evt) {
-    if (evt.getID() == FocusEvent.FOCUS_LOST) {
-        // do something when component loses focus
-    }
-}
+// Code after refactoring
+this.processFocusEvent(new FocusEvent(this, FocusEvent.FOCUS_LOST));
 ```

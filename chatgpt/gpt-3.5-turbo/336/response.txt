@@ -1,21 +1,8 @@
-# Response Time: 16.642292976379395
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.106865406036377
 ```
-JTextComponent textComponent = new JTextComponent();
-BasicTextUI basicTextUI = new BasicTextUI();
-int pos = 5;
-Rectangle rect = basicTextUI.modelToView(textComponent, pos);
-```
+// Code before refactoring
+Rectangle rect = this.modelToView(a, b);
 
->>> After refactoring:
+// Code after refactoring
+Rectangle2D rect = this.modelToView2D(a, b, Position.Bias.Forward);
 ```
-JTextComponent textComponent = new JTextComponent();
-TextUI textUI = textComponent.getUI();
-int pos = 5;
-Shape shape = textUI.modelToView2D(textComponent, pos, Position.Bias.Forward);
-Rectangle rect = (shape instanceof Rectangle) ? (Rectangle)shape : shape.getBounds();
-``` 
-
-In the refactored code, we first get the `TextUI` instance from the `JTextComponent` using the `getUI()` method. Then, we use the `modelToView2D()` method of the `TextUI` interface to get a `Shape` object representing the location of the specified position in the text component. Finally, we convert the `Shape` object to a `Rectangle` object using the `getBounds()` method, if necessary.

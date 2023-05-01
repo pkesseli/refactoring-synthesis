@@ -1,40 +1,8 @@
-# Response Time: 16.313210010528564
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.380049467086792
 ```
-import com.sun.management.OperatingSystemMXBean;
-import java.lang.management.ManagementFactory;
+// Code before refactoring
+double cpuLoad = ((com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getSystemCpuLoad();
 
-public class CPUUsageMonitor {
-    private OperatingSystemMXBean osBean;
-
-    public CPUUsageMonitor() {
-        osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-    }
-
-    public double getCPUUsage() {
-        return osBean.getSystemCpuLoad();
-    }
-}
+// Code after refactoring
+double cpuLoad = ((com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getCpuLoad();
 ```
-
->>> After refactoring:
-```
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
-
-public class CPUUsageMonitor {
-    private OperatingSystemMXBean osBean;
-
-    public CPUUsageMonitor() {
-        osBean = ManagementFactory.getOperatingSystemMXBean();
-    }
-
-    public double getCPUUsage() {
-        return osBean.getCpuLoad();
-    }
-}
-```
-
-In this refactoring, we simply replaced the deprecated `getSystemCpuLoad()` method with the recommended `getCpuLoad()` method. We also updated the import statement for `OperatingSystemMXBean` to use the standard Java package instead of the deprecated `com.sun.management` package.

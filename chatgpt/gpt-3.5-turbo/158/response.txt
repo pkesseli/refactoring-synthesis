@@ -1,14 +1,8 @@
-# Response Time: 6.191447973251343
-Sure, here's an example refactoring:
+# Response Time: 2.1319918632507324
+```
+// Code before refactoring
+this.setScale(a, b);
 
-<<< Before refactoring:
-```
-BigDecimal bigDecimal = new BigDecimal("123.456");
-bigDecimal = bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
-```
-
->>> After refactoring:
-```
-BigDecimal bigDecimal = new BigDecimal("123.456");
-bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
+// Code after refactoring
+this.setScale(a, RoundingMode.valueOf(b));
 ```

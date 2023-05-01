@@ -1,22 +1,8 @@
-# Response Time: 6.264064073562622
-Sure, here's an example:
+# Response Time: 2.448185920715332
+```
+// Code before refactoring
+TableCell cell = this.createTableCell(a);
 
-<<< Before refactoring:
-```
-public class MyTableView extends TableView {
-    @Override
-    protected TableCell createTableCell(Element elem) {
-        return super.createTableCell(elem);
-    }
-}
-```
-
->>> After refactoring:
-```
-public class MyTableView extends TableView {
-    @Override
-    public View create(Element elem) {
-        return getFactory().create(elem);
-    }
-}
+// Code after refactoring
+TableCell cell = getEditorKit().getViewFactory().create(a);
 ```

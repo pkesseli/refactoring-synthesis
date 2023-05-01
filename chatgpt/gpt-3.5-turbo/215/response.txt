@@ -1,16 +1,15 @@
-# Response Time: 10.520771980285645
-Sure, here's an example refactoring for the deprecated method java.sql.Date.getHours():
-
-<<< Before refactoring:
+# Response Time: 3.588799476623535
 ```
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+<code before refactoring here>
+```
+```
+Date date = new Date();
 int hours = date.getHours();
 ```
-
->>> After refactoring:
 ```
-java.sql.Timestamp timestamp = new java.sql.Timestamp(System.currentTimeMillis());
-int hours = timestamp.toLocalDateTime().getHour();
+<code after refactoring here>
 ```
-
-In this refactored code, we create a new java.sql.Timestamp object instead of a java.sql.Date object. We then convert the Timestamp to a LocalDateTime object using the toLocalDateTime() method, and finally get the hour value using the getHour() method on the LocalDateTime object. This avoids using the deprecated getHours() method on the Date object.
+```
+LocalDateTime localDateTime = LocalDateTime.now();
+int hours = localDateTime.getHour();
+```

@@ -1,26 +1,9 @@
-# Response Time: 11.879334926605225
-Sure, here's an example refactoring:
+# Response Time: 2.4701757431030273
+```
+// Code before refactoring
+String line = this.readLine();
 
-<<< Before refactoring:
+// Code after refactoring
+BufferedReader reader = new BufferedReader(new InputStreamReader(this));
+String line = reader.readLine();
 ```
-try {
-    ObjectInputStream ois = new ObjectInputStream(inputStream);
-    String line = ois.readLine();
-    // do something with line
-} catch (IOException e) {
-    // handle exception
-}
-```
-
->>> After refactoring:
-```
-try {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-    String line = reader.readLine();
-    // do something with line
-} catch (IOException e) {
-    // handle exception
-}
-```
-
-In the refactored code, we replace the use of `ObjectInputStream.readLine()` with `BufferedReader.readLine()`. This avoids the deprecated method and properly converts bytes to characters. We also wrap the `InputStreamReader` in a `BufferedReader` for efficiency.

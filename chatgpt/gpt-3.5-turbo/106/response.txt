@@ -1,14 +1,8 @@
-# Response Time: 6.49663782119751
-Sure, here's an example refactoring:
+# Response Time: 2.0268561840057373
+```
+// Code before refactoring
+this.insertText(a, b);
 
-<<< Before refactoring: 
-```
-java.awt.TextArea textArea = new java.awt.TextArea();
-textArea.insertText("Hello, world!", 0);
-```
-
->>> After refactoring: 
-```
-java.awt.TextArea textArea = new java.awt.TextArea();
-textArea.insert("Hello, world!", 0);
+// Code after refactoring
+this.insert(a, b);
 ```

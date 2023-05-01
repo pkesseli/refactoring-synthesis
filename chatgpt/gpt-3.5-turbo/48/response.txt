@@ -1,12 +1,9 @@
-# Response Time: 3.721283197402954
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.5409464836120605
 ```
-int numComponents = myContainer.countComponents();
+<code before refactoring here>
+int numComponents = this.countComponents();
 ```
-
->>> After refactoring:
 ```
-int numComponents = myContainer.getComponentCount();
+<code after refactoring here>
+int numComponents = this.getComponentCount();
 ```

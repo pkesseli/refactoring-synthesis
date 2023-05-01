@@ -1,53 +1,8 @@
-# Response Time: 25.101157188415527
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.849027633666992
 ```
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
+// Code before refactoring
+int shortcutKeyMask = this.getMenuShortcutKeyMask();
 
-public class MyFrame extends JFrame implements ActionListener {
-    public MyFrame() {
-        JMenuItem menuItem = new JMenuItem("Save");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        menuItem.addActionListener(this);
-        JMenu menu = new JMenu("File");
-        menu.add(menuItem);
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.add(menu);
-        setJMenuBar(menuBar);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        // Handle save action
-    }
-}
+// Code after refactoring
+int shortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 ```
-
->>> After refactoring:
-```
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
-
-public class MyFrame extends JFrame implements ActionListener {
-    public MyFrame() {
-        JMenuItem menuItem = new JMenuItem("Save");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        menuItem.addActionListener(this);
-        JMenu menu = new JMenu("File");
-        menu.add(menuItem);
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.add(menu);
-        setJMenuBar(menuBar);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        // Handle save action
-    }
-}
-```
-
-In the refactored code, we've replaced the deprecated `Toolkit.getMenuShortcutKeyMask()` method with the recommended `Toolkit.getMenuShortcutKeyMaskEx()` method. This ensures that our code is up-to-date and uses the latest best practices.

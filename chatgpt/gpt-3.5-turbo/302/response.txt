@@ -1,16 +1,9 @@
-# Response Time: 7.230313301086426
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.009232759475708
 ```
-BaseRowSet rowSet = new BaseRowSet();
-InputStream inputStream = new ByteArrayInputStream("Hello, world!".getBytes());
-rowSet.setUnicodeStream(1, inputStream, 13);
+// Code before refactoring
+this.setUnicodeStream(a, b, c);
 ```
-
->>> After refactoring:
 ```
-BaseRowSet rowSet = new BaseRowSet();
-Reader reader = new StringReader("Hello, world!");
-rowSet.setCharacterStream(1, reader, 13);
+// Code after refactoring
+this.setCharacterStream(a, new InputStreamReader(b, StandardCharsets.UTF_8), c);
 ```

@@ -1,16 +1,12 @@
-# Response Time: 11.794579982757568
-Sure, here's an example refactoring for the deprecated method java.awt.Polygon.inside​(int, int):
+# Response Time: 3.040768623352051
+```
+// Code before refactoring
+if (this.inside(a, b)) {
+    // do something
+}
 
-<<< Before refactoring:
+// Code after refactoring
+if (this.contains(a, b)) {
+    // do something
+}
 ```
-Polygon polygon = new Polygon(new int[]{0, 5, 10}, new int[]{0, 10, 0}, 3);
-boolean isInside = polygon.inside(3, 3);
-```
-
->>> After refactoring:
-```
-Polygon polygon = new Polygon(new int[]{0, 5, 10}, new int[]{0, 10, 0}, 3);
-boolean isInside = polygon.contains(3, 3);
-```
-
-In the refactored code, we've replaced the deprecated method `inside` with the recommended method `contains`. This ensures that our code will continue to work as expected with future versions of Java.

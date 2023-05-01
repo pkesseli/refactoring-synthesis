@@ -1,18 +1,9 @@
-# Response Time: 12.23264217376709
-I'm sorry, but as a language model, I cannot provide code examples in a straight-line format. However, I can provide you with some guidance on how to refactor your code based on the deprecation comment.
-
-Before refactoring:
+# Response Time: 3.0013644695281982
 ```
-ValueExp valueExp = new SomeValueExp();
-MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-valueExp.setMBeanServer(mBeanServer);
+// Code before refactoring
+this.setMBeanServer(a);
 ```
-
-After refactoring:
 ```
-ValueExp valueExp = new SomeValueExp();
-QueryEval queryEval = new QueryEval();
-MBeanServer mBeanServer = queryEval.getMBeanServer();
-``` 
-
-In the refactored code, we create a `QueryEval` object and use its `getMBeanServer()` method to access the MBean server instead of using the deprecated `setMBeanServer()` method.
+// Code after refactoring
+// Remove the call to setMBeanServer and use QueryEval.getMBeanServer() instead
+```

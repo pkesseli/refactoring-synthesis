@@ -1,18 +1,8 @@
-# Response Time: 8.416321992874146
-Sure, here's an example refactoring:
+# Response Time: 2.6857690811157227
+```
+// Code before refactoring
+this.setUnicodeStream(a, b, c);
 
-<<< Before refactoring:
-```
-PreparedStatement ps = conn.prepareStatement("INSERT INTO my_table (my_column) VALUES (?)");
-InputStream inputStream = new ByteArrayInputStream("Hello, world!".getBytes(StandardCharsets.UTF_8));
-ps.setUnicodeStream(1, inputStream, 13);
-ps.executeUpdate();
-```
-
->>> After refactoring:
-```
-PreparedStatement ps = conn.prepareStatement("INSERT INTO my_table (my_column) VALUES (?)");
-Reader reader = new StringReader("Hello, world!");
-ps.setCharacterStream(1, reader, 13);
-ps.executeUpdate();
+// Code after refactoring
+this.setCharacterStream(a, new InputStreamReader(b, StandardCharsets.UTF_8), c);
 ```

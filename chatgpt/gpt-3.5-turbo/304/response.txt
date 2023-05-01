@@ -1,14 +1,8 @@
-# Response Time: 4.361745357513428
-Sure, here's an example refactoring:
+# Response Time: 1.757511854171753
+```
+// Code before refactoring
+this.setLabel(a);
 
-<<< Before refactoring: 
-```
-JButton button = new JButton();
-button.setLabel("Click me");
-```
-
->>> After refactoring: 
-```
-JButton button = new JButton();
-button.setText("Click me");
+// Code after refactoring
+this.setText(a);
 ```

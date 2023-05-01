@@ -1,12 +1,8 @@
-# Response Time: 3.9872310161590576
-Sure, here's an example refactoring:
+# Response Time: 2.3647470474243164
+```
+// Code before refactoring
+this.reshape(a, b, c, d);
 
-<<< Before refactoring:
-```
-myComponent.reshape(x, y, width, height);
-```
-
->>> After refactoring:
-```
-myComponent.setBounds(x, y, width, height);
+// Code after refactoring
+this.setBounds(a, b, c, d);
 ```

@@ -1,2 +1,21 @@
-# Response Time: 3.530055046081543
-I'm sorry, but as an AI language model, I cannot provide code refactoring examples without a specific context or codebase to work with. Could you please provide more information or context about the code you want to refactor?
+# Response Time: 5.8651793003082275
+```
+// Code before refactoring
+public class MyComboBox extends JComboBox<String> {
+    public MyComboBox() {
+        this.removeListeners();
+    }
+}
+
+// Code after refactoring
+public class MyComboBox extends JComboBox<String> {
+    public MyComboBox() {
+        for (ActionListener listener : getActionListeners()) {
+            removeActionListener(listener);
+        }
+        for (ItemListener listener : getItemListeners()) {
+            removeItemListener(listener);
+        }
+    }
+}
+```

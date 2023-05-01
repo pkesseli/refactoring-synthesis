@@ -1,10 +1,8 @@
-# Response Time: 7.047746896743774
-I'm sorry, but as an AI language model, I don't have access to your codebase or development environment. However, I can provide you with an example of how to refactor the deprecated method using the suggested replacement:
+# Response Time: 3.0906245708465576
+```
+// Code before refactoring
+boolean isBackingStoreEnabled = this.isBackingStoreEnabled();
 
-<<< Before refactoring: 
-boolean isBackingStoreEnabled = viewport.isBackingStoreEnabled();
-
->>> After refactoring: 
-int scrollMode = viewport.getScrollMode();
-boolean isBackingStoreEnabled = scrollMode == JViewport.BACKINGSTORE_SCROLL_MODE || 
-                                scrollMode == JViewport.SIMPLE_SCROLL_MODE;
+// Code after refactoring
+boolean isBackingStoreEnabled = this.getScrollMode() == JViewport.BACKINGSTORE_SCROLL_MODE;
+```

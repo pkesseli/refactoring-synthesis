@@ -1,15 +1,8 @@
-# Response Time: 5.687496900558472
-Sure, here's an example refactoring:
+# Response Time: 2.5858237743377686
+```
+// Code before refactoring
+int minutes = this.getMinutes();
 
-<<< Before refactoring: 
-```
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-int minutes = date.getMinutes();
-```
-
->>> After refactoring: 
-```
-java.sql.Timestamp timestamp = new java.sql.Timestamp(System.currentTimeMillis());
-java.time.LocalDateTime localDateTime = timestamp.toLocalDateTime();
-int minutes = localDateTime.getMinute();
+// Code after refactoring
+int minutes = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault()).getMinute();
 ```

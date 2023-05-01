@@ -1,14 +1,8 @@
-# Response Time: 6.091125965118408
-Sure, here's an example refactoring:
+# Response Time: 2.7703521251678467
+```
+// Code before refactoring
+boolean loopbackMode = this.getLoopbackMode();
 
-<<< Before refactoring:
-```
-MulticastSocket socket = new MulticastSocket(1234);
-boolean loopback = socket.getLoopbackMode();
-```
-
->>> After refactoring:
-```
-MulticastSocket socket = new MulticastSocket(1234);
-boolean loopback = socket.getOption(StandardSocketOptions.IP_MULTICAST_LOOP);
+// Code after refactoring
+boolean loopbackMode = this.getOption(StandardSocketOptions.IP_MULTICAST_LOOP);
 ```

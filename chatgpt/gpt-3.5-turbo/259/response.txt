@@ -1,32 +1,11 @@
-# Response Time: 16.799450159072876
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.37870192527771
 ```
-import java.util.Date;
+// Code before refactoring
+Date currentDate = new Date();
+String formattedDate = currentDate.toLocaleString();
 
-public class Example {
-    public static void main(String[] args) {
-        Date date = new Date();
-        String formattedDate = date.toLocaleString();
-        System.out.println(formattedDate);
-    }
-}
+// Code after refactoring
+Date currentDate = new Date();
+DateFormat dateFormat = DateFormat.getDateTimeInstance();
+String formattedDate = dateFormat.format(currentDate);
 ```
-
->>> After refactoring:
-```
-import java.text.DateFormat;
-import java.util.Date;
-
-public class Example {
-    public static void main(String[] args) {
-        Date date = new Date();
-        DateFormat dateFormat = DateFormat.getDateTimeInstance();
-        String formattedDate = dateFormat.format(date);
-        System.out.println(formattedDate);
-    }
-}
-```
-
-In the original code, the `toLocaleString()` method is used to format a `Date` object as a string. However, this method is deprecated and should be replaced with the `DateFormat.format()` method. In the refactored code, we create a `DateFormat` object using the `getDateTimeInstance()` method, which returns a `DateFormat` object that formats dates and times in the user's default locale. We then use this object to format the `Date` object as a string.

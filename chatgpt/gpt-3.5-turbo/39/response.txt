@@ -1,14 +1,9 @@
-# Response Time: 4.803278207778931
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 1.9704208374023438
 ```
-Event event = new Event(this, Event.ACTION_EVENT, null);
-postEvent(event);
+// Code before refactoring
+this.postEvent(a);
 ```
-
->>> After refactoring:
 ```
-Event event = new Event(this, Event.ACTION_EVENT, null);
-dispatchEvent(event);
+// Code after refactoring
+this.dispatchEvent(a);
 ```

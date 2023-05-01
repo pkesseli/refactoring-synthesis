@@ -1,18 +1,13 @@
-# Response Time: 6.772060871124268
-Sure, here's an example refactoring for the deprecated `inside` method in Java:
-
-<<< Before refactoring:
+# Response Time: 3.051910877227783
 ```
-if (component.inside(x, y)) {
+// Code before refactoring
+if (this.inside(a, b)) {
     // do something
 }
 ```
-
->>> After refactoring:
 ```
-if (component.contains(x, y)) {
+// Code after refactoring
+if (this.contains(a, b)) {
     // do something
 }
 ```
-
-This refactoring simply replaces the deprecated `inside` method with the recommended `contains` method.

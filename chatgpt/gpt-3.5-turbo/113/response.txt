@@ -1,26 +1,8 @@
-# Response Time: 7.704890727996826
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 1.891831874847412
 ```
-import java.awt.TextField;
+// Code before refactoring
+this.minimumSize(a);
 
-public class Example {
-    public static void main(String[] args) {
-        TextField textField = new TextField();
-        textField.minimumSize(10);
-    }
-}
-```
-
->>> After refactoring: 
-```
-import java.awt.TextField;
-
-public class Example {
-    public static void main(String[] args) {
-        TextField textField = new TextField();
-        textField.getMinimumSize(10);
-    }
-}
+// Code after refactoring
+this.getMinimumSize(a);
 ```

@@ -1,27 +1,10 @@
-# Response Time: 15.728714942932129
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.1989665031433105
 ```
-import org.ietf.jgss.GSSContext;
+// Code before refactoring
+this.initSecContext​(a, b);
 
-public class ExampleClass {
-    public void exampleMethod(GSSContext context, InputStream in, OutputStream out) throws GSSException, IOException {
-        context.initSecContext(in, out);
-    }
-}
+// Code after refactoring
+byte[] token = this.initSecContext(a, 0, a.length);
+OutputStream out = ...;
+out.write(token);
 ```
-
->>> After refactoring:
-```
-import org.ietf.jgss.GSSContext;
-
-public class ExampleClass {
-    public void exampleMethod(GSSContext context, byte[] inputToken) throws GSSException {
-        byte[] outputToken = context.initSecContext(inputToken, 0, inputToken.length);
-        // send outputToken to other party
-    }
-}
-```
-
-In this refactored code, we've replaced the deprecated `initSecContext(InputStream, OutputStream)` method with the recommended `initSecContext(byte[], int, int)` method. Instead of passing in an `InputStream` and `OutputStream`, we now pass in a `byte[]` representing the input token. The method returns a `byte[]` representing the output token, which we can then send to the other party.

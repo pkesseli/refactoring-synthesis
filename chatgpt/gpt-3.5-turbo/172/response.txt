@@ -1,18 +1,8 @@
-# Response Time: 11.633325099945068
-Sure, here's an example refactoring:
+# Response Time: 2.576749801635742
+```
+// Code before refactoring
+String decodedString = URLDecoder.decode(a);
 
-<<< Before refactoring:
+// Code after refactoring
+String decodedString = URLDecoder.decode(a, StandardCharsets.UTF_8.toString());
 ```
-String encodedString = "Hello%20World%21";
-String decodedString = java.net.URLDecoder.decode(encodedString);
-System.out.println(decodedString);
-```
-
->>> After refactoring:
-```
-String encodedString = "Hello%20World%21";
-String decodedString = java.net.URLDecoder.decode(encodedString, "UTF-8");
-System.out.println(decodedString);
-```
-
-In the refactored code, we've replaced the deprecated `java.net.URLDecoder.decode(String)` method with the recommended `java.net.URLDecoder.decode(String, String)` method, which allows us to specify the encoding. In this case, we've specified the UTF-8 encoding, which is a common encoding used for URLs.

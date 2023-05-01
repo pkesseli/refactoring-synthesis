@@ -1,16 +1,9 @@
-# Response Time: 5.60940408706665
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.252902030944824
 ```
-MonitorMBean monitor = ...;
-ObjectName observedObject = ...;
-monitor.setObservedObject(observedObject);
+// Code before refactoring
+this.setObservedObject(a);
 ```
-
->>> After refactoring:
 ```
-MonitorMBean monitor = ...;
-ObjectName observedObject = ...;
-monitor.addObservedObject(observedObject);
+// Code after refactoring
+this.addObservedObject(a);
 ```

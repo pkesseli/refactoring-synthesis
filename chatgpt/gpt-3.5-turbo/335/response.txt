@@ -1,21 +1,9 @@
-# Response Time: 16.755371570587158
-I'm sorry, but as an AI language model, I don't have access to a specific codebase to provide a refactoring example. However, I can give you some general advice on how to refactor deprecated code.
-
-When you encounter deprecated code, you should first check the deprecation comment in the Javadoc to see if there is a recommended alternative. In this case, the comment suggests setting the border on the divider instead of using the deprecated method.
-
-Here's an example of how you could refactor code that uses the deprecated method:
-
-<<< Before refactoring:
+# Response Time: 3.757456064224243
 ```
-BasicSplitPaneUI ui = new BasicSplitPaneUI();
-int borderSize = ui.getDividerBorderSize();
-```
+// Code before refactoring
+int borderSize = this.getDividerBorderSize();
 
->>> After refactoring:
+// Code after refactoring
+Border border = this.getDivider().getBorder();
+int borderSize = (border != null) ? border.getBorderInsets(this.getDivider()).left : 0;
 ```
-BasicSplitPaneUI ui = new BasicSplitPaneUI();
-Border border = BorderFactory.createEmptyBorder(0, 0, 0, 0);
-ui.getDivider().setBorder(border);
-``` 
-
-In this example, we create an empty border and set it on the divider using the `setBorder()` method. This achieves the same result as the deprecated `getDividerBorderSize()` method without using deprecated code.

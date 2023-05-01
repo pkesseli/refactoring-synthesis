@@ -1,34 +1,11 @@
-# Response Time: 18.064636945724487
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 2.8834006786346436
 ```
-import java.util.Date;
+// Code before refactoring
+this.setMinutes(a);
 
-public class Example {
-    public static void main(String[] args) {
-        Date date = new Date();
-        date.setMinutes(30);
-        System.out.println(date);
-    }
-}
+// Code after refactoring
+Calendar calendar = Calendar.getInstance();
+calendar.setTime(this);
+calendar.set(Calendar.MINUTE, a);
+this.setTime(calendar.getTime().getTime());
 ```
-
->>> After refactoring: 
-```
-import java.util.Calendar;
-import java.util.Date;
-
-public class Example {
-    public static void main(String[] args) {
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.MINUTE, 30);
-        date = calendar.getTime();
-        System.out.println(date);
-    }
-}
-```
-
-In this example, we've refactored the code to use the recommended `Calendar` class instead of the deprecated `setMinutes` method. We first create a `Calendar` instance and set its time to the `Date` object. Then, we set the minute field of the `Calendar` object using the `Calendar.MINUTE` constant. Finally, we get the updated `Date` object from the `Calendar` and print it out.

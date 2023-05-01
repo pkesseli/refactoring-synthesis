@@ -1,34 +1,9 @@
-# Response Time: 16.333525896072388
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.3454418182373047
 ```
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class MyClass {
-    private static final Logger LOGGER = Logger.getLogger(MyClass.class.getName());
-
-    public void myMethod() {
-        LOGGER.logrb(Level.INFO, null, null, null, "Hello, world!");
-    }
-}
+// Code before refactoring
+this.logrb(a, b, c, d, e, f);
 ```
-
->>> After refactoring:
 ```
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.ResourceBundle;
-
-public class MyClass {
-    private static final Logger LOGGER = Logger.getLogger(MyClass.class.getName());
-    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("myResourceBundle");
-
-    public void myMethod() {
-        LOGGER.logrb(Level.INFO, null, null, BUNDLE, "helloWorld");
-    }
-}
+// Code after refactoring
+this.logrb(a, b, c, ResourceBundle.getBundle(d), e, f);
 ```
-
-In this example, we've refactored the `myMethod()` method to use the `Logger.logrb()` method with a `ResourceBundle` parameter instead of the deprecated method. We've also added a `ResourceBundle` field to the class to hold the bundle that contains the message we want to log.

@@ -1,32 +1,12 @@
-# Response Time: 20.01224708557129
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.117289066314697
 ```
-try {
-    InetAddress group = InetAddress.getByName("224.0.0.1");
-    MulticastSocket socket = new MulticastSocket(1234);
-    socket.joinGroup(group);
-    socket.send(new DatagramPacket(new byte[] { 1, 2, 3 }, 3, group, 1234));
-} catch (IOException e) {
-    e.printStackTrace();
+// Code before refactoring
+this.checkMulticast(a, b);
+```
+```
+// Code after refactoring
+SecurityManager securityManager = System.getSecurityManager();
+if (securityManager != null) {
+    securityManager.checkPermission(new java.net.SocketPermission(a.getHostAddress(), "accept,connect,listen,resolve"));
 }
 ```
-
->>> After refactoring:
-```
-try {
-    InetAddress group = InetAddress.getByName("224.0.0.1");
-    MulticastSocket socket = new MulticastSocket(1234);
-    socket.joinGroup(group);
-    SecurityManager security = System.getSecurityManager();
-    if (security != null) {
-        security.checkPermission(new MulticastPermission(group));
-    }
-    socket.send(new DatagramPacket(new byte[] { 1, 2, 3 }, 3, group, 1234));
-} catch (IOException e) {
-    e.printStackTrace();
-}
-```
-
-In the refactored code, we've replaced the deprecated `checkMulticast` method with a call to `checkPermission` with a `MulticastPermission` object. This ensures that the code is still secure and follows best practices, even with the deprecated method.

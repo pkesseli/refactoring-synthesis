@@ -1,38 +1,9 @@
-# Response Time: 22.28780198097229
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.6769449710845947
 ```
-public class MySignature extends SignatureSpi {
-    // ...
-    protected void engineSetParameter(String param, Object value) throws InvalidParameterException {
-        if (param.equals("myParam")) {
-            // do something with value
-        } else {
-            throw new InvalidParameterException("Invalid parameter: " + param);
-        }
-    }
-    // ...
-}
+// Code before refactoring
+this.engineSetParameter(a, b);
 ```
-
->>> After refactoring:
 ```
-public class MySignature extends SignatureSpi {
-    // ...
-    protected void engineSetParameter(String param, Object value) throws InvalidParameterException {
-        engineSetParameter(new AlgorithmParameterSpec(param, value));
-    }
-
-    protected void engineSetParameter(AlgorithmParameterSpec params) throws InvalidParameterException {
-        if (params instanceof MyParameterSpec) {
-            // do something with ((MyParameterSpec) params).getValue()
-        } else {
-            throw new InvalidParameterException("Invalid parameter: " + params);
-        }
-    }
-    // ...
-}
-``` 
-
-In this example, we've refactored the `engineSetParameter` method to use an `AlgorithmParameterSpec` object instead of separate `param` and `value` arguments. This allows us to handle different types of parameters more easily, and also makes the code more consistent with other parts of the Java API. We've also added a new `engineSetParameter` method that takes an `AlgorithmParameterSpec` object, and moved the parameter validation logic into that method.
+// Code after refactoring
+this.engineSetParameter(a, (java.lang.Object) b);
+```

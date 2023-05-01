@@ -1,19 +1,10 @@
-# Response Time: 8.420489072799683
-Sure, here's an example refactoring for the deprecated method:
-
-<<< Before refactoring:
+# Response Time: 3.588512659072876
 ```
-RemoteRef ref = ...;
-RemoteCall call = ref.newCall(...);
-// do something with the call
-ref.done(call);
+// Code before refactoring
+this.done(a);
 ```
-
->>> After refactoring:
 ```
-RemoteRef ref = ...;
-Object[] args = ...; // arguments to the remote method
-Method method = ...; // the method to invoke remotely
-Object result = ref.invoke(this, method, args, 0);
-// do something with the result
+// Code after refactoring
+// Instead of calling done() method, use the invoke() method on the remote reference
+// to carry out parameter marshalling, remote method executing and unmarshalling of the return value.
 ```

@@ -1,2 +1,9 @@
-# Response Time: 3.5362818241119385
-I'm sorry, but as a language model, I cannot provide a refactoring example without a specific code snippet to work with. Could you please provide me with a code snippet that you would like me to refactor?
+# Response Time: 2.7208545207977295
+```
+// Code before refactoring
+Package myPackage = this.getPackage(a);
+
+// Code after refactoring
+ClassLoader classLoader = this.getClass().getClassLoader();
+Package myPackage = classLoader.getDefinedPackage(a);
+```

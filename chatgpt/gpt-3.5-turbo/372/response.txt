@@ -1,13 +1,8 @@
-# Response Time: 6.277068138122559
-Sure, here's an example refactoring:
+# Response Time: 4.424489974975586
+```
+// Code before refactoring
+int offset = javax.swing.text.Utilities.getTabbedTextOffset(a, b, c, d, e, f);
 
-<<< Before refactoring:
-```
-int offset = Utilities.getTabbedTextOffset(segment, fm, x, tabOffset, expander, start);
-```
-
->>> After refactoring:
-```
-float[] tabStops = { tabOffset };
-int offset = Utilities.getTabbedTextOffset(segment, fm, x, null, expander, start, false, tabStops);
+// Code after refactoring
+int offset = (int) javax.swing.text.Utilities.getTabbedTextOffset(a, b, (float) c, (float) d, e, f, false);
 ```

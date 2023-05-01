@@ -1,16 +1,9 @@
-# Response Time: 6.36368989944458
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.033393621444702
 ```
-Window window = new Window();
-Event event = new Event(window, Event.MOUSE_DOWN, 0, 0);
-window.postEvent(event);
+// Code before refactoring
+this.postEvent(a);
 ```
-
->>> After refactoring:
 ```
-Window window = new Window();
-Event event = new Event(window, Event.MOUSE_DOWN, 0, 0);
-window.dispatchEvent(event);
+// Code after refactoring
+this.dispatchEvent(a);
 ```

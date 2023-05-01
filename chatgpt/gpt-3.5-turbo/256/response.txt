@@ -1,34 +1,11 @@
-# Response Time: 16.50941014289856
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 2.942445755004883
 ```
-import java.util.Date;
+// Code before refactoring
+this.setSeconds(a);
 
-public class Example {
-    public static void main(String[] args) {
-        Date date = new Date();
-        date.setSeconds(30);
-        System.out.println(date);
-    }
-}
+// Code after refactoring
+Calendar calendar = Calendar.getInstance();
+calendar.setTime(this);
+calendar.set(Calendar.SECOND, a);
+this.setTime(calendar.getTime().getTime());
 ```
-
->>> After refactoring: 
-```
-import java.util.Calendar;
-import java.util.Date;
-
-public class Example {
-    public static void main(String[] args) {
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.SECOND, 30);
-        date = calendar.getTime();
-        System.out.println(date);
-    }
-}
-```
-
-In this example, we've refactored the code to use `Calendar` instead of `Date`'s deprecated `setSeconds` method. We first create a `Calendar` instance and set its time to the `Date` object. Then, we set the seconds using `Calendar.set` and retrieve the updated `Date` object using `Calendar.getTime`. Finally, we print the updated `Date` object.

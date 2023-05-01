@@ -1,16 +1,10 @@
-# Response Time: 10.172130823135376
-I'm happy to help! Here's an example of how you could refactor the deprecated method `java.sql.Time.getDate()`:
-
-<<< Before refactoring:
+# Response Time: 3.2417938709259033
 ```
+// Code before refactoring
 java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-java.util.Date date = time.getDate();
-```
+Date date = time.getDate();
 
->>> After refactoring:
-```
+// Code after refactoring
 java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-java.util.Date date = new java.util.Date(time.getTime());
+Date date = new Date(time.getTime());
 ```
-
-In the refactored code, we create a new `java.util.Date` object using the `getTime()` method of the `java.sql.Time` object. This avoids using the deprecated `getDate()` method and ensures that the code will continue to work as expected in future versions of Java.

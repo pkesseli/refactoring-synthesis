@@ -1,14 +1,8 @@
-# Response Time: 4.028644800186157
-Sure, here's an example refactoring:
+# Response Time: 1.6516153812408447
+```
+// Code before refactoring
+this.hide();
 
-<<< Before refactoring:
-```
-Component myComponent = new Component();
-myComponent.hide();
-```
-
->>> After refactoring:
-```
-Component myComponent = new Component();
-myComponent.setVisible(false);
+// Code after refactoring
+this.setVisible(false);
 ```

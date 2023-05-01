@@ -1,16 +1,10 @@
-# Response Time: 10.096138954162598
-Sure, here's an example refactoring for the deprecated method `java.rmi.server.LogStream.parseLevel(String)`:
+# Response Time: 2.624788761138916
+```
+// Code before refactoring
+String a = "INFO";
+int level = parseLevel(a);
 
-<<< Before refactoring:
+// Code after refactoring
+String a = "INFO";
+int level = Level.parse(a).intValue();
 ```
-String levelString = "INFO";
-int level = java.rmi.server.LogStream.parseLevel(levelString);
-```
-
->>> After refactoring:
-```
-String levelString = "INFO";
-int level = java.util.logging.Level.parse(levelString).intValue();
-```
-
-In the refactored code, we use the `java.util.logging.Level.parse(String)` method to parse the log level string instead of the deprecated `java.rmi.server.LogStream.parseLevel(String)` method. We then convert the resulting `Level` object to an `int` using the `intValue()` method.

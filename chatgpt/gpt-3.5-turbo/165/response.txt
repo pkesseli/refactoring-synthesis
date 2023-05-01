@@ -1,24 +1,16 @@
-# Response Time: 17.918998956680298
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 7.505527019500732
 ```
+// Code before refactoring
 InetAddress group = InetAddress.getByName("224.0.0.1");
 MulticastSocket socket = new MulticastSocket(1234);
 socket.joinGroup(group);
-// do some work...
 socket.leaveGroup(group);
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 InetAddress group = InetAddress.getByName("224.0.0.1");
 MulticastSocket socket = new MulticastSocket(1234);
+socket.joinGroup(group);
 NetworkInterface networkInterface = NetworkInterface.getByName("eth0");
 SocketAddress socketAddress = new InetSocketAddress(group, 1234);
-socket.joinGroup(socketAddress, networkInterface);
-// do some work...
 socket.leaveGroup(socketAddress, networkInterface);
 ```
-
-In the refactored code, we use the `joinGroup(SocketAddress, NetworkInterface)` method to join the multicast group, passing in both the `SocketAddress` and `NetworkInterface` objects. Similarly, we use the `leaveGroup(SocketAddress, NetworkInterface)` method to leave the multicast group, passing in the same `SocketAddress` and `NetworkInterface` objects. This ensures that the multicast group is joined and left on the correct network interface.

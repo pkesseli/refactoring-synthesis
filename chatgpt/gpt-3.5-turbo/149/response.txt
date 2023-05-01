@@ -1,20 +1,32 @@
-# Response Time: 10.475266218185425
-Sure, here's an example refactoring:
+# Response Time: 7.747589349746704
+```
+// Code before refactoring
+this.resume();
+```
+```
+// Code after refactoring
+// Instead of using Thread.suspend() and Thread.resume(),
+// use a boolean flag to control the execution of the thread.
+private boolean isPaused = false;
 
-<<< Before refactoring:
-```
-Thread thread = new Thread();
-thread.suspend();
-// do some work
-thread.resume();
-```
+public void pauseThread() {
+    isPaused = true;
+}
 
->>> After refactoring:
-```
-Thread thread = new Thread();
-thread.start();
-// do some work
-thread.interrupt();
-```
+public void resumeThread() {
+    isPaused = false;
+}
 
-In the original code, `Thread.suspend()` and `Thread.resume()` are used to pause and resume the execution of a thread. However, these methods are deprecated because they can cause deadlocks. Instead, we can use `Thread.start()` to start the thread and `Thread.interrupt()` to interrupt it when we want to pause its execution. This is a safer and more reliable way to control the execution of a thread.
+public void run() {
+    while (true) {
+        if (!isPaused) {
+            // Your thread code here
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```

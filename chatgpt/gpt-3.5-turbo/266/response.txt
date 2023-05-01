@@ -1,18 +1,9 @@
-# Response Time: 12.983747720718384
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.406000852584839
 ```
-LogRecord record = new LogRecord(Level.INFO, "Hello, world!");
-record.setMillis(System.currentTimeMillis());
-logger.log(record);
+// Code before refactoring
+this.setMillis(a);
 ```
-
->>> After refactoring:
 ```
-LogRecord record = new LogRecord(Level.INFO, "Hello, world!");
-record.setInstant(Instant.now());
-logger.log(record);
+// Code after refactoring
+this.setInstant(Instant.ofEpochMilli(a));
 ```
-
-In the original code, the `setMillis` method is used to set the timestamp of the `LogRecord` to the current time in milliseconds. However, this method is deprecated in favor of `setInstant`, which sets the timestamp using an `Instant` object with nanosecond resolution. The refactored code uses `Instant.now()` to get the current time with nanosecond precision and sets it on the `LogRecord` using `setInstant`.

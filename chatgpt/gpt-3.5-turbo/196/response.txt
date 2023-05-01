@@ -1,20 +1,8 @@
-# Response Time: 6.990312814712524
-Sure, here's an example refactoring:
+# Response Time: 2.3771867752075195
+```
+// Code before refactoring
+InputStream resultStream = this.getResultStream(a);
 
-<<< Before refactoring:
-```
-RemoteCall call = ...;
-InputStream resultStream = call.getResultStream(true);
-```
-
->>> After refactoring:
-```
-RemoteCall call = ...;
-Object result = call.getResult();
-if (result instanceof InputStream) {
-    InputStream resultStream = (InputStream) result;
-    // use resultStream as needed
-} else {
-    // handle error case
-}
+// Code after refactoring
+throw new UnsupportedOperationException("This method is deprecated and has no replacement.");
 ```

@@ -32,6 +32,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
@@ -190,27 +191,27 @@ public class SourceFinder {
 //     }
 //   }
 
-  public ResolvedMethodDeclaration getResolvedMethodDeclarationFromLink(final JavaSymbolSolver symbolResolver,
-      final CombinedTypeSolver typeSolver, final JavaParser javaParser, final Type defaultType,
-      final ParseResult<CompilationUnit> parseResult, final MethodDeclaration method, final String code) {
-    final Expression expression;
-    try {
-      expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method, code);
-    } catch (final Exception e) {
-      logger.warn("Could not identify method linked in JavaDoc", e);
-      return null;
-    }
+  // public ResolvedMethodDeclaration getResolvedMethodDeclarationFromLink(final JavaSymbolSolver symbolResolver,
+  //     final CombinedTypeSolver typeSolver, final JavaParser javaParser, final Type defaultType,
+  //     final ParseResult<CompilationUnit> parseResult, final MethodDeclaration method, final String code) {
+  //   final Expression expression;
+  //   try {
+  //     expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult, method, code);
+  //   } catch (final Exception e) {
+  //     logger.warn("Could not identify method linked in JavaDoc", e);
+  //     return null;
+  //   }
 
-    if (!(expression instanceof MethodCallExpr))
-      return null;
-    final MethodCallExpr methodCall = (MethodCallExpr) expression;
-    try {
-      return methodCall.resolve();
-    } catch (final Exception e) {
-      logger.warn("Could not resolved method linked in JavaDoc", e);
-      return null;
-    }
-  }
+  //   if (!(expression instanceof MethodCallExpr))
+  //     return null;
+  //   final MethodCallExpr methodCall = (MethodCallExpr) expression;
+  //   try {
+  //     return methodCall.resolve();
+  //   } catch (final Exception e) {
+  //     logger.warn("Could not resolved method linked in JavaDoc", e);
+  //     return null;
+  //   }
+  // }
 
 //   /**
 //    * Registers a generic method instruction in {@code javaComponents}.
@@ -300,7 +301,7 @@ public class SourceFinder {
         .flatMap(SourceFinder::expandInnerTypes)
         .filter(new MatchesMethodIdentifier(symbolResolver, typeSolver, methodToRefactor))
         .map(TypeDeclaration::getMethods).flatMap(Collection::stream)
-        .filter(new MatchesSignature(typeSolver, methodToRefactor)).findAny().orElse(null);
+        .filter(new SimplyMatchesSignature(typeSolver, methodToRefactor)).findAny().get();
   }
 
   private static Stream<TypeDeclaration<?>> expandInnerTypes(final TypeDeclaration<?> type) {
@@ -309,38 +310,46 @@ public class SourceFinder {
             .flatMap(SourceFinder::expandInnerTypes));
   }
 
-  /**
-   * Parses a code snippet extracted from JavaDoc as if it were a satement in the
-   * documented method. This helps resolve unqualified names, as JavaDoc code
-   * examples are often written as though in the scope of the documented method.
-   * 
-   * @param symbolResolver  {@link #findMethod(SymbolResolver, TypeSolver, ParseResult)}
-   * @param typeSolver      {@link #findMethod(SymbolResolver, TypeSolver, ParseResult)}
-   * @param javaParser      {@link Typecheck}
-   * @param defaultType     {@link TypeCheck}
-   * @param compilationUnit Compilation unit which is modified and parsed again.
-   * @param method          Method in whose context to parse {@code code}.
-   * @param code            Java code snippet to parse.
-   * @return JavaDoc AST expression.
-   */
-  public Expression parseInMethodContext(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
-      final JavaParser javaParser, final Type defaultType, final ParseResult<CompilationUnit> compilationUnit,
-      final MethodDeclaration method, final String code) {
-    final ParseResult<Expression> textExpression = javaParser.parseExpression("__RESYNTH(" + code + ")");
-    method.getBody().get().addStatement(0, textExpression.getResult().get());
-    final ParseResult<CompilationUnit> parseResult = javaParser.parse(compilationUnit.getResult().get().toString());
-    final MethodDeclaration container = findMethod(symbolResolver, typeSolver, parseResult);
-    final Expression result = container.getBody().get().getStatement(0).asExpressionStmt().getExpression()
-        .asMethodCallExpr().getArgument(0);
-    Typecheck.apply(javaParser, typeSolver, defaultType, result);
-    return result;
-  }
+  // /**
+  //  * Parses a code snippet extracted from JavaDoc as if it were a satement in the
+  //  * documented method. This helps resolve unqualified names, as JavaDoc code
+  //  * examples are often written as though in the scope of the documented method.
+  //  * 
+  //  * @param symbolResolver  {@link #findMethod(SymbolResolver, TypeSolver, ParseResult)}
+  //  * @param typeSolver      {@link #findMethod(SymbolResolver, TypeSolver, ParseResult)}
+  //  * @param javaParser      {@link Typecheck}
+  //  * @param defaultType     {@link TypeCheck}
+  //  * @param compilationUnit Compilation unit which is modified and parsed again.
+  //  * @param method          Method in whose context to parse {@code code}.
+  //  * @param code            Java code snippet to parse.
+  //  * @return JavaDoc AST expression.
+  //  */
+  // public Expression parseInMethodContext(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
+  //     final JavaParser javaParser, final Type defaultType, final ParseResult<CompilationUnit> compilationUnit,
+  //     final MethodDeclaration method, final String code) {
+  //   final ParseResult<Expression> textExpression = javaParser.parseExpression("__RESYNTH(" + code + ")");
+  //   method.getBody().get().addStatement(0, textExpression.getResult().get());
+  //   final ParseResult<CompilationUnit> parseResult = javaParser.parse(compilationUnit.getResult().get().toString());
+  //   final MethodDeclaration container = findMethod(symbolResolver, typeSolver, parseResult);
+  //   final Expression result = container.getBody().get().getStatement(0).asExpressionStmt().getExpression()
+  //       .asMethodCallExpr().getArgument(0);
+  //   Typecheck.apply(javaParser, typeSolver, defaultType, result);
+  //   return result;
+  // }
 
 
   public Statement parseInMethodContext(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
       final JavaParser javaParser, final Type defaultType, final ParseResult<CompilationUnit> compilationUnit,
       final MethodDeclaration method, final Statement statement) {
-    method.getBody().get().addStatement(0, statement);
+    final Optional<BlockStmt> optionalBody = method.getBody();
+    if (optionalBody.isPresent())
+      optionalBody.get().addStatement(0, statement);
+    else {
+      final BlockStmt newBody = new BlockStmt();
+      newBody.addStatement(0, statement);
+      method.setBody(newBody);
+    }
+    // method.getBody().get().addStatement(0, statement);
     final ParseResult<CompilationUnit> parseResult = javaParser.parse(compilationUnit.getResult().get().toString());
     final MethodDeclaration container = findMethod(symbolResolver, typeSolver, parseResult);
     final Statement result = container.getBody().get().getStatement(0);
@@ -361,34 +370,34 @@ public class SourceFinder {
         .map(JavadocInlineTag::getContent).map(Links::getLink).collect(Collectors.toSet());
   }
 
-  /**
-   * Extracts a code example in the context of a deprecated block tag.
-   * 
-   * @param symbolResolver  {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
-   * @param typeSolver      {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
-   * @param javaParser      {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
-   * @param defaultType     {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
-   * @param compilationUnit {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
-   * @param method          {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
-   * @param javadoc         Comment from which to extract the example.
-   * @return Code example to replace the method call.
-   */
-  public Expression parseDeprecatedCodeExample(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
-      final JavaParser javaParser, final Type defaultType, final ParseResult<CompilationUnit> compilationUnit,
-      final MethodDeclaration method, final Javadoc javadoc) {
+  // /**
+  //  * Extracts a code example in the context of a deprecated block tag.
+  //  * 
+  //  * @param symbolResolver  {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+  //  * @param typeSolver      {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+  //  * @param javaParser      {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+  //  * @param defaultType     {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+  //  * @param compilationUnit {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+  //  * @param method          {@link #parseInMethodContext(SymbolResolver, TypeSolver, JavaParser, Type, ParseResult, MethodDeclaration, String)}
+  //  * @param javadoc         Comment from which to extract the example.
+  //  * @return Code example to replace the method call.
+  //  */
+  // public Expression parseDeprecatedCodeExample(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
+  //     final JavaParser javaParser, final Type defaultType, final ParseResult<CompilationUnit> compilationUnit,
+  //     final MethodDeclaration method, final Javadoc javadoc) {
 
-    final List<JavadocInlineTag> tags = getDeprecatedInlineTags(javadoc)
-        .filter(tag -> JavadocInlineTag.Type.CODE == tag.getType()).collect(Collectors.toList());
-    for (final JavadocInlineTag javadocInlineTag : tags) {
-      final String code = javadocInlineTag.getContent();
-      final Expression expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType,
-          compilationUnit, method, code);
-      if (!containsDeprectedMethodCalls(classLoader, expression))
-        return expression;
-    }
+  //   final List<JavadocInlineTag> tags = getDeprecatedInlineTags(javadoc)
+  //       .filter(tag -> JavadocInlineTag.Type.CODE == tag.getType()).collect(Collectors.toList());
+  //   for (final JavadocInlineTag javadocInlineTag : tags) {
+  //     final String code = javadocInlineTag.getContent();
+  //     final Expression expression = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType,
+  //         compilationUnit, method, code);
+  //     if (!containsDeprectedMethodCalls(classLoader, expression))
+  //       return expression;
+  //   }
 
-    return null;
-  }
+  //   return null;
+  // }
 
   /**
    * Indicates whether {@code expression} contains any invocations of deprecated

@@ -1,15 +1,9 @@
-# Response Time: 12.747312068939209
-I'm sorry, but as an AI language model, I don't have access to your codebase or know what programming language you are using. However, I can give you a general example of how to refactor code that uses the deprecated method `java.lang.Thread.countStackFrames()`:
+# Response Time: 2.760267734527588
+```
+// Code before refactoring
+int stackFrames = this.countStackFrames();
 
-<<< Before refactoring:
-```
-Thread.currentThread().countStackFrames();
-```
-
->>> After refactoring:
-```
+// Code after refactoring
 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-int stackDepth = stackTrace.length;
+int stackFrames = stackTrace.length;
 ```
-
-This refactored code uses the `getStackTrace()` method to retrieve the current thread's stack trace as an array of `StackTraceElement` objects. The length of this array is then used to determine the number of stack frames. This approach is more reliable than using `countStackFrames()` because it does not depend on thread suspension and provides a consistent result.

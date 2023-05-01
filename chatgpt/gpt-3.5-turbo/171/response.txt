@@ -1,17 +1,10 @@
-# Response Time: 11.347470045089722
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.472860813140869
 ```
-URLConnection connection = new URL("https://example.com").openConnection();
-connection.setDefaultRequestProperty("Authorization", "Bearer myToken");
+// Code before refactoring
+this.setDefaultRequestProperty(a, b);
 ```
-
->>> After refactoring:
 ```
-URL url = new URL("https://example.com");
-URLConnection connection = url.openConnection();
-connection.setRequestProperty("Authorization", "Bearer myToken");
-``` 
-
-In the refactored code, we first create a `URL` object and then call `openConnection()` to obtain an instance of `URLConnection`. We then use the `setRequestProperty()` method on the `URLConnection` instance to set the `Authorization` header. This is the recommended approach according to the deprecation comment in the Javadoc.
+// Code after refactoring
+URLConnection connection = this.openConnection();
+connection.setRequestProperty(a, b);
+```

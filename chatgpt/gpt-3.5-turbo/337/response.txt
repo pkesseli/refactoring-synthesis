@@ -1,22 +1,8 @@
-# Response Time: 14.872393131256104
-Sure, here's an example refactoring:
+# Response Time: 2.9572200775146484
+```
+// Code before refactoring
+Rectangle rect = this.modelToView(a, b, c);
 
-<<< Before refactoring:
+// Code after refactoring
+Rectangle2D rect = this.modelToView2D(a, b, c);
 ```
-JTextComponent textComponent = new JTextComponent();
-BasicTextUI basicTextUI = new BasicTextUI();
-int offset = 10;
-Position.Bias bias = Position.Bias.Forward;
-Rectangle rectangle = basicTextUI.modelToView(textComponent, offset, bias);
-```
-
->>> After refactoring:
-```
-JTextComponent textComponent = new JTextComponent();
-TextUI textUI = textComponent.getUI();
-int offset = 10;
-Position.Bias bias = Position.Bias.Forward;
-Rectangle rectangle = textUI.modelToView2D(textComponent, offset, bias);
-```
-
-In this example, we've replaced the deprecated `BasicTextUI.modelToView` method with the recommended `TextUI.modelToView2D` method. We've also updated the code to use the `getUI` method to get the `TextUI` instance instead of creating a new `BasicTextUI` instance.

@@ -1,27 +1,8 @@
-# Response Time: 15.753185987472534
-Sure, here's an example refactoring for the deprecated `java.awt.Component.locate(int, int)` method:
+# Response Time: 2.2894606590270996
+```
+// Code before refactoring
+Point location = this.locate(a, b);
 
-<<< Before refactoring:
+// Code after refactoring
+Point location = this.getComponentAt(a, b).getLocation();
 ```
-Component myComponent = ...;
-int x = ...;
-int y = ...;
-Point location = myComponent.getLocation();
-if (x >= location.x && x < location.x + myComponent.getWidth() &&
-    y >= location.y && y < location.y + myComponent.getHeight()) {
-    // Do something with myComponent
-}
-```
-
->>> After refactoring:
-```
-Component myComponent = ...;
-int x = ...;
-int y = ...;
-Component componentAtPoint = myComponent.getComponentAt(x, y);
-if (componentAtPoint == myComponent) {
-    // Do something with myComponent
-}
-```
-
-In the refactored code, we've replaced the deprecated `locate(int, int)` method with the recommended `getComponentAt(int, int)` method. We then check if the returned component is the same as the original component, which is equivalent to checking if the original component contains the given point.

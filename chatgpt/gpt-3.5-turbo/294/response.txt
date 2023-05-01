@@ -1,30 +1,13 @@
-# Response Time: 19.3418128490448
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 5.397573709487915
 ```
-StringMonitor stringMonitor = new StringMonitor(monitorName);
-stringMonitor.addObservedObject(objectName);
-stringMonitor.setNotifyDiffer(true);
-stringMonitor.setNotifyMatch(true);
-stringMonitor.setNotifyNotMatch(true);
-stringMonitor.setStringToCompare(stringToCompare);
+// Code before refactoring
+StringMonitor stringMonitor = new StringMonitor(monitorMBean);
 stringMonitor.start();
 double derivedGauge = stringMonitor.getDerivedGauge();
-```
 
->>> After refactoring:
-```
-StringMonitor stringMonitor = new StringMonitor();
-stringMonitor.addObservedObject(objectName);
-stringMonitor.setNotifyDiffer(true);
-stringMonitor.setNotifyMatch(true);
-stringMonitor.setNotifyNotMatch(true);
-stringMonitor.setStringToCompare(stringToCompare);
+// Code after refactoring
+StringMonitor stringMonitor = new StringMonitor(monitorMBean);
 stringMonitor.start();
-ObjectName objectName = new ObjectName(monitorName);
-AttributeList attributeList = stringMonitor.getAttributes(objectName, new String[]{"DerivedGauge"});
-Double derivedGauge = (Double) ((Attribute) attributeList.get(0)).getValue();
-``` 
-
-In this example, we've replaced the deprecated `StringMonitor.getDerivedGauge()` method with the recommended `StringMonitor.getDerivedGauge(ObjectName)` method. We've also made some other changes to the code to accommodate this change, such as creating an `ObjectName` instance and using `AttributeList` to retrieve the `DerivedGauge` attribute.
+ObjectName objectName = new ObjectName(monitorMBean);
+double derivedGauge = stringMonitor.getDerivedGauge(objectName);
+```

@@ -1,19 +1,10 @@
-# Response Time: 6.441236972808838
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.051008701324463
 ```
-public void keyDown(Event evt, int key) {
-    // handle key down event
-}
+// Code before refactoring
+this.keyDown(a, b);
 ```
-
->>> After refactoring:
 ```
-public void processKeyEvent(KeyEvent evt) {
-    if (evt.getID() == KeyEvent.KEY_PRESSED) {
-        int key = evt.getKeyCode();
-        // handle key down event
-    }
-}
+// Code after refactoring
+KeyEvent keyEvent = new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_UNKNOWN, false);
+this.processKeyEvent(keyEvent);
 ```

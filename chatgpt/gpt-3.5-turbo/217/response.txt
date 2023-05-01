@@ -1,16 +1,8 @@
-# Response Time: 12.658276081085205
-Sure, here's an example refactoring for the deprecated method `java.sql.Date.getSeconds()`:
+# Response Time: 1.8638107776641846
+```
+// Code before refactoring
+this.getSeconds();
 
-<<< Before refactoring:
+// Code after refactoring
+this.toLocalDateTime().getSecond();
 ```
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-int seconds = date.getSeconds();
-```
-
->>> After refactoring:
-```
-java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-int seconds = (int) (date.getTime() / 1000) % 60;
-```
-
-In the refactored code, we use the `getTime()` method to get the number of milliseconds since January 1, 1970, 00:00:00 GMT, and then divide by 1000 to get the number of seconds. We then use the modulo operator `%` to get the remainder when dividing by 60, which gives us the number of seconds within the current minute. This is equivalent to the deprecated `getSeconds()` method, but avoids using a deprecated API.

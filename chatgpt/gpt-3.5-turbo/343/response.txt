@@ -1,17 +1,8 @@
-# Response Time: 9.379805088043213
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.124666452407837
 ```
-int pos = 5;
-Rectangle rect = multiTextUI.modelToView(textComponent, pos);
-```
+// Code before refactoring
+Rectangle rect = textUI.modelToView(a, b);
 
->>> After refactoring:
+// Code after refactoring
+Rectangle2D rect = textUI.modelToView2D(a, b, Position.Bias.Forward);
 ```
-int pos = 5;
-Position.Bias[] bias = new Position.Bias[1];
-Rectangle rect = textComponent.getUI().modelToView2D(textComponent, pos, bias);
-``` 
-
-In the refactored code, we use the `modelToView2D` method instead of the deprecated `modelToView` method. We also pass in a `Position.Bias` array to the method, which is required by the new method signature.

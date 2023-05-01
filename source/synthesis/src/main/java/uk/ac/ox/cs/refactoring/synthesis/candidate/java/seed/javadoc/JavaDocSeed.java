@@ -175,7 +175,8 @@ public class JavaDocSeed implements InstructionSetSeed {
     }
 
     if (!foundMethod) {
-      final List<JavadocDescriptionElement> deprecatedElements = getDeprecatedElements(javadoc).collect(Collectors.toList());
+      final List<JavadocDescriptionElement> deprecatedElements = getDeprecatedElements(javadoc)
+          .collect(Collectors.toList());
       for (final JavadocDescriptionElement javadocDescriptionElement : deprecatedElements) {
         final String javadocText;
         if (javadocDescriptionElement instanceof JavadocInlineTag) {
@@ -468,7 +469,7 @@ public class JavaDocSeed implements InstructionSetSeed {
     final List<JavadocInlineTag> tags = getDeprecatedInlineTags(javadoc)
         .filter(tag -> JavadocInlineTag.Type.CODE == tag.getType()).collect(Collectors.toList());
     for (final JavadocInlineTag javadocInlineTag : tags) {
-      final String code = javadocInlineTag.getContent();
+      final String code = clean(javadocInlineTag.getContent());
       final Expression expression = parseDeprecatedCodeExample(symbolResolver, typeSolver, javaParser, defaultType,
           compilationUnit, method, code);
       if (expression != null)
@@ -476,6 +477,22 @@ public class JavaDocSeed implements InstructionSetSeed {
     }
 
     return null;
+  }
+
+  /**
+   * Some Javadoc in the JCL uses a syntax of fully-qualified method names like
+   * "java.awt.Component.setEnabled(false)". This is not valid Java syntax, but we
+   * can handle this format explicitly in the future. For now we use this
+   * workaround.
+   * 
+   * @param code Code example to parse.
+   * @return Cleaned code example.
+   */
+  private static String clean(final String code) {
+    if (code.startsWith(" java.awt.Component.")) {
+      return code.substring(20);
+    }
+    return code;
   }
 
   /**

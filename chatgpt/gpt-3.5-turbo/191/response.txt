@@ -1,16 +1,13 @@
-# Response Time: 9.422667741775513
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.745448350906372
 ```
-Operation op = ...;
-String opString = op.toString();
+// Code before refactoring
+public String myMethod() {
+    return this.toString();
+}
 ```
-
->>> After refactoring:
 ```
-Operation op = ...;
-String opString = "Operation: " + op.getClass().getName();
-``` 
-
-In this refactored code, we're no longer using the deprecated `toString()` method. Instead, we're constructing a custom string representation of the `Operation` object by concatenating the string "Operation: " with the fully qualified class name of the object. This provides a more descriptive and informative string representation of the object, without relying on a deprecated method.
+// Code after refactoring
+public String myMethod() {
+    return super.toString();
+}
+```

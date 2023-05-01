@@ -1,40 +1,17 @@
-# Response Time: 22.914649963378906
-Sure, here's an example refactoring for the deprecated method `java.security.SignatureSpi.engineGetParameter(String)`:
-
-<<< Before refactoring:
+# Response Time: 6.062184810638428
 ```
-public class MySignatureSpi extends SignatureSpi {
-    // ...
-
-    @Override
-    protected Object engineGetParameter(String param) throws InvalidParameterException {
-        if (param.equals("myParam")) {
-            return myParam;
-        } else {
-            throw new InvalidParameterException("Invalid parameter: " + param);
-        }
-    }
-
-    // ...
+// Code before refactoring
+public byte[] sign(byte[] data) throws SignatureException {
+    AlgorithmParameters params = this.engineGetParameters();
+    byte[] a = params.getEncoded();
+    return this.engineSign(data);
 }
 ```
-
->>> After refactoring:
 ```
-public class MySignatureSpi extends SignatureSpi {
-    // ...
-
-    @Override
-    protected <T extends AlgorithmParameterSpec> T engineGetParameter(Class<T> paramSpec) throws InvalidParameterException {
-        if (paramSpec == MyParamSpec.class) {
-            return (T) myParamSpec;
-        } else {
-            throw new InvalidParameterException("Invalid parameter: " + paramSpec.getName());
-        }
-    }
-
-    // ...
+// Code after refactoring
+public byte[] sign(byte[] data) throws SignatureException {
+    AlgorithmParameters params = this.engineGetParameters();
+    byte[] a = params.getEncoded("ASN.1");
+    return this.engineSign(data);
 }
 ```
-
-In this refactored code, we've replaced the deprecated `engineGetParameter(String)` method with the new `engineGetParameter(Class<T>)` method. This new method takes a `Class<T>` parameter that specifies the type of the parameter to retrieve. We've also created a new `MyParamSpec` class that extends `AlgorithmParameterSpec` and represents the specific parameter we want to retrieve. Finally, we've updated the implementation of `engineGetParameter` to use `paramSpec` instead of `param`, and to return `myParamSpec` instead of `myParam`.

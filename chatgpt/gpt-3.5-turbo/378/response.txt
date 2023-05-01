@@ -1,22 +1,10 @@
-# Response Time: 19.31032109260559
-I'm sorry, but as a language model, I don't have access to your codebase or development environment. However, I can provide you with an example of how to refactor the deprecated method call based on the information you provided.
-
-<<< Before refactoring: 
+# Response Time: 4.118257761001587
 ```
-javax.swing.text.WrappedPlainView view = new javax.swing.text.WrappedPlainView();
-Graphics graphics = new Graphics();
-int start = 0;
-int end = 10;
-view.drawSelectedText(graphics, start, end, 0, 0);
+// Code before refactoring
+this.drawSelectedText(a, b, c, d, e);
 ```
-
->>> After refactoring: 
 ```
-javax.swing.text.WrappedPlainView view = new javax.swing.text.WrappedPlainView();
-Graphics2D graphics = (Graphics2D) graphics;
-float start = 0.0f;
-float end = 10.0f;
-view.drawSelectedText(graphics, start, end, 0, 0);
-``` 
-
-In the refactored code, we have replaced the deprecated method `drawSelectedText(Graphics, int, int, int, int)` with the new method `drawSelectedText(Graphics2D, float, float, int, int)` as suggested in the Javadoc comment. We have also cast the `Graphics` object to `Graphics2D` to use the new method.
+// Code after refactoring
+Graphics2D g2d = (Graphics2D) a;
+this.drawSelectedText(g2d, (float) b, (float) c, d, e);
+```

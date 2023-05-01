@@ -1,2 +1,8 @@
-# Response Time: 3.7306251525878906
-Sorry, as an AI language model, I cannot provide a refactoring example without knowing the specific code that needs to be refactored. Can you please provide me with the code snippet that needs to be refactored?
+# Response Time: 2.0431530475616455
+```
+// Code before refactoring
+int major = Runtime.version().major();
+
+// Code after refactoring
+int major = Runtime.version().feature();
+```

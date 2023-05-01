@@ -1,16 +1,14 @@
-# Response Time: 8.63664197921753
-Sure, here's an example refactoring for the deprecated method `java.awt.Scrollbar.getVisible()`:
-
-<<< Before refactoring:
+# Response Time: 3.5257623195648193
 ```
-Scrollbar scrollbar = new Scrollbar();
-int visible = scrollbar.getVisible();
+<code before refactoring here>
 ```
-
->>> After refactoring:
 ```
-Scrollbar scrollbar = new Scrollbar();
-int visibleAmount = scrollbar.getVisibleAmount();
-``` 
-
-In the refactored code, we've replaced the deprecated `getVisible()` method with the recommended `getVisibleAmount()` method. This should ensure that our code remains compatible with future versions of Java.
+boolean visible = this.getVisible();
+```
+```
+<code after refactoring here>
+```
+```
+int visibleAmount = this.getVisibleAmount();
+boolean visible = visibleAmount > 0;
+```

@@ -1,14 +1,8 @@
-# Response Time: 5.0261781215667725
-Sure, here's an example refactoring:
+# Response Time: 2.2949748039245605
+```
+// Code before refactoring
+int ttl = this.getTTL();
 
-<<< Before refactoring:
-```
-MulticastSocket socket = new MulticastSocket();
-byte ttl = socket.getTTL();
-```
-
->>> After refactoring:
-```
-MulticastSocket socket = new MulticastSocket();
-int ttl = socket.getTimeToLive();
+// Code after refactoring
+int ttl = this.getTimeToLive();
 ```

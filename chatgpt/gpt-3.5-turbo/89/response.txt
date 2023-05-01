@@ -1,14 +1,8 @@
-# Response Time: 3.856198787689209
-Sure, here's an example refactoring:
+# Response Time: 1.6679933071136475
+```
+// Code before refactoring
+this.disable();
 
-<<< Before refactoring:
-```
-MenuItem menuItem = new MenuItem("File");
-menuItem.disable();
-```
-
->>> After refactoring:
-```
-MenuItem menuItem = new MenuItem("File");
-menuItem.setEnabled(false);
+// Code after refactoring
+this.setEnabled(false);
 ```

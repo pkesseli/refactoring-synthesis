@@ -1,16 +1,8 @@
-# Response Time: 8.189799070358276
-Sure, here's an example refactoring for the deprecated method:
-
-<<< Before refactoring:
+# Response Time: 2.3517227172851562
 ```
-Rectangle rect = new Rectangle();
-int pos = 10;
-view.modelToView(pos, rect);
-```
+// Code before refactoring
+Rectangle rect = this.modelToView(a, b);
 
->>> After refactoring:
+// Code after refactoring
+Rectangle rect = this.modelToView(a);
 ```
-Rectangle rect = view.modelToView(pos);
-``` 
-
-In the refactored code, we're using the `modelToView(int)` method instead of the deprecated `modelToView(int, Shape)` method. This simplifies the code and removes the need to create a `Rectangle` object to pass as a parameter.

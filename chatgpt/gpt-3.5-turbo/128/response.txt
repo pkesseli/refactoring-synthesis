@@ -1,11 +1,10 @@
-# Response Time: 4.252349853515625
-<<< Before refactoring:
+# Response Time: 2.9090332984924316
 ```
-DataInputStream dataInputStream = new DataInputStream(inputStream);
-String line = dataInputStream.readLine();
-```
->>> After refactoring:
-```
-BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-String line = bufferedReader.readLine();
+// Code before refactoring
+DataInputStream in = new DataInputStream(socket.getInputStream());
+String line = in.readLine();
+
+// Code after refactoring
+BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+String line = in.readLine();
 ```

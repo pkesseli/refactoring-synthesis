@@ -1,17 +1,11 @@
-# Response Time: 8.205424785614014
-Sure, here's an example refactoring:
+# Response Time: 4.308039665222168
+```
+// Code before refactoring
+InetAddress a = InetAddress.getByName("224.0.0.1");
+this.setInterface(a);
 
-<<< Before refactoring:
-```
-InetAddress group = InetAddress.getByName("224.0.0.1");
-MulticastSocket socket = new MulticastSocket(1234);
-socket.setInterface(group);
-```
-
->>> After refactoring:
-```
-InetAddress group = InetAddress.getByName("224.0.0.1");
-MulticastSocket socket = new MulticastSocket(1234);
-NetworkInterface networkInterface = NetworkInterface.getByInetAddress(group);
-socket.setNetworkInterface(networkInterface);
+// Code after refactoring
+InetAddress a = InetAddress.getByName("224.0.0.1");
+NetworkInterface ni = NetworkInterface.getByInetAddress(a);
+this.setNetworkInterface(ni);
 ```

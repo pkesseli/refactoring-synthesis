@@ -1,15 +1,11 @@
-# Response Time: 4.558470010757446
-Sure, here's an example refactoring:
+# Response Time: 3.175233840942383
+```
+// Code before refactoring
+this.setYear(a);
 
-<<< Before refactoring:
-```
-Date date = new Date();
-date.setYear(2021);
-```
-
->>> After refactoring:
-```
-Calendar calendar = Calendar.getInstance();
-calendar.set(Calendar.YEAR, 2021);
-Date date = calendar.getTime();
+// Code after refactoring
+Calendar cal = Calendar.getInstance();
+cal.setTime(this);
+cal.set(Calendar.YEAR, a + 1900);
+this.setTime(cal.getTime().getTime());
 ```

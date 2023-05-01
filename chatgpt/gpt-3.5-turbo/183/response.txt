@@ -1,32 +1,9 @@
-# Response Time: 14.26265001296997
-Sure, here's an example refactoring for the deprecated `java.rmi.server.LogStream.log(String)` method:
-
-<<< Before refactoring:
+# Response Time: 2.3613641262054443
 ```
-import java.rmi.server.LogStream;
-
-public class MyServer {
-  private static final LogStream log = LogStream.log("myserver");
-
-  public static void main(String[] args) {
-    log.println("Starting server...");
-    // rest of server code
-  }
-}
+// Code before refactoring
+this.log(a);
 ```
-
->>> After refactoring:
 ```
-import java.util.logging.Logger;
-
-public class MyServer {
-  private static final Logger log = Logger.getLogger("myserver");
-
-  public static void main(String[] args) {
-    log.info("Starting server...");
-    // rest of server code
-  }
-}
+// Code after refactoring
+// Deprecated method has no replacement, so we can simply remove the call
 ```
-
-In this refactoring, we replace the deprecated `LogStream.log(String)` method with the `Logger.getLogger(String)` method from the `java.util.logging` package. We also change the log level from `println` to `info` to match the default log level of the `Logger` class.

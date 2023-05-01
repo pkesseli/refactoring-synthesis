@@ -1,2 +1,8 @@
-# Response Time: 3.4738731384277344
-I'm sorry, but as an AI language model, I cannot provide code refactoring examples without a specific context or code snippet. Could you please provide me with more information or a code snippet to work with?
+# Response Time: 2.018296718597412
+```
+// Code before refactoring
+this.stop();
+
+// Code after refactoring
+Thread.currentThread().getThreadGroup().interrupt();
+```

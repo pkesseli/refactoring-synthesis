@@ -1,15 +1,12 @@
-# Response Time: 5.733260154724121
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.233052015304565
 ```
+// Code before refactoring
 MulticastSocket socket = new MulticastSocket(port);
-socket.setInterface(address);
-```
+socket.joinGroup(group);
+NetworkInterface networkInterface = socket.getInterface();
 
->>> After refactoring:
-```
+// Code after refactoring
 MulticastSocket socket = new MulticastSocket(port);
-NetworkInterface networkInterface = NetworkInterface.getByInetAddress(address);
-socket.setNetworkInterface(networkInterface);
+socket.joinGroup(group);
+NetworkInterface networkInterface = socket.getNetworkInterface();
 ```

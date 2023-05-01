@@ -1,14 +1,8 @@
-# Response Time: 4.122286081314087
-Sure, here's an example refactoring:
+# Response Time: 1.5823986530303955
+```
+// Code before refactoring
+this.disable();
 
-<<< Before refactoring:
-```
-Component myComponent = new Component();
-myComponent.disable();
-```
-
->>> After refactoring:
-```
-Component myComponent = new Component();
-myComponent.setEnabled(false);
+// Code after refactoring
+this.setEnabled(false);
 ```

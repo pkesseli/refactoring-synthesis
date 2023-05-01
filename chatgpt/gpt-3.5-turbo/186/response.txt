@@ -1,40 +1,9 @@
-# Response Time: 18.014098167419434
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.384878158569336
 ```
-import java.rmi.server.LogStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-public class MyServer {
-    public static void main(String[] args) throws IOException {
-        LogStream logStream = LogStream.log("myLog");
-        FileOutputStream fileOutputStream = new FileOutputStream("myLog.txt");
-        logStream.setOutputStream(fileOutputStream);
-        // rest of server code
-    }
-}
+// Code before refactoring
+this.setOutputStream(a);
 ```
-
->>> After refactoring:
 ```
-import java.rmi.server.LogStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-public class MyServer {
-    public static void main(String[] args) throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream("myLog.txt");
-        LogStream logStream = new LogStream() {
-            @Override
-            public void write(int b) throws IOException {
-                fileOutputStream.write(b);
-            }
-        };
-        // rest of server code
-    }
-}
+// Code after refactoring
+// Deprecated method has no replacement, so we can simply remove the call
 ```
-
-In this refactored code, we create a new anonymous class that extends `LogStream` and overrides the `write` method to write to the `FileOutputStream` instead of using the deprecated `setOutputStream` method. This allows us to continue using the `LogStream` class without relying on the deprecated method.

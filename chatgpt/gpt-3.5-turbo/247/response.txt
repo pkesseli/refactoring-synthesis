@@ -1,28 +1,10 @@
-# Response Time: 8.922513008117676
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.6620094776153564
 ```
-import java.util.Date;
+// Code before refactoring
+Date date = new Date();
+int month = date.getMonth();
 
-public class Example {
-    public static void main(String[] args) {
-        Date date = new Date();
-        int month = date.getMonth();
-        System.out.println("Month: " + month);
-    }
-}
-```
-
->>> After refactoring:
-```
-import java.util.Calendar;
-
-public class Example {
-    public static void main(String[] args) {
-        Calendar calendar = Calendar.getInstance();
-        int month = calendar.get(Calendar.MONTH);
-        System.out.println("Month: " + month);
-    }
-}
+// Code after refactoring
+Calendar calendar = Calendar.getInstance();
+int month = calendar.get(Calendar.MONTH);
 ```

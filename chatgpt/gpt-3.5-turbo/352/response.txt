@@ -1,2 +1,12 @@
-# Response Time: 3.2246620655059814
-I'm happy to help you with that! However, I need more context to provide a specific refactoring example. Could you please provide me with the code snippet where you are encountering this issue?
+# Response Time: 5.5020177364349365
+```
+// Code before refactoring
+this.addDirtyRegion​(a, b, c, d, e);
+```
+```
+// Code after refactoring
+JComponent comp = (JComponent) a;
+Rectangle dirtyRegion = new Rectangle(b, c, d, e);
+SwingUtilities.computeIntersection(0, 0, comp.getWidth(), comp.getHeight(), dirtyRegion);
+comp.repaint(dirtyRegion);
+```

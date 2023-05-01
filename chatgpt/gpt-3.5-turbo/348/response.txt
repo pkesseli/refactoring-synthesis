@@ -1,28 +1,8 @@
-# Response Time: 15.66514801979065
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.0597193241119385
 ```
-JTextComponent textComponent = new JTextComponent();
-TextUI textUI = textComponent.getUI();
-Rectangle rect = null;
-try {
-    rect = textUI.modelToView(textComponent, 5);
-} catch (BadLocationException e) {
-    e.printStackTrace();
-}
-```
+// Code before refactoring
+Rectangle rect = textUI.modelToView(a, b);
 
->>> After refactoring:
+// Code after refactoring
+Rectangle2D rect = textUI.modelToView2D(a, b, Position.Bias.Forward);
 ```
-JTextComponent textComponent = new JTextComponent();
-TextUI textUI = textComponent.getUI();
-Rectangle2D rect = null;
-try {
-    rect = textUI.modelToView2D(textComponent, 5, Position.Bias.Forward);
-} catch (BadLocationException e) {
-    e.printStackTrace();
-}
-``` 
-
-In the refactored code, we've replaced the deprecated `modelToView` method with the recommended `modelToView2D` method, passing in the `JTextComponent`, the index to convert, and the `Position.Bias` to use. We've also changed the type of the `rect` variable to `Rectangle2D`, which is the return type of the new method.

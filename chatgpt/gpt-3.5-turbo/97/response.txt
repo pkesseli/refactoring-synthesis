@@ -1,14 +1,8 @@
-# Response Time: 6.613978862762451
-Sure, here's an example refactoring:
+# Response Time: 2.4336204528808594
+```
+// Code before refactoring
+this.reshape(a, b, c, d);
 
-<<< Before refactoring:
-```
-Rectangle rect = new Rectangle(10, 10, 50, 50);
-rect.reshape(20, 20, 60, 60);
-```
-
->>> After refactoring:
-```
-Rectangle rect = new Rectangle(10, 10, 50, 50);
-rect.setBounds(20, 20, 60, 60);
+// Code after refactoring
+this.setBounds(a, b, c, d);
 ```

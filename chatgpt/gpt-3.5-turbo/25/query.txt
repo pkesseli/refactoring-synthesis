@@ -1,7 +1,12 @@
 The method java.awt.Component.keyUp​(Event, int) is deprecated.
  The related deprecation comment in Javadoc is "As of JDK version 1.1,
  replaced by processKeyEvent(KeyEvent)."
-Give me a refactoring example in the following format:
-<<< Before refactoring: <code here>
->>> After refactoring: <code here>
-Example code should be a straight-line code block.
+I have a call to this deprecated method in my codebase `this.keyUp​(a, b)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

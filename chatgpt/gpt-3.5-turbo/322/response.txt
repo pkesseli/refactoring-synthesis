@@ -1,14 +1,8 @@
-# Response Time: 4.408098220825195
-Sure, here's an example refactoring:
+# Response Time: 2.1596176624298096
+```
+// Code before refactoring
+Component c = this.getComponentAtIndex(a);
 
-<<< Before refactoring:
-```
-JPopupMenu popupMenu = new JPopupMenu();
-Component component = popupMenu.getComponentAtIndex(0);
-```
-
->>> After refactoring:
-```
-JPopupMenu popupMenu = new JPopupMenu();
-Component component = popupMenu.getComponent(0);
+// Code after refactoring
+Component c = this.getComponent(a);
 ```

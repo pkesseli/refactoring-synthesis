@@ -1,17 +1,9 @@
-# Response Time: 14.62083101272583
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.5174410343170166
 ```
-GaugeMonitor monitor = new GaugeMonitor(mbeanServer, objectName, gaugeMBean, threshold);
-long timeStamp = monitor.getDerivedGaugeTimeStamp();
-```
+// Code before refactoring
+long timeStamp = this.getDerivedGaugeTimeStamp();
 
->>> After refactoring:
+// Code after refactoring
+ObjectName objectName = this.getObservedObject();
+long timeStamp = ((GaugeMonitor) this.getMonitor()).getDerivedGaugeTimeStamp(objectName);
 ```
-GaugeMonitor monitor = new GaugeMonitor(mbeanServer, objectName, gaugeMBean, threshold);
-ObjectName derivedGauge = monitor.getDerivedGauge();
-long timeStamp = (long) mbeanServer.getAttribute(derivedGauge, "TimeStamp");
-``` 
-
-In the refactored code, we first create a `GaugeMonitor` object with the necessary parameters. Then, instead of calling the deprecated `getDerivedGaugeTimeStamp()` method, we call the new `getDerivedGauge()` method to get the `ObjectName` of the derived gauge. Finally, we use the `MBeanServer` to get the `TimeStamp` attribute of the derived gauge and assign it to the `timeStamp` variable.

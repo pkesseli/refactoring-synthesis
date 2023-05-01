@@ -1,16 +1,8 @@
-# Response Time: 8.504060983657837
-Sure, here's an example refactoring:
+# Response Time: 2.1371827125549316
+```
+// Code before refactoring
+this.preConcetenateTransform(a);
 
-<<< Before refactoring:
-```
-AffineTransform transform = new AffineTransform();
-RenderContext context = new RenderContext(transform);
-context.preConcatenateTransform(new AffineTransform(2, 0, 0, 2, 0, 0));
-```
-
->>> After refactoring:
-```
-AffineTransform transform = new AffineTransform();
-RenderContext context = new RenderContext(transform);
-context.preConcatenate(new AffineTransform(2, 0, 0, 2, 0, 0));
+// Code after refactoring
+this.preConcatenateTransform(a);
 ```

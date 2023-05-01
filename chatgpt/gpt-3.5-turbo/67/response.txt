@@ -1,16 +1,9 @@
-# Response Time: 7.902673006057739
-Sure, here's an example refactoring:
+# Response Time: 3.3965446949005127
+```
+// Code before refactoring
+Rectangle clipRect = this.getClipRect();
 
-<<< Before refactoring:
+// Code after refactoring
+Rectangle clipBounds = this.getClipBounds();
+Rectangle clipRect = new Rectangle(clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height);
 ```
-Graphics graphics = new Graphics();
-Rectangle clipRect = graphics.getClipRect();
-```
-
->>> After refactoring:
-```
-Graphics graphics = new Graphics();
-Rectangle clipBounds = graphics.getClipBounds();
-```
-
-Explanation: Instead of using the deprecated `getClipRect()` method, we use the recommended `getClipBounds()` method to get the clipping bounds of the graphics context. We also update the variable name to reflect the change in method name.

@@ -1,14 +1,8 @@
-# Response Time: 4.395471096038818
-Sure, here's an example refactoring for the deprecated method java.awt.MenuItem.enable():
+# Response Time: 1.6552393436431885
+```
+// Code before refactoring
+this.enable();
 
-<<< Before refactoring:
-```
-MenuItem menuItem = new MenuItem("Example");
-menuItem.enable();
-```
-
->>> After refactoring:
-```
-MenuItem menuItem = new MenuItem("Example");
-menuItem.setEnabled(true);
+// Code after refactoring
+this.setEnabled(true);
 ```

@@ -1,20 +1,8 @@
-# Response Time: 9.58831787109375
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 2.00758957862854
 ```
-char c = ' ';
-if (Character.isSpace(c)) {
-    System.out.println("This is a space character.");
-}
-```
+// Before refactoring
+boolean isSpace = Character.isSpace(a);
 
->>> After refactoring: 
+// After refactoring
+boolean isSpace = Character.isWhitespace(a);
 ```
-char c = ' ';
-if (Character.isWhitespace(c)) {
-    System.out.println("This is a whitespace character.");
-}
-``` 
-
-In the above example, we have replaced the deprecated `isSpace` method with the recommended `isWhitespace` method. This change ensures that our code is up-to-date with the latest Java API and will continue to work as expected in future versions of Java.

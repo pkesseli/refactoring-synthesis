@@ -1,16 +1,9 @@
-# Response Time: 9.390458106994629
-Sure, here's an example refactoring for the deprecated `java.awt.Window.reshape(int, int, int, int)` method:
-
-<<< Before refactoring:
+# Response Time: 2.6749327182769775
 ```
-Window window = new Window(null);
-window.reshape(100, 100, 500, 500);
+// Code before refactoring
+this.reshape(a, b, c, d);
 ```
-
->>> After refactoring:
 ```
-Window window = new Window(null);
-window.setBounds(100, 100, 500, 500);
-``` 
-
-This refactoring replaces the deprecated `reshape` method with the recommended `setBounds` method, which achieves the same result of setting the size and position of the window.
+// Code after refactoring
+this.setBounds(a, b, c, d);
+```

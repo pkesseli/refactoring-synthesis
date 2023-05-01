@@ -1,32 +1,12 @@
-# Response Time: 14.029556035995483
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.7968685626983643
 ```
-public class MyButton extends Button implements ActionListener {
-    public MyButton(String label) {
-        super(label);
-        addActionListener(this);
-    }
+// Code before refactoring
+this.action(a, b);
 
+// Code after refactoring
+this.addActionListener(new ActionListener() {
     public void actionPerformed(ActionEvent e) {
-        // handle button click event
+        // Code to handle action event
     }
-}
+});
 ```
-
->>> After refactoring:
-```
-public class MyButton extends Button {
-    public MyButton(String label) {
-        super(label);
-        addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // handle button click event
-            }
-        });
-    }
-}
-```
-
-In the refactored code, we no longer implement the `ActionListener` interface in `MyButton`. Instead, we create an anonymous inner class that implements `ActionListener` and registers itself as the listener for the button's action events. This way, we don't need to use the deprecated `addActionListener(this)` method.

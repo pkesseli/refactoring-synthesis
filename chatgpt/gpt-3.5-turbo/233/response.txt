@@ -1,16 +1,11 @@
-# Response Time: 6.05700421333313
-Sure, here's an example refactoring for the deprecated method java.sql.Time.setMonth(int):
+# Response Time: 2.912118434906006
+```
+// Code before refactoring
+this.setMonth(a);
 
-<<< Before refactoring:
-```
-Time time = new Time(System.currentTimeMillis());
-time.setMonth(5);
-```
-
->>> After refactoring:
-```
-Calendar calendar = Calendar.getInstance();
-calendar.setTimeInMillis(System.currentTimeMillis());
-calendar.set(Calendar.MONTH, 5);
-Time time = new Time(calendar.getTimeInMillis());
+// Code after refactoring
+Calendar cal = Calendar.getInstance();
+cal.setTime(this);
+cal.set(Calendar.MONTH, a-1);
+this.setTime(cal.getTime().getTime());
 ```

@@ -1,16 +1,8 @@
-# Response Time: 7.8765549659729
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.124380588531494
 ```
-FontMetrics fontMetrics = graphics.getFontMetrics(font);
-int maxDescent = fontMetrics.getMaxDecent();
-```
+// Code before refactoring
+int descent = this.getMaxDecent();
 
->>> After refactoring:
+// Code after refactoring
+int descent = this.getMaxDescent();
 ```
-FontMetrics fontMetrics = graphics.getFontMetrics(font);
-int maxDescent = fontMetrics.getMaxDescent();
-``` 
-
-Note that the only change made was to replace `getMaxDecent()` with `getMaxDescent()`, which is the non-deprecated method that should be used instead.

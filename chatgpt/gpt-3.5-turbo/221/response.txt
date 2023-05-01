@@ -1,38 +1,8 @@
-# Response Time: 14.802502870559692
-Sure, here's an example refactoring:
-
-<<< Before refactoring: 
+# Response Time: 1.6798272132873535
 ```
-import java.sql.DriverManager;
-import java.io.PrintStream;
+// Code before refactoring
+this.getLogStream();
 
-public class Example {
-  public static void main(String[] args) {
-    try {
-      PrintStream logStream = DriverManager.getLogStream();
-      logStream.println("Logging message");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-}
+// Code after refactoring
+this.getLogWriter();
 ```
-
->>> After refactoring: 
-```
-import java.sql.DriverManager;
-import java.io.PrintWriter;
-
-public class Example {
-  public static void main(String[] args) {
-    try {
-      PrintWriter logWriter = DriverManager.getLogWriter();
-      logWriter.println("Logging message");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-}
-``` 
-
-In this example, we've replaced the deprecated `getLogStream()` method with the recommended `getLogWriter()` method. We've also updated the import statement to use `PrintWriter` instead of `PrintStream`, since that's the type returned by `getLogWriter()`.

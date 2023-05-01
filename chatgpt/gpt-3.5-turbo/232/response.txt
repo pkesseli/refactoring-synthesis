@@ -1,19 +1,8 @@
-# Response Time: 13.025915145874023
-Sure, here's an example refactoring for the deprecated method java.sql.Time.setDate​(int):
+# Response Time: 3.0229742527008057
+```
+// Code before refactoring
+this.setDate(a);
 
-<<< Before refactoring:
+// Code after refactoring
+this.setTime(new java.sql.Time(a * 24L * 60L * 60L * 1000L).getTime());
 ```
-Time time = new Time(System.currentTimeMillis());
-time.setDate(15);
-```
-
->>> After refactoring:
-```
-Time time = new Time(System.currentTimeMillis());
-Calendar calendar = Calendar.getInstance();
-calendar.setTime(time);
-calendar.set(Calendar.DATE, 15);
-time = new Time(calendar.getTimeInMillis());
-```
-
-In this refactored code, we create a Calendar instance and set its time to the Time object we want to modify. We then set the desired date on the Calendar object using the set() method with the Calendar.DATE field. Finally, we create a new Time object with the modified time value from the Calendar object. This way, we avoid using the deprecated setDate() method and achieve the same result using the Calendar API.

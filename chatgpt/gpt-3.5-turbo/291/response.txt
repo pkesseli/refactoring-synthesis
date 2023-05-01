@@ -1,18 +1,9 @@
-# Response Time: 9.566694974899292
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.2476868629455566
 ```
-Monitor monitor = new Monitor();
-ObjectName observedObject = new ObjectName("com.example:type=MyMBean");
-monitor.setObservedObject(observedObject);
+// Code before refactoring
+this.setObservedObject(a);
 ```
-
->>> After refactoring:
 ```
-Monitor monitor = new Monitor();
-ObjectName observedObject = new ObjectName("com.example:type=MyMBean");
-monitor.addObservedObject(observedObject);
-``` 
-
-In the refactored code, we've replaced the deprecated `setObservedObject` method with the recommended `addObservedObject` method. This should ensure that our code remains compatible with future versions of JMX.
+// Code after refactoring
+this.addObservedObject(a);
+```

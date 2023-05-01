@@ -1,14 +1,8 @@
-# Response Time: 4.755418062210083
-Sure, here's an example refactoring:
+# Response Time: 1.9197003841400146
+```
+// Code before refactoring
+this.setTTL(a);
 
-<<< Before refactoring:
-```
-DatagramSocket socket = new DatagramSocket();
-socket.setTTL((byte) 64);
-```
-
->>> After refactoring:
-```
-DatagramSocket socket = new DatagramSocket();
-socket.setTimeToLive(64);
+// Code after refactoring
+this.setTimeToLive(a);
 ```

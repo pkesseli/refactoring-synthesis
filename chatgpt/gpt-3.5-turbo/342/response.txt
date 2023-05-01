@@ -1,16 +1,9 @@
-# Response Time: 6.070741891860962
-Sure, here's an example refactoring:
+# Response Time: 2.671926975250244
+```
+// Code before refactoring
+this.uninstallListeners(a);
 
-<<< Before refactoring: 
-```
-JScrollPane scrollPane = new JScrollPane();
-MetalScrollPaneUI metalUI = new MetalScrollPaneUI();
-metalUI.uninstallListeners(scrollPane);
-```
-
->>> After refactoring: 
-```
-JScrollPane scrollPane = new JScrollPane();
-BasicScrollPaneUI basicUI = new BasicScrollPaneUI();
-basicUI.uninstallListeners(scrollPane);
+// Code after refactoring
+BasicScrollPaneUI ui = (BasicScrollPaneUI) a.getUI();
+ui.uninstallListeners(a);
 ```

@@ -1,34 +1,10 @@
-# Response Time: 14.991671085357666
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 3.9809770584106445
 ```
-import javax.management.monitor.CounterMonitorMBean;
+// Code before refactoring
+long threshold = this.getThreshold();
 
-public class MyMonitor {
-    private CounterMonitorMBean counterMonitor;
-    
-    public void checkThreshold() {
-        long threshold = counterMonitor.getThreshold();
-        // do something with threshold
-    }
-}
+// Code after refactoring
+ObjectName objectName = this.getObservedObject();
+long threshold = ((CounterMonitorMBean) this.getMBeanServer().newProxyInstance(objectName,
+                CounterMonitorMBean.class, false)).getThreshold();
 ```
-
->>> After refactoring:
-```
-import javax.management.ObjectName;
-import javax.management.monitor.CounterMonitorMBean;
-
-public class MyMonitor {
-    private CounterMonitorMBean counterMonitor;
-    
-    public void checkThreshold() {
-        ObjectName objectName = counterMonitor.getObservedObject();
-        long threshold = counterMonitor.getThreshold(objectName);
-        // do something with threshold
-    }
-}
-```
-
-In the refactored code, we've replaced the deprecated `getThreshold()` method with the recommended `getThreshold(ObjectName)` method. We first get the `ObjectName` of the observed object using the `getObservedObject()` method, and then pass that `ObjectName` to the `getThreshold()` method to get the threshold value.

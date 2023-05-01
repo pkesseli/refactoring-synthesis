@@ -1,37 +1,9 @@
-# Response Time: 25.256173849105835
-Sure, I can help you with that! Before I provide you with an example, let me explain what deprecation means in Java.
-
-When a method or class is marked as deprecated in Java, it means that it is no longer recommended to use that method or class. It is still available for backward compatibility, but it may be removed in future versions of Java. The deprecation comment in Javadoc usually provides an alternative method or class that should be used instead.
-
-Now, let's move on to the refactoring example you requested. Here it is:
-
-<<< Before refactoring: 
+# Response Time: 2.5015594959259033
 ```
-import java.sql.Time;
-import java.util.Date;
+// Code before refactoring
+int day = this.getDay();
 
-public class Example {
-    public static void main(String[] args) {
-        Date date = new Date();
-        Time time = new Time(date.getTime());
-        int day = time.getDay();
-        System.out.println("Day of the week: " + day);
-    }
-}
+// Code after refactoring
+LocalDate localDate = LocalDate.now();
+int day = localDate.getDayOfMonth();
 ```
-
->>> After refactoring: 
-```
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-
-public class Example {
-    public static void main(String[] args) {
-        LocalDateTime now = LocalDateTime.now();
-        DayOfWeek dayOfWeek = now.getDayOfWeek();
-        System.out.println("Day of the week: " + dayOfWeek.getValue());
-    }
-}
-```
-
-In this example, we have refactored the code to use the `java.time` package instead of the deprecated `java.sql.Time.getDay()` method. We have also used the `java.time.LocalDateTime` class to get the current date and time instead of the `java.util.Date` class. Finally, we have used the `java.time.DayOfWeek` enum to get the day of the week instead of the integer value returned by the deprecated method.

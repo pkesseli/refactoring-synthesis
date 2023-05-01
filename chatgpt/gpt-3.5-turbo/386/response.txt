@@ -1,42 +1,8 @@
-# Response Time: 17.621502161026
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 2.3519399166107178
 ```
-import org.ietf.jgss.GSSContext;
+// Code before refactoring
+this.acceptSecContext​(a, b);
 
-public class GSSContextExample {
-    public void acceptContext(InputStream in, OutputStream out) throws GSSException {
-        GSSContext context = null;
-        try {
-            context = GSSContext.getInstance();
-            context.acceptSecContext(in, out);
-        } finally {
-            if (context != null) {
-                context.dispose();
-            }
-        }
-    }
-}
+// Code after refactoring
+this.acceptSecContext(a, 0, a.length);
 ```
-
->>> After refactoring:
-```
-import org.ietf.jgss.GSSContext;
-
-public class GSSContextExample {
-    public void acceptContext(byte[] token) throws GSSException {
-        GSSContext context = null;
-        try {
-            context = GSSContext.getInstance();
-            context.acceptSecContext(token, 0, token.length);
-        } finally {
-            if (context != null) {
-                context.dispose();
-            }
-        }
-    }
-}
-```
-
-In this refactoring, we've updated the `acceptContext` method to use the non-deprecated `acceptSecContext` method that takes a byte array instead of an input and output stream. We've also updated the method signature to only take in the token byte array, since the input and output streams are no longer needed.

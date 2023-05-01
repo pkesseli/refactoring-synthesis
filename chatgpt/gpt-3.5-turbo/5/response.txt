@@ -1,17 +1,11 @@
-# Response Time: 10.78102707862854
-Sure, here's an example refactoring:
-
-<<< Before refactoring:
+# Response Time: 4.0216169357299805
 ```
+// Code before refactoring
 CaseTree caseTree = ...;
 ExpressionTree expressionTree = caseTree.getExpression();
-```
 
->>> After refactoring:
-```
+// Code after refactoring
 CaseTree caseTree = ...;
-List<? extends ExpressionTree> expressionTrees = caseTree.getExpressions();
-ExpressionTree expressionTree = expressionTrees.get(0);
-``` 
-
-In the refactored code, we first call `caseTree.getExpressions()` to get a list of all the expressions associated with the case. Since the `getExpressions()` method returns a list, we can access the first expression by calling `expressionTrees.get(0)`. This achieves the same result as the original code, but avoids using the deprecated `getExpression()` method.
+List<? extends ExpressionTree> expressions = caseTree.getExpressions();
+ExpressionTree expressionTree = expressions.get(0);
+```
