@@ -22,7 +22,7 @@ class java_awt_ScrollbarTest {
 
   @Test
   void getVisible() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\nboolean visible = this.getVisible();\n<code after refactoring here>\nint visibleAmount = this.getVisibleAmount();\nboolean visible = visibleAmount > 0;\n", "", "java.awt.Scrollbar", "getVisible"), anyOf(contains("getVisibleAmount")));
+    assertThat(synthesiseGPT("boolean visible = this.getVisible();", "int visibleAmount = this.getVisibleAmount();\nboolean visible = visibleAmount > 0;", "java.awt.Scrollbar", "getVisible"), anyOf(contains("getVisibleAmount")));
   }
 
   @Test

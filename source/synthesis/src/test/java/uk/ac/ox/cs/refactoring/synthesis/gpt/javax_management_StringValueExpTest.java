@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_management_StringValueExpTest {
   @Test
   void setMBeanServer() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\nthis.setMBeanServer(a);\n<code after refactoring here>\nMBeanServer mbs = ManagementFactory.getPlatformMBeanServer();\nthis.setMBeanServer(mbs);\n", "", "javax.management.StringValueExp", "setMBeanServer", "javax.management.MBeanServer"), Matchers.anything());
+    assertThat(synthesiseGPT("this.setMBeanServer(a);\n", "MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();\nthis.setMBeanServer(mbs);\n", "javax.management.StringValueExp", "setMBeanServer", "javax.management.MBeanServer"), Matchers.anything());
   }
 }

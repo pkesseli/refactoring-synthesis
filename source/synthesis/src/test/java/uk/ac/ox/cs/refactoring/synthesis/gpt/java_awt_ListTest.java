@@ -37,7 +37,7 @@ class java_awt_ListTest {
 
   @Test
   void delItem() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\nthis.delItem(a);\n<code after refactoring here>\nthis.remove(a);\n", "", "java.awt.List", "delItem", "int"), anyOf(contains("remove")));
+    assertThat(synthesiseGPT("this.delItem(a);\n\n", "this.remove(a);\n", "java.awt.List", "delItem", "int"), anyOf(contains("remove")));
   }
 
   @Test
@@ -47,7 +47,7 @@ class java_awt_ListTest {
 
   @Test
   void isSelected() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\nthis.isSelected(a)\n<code after refactoring here>\nthis.isIndexSelected(a)\n", "", "java.awt.List", "isSelected", "int"), anyOf(contains("isIndexSelected")));
+    assertThat(synthesiseGPT("this.isSelected(a)\n", "this.isIndexSelected(a)\n", "java.awt.List", "isSelected", "int"), anyOf(contains("isIndexSelected")));
   }
 
   @Test

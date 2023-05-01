@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class java_sql_DateTest {
   @Test
   void getHours() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\nDate date = new Date();\nint hours = date.getHours();\n<code after refactoring here>\nLocalDateTime localDateTime = LocalDateTime.now();\nint hours = localDateTime.getHour();\n", "", "java.sql.Date", "getHours"), Matchers.anything());
+    assertThat(synthesiseGPT("Date date = new Date();\nint hours = date.getHours();\n\n", "LocalDateTime localDateTime = LocalDateTime.now();\nint hours = localDateTime.getHour();\n", "java.sql.Date", "getHours"), Matchers.anything());
   }
 
   @Test
@@ -32,7 +32,7 @@ class java_sql_DateTest {
 
   @Test
   void setMinutes() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\nthis.setMinutes(a);\n<code after refactoring here>\nthis.setTime(this.getTime() + TimeUnit.MINUTES.toMillis(a));\n", "", "java.sql.Date", "setMinutes", "int"), Matchers.anything());
+    assertThat(synthesiseGPT("this.setMinutes(a);\n", "this.setTime(this.getTime() + TimeUnit.MINUTES.toMillis(a));\n", "java.sql.Date", "setMinutes", "int"), Matchers.anything());
   }
 
   @Test

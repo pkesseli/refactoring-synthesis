@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_AWTKeyStrokeTest {
   @Test
   void registerSubclass() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\nthis.registerSubclass(a);\n<code after refactoring here>\nAWTKeyStroke awtKeyStroke = AWTKeyStroke.getAWTKeyStroke(a.getName());\nAWTKeyStroke.registerSubclass(MyAWTKeyStroke.class);\nNote: `MyAWTKeyStroke` is a custom subclass of `AWTKeyStroke` that you need to create.\n", "", "java.awt.AWTKeyStroke", "registerSubclass", "Class&lt;?&gt;"), Matchers.anything());
+    assertThat(synthesiseGPT("this.registerSubclass(a);\n", "AWTKeyStroke awtKeyStroke = AWTKeyStroke.getAWTKeyStroke(a.getName());\nAWTKeyStroke.registerSubclass(MyAWTKeyStroke.class);\n", "java.awt.AWTKeyStroke", "registerSubclass", "java.lang.Class<?>;"), Matchers.anything());
   }
 }

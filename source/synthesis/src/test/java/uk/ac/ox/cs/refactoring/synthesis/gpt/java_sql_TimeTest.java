@@ -22,7 +22,7 @@ class java_sql_TimeTest {
 
   @Test
   void getMonth() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\njava.sql.Time time = new java.sql.Time(System.currentTimeMillis());\nint month = time.getMonth();\n\n<code after refactoring here>\njava.sql.Time time = new java.sql.Time(System.currentTimeMillis());\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(time);\nint month = calendar.get(Calendar.MONTH);\n", "", "java.sql.Time", "getMonth"), Matchers.anything());
+    assertThat(synthesiseGPT("java.sql.Time time = new java.sql.Time(System.currentTimeMillis());\nint month = time.getMonth();\n\n", "java.sql.Time time = new java.sql.Time(System.currentTimeMillis());\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(time);\nint month = calendar.get(Calendar.MONTH);\n", "java.sql.Time", "getMonth"), Matchers.anything());
   }
 
   @Test
