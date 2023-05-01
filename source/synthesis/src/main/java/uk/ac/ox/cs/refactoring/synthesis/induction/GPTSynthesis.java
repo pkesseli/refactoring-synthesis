@@ -10,8 +10,12 @@ import java.util.Map.Entry;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -106,17 +110,18 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       }
       environment.putAll(remapper.arguments);
 
-
+      var after = (BlockStmt) parseHints(hints.after);
       var arguments = resolveArguments(environment);
-      var resolvedHints = arguments + hints.after;
-      System.out.println("resolved hints:\n" + resolvedHints);
-      var after = parseHints(resolvedHints);
+      for (final var argument : arguments) {
+        after.addStatement(0, argument);
+      }
+
 
       final var candidate = new SnippetCandidate();
       final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses,
           environment, candidate);
 
-      for (final var suggestedStatement: ((BlockStmt) after).getStatements()) {
+      for (final var suggestedStatement: after.getStatements()) {
 
         final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
             method, suggestedStatement);
@@ -167,6 +172,16 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       return block.getResult().get();
     }
 
+    ParseResult<Statement> statement = parserContext.JavaParser.parseStatement(hints);
+    if (statement.getResult().isPresent() && statement.getResult().get() instanceof IfStmt) {
+      var ifStmt = (IfStmt) statement.getResult().get();
+      if (ifStmt.getThenStmt() instanceof BlockStmt && 
+          ((BlockStmt) ifStmt.getThenStmt()).getStatements().isEmpty() &&
+          ifStmt.getElseStmt().isEmpty()) {
+        return new BlockStmt(new NodeList<>(new ExpressionStmt(ifStmt.getCondition())));
+      }
+    }
+
     block = parserContext.JavaParser.parseBlock("{" + hints + "}");
     if (block.getResult().isPresent()) {
       return block.getResult().get();
@@ -181,12 +196,23 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     throw new NoSuchElementException("hints not parsable");
   }
 
-  private String resolveArguments(final Map<String, IExpression> environment) {
+  // private String resolveArguments(final Map<String, IExpression> environment) {
   
-    var result = "";
+  //   var result = "";
+
+  //   for (Entry<String, IExpression> entry : environment.entrySet()) {
+  //     result += entry.getValue().getType().asString() + " " + entry.getKey() + ";\n";
+  //   }
+
+  //   return result;
+  // }
+
+  private NodeList<Statement> resolveArguments(final Map<String, IExpression> environment) {
+  
+    final NodeList<Statement> result = new NodeList<>();
 
     for (Entry<String, IExpression> entry : environment.entrySet()) {
-      result += entry.getValue().getType().asString() + " " + entry.getKey() + ";\n";
+      result.add(parserContext.JavaParser.parseStatement(entry.getValue().getType().asString() + " " + entry.getKey() + ";").getResult().get());
     }
 
     return result;
