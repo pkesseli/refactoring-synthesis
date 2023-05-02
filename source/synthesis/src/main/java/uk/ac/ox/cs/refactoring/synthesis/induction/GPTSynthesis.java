@@ -132,7 +132,8 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
         if (instructionExpression == null) {
           continue;
         }
-        candidate.Block.Statements.add(new ExpressionStatement(instructionExpression));
+        var convertedExpression = new ExpressionStatement(instructionExpression);
+        candidate.Block.Statements.add(convertedExpression);
   
       }
 
