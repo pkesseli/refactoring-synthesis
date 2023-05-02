@@ -1,4 +1,4 @@
-# Response Time: 1.7515361309051514
+# Response Time: 2.138335704803467
 ```
 // Code before refactoring
 this.minimumSize();

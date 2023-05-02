@@ -1,8 +1,13 @@
-# Response Time: 2.3517227172851562
+# Response Time: 3.9093401432037354
 ```
 // Code before refactoring
 Rectangle rect = this.modelToView(a, b);
 
 // Code after refactoring
-Rectangle rect = this.modelToView(a);
+Rectangle rect = null;
+try {
+    rect = this.modelToView(a);
+} catch (BadLocationException e) {
+    e.printStackTrace();
+}
 ```

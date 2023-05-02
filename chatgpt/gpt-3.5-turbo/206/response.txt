@@ -1,8 +1,28 @@
-# Response Time: 2.3550734519958496
+# Response Time: 10.101756572723389
 ```
 // Code before refactoring
-this.getOperations();
+import java.rmi.server.Skeleton;
 
+public class MyClass extends Skeleton {
+    public void myMethod() {
+        int[] operations = this.getOperations();
+        // rest of the code
+    }
+}
+```
+```
 // Code after refactoring
-// There is no replacement for this method, so you can simply remove the call
+import java.rmi.server.Skeleton;
+import java.lang.reflect.Method;
+
+public class MyClass extends Skeleton {
+    public void myMethod() {
+        Method[] methods = this.getClass().getMethods();
+        String[] operations = new String[methods.length];
+        for (int i = 0; i < methods.length; i++) {
+            operations[i] = methods[i].getName();
+        }
+        // rest of the code
+    }
+}
 ```

@@ -1,0 +1,12 @@
+The method java.util.Date.getHours() is deprecated.
+ The related deprecation comment in Javadoc is "As of JDK version 1.1,
+ replaced by Calendar.get(Calendar.HOUR_OF_DAY)."
+I have a call to this deprecated method in my codebase `this.getHours()`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

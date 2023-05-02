@@ -1,0 +1,16 @@
+The method java.io.ObjectOutputStream.PutField.write​(ObjectOutput) is deprecated.
+ The related deprecation comment in Javadoc is "This method does not write the values contained by this
+         PutField object in a proper format, and may
+         result in corruption of the serialization stream.  The
+         correct way to write PutField data is by
+         calling the ObjectOutputStream.writeFields()
+         method."
+I have a call to this deprecated method in my codebase `this.write​(a)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

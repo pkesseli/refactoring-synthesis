@@ -1,8 +1,12 @@
-# Response Time: 1.7920756340026855
+# Response Time: 4.197245359420776
 ```
 // Code before refactoring
 this.sizeColumnsToFit(a);
 
 // Code after refactoring
-this.doLayout();
+if (a) {
+    this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+} else {
+    this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+}
 ```

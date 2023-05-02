@@ -1,0 +1,11 @@
+The method java.rmi.server.Operation.getOperation() is deprecated.
+ The related deprecation comment in Javadoc is "no replacement"
+I have a call to this deprecated method in my codebase `this.getOperation()`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

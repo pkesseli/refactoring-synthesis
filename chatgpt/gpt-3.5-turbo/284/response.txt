@@ -1,10 +1,8 @@
-# Response Time: 3.9809770584106445
+# Response Time: 2.8382620811462402
 ```
 // Code before refactoring
-long threshold = this.getThreshold();
+long threshold = ((CounterMonitorMBean) monitor).getThreshold();
 
 // Code after refactoring
-ObjectName objectName = this.getObservedObject();
-long threshold = ((CounterMonitorMBean) this.getMBeanServer().newProxyInstance(objectName,
-                CounterMonitorMBean.class, false)).getThreshold();
+long threshold = monitor.getThreshold();
 ```

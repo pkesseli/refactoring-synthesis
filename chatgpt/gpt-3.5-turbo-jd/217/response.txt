@@ -1,0 +1,8 @@
+# Response Time: 1.8638107776641846
+```
+// Code before refactoring
+this.getSeconds();
+
+// Code after refactoring
+this.toLocalDateTime().getSecond();
+```

@@ -1,8 +1,8 @@
-# Response Time: 2.576749801635742
+# Response Time: 4.014112949371338
 ```
 // Code before refactoring
-String decodedString = URLDecoder.decode(a);
+String decodedString = java.net.URLDecoder.decode(encodedString, "UTF-8");
 
 // Code after refactoring
-String decodedString = URLDecoder.decode(a, StandardCharsets.UTF_8.toString());
+String decodedString = java.net.URLDecoder.decode(encodedString.replace("+", "%2B"), "UTF-8");
 ```

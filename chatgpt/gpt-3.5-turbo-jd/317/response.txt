@@ -1,0 +1,9 @@
+# Response Time: 2.1490652561187744
+```
+// Code before refactoring
+this.setMenuBar(a);
+```
+```
+// Code after refactoring
+this.setJMenuBar(a);
+```

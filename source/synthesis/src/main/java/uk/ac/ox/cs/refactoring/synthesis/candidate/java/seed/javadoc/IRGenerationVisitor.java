@@ -118,7 +118,11 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
    */
   IExpression getExpression() {
     // TODO `null` represent noop. It is appropriate?
-    return stack.peek();
+    if (stack.isEmpty()) {
+      return null;
+    } else {
+      return stack.removeLast();
+    }
   }
 
   @Override

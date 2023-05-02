@@ -1,8 +1,8 @@
-# Response Time: 1.8234875202178955
+# Response Time: 2.247281789779663
 ```
 // Code before refactoring
-this.isFocusTraversable();
+this.isFocusTraversable()
 
 // Code after refactoring
-this.isFocusable();
+this.isFocusable()
 ```

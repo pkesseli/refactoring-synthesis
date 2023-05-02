@@ -1,0 +1,10 @@
+# Response Time: 3.545447587966919
+```
+// Code before refactoring
+Signature signature = Signature.getInstance("SHA256withRSA");
+String parameterValue = signature.getParameter("parameterName");
+
+// Code after refactoring
+Signature signature = Signature.getInstance("SHA256withRSA");
+String parameterValue = signature.getParameterValue("parameterName");
+```

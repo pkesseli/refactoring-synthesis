@@ -1,5 +1,4 @@
 The method javax.management.monitor.Monitor.setObservedObject​(ObjectName) is deprecated.
- The related deprecation comment in Javadoc is "As of JMX 1.2, replaced by Monitor.addObservedObject(javax.management.ObjectName)"
 I have a call to this deprecated method in my codebase `this.setObservedObject​(a)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

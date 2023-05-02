@@ -1,0 +1,9 @@
+# Response Time: 2.384878158569336
+```
+// Code before refactoring
+this.setOutputStream(a);
+```
+```
+// Code after refactoring
+// Deprecated method has no replacement, so we can simply remove the call
+```

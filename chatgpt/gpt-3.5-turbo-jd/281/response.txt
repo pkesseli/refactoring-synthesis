@@ -1,0 +1,9 @@
+# Response Time: 2.08732271194458
+```
+// Code before refactoring
+this.setThreshold(a);
+```
+```
+// Code after refactoring
+this.setInitThreshold(a);
+```

@@ -1,4 +1,4 @@
-# Response Time: 1.9214293956756592
+# Response Time: 2.129655122756958
 ```
 // Code before refactoring
 Point location = this.location();

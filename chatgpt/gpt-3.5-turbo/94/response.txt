@@ -1,14 +1,21 @@
-# Response Time: 3.301705837249756
+# Response Time: 5.255529403686523
 ```
 // Code before refactoring
-public void cleanup() {
-    // perform some cleanup
-    this.finalize();
+public class MyClass {
+    private PrintJob printJob;
+
+    public void finalize() {
+        printJob.finalize();
+    }
 }
 
 // Code after refactoring
-public void cleanup() {
-    // perform some cleanup
-    // alternative cleanup mechanism
+public class MyClass {
+    private PrintJob printJob;
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        printJob.dispose();
+    }
 }
 ```

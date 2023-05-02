@@ -1,0 +1,8 @@
+# Response Time: 2.1371827125549316
+```
+// Code before refactoring
+this.preConcetenateTransform(a);
+
+// Code after refactoring
+this.preConcatenateTransform(a);
+```

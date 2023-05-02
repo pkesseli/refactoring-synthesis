@@ -1,13 +1,12 @@
-# Response Time: 4.305127859115601
+# Response Time: 4.352726936340332
 ```
 // Code before refactoring
 this.deserialize(a, b);
 ```
+
 ```
 // Code after refactoring
-ClassLoaderRepository clr = MBeanServerFactory.getClassLoaderRepository();
-ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(b));
-Object obj = ois.readObject();
-ois.close();
-this.deserialize(a, obj, clr);
+ByteArrayInputStream in = new ByteArrayInputStream(b);
+ObjectInputStream ois = new ObjectInputStream(in);
+this.invoke(a, ois.readObject(), new String[0]);
 ```

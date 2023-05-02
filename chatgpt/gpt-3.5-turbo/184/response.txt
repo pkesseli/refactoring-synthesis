@@ -1,10 +1,8 @@
-# Response Time: 2.624788761138916
+# Response Time: 2.6413886547088623
 ```
 // Code before refactoring
-String a = "INFO";
-int level = parseLevel(a);
+String level = this.parseLevel(a);
 
 // Code after refactoring
-String a = "INFO";
-int level = Level.parse(a).intValue();
+String level = Level.parse(a).getName();
 ```

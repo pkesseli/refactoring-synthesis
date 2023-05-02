@@ -1,8 +1,8 @@
-# Response Time: 2.381577491760254
+# Response Time: 3.1658968925476074
 ```
 // Code before refactoring
-Component component = this.locate(a, b);
+this.locate(a, b);
 
 // Code after refactoring
-Component component = this.getComponentAt(a, b);
+SwingUtilities.convertPointToScreen(new Point(0, 0), this).getLocation();
 ```

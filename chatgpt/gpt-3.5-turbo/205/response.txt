@@ -1,9 +1,9 @@
-# Response Time: 2.708386182785034
+# Response Time: 3.6081044673919678
 ```
 // Code before refactoring
 this.dispatch(a, b, c, d);
 ```
 ```
 // Code after refactoring
-throw new UnsupportedOperationException("This method is deprecated and has no replacement.");
+UnicastServerRef.getClientCall().executeCall((RemoteObject) a, b);
 ```

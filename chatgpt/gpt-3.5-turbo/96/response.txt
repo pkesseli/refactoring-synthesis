@@ -1,8 +1,9 @@
-# Response Time: 2.0329909324645996
+# Response Time: 2.933609962463379
 ```
 // Code before refactoring
 this.move(a, b);
-
+```
+```
 // Code after refactoring
-this.setLocation(a, b);
+this.setLocation(this.getX() + a, this.getY() + b);
 ```

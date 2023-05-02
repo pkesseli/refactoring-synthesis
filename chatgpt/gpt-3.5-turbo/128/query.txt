@@ -1,15 +1,4 @@
 The method java.io.DataInputStream.readLine() is deprecated.
- The related deprecation comment in Javadoc is "This method does not properly convert bytes to characters.
- As of JDK 1.1, the preferred way to read lines of text is via the
- BufferedReader.readLine() method.  Programs that use the
- DataInputStream class to read lines can be converted to use
- the BufferedReader class by replacing code of the form:
-      DataInputStream d = new DataInputStream(in);
- 
- with:
-      BufferedReader d
-          = new BufferedReader(new InputStreamReader(in));
- "
 I have a call to this deprecated method in my codebase `this.readLine()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

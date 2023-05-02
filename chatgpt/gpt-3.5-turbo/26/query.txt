@@ -1,6 +1,4 @@
 The method java.awt.Component.layout() is deprecated.
- The related deprecation comment in Javadoc is "As of JDK version 1.1,
- replaced by doLayout()."
 I have a call to this deprecated method in my codebase `this.layout()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

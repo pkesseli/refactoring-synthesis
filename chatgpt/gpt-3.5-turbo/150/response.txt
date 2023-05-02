@@ -1,8 +1,12 @@
-# Response Time: 1.6141941547393799
+# Response Time: 2.9837098121643066
 ```
 // Code before refactoring
-this.stop();
+public void stopThread() {
+    this.stop();
+}
 
 // Code after refactoring
-this.interrupt();
+public void stopThread() {
+    Thread.currentThread().interrupt();
+}
 ```

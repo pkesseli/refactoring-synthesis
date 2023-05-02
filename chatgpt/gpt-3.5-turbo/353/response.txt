@@ -1,8 +1,8 @@
-# Response Time: 2.0390233993530273
+# Response Time: 4.66629433631897
 ```
 // Code before refactoring
-this.getViewportBorderBounds(a);
+Rectangle bounds = this.getViewportBorderBounds(a);
 
 // Code after refactoring
-a.getViewportBorderBounds();
+Rectangle bounds = ((JComponent) a.getViewport().getBorder()).getBounds(a);
 ```

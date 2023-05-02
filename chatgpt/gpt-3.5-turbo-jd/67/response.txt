@@ -1,0 +1,9 @@
+# Response Time: 3.3965446949005127
+```
+// Code before refactoring
+Rectangle clipRect = this.getClipRect();
+
+// Code after refactoring
+Rectangle clipBounds = this.getClipBounds();
+Rectangle clipRect = new Rectangle(clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height);
+```

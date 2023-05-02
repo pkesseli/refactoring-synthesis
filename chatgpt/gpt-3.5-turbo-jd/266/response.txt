@@ -1,0 +1,9 @@
+# Response Time: 2.406000852584839
+```
+// Code before refactoring
+this.setMillis(a);
+```
+```
+// Code after refactoring
+this.setInstant(Instant.ofEpochMilli(a));
+```

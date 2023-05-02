@@ -1,0 +1,9 @@
+# Response Time: 2.708386182785034
+```
+// Code before refactoring
+this.dispatch(a, b, c, d);
+```
+```
+// Code after refactoring
+throw new UnsupportedOperationException("This method is deprecated and has no replacement.");
+```

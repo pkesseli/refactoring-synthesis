@@ -1,0 +1,12 @@
+# Response Time: 3.040768623352051
+```
+// Code before refactoring
+if (this.inside(a, b)) {
+    // do something
+}
+
+// Code after refactoring
+if (this.contains(a, b)) {
+    // do something
+}
+```

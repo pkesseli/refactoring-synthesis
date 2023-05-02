@@ -1,0 +1,10 @@
+# Response Time: 2.861605644226074
+```
+// Code before refactoring
+Date date = new Date();
+int hours = date.getHours();
+
+// Code after refactoring
+Calendar calendar = Calendar.getInstance();
+int hours = calendar.get(Calendar.HOUR_OF_DAY);
+```

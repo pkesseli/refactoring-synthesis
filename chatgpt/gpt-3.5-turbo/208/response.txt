@@ -1,8 +1,24 @@
-# Response Time: 1.9754860401153564
+# Response Time: 7.995069742202759
 ```
 // Code before refactoring
-String version = this.getVersion();
+public class MyProvider extends Provider {
+    public MyProvider() {
+        super("MyProvider", 1.0, "MyProvider description");
+    }
+
+    public double getVersion() {
+        return super.getVersion();
+    }
+}
 
 // Code after refactoring
-String version = this.getVersionStr();
+public class MyProvider extends Provider {
+    public MyProvider() {
+        super("MyProvider", 1.0, "MyProvider description");
+    }
+
+    public double getProviderVersion() {
+        return Double.parseDouble(super.getProperty("Provider version"));
+    }
+}
 ```

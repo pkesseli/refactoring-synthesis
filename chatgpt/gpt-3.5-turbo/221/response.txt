@@ -1,8 +1,14 @@
-# Response Time: 1.6798272132873535
+# Response Time: 4.35291600227356
 ```
 // Code before refactoring
-this.getLogStream();
+public void someMethod() {
+    OutputStream logStream = DriverManager.getLogStream();
+    // rest of the code
+}
 
 // Code after refactoring
-this.getLogWriter();
+public void someMethod() {
+    DriverManager.setLogWriter(new PrintWriter(System.out));
+    // rest of the code
+}
 ```

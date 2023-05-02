@@ -1,0 +1,10 @@
+# Response Time: 3.0554778575897217
+```
+// Code before refactoring
+this.setRef(a, b);
+```
+```
+// Code after refactoring
+// Use the RemoteStub(RemoteRef) constructor instead
+this.ref = new RemoteStub(b);
+```

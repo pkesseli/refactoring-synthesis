@@ -1,0 +1,10 @@
+# Response Time: 4.119866132736206
+```
+// Code before refactoring
+javax.net.ssl.SSLSession session = event.getSession();
+javax.security.cert.X509Certificate[] certs = session.getPeerCertificateChain();
+
+// Code after refactoring
+javax.net.ssl.SSLSession session = event.getSession();
+java.security.cert.Certificate[] certs = session.getPeerCertificates();
+```

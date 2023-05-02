@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class java_awt_ContainerTest {
   @Test
   void countComponents() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\nint numComponents = this.countComponents();\n<code after refactoring here>\nint numComponents = this.getComponentCount();\n", "", "java.awt.Container", "countComponents"), Matchers.anything());
+    assertThat(synthesiseGPT("\nint numComponents = this.countComponents();\n", "int numComponents = this.getComponentCount();\n", "java.awt.Container", "countComponents"), Matchers.anything());
   }
 
   @Test

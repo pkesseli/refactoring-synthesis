@@ -1,17 +1,12 @@
-# Response Time: 3.7757394313812256
+# Response Time: 3.5779714584350586
 ```
-<code before refactoring here>
-```
-```
+// Code before refactoring
 if (Character.isJavaLetterOrDigit(a)) {
     // do something
 }
-```
-```
-<code after refactoring here>
-```
-```
-if (Character.isJavaIdentifierPart(a)) {
+
+// Code after refactoring
+if (Character.isLetterOrDigit(a)) {
     // do something
 }
 ```

@@ -1,0 +1,8 @@
+# Response Time: 1.9633862972259521
+```
+// Code before refactoring
+this.hasPrivateAccess();
+
+// Code after refactoring
+this.lookup().hasFullPrivilegeAccess();
+```

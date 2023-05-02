@@ -1,4 +1,4 @@
-# Response Time: 1.886629581451416
+# Response Time: 2.141084671020508
 ```
 // Code before refactoring
 this.setModifiers(a);

@@ -1,0 +1,13 @@
+# Response Time: 2.745448350906372
+```
+// Code before refactoring
+public String myMethod() {
+    return this.toString();
+}
+```
+```
+// Code after refactoring
+public String myMethod() {
+    return super.toString();
+}
+```

@@ -1,0 +1,8 @@
+# Response Time: 1.566798210144043
+```
+// Code before refactoring
+this.clear();
+
+// Code after refactoring
+this.removeAll();
+```

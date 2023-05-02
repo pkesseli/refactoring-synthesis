@@ -1,0 +1,16 @@
+The method javax.tools.StandardJavaFileManager.getJavaFileObjectsFromPaths​(Iterable&lt;? extends Path&gt;) is deprecated.
+ The related deprecation comment in Javadoc is "use StandardJavaFileManager.getJavaFileObjectsFromPaths(Collection) instead,
+ to prevent the possibility of accidentally calling the method with a
+ single Path as such an argument. Although Path implements
+ Iterable<Path>, it would almost never be correct to pass a single
+ Path and have it be treated as an Iterable of its
+ components."
+I have a call to this deprecated method in my codebase `this.getJavaFileObjectsFromPaths​(a)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

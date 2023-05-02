@@ -1,0 +1,8 @@
+# Response Time: 1.757511854171753
+```
+// Code before refactoring
+this.setLabel(a);
+
+// Code after refactoring
+this.setText(a);
+```

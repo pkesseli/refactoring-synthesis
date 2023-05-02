@@ -1,0 +1,14 @@
+# Response Time: 3.4057939052581787
+```
+// Code before refactoring
+public void cleanup() throws IOException {
+    // some code here
+    this.finalize();
+}
+
+// Code after refactoring
+public void cleanup() throws IOException {
+    // some code here
+    // alternative cleanup mechanism
+}
+```

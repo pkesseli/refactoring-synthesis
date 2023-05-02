@@ -1,5 +1,4 @@
 The method java.rmi.server.RemoteCall.getResultStream​(boolean) is deprecated.
- The related deprecation comment in Javadoc is "no replacement"
 I have a call to this deprecated method in my codebase `this.getResultStream​(a)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

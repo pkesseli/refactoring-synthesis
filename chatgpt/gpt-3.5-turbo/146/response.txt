@@ -1,4 +1,4 @@
-# Response Time: 4.117289066314697
+# Response Time: 4.370248079299927
 ```
 // Code before refactoring
 this.checkMulticast(a, b);
@@ -7,6 +7,6 @@ this.checkMulticast(a, b);
 // Code after refactoring
 SecurityManager securityManager = System.getSecurityManager();
 if (securityManager != null) {
-    securityManager.checkPermission(new java.net.SocketPermission(a.getHostAddress(), "accept,connect,listen,resolve"));
+    securityManager.checkMulticast(a.getAddress(), b);
 }
 ```

@@ -1,10 +1,8 @@
-# Response Time: 3.6664509773254395
+# Response Time: 3.256080150604248
 ```
 // Code before refactoring
-this.getMIC​(a, b, c);
-```
-```
+this.getMIC(a, b, c);
+
 // Code after refactoring
-byte[] mic = this.getMIC(a, 0, a.length, new MessageProp(0, true));
-b.write(mic);
+this.getMIC(a, 0, a.length, b, 0, b.length, c);
 ```

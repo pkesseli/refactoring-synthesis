@@ -1,8 +1,8 @@
-# Response Time: 2.2449166774749756
+# Response Time: 2.6876392364501953
 ```
 // Code before refactoring
 this.createKeyboardHomeListener();
 
 // Code after refactoring
-this.getHandler().getHomeHandler().run(); 
+this.getHandler().getKeyboardHomeHandler().run(); 
 ```

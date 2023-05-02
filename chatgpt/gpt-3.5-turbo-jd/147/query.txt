@@ -1,0 +1,13 @@
+The method java.lang.String.getBytes​(int, int, byte[], int) is deprecated.
+ The related deprecation comment in Javadoc is "This method does not properly convert characters into
+ bytes.  As of JDK 1.1, the preferred way to do this is via the
+ String.getBytes() method, which uses the platform's default charset."
+I have a call to this deprecated method in my codebase `this.getBytes​(a, b, c, d)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

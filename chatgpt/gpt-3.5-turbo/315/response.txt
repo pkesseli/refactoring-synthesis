@@ -1,9 +1,8 @@
-# Response Time: 9.126153945922852
+# Response Time: 9.636754751205444
 ```
 // Code before refactoring
 this.setNextFocusableComponent(a);
-```
-```
+
 // Code after refactoring
 this.setFocusTraversalPolicyProvider(true);
 this.setFocusTraversalPolicy(new FocusTraversalPolicy() {

@@ -1,0 +1,17 @@
+
+package uk.ac.ox.cs.refactoring.synthesis.gptnojd;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
+import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseGPT;
+
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+
+class javax_swing_JListTest {
+  @Test
+  void getSelectedValues() throws Exception {
+    assertThat(synthesiseGPT("Object[] selectedValues = this.getSelectedValues();\n\n", "List<Object> selectedValuesList = Arrays.asList(this.getSelectedValues());\n", "javax.swing.JList", "getSelectedValues"), anyOf(contains("getSelectedValuesList")));
+  }
+}

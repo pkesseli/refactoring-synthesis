@@ -1,0 +1,8 @@
+# Response Time: 7.319090366363525
+```
+// Code before refactoring
+InputStream inputStream = resultSet.getUnicodeStream(a);
+
+// Code after refactoring
+Reader reader = resultSet.getCharacterStream(a);
+```

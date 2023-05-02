@@ -1,14 +1,23 @@
-# Response Time: 3.5112383365631104
+# Response Time: 6.516940593719482
 ```
 // Code before refactoring
-public void cleanup() throws IOException {
-    // some code here
-    this.finalize();
+@Override
+protected void finalize() throws Throwable {
+    try {
+        this.close();
+    } finally {
+        super.finalize();
+    }
 }
-
+```
+```
 // Code after refactoring
-public void cleanup() throws IOException {
-    // some code here
-    // alternative cleanup mechanism
+@Override
+protected void finalize() throws Throwable {
+    try {
+        this.close();
+    } finally {
+        // No need to call super.finalize() as it is already called by the JVM
+    }
 }
 ```

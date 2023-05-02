@@ -1,6 +1,4 @@
 The method javax.swing.JViewport.isBackingStoreEnabled() is deprecated.
- The related deprecation comment in Javadoc is "As of Java 2 platform v1.3, replaced by
-             getScrollMode()."
 I have a call to this deprecated method in my codebase `this.isBackingStoreEnabled()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

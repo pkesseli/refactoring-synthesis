@@ -1,8 +1,8 @@
-# Response Time: 2.882084608078003
+# Response Time: 3.8369932174682617
 ```
 // Code before refactoring
-Class<?> proxyClass = this.getProxyClass(a, b);
+Class<?> proxyClass = Proxy.getProxyClass(classLoader, interfaces);
 
 // Code after refactoring
-Class<?> proxyClass = Proxy.newProxyInstance(a, b, null).getClass();
+Class<?> proxyClass = Proxy.getProxyClass(classLoader, interfaces.toArray(new Class<?>[0]));
 ```

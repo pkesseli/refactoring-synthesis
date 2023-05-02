@@ -1,4 +1,4 @@
-# Response Time: 2.427093982696533
+# Response Time: 2.76901912689209
 ```
 // Code before refactoring
 ComponentOrientation orientation = this.getOrientation(a);

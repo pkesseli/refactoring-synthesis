@@ -1,0 +1,8 @@
+# Response Time: 1.9769585132598877
+```
+// Code before refactoring
+this.setParameter(a, b);
+
+// Code after refactoring
+this.setParameter(Parameter.valueOf(a), b);
+```

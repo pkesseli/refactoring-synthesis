@@ -1,12 +1,8 @@
-# Response Time: 5.283369779586792
+# Response Time: 5.199115991592407
 ```
 // Code before refactoring
-long totalPhysicalMemorySize = ((com.sun.management.OperatingSystemMXBean) 
-        java.lang.management.ManagementFactory.getOperatingSystemMXBean())
-        .getTotalPhysicalMemorySize();
+long totalMemory = ((com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalPhysicalMemorySize();
 
 // Code after refactoring
-long totalMemorySize = ((com.sun.management.OperatingSystemMXBean) 
-        java.lang.management.ManagementFactory.getOperatingSystemMXBean())
-        .getTotalMemorySize();
+long totalMemory = ((com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalMemorySize();
 ```

@@ -1,0 +1,11 @@
+# Response Time: 4.753732204437256
+```
+// Code before refactoring
+this.drawUnselectedText(a, b, c, d, e);
+```
+```
+// Code after refactoring
+((Graphics2D) a).setColor(getTextColors().getForeground());
+((Graphics2D) a).setFont(getFont());
+((Graphics2D) a).drawString(getText(c, d), b, d);
+```

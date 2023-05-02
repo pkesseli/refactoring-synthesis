@@ -1,4 +1,4 @@
-# Response Time: 2.360334873199463
+# Response Time: 2.8010334968566895
 ```
 // Code before refactoring
 this.editablePropertyChanged(a);

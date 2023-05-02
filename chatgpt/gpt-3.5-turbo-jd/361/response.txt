@@ -1,0 +1,9 @@
+# Response Time: 3.795417547225952
+```
+// Code before refactoring
+this.drawEchoCharacter(a, b, c, d);
+
+// Code after refactoring
+Graphics2D g2d = (Graphics2D) a;
+this.drawEchoCharacter(g2d, (float) b, (float) c, d);
+```

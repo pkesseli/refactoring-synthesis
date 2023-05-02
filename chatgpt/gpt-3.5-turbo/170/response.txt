@@ -1,8 +1,8 @@
-# Response Time: 2.476120710372925
+# Response Time: 2.5864336490631104
 ```
 // Code before refactoring
-String property = this.getDefaultRequestProperty(a);
+String headerValue = this.getDefaultRequestProperty(a);
 
 // Code after refactoring
-String property = this.getRequestProperty(a);
+String headerValue = this.getRequestProperty(a);
 ```

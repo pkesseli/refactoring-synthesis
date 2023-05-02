@@ -1,0 +1,10 @@
+# Response Time: 3.588512659072876
+```
+// Code before refactoring
+this.done(a);
+```
+```
+// Code after refactoring
+// Instead of calling done() method, use the invoke() method on the remote reference
+// to carry out parameter marshalling, remote method executing and unmarshalling of the return value.
+```

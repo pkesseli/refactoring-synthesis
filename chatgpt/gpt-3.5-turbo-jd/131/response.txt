@@ -1,0 +1,33 @@
+# Response Time: 15.266297340393066
+```
+// Code before refactoring
+private void writeObject(ObjectOutputStream out) throws IOException {
+    PutField fields = out.putFields();
+    fields.put("field1", this.field1);
+    fields.put("field2", this.field2);
+    fields.put("field3", this.field3);
+    fields.put("field4", this.field4);
+    fields.put("field5", this.field5);
+    fields.put("field6", this.field6);
+    fields.put("field7", this.field7);
+    fields.put("field8", this.field8);
+    fields.put("field9", this.field9);
+    fields.put("field10", this.field10);
+    fields.put("field11", this.field11);
+    fields.put("field12", this.field12);
+    fields.put("field13", this.field13);
+    fields.put("field14", this.field14);
+    fields.put("field15", this.field15);
+    fields.put("field16", this.field16);
+    fields.put("field17", this.field17);
+    fields.put("field18", this.field18);
+    fields.put("field19", this.field19);
+    fields.put("field20", this.field20);
+    out.writeFields();
+}
+
+// Code after refactoring
+private void writeObject(ObjectOutputStream out) throws IOException {
+    out.defaultWriteObject();
+}
+```

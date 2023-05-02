@@ -1,9 +1,18 @@
-# Response Time: 2.527188301086426
+# Response Time: 5.909647226333618
 ```
 // Code before refactoring
-int seconds = this.getSeconds();
+public void someMethod() {
+    Date date = new Date();
+    int seconds = date.getSeconds();
+    // rest of the code
+}
 
 // Code after refactoring
-Calendar calendar = Calendar.getInstance();
-int seconds = calendar.get(Calendar.SECOND);
+public void someMethod() {
+    Date date = new Date();
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    int seconds = calendar.get(Calendar.SECOND);
+    // rest of the code
+}
 ```

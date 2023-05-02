@@ -1,7 +1,4 @@
 The method javax.swing.RepaintManager.addDirtyRegion​(Applet, int, int, int, int) is deprecated.
- The related deprecation comment in Javadoc is "The Applet API is deprecated. See the
-  java.applet package
- documentation for further information."
 I have a call to this deprecated method in my codebase `this.addDirtyRegion​(a, b, c, d, e)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

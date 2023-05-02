@@ -1,4 +1,4 @@
-# Response Time: 2.9861581325531006
+# Response Time: 3.437842607498169
 ```
 // Code before refactoring
 if (this.inside(a, b)) {

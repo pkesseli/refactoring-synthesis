@@ -1,14 +1,8 @@
-# Response Time: 4.678170919418335
+# Response Time: 2.570666551589966
 ```
 // Code before refactoring
 this.createKeyboardResizeToggleListener();
 
 // Code after refactoring
-// Use the new method createToggleKeyBinding() instead
-this.createToggleKeyBinding(
-    KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
-    "focusOutForward",
-    "negativeIncrement",
-    "toggleFocus"
-);
+splitPane.setDividerKeyboardAction(new ToggleAction());
 ```

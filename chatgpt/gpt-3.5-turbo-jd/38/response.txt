@@ -1,0 +1,8 @@
+# Response Time: 1.6385293006896973
+```
+// Code before refactoring
+this.nextFocus();
+
+// Code after refactoring
+this.transferFocus();
+```

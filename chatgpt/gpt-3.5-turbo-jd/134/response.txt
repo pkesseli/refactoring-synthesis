@@ -1,0 +1,8 @@
+# Response Time: 2.00758957862854
+```
+// Before refactoring
+boolean isSpace = Character.isSpace(a);
+
+// After refactoring
+boolean isSpace = Character.isWhitespace(a);
+```

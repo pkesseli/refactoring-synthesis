@@ -1,4 +1,4 @@
-# Response Time: 3.175233840942383
+# Response Time: 3.304818630218506
 ```
 // Code before refactoring
 this.setYear(a);
@@ -6,6 +6,6 @@ this.setYear(a);
 // Code after refactoring
 Calendar cal = Calendar.getInstance();
 cal.setTime(this);
-cal.set(Calendar.YEAR, a + 1900);
+cal.set(Calendar.YEAR, a);
 this.setTime(cal.getTime().getTime());
 ```

@@ -1,4 +1,4 @@
-# Response Time: 3.0906245708465576
+# Response Time: 3.5123696327209473
 ```
 // Code before refactoring
 boolean isBackingStoreEnabled = this.isBackingStoreEnabled();

@@ -1,6 +1,4 @@
 The method javax.management.MBeanServer.deserialize​(String, ObjectName, byte[]) is deprecated.
- The related deprecation comment in Javadoc is "Use getClassLoader to obtain
- the class loader for deserialization."
 I have a call to this deprecated method in my codebase `this.deserialize​(a, b, c)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

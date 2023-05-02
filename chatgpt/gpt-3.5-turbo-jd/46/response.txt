@@ -1,0 +1,8 @@
+# Response Time: 1.5822596549987793
+```
+// Code before refactoring
+this.size();
+
+// Code after refactoring
+this.getSize();
+```

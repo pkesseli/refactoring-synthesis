@@ -1,0 +1,8 @@
+# Response Time: 3.0499284267425537
+```
+// Code before refactoring
+String[] fontList = Toolkit.getDefaultToolkit().getFontList();
+
+// Code after refactoring
+String[] fontList = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+```

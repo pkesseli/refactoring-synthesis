@@ -1,0 +1,12 @@
+# Response Time: 3.6701056957244873
+```
+// Code before refactoring
+this.deserialize(a, b);
+```
+```
+// Code after refactoring
+ClassLoader cl = getClassLoaderFor(a);
+ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(b));
+Object obj = in.readObject();
+in.close();
+```

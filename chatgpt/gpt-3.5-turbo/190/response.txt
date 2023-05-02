@@ -1,8 +1,14 @@
-# Response Time: 2.4479920864105225
+# Response Time: 4.589430332183838
 ```
 // Code before refactoring
-this.getOperation();
+public void someMethod() {
+    Operation op = this.getOperation();
+    // rest of the code
+}
 
 // Code after refactoring
-// There is no replacement for this method, so you can simply remove the call
+public void someMethod() {
+    Operation op = Operation.valueOf(this.getOperation().toString());
+    // rest of the code
+}
 ```

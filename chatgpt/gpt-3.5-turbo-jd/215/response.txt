@@ -1,0 +1,15 @@
+# Response Time: 3.588799476623535
+```
+<code before refactoring here>
+```
+```
+Date date = new Date();
+int hours = date.getHours();
+```
+```
+<code after refactoring here>
+```
+```
+LocalDateTime localDateTime = LocalDateTime.now();
+int hours = localDateTime.getHour();
+```

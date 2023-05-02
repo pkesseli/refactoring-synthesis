@@ -1,9 +1,15 @@
-# Response Time: 2.842005491256714
+# Response Time: 7.26439642906189
 ```
 // Code before refactoring
 this.weakCompareAndSet(a, b, c);
 ```
 ```
 // Code after refactoring
-this.weakCompareAndSetPlain(a, b, c);
+AtomicReferenceArray<E> arr = new AtomicReferenceArray<>(1);
+arr.set(0, b);
+AtomicReferenceArray<E> oldArr = new AtomicReferenceArray<>(1);
+oldArr.set(0, c);
+AtomicReferenceArray<E> newArr = new AtomicReferenceArray<>(1);
+newArr.set(0, b);
+this.compareAndSet(a, oldArr, newArr);
 ```

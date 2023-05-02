@@ -1,0 +1,18 @@
+# Response Time: 5.6364219188690186
+```
+// Code before refactoring
+SecurityContext context = this.getSecurityContext(a);
+
+// Code after refactoring
+SecurityManager securityManager = System.getSecurityManager();
+if (securityManager != null) {
+    securityManager.checkPermission(new RuntimePermission("getClassLoader"));
+}
+SecurityContext context = AccessController.doPrivileged(
+    new PrivilegedAction<SecurityContext>() {
+        public SecurityContext run() {
+            return AccessController.getContext();
+        }
+    }
+);
+```

@@ -1,17 +1,21 @@
-# Response Time: 3.8801722526550293
+# Response Time: 5.2843017578125
 ```
 // Code before refactoring
-public void cleanup() {
-    try {
-        this.finalize();
-    } catch (Throwable t) {
-        // handle exception
+public class MyClass {
+    private ImageInputStreamImpl stream;
+
+    public void close() throws IOException {
+        stream.finalize();
     }
 }
 ```
 ```
 // Code after refactoring
-public void cleanup() {
-    // alternative cleanup mechanism
+public class MyClass {
+    private ImageInputStreamImpl stream;
+
+    public void close() throws IOException {
+        stream.close();
+    }
 }
 ```

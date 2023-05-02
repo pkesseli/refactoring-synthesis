@@ -1,0 +1,12 @@
+The method javax.swing.JInternalFrame.setMenuBar​(JMenuBar) is deprecated.
+ The related deprecation comment in Javadoc is "As of Swing version 1.0.3
+  replaced by setJMenuBar(JMenuBar m)."
+I have a call to this deprecated method in my codebase `this.setMenuBar​(a)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

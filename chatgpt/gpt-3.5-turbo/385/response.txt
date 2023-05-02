@@ -1,8 +1,8 @@
-# Response Time: 4.539770841598511
+# Response Time: 5.645034074783325
 ```
 // Code before refactoring
-XMLOutputFactory factory = XMLOutputFactory.newInstance("javax.xml.stream.XMLOutputFactory", getClass().getClassLoader());
+XMLOutputFactory factory = XMLOutputFactory.newInstance("com.sun.xml.internal.stream.XMLOutputFactoryImpl", this.getClass().getClassLoader());
 
 // Code after refactoring
-XMLOutputFactory factory = XMLOutputFactory.newFactory("javax.xml.stream.XMLOutputFactory", getClass().getClassLoader());
+XMLOutputFactory factory = XMLOutputFactory.newFactory("com.sun.xml.internal.stream.XMLOutputFactoryImpl", this.getClass().getClassLoader());
 ```

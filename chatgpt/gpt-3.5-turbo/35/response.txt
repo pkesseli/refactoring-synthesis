@@ -1,4 +1,4 @@
-# Response Time: 3.6636710166931152
+# Response Time: 4.114035129547119
 ```
 // Code before refactoring
 this.mouseMove(a, b, c);
@@ -6,5 +6,5 @@ this.mouseMove(a, b, c);
 ```
 // Code after refactoring
 MouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, a, b, c, false);
-this.processMouseMotionEvent(event);
+dispatchEvent(event);
 ```

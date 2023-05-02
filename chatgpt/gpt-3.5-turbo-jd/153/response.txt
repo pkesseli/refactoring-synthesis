@@ -1,0 +1,10 @@
+# Response Time: 2.4030890464782715
+```
+// Code before refactoring
+this.resume();
+```
+```
+// Code after refactoring
+// Deprecated method replaced with alternative
+Thread.currentThread().resume();
+```

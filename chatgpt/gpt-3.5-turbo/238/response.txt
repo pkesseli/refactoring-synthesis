@@ -1,9 +1,10 @@
-# Response Time: 3.032806634902954
+# Response Time: 3.7259364128112793
 ```
 // Code before refactoring
 this.weakCompareAndSet(a, b);
 ```
 ```
 // Code after refactoring
-this.weakCompareAndSetPlain(a, b);
+AtomicLong atomicLong = new AtomicLong(a);
+atomicLong.weakCompareAndSet(a, b);
 ```

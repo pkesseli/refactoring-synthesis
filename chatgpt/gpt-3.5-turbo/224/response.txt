@@ -1,8 +1,21 @@
-# Response Time: 11.840309858322144
+# Response Time: 8.501019716262817
 ```
 // Code before refactoring
-this.getBigDecimal(a, b);
-
+public BigDecimal getSomeValue(int a, int b) throws SQLException {
+    ResultSet rs = statement.executeQuery("SELECT some_value FROM some_table");
+    if (rs.next()) {
+        return rs.getBigDecimal(a, b);
+    }
+    return null;
+}
+```
+```
 // Code after refactoring
-this.getBigDecimal(a);
+public BigDecimal getSomeValue(int a, int b) throws SQLException {
+    ResultSet rs = statement.executeQuery("SELECT some_value FROM some_table");
+    if (rs.next()) {
+        return rs.getBigDecimal(a).setScale(b);
+    }
+    return null;
+}
 ```

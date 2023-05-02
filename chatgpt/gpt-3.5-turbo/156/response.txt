@@ -1,8 +1,8 @@
-# Response Time: 2.415431499481201
+# Response Time: 2.7487430572509766
 ```
 // Code before refactoring
 this.divide(a, b);
 
 // Code after refactoring
-this.divide(a, b, RoundingMode.HALF_UP);
+this.divide(a, b, RoundingMode.UNNECESSARY);
 ```

@@ -1,9 +1,4 @@
 The method java.lang.Runtime.Version.major() is deprecated.
- The related deprecation comment in Javadoc is "As of Java SE 10, the first element of a version
- number is not the major-release number but the feature-release
- counter, incremented for every time-based release.  Use the Runtime.Version.feature() method in preference to this method.  For compatibility,
- this method returns the value of the feature
- element."
 I have a call to this deprecated method in my codebase `this.major()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

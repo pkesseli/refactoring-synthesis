@@ -1,0 +1,9 @@
+# Response Time: 2.6769449710845947
+```
+// Code before refactoring
+this.engineSetParameter(a, b);
+```
+```
+// Code after refactoring
+this.engineSetParameter(a, (java.lang.Object) b);
+```

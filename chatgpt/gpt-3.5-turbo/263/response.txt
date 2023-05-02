@@ -1,9 +1,10 @@
-# Response Time: 3.3454418182373047
+# Response Time: 4.181812763214111
 ```
 // Code before refactoring
 this.logrb(a, b, c, d, e, f);
-```
-```
+
 // Code after refactoring
-this.logrb(a, b, c, ResourceBundle.getBundle(d), e, f);
+if (this.isLoggable(a)) {
+    this.log(a, String.format(this.getResourceBundle().getString(c), f));
+}
 ```

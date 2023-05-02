@@ -1,0 +1,10 @@
+# Response Time: 2.360334873199463
+```
+// Code before refactoring
+this.editablePropertyChanged(a);
+
+// Code after refactoring
+if ("editable".equals(a.getPropertyName())) {
+    editableChanged();
+}
+```

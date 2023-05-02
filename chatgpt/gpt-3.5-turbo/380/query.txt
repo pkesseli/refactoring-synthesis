@@ -1,5 +1,4 @@
 The method javax.swing.tree.DefaultTreeSelectionModel.notifyPathChange​(Vector&lt;?&gt;, TreePath) is deprecated.
- The related deprecation comment in Javadoc is "As of JDK version 1.7"
 I have a call to this deprecated method in my codebase `this.notifyPathChange​(a, b)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

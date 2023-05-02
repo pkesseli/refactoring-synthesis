@@ -1,0 +1,8 @@
+# Response Time: 2.4479920864105225
+```
+// Code before refactoring
+this.getOperation();
+
+// Code after refactoring
+// There is no replacement for this method, so you can simply remove the call
+```

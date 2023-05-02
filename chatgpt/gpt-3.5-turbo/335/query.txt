@@ -1,6 +1,4 @@
 The method javax.swing.plaf.basic.BasicSplitPaneUI.getDividerBorderSize() is deprecated.
- The related deprecation comment in Javadoc is "As of Java 2 platform v1.3, instead set the border on the
- divider."
 I have a call to this deprecated method in my codebase `this.getDividerBorderSize()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

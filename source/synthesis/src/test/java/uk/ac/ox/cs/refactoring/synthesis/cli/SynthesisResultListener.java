@@ -106,7 +106,9 @@ public class SynthesisResultListener implements TestExecutionListener {
     final MethodSource methodTestSource = (MethodSource) source;
     final String packageName = methodTestSource.getJavaClass().getPackageName();
     final String expectedPackageName = "uk.ac.ox.cs.refactoring.synthesis.experiment";
-    return expectedPackageName.equals(packageName);
+    final String expectedGPTPackageName1 = "uk.ac.ox.cs.refactoring.synthesis.gpt";
+    final String expectedGPTPackageName2 = "uk.ac.ox.cs.refactoring.synthesis.gptnojd";
+    return expectedPackageName.equals(packageName) || expectedGPTPackageName1.equals(packageName) || expectedGPTPackageName2.equals(packageName);
   }
 
   private static String getBenchmarkName(final TestIdentifier testIdentifier) {

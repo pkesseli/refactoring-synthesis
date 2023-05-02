@@ -1,8 +1,10 @@
-# Response Time: 2.1371827125549316
+# Response Time: 3.1671860218048096
 ```
 // Code before refactoring
 this.preConcetenateTransform(a);
 
 // Code after refactoring
-this.preConcatenateTransform(a);
+AffineTransform transform = this.getTransform();
+transform.preConcatenate(a);
+this.setTransform(transform);
 ```

@@ -1,9 +1,8 @@
-# Response Time: 3.568023681640625
+# Response Time: 3.2845776081085205
 ```
 // Code before refactoring
 Component nextFocusableComponent = this.getNextFocusableComponent();
 
 // Code after refactoring
-FocusTraversalPolicy policy = this.getFocusTraversalPolicy();
-Component nextFocusableComponent = policy.getComponentAfter(this, null);
+Component nextFocusableComponent = this.getFocusTraversalPolicy().getComponentAfter(this);
 ```

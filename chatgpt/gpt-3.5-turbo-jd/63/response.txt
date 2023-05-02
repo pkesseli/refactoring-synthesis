@@ -1,0 +1,8 @@
+# Response Time: 2.124380588531494
+```
+// Code before refactoring
+int descent = this.getMaxDecent();
+
+// Code after refactoring
+int descent = this.getMaxDescent();
+```

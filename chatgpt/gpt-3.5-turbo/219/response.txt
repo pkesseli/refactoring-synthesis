@@ -1,13 +1,11 @@
-# Response Time: 2.933347702026367
+# Response Time: 3.2415435314178467
 ```
-<code before refactoring here>
-```
-```
+// Code before refactoring
 this.setMinutes(a);
-```
-```
-<code after refactoring here>
-```
-```
-this.setTime(this.getTime() + TimeUnit.MINUTES.toMillis(a));
+
+// Code after refactoring
+Calendar cal = Calendar.getInstance();
+cal.setTime(this);
+cal.set(Calendar.MINUTE, a);
+this.setTime(cal.getTimeInMillis());
 ```

@@ -1,9 +1,8 @@
-# Response Time: 2.922152519226074
+# Response Time: 2.579953670501709
 ```
 // Code before refactoring
-Package p = this.getPackage("com.example.packageName");
+Package p = this.getPackage(a);
 
 // Code after refactoring
-ClassLoader cl = this.getClass().getClassLoader();
-Package p = cl.getDefinedPackage("com.example.packageName");
+Package p = Package.getPackage(a);
 ```

@@ -1,9 +1,8 @@
-# Response Time: 3.5096561908721924
+# Response Time: 3.0363574028015137
 ```
 // Code before refactoring
 Object observedObject = this.getObservedObject();
 
 // Code after refactoring
-Object[] observedObjects = this.getObservedObjects();
-Object observedObject = observedObjects.length > 0 ? observedObjects[0] : null;
+Object observedObject = this.getObservedAttribute("ObservedObject");
 ```

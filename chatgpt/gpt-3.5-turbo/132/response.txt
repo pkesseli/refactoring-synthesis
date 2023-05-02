@@ -1,8 +1,12 @@
-# Response Time: 1.8900127410888672
+# Response Time: 3.8259637355804443
 ```
 // Code before refactoring
-this.isJavaLetter(a);
+if (Character.isJavaLetter(a)) {
+    // do something
+}
 
 // Code after refactoring
-Character.isJavaIdentifierStart(a);
+if (Character.isLetter(a) && Character.isAlphabetic(a)) {
+    // do something
+}
 ```

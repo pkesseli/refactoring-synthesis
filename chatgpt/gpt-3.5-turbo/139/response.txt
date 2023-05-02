@@ -1,46 +1,18 @@
-# Response Time: 10.577105283737183
+# Response Time: 4.9822657108306885
 ```
-<code before refactoring here>
+// Code before refactoring
+protected void finalize() throws Throwable {
+    try {
+        // some cleanup code here
+    } finally {
+        super.finalize();
+    }
+}
 ```
 ```
-// Refactored code using try-with-resources block and Cleaner API
-import java.lang.ref.Cleaner;
-
-public class MyClass implements AutoCloseable {
-    private final Cleaner cleaner = Cleaner.create();
-
-    private static class MyResource implements Runnable {
-        private final Resource resource;
-
-        private MyResource(Resource resource) {
-            this.resource = resource;
-        }
-
-        @Override
-        public void run() {
-            // Release the resource here
-            resource.release();
-        }
-    }
-
-    private final MyResource myResource;
-
-    public MyClass() {
-        Resource resource = new Resource();
-        myResource = new MyResource(resource);
-        cleaner.register(this, myResource);
-    }
-
-    @Override
-    public void close() {
-        // Release the resource here
-        myResource.run();
-    }
-
-    private static class Resource {
-        public void release() {
-            // Release the resource here
-        }
-    }
+// Code after refactoring
+protected void finalize() throws Throwable {
+    // some cleanup code here
+    super.finalize();
 }
 ```

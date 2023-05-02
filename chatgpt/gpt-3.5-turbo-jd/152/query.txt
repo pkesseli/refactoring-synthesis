@@ -1,0 +1,13 @@
+The method java.lang.ThreadGroup.allowThreadSuspension​(boolean) is deprecated.
+ The related deprecation comment in Javadoc is "The definition of this call depends on ThreadGroup.suspend(),
+             which is deprecated.  Further, the behavior of this call
+             was never specified."
+I have a call to this deprecated method in my codebase `this.allowThreadSuspension​(a)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

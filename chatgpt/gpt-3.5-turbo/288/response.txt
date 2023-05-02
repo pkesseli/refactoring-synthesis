@@ -1,9 +1,8 @@
-# Response Time: 3.7709338665008545
+# Response Time: 3.072721004486084
 ```
 // Code before refactoring
-double derivedGauge = gaugeMonitorMBean.getDerivedGauge();
+double derivedGauge = this.getDerivedGauge();
 
 // Code after refactoring
-ObjectName objectName = gaugeMonitorMBean.getObservedObject();
-double derivedGauge = gaugeMonitorMBean.getDerivedGauge(objectName);
+double derivedGauge = (Double)getAttribute("DerivedGauge");
 ```

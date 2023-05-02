@@ -1,8 +1,8 @@
-# Response Time: 2.4440274238586426
+# Response Time: 2.121469020843506
 ```
 // Code before refactoring
 this.write(a);
 
 // Code after refactoring
-// There is no replacement for this deprecated method, so you can simply remove the call to it.
+this.write(Integer.toString(a));
 ```

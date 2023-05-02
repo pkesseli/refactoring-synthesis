@@ -1,4 +1,4 @@
-# Response Time: 1.9949262142181396
+# Response Time: 1.8551337718963623
 ```
 // Code before refactoring
 this.disable();

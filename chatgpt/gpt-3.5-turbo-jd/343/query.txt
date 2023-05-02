@@ -1,0 +1,12 @@
+The method javax.swing.plaf.multi.MultiTextUI.modelToView​(JTextComponent, int) is deprecated.
+ The related deprecation comment in Javadoc is "replaced by
+     TextUI.modelToView2D(JTextComponent, int, Position.Bias)"
+I have a call to this deprecated method in my codebase `this.modelToView​(a, b)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

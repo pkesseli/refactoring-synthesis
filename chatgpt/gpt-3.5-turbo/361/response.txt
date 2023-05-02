@@ -1,9 +1,15 @@
-# Response Time: 3.795417547225952
+# Response Time: 7.375775098800659
 ```
 // Code before refactoring
 this.drawEchoCharacter(a, b, c, d);
+```
 
+```
 // Code after refactoring
 Graphics2D g2d = (Graphics2D) a;
-this.drawEchoCharacter(g2d, (float) b, (float) c, d);
+FontMetrics fm = g2d.getFontMetrics();
+int charWidth = fm.charWidth(d);
+int x = b + (c - charWidth) / 2;
+int y = fm.getAscent() + b + 1;
+g2d.drawString(String.valueOf(d), x, y);
 ```

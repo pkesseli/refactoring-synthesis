@@ -1,0 +1,9 @@
+# Response Time: 2.2509853839874268
+```
+// Code before refactoring
+this.equals(a);
+```
+```
+// Code after refactoring
+this.isMimeTypeEqual(a.getMimeType());
+```

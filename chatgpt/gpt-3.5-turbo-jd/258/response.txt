@@ -1,0 +1,26 @@
+# Response Time: 6.831386089324951
+```
+// Code before refactoring
+public class MyClass {
+    private Date myDate;
+
+    public String getGMTString() {
+        return myDate.toGMTString();
+    }
+}
+
+// Code after refactoring
+public class MyClass {
+    private Date myDate;
+    private DateFormat dateFormat;
+
+    public MyClass() {
+        dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+    }
+
+    public String getGMTString() {
+        return dateFormat.format(myDate);
+    }
+}
+```

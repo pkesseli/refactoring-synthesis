@@ -1,4 +1,4 @@
-# Response Time: 4.1571433544158936
+# Response Time: 4.2874228954315186
 ```
 // Code before refactoring
 StringMonitorMBean stringMonitor = ...;
@@ -6,6 +6,5 @@ String derivedGauge = stringMonitor.getDerivedGauge();
 
 // Code after refactoring
 StringMonitorMBean stringMonitor = ...;
-ObjectName objectName = ...;
-String derivedGauge = stringMonitor.getDerivedGauge(objectName);
+String derivedGauge = (String) stringMonitor.getAttribute("DerivedGauge");
 ```

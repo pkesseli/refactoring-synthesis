@@ -1,0 +1,15 @@
+# Response Time: 4.576196193695068
+```
+<code before refactoring here>
+```
+```
+this.setMBeanServer(a);
+```
+```
+<code after refactoring here>
+```
+```
+// Use MBeanServerFactory to get the platform MBeanServer
+MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+this.setMBeanServer(mbs);
+```

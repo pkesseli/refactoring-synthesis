@@ -1,9 +1,27 @@
-# Response Time: 2.707651376724243
+# Response Time: 7.835083246231079
 ```
 // Code before refactoring
-this.setDefaultStream(a);
+import java.rmi.server.LogStream;
+import java.io.PrintStream;
+
+public class MyClass {
+    public void myMethod() {
+        PrintStream a = System.out;
+        LogStream.setDefaultStream(a);
+    }
+}
 ```
+
 ```
 // Code after refactoring
-// There is no replacement for this method, so you can simply remove the call
+import java.rmi.server.LogStream;
+import java.io.PrintStream;
+
+public class MyClass {
+    public void myMethod() {
+        PrintStream a = System.out;
+        LogStream logStream = LogStream.log("default");
+        logStream.setOutputStream(a);
+    }
+}
 ```

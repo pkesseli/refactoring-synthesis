@@ -1,0 +1,11 @@
+The method java.awt.MenuComponent.postEvent​(Event) is deprecated.
+ The related deprecation comment in Javadoc is "As of JDK version 1.1, replaced by dispatchEvent."
+I have a call to this deprecated method in my codebase `this.postEvent​(a)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

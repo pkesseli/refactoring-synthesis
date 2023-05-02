@@ -1,16 +1,18 @@
-# Response Time: 3.7186098098754883
+# Response Time: 4.845373868942261
 ```
 // Code before refactoring
 public class MyClass {
-    public String myMethod() {
-        return this.toString();
+    public void myMethod() {
+        String log = this.toString();
+        System.out.println(log);
     }
 }
 
 // Code after refactoring
 public class MyClass {
-    public String myMethod() {
-        return getClass().getName() + "@" + Integer.toHexString(hashCode());
+    public void myMethod() {
+        String log = getClass().getName();
+        System.out.println(log);
     }
 }
 ```

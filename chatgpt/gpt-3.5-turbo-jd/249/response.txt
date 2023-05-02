@@ -1,0 +1,8 @@
+# Response Time: 3.0985653400421143
+```
+// Code before refactoring
+this.getTimezoneOffset();
+
+// Code after refactoring
+-(Calendar.getInstance().get(Calendar.ZONE_OFFSET) + Calendar.getInstance().get(Calendar.DST_OFFSET)) / (60 * 1000);
+```

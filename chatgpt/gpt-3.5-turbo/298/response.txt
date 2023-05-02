@@ -1,15 +1,16 @@
-# Response Time: 4.576196193695068
+# Response Time: 4.961676359176636
 ```
-<code before refactoring here>
-```
-```
+// Code before refactoring
 this.setMBeanServer(a);
 ```
 ```
-<code after refactoring here>
-```
-```
-// Use MBeanServerFactory to get the platform MBeanServer
-MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-this.setMBeanServer(mbs);
+// Code after refactoring
+// Use constructor injection instead
+public class MyClass {
+  private final MBeanServer mBeanServer;
+
+  public MyClass(MBeanServer mBeanServer) {
+    this.mBeanServer = mBeanServer;
+  }
+}
 ```

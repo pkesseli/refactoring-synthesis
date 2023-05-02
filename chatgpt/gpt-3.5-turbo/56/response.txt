@@ -1,8 +1,8 @@
-# Response Time: 3.037442684173584
+# Response Time: 2.705476999282837
 ```
 // Code before refactoring
 String normalizedMimeType = normalizeMimeType(a);
 
 // Code after refactoring
-String normalizedMimeType = DataFlavor.selectBestTextFlavor(DataFlavor.getTextFlavor(a)).getMimeType();
+String normalizedMimeType = DataFlavor.getNormalizedMimeType(a);
 ```

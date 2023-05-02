@@ -1,4 +1,4 @@
-# Response Time: 2.472860813140869
+# Response Time: 3.0300700664520264
 ```
 // Code before refactoring
 this.setDefaultRequestProperty(a, b);

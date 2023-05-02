@@ -1,6 +1,4 @@
 The method java.awt.event.KeyEvent.getKeyModifiersText​(int) is deprecated.
- The related deprecation comment in Javadoc is "It is recommended that extended modifier keys and
-             InputEvent.getModifiersExText(int) be used instead"
 I have a call to this deprecated method in my codebase `this.getKeyModifiersText​(a)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

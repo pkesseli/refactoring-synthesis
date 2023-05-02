@@ -17,11 +17,11 @@ class java_lang_CharacterTest {
 
   @Test
   void isJavaLetterOrDigit() throws Exception {
-    assertThat(synthesiseGPT("<code before refactoring here>\nif (Character.isJavaLetterOrDigit(a)) {\n    // do something\n}\n<code after refactoring here>\nif (Character.isJavaIdentifierPart(a)) {\n    // do something\n}\n", "", "java.lang.Character", "isJavaLetterOrDigit", "char"), Matchers.anything());
+    assertThat(synthesiseGPT("if (Character.isJavaLetterOrDigit(a)) {\n    // do something\n}\n\n", "if (Character.isJavaIdentifierPart(a)) {\n    // do something\n}\n", "java.lang.Character", "isJavaLetterOrDigit", "char"), Matchers.anything());
   }
 
   @Test
   void isSpace() throws Exception {
-    assertThat(synthesiseGPT("boolean isSpace = Character.isSpace(a);\n\nboolean isSpace = Character.isWhitespace(a);\n", "", "java.lang.Character", "isSpace", "char"), Matchers.anything());
+    assertThat(synthesiseGPT("boolean isSpace = Character.isSpace(a);\n\n", "boolean isSpace = Character.isWhitespace(a);\n", "java.lang.Character", "isSpace", "char"), Matchers.anything());
   }
 }

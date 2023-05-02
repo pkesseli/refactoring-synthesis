@@ -1,12 +1,12 @@
-# Response Time: 2.7968685626983643
+# Response Time: 4.187685966491699
 ```
 // Code before refactoring
-this.action(a, b);
+public void someMethod(Event a, Object b) {
+    this.action(a, b);
+}
 
 // Code after refactoring
-this.addActionListener(new ActionListener() {
-    public void actionPerformed(ActionEvent e) {
-        // Code to handle action event
-    }
-});
+public void someMethod(Event a, Object b) {
+    // Do something else instead of calling deprecated method
+}
 ```

@@ -1,0 +1,8 @@
+# Response Time: 2.058475971221924
+```
+// Code before refactoring
+int itemCount = this.countItems();
+
+// Code after refactoring
+int itemCount = this.getItemCount();
+```

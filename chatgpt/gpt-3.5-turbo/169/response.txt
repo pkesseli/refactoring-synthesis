@@ -1,8 +1,8 @@
-# Response Time: 2.091254949569702
+# Response Time: 2.4478914737701416
 ```
 // Code before refactoring
 this.setTTL(a);
 
 // Code after refactoring
-this.setTimeToLive((int) a);
+this.setTimeToLive(Byte.toUnsignedInt(a));
 ```

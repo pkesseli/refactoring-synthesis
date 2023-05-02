@@ -1,8 +1,9 @@
-# Response Time: 2.31264066696167
+# Response Time: 2.6136770248413086
 ```
 // Code before refactoring
 this.done();
 
 // Code after refactoring
-// There is no replacement for this method, so it can be safely removed
+// Use the new method `this.releaseInputStream()` instead
+this.releaseInputStream();
 ```

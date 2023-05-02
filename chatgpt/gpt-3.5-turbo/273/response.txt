@@ -1,22 +1,21 @@
-# Response Time: 6.282342195510864
+# Response Time: 6.344589471817017
 ```
 // Code before refactoring
-public void cleanup() {
-    try {
-        MemoryCacheImageInputStream input = new MemoryCacheImageInputStream(inputStream);
-        // some code here
-    } finally {
-        this.finalize();
-    }
+public void someMethod() {
+    // some code here
+    this.finalize();
+    // some more code here
 }
 ```
 ```
 // Code after refactoring
-public void cleanup() {
-    try (MemoryCacheImageInputStream input = new MemoryCacheImageInputStream(inputStream)) {
-        // some code here
-    } catch (IOException e) {
-        // handle exception
+public void someMethod() {
+    // some code here
+    try {
+        super.finalize();
+    } catch (Throwable throwable) {
+        // handle the exception
     }
+    // some more code here
 }
 ```

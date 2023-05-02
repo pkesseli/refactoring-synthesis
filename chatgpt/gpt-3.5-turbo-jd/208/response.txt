@@ -1,0 +1,8 @@
+# Response Time: 1.9754860401153564
+```
+// Code before refactoring
+String version = this.getVersion();
+
+// Code after refactoring
+String version = this.getVersionStr();
+```

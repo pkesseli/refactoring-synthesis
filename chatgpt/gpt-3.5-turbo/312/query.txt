@@ -1,7 +1,4 @@
 The method javax.swing.JComponent.isManagingFocus() is deprecated.
- The related deprecation comment in Javadoc is "As of 1.4, replaced by
-   Component.setFocusTraversalKeys(int, Set) and
-   Container.setFocusCycleRoot(boolean)."
 I have a call to this deprecated method in my codebase `this.isManagingFocus()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

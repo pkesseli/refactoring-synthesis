@@ -1,8 +1,9 @@
-# Response Time: 3.402332305908203
+# Response Time: 4.112000465393066
 ```
 // Code before refactoring
-LoggingMXBean loggingMXBean = LogManager.getLogManager().getLoggingMXBean();
-
+LoggingMXBean loggingMXBean = ManagementFactory.getPlatformMXBean(LoggingMXBean.class);
+```
+```
 // Code after refactoring
-PlatformLoggingMXBean platformLoggingMXBean = ManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class);
+LoggingMXBean loggingMXBean = LogManager.getLogManager().getLoggingMXBean();
 ```

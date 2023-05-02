@@ -1,4 +1,4 @@
-# Response Time: 2.525360345840454
+# Response Time: 2.8522133827209473
 ```
 // Code before refactoring
 this.postEvent(a);

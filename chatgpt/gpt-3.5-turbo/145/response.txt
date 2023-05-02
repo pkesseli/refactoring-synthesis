@@ -1,8 +1,10 @@
-# Response Time: 2.07488751411438
+# Response Time: 6.094540357589722
 ```
 // Code before refactoring
-int securityLevel = Runtime.version().security();
+Runtime.Version version = Runtime.Version.parse("11.0.2");
+String security = version.security();
 
 // Code after refactoring
-int securityLevel = Runtime.version().update();
+Runtime.Version version = Runtime.Version.parse("11.0.2");
+String security = version.feature() == 11 ? version.interim() + "." + version.update() + "." + version.patch() + "." + version.build() : null;
 ```

@@ -1,0 +1,11 @@
+# Response Time: 5.819275379180908
+```
+// Code before refactoring
+Font font = new Font("Arial", Font.PLAIN, 12);
+int fontWidth = this.getFontMetrics(font).stringWidth("Hello World");
+
+// Code after refactoring
+Font font = new Font("Arial", Font.PLAIN, 12);
+FontRenderContext frc = new FontRenderContext(null, true, true);
+int fontWidth = (int) font.getLineMetrics("Hello World", frc).getBounds().getWidth();
+```

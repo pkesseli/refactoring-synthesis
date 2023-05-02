@@ -1,4 +1,4 @@
-# Response Time: 2.4035279750823975
+# Response Time: 2.8200783729553223
 ```
 // Code before refactoring
 JScrollPane scrollPane = this.createScrollPaneForTable(a);

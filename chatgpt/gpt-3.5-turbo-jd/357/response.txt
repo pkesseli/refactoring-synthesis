@@ -1,0 +1,8 @@
+# Response Time: 3.284017324447632
+```
+// Code before refactoring
+this.insertAtBoundry(a, b, c, d, e, f, g);
+
+// Code after refactoring
+this.insertAtBoundary(a, b, c, d, e, f, g);
+```

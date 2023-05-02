@@ -1,8 +1,16 @@
-# Response Time: 2.396634101867676
+# Response Time: 5.764751195907593
 ```
 // Code before refactoring
 boolean isAccessible = this.isAccessible();
 
 // Code after refactoring
-boolean isAccessible = AccessibleObject.canAccess(this, null);
+boolean isAccessible = AccessController.doPrivileged((PrivilegedAction<Boolean>) () -> {
+    boolean accessible = false;
+    try {
+        accessible = this.canAccess(null);
+    } catch (IllegalAccessException e) {
+        // ignore
+    }
+    return accessible;
+});
 ```

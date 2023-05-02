@@ -1,0 +1,13 @@
+# Response Time: 4.610984802246094
+```
+// Code before refactoring
+this.deserialize(a, b, c);
+```
+```
+// Code after refactoring
+ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(c));
+Object obj = in.readObject();
+in.close();
+this.getMBeanServer().registerMBean(obj, b);
+```
