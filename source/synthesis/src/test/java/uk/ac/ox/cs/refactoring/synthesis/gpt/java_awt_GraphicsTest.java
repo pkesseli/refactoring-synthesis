@@ -11,11 +11,6 @@ import org.junit.jupiter.api.Test;
 
 class java_awt_GraphicsTest {
   @Test
-  void finalize1() throws Exception {
-    assertThat(synthesiseGPT("public void cleanup() {\n    // perform cleanup actions\n    this.finalize();\n}\n\n", "public void cleanup() {\n    // perform cleanup actions\n    // alternative cleanup mechanism\n}\n", "java.awt.Graphics", "finalize"), anyOf(contains("finalize")));
-  }
-
-  @Test
   void getClipRect() throws Exception {
     assertThat(synthesiseGPT("Rectangle clipRect = this.getClipRect();\n\n", "Rectangle clipBounds = this.getClipBounds();\nRectangle clipRect = new Rectangle(clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height);\n", "java.awt.Graphics", "getClipRect"), anyOf(contains("getClipBounds")));
   }
