@@ -497,14 +497,15 @@ and in Section~\ref{sec:implementation} we discuss some implementation details.
 
 
 \section{Seeding of the component library} \label{sec:components-seeding}
-We designed two versions of the library, differentiated by the seeding guidance:
-\begin{itemize}
-\item For the {\bf CodeHints-library} the seeding is guided
-  by both Javadoc code hints and types.
-\item For the {\bf Types-library} the seeding is only guided by types.
-\end{itemize}  
+%% We designed two versions of the library, differentiated by the seeding guidance:
+%% \begin{itemize}
+%% \item For the {\bf CodeHints-library} the seeding is guided
+%%   by both Javadoc code hints and types.
+%% \item For the {\bf Types-library} the seeding is only guided by types.
+%% \end{itemize}  
 
-\subsection{CodeHints-library} \label{sec:core-library}
+%% \subsection{CodeHints-library} \label{sec:core-library}
+In this section, we'll explain how we populate the component library used by the synthesis procedure starting from the code hints.
 In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \texttt{date} of type \texttt{Date} as the input to the code to be refactored, and the integer \texttt{hour} as the output. Generally speaking, the refactoring technique will weave together components from the component library that consume the inputs and generate the required outputs.
 
 Throughout the seeding process, we keep track of the following sets:
@@ -629,26 +630,12 @@ and all the public methods from class \texttt{Calendar} that return an object of
   \item \texttt{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- creates a \texttt{Calendar} object with the specified time zone and locale.
 \end{enumerate}
 
-%% For our illustrating example, the only object used by the deprecated code is \texttt{Source\_Obj}=\{\texttt{date}\} with given type \texttt{Source\_Type}=\{\texttt{Date}\}. Using these, we need to obtain an object of type \texttt{Target\_Type}=\{\texttt{Calendar}\}, so that we can make use of the JavaDoc hint.  
-%
-%Out of the four options above, we are interested in those for which we have the means to generate all their arguments and the current object. 
 Out of the four methods,
-%from our example that can produce objects of type \texttt{Calendar},
 only the first one is realisable. Conversely, in order to call the second method, we would need to generate an object of type \texttt{Locale},
 for which we don't have a corresponding component in the library.
 The last two methods are in a similar situation as the second. Thus, we only add the first method to the CodeHints-library.
 
-%% Even though we add them, they are not going to be used by the synthesis engine
-%% as we use a type-directed approach to term generation...
-
-
-
-%(those from the code hints are fixed in place).
-%% Then, we also add all the instructions contained
-%% in the code hints.
-
 \paragraph{{\bf Phase 3: Add transformers for $target\_types$}}
-%% \todo{Comment PK: I would call these "transformers". Just to avoid confusion with reviewers, if they expect them to "mutate" the state of an object in Java terms, which of course not all of them do.}
 The third and last phase adds  transformers for the target types.
 By transformers we refer to methods that modify the value of an instance variable.
 Given our objective to generate objects for the $target\_types$ while consuming objects from $consumable\_objs$,
@@ -658,50 +645,8 @@ However, instead of adding all of them to the CodeHints-library, we prioritise t
 consume the \texttt{date} object. There is only one such transformer \texttt{void setTime(Date date)}.
 Once we added any new transformers to the library, we remove the consumed objects from \texttt{consumable\_obj}.
 
-%% Besides ways of generating objects of certain types, we also need to be able to
-%% modify the newly generated objects by setting their fields.
-%% This is covered in the algorithm given in Figure~\ref{alg:seeding-core}
-%% by adding $modifiers$ to the library.
-%% For the running example, the modifiers that we add to the library are
-%% ...
-
-%% Once we added the components required to generate an object of a given type,
-%% we add that type to $source\_types$.
 Notably, all the components that
 we add to the library must be accessible from the current location.
-
-%% we overload \var{ensured\_types} to take \var{library} as an argument, in which case it returns the set of all the types of the objects that can be created using the instructions in the library.
-
-%% In certain situations, the seeding of the component library may require additional work.
-%% For instance, for the example in Figure~\ref{ex:deprecated-method-other}, we need to also provide a way of obtaining
-%% a \texttt{Calendar} object. Thus, we add \texttt{Calendar.getInstance()}. 
-
-%% \SetKwInOut{KwIn}{Input}
-%% \SetKwInOut{KwOut}{Output}
-
-%% \begin{figure}
-%% \removelatexerror% Nullify \@latex@error
-%% \begin{algorithm}[H]
-%% \SetAlgoLined
-%% \KwOut{Core component library}
-%%  Add constants from the code hints and the original code\;
-%%  Add instructions from the code hints\;
-%%  \For{instr $\in$ library}{
-%%    \If{$\neg$realizable(instr)}{
-%%      \For{$type {\in} required\_types(instr) ~\&\&~ type {\not\in} source\_types$}{
-%%        $generators = realizable\_constructors(type) \cup realizable\_methods\_returning\_type(type)$\;
-%%        $modifiers = realizable\_methods\_with\_receiver\_of\_type(type)$\;
-%%        Add $generators$ to the library\;
-%%        Add $modifiers$ to the library\;
-%%        \If{$generators \neq \emptyset$}{$source\_types = source\_types \cup\{type\} $}
-%%      }
-%%    }
-%%  }
-%% \end{algorithm}
-%%  \caption{Seeding algorithm for the core library}
-%% \label{alg:seeding-core}
-%% \end{figure}
-
 
 \begin{figure}
 \removelatexerror% Nullify \@latex@error
@@ -727,21 +672,6 @@ $\newline$
 Add realisable transformers to the library for types in $target\_types$ that consume objects from $consumable\_objs$\;
 Remove consumed objs from $consumable\_objs$\;
 }
-%% =======
-%%  Add constants from the original code to the library\;
-%%  Add instructions from the code hints to the library\;
-%%  \For{instr $\in$ library}{
-%%    \If{$\neg$realizable(instr)}{
-%%      \For{$type {\in} required\_types(instr) ~\wedge~ type {\not\in} source\_types$}{
-%%        $generators = realizable\_constructors(type) \cup realizable\_methods\_returning\_type(type)$\;
-%%        $modifiers = realizable\_methods\_with\_receiver\_of\_type(type)$\;
-%%        Add $generators$ to the library\;
-%%        Add $\mathit{modifiers}$ to the library\;
-%%        \If{$generators \neq \emptyset$}{$source\_types = source\_types \cup\{type\} $}
-%%      }
-%%    }
-%%  }
-%% >>>>>>> 64d053e021f0976d2f4411950ad48f41ed31c8d9
 \end{algorithm}
  \caption{Seeding algorithm for the CodeHints-library}
 \label{alg:seeding-core}
@@ -755,6 +685,9 @@ A possible future direction is allowing unrealisable generators and transformers
 %% iterate phase 2 and 3 until fixed point to 
 
 \subsection{Types-library} \label{sec:extend-library}
+
+For comparison reasons, in addition to the CodeHints-library, we also provide a components library that is populated only based on the type signature
+of the deprecated method. Next, we describe how this Types-library is being built.
 
 For the CodeHints-library, the Javadoc code hints guidance results in the code hints being
 used to collect the $target\_types$ set during the initialisation phase.
