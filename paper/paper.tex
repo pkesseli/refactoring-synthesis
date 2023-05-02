@@ -1469,11 +1469,10 @@ Configurations marked as {\bf Types}
 are based on the Types-library,
 whereas configurations marked as ({\bf CodeHints}) work with the CodeHints-library.
 
-We use JQF in two modes: (1) with Zest~\cite{DBLP:conf/issta/PadhyeLSPT19}
-guidance, which incorporates feedback from the test program in the form of
+We use JQF in Zest~\cite{DBLP:conf/issta/PadhyeLSPT19}
+guidance mode, which incorporates feedback from the test program in the form of
 semantic validity of test inputs and the code coverage achieved during test
-execution, and (2) with random guidance, which randomly generates test
-inputs without using code coverage feedback.
+execution.
 %
 %
 The coverage feedback used by Zest means that JQF uses lightweight program
@@ -1490,9 +1489,9 @@ For each configuration we evaluate how many sound as well as unsound
 refactorings are produced, how many refactoring opportunities were missed
 and the average time to successfully produce a refactoring.  We bound the
 search by at most 500 inputs and 5 minutes per verification phase, and at
-most 2 minutes per synthesis phase.  Experiments were performed on a Windows
-10 computer with Oracle JDK 15.02, 32 GB of RAM and an Intel Core i7-4790
-CPU dual core at 3.60 GHz.
+most 2 minutes per synthesis phase.  Experiments were performed on an Ubuntu
+22.04 x64 operating system running in a VirtualBox machine with 8GB RAM and
+2 Intel Core i7-4790CPU cores at 3.60 GHz.  The JVM used was Oracle JDK 15.02.
 
 \subsection{Baseline: ChatGPT} \label{sec:chatgpt}
 We are interested in comparing our symbolic refactoring based on program refactoring and fuzzing against
@@ -1510,10 +1509,8 @@ produced per configuration, as well as the average runtime per refactoring.
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-Zest-Types     &         61 &     59 &         12 & 46 & 233.2 \\ 
-Zest-CodeHints &         88 &     39 &          5 & 67 & 199.9 \\ 
-Rand-Types     &         66 &     55 &         11 & 50 & 220.3 \\ 
-Rand-CodeHints &         87 &     40 &          5 & 66 & 207.4 \\  \hline\hline
+Zest-Types     &         81 &     84 &         48 & 38 & 220.5 \\ 
+Zest-CodeHints &        116 &     91 &          6 & 54 & 206.7 \\  \hline\hline
 \end{tabular} 
 \caption{Experimental results per configuration.}
 \label{tab:configuration-results}   
@@ -1537,19 +1534,14 @@ as captured by Table~\ref{tab:configuration-results-ch}.
 %, further highlighting the importance of Javadoc code hints.
 
 \paragraph{Missed refactorings}
-Out of the refactorings missed by both Zest-CodeHints and Rand-CodeHints, 
+Out of the refactorings missed both with and without code hints, 
 2 were missed because the method return
 value was dependent on an external system state which changed frequently between
 invocations\\
 (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
-The rest of the refactorings missed by Zest-CodeHints and Rand-CodeHints
-were caused by fuzzing timeouts.  
-
-Regarding the refactorings missed by Zest-Types and Rand-Types, apart from those
-caused by the nondeterminism issue mentioned above, the majority
-were due to fuzzing timeouts. Particularly in the case of Zest-Types and Rand-Types,
-the timeouts are likely due to the Types-library missing some
+The rest of the refactorings missed were caused by fuzzing timeouts.
+These timeouts are likely due to the Types-library missing some
 needed instructions.
 
 As explained in Section~\ref{sec:components-seeding}, one option 
@@ -1568,7 +1560,7 @@ like Objenesis for object construction and instead use public constructors.
 For the former, the disadvantage of increasing the timeout is that it will
 slow down the overall refactoring procedure.
 
-One solution was unsound
+Some solutions were unsound
 because the method to refactor was a default method with an empty body, meant
 to be overridden by subclasses. To find a sound refactoring in these cases our
 algorithm should expand its equivalence constraint to types who override the
@@ -1579,10 +1571,8 @@ method to refactor.
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-Zest-Types     &         55 &     28 &  8         & 60 & 234.7 \\ 
-Zest-CodeHints &         85 &      5 &  1         & 93 & 206.8 \\ 
-Rand-Types     &         60 &     23 &  8         & 65 & 224.9 \\ 
-Rand-CodeHints &         83 &      7 &  1         & 91 & 209.7 \\  \hline\hline
+Zest-Types     &         72 &     84 &  48         & 52 & 230.5 \\ 
+Zest-CodeHints &        116 &     91 &   6         & 83 & 206.7 \\  \hline\hline
 \hline
 \end{tabular} 
 \caption{Results when code hints were present.}
