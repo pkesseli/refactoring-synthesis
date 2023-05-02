@@ -1,8 +1,16 @@
-# Response Time: 2.0055904388427734
+# Response Time: 5.21513295173645
 ```
 // Code before refactoring
 Insets insets = this.insets();
+int top = insets.top;
+int left = insets.left;
+int bottom = insets.bottom;
+int right = insets.right;
 
 // Code after refactoring
-Insets insets = this.getInsets();
+Insets insets = getInsets();
+int top = insets.top;
+int left = insets.left;
+int bottom = insets.bottom;
+int right = insets.right;
 ```

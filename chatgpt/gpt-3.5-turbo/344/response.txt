@@ -1,8 +1,8 @@
-# Response Time: 2.4225080013275146
+# Response Time: 3.080010175704956
 ```
 // Code before refactoring
-this.modelToView(a, b, c);
+Rectangle rect = this.modelToView(a, b, c);
 
 // Code after refactoring
-this.modelToView2D(a, b, c);
+Rectangle rect = a.modelToView(b, c);
 ```

@@ -1,0 +1,8 @@
+# Response Time: 1.9361681938171387
+```
+// Code before refactoring
+this.preferredSize(a);
+
+// Code after refactoring
+this.getPreferredSize(a);
+```

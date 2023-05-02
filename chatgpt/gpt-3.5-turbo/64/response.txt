@@ -1,4 +1,4 @@
-# Response Time: 2.6506199836730957
+# Response Time: 3.0090157985687256
 ```
 // Code before refactoring
 int cursorType = this.getCursorType();

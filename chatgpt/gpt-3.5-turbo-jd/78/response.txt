@@ -1,0 +1,19 @@
+# Response Time: 6.372742176055908
+```
+// Code before refactoring
+this.delItems(a, b);
+```
+```
+// Code after refactoring
+int[] selectedIndices = this.getSelectedIndexes();
+List<String> items = new ArrayList<>();
+for (int i = 0; i < selectedIndices.length; i++) {
+    if (selectedIndices[i] < a || selectedIndices[i] > b) {
+        items.add(this.getItem(selectedIndices[i]));
+    }
+}
+this.removeAll();
+for (String item : items) {
+    this.add(item);
+}
+```

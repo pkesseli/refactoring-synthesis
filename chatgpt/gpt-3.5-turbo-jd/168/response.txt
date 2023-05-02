@@ -1,0 +1,8 @@
+# Response Time: 2.435405969619751
+```
+// Code before refactoring
+this.setLoopbackMode(a);
+
+// Code after refactoring
+this.setOption(StandardSocketOptions.IP_MULTICAST_LOOP, !a);
+```

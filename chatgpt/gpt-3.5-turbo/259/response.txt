@@ -1,11 +1,11 @@
-# Response Time: 3.37870192527771
+# Response Time: 3.6976468563079834
 ```
 // Code before refactoring
-Date currentDate = new Date();
-String formattedDate = currentDate.toLocaleString();
+Date date = new Date();
+String formattedDate = date.toLocaleString();
 
 // Code after refactoring
-Date currentDate = new Date();
+Date date = new Date();
 DateFormat dateFormat = DateFormat.getDateTimeInstance();
-String formattedDate = dateFormat.format(currentDate);
+String formattedDate = dateFormat.format(date);
 ```

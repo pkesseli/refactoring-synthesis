@@ -1,10 +1,11 @@
-# Response Time: 3.22251558303833
+# Response Time: 4.374506235122681
 ```
 // Code before refactoring
 this.notifyPathChange(a, b);
 ```
 ```
 // Code after refactoring
-TreeSelectionEvent event = new TreeSelectionEvent(this, b, true, null, null);
-this.fireValueChanged(event);
+TreePath[] paths = new TreePath[a.size()];
+a.copyInto(paths);
+this.fireValueChanged(new TreeSelectionEvent(this, paths, new int[0], null, null));
 ```

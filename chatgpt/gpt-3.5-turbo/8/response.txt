@@ -1,8 +1,8 @@
-# Response Time: 2.1683712005615234
+# Response Time: 2.358835220336914
 ```
 // Code before refactoring
 this.addLayoutComponent(a, b);
 
 // Code after refactoring
-this.addLayoutComponent(b, a);
+this.add(b, a);
 ```

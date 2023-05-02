@@ -1,9 +1,9 @@
-# Response Time: 2.8987607955932617
+# Response Time: 2.9617764949798584
 ```
 // Code before refactoring
 this.disableSwingFocusManager();
 ```
 ```
 // Code after refactoring
-KeyboardFocusManager.getCurrentKeyboardFocusManager().setDefaultFocusTraversalPolicy(FocusTraversalPolicy); 
+FocusManager.getCurrentManager().setFocusTraversalPolicyProvider(true);
 ```

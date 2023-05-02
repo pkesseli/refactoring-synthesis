@@ -1,0 +1,18 @@
+# Response Time: 4.761279582977295
+```
+<code before refactoring here>
+```
+```
+java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
+int month = time.getMonth();
+```
+
+```
+<code after refactoring here>
+```
+```
+java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
+Calendar calendar = Calendar.getInstance();
+calendar.setTime(time);
+int month = calendar.get(Calendar.MONTH);
+```

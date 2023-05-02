@@ -1,8 +1,8 @@
-# Response Time: 3.0927014350891113
+# Response Time: 3.078643798828125
 ```
 // Code before refactoring
-Rectangle rect = textUI.modelToView(a, b, c);
+Rectangle rect = this.modelToView(a, b, c);
 
 // Code after refactoring
-Rectangle2D rect = textUI.modelToView2D(a, b, c);
+Rectangle rect = a.modelToView(b, c);
 ```

@@ -1,10 +1,11 @@
-# Response Time: 4.051008701324463
+# Response Time: 4.021423816680908
 ```
 // Code before refactoring
 this.keyDown(a, b);
 ```
+
 ```
 // Code after refactoring
-KeyEvent keyEvent = new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_UNKNOWN, false);
-this.processKeyEvent(keyEvent);
+KeyEvent keyEvent = new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, b, KeyEvent.CHAR_UNDEFINED);
+this.dispatchEvent(keyEvent);
 ```

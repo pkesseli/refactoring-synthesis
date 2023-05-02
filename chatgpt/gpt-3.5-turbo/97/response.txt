@@ -1,8 +1,7 @@
-# Response Time: 2.4336204528808594
+# Response Time: 2.2800869941711426
 ```
-// Code before refactoring
 this.reshape(a, b, c, d);
-
-// Code after refactoring
+```
+```
 this.setBounds(a, b, c, d);
 ```

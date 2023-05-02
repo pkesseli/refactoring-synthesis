@@ -1,0 +1,10 @@
+# Response Time: 3.4992682933807373
+```
+// Code before refactoring
+this.setYear(a);
+
+// Code after refactoring
+LocalDateTime ldt = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault());
+ldt = ldt.withYear(a);
+this.setTime(Time.valueOf(ldt.toLocalTime()));
+```

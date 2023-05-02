@@ -1,0 +1,8 @@
+# Response Time: 1.9610011577606201
+```
+// Code before refactoring
+this.enableResizedPosting();
+
+// Code after refactoring
+this.setResizingAllowed(true);
+```

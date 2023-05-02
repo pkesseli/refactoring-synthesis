@@ -1,8 +1,8 @@
-# Response Time: 1.9633862972259521
+# Response Time: 3.237685441970825
 ```
 // Code before refactoring
-this.hasPrivateAccess();
+boolean hasPrivateAccess = this.hasPrivateAccess();
 
 // Code after refactoring
-this.lookup().hasFullPrivilegeAccess();
+boolean hasPrivateAccess = this.lookup().lookupClass() == this.getClass();
 ```

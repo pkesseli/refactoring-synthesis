@@ -1,0 +1,8 @@
+# Response Time: 2.2387747764587402
+```
+// Code before refactoring
+this.defineClass(a, b, c);
+
+// Code after refactoring
+this.defineClass(null, a, b, c);
+```

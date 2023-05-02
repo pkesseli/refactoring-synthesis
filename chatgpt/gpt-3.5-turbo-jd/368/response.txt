@@ -1,0 +1,9 @@
+# Response Time: 3.801781177520752
+```
+// Code before refactoring
+this.drawTabbedText(a, b, c, d, e, f);
+```
+```
+// Code after refactoring
+Utilities.drawTabbedText(a, (float)b, (float)c, (Graphics2D)d, e, f);
+```

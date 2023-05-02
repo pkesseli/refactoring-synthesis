@@ -1,4 +1,4 @@
-# Response Time: 2.745778799057007
+# Response Time: 3.212052822113037
 ```
 // Code before refactoring
 Component focusOwner = this.findFocusOwner(a);

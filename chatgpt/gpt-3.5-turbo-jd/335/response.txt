@@ -1,0 +1,9 @@
+# Response Time: 3.757456064224243
+```
+// Code before refactoring
+int borderSize = this.getDividerBorderSize();
+
+// Code after refactoring
+Border border = this.getDivider().getBorder();
+int borderSize = (border != null) ? border.getBorderInsets(this.getDivider()).left : 0;
+```

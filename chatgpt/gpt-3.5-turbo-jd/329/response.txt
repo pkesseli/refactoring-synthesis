@@ -1,0 +1,8 @@
+# Response Time: 2.012434959411621
+```
+// Code before refactoring
+this.getKeyStroke(a, b);
+
+// Code after refactoring
+KeyStroke.getKeyStroke(a);
+```

@@ -1,0 +1,11 @@
+# Response Time: 2.8834006786346436
+```
+// Code before refactoring
+this.setMinutes(a);
+
+// Code after refactoring
+Calendar calendar = Calendar.getInstance();
+calendar.setTime(this);
+calendar.set(Calendar.MINUTE, a);
+this.setTime(calendar.getTime().getTime());
+```

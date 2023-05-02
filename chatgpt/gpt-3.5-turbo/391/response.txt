@@ -1,9 +1,10 @@
-# Response Time: 3.1053292751312256
+# Response Time: 3.2558517456054688
 ```
 // Code before refactoring
 this.wrap(a, b, c);
 
 // Code after refactoring
-byte[] wrappedData = this.wrap(a, 0, a.length, c);
-b.write(wrappedData);
+OutputStream outputStream = this.wrap(b, c);
+IOUtils.copy(a, outputStream);
+outputStream.flush();
 ```

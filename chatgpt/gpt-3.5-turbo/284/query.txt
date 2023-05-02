@@ -1,5 +1,4 @@
 The method javax.management.monitor.CounterMonitorMBean.getThreshold() is deprecated.
- The related deprecation comment in Javadoc is "As of JMX 1.2, replaced by CounterMonitorMBean.getThreshold(ObjectName)"
 I have a call to this deprecated method in my codebase `this.getThreshold()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

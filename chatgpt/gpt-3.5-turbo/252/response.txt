@@ -1,11 +1,11 @@
-# Response Time: 2.949570655822754
+# Response Time: 3.384059429168701
 ```
 // Code before refactoring
-this.setDate(a);
+Date date = new Date();
+date.setDate(10);
 
 // Code after refactoring
 Calendar calendar = Calendar.getInstance();
-calendar.setTime(this);
-calendar.set(Calendar.DAY_OF_MONTH, a);
-this.setTime(calendar.getTime().getTime());
+calendar.set(Calendar.DATE, 10);
+Date date = calendar.getTime();
 ```

@@ -1,17 +1,12 @@
-# Response Time: 3.834123134613037
+# Response Time: 3.06549072265625
 ```
 // Code before refactoring
-public void cleanup() {
-    try {
-        this.finalize();
-    } catch (Throwable t) {
-        // handle exception
-    }
+public void close() throws IOException {
+    this.finalize();
 }
-```
-```
+
 // Code after refactoring
-public void cleanup() {
-    // alternative cleanup mechanism
+public void close() throws IOException {
+    super.close();
 }
 ```

@@ -1,9 +1,14 @@
-# Response Time: 2.5015594959259033
+# Response Time: 3.9253592491149902
 ```
 // Code before refactoring
-int day = this.getDay();
+public int getDayOfWeek() {
+    return this.getDay();
+}
 
 // Code after refactoring
-LocalDate localDate = LocalDate.now();
-int day = localDate.getDayOfMonth();
+public int getDayOfWeek() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(this);
+    return calendar.get(Calendar.DAY_OF_WEEK);
+}
 ```

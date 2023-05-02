@@ -1,0 +1,8 @@
+# Response Time: 2.429926633834839
+```
+// Code before refactoring
+JMenuBar menuBar = this.getMenuBar();
+
+// Code after refactoring
+JMenuBar menuBar = this.getJMenuBar();
+```

@@ -1,10 +1,13 @@
-# Response Time: 3.1989665031433105
+# Response Time: 5.883096694946289
 ```
 // Code before refactoring
 this.initSecContext​(a, b);
-
+```
+```
 // Code after refactoring
-byte[] token = this.initSecContext(a, 0, a.length);
-OutputStream out = ...;
+GSSContext context = GSSManager.getInstance().createContext(null, null, null, GSSContext.DEFAULT_LIFETIME);
+byte[] token = context.initSecContext(new byte[0], 0, 0);
+OutputStream out = new OutputStream();
 out.write(token);
+out.flush();
 ```

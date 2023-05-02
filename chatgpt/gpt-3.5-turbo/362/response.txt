@@ -1,13 +1,15 @@
-# Response Time: 6.037600040435791
+# Response Time: 6.959823131561279
 ```
 // Code before refactoring
 this.drawSelectedText(a, b, c, d, e);
 ```
+
 ```
 // Code after refactoring
-((Graphics2D) a).setColor(this.getSelectedTextColor());
-((Graphics2D) a).setBackground(this.getBackground());
-((Graphics2D) a).fill(this.getVisibleEditorRect());
-((Graphics2D) a).setColor(this.getForeground());
-((Graphics2D) a).drawString(this.getSelectedText().toString(), b, c);
+Rectangle rect = this.modelToView(start, Position.Bias.Forward);
+Rectangle rect2 = this.modelToView(end, Position.Bias.Forward);
+if (rect != null && rect2 != null) {
+    Rectangle r = rect.union(rect2);
+    a.fillRect(r.x, r.y, r.width, r.height);
+}
 ```

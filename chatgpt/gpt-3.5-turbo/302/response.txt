@@ -1,4 +1,4 @@
-# Response Time: 3.009232759475708
+# Response Time: 3.492722272872925
 ```
 // Code before refactoring
 this.setUnicodeStream(a, b, c);

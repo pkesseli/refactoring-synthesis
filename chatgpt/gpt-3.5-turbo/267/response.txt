@@ -1,11 +1,10 @@
-# Response Time: 2.8294131755828857
+# Response Time: 3.0234596729278564
 ```
 // Code before refactoring
 this.save(a, b);
-```
-```
+
 // Code after refactoring
-try (OutputStream outputStream = new FileOutputStream(a)) {
-    this.store(outputStream, b);
+try (OutputStream out = new FileOutputStream(a)) {
+    this.store(out, b);
 }
 ```

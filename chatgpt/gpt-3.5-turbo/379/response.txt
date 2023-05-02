@@ -1,11 +1,12 @@
-# Response Time: 4.718793869018555
+# Response Time: 5.692734479904175
 ```
 // Code before refactoring
 this.drawUnselectedText(a, b, c, d, e);
 ```
+
 ```
 // Code after refactoring
-((Graphics2D) a).setFont(getFont());
-((Graphics2D) a).setColor(getForeground());
-((Graphics2D) a).drawString(getText().substring(d, e), b, c);
+Graphics2D g2d = (Graphics2D) a;
+g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+g2d.drawString(getText(b, c), b, d);
 ```

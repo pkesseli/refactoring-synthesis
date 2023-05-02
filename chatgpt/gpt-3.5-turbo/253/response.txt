@@ -1,11 +1,11 @@
-# Response Time: 3.014954090118408
+# Response Time: 3.2592179775238037
 ```
 // Code before refactoring
 this.setHours(a);
 
 // Code after refactoring
-Calendar calendar = Calendar.getInstance();
-calendar.setTime(this);
-calendar.set(Calendar.HOUR_OF_DAY, a);
-this.setTime(calendar.getTime().getTime());
+Calendar cal = Calendar.getInstance();
+cal.setTime(this);
+cal.set(Calendar.HOUR_OF_DAY, a);
+this.setTime(cal.getTimeInMillis());
 ```

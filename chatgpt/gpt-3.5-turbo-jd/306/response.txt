@@ -1,0 +1,8 @@
+# Response Time: 2.437133550643921
+```
+// Code before refactoring
+this.isFocusManagerEnabled();
+
+// Code after refactoring
+KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalPolicy();
+```

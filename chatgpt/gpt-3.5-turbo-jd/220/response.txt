@@ -1,0 +1,9 @@
+# Response Time: 2.7999587059020996
+```
+// Code before refactoring
+this.setSeconds(a);
+
+// Code after refactoring
+this.setTime(this.getTime() + (a - this.getSeconds()) * 1000);
+this.setSeconds(0);
+```

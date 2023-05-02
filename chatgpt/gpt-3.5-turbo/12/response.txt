@@ -1,14 +1,23 @@
-# Response Time: 3.1269590854644775
+# Response Time: 5.504871845245361
 ```
 // Code before refactoring
-public void cleanup() {
-    // perform some cleanup
-    this.finalize();
+public void finalize() throws Throwable {
+    try {
+        // some code here
+        this.finalize();
+    } finally {
+        super.finalize();
+    }
 }
-
+```
+```
 // Code after refactoring
-public void cleanup() {
-    // perform some cleanup
-    // alternative cleanup mechanism
+@Override
+protected void finalize() throws Throwable {
+    try {
+        // some code here
+    } finally {
+        super.finalize();
+    }
 }
 ```

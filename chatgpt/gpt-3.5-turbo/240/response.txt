@@ -1,8 +1,10 @@
-# Response Time: 2.3833675384521484
+# Response Time: 3.6781797409057617
 ```
 // Code before refactoring
 this.weakCompareAndSet(a, b);
-
+```
+```
 // Code after refactoring
-this.weakCompareAndSetPlain(a, b);
+AtomicReference<V> atomicRef = new AtomicReference<>(a);
+atomicRef.compareAndExchange(a, b);
 ```

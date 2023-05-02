@@ -1,9 +1,13 @@
-# Response Time: 2.6769449710845947
+# Response Time: 4.214411020278931
 ```
 // Code before refactoring
 this.engineSetParameter(a, b);
 ```
 ```
 // Code after refactoring
-this.engineSetParameter(a, (java.lang.Object) b);
+if ("myParameter".equals(a)) {
+    this.engineSetMyParameter(b);
+} else {
+    throw new UnsupportedOperationException("Unsupported parameter: " + a);
+}
 ```

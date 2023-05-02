@@ -1,6 +1,4 @@
 The method java.awt.Component.nextFocus() is deprecated.
- The related deprecation comment in Javadoc is "As of JDK version 1.1,
- replaced by transferFocus()."
 I have a call to this deprecated method in my codebase `this.nextFocus()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

@@ -1,8 +1,8 @@
-# Response Time: 3.0229742527008057
+# Response Time: 2.412907361984253
 ```
 // Code before refactoring
 this.setDate(a);
 
 // Code after refactoring
-this.setTime(new java.sql.Time(a * 24L * 60L * 60L * 1000L).getTime());
+this.setTime(this.getTime() + TimeUnit.DAYS.toMillis(a));
 ```

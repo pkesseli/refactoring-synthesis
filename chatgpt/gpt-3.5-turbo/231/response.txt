@@ -1,9 +1,16 @@
-# Response Time: 3.1961610317230225
+# Response Time: 4.838637828826904
 ```
 // Code before refactoring
-int year = this.getYear() + 1900;
-
+public int getYear() {
+    Time time = new Time(System.currentTimeMillis());
+    return time.getYear();
+}
+```
+```
 // Code after refactoring
-LocalDateTime dateTime = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault());
-int year = dateTime.getYear();
+public int getYear() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTimeInMillis(System.currentTimeMillis());
+    return calendar.get(Calendar.YEAR);
+}
 ```

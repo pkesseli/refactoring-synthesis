@@ -1,0 +1,8 @@
+# Response Time: 2.3716251850128174
+```
+// Code before refactoring
+int minorVersion = Runtime.version().minor();
+
+// Code after refactoring
+int minorVersion = Runtime.version().interim();
+```

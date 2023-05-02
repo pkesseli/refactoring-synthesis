@@ -1,4 +1,4 @@
-# Response Time: 1.5822596549987793
+# Response Time: 1.7847514152526855
 ```
 // Code before refactoring
 this.size();

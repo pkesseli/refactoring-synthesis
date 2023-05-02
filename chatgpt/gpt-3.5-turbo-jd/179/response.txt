@@ -1,0 +1,8 @@
+# Response Time: 1.6488111019134521
+```
+// Code before refactoring
+this.loadClass(a);
+
+// Code after refactoring
+Class.forName(a);
+```

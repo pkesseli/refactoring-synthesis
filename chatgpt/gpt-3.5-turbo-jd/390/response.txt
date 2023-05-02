@@ -1,0 +1,10 @@
+# Response Time: 4.338824510574341
+```
+// Code before refactoring
+this.verifyMIC(a, b, c);
+
+// Code after refactoring
+byte[] aBytes = a.readAllBytes();
+byte[] bBytes = b.readAllBytes();
+this.verifyMIC(aBytes, 0, aBytes.length, bBytes, 0, bBytes.length, c);
+```

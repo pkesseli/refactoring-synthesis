@@ -1,18 +1,28 @@
-# Response Time: 4.761279582977295
+# Response Time: 7.940845727920532
 ```
-<code before refactoring here>
-```
-```
-java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-int month = time.getMonth();
-```
+// Code before refactoring
+import java.sql.Time;
 
+public class Example {
+    private Time time;
+
+    public int getMonth() {
+        return time.getMonth();
+    }
+}
 ```
-<code after refactoring here>
 ```
-```
-java.sql.Time time = new java.sql.Time(System.currentTimeMillis());
-Calendar calendar = Calendar.getInstance();
-calendar.setTime(time);
-int month = calendar.get(Calendar.MONTH);
+// Code after refactoring
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoField;
+
+public class Example {
+    private Time time;
+
+    public int getMonth() {
+        LocalDate localDate = time.toLocalTime().atDate(LocalDate.now(ZoneId.systemDefault()));
+        return localDate.get(ChronoField.MONTH_OF_YEAR);
+    }
+}
 ```

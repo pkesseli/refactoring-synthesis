@@ -1,0 +1,9 @@
+# Response Time: 2.760267734527588
+```
+// Code before refactoring
+int stackFrames = this.countStackFrames();
+
+// Code after refactoring
+StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+int stackFrames = stackTrace.length;
+```

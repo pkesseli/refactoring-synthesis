@@ -1,5 +1,4 @@
 The method java.awt.Component.isFocusTraversable() is deprecated.
- The related deprecation comment in Javadoc is "As of 1.4, replaced by isFocusable()."
 I have a call to this deprecated method in my codebase `this.isFocusTraversable()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

@@ -1,0 +1,13 @@
+The method javax.management.ValueExp.setMBeanServer​(MBeanServer) is deprecated.
+ The related deprecation comment in Javadoc is "This method is not needed because a
+ ValueExp can access the MBean server in which it
+ is being evaluated by using QueryEval.getMBeanServer()."
+I have a call to this deprecated method in my codebase `this.setMBeanServer​(a)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

@@ -1,4 +1,4 @@
-# Response Time: 2.2585525512695312
+# Response Time: 2.4610183238983154
 ```
 // Code before refactoring
 int menuCount = this.countMenus();

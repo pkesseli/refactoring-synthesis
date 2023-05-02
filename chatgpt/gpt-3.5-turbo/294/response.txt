@@ -1,4 +1,4 @@
-# Response Time: 5.397573709487915
+# Response Time: 5.606705904006958
 ```
 // Code before refactoring
 StringMonitor stringMonitor = new StringMonitor(monitorMBean);
@@ -8,6 +8,6 @@ double derivedGauge = stringMonitor.getDerivedGauge();
 // Code after refactoring
 StringMonitor stringMonitor = new StringMonitor(monitorMBean);
 stringMonitor.start();
-ObjectName objectName = new ObjectName(monitorMBean);
-double derivedGauge = stringMonitor.getDerivedGauge(objectName);
+Object attribute = stringMonitor.getAttribute("DerivedGauge");
+double derivedGauge = Double.parseDouble(attribute.toString());
 ```

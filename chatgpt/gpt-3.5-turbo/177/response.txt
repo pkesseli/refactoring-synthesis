@@ -1,9 +1,10 @@
-# Response Time: 3.3614203929901123
+# Response Time: 5.565858364105225
 ```
 // Code before refactoring
-RegistryHandler registryHandler = new RegistryHandler();
-Registry registry = (Registry) registryHandler.registryStub("localhost", 1099);
+Registry registry = LocateRegistry.getRegistry(host, port);
+MyRemoteInterface stub = (MyRemoteInterface) registry.registryStub("myRemoteObject", MyRemoteInterface.class);
 
 // Code after refactoring
-Registry registry = LocateRegistry.getRegistry("localhost", 1099);
+Registry registry = LocateRegistry.getRegistry(host, port);
+MyRemoteInterface stub = (MyRemoteInterface) registry.lookup("myRemoteObject");
 ```

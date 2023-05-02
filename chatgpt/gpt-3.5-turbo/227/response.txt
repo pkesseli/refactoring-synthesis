@@ -1,8 +1,15 @@
-# Response Time: 7.319090366363525
+# Response Time: 5.698349237442017
 ```
 // Code before refactoring
-InputStream inputStream = resultSet.getUnicodeStream(a);
+public void someMethod(String a) throws SQLException {
+    InputStream inputStream = this.getUnicodeStream(a);
+    // do something with inputStream
+}
 
 // Code after refactoring
-Reader reader = resultSet.getCharacterStream(a);
+public void someMethod(String a) throws SQLException {
+    Reader reader = this.getCharacterStream(a);
+    InputStream inputStream = new ReaderInputStream(reader);
+    // do something with inputStream
+}
 ```

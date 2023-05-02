@@ -1,0 +1,11 @@
+# Response Time: 3.175233840942383
+```
+// Code before refactoring
+this.setYear(a);
+
+// Code after refactoring
+Calendar cal = Calendar.getInstance();
+cal.setTime(this);
+cal.set(Calendar.YEAR, a + 1900);
+this.setTime(cal.getTime().getTime());
+```

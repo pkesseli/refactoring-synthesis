@@ -1,0 +1,9 @@
+# Response Time: 2.056931972503662
+```
+// Code before refactoring
+this.deliverEvent(a);
+```
+```
+// Code after refactoring
+this.dispatchEvent(a);
+```

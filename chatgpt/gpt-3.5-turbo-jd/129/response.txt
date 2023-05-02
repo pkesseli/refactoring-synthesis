@@ -1,0 +1,8 @@
+# Response Time: 2.091097354888916
+```
+// Code before refactoring
+URL url = file.toURL();
+
+// Code after refactoring
+URL url = file.toURI().toURL();
+```

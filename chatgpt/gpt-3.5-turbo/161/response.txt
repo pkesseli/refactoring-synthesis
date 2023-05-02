@@ -1,12 +1,11 @@
-# Response Time: 4.233052015304565
+# Response Time: 4.6161370277404785
 ```
 // Code before refactoring
 MulticastSocket socket = new MulticastSocket(port);
-socket.joinGroup(group);
 NetworkInterface networkInterface = socket.getInterface();
 
 // Code after refactoring
 MulticastSocket socket = new MulticastSocket(port);
-socket.joinGroup(group);
-NetworkInterface networkInterface = socket.getNetworkInterface();
+NetworkInterface networkInterface = NetworkInterface.getByInetAddress(socket.getLocalAddress());
+socket.setNetworkInterface(networkInterface);
 ```

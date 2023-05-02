@@ -1,8 +1,8 @@
-# Response Time: 2.230956792831421
+# Response Time: 2.6172854900360107
 ```
 // Code before refactoring
 OutputStream outputStream = this.getOutputStream();
 
 // Code after refactoring
-throw new UnsupportedOperationException("This method is deprecated and has no replacement.");
+OutputStream outputStream = ((java.rmi.server.RemoteCall) this).getOutputStream();
 ```

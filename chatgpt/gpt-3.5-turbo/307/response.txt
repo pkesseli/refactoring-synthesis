@@ -1,8 +1,24 @@
-# Response Time: 2.299816846847534
+# Response Time: 6.955836296081543
 ```
 // Code before refactoring
+public class MyInputVerifier extends InputVerifier {
+    @Override
+    public boolean shouldYieldFocus(JComponent input) {
+        return validate(input);
+    }
+}
+
+// Call to deprecated method
 this.shouldYieldFocus(a);
 
 // Code after refactoring
-InputVerifier.shouldYieldFocus(this, a);
+public class MyInputVerifier extends InputVerifier {
+    @Override
+    public boolean verify(JComponent input) {
+        return validate(input);
+    }
+}
+
+// Call to updated method
+this.getInputVerifier().verify(a);
 ```

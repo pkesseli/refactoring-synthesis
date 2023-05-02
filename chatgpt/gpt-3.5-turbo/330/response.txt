@@ -1,9 +1,8 @@
-# Response Time: 2.6529457569122314
+# Response Time: 2.43654465675354
 ```
 // Code before refactoring
 this.createKeyboardDownRightListener();
 
 // Code after refactoring
-// Use the new method createDownRightListener() instead
-this.createDownRightListener();
+this.getHandler().getKeyboardDownRightHandler();
 ```

@@ -1,0 +1,9 @@
+# Response Time: 2.5015594959259033
+```
+// Code before refactoring
+int day = this.getDay();
+
+// Code after refactoring
+LocalDate localDate = LocalDate.now();
+int day = localDate.getDayOfMonth();
+```

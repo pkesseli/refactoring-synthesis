@@ -1,8 +1,8 @@
-# Response Time: 2.494622230529785
+# Response Time: 3.891918897628784
 ```
 // Code before refactoring
 this.divide(a, b, c);
 
 // Code after refactoring
-this.divide(a, b, RoundingMode.valueOf(c));
+this.divide(a, new MathContext(c, RoundingMode.HALF_UP)).setScale(b, RoundingMode.HALF_UP);
 ```

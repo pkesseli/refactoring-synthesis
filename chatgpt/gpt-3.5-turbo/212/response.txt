@@ -1,17 +1,26 @@
-# Response Time: 6.062184810638428
+# Response Time: 10.754891872406006
 ```
 // Code before refactoring
-public byte[] sign(byte[] data) throws SignatureException {
-    AlgorithmParameters params = this.engineGetParameters();
-    byte[] a = params.getEncoded();
-    return this.engineSign(data);
+public class MySignature extends SignatureSpi {
+    @Override
+    protected Object engineGetParameter(String a) throws InvalidParameterException {
+        // Some implementation here
+    }
 }
-```
-```
+
+// Call to deprecated method
+MySignature mySig = new MySignature();
+Object param = mySig.engineGetParameter("paramName");
+
 // Code after refactoring
-public byte[] sign(byte[] data) throws SignatureException {
-    AlgorithmParameters params = this.engineGetParameters();
-    byte[] a = params.getEncoded("ASN.1");
-    return this.engineSign(data);
+public class MySignature extends SignatureSpi {
+    @Override
+    protected <T extends AlgorithmParameterSpec> T engineGetParameter(Class<T> paramSpec) throws InvalidParameterException {
+        // Some implementation here
+    }
 }
+
+// Call to refactored method
+MySignature mySig = new MySignature();
+AlgorithmParameterSpec paramSpec = mySig.engineGetParameter(AlgorithmParameterSpec.class);
 ```

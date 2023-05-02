@@ -1,0 +1,8 @@
+# Response Time: 2.005695343017578
+```
+// Code before refactoring
+this.exportObject(a);
+
+// Code after refactoring
+this.exportObject(a, 0);
+```

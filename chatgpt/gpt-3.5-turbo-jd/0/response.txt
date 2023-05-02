@@ -1,0 +1,12 @@
+# Response Time: 4.008412599563599
+```
+// Code before refactoring
+if (this.canAddMethod()) {
+    // do something
+}
+
+// Code after refactoring
+// The method is always returning false, so the condition is unnecessary
+// Remove the if statement and the call to the deprecated method
+// do something
+```

@@ -1,13 +1,12 @@
-# Response Time: 2.6480770111083984
+# Response Time: 3.28460431098938
 ```
-<code before refactoring here>
-```
-```
-this.isSelected(a)
-```
-```
-<code after refactoring here>
-```
-```
-this.isIndexSelected(a)
+// Code before refactoring
+if (this.isSelected(a)) {
+    // do something
+}
+
+// Code after refactoring
+if (this.getSelectedIndex() == a) {
+    // do something
+}
 ```

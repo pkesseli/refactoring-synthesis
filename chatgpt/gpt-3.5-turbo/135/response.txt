@@ -1,4 +1,4 @@
-# Response Time: 2.2218282222747803
+# Response Time: 2.7738540172576904
 ```
 // Code before refactoring
 MyClass obj = MyClass.class.newInstance();

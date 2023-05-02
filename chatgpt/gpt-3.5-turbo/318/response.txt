@@ -1,8 +1,8 @@
-# Response Time: 2.4851884841918945
+# Response Time: 2.7306902408599854
 ```
 // Code before refactoring
 Object[] selectedValues = this.getSelectedValues();
 
 // Code after refactoring
-List<Object> selectedValuesList = this.getSelectedValuesList();
+List<Object> selectedValuesList = Arrays.asList(this.getSelectedValues());
 ```

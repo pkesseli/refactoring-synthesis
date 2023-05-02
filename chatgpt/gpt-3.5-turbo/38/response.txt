@@ -1,8 +1,8 @@
-# Response Time: 1.6385293006896973
+# Response Time: 2.483985185623169
 ```
 // Code before refactoring
 this.nextFocus();
 
 // Code after refactoring
-this.transferFocus();
+KeyboardFocusManager.getCurrentKeyboardFocusManager().focusNextComponent(this);
 ```

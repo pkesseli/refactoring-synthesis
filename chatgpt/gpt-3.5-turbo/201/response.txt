@@ -1,9 +1,12 @@
-# Response Time: 3.676020622253418
+# Response Time: 4.826545476913452
 ```
 // Code before refactoring
-RemoteRef ref = this.newCall(a, b, c, d);
+this.newCall(a, b, c, d);
 
 // Code after refactoring
-RemoteRef ref = ((RemoteObject) a).ref;
-Object result = ref.invoke(a, b[0], b[1], c);
+RemoteCall call = new RemoteCall();
+call.setOperation(Operation[] b);
+call.setParameters(Object[] c);
+call.setMethodHash(long d);
+this.invoke(RemoteObject obj, RemoteCall call);
 ```

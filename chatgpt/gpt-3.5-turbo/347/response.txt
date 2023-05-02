@@ -1,8 +1,8 @@
-# Response Time: 3.430910110473633
+# Response Time: 3.2201733589172363
 ```
 // Code before refactoring
 String tooltip = this.getToolTipText(a, b);
 
 // Code after refactoring
-String tooltip = ((javax.swing.plaf.basic.BasicTextUI) this.getUI()).getToolTipText2D(a, b).toString();
+JToolTip tooltip = a.getUI().getToolTipText(a, b);
 ```

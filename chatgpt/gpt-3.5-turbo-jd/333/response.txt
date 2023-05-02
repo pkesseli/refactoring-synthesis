@@ -1,0 +1,14 @@
+# Response Time: 4.678170919418335
+```
+// Code before refactoring
+this.createKeyboardResizeToggleListener();
+
+// Code after refactoring
+// Use the new method createToggleKeyBinding() instead
+this.createToggleKeyBinding(
+    KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK),
+    "focusOutForward",
+    "negativeIncrement",
+    "toggleFocus"
+);
+```

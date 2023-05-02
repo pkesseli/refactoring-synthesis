@@ -1,0 +1,9 @@
+# Response Time: 2.842005491256714
+```
+// Code before refactoring
+this.weakCompareAndSet(a, b, c);
+```
+```
+// Code after refactoring
+this.weakCompareAndSetPlain(a, b, c);
+```

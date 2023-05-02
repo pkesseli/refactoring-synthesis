@@ -1,8 +1,9 @@
-# Response Time: 1.9087634086608887
+# Response Time: 3.025078296661377
 ```
 // Code before refactoring
-this.getTTL();
+int ttl = this.getTTL();
 
 // Code after refactoring
-this.getTimeToLive();
+DatagramSocket socket = new DatagramSocket();
+socket.getOption(IP_MULTICAST_TTL);
 ```

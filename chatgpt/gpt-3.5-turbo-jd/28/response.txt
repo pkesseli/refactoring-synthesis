@@ -1,0 +1,8 @@
+# Response Time: 1.9214293956756592
+```
+// Code before refactoring
+Point location = this.location();
+
+// Code after refactoring
+Point location = this.getLocation();
+```

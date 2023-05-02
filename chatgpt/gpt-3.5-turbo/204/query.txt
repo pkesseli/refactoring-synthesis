@@ -1,5 +1,4 @@
 The method java.rmi.server.RMIClassLoader.loadClass​(String) is deprecated.
- The related deprecation comment in Javadoc is "replaced by loadClass(String,String) method"
 I have a call to this deprecated method in my codebase `this.loadClass​(a)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

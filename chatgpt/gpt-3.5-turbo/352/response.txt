@@ -1,12 +1,9 @@
-# Response Time: 5.5020177364349365
+# Response Time: 3.9476518630981445
 ```
 // Code before refactoring
-this.addDirtyRegion​(a, b, c, d, e);
+this.addDirtyRegion(a, b, c, d, e);
 ```
 ```
 // Code after refactoring
-JComponent comp = (JComponent) a;
-Rectangle dirtyRegion = new Rectangle(b, c, d, e);
-SwingUtilities.computeIntersection(0, 0, comp.getWidth(), comp.getHeight(), dirtyRegion);
-comp.repaint(dirtyRegion);
+RepaintManager.currentManager(this).addDirtyRegion(this, b, c, d, e);
 ```

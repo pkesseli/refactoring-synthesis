@@ -1,4 +1,4 @@
-# Response Time: 2.1529629230499268
+# Response Time: 2.742471218109131
 ```
 // Code before refactoring
 this.loadClass(a, b);

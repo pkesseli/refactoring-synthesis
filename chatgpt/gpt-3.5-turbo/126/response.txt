@@ -1,8 +1,14 @@
-# Response Time: 3.0930755138397217
+# Response Time: 5.701923608779907
 ```
 // Code before refactoring
-Object obj = Beans.instantiate(classLoader, className, beanContext, appletInitializer);
+this.instantiate(a, b, c, d);
+```
 
+```
 // Code after refactoring
-Object obj = Beans.instantiate(classLoader, className, beanContext);
+java.beans.XMLDecoder decoder = new java.beans.XMLDecoder(new java.io.ByteArrayInputStream(b.getBytes()));
+decoder.setClassLoader(a);
+decoder.setExceptionListener(e -> System.out.println("Exception: " + e.toString()));
+Object obj = decoder.readObject();
+decoder.close();
 ```

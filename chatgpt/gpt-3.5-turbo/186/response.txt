@@ -1,9 +1,9 @@
-# Response Time: 2.384878158569336
+# Response Time: 2.7123875617980957
 ```
 // Code before refactoring
 this.setOutputStream(a);
 ```
 ```
 // Code after refactoring
-// Deprecated method has no replacement, so we can simply remove the call
+this.log = new PrintStream(a, true);
 ```

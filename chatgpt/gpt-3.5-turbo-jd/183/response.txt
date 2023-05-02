@@ -1,0 +1,9 @@
+# Response Time: 2.3613641262054443
+```
+// Code before refactoring
+this.log(a);
+```
+```
+// Code after refactoring
+// Deprecated method has no replacement, so we can simply remove the call
+```

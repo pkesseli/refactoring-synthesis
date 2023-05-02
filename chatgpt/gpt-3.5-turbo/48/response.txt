@@ -1,9 +1,8 @@
-# Response Time: 2.5409464836120605
+# Response Time: 2.5541257858276367
 ```
-<code before refactoring here>
-int numComponents = this.countComponents();
-```
-```
-<code after refactoring here>
-int numComponents = this.getComponentCount();
+// Code before refactoring
+int componentCount = this.countComponents();
+
+// Code after refactoring
+int componentCount = this.getComponentCount();
 ```

@@ -1,13 +1,15 @@
-# Response Time: 2.9177489280700684
+# Response Time: 5.677546262741089
 ```
 // Code before refactoring
 public void someMethod(Event a) {
     this.handleEvent(a);
 }
-```
-```
+
 // Code after refactoring
 public void someMethod(Event a) {
-    this.processEvent(a);
+    EventQueue.invokeLater(() -> {
+        Event event = new Event(this, a.when, a.id, a.arg);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(event);
+    });
 }
 ```

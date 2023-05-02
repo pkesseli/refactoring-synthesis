@@ -1,0 +1,8 @@
+# Response Time: 2.476120710372925
+```
+// Code before refactoring
+String property = this.getDefaultRequestProperty(a);
+
+// Code after refactoring
+String property = this.getRequestProperty(a);
+```

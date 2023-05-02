@@ -1,8 +1,21 @@
-# Response Time: 1.6107745170593262
+# Response Time: 5.427293062210083
 ```
 // Code before refactoring
-this.getBoundingBox();
+import java.awt.Polygon;
+
+public class MyPolygon extends Polygon {
+    public Rectangle getBoundingBox() {
+        return super.getBoundingBox();
+    }
+}
 
 // Code after refactoring
-this.getBounds();
+import java.awt.Polygon;
+import java.awt.Rectangle;
+
+public class MyPolygon extends Polygon {
+    public Rectangle getBoundingBox() {
+        return super.getBounds();
+    }
+}
 ```

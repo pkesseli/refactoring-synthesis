@@ -1,8 +1,29 @@
-# Response Time: 1.702899694442749
+# Response Time: 8.07084035873413
 ```
 // Code before refactoring
-this.isUnique();
+public class MyClass {
+    private java.rmi.dgc.VMID id;
 
+    public MyClass() {
+        id = new java.rmi.dgc.VMID();
+    }
+
+    public boolean isIdUnique() {
+        return id.isUnique();
+    }
+}
+```
+```
 // Code after refactoring
-UUID.randomUUID().toString();
+public class MyClass {
+    private java.rmi.dgc.VMID id;
+
+    public MyClass() {
+        id = new java.rmi.dgc.VMID();
+    }
+
+    public boolean isIdUnique() {
+        return true;
+    }
+}
 ```

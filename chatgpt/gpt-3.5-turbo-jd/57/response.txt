@@ -1,0 +1,8 @@
+# Response Time: 2.4753336906433105
+```
+// Code before refactoring
+String normalized = DataFlavor.normalizeMimeTypeParameter(a, b);
+
+// Code after refactoring
+String normalized = a + "=" + b;
+```

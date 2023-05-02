@@ -1,8 +1,9 @@
-# Response Time: 2.012434959411621
+# Response Time: 3.385140895843506
 ```
 // Code before refactoring
 this.getKeyStroke(a, b);
-
+```
+```
 // Code after refactoring
-KeyStroke.getKeyStroke(a);
+KeyStroke.getKeyStroke(Character.toUpperCase(a), b ? KeyEvent.SHIFT_DOWN_MASK : 0);
 ```

@@ -1,0 +1,12 @@
+# Response Time: 3.3313162326812744
+```
+// Code before refactoring
+this.send(a, b);
+```
+```
+// Code after refactoring
+int ttl = this.getTimeToLive();
+this.setTimeToLive(newttl);
+this.send(a);
+this.setTimeToLive(ttl);
+```

@@ -1,0 +1,12 @@
+# Response Time: 3.332367420196533
+```
+// Code before refactoring
+this.invoke(a);
+
+// Code after refactoring
+RemoteCall call = new RemoteCallImpl(method.hashCode());
+call.setMethodHash(method.hashCode());
+Object[] args = {a};
+call.setArguments(args);
+this.newCall(call);
+```

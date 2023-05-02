@@ -1,8 +1,8 @@
-# Response Time: 2.005695343017578
+# Response Time: 2.517230272293091
 ```
 // Code before refactoring
 this.exportObject(a);
 
 // Code after refactoring
-this.exportObject(a, 0);
+UnicastRemoteObject.exportObject(a, 0);
 ```

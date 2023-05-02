@@ -1,8 +1,12 @@
-# Response Time: 1.6737613677978516
+# Response Time: 2.9445011615753174
 ```
 // Code before refactoring
 this.show(a);
 
 // Code after refactoring
-this.setVisible(a);
+if (a) {
+    this.setVisible(true);
+} else {
+    this.setVisible(false);
+}
 ```

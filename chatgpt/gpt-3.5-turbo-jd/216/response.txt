@@ -1,0 +1,8 @@
+# Response Time: 2.5858237743377686
+```
+// Code before refactoring
+int minutes = this.getMinutes();
+
+// Code after refactoring
+int minutes = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault()).getMinute();
+```

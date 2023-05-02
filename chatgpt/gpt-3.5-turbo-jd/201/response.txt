@@ -1,0 +1,9 @@
+# Response Time: 3.676020622253418
+```
+// Code before refactoring
+RemoteRef ref = this.newCall(a, b, c, d);
+
+// Code after refactoring
+RemoteRef ref = ((RemoteObject) a).ref;
+Object result = ref.invoke(a, b[0], b[1], c);
+```

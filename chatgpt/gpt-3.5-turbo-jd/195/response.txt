@@ -1,0 +1,8 @@
+# Response Time: 2.230956792831421
+```
+// Code before refactoring
+OutputStream outputStream = this.getOutputStream();
+
+// Code after refactoring
+throw new UnsupportedOperationException("This method is deprecated and has no replacement.");
+```

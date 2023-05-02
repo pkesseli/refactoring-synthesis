@@ -1,4 +1,4 @@
-# Response Time: 2.1175806522369385
+# Response Time: 2.5022449493408203
 ```
 // Code before refactoring
 this.move(a, b);

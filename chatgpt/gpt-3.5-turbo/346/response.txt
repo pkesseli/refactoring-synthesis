@@ -1,4 +1,4 @@
-# Response Time: 2.7308812141418457
+# Response Time: 3.206604480743408
 ```
 // Code before refactoring
 int pos = this.viewToModel(a, b, c);

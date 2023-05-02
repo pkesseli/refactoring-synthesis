@@ -1,8 +1,20 @@
-# Response Time: 1.8638107776641846
+# Response Time: 5.3048107624053955
 ```
 // Code before refactoring
-this.getSeconds();
+public class MyClass {
+    private Date date;
+
+    public int getSeconds() {
+        return date.getSeconds();
+    }
+}
 
 // Code after refactoring
-this.toLocalDateTime().getSecond();
+public class MyClass {
+    private Date date;
+
+    public int getSeconds() {
+        return (int) (date.getTime() / 1000) % 60;
+    }
+}
 ```

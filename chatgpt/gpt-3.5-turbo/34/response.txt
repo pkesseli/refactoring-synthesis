@@ -1,4 +1,4 @@
-# Response Time: 3.8064327239990234
+# Response Time: 4.134236574172974
 ```
 // Code before refactoring
 this.mouseExit(a, b, c);
@@ -6,5 +6,5 @@ this.mouseExit(a, b, c);
 ```
 // Code after refactoring
 MouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), 0, b, c, 0, false);
-this.processMouseEvent(event);
+this.dispatchEvent(event);
 ```

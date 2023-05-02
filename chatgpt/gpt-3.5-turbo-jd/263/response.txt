@@ -1,0 +1,9 @@
+# Response Time: 3.3454418182373047
+```
+// Code before refactoring
+this.logrb(a, b, c, d, e, f);
+```
+```
+// Code after refactoring
+this.logrb(a, b, c, ResourceBundle.getBundle(d), e, f);
+```

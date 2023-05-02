@@ -1,0 +1,15 @@
+The method java.util.concurrent.atomic.AtomicLongArray.weakCompareAndSet​(int, long, long) is deprecated.
+ The related deprecation comment in Javadoc is "This method has plain memory effects but the method
+ name implies volatile memory effects (see methods such as
+ AtomicLongArray.compareAndExchange(int, long, long) and AtomicLongArray.compareAndSet(int, long, long)).  To avoid
+ confusion over plain or volatile memory effects it is recommended that
+ the method AtomicLongArray.weakCompareAndSetPlain(int, long, long) be used instead."
+I have a call to this deprecated method in my codebase `this.weakCompareAndSet​(a, b, c)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

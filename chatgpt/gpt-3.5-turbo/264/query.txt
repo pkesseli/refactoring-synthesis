@@ -1,7 +1,4 @@
 The method java.util.logging.Logger.logrb​(Level, String, String, String, String, Throwable) is deprecated.
- The related deprecation comment in Javadoc is "Use Logger.logrb(java.util.logging.Level, java.lang.String,
-     java.lang.String, java.util.ResourceBundle, java.lang.String,
-     java.lang.Throwable) instead."
 I have a call to this deprecated method in my codebase `this.logrb​(a, b, c, d, e, f)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

@@ -1,6 +1,4 @@
 The method java.awt.Component.mouseEnter​(Event, int, int) is deprecated.
- The related deprecation comment in Javadoc is "As of JDK version 1.1,
- replaced by processMouseEvent(MouseEvent)."
 I have a call to this deprecated method in my codebase `this.mouseEnter​(a, b, c)`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

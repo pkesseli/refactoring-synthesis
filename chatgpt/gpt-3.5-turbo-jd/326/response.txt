@@ -1,0 +1,8 @@
+# Response Time: 1.7920756340026855
+```
+// Code before refactoring
+this.sizeColumnsToFit(a);
+
+// Code after refactoring
+this.doLayout();
+```

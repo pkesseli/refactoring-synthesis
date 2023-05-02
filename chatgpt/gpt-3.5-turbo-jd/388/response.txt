@@ -1,0 +1,10 @@
+# Response Time: 3.1989665031433105
+```
+// Code before refactoring
+this.initSecContext​(a, b);
+
+// Code after refactoring
+byte[] token = this.initSecContext(a, 0, a.length);
+OutputStream out = ...;
+out.write(token);
+```

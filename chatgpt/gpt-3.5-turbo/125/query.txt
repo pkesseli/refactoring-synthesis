@@ -1,6 +1,4 @@
 The method java.awt.Window.show() is deprecated.
- The related deprecation comment in Javadoc is "As of JDK version 1.5, replaced by
- Window.setVisible(boolean)."
 I have a call to this deprecated method in my codebase `this.show()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

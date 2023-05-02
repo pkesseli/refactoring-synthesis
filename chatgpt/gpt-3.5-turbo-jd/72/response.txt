@@ -1,0 +1,9 @@
+# Response Time: 1.9208834171295166
+```
+// Code before refactoring
+this.addItem(a);
+```
+```
+// Code after refactoring
+this.add(a);
+```

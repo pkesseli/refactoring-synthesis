@@ -1,0 +1,9 @@
+# Response Time: 3.434696912765503
+```
+// Code before refactoring
+double derivedGauge = counterMonitor.getDerivedGauge();
+
+// Code after refactoring
+ObjectName objectName = counterMonitor.getObservedObject();
+double derivedGauge = counterMonitor.getDerivedGauge(objectName);
+```

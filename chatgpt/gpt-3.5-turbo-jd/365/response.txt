@@ -1,0 +1,10 @@
+# Response Time: 4.662937879562378
+```
+// Code before refactoring
+this.drawSelectedText(a, b, c, d, e);
+```
+```
+// Code after refactoring
+Graphics2D g2d = (Graphics2D) a;
+this.drawSelectedText(g2d, (float) b, (float) c, d, e);
+```

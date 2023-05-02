@@ -1,8 +1,8 @@
-# Response Time: 2.8913426399230957
+# Response Time: 2.9357423782348633
 ```
 // Code before refactoring
 int pos = this.viewToModel(a, b, c);
 
 // Code after refactoring
-int pos = this.viewToModel2D(a, b, c);
+int pos = a.viewToModel(b);
 ```

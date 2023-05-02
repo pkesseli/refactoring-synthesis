@@ -1,4 +1,4 @@
-# Response Time: 3.4992682933807373
+# Response Time: 3.9716997146606445
 ```
 // Code before refactoring
 this.setYear(a);

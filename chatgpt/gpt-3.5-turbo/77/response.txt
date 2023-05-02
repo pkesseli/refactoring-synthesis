@@ -1,13 +1,8 @@
-# Response Time: 2.730760335922241
+# Response Time: 2.003012180328369
 ```
-<code before refactoring here>
-```
-```
+// Code before refactoring
 this.delItem(a);
-```
-```
-<code after refactoring here>
-```
-```
+
+// Code after refactoring
 this.remove(a);
 ```

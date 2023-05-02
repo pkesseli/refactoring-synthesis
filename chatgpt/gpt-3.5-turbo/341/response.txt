@@ -1,20 +1,23 @@
-# Response Time: 5.8651793003082275
+# Response Time: 10.127785682678223
 ```
 // Code before refactoring
-public class MyComboBox extends JComboBox<String> {
-    public MyComboBox() {
-        this.removeListeners();
-    }
-}
-
+this.removeListeners();
+```
+```
 // Code after refactoring
-public class MyComboBox extends JComboBox<String> {
-    public MyComboBox() {
-        for (ActionListener listener : getActionListeners()) {
-            removeActionListener(listener);
+ComboBoxEditor editor = this.getEditor();
+if (editor != null) {
+    Component editorComponent = editor.getEditorComponent();
+    if (editorComponent instanceof JComponent) {
+        JComponent jEditorComponent = (JComponent) editorComponent;
+        for (FocusListener listener : jEditorComponent.getFocusListeners()) {
+            jEditorComponent.removeFocusListener(listener);
         }
-        for (ItemListener listener : getItemListeners()) {
-            removeItemListener(listener);
+        for (KeyListener listener : jEditorComponent.getKeyListeners()) {
+            jEditorComponent.removeKeyListener(listener);
+        }
+        for (MouseListener listener : jEditorComponent.getMouseListeners()) {
+            jEditorComponent.removeMouseListener(listener);
         }
     }
 }

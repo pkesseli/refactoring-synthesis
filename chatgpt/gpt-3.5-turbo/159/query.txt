@@ -1,5 +1,4 @@
 The method java.net.DatagramSocketImpl.getTTL() is deprecated.
- The related deprecation comment in Javadoc is "use getTimeToLive instead."
 I have a call to this deprecated method in my codebase `this.getTTL()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

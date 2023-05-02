@@ -1,4 +1,4 @@
-# Response Time: 3.799767017364502
+# Response Time: 3.9906270503997803
 ```
 // Code before refactoring
 Date date = new Date();
@@ -8,5 +8,5 @@ int year = date.getYear();
 Date date = new Date();
 Calendar calendar = Calendar.getInstance();
 calendar.setTime(date);
-int year = calendar.get(Calendar.YEAR) - 1900;
+int year = calendar.get(Calendar.YEAR);
 ```

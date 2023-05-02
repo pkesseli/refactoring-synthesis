@@ -1,0 +1,12 @@
+The method java.net.MulticastSocket.setTTL​(byte) is deprecated.
+ The related deprecation comment in Javadoc is "use the setTimeToLive method instead, which uses
+             int instead of byte as the type for ttl."
+I have a call to this deprecated method in my codebase `this.setTTL​(a)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

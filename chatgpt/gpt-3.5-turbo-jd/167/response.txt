@@ -1,0 +1,11 @@
+# Response Time: 4.308039665222168
+```
+// Code before refactoring
+InetAddress a = InetAddress.getByName("224.0.0.1");
+this.setInterface(a);
+
+// Code after refactoring
+InetAddress a = InetAddress.getByName("224.0.0.1");
+NetworkInterface ni = NetworkInterface.getByInetAddress(a);
+this.setNetworkInterface(ni);
+```

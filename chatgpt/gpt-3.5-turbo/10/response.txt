@@ -1,9 +1,14 @@
-# Response Time: 1.847344160079956
+# Response Time: 5.44170618057251
 ```
 // Code before refactoring
-this.setCurrent(a);
-```
-```
+Checkbox a = new Checkbox("Option A");
+Checkbox b = new Checkbox("Option B");
+CheckboxGroup group = new CheckboxGroup();
+group.setCurrent(a);
+
 // Code after refactoring
+Checkbox a = new Checkbox("Option A");
+Checkbox b = new Checkbox("Option B");
+CheckboxGroup group = new CheckboxGroup();
 a.setState(true);
 ```

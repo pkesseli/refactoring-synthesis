@@ -1,9 +1,4 @@
 The method java.io.File.toURL() is deprecated.
- The related deprecation comment in Javadoc is "This method does not automatically escape characters that
- are illegal in URLs.  It is recommended that new code convert an
- abstract pathname into a URL by first converting it into a URI, via the
- toURI method, and then converting the URI into a URL
- via the URI.toURL method."
 I have a call to this deprecated method in my codebase `this.toURL()`, show me Give me how to refactor my code in the following format:
 ```
 <code before refactoring here>

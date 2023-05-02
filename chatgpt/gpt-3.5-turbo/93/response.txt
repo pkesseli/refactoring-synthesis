@@ -1,4 +1,4 @@
-# Response Time: 3.040768623352051
+# Response Time: 4.23746657371521
 ```
 // Code before refactoring
 if (this.inside(a, b)) {
@@ -6,7 +6,7 @@ if (this.inside(a, b)) {
 }
 
 // Code after refactoring
-if (this.contains(a, b)) {
+if (new java.awt.Polygon(xPoints, yPoints, nPoints).contains(a, b)) {
     // do something
 }
 ```

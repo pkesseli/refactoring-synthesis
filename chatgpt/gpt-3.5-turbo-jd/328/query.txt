@@ -1,0 +1,12 @@
+The method javax.swing.JViewport.setBackingStoreEnabled​(boolean) is deprecated.
+ The related deprecation comment in Javadoc is "As of Java 2 platform v1.3, replaced by
+             setScrollMode()."
+I have a call to this deprecated method in my codebase `this.setBackingStoreEnabled​(a)`, show me Give me how to refactor my code in the following format:
+```
+<code before refactoring here>
+```
+```
+<code after refactoring here>
+```
+
+Example code should be a straight-line code block. Don't provide extra explanation.

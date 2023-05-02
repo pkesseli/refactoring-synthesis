@@ -1,0 +1,8 @@
+# Response Time: 2.103137969970703
+```
+// Code before refactoring
+Checkbox selectedCheckbox = this.getCurrent();
+
+// Code after refactoring
+Checkbox selectedCheckbox = this.getSelectedCheckbox();
+```

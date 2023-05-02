@@ -1,8 +1,8 @@
-# Response Time: 2.091097354888916
+# Response Time: 2.1533350944519043
 ```
 // Code before refactoring
-URL url = file.toURL();
+this.toURL();
 
 // Code after refactoring
-URL url = file.toURI().toURL();
+this.toURI().toURL();
 ```

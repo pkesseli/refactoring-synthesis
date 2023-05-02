@@ -1,4 +1,4 @@
-# Response Time: 1.646662712097168
+# Response Time: 1.9299540519714355
 ```
 // Code before refactoring
 this.show();

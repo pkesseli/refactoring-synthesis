@@ -1,8 +1,21 @@
-# Response Time: 2.103137969970703
+# Response Time: 9.737000703811646
 ```
 // Code before refactoring
-Checkbox selectedCheckbox = this.getCurrent();
+CheckboxGroup group = new CheckboxGroup();
+Checkbox checkbox1 = new Checkbox("Option 1", group, true);
+Checkbox checkbox2 = new Checkbox("Option 2", group, false);
+Checkbox currentCheckbox = group.getCurrent();
 
 // Code after refactoring
-Checkbox selectedCheckbox = this.getSelectedCheckbox();
+CheckboxGroup group = new CheckboxGroup();
+Checkbox checkbox1 = new Checkbox("Option 1", group, true);
+Checkbox checkbox2 = new Checkbox("Option 2", group, false);
+Checkbox currentCheckbox = null;
+Checkbox[] checkboxes = group.getCheckboxGroup().getElements();
+for (Checkbox checkbox : checkboxes) {
+    if (checkbox.getState()) {
+        currentCheckbox = checkbox;
+        break;
+    }
+}
 ```

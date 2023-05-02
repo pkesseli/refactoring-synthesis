@@ -1,8 +1,8 @@
-# Response Time: 3.9225785732269287
+# Response Time: 4.536125183105469
 ```
 // Code before refactoring
-int breakLocation = Utilities.getBreakLocation(a, b, c, d, e, f);
+int breakLocation = javax.swing.text.Utilities.getBreakLocation(a, b, c, d, e, f);
 
 // Code after refactoring
-float breakLocation = Utilities.getBreakLocation(a, b, (float) c, (float) d, e, f);
+int breakLocation = javax.swing.text.Utilities.getBreakLocation(a, b.getFontRenderContext(), c, d, e, f);
 ```
