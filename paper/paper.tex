@@ -378,7 +378,7 @@ symbolic code generation methods to outperform general-purpose LLMs at a much lo
 
 
 
-\section{Overview of the program synthesis based approach} \label{sec:overview}
+\section{Overview of our approach} \label{sec:overview}
 
 %% At a high level, the new code is obtained by composing methods
 %% that are accessible from that respective location. 
@@ -568,55 +568,17 @@ Method \texttt{get} is not realisable as the library doesn't contain any generat
 Consequently, \texttt{Calendar} is added to $target\_types$, resulting in:
 $$target\_types = \{\texttt{int, Calendar}\}$$
 
-%% at the beginning of the library seeding process:
-%% \[
-%% \begin{aligned}
-%%   source\_types &=  \{\texttt{Date}\}\\
-%%   required\_types(\texttt{get}) &= \{\texttt{int, Calendar}\}
-%% \end{aligned}
-%% \]
-%% where the required types for component \texttt{get} to be realizable
-%% are \texttt{int} and \texttt{Calendar} because, in order to call \texttt{get}, we must provide an argument of type \texttt{int} and a current object of type \texttt{Calendar}. With respect to
-%% the source types, we have the object \texttt{date} of type \texttt{Date}, which
-%% our refactoring can consume.
-%% As for the core library,
-%% we fix the argument \texttt{``Calendar.HOUR\_OF\_DAY''}, we actually have $required\_types(get) = \{Calendar\}$.
-
-
-%% We call such an instruction {\em realizable}, according to Definition~\ref{def:realizable}.
-%% In the definition, we use
-%% \var{required\_types(i)} to denote
-%% the set of the types of the parameters and receiver required to call instruction \var{i}.
-
 \begin{definition}[Realisable method]\label{def:realizable}
 Method \var{i} is {\em realisable} iff $\forall t \in required\_types(i). t \in available\_types \vee t~is~a~primitive~type$.
 \end{definition}
 
-%% For our running example, \texttt{Calendar} is needed
-%% in order to call method \texttt{get}, which is required by the code hint. However, our library doesn't contain any way of creating such an object.
-%% Then, we add \texttt{Calendar} to $target\_types$.
-
-%% The objective is to generate objects for the $target\_types$, while consuming objects from $consumable\_objs$.
-%% During the process, $available\_types$ tells us for which types we have the means
-%% of generating objects.
-
 \paragraph{{\bf Phase 2: Add generators for $target\_types$}}
 
-%When referring to the algorithm in Figure~\ref{alg:seeding-core}, 
-%In the second phase of the seeding algorithm, 
-
-%In the algorithm in Figure~\ref{alg:seeding-core}, %% in the second phase, we add ways of generating
-%% objects whose types match the types of the required arguments and current objects to the library.
-%
 By generators we refer to constructors and any other methods returning objects of that particular type.
-%% Essentially, for each required type that we have no way of generating, we add all the realizable
-%% constructors and realizable methods returning objects of that type to the
-%% core library.
 In the algorithm in Figure~\ref{alg:seeding-core},
 once we added a generator for a new type, we must add that type to $available\_types$.
 Additionally, if the new generator consumes any objects from $consumable\_objs$,
 we must remove them from the set.
-%More details on this in Section~\ref{sec:synthesis}.
 
 For our running example, we must seed our component library with generators for \texttt{Calendar}.
 %
@@ -711,7 +673,7 @@ the Javadoc hints, would be to add all the classes from the
 in a very large component library, most likely outside the capabilities of existing
 synthesis techniques.
 
-\section{Program synthesis based refactoring} \label{sec:encoding}
+\section{Program synthesis and fuzzing based refactoring} \label{sec:encoding}
 
 %% Once the component library is built, for the actual synthesis,
 %% we use a counterexample-guided iterative process that enables us
@@ -753,14 +715,6 @@ observationally equivalent to $P_2$ for inputs $\vec{i}$, meaning that the two p
 can't be distinguished by their behaviour on inputs $\vec{i}$.  In general,
 we refer to the original code as $P_1$ and the refactored code as
 $P_2$. We will fully define what $equivalent$ actually means in Section~\ref{sec:equiv}.
-
--- integrate:  {\bf (3)} Finally, the key criterion we have for the code to be generated is that it needs to be {\em semantically equivalent to the original}, meaning that they must preserve its behaviour. 
-  However, formally proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
-In this work, instead of aiming for a formal proof,  we use fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
-While we can't provide full correctness guarantees,
-our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
-
-
 
 In each iteration of the synthesis process, there are two phases, a synthesis phase and a verification phase. The synthesis phase generates a {\em candidate refactoring} that is equivalent to
 the original code on a finite set of inputs. Then, the verification phase tries to find a new {\em counterexample input} that distinguishes between the current candidate refactoring and the original code. If it manages, this input is added to the set of finite inputs used by the next synthesis phase, and if it fails, then the current candidate is indeed a solution refactoring.
@@ -850,6 +804,10 @@ safety of \texttt{Verify} with fuzz testing,
 which means that we may fail to find a distinguishing input even if one
 exists.
 
+In this section, we hid the complexity of the equivalence check inside
+the $equivalent$ predicate. This is far from trivial as it requires handling
+of notions such as aliasing, loaded classes, static fields etc.. This will be
+described in detail in the next section.
 
 \section{Checking program equivalence for a certain input}\label{sec:equiv}
 
