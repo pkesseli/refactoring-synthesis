@@ -302,7 +302,6 @@ manually: for instance, she has to figure out lines 6--8 for the refactoring in 
 responsibility of guaranteeing that the refactored code maintains the original behaviour
 is left to the programmer.
 
-
 For illustration, when referring back to the example in
 Figure~\ref{ex:deprecated-method-other}, it's not immediately obvious
 that the original and the refactored code behave in the same manner.
@@ -315,11 +314,18 @@ analyses of a program is not new, e.g. previous works made use of
 program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or
 types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
 
-\emph{Current solution.}  In this paper, we investigate a symbolic approach for automatically refactoring uses of deprecated APIs based on program synthesis and fuzzing.
+\emph{Current solution.}  In this paper, we investigate a symbolic approach for automatically refactoring uses of deprecated APIs based on program synthesis and fuzzing that makes use of semantic information
+to offer guarantees about the preservation of the original behaviour.
 Additionally, we are interested in comparing our symbolic approach against a neural one using Large Language Models (LLMs).
 In particular, given the recent advances that LLMs made in code generation,
-we are interested in investigating whether they completely subsume symbolic methods, or whether, for specialised tasks,
+we are interested in investigating whether they completely subsume symbolic methods, or whether, for specialised tasks such as the current refactoring,
 symbolic methods are still useful at lower computational costs.
+%
+%Research [60], [52] have proposed using LLMs to answer software engineering questions. 
+%
+Given its recent popularity, we picked ChatGPT~\cite{chatgpt}, which is a LLM trained using Reinforcement Learning from Human Feedback.
+There are a few studies of ChatGPT's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs}.
+%
 %
 (While we focus on the refactoring of deprecated methods, the same
 technique can be applied to deprecated fields and classes.)
@@ -354,10 +360,11 @@ technique can be applied to deprecated fields and classes.)
 
 We are interested in answering the following research questions:
 \begin{itemize}
-\item[RQ1] How does a symbolic refactoring method based on program synthesis compare against one based on LLMs?
-\item[RQ2] How often does the LLM generate refactorings that preserve the semantics of the original code?
-\item[RQ3] Is type information alone sufficient for the refactoring generation task (for both the symbolic and neural approach)?
-\item[RQ4] Do code hints help generating the refactoring (again for both approaches)?
+\item[RQ1] Can ChatGPT replace symbolic code generation techniques such as our refactoring of deprecated calls?
+  %How does a symbolic refactoring method based on program synthesis compare against one based on LLMs?
+\item[RQ2] How often does Chat GPT generate refactorings that preserve the semantics of the original code?
+%\item[RQ3] Is type information alone sufficient for the refactoring generation task?
+\item[RQ3] Do code hints help the generation of refactorings compared to types?
 \end{itemize}
 
 We believe RQ1 is particularly important given the high computational cost of LLMs. Our results highlight the fact that there is room for
@@ -1091,202 +1098,6 @@ if and only if they are in the same equivalence class induced by the aliasing re
   The objective is to return the union of all static fields defined in all the classes in the set of classes taken as argument.
   
 
-%\todo{also add an example where static fields are changed.}
-
-
-%% Aliasing check: checks whether the two given objects have the same aliasing ID, and thus
-%%    alias with the same objects on their respective heaps.
-
-%%    What do you assign id's to? I'm trying to figure out whether this is too strict?
-%%    Basically, equivalence classes induced by the aliasing relation need to be preserved,
-%%    but they may not have the same representative ID.
-
-%% You compare execution results:
-%% - do you just look at the returned object?
-
-%% Equivalent execution results
-%% - returned value
-%% - static fields of the corresponding classes
-
-%% Equivalent objects
-%% - ObjectIdComparator
-%% - IsAliasingEquivalent
-
-%% State: static fields of all classes, stack vars, follow object pointers, thread locals?, equivalence classes induced by the aliasing relation must be preserved
-%% - touch the same vars
-%% - all touched vars correspond to equivalent objects
-%% - 2 graphs are isomorphic
-
-%% 2 obj are equal if all their fields are equal
-%% 2 primitive types are equal if they are the same value
-
-%% ============
-
-%% a1 = new Integer(1);
-%% b1 = new Integer(1);
-
-%% vs
-
-%% a2 = new Integer(1);
-%% b2 = a2;
-
-
-
-%% A class is initialized when a symbol in the class is first used. When
-%% a class is loaded it is not initialized.
-
-
-%% Discuss different types of fuzzing and the one that we use.
-%% \todo{Double check with Pascal what he uses.}
-
-%% \section{Algorithm}
-
-%% \todo{Write description of the algorithm}
-
-%% \subsection{Reduction of semantically equivalent programs}
-
-%% \subsection{Guarantees} \label{sec:guarantees}
-
-%% \paragraph{Discussion on soundness} Given that we rely on fuzzing, we can't guarantee that the
-%% refactoring works for all possible inputs. However, it is well suited
-%% to the particular scenarios for which we designed our technique,
-%% IDE integration where the refactoring is presented as a suggestion to the programmer,
-%% or automated pull requests to be approved by the developers.
-
-%% In order to fully guarantee the soundness of the refactorings proposed
-%% by our technique, we would have to use a sound verification technique
-%% in the verification phase mentioned earlier. However, such a technique
-%% would require symbolic execution, which is notoriously difficult for
-%% real-world programs due to features such as loops, library functions,
-%% complex data structures. The most successful such verification
-%% techniques are either bounded (i.e. check that an erroneous state
-%% cannot be reached within a bounded number of loop unrollings) or
-%% require user input in the form of loop invariants. While the former
-%% class of techniques provides limited soundness guarantees, the latter
-%% requires intricate help from the user.  In fact, we are not aware of
-%% any sound and automatic symbolic verification method that can handle
-%% the kind of code we are interested in.
-
-%% Discuss tradeoff: symbolic execution is expensive; programming
-%% languages evolve faster than verification techniques and therefore
-%% many new features are not supported by their front ends (and/or
-%% backends depending on how complex the new feature is); even after
-%% translating the code into a logical formula, calls to solvers are
-%% expensive.
-
-%% \paragraph{Discussion on completeness}
-%% We cannot guarantee that we'll find a refactoring whenever one exists.
-%% The fuzzer in the synthesis phase may fail to find a candidate.
-
-%% \section{Some research questions}
-
-%% What if the new method doesn't maintain observational equivalence?
-%% TODO: Check existing projects to see how many do preserve equivalence.
-%% For the rest, is there a notion of partial equivalence that ensures the equivalence
-%% for the new projects minus the differences introduced by the new function.
-
-%% How easy is for the fuzzer to handle such structured inputs as we need in the
-%% synthesis phase?
-
-
-%% \subsection{For the experimental evaluation}
-%% \begin{itemize}
-%% \item Pick libraries that have deprecated instances.
-%% \item Pick users of these libraries (i.e. open source projects that are actively maintained).
-%% \item Make pull requests and see how many get merged.
-%% \end{itemize}  
-
-%% \section{Context-sensitive vs. context-insensitive refactoring}
-
-%% \paragraph{Context-insensitive refactoring}
-%% We consider different refactoring options. The first and most simple
-%% one is the so called ``context-insensitive'' refactoring, where we
-%% find a refactoring for the deprecated code that works irrespective of
-%% context. This means that, once such a refactoring is found, it can be
-%% used to replace all the uses of the deprecated code, e.g. a deprecated
-%% method invocation will be replaced with the same refactored code
-%% irrespective of the actual parameters or rest of the state at the call
-%% site.
-
-%% For instance, if we want to refactor the call to method
-%% \texttt{toRefactor} in the code below, then we search for a refactoring that is
-%% observationally equivalent to the given method irrespective of the
-%% context of the call.
-
-%% \begin{lstlisting}[mathescape=true]
-%% class NoContext {
-%%   int x;
-
-%%   public double toRefactor(int y, int z) {
-%%     return (double) x + y + z;
-%%   }
-%% }
-%% \end{lstlisting}
- 
-%% This means that the state that we can vary in order to check for
-%% observational equivalence includes \texttt{x, y} and \texttt{z}.
-
-%% \paragraph{Context-sensitive refactoring}
-%% The refactoring context consists of the context where the code to be refactored
-%% is placed. For instance, in the snippet below, if we are trying to refactor the call to the deprecated
-%% function \texttt{f}, then the context gives us the valuation $[\texttt{x}\mapsto 1]$ for the function's argument. 
-
-%% \begin{lstlisting}[mathescape=true]
-%%   int x = 1;
-%%   A a = new A();
-  
-%%   a.f(1)
-%% \end{lstlisting}
-    
-%% We now look at the possibility of considering the refactoring context
-%% when searching for a refactoring. This gives us the option of starting
-%% with very little context and gradually increasing it until finding a
-%% refactoring. \todo{Adjust this based on what the experiments do.}
-
-%% The other option is to find a refactoring that takes into consideration
-%% the calling context. For instance, in the code below we have two
-%% calls to \texttt{toRefactor}, one in method \texttt{foo} and one in
-%% method \texttt{bar}. When considering the calling context, we have to
-%% find two different refactorings, one for each of the method calls.
-%% For the call in \texttt{foo}, the state that we need to consider for observational
-%% equivalence contains \texttt{ctx} and \texttt{a}, whereas for the call in method
-%% \texttt{bar} it contains \texttt{ctx, a, b, c, d} and \texttt{e}.
-
-%% \begin{lstlisting}[mathescape=true]
-%%   class Context1 {
-%%     NoContext ctx = new NoContext();
-
-%%     public double foo(int a) {
-%%       return ctx.toRefactor(a, a);
-%%     }
-%%   }
-
- 
-
-%%   class Context2 {
-%%     NoContext ctx = new NoContext();
-
-%%     int d;
-%%     int e;
-
-%%     public double bar(int a, int b, int c) {
-%%       return ctx.toRefactor(a, b + c + d + e);
-%%     }
-%%   }
-%% \end{lstlisting}
-
-
-%% Fuzzing:
-
-%% someNoContext.x = x_*;
-
-%% someNoContext.toRefactor(y_*, z_*);
-
-%% Possible follow-up:
-%% - if we have a sizeable codebase, the user might have to do 1,2 deprecated
-%% refactorings and then the synthesisers can use the PRs done by the user
-%% to seed the synthesiser and do the other thousands of refactorings
-%% automatically.
 
   \section{Implementation} \label{sec:implementation}
 
@@ -1296,24 +1107,6 @@ if and only if they are in the same equivalence class induced by the aliasing re
 
 \subsection{Checking aliasing}
 
-%% In Section~\ref{sec:equiv}, we discussed checking program equivalence with respect to a concrete input. As part of this, 
-%% we must check that the refactoring preserves the aliases present in the original code (see Definition~\ref{def:prog-equiv-add}).
-%
-%% In our implementation we enforce a strict notion of aliasing. In
-%% particular, every reference variable encountered in the original and
-%% refactored code is assigned a strictly increasing symbolic id
-%% $sid(v)$. We start from the same initial symbolic id in the original
-%% and refactored code.  Then, every live variable at the end of the
-%% original code (which according to Definition~\ref{} is also live at
-%% the end of the refactored code) must be assigned the same symbolic id
-%% by the original code and the refactored one.
-
-%% Notably, this is stronger than needed as it means that variables are declared in the same order by the
-%% original and the refactored program
-%% Then, two variables $v_1$ and $v_2$ in $P$ (where $P$ is either the original or the refactored code)
-%% are aliases if 
-
-%\todo{Discuss this.}
 While in Section~\ref{sec:equiv}, we discussed aliasing preservation in terms of
 preserving the equivalence classes induced by the aliasing relation,
 in our implementation we enforce a simpler but stricter  than necessary check.
@@ -1653,22 +1446,6 @@ For example, \cite{DBLP:conf/cav/AlbarghouthiGK13}
 prune the search space using observational equivalence with respect to a set of input/output examples, i.e., two programs are considered to be in the same equivalence class if, for all given inputs in the set of input/output examples, they produce the same outputs. Alternatively, \cite{DBLP:conf/vmcai/SmithA19} generate only programs in a specific normal form, where term rewriting is used to transform a program into its normal form. In~\cite{DBLP:journals/corr/KoukoutosKK16}, Koukoutos et al. make use of attribute grammars to only produce certain types of expressions in their normal form, thus skipping other expressions
 that are syntactically different, yet semantically equivalent.
 We plan on investigating some of these directions as part of future work.
-%% our current technique is still effective without equivalence reduction.
-%% Our conjecture is that, especially for the CodeHints-library, this is due to the reduced number of components. 
-%% \todo{Do we want to mention number of components? Do we use any heuristic at all for this?}
-%% given the restricted set of instructions in the core library,
-%% our current technique is still effective (as shown by the experimental evaluation).
-
-%% We plan on addressing this 
-%% This may be addressed
-%% in future work by explicitly restricting redundancy in our instruciton set.
-%% Since the instruction sets in our experiments are already restricted by type
-%% information and other hints, this effect did not appear to affect the
-%% effectiveness of our algorithm.
-%% Next, we discuss a few techniques that we use to reduce the number of
-%% generated programs that are semantically equivalent.
-
-
 
 \section{Experimental results}\label{sec:experimental-results}
 We selected 132 out of 392 deprecated methods on the Oracle
@@ -1690,21 +1467,13 @@ they consider as well as the JQF fuzzing guidance applied.
 
 Configurations marked as {\bf Types}
 are based on the Types-library,
-%only consider type information when building the component library,
 whereas configurations marked as ({\bf CodeHints}) work with the CodeHints-library.
-%consider both type information and Javadoc
-%code hints.
 
 We use JQF in two modes: (1) with Zest~\cite{DBLP:conf/issta/PadhyeLSPT19}
 guidance, which incorporates feedback from the test program in the form of
 semantic validity of test inputs and the code coverage achieved during test
 execution, and (2) with random guidance, which randomly generates test
 inputs without using code coverage feedback.
-%
-%% However,
-%% random-from-scratch input generation is exceedingly unlikely to
-%% generate inputs fitting precise bug-revealing conditions, like those
-%% described above
 %
 %
 The coverage feedback used by Zest means that JQF uses lightweight program
@@ -1724,6 +1493,12 @@ search by at most 500 inputs and 5 minutes per verification phase, and at
 most 2 minutes per synthesis phase.  Experiments were performed on a Windows
 10 computer with Oracle JDK 15.02, 32 GB of RAM and an Intel Core i7-4790
 CPU dual core at 3.60 GHz.
+
+\subsection{Baseline: ChatGPT} \label{sec:chatgpt}
+We are interested in comparing our symbolic refactoring based on program refactoring and fuzzing against
+ChatGPT. In our experiments, we only used prompt-engineering, and we did not perform any fine-tuning. We will consider
+that for suture work.
+%This is in line with our aim to investigate how
 
 \subsection{Results}\label{sec:experimental-results}
 
@@ -1814,10 +1589,11 @@ Rand-CodeHints &         83 &      7 &  1         & 91 & 209.7 \\  \hline\hline
 \label{tab:configuration-results-ch}   
 \end{table}
 
-\paragraph{{\bf (RQ1) How does a symbolic refactoring method based on program synthesis compare against one based on LLMs?}}
-\paragraph{{\bf (RQ2) How often does the LLM generate refactorings that preserve the semantics of the original code?}}
-\paragraph{{\bf (RQ3) Is type information alone sufficient for the the refactoring generation task (for both the symbolic and neural approach)?}}
-\paragraph{{\bf (RQ4) Do code hints help generating the refactoring (again for both approaches)?}}
+{\bf (RQ1) Can ChatGPT replace symbolic code generation techniques such as our refactoring of deprecated calls?}
+
+{\bf (RQ2) How often does Chat GPT generate refactorings that preserve the semantics of the original code?}
+
+{\bf (RQ3) Do code hints help the generation of refactorings compared to types?}
 
 \paragraph{Successful refactorings for CodeHints vs Types}
 Using the CodeHints-library enables our technique to find more refactorings
