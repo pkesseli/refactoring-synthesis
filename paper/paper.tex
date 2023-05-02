@@ -378,7 +378,7 @@ symbolic code generation methods to outperform general-purpose LLMs at a much lo
 
 
 
-\section{Overview of our approach} \label{sec:overview}
+\section{Overview of the program synthesis based approach} \label{sec:overview}
 
 %% At a high level, the new code is obtained by composing methods
 %% that are accessible from that respective location. 
@@ -421,7 +421,7 @@ For illustration, let's look at our running example in Figure~\ref{ex:deprecated
 with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
 %
 %Note that this hint is not immediately usable.
-Some of the challenges with making use of this code hint for refactoring are:
+It's not straightforward to use this code to generate the refactoring, with some of the chellanges being as follows: 
 
 
 \begin{figure}
@@ -466,12 +466,22 @@ and/or the current object. Adding the latter components to the library will
 significantly slow down the code generation process by
 adding infeasible programs to the search space.
 
-Consequently, in our approach, the component library is dynamically built for each refactoring
+{\bf Challenge 4.} An additional difficulty is that the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that they must preserve its behaviour.
+However, proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
+
+
+We address challenges 1-3 by dynamically building the component library for each refactoring
 such that it only contains components specific to that particular use case.
-The seeding of the component library will be described in detail in Section~\ref{sec:components-seeding}.
-In Section~\ref{sec:encoding}, we present our synthesis based refactoring procedure.
-Then, we provide details about the semantics preservation check in Section~\ref{sec:equiv}, and we discuss
-some implementation details in Section~\ref{sec:implementation}.
+This process is described in detail in Section~\ref{sec:components-seeding}.
+The fourth challenge is addressed
+%In this work, instead of aiming for a formal proof,  we
+by using fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
+While we can't provide full correctness guarantees,
+our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
+More details about the semantic equivalence check are given in Section~\ref{sec:equiv}.
+Additionally, in Section~\ref{sec:encoding}, we give technical details about the synthesis based refactoring procedure, 
+%Then, we provide details about the semantics preservation check in Section~\ref{sec:equiv},
+and in Section~\ref{sec:implementation} we discuss some implementation details.
 
 %% In Section~\ref{sec:components-seeding}, we provide in-depth details about the
 %% seeding of the component library and how to tackle the above challenges. 
@@ -1914,8 +1924,9 @@ Rand-CodeHints &         83 &      7 &  1         & 91 & 209.7 \\  \hline\hline
 \end{table}
 
 \paragraph{{\bf (RQ1) How does a symbolic refactoring method based on program synthesis compare against one based on LLMs?}}
-\paragraph{{\bf (RQ2) Is type information alone sufficient for the the refactoring generation task (for both the symbolic and neural approach)?}}
-\paragraph{{\bf (RQ3) Do code hints help generating the refactoring (again for both approaches)?}}
+\paragraph{{\bf (RQ2) How often does the LLM generate refactorings that preserve the semantics of the original code?}}
+\paragraph{{\bf (RQ3) Is type information alone sufficient for the the refactoring generation task (for both the symbolic and neural approach)?}}
+\paragraph{{\bf (RQ4) Do code hints help generating the refactoring (again for both approaches)?}}
 
 \paragraph{Successful refactorings for CodeHints vs Types}
 Using the CodeHints-library enables our technique to find more refactorings
