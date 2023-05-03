@@ -49,6 +49,7 @@
 %\usepackage[colorlinks=true,allcolors=blue,breaklinks,draft=false]{hyperref}   % hyperlinks, including DOIs and URLs in bibliography
 % known bug: http://tex.stackexchange.com/questions/1522/pdfendlink-ended-up-in-different-nesting-level-than-pdfstartlink
 
+\usepackage[htt]{hyphenat}
 \usepackage{graphicx}
 \usepackage{float,subfig}
 \usepackage{xspace,framed}
@@ -1374,6 +1375,11 @@ JQF generators for the synthesis and verification phase of the CEGIS loop. %% In
 %% it produces counterexample inputs %heaps
 %% for candidate verification.
 
+%% We use JQF in Zest~\cite{DBLP:conf/issta/PadhyeLSPT19}
+%% guidance mode, which incorporates feedback from the test program in the form of
+%% semantic validity of test inputs and the code coverage achieved during test
+%% execution.
+
 
 \subsection{Sources of unsoundness and incompleteness}\label{sec:incompleteness}
 As explained in Section~\ref{sec:encoding}, due to the use of fuzz testing in the synthesis
@@ -1448,43 +1454,38 @@ prune the search space using observational equivalence with respect to a set of 
 that are syntactically different, yet semantically equivalent.
 We plan on investigating some of these directions as part of future work.
 
+
 \section{Experimental results}\label{sec:experimental-results}
-We selected 213 out of 392 deprecated methods on the Oracle
-JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}, for which
-there exist refactorings that are semantically equivalent to the original code,
-prioritised in order of appearance on the website.
-Besides deprecated methods that do not have a semantically equivalent refactoring
+Our benchmark suite contains 213 out of 392 deprecated methods in the Oracle
+JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
+We included all the deprecated methods expect those that were deprecated without a replacement
+(e.g. \texttt{java.rmi.registry.RegistryHandler.\ registryImpl(int)}),
+deprecated methods that do not have a semantically equivalent refactoring
 (see Section~\ref{sec:semantically-different-refactorings}),
-we also excluded methods with I/O side-effects, which are currently
-unsupported by our implementation (see Sec.~\ref{sec:incompleteness}). Other
-reasons for exclusion were: deprecation without replacement, methods
-inaccessible by non-JCL classes, and native methods.
+methods inaccessible by non-JCL classes, 
+methods with I/O side-effects and native methods, which are currently
+unsupported by our implementation (see Sec.~\ref{sec:incompleteness}).
 
 \subsection{Experiment design}
 
-In our experiments, we compare four configurations of our algorithm against
-each other.  The configurations differ in terms of the component library
-they consider as well as the JQF fuzzing guidance applied.
-
-Configurations marked as {\bf Types}
-are based on the Types-library,
-whereas configurations marked as ({\bf CodeHints}) work with the CodeHints-library.
-
-We use JQF in Zest~\cite{DBLP:conf/issta/PadhyeLSPT19}
-guidance mode, which incorporates feedback from the test program in the form of
-semantic validity of test inputs and the code coverage achieved during test
-execution.
-%
-%
-The coverage feedback used by Zest means that JQF uses lightweight program
-instrumentation to trace the code coverage reached by each generated
-input that is fed to the program under test.  %% Basically, the program
-%% is continuously executed with randomly generated inputs. However,
-Instead of generating inputs from scratch, coverage-guided fuzzers
-evolve a set of saved inputs. If a new input leads to an increase
-in code coverage, it is saved for subsequent evolution.
-Configurations marked as {\bf Rand} use JQF's random fuzzing
-guidance, whereas {\bf Zest} uses JQF's coverage-guided Zest guidance.
+In our experiments, we compare four configurations: two versions of the program synthesis based refactoring (one based on the Types-library, and one based on the CodeHints-library),
+and two configurations for ChatGPT (one where the prompt contains the code hints, and one where it doesn't).
+%The configurations differ in terms of the component library
+%they consider as well as the JQF fuzzing guidance applied.
+%% We use JQF in Zest~\cite{DBLP:conf/issta/PadhyeLSPT19}
+%% guidance mode, which incorporates feedback from the test program in the form of
+%% semantic validity of test inputs and the code coverage achieved during test
+%% execution.
+%% %
+%% %
+%% The coverage feedback used by Zest means that JQF uses lightweight program
+%% instrumentation to trace the code coverage reached by each generated
+%% input that is fed to the program under test.  
+%% Instead of generating inputs from scratch, coverage-guided fuzzers
+%% evolve a set of saved inputs. If a new input leads to an increase
+%% in code coverage, it is saved for subsequent evolution.
+%% Configurations marked as {\bf Rand} use JQF's random fuzzing
+%% guidance, whereas {\bf Zest} uses JQF's coverage-guided Zest guidance.
 
 For each configuration we evaluate how many sound as well as unsound
 refactorings are produced, how many refactoring opportunities were missed
@@ -1499,36 +1500,43 @@ We are interested in comparing our symbolic refactoring based on program refacto
 ChatGPT. In our experiments, we only used prompt-engineering, and we did not perform any fine-tuning. We will consider
 that for future work. 
 
-We made two kinds of queries to ChatGPT, one is without the deprecation comments (GPT), another is
-with (GPT-CodeHints). The results are summarised in Tabel~\ref{tab:gpt-results}.
+As explained above, we made two kinds of queries to ChatGPT, one is with the deprecation comments (GPT w/ code hints) and one 
+without them (GPT w/o code hints). The results are summarised in Table~\ref{tab:gpt-results}, 
+which provides an overview of the number of
+sound refactorings (\checkmark), missed refactorings (\xmark), unsound
+refactorings (\lightning), the percentage of sound refactorings (\%)
+produced per configuration, as well as the average runtime per refactoring. 
+The missed refactorings are due to JVM crashes during the semantics preservation
+check, as well as timeouts, while unsound refactorings are those for which the semantics
+preservation check returned false.
+
 %This is in line with our aim to investigate how
 \begin{table}[h]
   \begin{tabular} {|l|r|r|r|r|r|}
   \hline
   Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-  GPT            &         14 &     97 &          7 & 12 & 301.5 \\ 
-  GPT-CodeHints  &         39 &     71 &          8 & 33 & 262.2 \\  \hline\hline
+  GPT w/o code hints           &         14 &     97 &          7 & 12 & 301.5 \\ 
+  GPT w/ code hints  &         39 &     71 &          8 & 33 & 262.2 \\  \hline\hline
   \end{tabular} 
-  \caption{ChatGPT results.}
+  \caption{ChatGPT experimental results.}
   \label{tab:gpt-results}   
 \end{table}
-The ChatGPT results with code hints perform significantly better, which suggests that LLMs GPT is able to interpret the JavaDoc and glean context information from it.
 
+As expected, the ChatGPT results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
 
-\subsection{Results}\label{sec:experimental-results}
+\subsection{Results for the program synthesis based refactoring}\label{sec:experimental-results}
 
-Table~\ref{tab:configuration-results} provides an overview of the number of
-sound refactorings (\checkmark), missed refactorings (\xmark), unsound
-refactorings (\lightning), the percentage of sound refactorings (\%)
-produced per configuration, as well as the average runtime per refactoring. 
+%the configuration marked as {\bf Types}
+%is based on the Types-library, whereas the one marked as ({\bf CodeHints}) uses the CodeHints-library.
+
 \begin{table}[h]
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-Zest-Types     &         81 &     84 &         48 & 38 & 220.5 \\ 
-Zest-CodeHints &        116 &     91 &          6 & 54 & 206.7 \\  \hline\hline
+PS w/ types     &         81 &     84 &         48 & 38 & 220.5 \\ 
+PS w/ code hints &        116 &     91 &          6 & 54 & 206.7 \\  \hline\hline
 \end{tabular} 
-\caption{Experimental results per configuration.}
+\caption{Experimental results for the program synthesis based refactoring.}
 \label{tab:configuration-results}   
 \end{table}
 
@@ -1549,7 +1557,7 @@ to identify a code hint. Next, we discuss the results of our experiments,
 as captured by Table~\ref{tab:configuration-results-ch}.
 %, further highlighting the importance of Javadoc code hints.
 
-\paragraph{Missed refactorings}
+{\bf Missed refactorings.}
 Out of the refactorings missed both with and without code hints, 
 2 were missed because the method return
 value was dependent on an external system state which changed frequently between
@@ -1573,7 +1581,7 @@ loop immediately, but in future versions we should treat our test VM crashing fo
 as a regular type of outcome in the heap comparison.
 
 
-\paragraph{Unsound refactorings}
+{Unsound refactorings.}
 In order to catch the unsound refactorings (for both the CodeHints-library and the
 Types-library), we can either  
 increase the fuzzing timeout for the verification phase (resulting in
@@ -1594,8 +1602,8 @@ method to refactor.
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-Zest-Types     &         72 &     84 &  48         & 52 & 230.5 \\ 
-Zest-CodeHints &        116 &     91 &   6         & 83 & 206.7 \\  \hline\hline
+PS w/ types     &         72 &     84 &  48         & 52 & 230.5 \\ 
+PS w/ code hints &        116 &     91 &   6         & 83 & 206.7 \\  \hline\hline
 \hline
 \end{tabular} 
 \caption{Results when code hints were present.}
@@ -1607,33 +1615,24 @@ Zest-CodeHints &        116 &     91 &   6         & 83 & 206.7 \\  \hline\hline
 {\bf (RQ2) How often does Chat GPT generate refactorings that preserve the semantics of the original code?}
 
 {\bf (RQ3) Do code hints help the generation of refactorings compared to types?}
-
-\paragraph{Successful refactorings for CodeHints vs Types}
-Using the CodeHints-library enables our technique to find more refactorings
-than with the Type-library.
-In particular, when code hints are present, the success rate of our
-refactoring technique is 93\% with Zest-CodeHints.
-%% Excluding failures due to missing code hints, our success rate
-%% increases from 65\% to 75\% for the Zest Ty/CH configuration.
+Code hints help both the program synthesis engine and ChatGPT.
+%Using the CodeHints-library enables our technique to find more refactorings
+%than with the Type-library.
+For the former, when code hints are present, the success rate is 83\%.
 The higher quality of the instructions in the CodeHints-library compared to the
 Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
+For ChatGPT, the use of code hints allows it to find 15 more correct refactorings.
 
-
-\paragraph{Zest vs Rand guidance}
-%% We couldn't find a big difference between Rand and Zest, although we expected
-%% Zest to find better counterexamples.
-Our experiments did not yield significant performance
-differences between using JQF's coverage-guided Zest guidance and its random
-guidance. %% Using Javadoc Code Hints increased the rate of successful refactorings
-%% by 51\% for Zest guidance and 33\% for random guidance.
-In general, Zest guidance is known to perform better at 
-%%random-from-scratch input generation is exceedingly unlikely to
-generating inputs fitting precise bug-revealing conditions than random guidance.
-However, this better guidance comes at the price of lower performance than the
-in-memory PRNG guidance and thus may result in fewer counterexamples and more
-timeouts.
-
+%% \paragraph{Zest vs Rand guidance}
+%% Our experiments did not yield significant performance
+%% differences between using JQF's coverage-guided Zest guidance and its random
+%% guidance. 
+%% In general, Zest guidance is known to perform better at 
+%% generating inputs fitting precise bug-revealing conditions than random guidance.
+%% However, this better guidance comes at the price of lower performance than the
+%% in-memory PRNG guidance and thus may result in fewer counterexamples and more
+%% timeouts.
 
 
 \section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
