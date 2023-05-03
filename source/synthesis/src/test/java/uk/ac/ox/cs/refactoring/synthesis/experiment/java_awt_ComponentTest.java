@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_ComponentTest {
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void action() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "action", "java.awt.Event", "java.lang.Object"), contains("???"));
   }
@@ -30,7 +29,6 @@ class java_awt_ComponentTest {
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void deliverEvent() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "deliverEvent", "java.awt.Event"), contains(".dispatchEvent("));
   }
@@ -65,7 +63,6 @@ class java_awt_ComponentTest {
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void gotFocus() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "gotFocus", "java.awt.Event"), contains(".processFocusEvent("));
   }
@@ -98,14 +95,12 @@ class java_awt_ComponentTest {
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void keyDown() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "keyDown", "java.awt.Event", "int"),
         contains(".processKeyEvent("));
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void keyUp() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "keyUp", "java.awt.Event", "int"),
         contains(".processKeyEvent("));
@@ -127,7 +122,6 @@ class java_awt_ComponentTest {
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void lostFocus() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "lostFocus", "java.awt.Event", "java.lang.Object"),
         contains(".processKeyEvent("));
@@ -139,42 +133,36 @@ class java_awt_ComponentTest {
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void mouseDown​() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "mouseUp", "java.awt.Event", "int", "int"),
         contains(".processMouseEvent("));
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void mouseDrag​() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "mouseDrag​", "java.awt.Event", "int", "int"),
         contains(".processMouseMotionEvent("));
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void mouseEnter​() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "mouseEnter​", "java.awt.Event", "int", "int"),
         contains(".processMouseEvent("));
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void mouseExit​() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "mouseExit​", "java.awt.Event", "int", "int"),
         contains(".processMouseEvent("));
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void mouseMove​() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "mouseMove​", "java.awt.Event", "int", "int"),
         contains(".processMouseMotionEvent("));
   }
 
   @Test
-  @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void mouseUp​() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "mouseUp​", "java.awt.Event", "int", "int"),
         contains(".processMouseEvent("));

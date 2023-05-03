@@ -16,9 +16,8 @@ class javax_swing_plaf_basic_BasicTextUITest {
   }
 
   @Test
-  @Disabled("Cannot find javax.swing.text.Position.Bias")
   void modelToView2() throws Exception {
-    assertThat(synthesiseAlias("javax.swing.plaf.basic.BasicTextUI", "modelToView", "javax.swing.text.JTextComponent", "int", "Position.Bias"), anyOf(contains("modelToView2D")));
+    assertThat(synthesiseAlias("javax.swing.plaf.basic.BasicTextUI", "modelToView", "javax.swing.text.JTextComponent", "int", "Position$Bias"), anyOf(contains("modelToView2D")));
   }
 
   @Test
@@ -27,8 +26,7 @@ class javax_swing_plaf_basic_BasicTextUITest {
   }
 
   @Test
-  @Disabled("Cannot find javax.swing.text.Position.Bias")
   void viewToModel2() throws Exception {
-    assertThat(synthesiseAlias("javax.swing.plaf.basic.BasicTextUI", "viewToModel", "javax.swing.text.JTextComponent", "java.awt.Point", "javax.swing.text.Position.Bias[]"), anyOf(contains("viewToModel2D")));
+    assertThat(synthesiseAlias("javax.swing.plaf.basic.BasicTextUI", "viewToModel", "javax.swing.text.JTextComponent", "java.awt.Point", "javax.swing.text.Position$Bias[]"), anyOf(contains("viewToModel2D")));
   }
 }
