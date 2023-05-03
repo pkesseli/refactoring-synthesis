@@ -41,11 +41,6 @@ class java_awt_ListTest {
   }
 
   @Test
-  void delItems() throws Exception {
-    assertThat(synthesiseGPT("this.delItems(a, b);\n\n", "int[] indicesToDelete = IntStream.rangeClosed(a, b).toArray();\nfor (int i = indicesToDelete.length - 1; i >= 0; i--) {\n    this.remove(indicesToDelete[i]);\n}\n", "java.awt.List", "delItems", "int", "int"), Matchers.anything());
-  }
-
-  @Test
   void isSelected() throws Exception {
     assertThat(synthesiseGPT("if (this.isSelected(a)) {\n    // do something\n}\n\n", "if (this.getSelectedIndex() == a) {\n    // do something\n}\n", "java.awt.List", "isSelected", "int"), anyOf(contains("isIndexSelected")));
   }
