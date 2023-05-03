@@ -1634,6 +1634,22 @@ For ChatGPT, the use of code hints allows it to find 15 more correct refactoring
 %% in-memory PRNG guidance and thus may result in fewer counterexamples and more
 %% timeouts.
 
+\section{Threats to validity}
+
+\paragraph{Selection of benchmarks}
+All our benchmarks are Java methods deprecated in Oracle JDK 15, and our claim may not extend to
+other scenarios or other programming languages.
+
+\paragraph{Not handled}
+
+\paragraph{Quality of refactorings} Refactorings need to generate code that
+remains understandable and maintainable. It is difficult to assess how well our technique does with respect to
+this subjective goal. Based on our manual inspection, the generated refactorings are what a human
+would write. (?)
+
+\paragraph{Efficiency and scalability of the program synthesiser}
+
+\paragraph{Prompt engineering vs. fine-tuning for ChatGPT}
 
 \section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
