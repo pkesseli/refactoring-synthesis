@@ -24,7 +24,6 @@ class java_awt_WindowTest {
   }
 
   @Test
-  @Disabled("Argument types differ, minimal instruction set will not find a solution.")
   void postEvent() throws Exception {
     assertThat(synthesiseAlias("java.awt.Window", "postEvent", "java.awt.Event"), contains(".dispatchEvent("));
   }

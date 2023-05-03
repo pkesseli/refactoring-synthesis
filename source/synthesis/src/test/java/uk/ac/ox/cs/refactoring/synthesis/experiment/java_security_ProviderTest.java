@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 class java_security_ProviderTest {
     
   @Test
-  @Disabled("Return types differ for the two methods. Presumably simple refactoring, but we just don't support this (yet?).")
   void getVersion() throws Exception {
     assertThat(synthesiseAlias("java.security.Provider", "getVersion"),
         contains("getVersionStr"));

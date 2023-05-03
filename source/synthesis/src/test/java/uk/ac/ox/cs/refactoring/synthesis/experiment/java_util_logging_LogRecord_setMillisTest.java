@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 class java_util_logging_LogRecord_setMillisTest {
 
   @Test
-  @Disabled("Change of signature")
   void setMillis() throws Exception {
     assertThat(synthesiseAlias(LogRecord.class.getName(), "setMillis", "long"),
         contains(".setInstance("));
