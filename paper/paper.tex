@@ -1496,8 +1496,23 @@ most 2 minutes per synthesis phase.  Experiments were performed on an Ubuntu
 \subsection{Baseline: ChatGPT} \label{sec:chatgpt}
 We are interested in comparing our symbolic refactoring based on program refactoring and fuzzing against
 ChatGPT. In our experiments, we only used prompt-engineering, and we did not perform any fine-tuning. We will consider
-that for suture work.
+that for future work. 
+
+We made two kinds of queries to ChatGPT, one is without the deprecation comments (GPT), another is
+with (GPT-CodeHints). The results are summarised in Tabel~\ref{tab:gpt-results}.
 %This is in line with our aim to investigate how
+\begin{table}[h]
+  \begin{tabular} {|l|r|r|r|r|r|}
+  \hline
+  Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
+  GPT            &         14 &     97 &          7 & 12 & 301.5 \\ 
+  GPT-CodeHints  &         39 &     71 &          8 & 33 & 262.2 \\  \hline\hline
+  \end{tabular} 
+  \caption{ChatGPT results.}
+  \label{tab:gpt-results}   
+\end{table}
+The ChatGPT results with code hints perform significantly better, which suggests that LLMs GPT is able to interpret the JavaDoc and glean context information from it.
+
 
 \subsection{Results}\label{sec:experimental-results}
 
