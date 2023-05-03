@@ -361,7 +361,7 @@ technique can be applied to deprecated fields and classes.
 
 We are interested in answering the following research questions:
 \begin{itemize}
-\item[RQ1] Can ChatGPT replace symbolic code generation techniques such as our refactoring of deprecated calls?
+\item[RQ1] Does ChatGPT subsume symbolic code generation techniques such as our refactoring of deprecated calls?
   %How does a symbolic refactoring method based on program synthesis compare against one based on LLMs?
 \item[RQ2] How often does Chat GPT generate refactorings that preserve the semantics of the original code?
 %\item[RQ3] Is type information alone sufficient for the refactoring generation task?
@@ -1643,8 +1643,8 @@ other scenarios or other programming languages.
 
 \paragraph{Quality of refactorings} Refactorings need to generate code that
 remains understandable and maintainable. It is difficult to assess how well our technique does with respect to
-this subjective goal. Based on our manual inspection, the generated refactorings are what a human
-would write. (?)
+this subjective goal. We manually inspected the refactorings obtained with
+our tool and found them to represent sensible transformations.
 
 \paragraph{Efficiency and scalability of the program synthesiser}
 
