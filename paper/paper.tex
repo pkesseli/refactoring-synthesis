@@ -1643,8 +1643,12 @@ other scenarios or other programming languages.
 
 \paragraph{Quality of refactorings} Refactorings need to generate code that
 remains understandable and maintainable. It is difficult to assess how well our technique does with respect to
-this subjective goal. We manually inspected the refactorings obtained with
-our tool and found them to represent sensible transformations.
+this subjective goal.  In our experimental evaluation, we define acceptable
+solutions not just using the heap equivalence criterion, but also regular
+expressions modelling what we consider sensible transformations after revewing
+the deprecated method's JavaDoc.  These patterns are subjective in nature and
+may also lead us to reject correct refactorings which do not conform to our
+expectations.
 
 \paragraph{Efficiency and scalability of the program synthesiser}
 
