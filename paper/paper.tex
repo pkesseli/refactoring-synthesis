@@ -1497,7 +1497,12 @@ most 2 minutes per synthesis phase.  Experiments were performed on an Ubuntu
 \subsection{Baseline: ChatGPT} \label{sec:chatgpt}
 We are interested in comparing our symbolic refactoring based on program refactoring and fuzzing against
 ChatGPT. In our experiments, we only used prompt-engineering, and we did not perform any fine-tuning. We will consider
-that for future work. 
+that for future work. An example prompt that we supplied to ChatGPT:
+\begin{quote}
+The method java.awt.TextField.minimumSize() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1, replaced by getMinimumSize()."
+I have a call to this deprecated method in my codebase `this.minimumSize()`, show me how to refactor my code.
+Example code should be a straight-line code block. Don't provide extra explanation.
+\end{quote}
 
 As explained above, we made two kinds of queries to ChatGPT, one is with the deprecation comments (GPT w/ code hints) and one 
 without them (GPT w/o code hints). The results are summarised in Table~\ref{tab:gpt-results}, 
