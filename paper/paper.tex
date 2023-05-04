@@ -1399,12 +1399,13 @@ therefore new language features might not be supported by the front ends of
 such techniques. An attempt at using formal methods for proving
 observational equivalence during the refactoring process was made in~\cite{DBLP:journals/corr/abs-1712-07388} and exposed the aforementioned limitations.
 
-Besides the use of fuzz testing, we identified three other potential sources of unsoundness,
+{\bf More sources of unsoundness.} Besides the use of fuzz testing, we identified three other potential sources of unsoundness,
 which we discuss next.
 
 Firstly, unsoundness can be caused by I/O,
 which is not part of the JVM state. We currently don't check
-that the original and refactored code perform the same I/O.
+that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
+
 %the possibility that the static initialiser performs some I/O,. 
 
 Secondly, our algorithm does currently not explore the entire classpath for
@@ -1455,19 +1456,24 @@ We plan on investigating some of these directions as part of future work.
 
 
 \section{Experimental results}\label{sec:experimental-results}
+
+We implemented the program synthesis and fuzzing refactoring technique in a tool called \tool.
+
 Our benchmark suite contains 213 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
-We included all the deprecated methods expect those that were deprecated without a replacement
-(e.g. \texttt{java.rmi.registry.RegistryHandler.\ registryImpl(int)}),
-deprecated methods that do not have a semantically equivalent refactoring
+We included all the deprecated methods exept those that were deprecated without a replacement
+(e.g. \texttt{java.rmi.registry.RegistryHandler.\ registryImpl(int)}), 
+methods that do not have a semantically equivalent refactoring
 (see Section~\ref{sec:semantically-different-refactorings}),
-methods inaccessible by non-JCL classes, 
-methods with I/O side-effects and native methods, which are currently
-unsupported by our implementation (see Sec.~\ref{sec:incompleteness}).
+methods inaccessible by non-JCL classes (i.e. all the finalize methods, which are called by the garbage collector, not user code, meaning that we can't modify their calls), 
+methods that only perform I/O (as our equivalence check doesn't include I/O side effects),
+and native methods.
+%methods with I/O side-effects and native methods, which are currently
+%unsupported by our implementation (see Sec.~\ref{sec:incompleteness}).
 
 \subsection{Experiment design}
 
-In our experiments, we compare four configurations: two versions of the program synthesis based refactoring (one based on the Types-library, and one based on the CodeHints-library),
+In our experiments, we compare four configurations: two versions of \tool (one using the Types-library, and one using the CodeHints-library),
 and two configurations for ChatGPT (one where the prompt contains the code hints, and one where it doesn't).
 %The configurations differ in terms of the component library
 %they consider as well as the JQF fuzzing guidance applied.
@@ -1490,7 +1496,7 @@ For each configuration we evaluate how many sound as well as unsound
 refactorings are produced, how many refactoring opportunities were missed
 and the average time to successfully produce a refactoring.  We bound the
 search by at most 500 inputs and 5 minutes per verification phase, and at
-most 2 minutes per synthesis phase.  Experiments were performed on an Ubuntu
+most 2 minutes per synthesis phase for \tool.  Experiments were performed on an Ubuntu
 22.04 x64 operating system running in a VirtualBox machine with 8GB RAM and
 2 Intel Core i7-4790CPU cores at 3.60 GHz.  The JVM used was Oracle JDK 15.02.
 
@@ -1537,29 +1543,26 @@ As expected, the ChatGPT results with code hints are significantly better than t
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-PS w/ types     &         81 &     84 &         48 & 38 & 220.5 \\ 
-PS w/ code hints &        116 &     91 &          6 & 54 & 206.7 \\  \hline\hline
+\tool w/ types     &         81 &     84 &         48 & 38 & 220.5 \\ 
+\tool w/ code hints &        116 &     91 &          6 & 54 & 206.7 \\  \hline\hline
 \end{tabular} 
-\caption{Experimental results for the program synthesis based refactoring.}
+\caption{Experimental results for \tool.}
 \label{tab:configuration-results}   
 \end{table}
 
 In Table~\ref{tab:configuration-results}, many of the refactorings missed when
 using the CodeHints-library are
-due to the fact that we actually couldn't find a Javadoc code hint,
-or we failed to parse it (see Section~\ref{sec:parse} for details).
+due to the fact that no code hints is provided by the Javadoc.
+%% we actually couldn't find a Javadoc code hint,
+%% or we failed to parse it (see Section~\ref{sec:parse} for details).
 %
-%% For instance, for the Zest Ty/CH configuration,
-%% out of the 39 missed refactorings, 13 were due
-%%to a failure to identify a code hint.
-In such a situation, our approach falls back
-to using the Types-library. As we are interested in quantifying the benefit of
+In such a situation, our approach falls back to using the
+Types-library. As we are interested in quantifying the benefit of
 using code hints compared to simply relying on types,
-Table~\ref{tab:configuration-results-ch} shows the same evaluation as
-Table~\ref{tab:configuration-results}, but excluding methods where we failed
-to identify a code hint. Next, we discuss the results of our experiments,
-as captured by Table~\ref{tab:configuration-results-ch}.
-%, further highlighting the importance of Javadoc code hints.
+Table~\ref{tab:configuration-results-ch} shows the same evaluation as the second row 
+of Table~\ref{tab:configuration-results}, but excluding methods where we
+failed to identify a code hint. Next, we discuss the results of our
+experiments, as captured by Table~\ref{tab:configuration-results-ch}.
 
 {\bf Missed refactorings.}
 Out of the refactorings missed both with and without code hints, 
@@ -1568,21 +1571,21 @@ value was dependent on an external system state which changed frequently between
 invocations\\
 (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
-The rest of the refactorings missed were caused by fuzzing timeouts.
-These timeouts are likely due to the Types-library missing some
-needed instructions.
 
+Another source of incompleteness are JVM crashes. Since we produce counterexamples
+through reflection we may create some that violate internal invariants.
+If executed on methods which eventually call native code, this can lead to the entire JVM
+crashing rather than e.g. throwing an exception. %% Currently, this terminates our synthesis
+%% loop immediately, but in future versions we plan on treating our test VM crashing for a given input
+%% as a regular type of outcome in the heap comparison.
+
+The rest of the refactorings missed were caused by fuzzing timeouts.
+These timeouts are likely due to component libraries missing some
+needed instructions in the synthesis phase.
 As explained in Section~\ref{sec:components-seeding}, one option 
 for increasing the size of our libraries 
 is allowing unrealisable generators and transformers to
 be added and iterating phases 2 and 3 a given number of times (potentially until fixed point).
-
-Another source of incompleteness are JVM crashes. Since we produce counterexamples
-through reflection we may create counterexamples that violate internal invariants.
-If executed on methods which eventually call native code, that can lead to the entire vmcai
-crashing rather than e.g. throwing an exception. Currently, this terminates our synthesis
-loop immediately, but in future versions we should treat our test VM crashing for a given input
-as a regular type of outcome in the heap comparison.
 
 
 {\bf Unsound refactorings.}
@@ -1606,11 +1609,11 @@ method to refactor.
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-PS w/ types     &         72 &     30 &  37         & 52 & 230.5 \\ 
-PS w/ code hints &        116 &     19 &   4         & 83 & 206.7 \\  \hline\hline
-\hline
+%\tool w/ types     &         72 &     30 &  37         & 52 & 230.5 \\ 
+\tool w/ code hints &        116 &     19 &   4         & 83 & 206.7 \\  \hline\hline
+%\hline
 \end{tabular} 
-\caption{Results when code hints were present.}
+\caption{\tool results when code hints were present.}
 \label{tab:configuration-results-ch}   
 \end{table}
 
