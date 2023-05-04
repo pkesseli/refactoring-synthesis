@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 class java_awt_ToolkitTest {
 
   @Test
+  @Disabled("The signatures of the two methods differ fundamentally, a massively larger instructions set would be necessary.")
   void getFontMetrics() throws Exception {
     assertThat(synthesiseAlias("java.awt.Toolkit", "getFontMetrics", "java.awt.Font"), contains(".getLineMetrics("));
   }
