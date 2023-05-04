@@ -52,6 +52,17 @@ For the prompt, we use the same information provided to the program synthesiser,
 
 (While code hints have been previously used to generate change rules~\cite{DBLP:conf/kbse/Huang0PW021}, our aim is to generate complete refactorings.)
 
+
+%% In order to catch the unsound refactorings (for both the CodeHints-library and the
+%% Types-library), we can either  
+%% increase the fuzzing timeout for the verification phase (resulting in
+%% more counterexamples), or attempt to produce higher quality
+%% counterexamples. For the latter, one solution is to stop relying on libraries
+%% like Objenesis for object construction and instead use public constructors.
+%% For the former, the disadvantage of increasing the timeout is that it will
+%% slow down the overall refactoring procedure.
+
+
 TODO:
 * add summary at the end of overview
 * integrate component-based synthesis paragraph -> I'm not sure about this, maybe integrated later on, in the challenge paragraphs

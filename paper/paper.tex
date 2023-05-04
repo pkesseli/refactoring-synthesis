@@ -1328,8 +1328,9 @@ are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\re
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 /**
-* Checks whether or not this {@code Rectangle} contains the
-* point at the specified location {@code (X,Y)}.
+* Checks whether or not this {@code Rectangle}
+* contains the point at the specified location
+* {@code (X,Y)}.
 *
 * @param  X the specified X coordinate
 * @param  Y the specified Y coordinate
@@ -1381,14 +1382,13 @@ JQF generators for the synthesis and verification phase of the CEGIS loop. %% In
 
 
 \subsection{Sources of unsoundness and incompleteness}\label{sec:incompleteness}
-As explained in Section~\ref{sec:encoding}, due to the use of fuzz testing in the synthesis
-phase, our technique may fail to find a refactoring even when one
-exists (i.e. it is {\em incomplete}), whereas using fuzz testing in the verification phase may result in finding a refactoring that is not equivalent to the original on all
+As explained in Section~\ref{sec:encoding}, due to the use of fuzz
+testing in the synthesis phase, our technique may fail to find a
+refactoring even when one exists (i.e. it is {\em incomplete}),
+whereas using fuzz testing in the verification phase may result in
+finding a refactoring that is not equivalent to the original on all
 inputs (i.e. our technique is {\em unsond}).
 
-%With respect to the use of fuzzing,
-%In order to guarantee the soundness and completeness of the
-%proposed refactoring technique,
 While we could attempt to swap fuzz testing with a formal verification technique,
 program verification is undecidable in general.
 Even for restricted, decidable fragments, such
@@ -1399,29 +1399,27 @@ therefore new language features might not be supported by the front ends of
 such techniques. An attempt at using formal methods for proving
 observational equivalence during the refactoring process was made in~\cite{DBLP:journals/corr/abs-1712-07388} and exposed the aforementioned limitations.
 
-{\bf More sources of unsoundness.} Besides the use of fuzz testing, we identified three other potential sources of unsoundness,
-which we discuss next.
+More sources of incompleteness and unsoundness are discussed in the experimental evaluation in Section~\ref{sec:experimental-results},
+under the ``Missed refactorings'' and ``Unsound refactorings'' paragraphs, respectively.
 
-Firstly, unsoundness can be caused by I/O,
-which is not part of the JVM state. We currently don't check
-that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 
-%the possibility that the static initialiser performs some I/O,. 
+%% {\bf More sources of unsoundness.} Besides the use of fuzz testing, we identified three other potential sources of unsoundness,
+%% which we discuss next.
 
-Secondly, our algorithm does currently not explore the entire classpath for
-potential overrides of the method to refactor. This may lead to unsound results
-when different subclasses of the original class are used polymorphically in the
-refactored context.
+%% Firstly, unsoundness can be caused by I/O,
+%% which is not part of the JVM state. We currently don't check
+%% that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 
-Finally, as described in Sec.~\ref{sec:equiv}, we rely in some cases on
-\texttt{equals} implementations for equivalence comparison.  While we
-strictly filter which \texttt{equals} implementations we consider, if any of
-them do not accurately identify an equivalent program state, our refactoring
-may be unsound.
+%% Secondly, our algorithm does currently not explore the entire classpath for
+%% potential overrides of the method to refactor. This may lead to unsound results
+%% when different subclasses of the original class are used polymorphically in the
+%% refactored context.
 
-%%However, we make no guarantee about correctness with respect to such operations
-%% anyway, whether static or instance state.}
-
+%% Finally, as described in Sec.~\ref{sec:equiv}, we rely in some cases on
+%% \texttt{equals} implementations for equivalence comparison.  While we
+%% strictly filter which \texttt{equals} implementations we consider, if any of
+%% them do not accurately identify an equivalent program state, our refactoring
+%% may be unsound.
 
 %\todo{Other sources of incompleteness and unsoundness?}
 
@@ -1500,41 +1498,8 @@ most 2 minutes per synthesis phase for \tool.  Experiments were performed on an 
 22.04 x64 operating system running in a VirtualBox machine with 8GB RAM and
 2 Intel Core i7-4790CPU cores at 3.60 GHz.  The JVM used was Oracle JDK 15.02.
 
-\subsection{Baseline: ChatGPT} \label{sec:chatgpt}
-We are interested in comparing our symbolic refactoring based on program refactoring and fuzzing against
-ChatGPT. In our experiments, we only used prompt-engineering, and we did not perform any fine-tuning. We will consider
-that for future work. An example prompt that we supplied to ChatGPT:
-\begin{quote}
-The method java.awt.TextField.minimumSize() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1, replaced by getMinimumSize()."
-I have a call to this deprecated method in my codebase `this.minimumSize()`, show me how to refactor my code.
-Example code should be a straight-line code block. Don't provide extra explanation.
-\end{quote}
 
-As explained above, we made two kinds of queries to ChatGPT, one is with the deprecation comments (GPT w/ code hints) and one 
-without them (GPT w/o code hints). The results are summarised in Table~\ref{tab:gpt-results}, 
-which provides an overview of the number of
-sound refactorings (\checkmark), missed refactorings (\xmark), unsound
-refactorings (\lightning), the percentage of sound refactorings (\%)
-produced per configuration, as well as the average runtime per refactoring. 
-The missed refactorings are due to JVM crashes during the semantics preservation
-check, as well as timeouts, while unsound refactorings are those for which the semantics
-preservation check returned false.
-
-%This is in line with our aim to investigate how
-\begin{table}[h]
-  \begin{tabular} {|l|r|r|r|r|r|}
-  \hline
-  Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-  GPT w/o code hints           &         14 &     97 &          7 & 12 & 301.5 \\ 
-  GPT w/ code hints  &         39 &     71 &          8 & 33 & 262.2 \\  \hline\hline
-  \end{tabular} 
-  \caption{ChatGPT experimental results.}
-  \label{tab:gpt-results}   
-\end{table}
-
-As expected, the ChatGPT results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
-
-\subsection{Results for the program synthesis based refactoring}\label{sec:experimental-results}
+\subsection{Results for \tool}\label{sec:experimental-results}
 
 %the configuration marked as {\bf Types}
 %is based on the Types-library, whereas the one marked as ({\bf CodeHints}) uses the CodeHints-library.
@@ -1550,7 +1515,11 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 \label{tab:configuration-results}   
 \end{table}
 
-In Table~\ref{tab:configuration-results}, many of the refactorings missed when
+Table~\ref{tab:configuration-results} provides an overview of the number of
+sound refactorings (\checkmark), missed refactorings (\xmark), unsound
+refactorings (\lightning), the percentage of sound refactorings (\%)
+produced per configuration, as well as the average runtime per refactoring. 
+Many of the refactorings missed when
 using the CodeHints-library are
 due to the fact that no code hints is provided by the Javadoc.
 %% we actually couldn't find a Javadoc code hint,
@@ -1572,37 +1541,56 @@ invocations\\
 (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
 
-Another source of incompleteness are JVM crashes. Since we produce counterexamples
-through reflection we may create some that violate internal invariants.
+Another reason for missed refactorings is JVM crashes. Since we produce counterexamples
+through reflection, we may create some that violate internal invariants.
 If executed on methods which eventually call native code, this can lead to the entire JVM
 crashing rather than e.g. throwing an exception. %% Currently, this terminates our synthesis
 %% loop immediately, but in future versions we plan on treating our test VM crashing for a given input
 %% as a regular type of outcome in the heap comparison.
 
-The rest of the refactorings missed were caused by fuzzing timeouts.
+The rest of the missed refactorings were due to fuzzing timeouts.
 These timeouts are likely due to component libraries missing some
 needed instructions in the synthesis phase.
 As explained in Section~\ref{sec:components-seeding}, one option 
 for increasing the size of our libraries 
 is allowing unrealisable generators and transformers to
-be added and iterating phases 2 and 3 a given number of times (potentially until fixed point).
+be added and iterating phases 2 and 3 of library seeding
+a given number of times (potentially until fixed point).
 
 
 {\bf Unsound refactorings.}
-In order to catch the unsound refactorings (for both the CodeHints-library and the
-Types-library), we can either  
-increase the fuzzing timeout for the verification phase (resulting in
-more counterexamples), or attempt to produce higher quality
-counterexamples. For the latter, one solution is to stop relying on libraries
-like Objenesis for object construction and instead use public constructors.
-For the former, the disadvantage of increasing the timeout is that it will
-slow down the overall refactoring procedure.
+%
+Firstly, unsoundness can be caused by I/O,
+which is not part of the JVM state. We currently don't check
+that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 
-Some solutions were unsound
+Secondly, our algorithm does currently not explore the entire classpath for
+potential overrides of the method to refactor. This may lead to unsound results
+when different subclasses of the original class are used polymorphically in the
+refactored context.
+
+Thirdly, as described in Sec.~\ref{sec:equiv}, we rely in some cases on
+\texttt{equals} implementations for equivalence comparison.  While we
+strictly filter which \texttt{equals} implementations we consider, if any of
+them do not accurately identify an equivalent program state, our refactoring
+may be unsound.
+
+Lastly, some solutions were unsound
 because the method to refactor was a default method with an empty body, meant
 to be overridden by subclasses. To find a sound refactoring in these cases our
-algorithm should expand its equivalence constraint to types who override the
+algorithm should expand its equivalence constraint to types that override the
 method to refactor. 
+
+
+%% In order to catch the unsound refactorings (for both the CodeHints-library and the
+%% Types-library), we can either  
+%% increase the fuzzing timeout for the verification phase (resulting in
+%% more counterexamples), or attempt to produce higher quality
+%% counterexamples. For the latter, one solution is to stop relying on libraries
+%% like Objenesis for object construction and instead use public constructors.
+%% For the former, the disadvantage of increasing the timeout is that it will
+%% slow down the overall refactoring procedure.
+
 
 
 \begin{table}[h]
@@ -1616,6 +1604,41 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 \caption{\tool results when code hints were present.}
 \label{tab:configuration-results-ch}   
 \end{table}
+
+
+\subsection{Baseline: ChatGPT} \label{sec:chatgpt}
+We are interested in comparing \tool against
+ChatGPT. In our experiments, we only used prompt-engineering.
+%, and we did not perform any fine-tuning. We will consider
+%that for future work.
+%
+As explained above, we made two kinds of queries to ChatGPT, one is with the Javadoc comment containing the code hints (GPT w/ code hints) and one 
+without it (GPT w/o code hints). An example prompt with code hints is as follows:
+\begin{quote}
+The method java.awt.TextField.minimumSize() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1, replaced by getMinimumSize()."
+I have a call to this deprecated method in my codebase `this.minimumSize()`, show me how to refactor my code.
+Example code should be a straight-line code block. Don't provide extra explanation.
+\end{quote}
+
+The results are summarised in Table~\ref{tab:gpt-results}.
+For each refactoring returned by ChatGPT, we use fuzzing to check program equivalence (according to the
+description in Section~\ref{sec:equiv}). The missed refactorings are due to JVM crashes or timeouts of the equivalence check,
+while unsound refactorings are those for which the equivalence check returned false.
+
+%This is in line with our aim to investigate how
+\begin{table}[h]
+  \begin{tabular} {|l|r|r|r|r|r|}
+  \hline
+  Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
+  GPT w/o code hints           &         14 &     97 &          7 & 12 & 301.5 \\ 
+  GPT w/ code hints  &         39 &     71 &          8 & 33 & 262.2 \\  \hline\hline
+  \end{tabular} 
+  \caption{ChatGPT experimental results.}
+  \label{tab:gpt-results}   
+\end{table}
+
+As expected, the ChatGPT results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
+
 
 {\bf (RQ1) Can ChatGPT replace symbolic code generation techniques such as our refactoring of deprecated calls?}
 
