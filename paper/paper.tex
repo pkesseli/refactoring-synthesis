@@ -361,7 +361,7 @@ technique can be applied to deprecated fields and classes.
 
 We are interested in answering the following research questions:
 \begin{itemize}
-\item[RQ1] Does ChatGPT subsume symbolic code generation techniques such as our refactoring of deprecated calls?
+\item[RQ1] Can ChatGPT replace symbolic code generation techniques such as our program synthesis and fuzzing based refactoring?
   %How does a symbolic refactoring method based on program synthesis compare against one based on LLMs?
 \item[RQ2] How often does Chat GPT generate refactorings that preserve the semantics of the original code?
 %\item[RQ3] Is type information alone sufficient for the refactoring generation task?
@@ -1461,8 +1461,8 @@ Our benchmark suite contains 213 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 We included all the deprecated methods exept those that were deprecated without a replacement
 (e.g. \texttt{java.rmi.registry.RegistryHandler.\ registryImpl(int)}), 
-methods that do not have a semantically equivalent refactoring
-(see Section~\ref{sec:semantically-different-refactorings}),
+%methods that do not have a semantically equivalent refactoring
+%(see Section~\ref{sec:semantically-different-refactorings}),
 methods inaccessible by non-JCL classes (i.e. all the finalize methods, which are called by the garbage collector, not user code, meaning that we can't modify their calls), 
 methods that only perform I/O (as our equivalence check doesn't include I/O side effects),
 and native methods.
@@ -1624,6 +1624,7 @@ The results are summarised in Table~\ref{tab:gpt-results}.
 For each refactoring returned by ChatGPT, we use fuzzing to check program equivalence (according to the
 description in Section~\ref{sec:equiv}). The missed refactorings are due to JVM crashes or timeouts of the equivalence check,
 while unsound refactorings are those for which the equivalence check returned false.
+In order to have a fair comparison to \tool, The average runtime for ChatGPT includes the time taken by the equivalence check.
 
 %This is in line with our aim to investigate how
 \begin{table}[h]
@@ -1640,9 +1641,15 @@ while unsound refactorings are those for which the equivalence check returned fa
 As expected, the ChatGPT results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
 
 
-{\bf (RQ1) Can ChatGPT replace symbolic code generation techniques such as our refactoring of deprecated calls?}
+{\bf (RQ1) Can ChatGPT replace symbolic code generation techniques such as our program synthesis and fuzzing based refactoring?}
+
+For this particular problem, ChatGPT only computes ? out refactorings, even when the JavaDoc code hints are being provided. A large number of possible
+refactorings that it proposes are found to be unsound by our equility checker. This shows that there is still space for symbolic code generation
+techniques such as \tool. Possible future directions are fine-tuning ChatGPT, or combining it with the symbolic approach, by using ChatGPT as the synthesis
+engine that provides candidate refactorings.
 
 {\bf (RQ2) How often does Chat GPT generate refactorings that preserve the semantics of the original code?}
+
 
 {\bf (RQ3) Do code hints help the generation of refactorings compared to types?}
 Code hints help both the program synthesis engine and ChatGPT.
@@ -1667,128 +1674,108 @@ For ChatGPT, the use of code hints allows it to find 15 more correct refactoring
 \section{Threats to validity}
 
 \paragraph{Selection of benchmarks}
-All our benchmarks are Java methods deprecated in Oracle JDK 15, and our claim may not extend to
-other scenarios or other programming languages.
+All our benchmarks are Java methods deprecated in Oracle JDK 15. %% Also,
+%% as explained at the beginning of Section~\ref{sec:experimental-results}, we excluded 
+%% certain methods from our experimental evaluation. 
+Thus, our claims may not extend to other scenarios or other programming languages.
 
-\paragraph{Not handled}
-
+%\paragraph{Not handled}
 \paragraph{Quality of refactorings} Refactorings need to generate code that
 remains understandable and maintainable. It is difficult to assess how well our technique does with respect to
-this subjective goal.  In our experimental evaluation, we define acceptable
-solutions not just using the heap equivalence criterion, but also regular
-expressions modelling what we consider sensible transformations after revewing
-the deprecated method's JavaDoc.  These patterns are subjective in nature and
-may also lead us to reject correct refactorings which do not conform to our
-expectations.
+this subjective goal.  %% In our experimental evaluation, we define acceptable
+%% solutions not just using the heap equivalence criterion, but also regular
+%% expressions modelling what we consider sensible transformations after revewing
+%% the deprecated method's JavaDoc.  These patterns are subjective in nature and
+%% may also lead us to reject correct refactorings which do not conform to our
+%% expectations.
+We manually inspected the refactorings obtained with
+our tool and found them to represent sensible transformations.
 
 \paragraph{Efficiency and scalability of the program synthesiser}
+We apply program synthesis and fuzzing. 
+This implies that our broader claim is threatened by scalability limits of these techniques.
+While for the majority of our experiments the synthesiser was able to find a solution, there were a few cases
+where it timed out, either because it could not generate a candidate, or it could not verify it.
+Different sized component libraries may help mitigate this effect.
 
-\paragraph{Prompt engineering vs. fine-tuning for ChatGPT}
+\paragraph{Prompt engineering for ChatGPT}
+In our current experiments, we only used prompt engineering for ChatGPT. As future work, we plan on also fine-tuning it. 
 
-\section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
+%% \section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
+
+%% Sometimes, the deprecated and the refactored features are not semantically
+%% equivalent on the entire domain. Reasons for this might be that a bug
+%% was fixed, a certain functionality was improved, or simply the fact
+%% that the deprecated feature is only expected to be used on restricted
+%% parts of the input domain. In such a case, the deprecated and the new
+%% feature may not be semantically equivalent on the entire input domain.
+
+%% For illustration, let's consider the example in Figure~\ref{ex:three-dates}.
+%% In the example, we make use of the constructor \texttt{new Date(year, month, day)}, 
+%% which is deprecated with the 
+%% recommendation to use the \texttt{Calendar} class instead.
+%% The refactoring is not trivial given that the 
+%% \texttt{Date} constructor expects its year parameter to be an offset
+%% from 1900.  This needs to be
+%% transformed by adding 1900 when using \texttt{Calendar} API, as shown in the
+%% example. Moreover, as already seen in the motivational example in  Figure~\ref{ex:deprecated-method-other},
+%% the \texttt{Calendar} constructor is protected,
+%% meaning that we must use \texttt{getInstance} to obtain a
+%% \texttt{Calendar} object.
+%% Alternatively, the \texttt{GregorianCalendar} class may be used with
+%% similar difficulties.
+%% In the example, we use \texttt{date1}, \texttt{date2} and \texttt{date3} to denote the three distinct ways of constructing a date.
 
 %% \begin{figure}
-%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
-%% void main(String[] args) {
+%%   \begin{lstlisting}[mathescape=true,showstringspaces=false]
 %%   // Deprecated:
-%%   Date date = new Date(120, 12, 30);
- 
-%%   // Should have been:
-%%   final Calendar calendar = Calendar.getInstance();
-%%   calendar.set(2020, 12, 30);
-%%   final Date date = calendar.getTime();
+%%   Date date1 = new Date(year, month, day);
 
+%%   // Should have been:
+%%   Calendar calendar = Calendar.getInstance();
+%%   calendar.set(1900 + year, month, day, 0, 0, 0);
+%%   calendar.set(Calendar.MILLISECOND, 0);
+%%   Date date2 = calendar.getTime();
+    
 %%   // Or:
-%%   final Date date = new GregorianCalendar(2020, 12, 30)
-%%                       .getTime();
-%% }
-%% \end{lstlisting}
-%% \caption{Deprecated method example.}
-%% \label{ex:deprecated-method}
+%%   Date date3=new GregorianCalendar(1900+year,month,day).
+%%              getTime();
+%%   \end{lstlisting}
+%% \caption{Deprecated `Date' example.}
+%% \label{ex:three-dates}
 %% \end{figure}
 
+%% Notably, the ways in which \texttt{date2} and \texttt{date3} are computed
+%% represent valid refactorings for the original code computing
+%% \texttt{date1}. However, when we provide this example to our
+%% verification phase (as described in Section~\ref{sec:encoding}), we obtain the following
+%% counterexample:
 
-Sometimes, the deprecated and the refactored features are not semantically
-equivalent on the entire domain. Reasons for this might be that a bug
-was fixed, a certain functionality was improved, or simply the fact
-that the deprecated feature is only expected to be used on restricted
-parts of the input domain. In such a case, the deprecated and the new
-feature may not be semantically equivalent on the entire input domain.
+%%   \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%%     int year = -89412298;
+%%     int month = 1439435067;
+%%     int day = 378993182;
+%%   \end{lstlisting}
 
-For illustration, let's consider the example in Figure~\ref{ex:three-dates}.
-In the example, we make use of the constructor \texttt{new Date(year, month, day)}, 
-which is deprecated with the 
-recommendation to use the \texttt{Calendar} class instead.
-The refactoring is not trivial given that the 
-\texttt{Date} constructor expects its year parameter to be an offset
-from 1900.  This needs to be
-transformed by adding 1900 when using \texttt{Calendar} API, as shown in the
-example. Moreover, as already seen in the motivational example in  Figure~\ref{ex:deprecated-method-other},
-the \texttt{Calendar} constructor is protected,
-meaning that we must use \texttt{getInstance} to obtain a
-\texttt{Calendar} object.
-Alternatively, the \texttt{GregorianCalendar} class may be used with
-similar difficulties.
-In the example, we use \texttt{date1}, \texttt{date2} and \texttt{date3} to denote the three distinct ways of constructing a date.
+%%   For these values of \texttt{year}, \texttt{month} and \texttt{day}, the three
+%%   dates evaluate to:
 
-%% For illustration, let's consider the three distinct ways of
-%% constructing a date captured in Figure~\ref{ex:three-dates} and
-%% denoted by \var{date1}, \var{date2} and \var{date3}.
+%%   \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%%     date1: "Sat May 02 00:00:00 CEST 31580172"
+%%     date2: "Fri Jul 02 00:00:00 CEST 31580799"
+%%     date3: "Fri Jul 02 00:00:00 CEST 31580799"
+%%   \end{lstlisting}
 
-\begin{figure}
-  \begin{lstlisting}[mathescape=true,showstringspaces=false]
-  // Deprecated:
-  Date date1 = new Date(year, month, day);
+%%   Where \texttt{date1} evaluates to a different date than \texttt{date2} and \texttt{date3}. In principle, this should not affect any use case as the counterexample
+%%   \texttt{year}, \texttt{month} and \texttt{day} are clearly artificial and outside the expected domain of a calendaristic date.
+%%   In particular, for this example, we deduced that the negative year is the cause for the different values of \texttt{date1}, \texttt{date2} and \texttt{date3}.
 
-  // Should have been:
-  Calendar calendar = Calendar.getInstance();
-  calendar.set(1900 + year, month, day, 0, 0, 0);
-  calendar.set(Calendar.MILLISECOND, 0);
-  Date date2 = calendar.getTime();
-    
-  // Or:
-  Date date3=new GregorianCalendar(1900+year,month,day).
-             getTime();
-  \end{lstlisting}
-\caption{Deprecated `Date' example.}
-\label{ex:three-dates}
-\end{figure}
-
-%% In the example, \var{date1} uses the deprecated
-%% \var{Date(year, month, day)} constructor, whereas \var{date2} and
-%% \var{date3} make use of the recommended \var{Calendar} and
-%% \var{GregorianCalendar} classes.
-Notably, the ways in which \texttt{date2} and \texttt{date3} are computed
-represent valid refactorings for the original code computing
-\texttt{date1}. However, when we provide this example to our
-verification phase (as described in Section~\ref{sec:encoding}), we obtain the following
-counterexample:
-
-  \begin{lstlisting}[mathescape=true,showstringspaces=false]
-    int year = -89412298;
-    int month = 1439435067;
-    int day = 378993182;
-  \end{lstlisting}
-
-  For these values of \texttt{year}, \texttt{month} and \texttt{day}, the three
-  dates evaluate to:
-
-  \begin{lstlisting}[mathescape=true,showstringspaces=false]
-    date1: "Sat May 02 00:00:00 CEST 31580172"
-    date2: "Fri Jul 02 00:00:00 CEST 31580799"
-    date3: "Fri Jul 02 00:00:00 CEST 31580799"
-  \end{lstlisting}
-
-  Where \texttt{date1} evaluates to a different date than \texttt{date2} and \texttt{date3}. In principle, this should not affect any use case as the counterexample
-  \texttt{year}, \texttt{month} and \texttt{day} are clearly artificial and outside the expected domain of a calendaristic date.
-  In particular, for this example, we deduced that the negative year is the cause for the different values of \texttt{date1}, \texttt{date2} and \texttt{date3}.
-
-  This counterexample is enough to stop our synthesiser from finding any of the correct refactorings in Figure~\ref{ex:three-dates}.
-  To overcome this problem, we plan on computing preconditions for the verification phase. Namely, for this example, we would collect all the concrete values that
-  \texttt{year}, \texttt{month} and \texttt{day} get instantiated to in the unit tests associated with the given project, and use them to
-  infer a precondition over the domain of these three variables. For \texttt{year}, this should tell us that the expected year must be positive.
-  Consequently, the verifier won't attempt to find counterexamples involving negative years, thus eliminating the counterexample above.
+%%   This counterexample is enough to stop our synthesiser from finding any of the correct refactorings in Figure~\ref{ex:three-dates}.
+%%   To overcome this problem, we plan on computing preconditions for the verification phase. Namely, for this example, we would collect all the concrete values that
+%%   \texttt{year}, \texttt{month} and \texttt{day} get instantiated to in the unit tests associated with the given project, and use them to
+%%   infer a precondition over the domain of these three variables. For \texttt{year}, this should tell us that the expected year must be positive.
+%%   Consequently, the verifier won't attempt to find counterexamples involving negative years, thus eliminating the counterexample above.
 
 
   
@@ -2069,7 +2056,8 @@ safety problems that we then solved with fuzz testing.
 \bibliographystyle{ACM-Reference-Format}
 %\bibliographystyle{abbrv}
 \bibliography{document}
-
+%\appendix
+%\input{appendix}
 
 
 \end{document}

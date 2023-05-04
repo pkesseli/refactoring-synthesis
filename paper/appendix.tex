@@ -1,88 +1,106 @@
-Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
-%
-The vast search space is particularly a challenge in the current
-setting given that, in the absence of any additional guidance, the
-entire \texttt{java.lang} could be considered when synthesising the
-refactoring.  In order to prune the search space, we start by
-investigating the information available to our refactoring procedure.
+
+\section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
 
-{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
-However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient to solve the problem. 
+%% \begin{figure}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%% void main(String[] args) {
+%%   // Deprecated:
+%%   Date date = new Date(120, 12, 30);
+ 
+%%   // Should have been:
+%%   final Calendar calendar = Calendar.getInstance();
+%%   calendar.set(2020, 12, 30);
+%%   final Date date = calendar.getTime();
 
-{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
-  comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show in Section~\ref{sec:overview}, these hints
-  don't provide the whole refactoring, but can be used to guide the search process.
-While code hints have been previously used to generate change rules~\cite{DBLP:conf/kbse/Huang0PW021}, our aim is to generate complete refactorings.
-  
-  {\bf (3)} Finally, the key criterion we have for the code to be generated is that it needs to be {\em semantically equivalent to the original}, meaning that they must preserve its behaviour. 
-  However, formally proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
-In this work, instead of aiming for a formal proof,  we use fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
-While we can't provide full correctness guarantees,
-our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
-
-
-To add to related work:
-
-Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
-
-
-======
-
-1. {\em Program synthesis based refactoring:} 
-We employ Counter-Example Guided Inductive Synthesis (CEGIS) to generate program refactorings. 
-%
-Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
-%
-The vast search space is particularly a challenge in the current
-setting given that, in the absence of any additional guidance, the
-entire \texttt{java.lang} could be considered when synthesising the
-refactoring.  In order to prune the search space, we make use of type information and Javadoc code hints.
-
-2. {\em LLMs based refactoring:} 
-Recently, Large Language Models (LLMs) have made a lot of progress in code generation tasks. 
-These models gain remarkable capabilities on a host of language tasks when prompted with just a problem description.
-Thus, we are interesting in investigating how the refactorings generated by such models compare to those generated by program synthesis,
-especially with respect to guaranteeing the preservation of semantics. In this work, we use
-ChatGPT, which is a LLM trained using Reinforcement Learning from Human Feedback.
-%
-For the prompt, we use the same information provided to the program synthesiser, namely the signature of the deprecated method (which includes the types) and the Javadoc code hints.
-
-- just prompt engineering, no fine-tuning
-
-(While code hints have been previously used to generate change rules~\cite{DBLP:conf/kbse/Huang0PW021}, our aim is to generate complete refactorings.)
+%%   // Or:
+%%   final Date date = new GregorianCalendar(2020, 12, 30)
+%%                       .getTime();
+%% }
+%% \end{lstlisting}
+%% \caption{Deprecated method example.}
+%% \label{ex:deprecated-method}
+%% \end{figure}
 
 
-%% In order to catch the unsound refactorings (for both the CodeHints-library and the
-%% Types-library), we can either  
-%% increase the fuzzing timeout for the verification phase (resulting in
-%% more counterexamples), or attempt to produce higher quality
-%% counterexamples. For the latter, one solution is to stop relying on libraries
-%% like Objenesis for object construction and instead use public constructors.
-%% For the former, the disadvantage of increasing the timeout is that it will
-%% slow down the overall refactoring procedure.
+Sometimes, the deprecated and the refactored features are not semantically
+equivalent on the entire domain. Reasons for this might be that a bug
+was fixed, a certain functionality was improved, or simply the fact
+that the deprecated feature is only expected to be used on restricted
+parts of the input domain. In such a case, the deprecated and the new
+feature may not be semantically equivalent on the entire input domain.
 
+For illustration, let's consider the example in Figure~\ref{ex:three-dates}.
+In the example, we make use of the constructor \texttt{new Date(year, month, day)}, 
+which is deprecated with the 
+recommendation to use the \texttt{Calendar} class instead.
+The refactoring is not trivial given that the 
+\texttt{Date} constructor expects its year parameter to be an offset
+from 1900.  This needs to be
+transformed by adding 1900 when using \texttt{Calendar} API, as shown in the
+example. Moreover, as already seen in the motivational example in  Figure~\ref{ex:deprecated-method-other},
+the \texttt{Calendar} constructor is protected,
+meaning that we must use \texttt{getInstance} to obtain a
+\texttt{Calendar} object.
+Alternatively, the \texttt{GregorianCalendar} class may be used with
+similar difficulties.
+In the example, we use \texttt{date1}, \texttt{date2} and \texttt{date3} to denote the three distinct ways of constructing a date.
 
-TODO:
-* add summary at the end of overview
-* integrate component-based synthesis paragraph -> I'm not sure about this, maybe integrated later on, in the challenge paragraphs
-* For Pascal: update the IDE version
-* integrate the semantic equivalence stuff
-* add new RQ to the experimental evaluation
-* Find a better place for: (While code hints have been previously used to generate change rules~\cite{DBLP:conf/kbse/Huang0PW021}, our aim is to generate complete refactorings.)
-* Remove types-library (maybe move it to the end of the seeding section). Also, add a bit of introduction to this section.
-* fix RQs
+%% For illustration, let's consider the three distinct ways of
+%% constructing a date captured in Figure~\ref{ex:three-dates} and
+%% denoted by \var{date1}, \var{date2} and \var{date3}.
 
+\begin{figure}
+  \begin{lstlisting}[mathescape=true,showstringspaces=false]
+  // Deprecated:
+  Date date1 = new Date(year, month, day);
 
-* abstract
-* add paragraph about LLMs: fine-tuning vs prompt engineering
-* Related work: add some stuff on LLMs, check newer refactoring papers
-* read paper on refactoring with ChatGPT, cite it and use it in the intro and evaluation.
-* add the reference to fine-tuning from Pascal
-* add citation for LLMs
-* talk more about semantics preservation when discussing the comparison to ChatGPT
-* talk about prompt pattern and cite the paper.
-* connect sec VI.F with missed and unsound refactorings in exerimental evaluation       
-* I don't like what we say about fine-tuning in sec VII.B
-* ChatGPT timeout.
-* Add threats to validity.
+  // Should have been:
+  Calendar calendar = Calendar.getInstance();
+  calendar.set(1900 + year, month, day, 0, 0, 0);
+  calendar.set(Calendar.MILLISECOND, 0);
+  Date date2 = calendar.getTime();
+    
+  // Or:
+  Date date3=new GregorianCalendar(1900+year,month,day).
+             getTime();
+  \end{lstlisting}
+\caption{Deprecated `Date' example.}
+\label{ex:three-dates}
+\end{figure}
+
+%% In the example, \var{date1} uses the deprecated
+%% \var{Date(year, month, day)} constructor, whereas \var{date2} and
+%% \var{date3} make use of the recommended \var{Calendar} and
+%% \var{GregorianCalendar} classes.
+Notably, the ways in which \texttt{date2} and \texttt{date3} are computed
+represent valid refactorings for the original code computing
+\texttt{date1}. However, when we provide this example to our
+verification phase (as described in Section~\ref{sec:encoding}), we obtain the following
+counterexample:
+
+  \begin{lstlisting}[mathescape=true,showstringspaces=false]
+    int year = -89412298;
+    int month = 1439435067;
+    int day = 378993182;
+  \end{lstlisting}
+
+  For these values of \texttt{year}, \texttt{month} and \texttt{day}, the three
+  dates evaluate to:
+
+  \begin{lstlisting}[mathescape=true,showstringspaces=false]
+    date1: "Sat May 02 00:00:00 CEST 31580172"
+    date2: "Fri Jul 02 00:00:00 CEST 31580799"
+    date3: "Fri Jul 02 00:00:00 CEST 31580799"
+  \end{lstlisting}
+
+  Where \texttt{date1} evaluates to a different date than \texttt{date2} and \texttt{date3}. In principle, this should not affect any use case as the counterexample
+  \texttt{year}, \texttt{month} and \texttt{day} are clearly artificial and outside the expected domain of a calendaristic date.
+  In particular, for this example, we deduced that the negative year is the cause for the different values of \texttt{date1}, \texttt{date2} and \texttt{date3}.
+
+  This counterexample is enough to stop our synthesiser from finding any of the correct refactorings in Figure~\ref{ex:three-dates}.
+  To overcome this problem, we plan on computing preconditions for the verification phase. Namely, for this example, we would collect all the concrete values that
+  \texttt{year}, \texttt{month} and \texttt{day} get instantiated to in the unit tests associated with the given project, and use them to
+  infer a precondition over the domain of these three variables. For \texttt{year}, this should tell us that the expected year must be positive.
+  Consequently, the verifier won't attempt to find counterexamples involving negative years, thus eliminating the counterexample above.
+
