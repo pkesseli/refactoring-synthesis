@@ -1634,8 +1634,8 @@ ChatGPT (with prompt-engineering).
 %that for future work.
 %
 As explained above, we made two kinds of queries to ChatGPT, one with the Javadoc code hints (GPT w/ code hints) and one 
-without it (GPT w/o code hints). The rows for GPT* in Table~\ref{tab:gpt-results} refer to only those benchmarks
-where the Javadoc contains a code hint.
+without it (GPT w/o code hints). The results are summarised in Table~\ref{tab:gpt-results}, where the rows
+for GPT* only consider those benchmarks where the Javadoc contains a code hint.
 
 An example prompt with code hints is as follows:
 %\begin{quote}
@@ -1644,7 +1644,7 @@ I have a call to this deprecated method in my codebase `this.minimumSize()`, sho
 The example code should be a straight-line code block. Don't provide extra explanations.}
 %\end{quote}
 
-The results are summarised in Table~\ref{tab:gpt-results}.
+
 For each refactoring returned by ChatGPT, we use fuzzing to check program equivalence (according to the
 description in Section~\ref{sec:equiv}). The missed refactorings are due to JVM crashes or timeouts of the equivalence check,
 while unsound refactorings are those for which the equivalence check returned false.
