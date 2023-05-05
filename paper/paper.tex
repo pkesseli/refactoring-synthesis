@@ -437,7 +437,7 @@ For illustration, let's look at our running example in Figure~\ref{ex:deprecated
 with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
 %
 %Note that this hint is not immediately usable.
-It's not straightforward to use this code to generate the refactoring, with some of the chellanges being as follows: 
+It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
 
 
 \begin{figure}
@@ -1072,7 +1072,7 @@ However, for \var{P_3} and \var{P_4} we have:
   &\var{staticFields(loadedClasses(P_4))} = \{\{dim1, dim2\}\} 
 \end{aligned}
 \]
-In \var{P_4}, the alising relation induces one equivalence class, namely \var{\{dim1, dim2\}}.
+In \var{P_4}, the aliasing relation induces one equivalence class, namely \var{\{dim1, dim2\}}.
 
 \end{example}
   
@@ -1463,7 +1463,7 @@ We implemented the program synthesis and fuzzing refactoring technique in a tool
 %
 Our benchmark suite contains 236 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
-We included all the deprecated methods exept those that were deprecated without a replacement
+We included all the deprecated methods except those that were deprecated without a replacement
 (e.g. \texttt{java.rmi.registry.RegistryHandler.\ registryImpl(int)}), 
 %methods that do not have a semantically equivalent refactoring
 %(see Section~\ref{sec:semantically-different-refactorings}),
@@ -1822,7 +1822,7 @@ presents prompt design techniques for software engineering in the form of patter
 
 
   
-\section{Related Works}
+\section{Conclusions and related Works}
 
 In this paper, we presented an automated program refactoring
 technique that eliminates uses of deprecated methods. Our
