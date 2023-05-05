@@ -377,7 +377,7 @@ technique can be applied to deprecated fields and classes.
 
 \begin{itemize}
 
-\item We proposed a symbolic refactoring technique for deprecated APIs that uses program synthesis and fuzzing. The technique incorporates semantic information about the code and it is guided by code hints and type information.
+\item We proposed a symbolic refactoring technique for deprecated APIs that uses program synthesis and fuzzing. The technique incorporates semantic information about the code and it is guided by Javadoc code hints and type information.
 
 %\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
 
@@ -458,22 +458,21 @@ It's not straightforward to use this code to generate the refactoring, with some
 %While it might seem that this hint ma solve the entire problem, 
 
 {\bf Challenge 1.}  Although it may seem as if
-method \texttt{get} is static allowing us to make an immediate call,
+method \texttt{get} is static allowing an immediate call,
 it is actually an instance method, requiring us to have an object of
 class \texttt{Calendar}. However, no such object is available in the
 original code meaning that it must be created by the refactored code.
 Consequently, we must find the necessary
-components to create such an object by consuming existing objects.
+components (i.e. instructions) that consume existing objects and create a \texttt{Calendar} object.
 
-{\bf Challenge 2.} Besides adding components that allow us to gen-
-erate the required objects, we also need components for setting their
+{\bf Challenge 2.} Besides adding components that allow us to generate the required objects, we also need components for setting their
 fields. For instance,
 in Figure~\ref{ex:deprecated-method-other}, we must call
 \texttt{calendar.setTime(date)} to set the calendar's date
 based on the existing \texttt{date} object.
 
 {\bf Challenge 3.} Adding too many components to the library will
-make the code generation task unfeasible. In particular, we should
+make the code generation task infeasible. In particular, we should
 be able to differentiate between components that we can use
 (we have or we are able to generate
 all the necessary arguments and the current object for calling them), and those
@@ -482,7 +481,7 @@ and/or the current object. Adding the latter components to the library will
 significantly slow down the code generation process by
 adding infeasible programs to the search space.
 
-{\bf Challenge 4.} An additional difficulty is that the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that they must preserve its behaviour.
+{\bf Challenge 4.} An additional difficulty is that the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that it must preserve its behaviour.
 However, proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
 
 
@@ -493,9 +492,10 @@ The fourth challenge is addressed
 %In this work, instead of aiming for a formal proof,  we
 by using fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
 While we can't provide full correctness guarantees,
-our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
+given a large number of test inputs, we consider this a close approximation.
+%our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
 More details about the semantic equivalence check are given in Section~\ref{sec:equiv}.
-Additionally, in Section~\ref{sec:encoding}, we give technical details about the synthesis based refactoring procedure, 
+Additionally, in Section~\ref{sec:encoding}, we provide technical details about the synthesis and fuzzing based refactoring procedure, 
 %Then, we provide details about the semantics preservation check in Section~\ref{sec:equiv},
 and in Section~\ref{sec:implementation} we discuss some implementation details.
 
