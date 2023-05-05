@@ -1652,16 +1652,21 @@ In order to have a fair comparison to \tool, The average runtime for ChatGPT inc
 
 As expected, the ChatGPT results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
 
+\subsection{Research questions}
 
-{\bf (RQ1) Can ChatGPT replace symbolic code generation techniques such as our program synthesis and fuzzing based refactoring?}
+{\bf (RQ1) How well does \tool work?}
+In the absence of code hints, when relying only on type information about the method to refactor,
+\tool refactors only 33\% of all deprecated calls (first row in Table~\ref{tab:configuration-results}).
+However, if we consider those benchmarks where code hints are given by Javadoc,
+\tool succeeds in finding a refactoring in 79\% of cases (Table~\ref{tab:configuration-results-ch}). 
+\tool guarantees (to the extent checked by JQF) that all of the found refactorings preserve the semantics of the original code.
 
+{\bf (RQ2) How does \tool compare against ChatGPT for the current refactoring task?}
+ % Can ChatGPT replace symbolic code generation techniques such as our program synthesis and fuzzing based refactoring?
 For this particular problem, ChatGPT only computes ? out refactorings, even when the JavaDoc code hints are being provided. A large number of possible
 refactorings that it proposes are found to be unsound by our equility checker. This shows that there is still space for symbolic code generation
 techniques such as \tool. Possible future directions are fine-tuning ChatGPT, or combining it with the symbolic approach, by using ChatGPT as the synthesis
 engine that provides candidate refactorings.
-
-{\bf (RQ2) How often does Chat GPT generate refactorings that preserve the semantics of the original code?}
-
 
 {\bf (RQ3) Do code hints help the generation of refactorings compared to types?}
 Code hints help both the program synthesis engine and ChatGPT.
@@ -1672,6 +1677,10 @@ The higher quality of the instructions in the CodeHints-library compared to the
 Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
 For ChatGPT, the use of code hints allows it to find 15 more correct refactorings.
+
+%{\bf (RQ2) How often does Chat GPT generate refactorings that preserve the semantics of the original code?}
+
+
 
 %% \paragraph{Zest vs Rand guidance}
 %% Our experiments did not yield significant performance
