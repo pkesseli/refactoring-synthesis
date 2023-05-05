@@ -1465,7 +1465,7 @@ under the ``Missed refactorings'' and ``Unsound refactorings'' paragraphs, respe
 
 We implemented the program synthesis and fuzzing refactoring technique in a tool called \tool.
 
-Our benchmark suite contains 213 out of 392 deprecated methods in the Oracle
+Our benchmark suite contains 236 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 We included all the deprecated methods exept those that were deprecated without a replacement
 (e.g. \texttt{java.rmi.registry.RegistryHandler.\ registryImpl(int)}), 
@@ -1479,8 +1479,8 @@ and native methods.
 
 \subsection{Experiment design}
 
-In our experiments, we compare four configurations: two versions of \tool (one using the Types-library, and one using the CodeHints-library),
-and two configurations for ChatGPT (one where the prompt contains the code hints, and one where it doesn't).
+In our experiments, we compare a version of \tool using the Types-library with one using the CodeHints-library.
+%and two configurations for ChatGPT (one where the prompt contains the code hints, and one where it doesn't).
 %The configurations differ in terms of the component library
 %they consider as well as the JQF fuzzing guidance applied.
 %% We use JQF in Zest~\cite{DBLP:conf/issta/PadhyeLSPT19}
@@ -1497,12 +1497,12 @@ and two configurations for ChatGPT (one where the prompt contains the code hints
 %% in code coverage, it is saved for subsequent evolution.
 %% Configurations marked as {\bf Rand} use JQF's random fuzzing
 %% guidance, whereas {\bf Zest} uses JQF's coverage-guided Zest guidance.
-
-For each configuration we evaluate how many sound as well as unsound
-refactorings are produced, how many refactoring opportunities were missed
-and the average time to successfully produce a refactoring.  We bound the
-search by at most 500 inputs and 5 minutes per verification phase, and at
-most 2 minutes per synthesis phase for \tool.  Experiments were performed on an Ubuntu
+%
+%For each configuration, %we evaluate how many sound as well as unsound
+%refactorings are produced, how many refactoring opportunities were missed
+%and the average time to successfully produce a refactoring.
+We bound the search by at most 500 inputs and 5 minutes per verification phase, and at
+most 2 minutes per synthesis phase.  Experiments were performed on an Ubuntu
 22.04 x64 operating system running in a VirtualBox machine with 8GB RAM and
 2 Intel Core i7-4790CPU cores at 3.60 GHz.  The JVM used was Oracle JDK 15.02.
 
@@ -1529,7 +1529,7 @@ refactorings (\lightning), the percentage of sound refactorings (\%)
 produced per configuration, as well as the average runtime per refactoring. 
 Many of the refactorings missed when
 using the CodeHints-library are
-due to the fact that no code hints is provided by the Javadoc.
+due to the fact that no code hints were provided by the Javadoc.
 %% we actually couldn't find a Javadoc code hint,
 %% or we failed to parse it (see Section~\ref{sec:parse} for details).
 %
@@ -1537,33 +1537,36 @@ In such a situation, our approach falls back to using the
 Types-library. As we are interested in quantifying the benefit of
 using code hints compared to simply relying on types,
 Table~\ref{tab:configuration-results-ch} shows the same evaluation as the second row 
-of Table~\ref{tab:configuration-results}, but excluding methods where we
-failed to identify a code hint. Next, we discuss the results of our
+of Table~\ref{tab:configuration-results}, but excluding methods where
+%we failed to identify a code hint
+no hint is provided in the Javadoc. Next, we discuss the results of our
 experiments, as captured by Table~\ref{tab:configuration-results-ch}.
 
 {\bf Missed refactorings.}
-Out of the refactorings missed both with and without code hints, 
-2 were missed because the method return
+%% Out of the refactorings missed both with and without code hints, 
+%% 2 were missed because the method return
+Some of the missed refactorings were caused by the fact that the return
 value was dependent on an external system state which changed frequently between
-invocations\\
-(e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
+invocations (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
-
-Another reason for missed refactorings is JVM crashes. Since we produce counterexamples
-through reflection, we may create some that violate internal invariants.
+%
+Another reason for missed refactorings is JVM crashes. We use reflection to produce counterexamples,
+and some may violate internal invariants.
+% we may create some that violate internal invariants
 If executed on methods which eventually call native code, this can lead to the entire JVM
 crashing rather than e.g. throwing an exception. %% Currently, this terminates our synthesis
 %% loop immediately, but in future versions we plan on treating our test VM crashing for a given input
 %% as a regular type of outcome in the heap comparison.
-
-The rest of the missed refactorings were due to fuzzing timeouts.
-These timeouts are likely due to component libraries missing some
-needed instructions in the synthesis phase.
+%
+The rest of the missed refactorings were due to fuzzing timeouts, which are likely 
+caused by the component libraries missing some
+instructions needed in the synthesis phase.
 As explained in Section~\ref{sec:components-seeding}, one option 
 for increasing the size of our libraries 
 is allowing unrealisable generators and transformers to
-be added and iterating phases 2 and 3 of library seeding
-a given number of times (potentially until fixed point).
+be added.
+%and iterating phases 2 and 3 of library seeding
+%a given number of times (potentially until fixed point).
 
 
 {\bf Unsound refactorings.}
@@ -1571,18 +1574,18 @@ a given number of times (potentially until fixed point).
 Firstly, unsoundness can be caused by I/O,
 which is not part of the JVM state. We currently don't check
 that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
-
+%
 Secondly, our algorithm does currently not explore the entire classpath for
 potential overrides of the method to refactor. This may lead to unsound results
 when different subclasses of the original class are used polymorphically in the
 refactored context.
-
+%
 Thirdly, as described in Sec.~\ref{sec:equiv}, we rely in some cases on
 \texttt{equals} implementations for equivalence comparison.  While we
 strictly filter which \texttt{equals} implementations we consider, if any of
 them do not accurately identify an equivalent program state, our refactoring
 may be unsound.
-
+%
 Lastly, some solutions were unsound
 because the method to refactor was a default method with an empty body, meant
 to be overridden by subclasses. To find a sound refactoring in these cases our
@@ -1609,7 +1612,7 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 \tool w/ code hints &        114 &     19 &  11         & 79 & 205.0 \\  \hline\hline
 %\hline
 \end{tabular} 
-\caption{\tool results when code hints were present.}
+\caption{\tool results when code hints were present in the Javadoc.}
 \label{tab:configuration-results-ch}   
 \end{table}
 
