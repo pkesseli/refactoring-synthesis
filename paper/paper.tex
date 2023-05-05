@@ -1110,7 +1110,8 @@ if and only if they are in the same equivalence class induced by the aliasing re
 
   \section{Implementation} \label{sec:implementation}
 
-  While in the previous sections, we presented our technique from a formal point of view,  in this section we discuss details related to some of our implementation choices.  
+  In the previous sections we presented our technique from a formal point of view.
+  Conversely, in this section we discuss details related to our implementation choices.  
 
 
 
@@ -1295,7 +1296,7 @@ In such situations, the use of mocked objects can lead to
 spurious refactorings.
 
 This problem generally appears whenever methods are overriden in subclasses.
-A trivial example of this limitation is refactoring the
+A trivial example of this limitation is the refactoring of the
 method \texttt{layout} in the abstract class \texttt{java.awt.Component}. The
 method is not abstract, but has an empty body and is meant to be overriden by
 subclasses. Using this empty body as a specification will only guarantee a sound
@@ -1319,7 +1320,9 @@ not always expressed as well-formed Java, we customised the
 GitHub Java parser
 %%framework
 to accept undeclared identifiers and type names
-as arguments. For instance, the Javadoc hint in Figure~\ref{ex:javadoc-hint} suggests using
+as arguments. For instance, the Javadoc hint for deprecating \code{boolean inside(int X, int Y)}
+suggests using 
+%in Figure~\ref{ex:javadoc-hint} suggests using
 \texttt{contains(int, int)}, which would normally cause a parsing error as the \texttt{int} type
 appears in the place of argument names. In our setting, we accept this hint as valid.
 There are still situations where our parser is too strict and fails to accept
@@ -1330,33 +1333,30 @@ in Section~\ref{sec:experimental-results}
 as some of the benchmarks for which we failed to identify a code hint. These benchmarks
 are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\ref{tab:configuration-results-ch} (some of the missing benchmarks from Table~\ref{tab:configuration-results-ch} do genuinely miss a code hint). We will improve our technique for collecting code hints as future work.
  
-%% provides an example of
-%% a valid Javadoc hint.
-
-\begin{figure}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-/**
-* Checks whether or not this {@code Rectangle}
-* contains the point at the specified location
-* {@code (X,Y)}.
-*
-* @param  X the specified X coordinate
-* @param  Y the specified Y coordinate
-* @return    {@code true} if the point
-*            {@code (X,Y)} is inside this
-*            {@code Rectangle};
-*            {@code false} otherwise.
-* @deprecated As of JDK version 1.1,
-* replaced by {@code contains(int, int)}.
-*/
-@Deprecated
-public boolean inside(int X, int Y) {
-  // ...
-}
-\end{lstlisting}
-\caption{Javadoc hint example.}
-\label{ex:javadoc-hint}
-\end{figure}
+%% \begin{figure}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%% /**
+%% * Checks whether or not this {@code Rectangle}
+%% * contains the point at the specified location
+%% * {@code (X,Y)}.
+%% *
+%% * @param  X the specified X coordinate
+%% * @param  Y the specified Y coordinate
+%% * @return    {@code true} if the point
+%% *            {@code (X,Y)} is inside this
+%% *            {@code Rectangle};
+%% *            {@code false} otherwise.
+%% * @deprecated As of JDK version 1.1,
+%% * replaced by {@code contains(int, int)}.
+%% */
+%% @Deprecated
+%% public boolean inside(int X, int Y) {
+%%   // ...
+%% }
+%% \end{lstlisting}
+%% \caption{Javadoc hint example.}
+%% \label{ex:javadoc-hint}
+%% \end{figure}
 
 Additionally, the code example is parsed as if it were invoked in the context of
 the method to refactor, such that imports or the implicit \texttt{this} argument
@@ -1450,15 +1450,15 @@ under the ``Missed refactorings'' and ``Unsound refactorings'' paragraphs, respe
 %% expensive.
 
 
-\subsection{Equivalence reduction}
-JQF never generates the same exact program twice. However it may generate many
-syntactically different, but semantically equivalent ones.
-Program synthesis techniques make use of equivalence reduction in order to
-reduce the number of equivalent programs that get explored.
-For example, \cite{DBLP:conf/cav/AlbarghouthiGK13} 
-prune the search space using observational equivalence with respect to a set of input/output examples, i.e., two programs are considered to be in the same equivalence class if, for all given inputs in the set of input/output examples, they produce the same outputs. Alternatively, \cite{DBLP:conf/vmcai/SmithA19} generate only programs in a specific normal form, where term rewriting is used to transform a program into its normal form. In~\cite{DBLP:journals/corr/KoukoutosKK16}, Koukoutos et al. make use of attribute grammars to only produce certain types of expressions in their normal form, thus skipping other expressions
-that are syntactically different, yet semantically equivalent.
-We plan on investigating some of these directions as part of future work.
+%% \subsection{Equivalence reduction}
+%% JQF never generates the same exact program twice. However it may generate many
+%% syntactically different, but semantically equivalent ones.
+%% Program synthesis techniques make use of equivalence reduction in order to
+%% reduce the number of equivalent programs that get explored.
+%% For example, \cite{DBLP:conf/cav/AlbarghouthiGK13} 
+%% prune the search space using observational equivalence with respect to a set of input/output examples, i.e., two programs are considered to be in the same equivalence class if, for all given inputs in the set of input/output examples, they produce the same outputs. Alternatively, \cite{DBLP:conf/vmcai/SmithA19} generate only programs in a specific normal form, where term rewriting is used to transform a program into its normal form. In~\cite{DBLP:journals/corr/KoukoutosKK16}, Koukoutos et al. make use of attribute grammars to only produce certain types of expressions in their normal form, thus skipping other expressions
+%% that are syntactically different, yet semantically equivalent.
+%% We plan on investigating some of these directions as part of future work.
 
 
 \section{Experimental results}\label{sec:experimental-results}

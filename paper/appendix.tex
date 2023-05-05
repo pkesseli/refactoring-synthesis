@@ -104,3 +104,40 @@ counterexample:
   infer a precondition over the domain of these three variables. For \texttt{year}, this should tell us that the expected year must be positive.
   Consequently, the verifier won't attempt to find counterexamples involving negative years, thus eliminating the counterexample above.
 
+
+
+\subsection{Equivalence reduction}
+JQF never generates the same exact program twice. However it may generate many
+syntactically different, but semantically equivalent ones.
+Program synthesis techniques make use of equivalence reduction in order to
+reduce the number of equivalent programs that get explored.
+For example, \cite{DBLP:conf/cav/AlbarghouthiGK13} 
+prune the search space using observational equivalence with respect to a set of input/output examples, i.e., two programs are considered to be in the same equivalence class if, for all given inputs in the set of input/output examples, they produce the same outputs. Alternatively, \cite{DBLP:conf/vmcai/SmithA19} generate only programs in a specific normal form, where term rewriting is used to transform a program into its normal form. In~\cite{DBLP:journals/corr/KoukoutosKK16}, Koukoutos et al. make use of attribute grammars to only produce certain types of expressions in their normal form, thus skipping other expressions
+that are syntactically different, yet semantically equivalent.
+We plan on investigating some of these directions as part of future work.
+
+
+%% \begin{figure}
+%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
+%% /**
+%% * Checks whether or not this {@code Rectangle}
+%% * contains the point at the specified location
+%% * {@code (X,Y)}.
+%% *
+%% * @param  X the specified X coordinate
+%% * @param  Y the specified Y coordinate
+%% * @return    {@code true} if the point
+%% *            {@code (X,Y)} is inside this
+%% *            {@code Rectangle};
+%% *            {@code false} otherwise.
+%% * @deprecated As of JDK version 1.1,
+%% * replaced by {@code contains(int, int)}.
+%% */
+%% @Deprecated
+%% public boolean inside(int X, int Y) {
+%%   // ...
+%% }
+%% \end{lstlisting}
+%% \caption{Javadoc hint example.}
+%% \label{ex:javadoc-hint}
+%% \end{figure}
