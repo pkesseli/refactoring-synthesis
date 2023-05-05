@@ -1479,7 +1479,17 @@ and native methods.
 
 \subsection{Experiment design}
 
-In our experiments, we compare a version of \tool using the Types-library with one using the CodeHints-library.
+In our experiments, we run two versions of \tool, one using the Types-library and one using the CodeHints-library.
+Moreover, we run ChatGPT with and without Javadoc code hints. We are interested in answering the following
+research questions:
+\begin{itemize}
+\item (RQ1) How well does \tool work?
+
+\item (RQ2) How does \tool compare against ChatGPT for the current refactoring task?
+
+\item (RQ3) Do code hints help the generation of refactorings?
+\end{itemize}
+  
 %and two configurations for ChatGPT (one where the prompt contains the code hints, and one where it doesn't).
 %The configurations differ in terms of the component library
 %they consider as well as the JQF fuzzing guidance applied.
@@ -1501,8 +1511,12 @@ In our experiments, we compare a version of \tool using the Types-library with o
 %For each configuration, %we evaluate how many sound as well as unsound
 %refactorings are produced, how many refactoring opportunities were missed
 %and the average time to successfully produce a refactoring.
-We bound the search by at most 500 inputs and 5 minutes per verification phase, and at
-most 2 minutes per synthesis phase.  Experiments were performed on an Ubuntu
+
+For \tool, we bound the search by at most 500 inputs and 5 minutes per verification phase, and at
+most 2 minutes per synthesis phase.
+For each refactoring found by ChatGPT, we use fuzzing to check program equivalence (according to the
+description in Section~\ref{sec:equiv}), and bound the verification time to 5 minutes.
+Experiments were performed on an Ubuntu
 22.04 x64 operating system running in a VirtualBox machine with 8GB RAM and
 2 Intel Core i7-4790CPU cores at 3.60 GHz.  The JVM used was Oracle JDK 15.02.
 
@@ -1539,8 +1553,8 @@ using code hints compared to simply relying on types,
 Table~\ref{tab:configuration-results-ch} shows the same evaluation as the second row 
 of Table~\ref{tab:configuration-results}, but excluding methods where
 %we failed to identify a code hint
-no hint is provided in the Javadoc. Next, we discuss the results of our
-experiments, as captured by Table~\ref{tab:configuration-results-ch}.
+no hint is provided in the Javadoc. %% Next, we discuss the results of our
+%% experiments, as captured by Table~\ref{tab:configuration-results-ch}.
 
 {\bf Missed refactorings.}
 %% Out of the refactorings missed both with and without code hints, 
@@ -1619,39 +1633,42 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 
 \subsection{Baseline: ChatGPT} \label{sec:chatgpt}
 We are interested in comparing \tool against
-ChatGPT. In our experiments, we only used prompt-engineering.
+ChatGPT (with prompt-engineering).
 %, and we did not perform any fine-tuning. We will consider
 %that for future work.
 %
-As explained above, we made two kinds of queries to ChatGPT, one is with the Javadoc comment containing the code hints (GPT w/ code hints) and one 
-without it (GPT w/o code hints). An example prompt with code hints is as follows:
-\begin{quote}
-The method java.awt.TextField.minimumSize() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1, replaced by getMinimumSize()."
+As explained above, we made two kinds of queries to ChatGPT, one with the Javadoc code hints (GPT w/ code hints) and one 
+without it (GPT w/o code hints). The rows for GPT* in Table~\ref{tab:gpt-results} refer to only those benchmarks
+where the Javadoc contains a code hint.
+
+An example prompt with code hints is as follows:
+%\begin{quote}
+\emph{The method java.awt.TextField.minimumSize() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1, replaced by getMinimumSize()."
 I have a call to this deprecated method in my codebase `this.minimumSize()`, show me how to refactor my code.
-Example code should be a straight-line code block. Don't provide extra explanation.
-\end{quote}
+The example code should be a straight-line code block. Don't provide extra explanations.}
+%\end{quote}
 
 The results are summarised in Table~\ref{tab:gpt-results}.
 For each refactoring returned by ChatGPT, we use fuzzing to check program equivalence (according to the
 description in Section~\ref{sec:equiv}). The missed refactorings are due to JVM crashes or timeouts of the equivalence check,
 while unsound refactorings are those for which the equivalence check returned false.
-In order to have a fair comparison to \tool, The average runtime for ChatGPT includes the time taken by the equivalence check.
+In order to have a fair comparison to \tool, the average runtime for ChatGPT includes the time taken by the equivalence check.
 
 %This is in line with our aim to investigate how
 \begin{table}[h]
   \begin{tabular} {|l|r|r|r|r|r|}
   \hline
   Config                       & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-  GPT                          &         43 &     166  &         27 & 18 & 258.6 \\
-  GPT(javadoc)                 &         80 &     127  &         29 & 34 & 200.9 \\
-  GPT w/ code hints            &         41 &     46   &         27 & 36 & 263.8 \\
-  GPT(javadoc) w/ code hints   &         79 &     7    &         28 & 69 & 199.6 \\  \hline\hline
+  GPT w/o code hints                   &         43 &     166  &         27 & 18 & 258.6 \\
+  GPT w/ code hints                 &         80 &     127  &         29 & 34 & 200.9 \\
+  GPT* w/o code hints             &         41 &     46   &         27 & 36 & 263.8 \\
+  GPT*  w/ code hints   &         79 &     7    &         28 & 69 & 199.6 \\  \hline\hline
   \end{tabular} 
   \caption{ChatGPT experimental results.}
   \label{tab:gpt-results}   
 \end{table}
 
-As expected, the ChatGPT results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
+%% As expected, the ChatGPT results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
 
 \subsection{Research questions}
 
@@ -1659,29 +1676,30 @@ As expected, the ChatGPT results with code hints are significantly better than t
 In the absence of code hints, when relying only on type information about the method to refactor,
 \tool refactors only 33\% of all deprecated calls (first row in Table~\ref{tab:configuration-results}).
 However, if we consider those benchmarks where code hints are given by Javadoc,
-\tool succeeds in finding a refactoring in 79\% of cases (Table~\ref{tab:configuration-results-ch}). 
+\tool succeeds in finding a refactoring in 79\% of cases (second row of Table~\ref{tab:configuration-results-ch}). 
 \tool guarantees (to the extent checked by JQF) that all of the found refactorings preserve the semantics of the original code.
 
 {\bf (RQ2) How does \tool compare against ChatGPT for the current refactoring task?}
  % Can ChatGPT replace symbolic code generation techniques such as our program synthesis and fuzzing based refactoring?
 Without the Javadoc code hints, ChatGPT only refactors 18\% of the benchmarks, compared to 33\% for \tool (first rows in Tables~\ref{tab:configuration-results} and~\ref{tab:gpt-results}, respectively).
-When considering only benchmarks that do have code hints, which are added to its prompt, ChatGPT finds refactorings in 69\% of the cases (third row in Table~\ref{tab:gpt-results}). This is compared to
+When considering only benchmarks that do have code hints, which are added to its prompt, ChatGPT finds refactorings in 69\% of the cases (third row in Table~\ref{tab:gpt-results}), compared to
 79\% by \tool (second row in Table~\ref{tab:configuration-results-ch}). 
 % Regarding unsound refactorings ..
 %For this particular problem, ChatGPT only computes ? out refactorings, even when the JavaDoc code hints are being provided. A large number of possible
 %refactorings that it proposes are found to be unsound by our equility checker.
-This shows that there is still space for symbolic code generation
-techniques such as \tool. As a future direction we want to combine the two approaches, by using ChatGPT as the synthesis engine that provides candidate refactorings.
+This shows that, at least for specialised settings, symbolic code generation
+techniques such as \tool can still outperform ChatGPT at a lower computational cost.
+As a future direction we want to combine the two approaches, by using ChatGPT as the synthesis engine that provides candidate refactorings to \tool.
 
 {\bf (RQ3) Do code hints help the generation of refactorings compared to types?}
-Code hints help both the program synthesis engine and ChatGPT.
+The performance of both \tool and ChatGPT are improved by using the Javadoc code hints. 
 %Using the CodeHints-library enables our technique to find more refactorings
 %than with the Type-library.
-For the former, when code hints are present, the success rate is 83\%.
+For the former, when code hints are present and used, the success rate goes from 49\% to 79\% (Table~\ref{tab:configuration-results}).
 The higher quality of the instructions in the CodeHints-library compared to the
 Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
-For ChatGPT, the use of code hints allows it to find 15 more correct refactorings.
+For ChatGPT, the use of code hints allows it to go from 36\% success rate to 69\% (last two rows of Table~\ref{tab:gpt-results}).
 
 %{\bf (RQ2) How often does Chat GPT generate refactorings that preserve the semantics of the original code?}
 
