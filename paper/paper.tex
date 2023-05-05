@@ -1629,7 +1629,7 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 
 \subsection{Baseline: ChatGPT} \label{sec:chatgpt}
 We are interested in comparing \tool against
-ChatGPT (with prompt-engineering).
+ChatGPT.
 %, and we did not perform any fine-tuning. We will consider
 %that for future work.
 %
@@ -1687,11 +1687,11 @@ This shows that, at least for specialised settings, symbolic code generation
 techniques such as \tool can still outperform ChatGPT at a lower computational cost.
 As a future direction we want to combine the two approaches, by using ChatGPT as the synthesis engine that provides candidate refactorings to \tool.
 
-{\bf (RQ3) Do code hints help the generation of refactorings compared to types?}
-The performance of both \tool and ChatGPT are improved by using the Javadoc code hints. 
+{\bf (RQ3) Do code hints help the generation of refactorings?}
+The performance of both \tool and ChatGPT is improved by using the Javadoc code hints. 
 %Using the CodeHints-library enables our technique to find more refactorings
 %than with the Type-library.
-For the former, when code hints are present and used, the success rate goes from 49\% to 79\% (Table~\ref{tab:configuration-results}).
+For the former, when code hints are present and used, the success rate goes from 49\% to 79\% (Table~\ref{tab:configuration-results-ch}).
 The higher quality of the instructions in the CodeHints-library compared to the
 Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
