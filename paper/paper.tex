@@ -753,7 +753,7 @@ Synthesise ($P_2$) {
 \end{lstlisting}
 
 This method consists of only one conditional saying that if $P_1$ and $P_2$ are equivalent on all given inputs $\vec{i_1}, \cdots, \vec{i_n}$, then \texttt{assert(false)} is reached.
-Given that this assertion always fails, it means that the method is unsafe when $P_1$ and $P_2$ are equivalent on the given inputs.
+Given that this assertion always fails if reached, it means that the method is unsafe when $P_1$ and $P_2$ are equivalent on the given inputs.
 Thus, we can reduce the synthesis problem to the problem of checking the safety of \texttt{Synthesise}. If a safety checker manages to
 find an input $P_2$ for which the assertion fails (meaning that \texttt{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs. This $P_2$ is the {\em refactoring candidate}
 that the synthesis phase is supposed to generate. As aforementioned, we use an existing fuzz testing technique
