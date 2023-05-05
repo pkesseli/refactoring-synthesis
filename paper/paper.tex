@@ -186,17 +186,21 @@
   use. When done manually, refactoring legacy code in order to eliminate uses of
   deprecated APIs is an error-prone and time-consuming process. In
   this paper, we propose an automated program refactoring technique
-  that eliminates such uses of deprecated APIs by incorporating
-  semantic information about the code. Our refactoring procedure
-  performs semantic reasoning and search in the space of possible
+  that eliminates such uses of deprecated APIs by
+  %incorporating
+  %semantic information about the code. Our refactoring procedure
+  performing semantic reasoning and search in the space of possible
   refactorings using automated program synthesis. In particular, the
   program synthesis is guided by Javadoc code hints and type information and makes use of
   fuzz testing. %% We
   %% encode both the synthesis of refactoring candidates and their
   %% verification as program safety problems that we then solve with
   %% coverage-guided property-based testing.
-  We implemented our technique and used it to refactor deprecated methods from the Oracle
-JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
+  We implemented our technique and used it to refactor the deprecated methods from the Oracle
+  JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
+  Given the recent success of Large Language Models in code generation tasks,
+  we also investigated how our symbolic program synthesis based approach compares
+  against ChatGPT.
   %
   %% Refactorings are structured changes to existing software that leave its
   %% externally observable behaviour unchanged.  Their intent is to improve
@@ -257,7 +261,7 @@ for our purpose, we must first set its time using the existing
 \texttt{date} as argument.  Finally, we can retrieve the hour by
 calling \texttt{calendar.get(Calendar.HOUR\_OF\_DAY)}.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 void main(String[] args) {
   // Deprecated:
@@ -302,11 +306,11 @@ manually: for instance, she has to figure out lines 6--8 for the refactoring in 
 responsibility of guaranteeing that the refactored code maintains the original behaviour
 is left to the programmer.
 
-For illustration, when referring back to the example in
+Indeed, when referring back to the example in
 Figure~\ref{ex:deprecated-method-other}, it's not immediately obvious
 that the original and the refactored code behave in the same manner.
 One needs a good understanding of the code's semantics in order to
-reach such a conclusion.  Indeed, refactorings that rely solely on a
+reach such a conclusion.  Refactorings that rely solely on a
 program's syntax and do not consider its semantics end up being overly
 conservative, mostly addressing structural changes to the program.
 The observation that refactoring generally benefits from semantic
@@ -359,30 +363,34 @@ technique can be applied to deprecated fields and classes.
 %However, the responsibility of guaranteeing that the generated code obeys the specification is left to
 %the programmer.
 
-We are interested in answering the following research questions:
-\begin{itemize}
-\item[RQ1] Can ChatGPT replace symbolic code generation techniques such as our program synthesis and fuzzing based refactoring?
-  %How does a symbolic refactoring method based on program synthesis compare against one based on LLMs?
-\item[RQ2] How often does Chat GPT generate refactorings that preserve the semantics of the original code?
-%\item[RQ3] Is type information alone sufficient for the refactoring generation task?
-\item[RQ3] Do code hints help the generation of refactorings compared to types?
-\end{itemize}
-
-We believe RQ1 is particularly important given the high computational cost of LLMs. Our results highlight the fact that there is room for
-symbolic code generation methods to outperform general-purpose LLMs at a much lower cost.
-
-%% \paragraph{Contributions:}
-
+%% We are interested in answering the following research questions:
 %% \begin{itemize}
+%% \item[RQ1] Can ChatGPT replace symbolic code generation techniques such as our program synthesis and fuzzing based refactoring?
+%% \item[RQ2] How often does Chat GPT generate refactorings that preserve the semantics of the original code?
+%% \item[RQ3] Do code hints help the generation of refactorings compared to types?
+%% \end{itemize}
 
-%% \item We propose a program synthesis based technique for refactoring uses of deprecated APIs, which incorporates semantic information about the code. In particular, the program synthesis is guided by code hints and type information.
+%% We believe RQ1 is particularly important given the high computational cost of LLMs. Our results highlight the fact that there is room for
+%% symbolic code generation methods to outperform general-purpose LLMs at a much lower cost.
 
-%% \item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
+\paragraph{Contributions:}
 
-%% \item We implemented our technique and used it to refactor deprecated methods from the Oracle
-%% JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
-  
-%% \end{itemize}  
+\begin{itemize}
+
+\item We proposed a symbolic refactoring technique for deprecated APIs that uses program synthesis and fuzzing. The technique incorporates semantic information about the code and it is guided by code hints and type information.
+
+%\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
+
+\item We implemented our technique and used it to refactor deprecated methods from the Oracle
+JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
+
+\item We investigated how our symbolic refactoring technique compares against a general purpose LLM. %In particular, we want to find out whether there is still space for specialised techniques
+  %such as ours in a ChatGPT era.
+  Our results highlight the fact that there is room for
+symbolic code generation methods such as ours to outperform general-purpose LLMs in specialised settings, at a lower computational cost.
+
+
+\end{itemize}  
 
 
 
@@ -1783,7 +1791,7 @@ presents prompt design techniques for software engineering in the form of patter
 
 
   
-\section{Related Work}
+\section{Related Works}
 
 \paragraph{Program synthesis}
 
@@ -1807,7 +1815,7 @@ the current refactoring would not be feasible.
 
 % type-directed synthesis
 Type information has been extensively used in program synthesis to
-guide the search for a solution~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/FeserCD15,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/LubinCOC20}.
+guide the search for a solution~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/FeserCD15,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/LubinCOC20,DBLP:journals/pacmpl/YamaguchiMDW21}.
 In our work, we combine type information with code hints.
 %
 % component-based synthesis
@@ -2029,6 +2037,13 @@ type information. Moreover, we explore the space of all potential
 candidate programs by combining techniques from type-directed,
 component-based and counterexample-guided inductive synthesis.
 
+\paragraph{Large Language Models}
+LLMs have been used successfully in recent years for code generation tasks~\cite{DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169}.
+Among them, ChatGPT~\cite{chatgpt} is a LLM trained using Reinforcement Learning from Human Feedback.
+There are recent studies investigating ChatGPT's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and 
+prompt pattern design for refactoring, requirements elicitation, and software design ~\cite{white2023chatgpt}.
+In this work, we are interested in using ChatGPT as a baseline, with the goal of investigating how our specialised symbolic refactoring technique compares
+against a general-purpose LLM.
 
 \section{Conclusion}
 
