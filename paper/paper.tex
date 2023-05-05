@@ -1631,8 +1631,9 @@ In order to have a fair comparison to \tool, The average runtime for ChatGPT inc
   \begin{tabular} {|l|r|r|r|r|r|}
   \hline
   Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-  GPT w/o code hints           &         14 &     97 &          7 & 12 & 301.5 \\ 
-  GPT w/ code hints  &         39 &     71 &          8 & 33 & 262.2 \\  \hline\hline
+  GPT            &         45 &     ? &          29 & 20 & 247.2 \\
+  GPT(javadoc)  &         78 &     ? &          31 & 35 & 202.1 \\
+  GPT(javadoc) w/ code hints  &         77 &     ? &     ? &    68  & 200.7 \\  \hline\hline
   \end{tabular} 
   \caption{ChatGPT experimental results.}
   \label{tab:gpt-results}   
