@@ -2,7 +2,7 @@
 
 ## Prerequisites
 - Maven
-- JDK 14
+- JDK 15
 
 ## Build
 To build all Java projects:
@@ -10,13 +10,27 @@ To build all Java projects:
 mvn package --define skipTests --file source/pom.xml
 ```
 
-## Tests
+## Experiments
+To run the JQF-Fuzz experiments, run:
+```shell
+./experiments.sh
+```
+in the root directory of the repository. Warning: A full experimental run can
+take multiple hours. The script also contains a commented out
+"Single example test run" which can be enabled to just run one benchmark.
+
+
+## Contributing
+
+The following contains instructions for developers contributing to the project.
+
+### Tests
 To run the project's unit tests:
 ```shell
 mvn test --file source/pom.xml
 ```
 
-## Fuzzing experiments
+### Fuzzing experiments
 To run fuzzing performance experiments:
 ```shell
 mvn test --define enableFuzzerExperiments --file source/pom.xml --projects fuzzer-experiments
