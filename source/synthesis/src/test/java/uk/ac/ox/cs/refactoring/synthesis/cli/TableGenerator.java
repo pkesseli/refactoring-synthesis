@@ -34,7 +34,7 @@ public class TableGenerator {
 
   public static void main(final String[] args) throws IOException {
     final Path[] files = Parameters.getJsonFiles(args);
-    final int numberOfConfigurations = files.length;
+    final int numberOfConfigurations = files.length + 1;
     final List<List<String>> cells = getCells(files);
     final int numberOfBenchmarks = cells.size() - NUMBER_OF_SUMMARY_COLUMNS - 1;
     try (final OutputStream os = Files.newOutputStream(Paths.get("table.tex"));
@@ -82,15 +82,24 @@ public class TableGenerator {
       return Collections.emptyList();
 
     final List<List<String>> cells = new ArrayList<>();
-    final int numberOfConfigurations = jsonFiles.length;
+    final int numberOfConfigurations = jsonFiles.length + 1;
     final int numberOfColumns = numberOfConfigurations + 1;
     int numberOfRows = -1;
     final List<Report> reports = getReports(jsonFiles);
-    ;
     final Map<String, Boolean> benchmarkNameToFoundCodeHints = new HashMap<>();
     for (int column = 0; column < numberOfConfigurations; ++column) {
-      final Path jsonFile = jsonFiles[column];
-      final Report report = reports.get(column);
+      final Report report;
+      final String configName;
+      if (column < jsonFiles.length) {
+        report = reports.get(column);
+        final Path jsonFile = jsonFiles[column];
+        configName = jsonFile.getFileName().toString().replace(".json", "").replace("javadoc", "jd").replace("random",
+            "rand");
+      } else {
+        report = getHypotheticalFallbackReport(reports);
+        configName = "JQF-full";
+      }
+
       final int numberOfBenchmarks = report.Benchmarks.size();
       numberOfRows = numberOfBenchmarks + NUMBER_OF_SUMMARY_COLUMNS + 1;
       if (cells.isEmpty()) {
@@ -101,8 +110,7 @@ public class TableGenerator {
       }
 
       final int columnIndex = column + 1;
-      cells.get(0).set(columnIndex,
-          jsonFile.getFileName().toString().replace(".json", "").replace("javadoc", "jd").replace("random", "rand"));
+      cells.get(0).set(columnIndex, configName);
       int rowIndex = 1;
       for (final Map.Entry<String, List<Run>> benchmark : report.Benchmarks.entrySet()) {
         final List<String> row = cells.get(rowIndex++);
@@ -231,5 +239,31 @@ public class TableGenerator {
         report.Benchmarks.put(missingBenchmark, missingPlaceholder);
     }
     return reports;
+  }
+
+  private static Report getHypotheticalFallbackReport(final List<Report> reports) {
+    final Report result = new Report();
+    for (final Report report : reports) {
+      for (final Map.Entry<String, List<Run>> runEntry : report.Benchmarks.entrySet()) {
+        final String benchmarkName = runEntry.getKey();
+        final List<Run> runs = runEntry.getValue();
+        if (runs.size() != 1)
+          throw new IllegalStateException("Expected single run.");
+
+        final Run run = runs.get(0);
+        List<Run> summaryRuns = result.Benchmarks.get(benchmarkName);
+        if (summaryRuns == null) {
+          summaryRuns = new ArrayList<>();
+          summaryRuns.add(run);
+          result.Benchmarks.put(benchmarkName, summaryRuns);
+        } else {
+          if (run.Solution != null) {
+            summaryRuns.clear();
+            summaryRuns.add(run);
+          }
+        }
+      }
+    }
+    return result;
   }
 }
