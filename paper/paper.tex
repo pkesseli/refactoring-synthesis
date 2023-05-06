@@ -1478,7 +1478,7 @@ and native methods.
 \subsection{Experiment design}
 
 In our experiments, we run three versions of \tool: (1) \tool with the Types-library; (2) \tool with the CodeHints-library;
-(3) a combined best configuration for \tool, where we start with the CodeHints-library and fall back to the Types-library if the synthesis phase times out.
+(3) a combined best configuration for \tool, where we start with the CodeHints-library and fall back to the Types-library if the synthesis phase (as described in Section~\ref{sec:encoding}) times out.
 Moreover, we run ChatGPT with and without Javadoc code hints. We are interested in answering the following
 research questions:
 \begin{itemize}
@@ -1547,7 +1547,7 @@ due to the fact that no code hints were provided by the Javadoc.
 %% we actually couldn't find a Javadoc code hint,
 %% or we failed to parse it (see Section~\ref{sec:parse} for details).
 %
-In such a situation, our approach falls back to using the
+In such a situation, our approach exclusively uses the
 Types-library. As we are interested in quantifying the benefit of
 using code hints compared to simply relying on types,
 Table~\ref{tab:configuration-results-ch} shows the same evaluation as  
