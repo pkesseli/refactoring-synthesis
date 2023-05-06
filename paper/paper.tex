@@ -1477,7 +1477,8 @@ and native methods.
 
 \subsection{Experiment design}
 
-In our experiments, we run two versions of \tool, one using the Types-library and one using the CodeHints-library.
+In our experiments, we run three versions of \tool: (1) \tool with the Types-library; (2) \tool with the CodeHints-library;
+(3) a combined best configuration for \tool, where we start with the CodeHints-library and fall back to the Types-library if the synthesis phase times out.
 Moreover, we run ChatGPT with and without Javadoc code hints. We are interested in answering the following
 research questions:
 \begin{itemize}
@@ -1676,13 +1677,14 @@ In the absence of code hints, when relying only on type information about the me
 \tool refactors only 33\% of all deprecated calls (first row in Table~\ref{tab:configuration-results}).
 However, if we consider those benchmarks where code hints are given by Javadoc,
 \tool succeeds in finding a refactoring in 79\% of cases (second row of Table~\ref{tab:configuration-results-ch}). 
+The combined best solver succeeds in 81\% of the cases for the benchmarks where we identified code hints (third row of Table~\ref{tab:configuration-results-ch}). 
 \tool guarantees (to the extent checked by JQF) that all of the found refactorings preserve the semantics of the original code.
 
 {\bf (RQ2) How does \tool compare against ChatGPT for the current refactoring task?}
  % Can ChatGPT replace symbolic code generation techniques such as our program synthesis and fuzzing based refactoring?
 Without the Javadoc code hints, ChatGPT only refactors 18\% of the benchmarks, compared to 33\% for \tool (first rows in Tables~\ref{tab:configuration-results} and~\ref{tab:gpt-results}, respectively).
 When considering only benchmarks that do have code hints, which are added to its prompt, ChatGPT finds refactorings in 69\% of the cases (fourth row in Table~\ref{tab:gpt-results}), compared to
-79\% by \tool (second row in Table~\ref{tab:configuration-results-ch}). 
+81\% by \tool (third row in Table~\ref{tab:configuration-results-ch}). 
 % Regarding unsound refactorings ..
 %For this particular problem, ChatGPT only computes ? out refactorings, even when the JavaDoc code hints are being provided. A large number of possible
 %refactorings that it proposes are found to be unsound by our equility checker.
@@ -1694,7 +1696,7 @@ As a future direction we want to combine the two approaches, by using ChatGPT as
 The performance of both \tool and ChatGPT is improved by using the Javadoc code hints. 
 %Using the CodeHints-library enables our technique to find more refactorings
 %than with the Type-library.
-For the former, when code hints are present and used, the success rate goes from 49\% to 79\% (Table~\ref{tab:configuration-results-ch}).
+For the former, when code hints are present and used, the success rate goes from 49\% to 81\% (Table~\ref{tab:configuration-results-ch}).
 The higher quality of the instructions in the CodeHints-library compared to the
 Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
