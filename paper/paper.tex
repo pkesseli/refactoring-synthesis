@@ -19,11 +19,15 @@
 % Created:      15 February 2005
 %
 %-----------------------------------------------------------------------------
-\documentclass[10pt,conference]{IEEEtran}
-\IEEEoverridecommandlockouts
+%\documentclass[10pt,conference]{IEEEtran}
+%\IEEEoverridecommandlockouts
 %\usepackage[scaled]{helvet} % see www.ctan.org/get/macros/latex/required/psnfss/psnfss2e.pdf
 
 %% \BibTeX command to typeset BibTeX logo in the docs
+
+\documentclass[sigconf,review, anonymous]{acmart}
+\acmConference[ISSTA 2024]{ACM SIGSOFT International Symposium on Software Testing and Analysis}{16-20 September, 2024}{Vienna, Austria}
+
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
     \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
@@ -178,7 +182,6 @@
 %% \affiliation{University of Oxford}
 %% \email{kroening@cs.ox.ac.uk}
 
-\maketitle
 
 \begin{abstract}
   As a project evolves, certain fields, methods or classes are
@@ -219,6 +222,8 @@
   %% refactorings.
 %
 \end{abstract}
+
+\maketitle
 
 %\keywords{program refactoring, program synthesis, program verification}
 
@@ -318,7 +323,9 @@ analyses of a program is not new, e.g. previous works made use of
 program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or
 types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
 
-\emph{Current solution.}  In this paper, we investigate a symbolic approach for automatically refactoring uses of deprecated APIs based on program synthesis and fuzzing that makes use of semantic information
+\emph{Current solution.}  In this paper, we investigate a symbolic approach for automatically refactoring uses of deprecated APIs based on program synthesis
+%and fuzzing
+that makes use of semantic information
 to offer guarantees about the preservation of the original behaviour.
 Additionally, we are interested in comparing our symbolic approach against a neural one using Large Language Models (LLMs).
 In particular, given the recent advances that LLMs made in code generation,
@@ -484,6 +491,10 @@ adding infeasible programs to the search space.
 {\bf Challenge 4.} An additional difficulty is that the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that it must preserve its behaviour.
 However, proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
 
+
+Proving semantic equivalence is a very difficult task especially given the possible side effects. We must consider:
+* the effects on the memory
+* the effects on global variables ... static?
 
 We address challenges 1-3 by dynamically building the component library for each refactoring
 such that it only contains components specific to that particular use case.
