@@ -12,31 +12,31 @@ import org.junit.jupiter.api.Test;
 class java_sql_DateTest {
   @Test
   void getHours() throws Exception {
-    assertThat(synthesiseGPT("Date date = new Date();\nint hours = date.getHours();\n\n", "LocalDateTime localDateTime = LocalDateTime.now();\nint hours = localDateTime.getHour();\n", "java.sql.Date", "getHours"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getHours();" , "\nthis.toLocalTime().getHour()\n;" , "java.sql.Date" , "getHours") , Matchers . anything ()) ;
   }
 
   @Test
   void getMinutes() throws Exception {
-    assertThat(synthesiseGPT("int minutes = this.getMinutes();\n\n", "int minutes = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault()).getMinute();\n", "java.sql.Date", "getMinutes"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getMinutes();" , "\nLocalTime time = LocalTime.now();\nint minutes = time.getMinute();\n;" , "java.sql.Date" , "getMinutes") , Matchers . anything ()) ;
   }
 
   @Test
   void getSeconds() throws Exception {
-    assertThat(synthesiseGPT("this.getSeconds();\n\n", "this.toLocalDateTime().getSecond();\n", "java.sql.Date", "getSeconds"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getSeconds();" , "\nthis.getCharacterStream()\n;" , "java.sql.Date" , "getSeconds") , Matchers . anything ()) ;
   }
 
   @Test
   void setHours() throws Exception {
-    assertThat(synthesiseGPT("this.setHours(a);\n\n", "LocalDateTime localDateTime = this.toLocalDateTime().withHour(a);\nthis.setTime(Timestamp.valueOf(localDateTime).getTime());\n", "java.sql.Date", "setHours", "int"), Matchers.anything());
+assertThat (synthesiseGPT ("this.setHours(param0);" , "\njava.util.Calendar cal = java.util.Calendar.getInstance();\ncal.setTime(this);\ncal.set(java.util.Calendar.HOUR_OF_DAY, param0);\njava.sql.Date newDate = new java.sql.Date(cal.getTimeInMillis());\nthis.setTime(newDate.getTime());\n;" , "java.sql.Date" , "setHours" , "int") , Matchers . anything ()) ;
   }
 
   @Test
   void setMinutes() throws Exception {
-    assertThat(synthesiseGPT("this.setMinutes(a);\n", "this.setTime(this.getTime() + TimeUnit.MINUTES.toMillis(a));\n", "java.sql.Date", "setMinutes", "int"), Matchers.anything());
+assertThat (synthesiseGPT ("this.setMinutes(param0);" , "\njava.util.Calendar cal = java.util.Calendar.getInstance();\ncal.setTime(this);\ncal.set(java.util.Calendar.MINUTE, param0);\njava.sql.Date newDate = new java.sql.Date(cal.getTimeInMillis());\nthis.setTime(newDate.getTime());\n;" , "java.sql.Date" , "setMinutes" , "int") , Matchers . anything ()) ;
   }
 
   @Test
   void setSeconds() throws Exception {
-    assertThat(synthesiseGPT("this.setSeconds(a);\n\n", "this.setTime(this.getTime() + (a - this.getSeconds()) * 1000);\nthis.setSeconds(0);\n", "java.sql.Date", "setSeconds", "int"), Matchers.anything());
+assertThat (synthesiseGPT ("this.setSeconds(param0);" , "" , "java.sql.Date" , "setSeconds" , "int") , Matchers . anything ()) ;
   }
 }

@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_lang_SecurityManagerTest {
   @Test
   void checkMulticast() throws Exception {
-    assertThat(synthesiseGPT("this.checkMulticast(a, b);\n", "SecurityManager securityManager = System.getSecurityManager();\nif (securityManager != null) {\n    securityManager.checkPermission(new java.net.SocketPermission(a.getHostAddress(), \"accept,connect,listen,resolve\"));\n}\n", "java.lang.SecurityManager", "checkMulticast", "java.net.InetAddress", "byte"), Matchers.anything());
+assertThat (synthesiseGPT ("this.checkMulticast(param0, param1);" , "\nthis.checkMulticast(param0, (byte)0);\n;" , "java.lang.SecurityManager" , "checkMulticast" , "java.net.InetAddress" , "byte") , Matchers . anything ()) ;
   }
 }

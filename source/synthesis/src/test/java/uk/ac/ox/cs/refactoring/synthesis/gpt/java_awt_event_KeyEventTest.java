@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_awt_event_KeyEventTest {
   @Test
   void getKeyModifiersText() throws Exception {
-    assertThat(synthesiseGPT("String modifiers = this.getKeyModifiersText(a);\n\n", "String modifiers = InputEvent.getModifiersExText(a);\n", "java.awt.event.KeyEvent", "getKeyModifiersText", "int"), anyOf(contains("getModifiersExText")));
+assertThat (synthesiseGPT ("this.getKeyModifiersText(param0);" , "\nKeyEvent.getKeyModifiersExText(param0)\n;" , "java.awt.event.KeyEvent" , "getKeyModifiersText" , "int") , anyOf (contains ("getModifiersExText"))) ;
   }
 
   @Test
   void setModifiers() throws Exception {
-    assertThat(synthesiseGPT("this.setModifiers(a);\n\n", "this.setModifiersEx(a);\n", "java.awt.event.KeyEvent", "setModifiers", "int"), Matchers.anything());
+assertThat (synthesiseGPT ("this.setModifiers(param0);" , "\nthis.setModifiersEx(param0)\n;" , "java.awt.event.KeyEvent" , "setModifiers" , "int") , Matchers . anything ()) ;
   }
 }

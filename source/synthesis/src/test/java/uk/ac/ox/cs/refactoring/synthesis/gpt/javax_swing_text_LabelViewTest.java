@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_text_LabelViewTest {
   @Test
   void getFontMetrics() throws Exception {
-    assertThat(synthesiseGPT("FontMetrics fontMetrics = this.getFontMetrics();\n\n", "FontMetrics fontMetrics = this.getFont().getFontMetrics(this.getFontRenderContext());\n", "javax.swing.text.LabelView", "getFontMetrics"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getFontMetrics();" , "\nthis.getFontMetrics(this.getFont())\n;" , "javax.swing.text.LabelView" , "getFontMetrics") , Matchers . anything ()) ;
   }
 }

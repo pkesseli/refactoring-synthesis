@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_swing_table_TableColumnTest {
   @Test
   void disableResizedPosting() throws Exception {
-    assertThat(synthesiseGPT("this.disableResizedPosting();\n\n", "this.setResizingAllowed(false);\n", "javax.swing.table.TableColumn", "disableResizedPosting"), Matchers.anything());
+assertThat (synthesiseGPT ("this.disableResizedPosting();" , "" , "javax.swing.table.TableColumn" , "disableResizedPosting") , Matchers . anything ()) ;
   }
 
   @Test
   void enableResizedPosting() throws Exception {
-    assertThat(synthesiseGPT("this.enableResizedPosting();\n\n", "this.setResizingAllowed(true);\n", "javax.swing.table.TableColumn", "enableResizedPosting"), Matchers.anything());
+assertThat (synthesiseGPT ("this.enableResizedPosting();" , "\n// Deprecated method, use setResizingAllowed(false) instead\nthis.setResizingAllowed(false);\n;" , "javax.swing.table.TableColumn" , "enableResizedPosting") , Matchers . anything ()) ;
   }
 }

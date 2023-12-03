@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_swing_JRootPaneTest {
   @Test
   void getMenuBar() throws Exception {
-    assertThat(synthesiseGPT("JMenuBar menuBar = this.getMenuBar();\n\n", "JMenuBar menuBar = this.getJMenuBar();\n", "javax.swing.JRootPane", "getMenuBar"), anyOf(contains("getJMenuBar")));
+assertThat (synthesiseGPT ("this.getMenuBar();" , "\nthis.getJMenuBar()\n;" , "javax.swing.JRootPane" , "getMenuBar") , anyOf (contains ("getJMenuBar"))) ;
   }
 
   @Test
   void setMenuBar() throws Exception {
-    assertThat(synthesiseGPT("this.setMenuBar(a);\n", "this.setJMenuBar(a);\n", "javax.swing.JRootPane", "setMenuBar", "javax.swing.JMenuBar"), anyOf(contains("setJMenuBar")));
+assertThat (synthesiseGPT ("this.setMenuBar(param0);" , "" , "javax.swing.JRootPane" , "setMenuBar" , "javax.swing.JMenuBar") , anyOf (contains ("setJMenuBar"))) ;
   }
 }

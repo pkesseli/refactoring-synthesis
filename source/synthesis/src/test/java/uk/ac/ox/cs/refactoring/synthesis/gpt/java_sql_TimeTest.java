@@ -12,36 +12,36 @@ import org.junit.jupiter.api.Test;
 class java_sql_TimeTest {
   @Test
   void getDate() throws Exception {
-    assertThat(synthesiseGPT("java.sql.Time time = new java.sql.Time(System.currentTimeMillis());\nDate date = time.getDate();\n\n", "java.sql.Time time = new java.sql.Time(System.currentTimeMillis());\nDate date = new Date(time.getTime());\n", "java.sql.Time", "getDate"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getDate();" , "\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\nint minute = calendar.get(Calendar.MINUTE);\n;" , "java.sql.Time" , "getDate") , Matchers . anything ()) ;
   }
 
   @Test
   void getDay() throws Exception {
-    assertThat(synthesiseGPT("int day = this.getDay();\n\n", "LocalDate localDate = LocalDate.now();\nint day = localDate.getDayOfMonth();\n", "java.sql.Time", "getDay"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getDay();" , "\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\nint day = calendar.get(Calendar.DAY_OF_MONTH);\n;" , "java.sql.Time" , "getDay") , Matchers . anything ()) ;
   }
 
   @Test
   void getMonth() throws Exception {
-    assertThat(synthesiseGPT("java.sql.Time time = new java.sql.Time(System.currentTimeMillis());\nint month = time.getMonth();\n\n", "java.sql.Time time = new java.sql.Time(System.currentTimeMillis());\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(time);\nint month = calendar.get(Calendar.MONTH);\n", "java.sql.Time", "getMonth"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getMonth();" , "" , "java.sql.Time" , "getMonth") , Matchers . anything ()) ;
   }
 
   @Test
   void getYear() throws Exception {
-    assertThat(synthesiseGPT("int year = this.getYear() + 1900;\n\n", "LocalDateTime dateTime = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault());\nint year = dateTime.getYear();\n", "java.sql.Time", "getYear"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getYear();" , "\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\nint year = calendar.get(Calendar.YEAR);\n;" , "java.sql.Time" , "getYear") , Matchers . anything ()) ;
   }
 
   @Test
   void setDate() throws Exception {
-    assertThat(synthesiseGPT("this.setDate(a);\n\n", "this.setTime(new java.sql.Time(a * 24L * 60L * 60L * 1000L).getTime());\n", "java.sql.Time", "setDate", "int"), Matchers.anything());
+assertThat (synthesiseGPT ("this.setDate(param0);" , "```java\nCalendar cal = Calendar.getInstance();\ncal.setTime(this);\ncal.set(Calendar.DATE, param0);\nthis.setTime(cal.getTimeInMillis());\n```;" , "java.sql.Time" , "setDate" , "int") , Matchers . anything ()) ;
   }
 
   @Test
   void setMonth() throws Exception {
-    assertThat(synthesiseGPT("this.setMonth(a);\n\n", "Calendar cal = Calendar.getInstance();\ncal.setTime(this);\ncal.set(Calendar.MONTH, a-1);\nthis.setTime(cal.getTime().getTime());\n", "java.sql.Time", "setMonth", "int"), Matchers.anything());
+assertThat (synthesiseGPT ("this.setMonth(param0);" , "" , "java.sql.Time" , "setMonth" , "int") , Matchers . anything ()) ;
   }
 
   @Test
   void setYear() throws Exception {
-    assertThat(synthesiseGPT("this.setYear(a);\n\n", "LocalDateTime ldt = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault());\nldt = ldt.withYear(a);\nthis.setTime(Time.valueOf(ldt.toLocalTime()));\n", "java.sql.Time", "setYear", "int"), Matchers.anything());
+assertThat (synthesiseGPT ("this.setYear(param0);" , "\nCalendar cal = Calendar.getInstance();\ncal.setTime(this);\ncal.set(Calendar.YEAR, param0);\nthis.setTime(cal.getTime().getTime());\n;" , "java.sql.Time" , "setYear" , "int") , Matchers . anything ()) ;
   }
 }

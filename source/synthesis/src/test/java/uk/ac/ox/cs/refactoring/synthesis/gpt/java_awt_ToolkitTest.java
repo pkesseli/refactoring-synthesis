@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Test;
 class java_awt_ToolkitTest {
   @Test
   void getFontList() throws Exception {
-    assertThat(synthesiseGPT("String[] fontList = Toolkit.getDefaultToolkit().getFontList();\n\n", "String[] fontList = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();\n", "java.awt.Toolkit", "getFontList"), anyOf(contains("getAvailableFontFamilyNames")));
+assertThat (synthesiseGPT ("this.getFontList();" , "\nToolkit.getDefaultToolkit().getFontList()\n;" , "java.awt.Toolkit" , "getFontList") , anyOf (contains ("getAvailableFontFamilyNames"))) ;
   }
 
   @Test
   void getFontMetrics() throws Exception {
-    assertThat(synthesiseGPT("Font font = new Font(\"Arial\", Font.PLAIN, 12);\nint fontWidth = this.getFontMetrics(font).stringWidth(\"Hello World\");\n\n", "Font font = new Font(\"Arial\", Font.PLAIN, 12);\nFontRenderContext frc = new FontRenderContext(null, true, true);\nint fontWidth = (int) font.getLineMetrics(\"Hello World\", frc).getBounds().getWidth();\n", "java.awt.Toolkit", "getFontMetrics", "java.awt.Font"), anyOf(contains("Font"), contains("getLineMetrics")));
+assertThat (synthesiseGPT ("this.getFontMetrics(param0);" , "\nToolkit.getDefaultToolkit().getFontMetrics(param0)\n;" , "java.awt.Toolkit" , "getFontMetrics" , "java.awt.Font") , anyOf (contains ("Font") , contains ("getLineMetrics"))) ;
   }
 
   @Test
   void getMenuShortcutKeyMask() throws Exception {
-    assertThat(synthesiseGPT("int shortcutKeyMask = this.getMenuShortcutKeyMask();\n\n", "int shortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();\n", "java.awt.Toolkit", "getMenuShortcutKeyMask"), anyOf(contains("getMenuShortcutKeyMaskEx")));
+assertThat (synthesiseGPT ("this.getMenuShortcutKeyMask();" , "\njava.awt.event.KeyEvent.VK_CONTROL // or VK_META for Mac\n;" , "java.awt.Toolkit" , "getMenuShortcutKeyMask") , anyOf (contains ("getMenuShortcutKeyMaskEx"))) ;
   }
 }

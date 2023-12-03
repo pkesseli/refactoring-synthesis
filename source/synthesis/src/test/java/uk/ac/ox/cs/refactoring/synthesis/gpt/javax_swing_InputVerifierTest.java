@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_InputVerifierTest {
   @Test
   void shouldYieldFocus() throws Exception {
-    assertThat(synthesiseGPT("this.shouldYieldFocus(a);\n\n", "InputVerifier.shouldYieldFocus(this, a);\n", "javax.swing.InputVerifier", "shouldYieldFocus", "javax.swing.JComponent"), anyOf(contains("shouldYieldFocus")));
+assertThat (synthesiseGPT ("this.shouldYieldFocus(param0);" , "\nthis.getInputVerifier().shouldYieldFocus(param0)\n;" , "javax.swing.InputVerifier" , "shouldYieldFocus" , "javax.swing.JComponent") , anyOf (contains ("shouldYieldFocus"))) ;
   }
 }

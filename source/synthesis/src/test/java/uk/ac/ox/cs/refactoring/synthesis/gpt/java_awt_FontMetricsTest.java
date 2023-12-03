@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_FontMetricsTest {
   @Test
   void getMaxDecent() throws Exception {
-    assertThat(synthesiseGPT("int descent = this.getMaxDecent();\n\n", "int descent = this.getMaxDescent();\n", "java.awt.FontMetrics", "getMaxDecent"), anyOf(contains("getMaxDescent")));
+assertThat (synthesiseGPT ("this.getMaxDecent();" , "\nthis.getDescent()\n;" , "java.awt.FontMetrics" , "getMaxDecent") , anyOf (contains ("getMaxDescent"))) ;
   }
 }

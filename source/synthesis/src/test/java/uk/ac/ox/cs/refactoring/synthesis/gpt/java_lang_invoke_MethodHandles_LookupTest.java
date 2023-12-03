@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_lang_invoke_MethodHandles_LookupTest {
   @Test
   void hasPrivateAccess() throws Exception {
-    assertThat(synthesiseGPT("this.hasPrivateAccess();\n\n", "this.lookup().hasFullPrivilegeAccess();\n", "java.lang.invoke.MethodHandles.Lookup", "hasPrivateAccess"), anyOf(contains("MODULE"), contains("PRIVATE"), contains("hasFullPrivilegeAccess")));
+assertThat (synthesiseGPT ("this.hasPrivateAccess();" , "" , "java.lang.invoke.MethodHandles.Lookup" , "hasPrivateAccess") , anyOf (contains ("MODULE") , contains ("PRIVATE") , contains ("hasFullPrivilegeAccess"))) ;
   }
 }

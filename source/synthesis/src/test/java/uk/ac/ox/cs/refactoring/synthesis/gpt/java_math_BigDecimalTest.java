@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Test;
 class java_math_BigDecimalTest {
   @Test
   void divide1() throws Exception {
-    assertThat(synthesiseGPT("this.divide(a, b);\n\n", "this.divide(a, b, RoundingMode.HALF_UP);\n", "java.math.BigDecimal", "divide", "java.math.BigDecimal", "int"), anyOf(contains("divide")));
+assertThat (synthesiseGPT ("this.divide(param0, param1);" , "\nthis.divide(param0, param1, RoundingMode.HALF_UP)\n;" , "java.math.BigDecimal" , "divide" , "java.math.BigDecimal" , "int") , anyOf (contains ("divide"))) ;
   }
 
   @Test
   void divide2() throws Exception {
-    assertThat(synthesiseGPT("this.divide(a, b, c);\n\n", "this.divide(a, b, RoundingMode.valueOf(c));\n", "java.math.BigDecimal", "divide", "java.math.BigDecimal", "int", "int"), anyOf(contains("divide")));
+assertThat (synthesiseGPT ("this.divide(param0, param1, param2);" , "\nthis.divide(param0, param1, RoundingMode.valueOf(param2))\n              .setScale(param1, RoundingMode.valueOf(param2))\n;" , "java.math.BigDecimal" , "divide" , "java.math.BigDecimal" , "int" , "int") , anyOf (contains ("divide"))) ;
   }
 
   @Test
   void setScale() throws Exception {
-    assertThat(synthesiseGPT("this.setScale(a, b);\n\n", "this.setScale(a, RoundingMode.valueOf(b));\n", "java.math.BigDecimal", "setScale", "int", "int"), anyOf(contains("setScale")));
+assertThat (synthesiseGPT ("this.setScale(param0, param1);" , "\nthis.setScale(param0, RoundingMode.getTimeToLive(param1))\n;" , "java.math.BigDecimal" , "setScale" , "int" , "int") , anyOf (contains ("setScale"))) ;
   }
 }

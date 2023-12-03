@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_lang_reflect_AccessibleObjectTest {
   @Test
   void isAccessible() throws Exception {
-    assertThat(synthesiseGPT("boolean isAccessible = this.isAccessible();\n\n", "boolean isAccessible = AccessibleObject.canAccess(this, null);\n", "java.lang.reflect.AccessibleObject", "isAccessible"), anyOf(contains("canAccess"), contains("false")));
+assertThat (synthesiseGPT ("this.isAccessible();" , "" , "java.lang.reflect.AccessibleObject" , "isAccessible") , anyOf (contains ("canAccess") , contains ("false"))) ;
   }
 }

@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_MonitorMBeanTest {
   @Test
   void getObservedObject() throws Exception {
-    assertThat(synthesiseGPT("Object observedObject = this.getObservedObject();\n\n", "Object[] observedObjects = this.getObservedObjects();\nObject observedObject = observedObjects.length > 0 ? observedObjects[0] : null;\n", "javax.management.monitor.MonitorMBean", "getObservedObject"), anyOf(contains("getObservedObjects")));
+assertThat (synthesiseGPT ("this.getObservedObject();" , "" , "javax.management.monitor.MonitorMBean" , "getObservedObject") , anyOf (contains ("getObservedObjects"))) ;
   }
 
   @Test
   void setObservedObject() throws Exception {
-    assertThat(synthesiseGPT("this.setObservedObject(a);\n", "this.addObservedObject(a);\n", "javax.management.monitor.MonitorMBean", "setObservedObject", "javax.management.ObjectName"), anyOf(contains("addObservedObject")));
+assertThat (synthesiseGPT ("this.setObservedObject(param0);" , "" , "javax.management.monitor.MonitorMBean" , "setObservedObject" , "javax.management.ObjectName") , anyOf (contains ("addObservedObject"))) ;
   }
 }

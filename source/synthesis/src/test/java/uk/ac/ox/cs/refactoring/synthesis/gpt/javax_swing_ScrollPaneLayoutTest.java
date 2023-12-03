@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_ScrollPaneLayoutTest {
   @Test
   void getViewportBorderBounds() throws Exception {
-    assertThat(synthesiseGPT("this.getViewportBorderBounds(a);\n\n", "a.getViewportBorderBounds();\n", "javax.swing.ScrollPaneLayout", "getViewportBorderBounds", "javax.swing.JScrollPane"), anyOf(contains("getViewportBorderBounds")));
+assertThat (synthesiseGPT ("this.getViewportBorderBounds(param0);" , "param0.getViewportBorderBounds();" , "javax.swing.ScrollPaneLayout" , "getViewportBorderBounds" , "javax.swing.JScrollPane") , anyOf (contains ("getViewportBorderBounds"))) ;
   }
 }

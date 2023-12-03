@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_awt_PolygonTest {
   @Test
   void getBoundingBox() throws Exception {
-    assertThat(synthesiseGPT("this.getBoundingBox();\n\n", "this.getBounds();\n", "java.awt.Polygon", "getBoundingBox"), anyOf(contains("getBounds")));
+assertThat (synthesiseGPT ("this.getBoundingBox();" , "\nthis.getBounds()\n;" , "java.awt.Polygon" , "getBoundingBox") , anyOf (contains ("getBounds"))) ;
   }
 
   @Test
   void inside() throws Exception {
-    assertThat(synthesiseGPT("if (this.inside(a, b)) {\n    // do something\n}\n\n", "if (this.contains(a, b)) {\n    // do something\n}\n", "java.awt.Polygon", "inside", "int", "int"), anyOf(contains("contains")));
+assertThat (synthesiseGPT ("this.inside(param0, param1);" , "" , "java.awt.Polygon" , "inside" , "int" , "int") , anyOf (contains ("contains"))) ;
   }
 }

@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Test;
 class java_lang_Runtime_VersionTest {
   @Test
   void major() throws Exception {
-    assertThat(synthesiseGPT("int major = Runtime.version().major();\n\n", "int major = Runtime.version().feature();\n", "java.lang.Runtime$Version", "major"), anyOf(contains("feature")));
+assertThat (synthesiseGPT ("this.major();" , "\nthis.version().interim()\n;" , "java.lang.Runtime$Version" , "major") , anyOf (contains ("feature"))) ;
   }
 
   @Test
   void minor() throws Exception {
-    assertThat(synthesiseGPT("int minorVersion = Runtime.version().minor();\n\n", "int minorVersion = Runtime.version().interim();\n", "java.lang.Runtime$Version", "minor"), anyOf(contains("interim")));
+assertThat (synthesiseGPT ("this.minor();" , "\nthis.version().update()\n;" , "java.lang.Runtime$Version" , "minor") , anyOf (contains ("interim"))) ;
   }
 
   @Test
   void security() throws Exception {
-    assertThat(synthesiseGPT("int securityLevel = Runtime.version().security();\n\n", "int securityLevel = Runtime.version().update();\n", "java.lang.Runtime$Version", "security"), anyOf(contains("update")));
+assertThat (synthesiseGPT ("this.security();" , "\nthis.checkPermission(new java.security.AllPermission());\n;" , "java.lang.Runtime$Version" , "security") , anyOf (contains ("update"))) ;
   }
 }

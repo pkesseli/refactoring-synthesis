@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_sql_DriverManagerTest {
   @Test
   void getLogStream() throws Exception {
-    assertThat(synthesiseGPT("this.getLogStream();\n\n", "this.getLogWriter();\n", "java.sql.DriverManager", "getLogStream"), anyOf(contains("getLogWriter")));
+assertThat (synthesiseGPT ("this.getLogStream();" , "" , "java.sql.DriverManager" , "getLogStream") , anyOf (contains ("getLogWriter"))) ;
   }
 
   @Test
   void setLogStream() throws Exception {
-    assertThat(synthesiseGPT("this.setLogStream(a);\n\n", "this.setLogWriter(new PrintWriter(a));\n", "java.sql.DriverManager", "setLogStream", "java.io.PrintStream"), anyOf(contains("setLogWriter")));
+assertThat (synthesiseGPT ("this.setLogStream(param0);" , "\nPrintStream logStream = param0;\nDriverManager.setLogWriter(new PrintWriter(logStream));\n;" , "java.sql.DriverManager" , "setLogStream" , "java.io.PrintStream") , anyOf (contains ("setLogWriter"))) ;
   }
 }

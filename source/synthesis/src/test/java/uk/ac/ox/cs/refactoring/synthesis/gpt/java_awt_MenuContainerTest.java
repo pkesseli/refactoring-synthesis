@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_MenuContainerTest {
   @Test
   void postEvent() throws Exception {
-    assertThat(synthesiseGPT("this.postEvent(a);\n", "Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(a);\n", "java.awt.MenuContainer", "postEvent", "java.awt.Event"), Matchers.anything());
+assertThat (synthesiseGPT ("this.postEvent(param0);" , "\nEventQueue.invokeLater(() -> {\n    setEnabled(true);\n});\n;" , "java.awt.MenuContainer" , "postEvent" , "java.awt.Event") , Matchers . anything ()) ;
   }
 }

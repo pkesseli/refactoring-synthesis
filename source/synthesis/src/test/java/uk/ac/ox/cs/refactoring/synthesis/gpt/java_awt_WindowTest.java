@@ -12,31 +12,31 @@ import org.junit.jupiter.api.Test;
 class java_awt_WindowTest {
   @Test
   void applyResourceBundle1() throws Exception {
-    assertThat(synthesiseGPT("this.applyResourceBundle(a);\n\n", "this.applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));\n", "java.awt.Window", "applyResourceBundle", "java.lang.String"), anyOf(contains("applyComponentOrientation")));
+assertThat (synthesiseGPT ("this.applyResourceBundle(param0);" , "this.applyComponentOrientation(ComponentOrientation.getOrientation(ResourceBundle.getBundle(param0).getLocale()));" , "java.awt.Window" , "applyResourceBundle" , "java.lang.String") , anyOf (contains ("applyComponentOrientation"))) ;
   }
 
   @Test
   void applyResourceBundle2() throws Exception {
-    assertThat(synthesiseGPT("this.applyResourceBundle(a);\n\n", "this.applyComponentOrientation(ComponentOrientation.getOrientation(a.getLocale()));\n", "java.awt.Window", "applyResourceBundle", "java.util.ResourceBundle"), anyOf(contains("applyComponentOrientation")));
+assertThat (synthesiseGPT ("this.applyResourceBundle(param0);" , "\nthis.setVisible(true);\n;" , "java.awt.Window" , "applyResourceBundle" , "java.util.ResourceBundle") , anyOf (contains ("applyComponentOrientation"))) ;
   }
 
   @Test
   void hide() throws Exception {
-    assertThat(synthesiseGPT("this.hide();\n\n", "this.setVisible(false);\n", "java.awt.Window", "hide"), anyOf(contains("setVisible")));
+assertThat (synthesiseGPT ("this.hide();" , "\nthis.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));\n;" , "java.awt.Window" , "hide") , anyOf (contains ("setVisible"))) ;
   }
 
   @Test
   void postEvent() throws Exception {
-    assertThat(synthesiseGPT("this.postEvent(a);\n", "this.dispatchEvent(a);\n", "java.awt.Window", "postEvent", "java.awt.Event"), anyOf(contains("dispatchEvent")));
+assertThat (synthesiseGPT ("this.postEvent(param0);" , "\nthis.dispatchEvent(param0);\n;" , "java.awt.Window" , "postEvent" , "java.awt.Event") , anyOf (contains ("dispatchEvent"))) ;
   }
 
   @Test
   void reshape() throws Exception {
-    assertThat(synthesiseGPT("this.reshape(a, b, c, d);\n", "this.setBounds(a, b, c, d);\n", "java.awt.Window", "reshape", "int", "int", "int", "int"), anyOf(contains("setBounds")));
+assertThat (synthesiseGPT ("this.reshape(param0, param1, param2, param3);" , "this.setBounds(param0, param1, param2, param3);" , "java.awt.Window" , "reshape" , "int" , "int" , "int" , "int") , anyOf (contains ("setBounds"))) ;
   }
 
   @Test
   void show() throws Exception {
-    assertThat(synthesiseGPT("this.show();\n\n", "this.setVisible(true);\n", "java.awt.Window", "show"), anyOf(contains("setVisible")));
+assertThat (synthesiseGPT ("this.show();" , "\nthis.setVisible(true);\n;" , "java.awt.Window" , "show") , anyOf (contains ("setVisible"))) ;
   }
 }

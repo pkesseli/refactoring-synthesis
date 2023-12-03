@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_sql_PreparedStatementTest {
   @Test
   void setUnicodeStream() throws Exception {
-    assertThat(synthesiseGPT("this.setUnicodeStream(a, b, c);\n\n", "this.setCharacterStream(a, new InputStreamReader(b, StandardCharsets.UTF_8), c);\n", "java.sql.PreparedStatement", "setUnicodeStream", "int", "java.io.InputStream", "int"), anyOf(contains("setCharacterStream")));
+assertThat (synthesiseGPT ("this.setUnicodeStream(param0, param1, param2);" , "" , "java.sql.PreparedStatement" , "setUnicodeStream" , "int" , "java.io.InputStream" , "int") , anyOf (contains ("setCharacterStream"))) ;
   }
 }

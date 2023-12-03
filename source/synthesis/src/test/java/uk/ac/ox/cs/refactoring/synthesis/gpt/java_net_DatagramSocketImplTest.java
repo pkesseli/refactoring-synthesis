@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_net_DatagramSocketImplTest {
   @Test
   void getTTL() throws Exception {
-    assertThat(synthesiseGPT("this.getTTL();\n\n", "this.getTimeToLive();\n", "java.net.DatagramSocketImpl", "getTTL"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getTTL();" , "\nthis.getTimeToLive()\n;" , "java.net.DatagramSocketImpl" , "getTTL") , Matchers . anything ()) ;
   }
 
   @Test
   void setTTL() throws Exception {
-    assertThat(synthesiseGPT("this.setTTL(a);\n\n", "this.setTimeToLive(a);\n", "java.net.DatagramSocketImpl", "setTTL", "byte"), Matchers.anything());
+assertThat (synthesiseGPT ("this.setTTL(param0);" , "\nMulticastSocket socket = new MulticastSocket();\nsocket.setTimeToLive(param0);\nNetworkInterface networkInterface = socket.getNetworkInterface();\n;" , "java.net.DatagramSocketImpl" , "setTTL" , "byte") , Matchers . anything ()) ;
   }
 }

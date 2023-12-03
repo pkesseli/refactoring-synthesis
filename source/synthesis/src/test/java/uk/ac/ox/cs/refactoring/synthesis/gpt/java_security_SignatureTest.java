@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_security_SignatureTest {
   @Test
   void getParameter() throws Exception {
-    assertThat(synthesiseGPT("Signature signature = Signature.getInstance(\"SHA256withRSA\");\nString parameterValue = signature.getParameter(\"parameterName\");\n\n", "Signature signature = Signature.getInstance(\"SHA256withRSA\");\nString parameterValue = signature.getParameterValue(\"parameterName\");\n", "java.security.Signature", "getParameter", "java.lang.String"), Matchers.anything());
+assertThat (synthesiseGPT ("this.getParameter(param0);" , "\nthis.getBigDecimal(param0)\n;" , "java.security.Signature" , "getParameter" , "java.lang.String") , Matchers . anything ()) ;
   }
 
   @Test
   void setParameter() throws Exception {
-    assertThat(synthesiseGPT("this.setParameter(a, b);\n\n", "this.setParameter(Parameter.valueOf(a), b);\n", "java.security.Signature", "setParameter", "java.lang.String", "java.lang.Object"), anyOf(contains("setParameter")));
+assertThat (synthesiseGPT ("this.setParameter(param0, param1);" , "\nthis.getParameter(param0).setParameter(param1);\n;" , "java.security.Signature" , "setParameter" , "java.lang.String" , "java.lang.Object") , anyOf (contains ("setParameter"))) ;
   }
 }

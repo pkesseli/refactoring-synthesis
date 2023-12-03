@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_swing_FocusManagerTest {
   @Test
   void disableSwingFocusManager() throws Exception {
-    assertThat(synthesiseGPT("this.disableSwingFocusManager();\n", "KeyboardFocusManager.getCurrentKeyboardFocusManager().setDefaultFocusTraversalPolicy(FocusTraversalPolicy); \n", "javax.swing.FocusManager", "disableSwingFocusManager"), anyOf(contains("setDefaultFocusTraversalPolicy")));
+assertThat (synthesiseGPT ("this.disableSwingFocusManager();" , "\nFocusManager.getCurrentManager().setFocusTraversalPolicyProvider(true);\n;" , "javax.swing.FocusManager" , "disableSwingFocusManager") , anyOf (contains ("setDefaultFocusTraversalPolicy"))) ;
   }
 
   @Test
   void isFocusManagerEnabled() throws Exception {
-    assertThat(synthesiseGPT("this.isFocusManagerEnabled();\n\n", "KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalPolicy();\n", "javax.swing.FocusManager", "isFocusManagerEnabled"), anyOf(contains("getDefaultFocusTraversalPolicy")));
+assertThat (synthesiseGPT ("this.isFocusManagerEnabled();" , "\nthis.isFocusable()\n;" , "javax.swing.FocusManager" , "isFocusManagerEnabled") , anyOf (contains ("getDefaultFocusTraversalPolicy"))) ;
   }
 }

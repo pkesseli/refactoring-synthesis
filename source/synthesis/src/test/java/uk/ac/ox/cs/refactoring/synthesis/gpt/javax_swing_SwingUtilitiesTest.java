@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_SwingUtilitiesTest {
   @Test
   void findFocusOwner() throws Exception {
-    assertThat(synthesiseGPT("Component focusOwner = this.findFocusOwner(a);\n\n", "Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();\n", "javax.swing.SwingUtilities", "findFocusOwner", "java.awt.Component"), anyOf(contains("getFocusOwner")));
+assertThat (synthesiseGPT ("this.findFocusOwner(param0);" , "\nSwingUtilities.getFocusedComponent(param0)\n;" , "javax.swing.SwingUtilities" , "findFocusOwner" , "java.awt.Component") , anyOf (contains ("getFocusOwner"))) ;
   }
 }

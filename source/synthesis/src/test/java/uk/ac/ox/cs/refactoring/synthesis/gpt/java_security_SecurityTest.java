@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_security_SecurityTest {
   @Test
   void getAlgorithmProperty() throws Exception {
-    assertThat(synthesiseGPT("String property = Security.getAlgorithmProperty(a, b);\n\n", "Provider provider = Security.getProvider(\"SUN\");\nAlgorithmParameters params = AlgorithmParameters.getInstance(a, provider);\nparams.init(property.getBytes());\n", "java.security.Security", "getAlgorithmProperty", "java.lang.String", "java.lang.String"), anyOf(contains("AlgorithmParameters"), contains("KeyFactory")));
+assertThat (synthesiseGPT ("this.getAlgorithmProperty(param0, param1);" , "\nSecurity.setProperty(param0 + \".\" + param1, value);\n;" , "java.security.Security" , "getAlgorithmProperty" , "java.lang.String" , "java.lang.String") , anyOf (contains ("AlgorithmParameters") , contains ("KeyFactory"))) ;
   }
 }

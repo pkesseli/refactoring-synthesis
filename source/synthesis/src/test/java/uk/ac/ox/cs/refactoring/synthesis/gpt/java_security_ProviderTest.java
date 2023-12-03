@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_security_ProviderTest {
   @Test
   void getVersion() throws Exception {
-    assertThat(synthesiseGPT("String version = this.getVersion();\n\n", "String version = this.getVersionStr();\n", "java.security.Provider", "getVersion"), anyOf(contains("getVersionStr")));
+assertThat (synthesiseGPT ("this.getVersion();" , "\nthis.getParameter(\"version\")\n;" , "java.security.Provider" , "getVersion") , anyOf (contains ("getVersionStr"))) ;
   }
 }

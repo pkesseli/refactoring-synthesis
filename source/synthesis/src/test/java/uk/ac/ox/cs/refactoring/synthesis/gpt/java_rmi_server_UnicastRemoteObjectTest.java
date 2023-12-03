@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_rmi_server_UnicastRemoteObjectTest {
   @Test
   void exportObject() throws Exception {
-    assertThat(synthesiseGPT("this.exportObject(a);\n\n", "this.exportObject(a, 0);\n", "java.rmi.server.UnicastRemoteObject", "exportObject", "java.rmi.Remote"), anyOf(contains("exportObject")));
+assertThat (synthesiseGPT ("this.exportObject(param0);" , "\nUnicastRemoteObject.exportObject(param0, 0);\n;" , "java.rmi.server.UnicastRemoteObject" , "exportObject" , "java.rmi.Remote") , anyOf (contains ("exportObject"))) ;
   }
 }

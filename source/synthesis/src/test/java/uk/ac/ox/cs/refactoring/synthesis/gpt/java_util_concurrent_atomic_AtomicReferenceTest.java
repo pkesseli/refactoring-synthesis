@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_util_concurrent_atomic_AtomicReferenceTest {
   @Test
   void weakCompareAndSet() throws Exception {
-    assertThat(synthesiseGPT("this.weakCompareAndSet(a, b);\n\n", "this.weakCompareAndSetPlain(a, b);\n", "java.util.concurrent.atomic.AtomicReference", "weakCompareAndSet", "V", "V"), anyOf(contains("weakCompareAndSetPlain")));
+assertThat (synthesiseGPT ("this.weakCompareAndSet(param0, param1);" , "\nthis.compareAndExchange(param0, param1, null) != null\n;" , "java.util.concurrent.atomic.AtomicReference" , "weakCompareAndSet" , "V" , "V") , anyOf (contains ("weakCompareAndSetPlain"))) ;
   }
 }

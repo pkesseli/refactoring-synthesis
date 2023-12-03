@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_text_html_HTMLEditorKit_InsertHTMLTextActionTest {
   @Test
   void insertAtBoundry() throws Exception {
-    assertThat(synthesiseGPT("this.insertAtBoundry(a, b, c, d, e, f, g);\n\n", "this.insertAtBoundary(a, b, c, d, e, f, g);\n", "javax.swing.text.html.HTMLEditorKit.InsertHTMLTextAction", "insertAtBoundry", "javax.swing.JEditorPane", "javax.swing.text.html.HTMLDocument", "int", "javax.swing.text.Element", "java.lang.String", "javax.swing.text.html.HTML$Tag", "javax.swing.text.html.HTML$Tag"), Matchers.anything());
+assertThat (synthesiseGPT ("this.insertAtBoundry(param0, param1, param2, param3, param4, param5, param6);" , "" , "javax.swing.text.html.HTMLEditorKit.InsertHTMLTextAction" , "insertAtBoundry" , "javax.swing.JEditorPane" , "javax.swing.text.html.HTMLDocument" , "int" , "javax.swing.text.Element" , "java.lang.String" , "javax.swing.text.html.HTML$Tag" , "javax.swing.text.html.HTML$Tag") , Matchers . anything ()) ;
   }
 }

@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_awt_FrameTest {
   @Test
   void getCursorType() throws Exception {
-    assertThat(synthesiseGPT("int cursorType = this.getCursorType();\n\n", "Cursor cursor = this.getCursor();\nint cursorType = cursor.getType();\n", "java.awt.Frame", "getCursorType"), anyOf(contains("getCursor")));
+assertThat (synthesiseGPT ("this.getCursorType();" , "\nthis.setCursor(Cursor.getDefaultCursor().getType())\n;" , "java.awt.Frame" , "getCursorType") , anyOf (contains ("getCursor"))) ;
   }
 
   @Test
   void setCursor() throws Exception {
-    assertThat(synthesiseGPT("this.setCursor(a);\n\n", "this.setCursor(Cursor.getPredefinedCursor(a));\n", "java.awt.Frame", "setCursor", "int"), anyOf(contains("setCursor")));
+assertThat (synthesiseGPT ("this.setCursor(param0);" , "\nthis.setCursor(Cursor.getPredefinedCursor(param0));\n;" , "java.awt.Frame" , "setCursor" , "int") , anyOf (contains ("setCursor"))) ;
   }
 }

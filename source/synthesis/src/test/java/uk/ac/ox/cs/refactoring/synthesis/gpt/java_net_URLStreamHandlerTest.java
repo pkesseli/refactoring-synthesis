@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_net_URLStreamHandlerTest {
   @Test
   void setURL() throws Exception {
-    assertThat(synthesiseGPT("this.setURL(a, b, c, d, e, f);\n\n", "this.setURL(a, b, c, d, e, f, null, null);\n", "java.net.URLStreamHandler", "setURL", "java.net.URL", "java.lang.String", "java.lang.String", "int", "java.lang.String", "java.lang.String"), Matchers.anything());
+assertThat (synthesiseGPT ("this.setURL(param0, param1, param2, param3, param4, param5);" , "" , "java.net.URLStreamHandler" , "setURL" , "java.net.URL" , "java.lang.String" , "java.lang.String" , "int" , "java.lang.String" , "java.lang.String") , Matchers . anything ()) ;
   }
 }
