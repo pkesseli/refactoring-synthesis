@@ -42,10 +42,7 @@ async fn main() -> anyhow::Result<()> {
         })
         .collect::<anyhow::Result<Vec<_>>>()?;
 
-    let api_key = "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";
-    let config = OpenAIConfig::new()
-        .with_api_key(api_key)
-        .with_org_id("org-VrmlZ45kWPFIWoRet1H083yR");
+    let config = OpenAIConfig::new().with_org_id("org-VrmlZ45kWPFIWoRet1H083yR");
 
     let client = Client::with_config(config);
 
@@ -173,7 +170,7 @@ fn decompose_path(path: &str) -> (&str, &str, impl Iterator<Item = &str>) {
     let args = &method_invoke[left_paren + 1..right_paren];
 
     if args.is_empty() {
-        return (class_name, method_name, either::Left(std::iter::empty()))
+        return (class_name, method_name, either::Left(std::iter::empty()));
     }
 
     return (class_name, method_name, either::Right(args.split(", ")));
