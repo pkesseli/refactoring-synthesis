@@ -72,7 +72,8 @@ public class ConsumerSeed implements InstructionSetSeed {
     final Class<?> cls = classLoader.loadClass(consumerType);
     for (final Method method : cls.getDeclaredMethods()) {
       if (Modifier.isPublic(method.getModifiers()) && method.getParameterTypes().length != 0
-          && Dependencies.isUsable(allComponents, method) && Dependencies.usesAny(unusedComponents, method))
+          && method.getAnnotation(Deprecated.class) == null && Dependencies.isUsable(allComponents, method)
+          && Dependencies.usesAny(unusedComponents, method))
         Invoke.register(javaComponents, method);
     }
   }
