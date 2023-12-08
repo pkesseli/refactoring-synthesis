@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Test;
 class org_ietf_jgss_GSSContextTest {
   @Test
   void acceptSecContext() throws Exception {
-    assertThat(synthesiseAlias("org.ietf.jgss.GSSContext", "acceptSecContext", "java.io.InputStream", "java.io.OutputStream"), anyOf(contains("acceptSecContext")));
+    // org.ietf.jgss.GSSContext
+    assertThat(synthesiseAlias("sun.security.jgss.GSSContextImpl", "acceptSecContext", "java.io.InputStream", "java.io.OutputStream"), anyOf(contains("acceptSecContext")));
   }
 
   @Test
@@ -21,7 +22,8 @@ class org_ietf_jgss_GSSContextTest {
 
   @Test
   void initSecContext() throws Exception {
-    assertThat(synthesiseAlias("org.ietf.jgss.GSSContext", "initSecContext", "java.io.InputStream", "java.io.OutputStream"), anyOf(contains("initSecContext")));
+    // org.ietf.jgss.GSSContext
+    assertThat(synthesiseAlias("sun.security.jgss.GSSContextImpl", "initSecContext", "java.io.InputStream", "java.io.OutputStream"), anyOf(contains("initSecContext")));
   }
 
   @Test

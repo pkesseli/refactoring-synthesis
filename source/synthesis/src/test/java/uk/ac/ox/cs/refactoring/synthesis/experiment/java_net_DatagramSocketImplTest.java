@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 class java_net_DatagramSocketImplTest {
   @Test
   void getTTL() throws Exception {
-    assertThat(synthesiseAlias("java.net.DatagramSocketImpl", "getTTL"), contains("getTimeToLive"));
+    // java.net.DatagramSocketImpl
+    assertThat(synthesiseAlias("java.net.PlainDatagramSocketImpl", "getTTL"), contains("getTimeToLive"));
   }
 
   @Test
