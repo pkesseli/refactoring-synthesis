@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_lang_ClassTest {
   @Test
   void newInstance() throws Exception {
-assertThat (synthesiseGPT ("this.newInstance();" , "\nthis.getDeclaredConstructor().newInstance()\n;" , "java.lang.Class" , "newInstance") , anyOf (contains ("InvocationTargetException") , contains ("NoSuchMethodException") , contains ("ReflectiveOperationException") , contains ("newInstance"))) ;
+assertThat (synthesiseGPT ("newInstance" , "this.newInstance();" , "\nthis.getDeclaredConstructor().newInstance()\n;" , "java.lang.Class" , "newInstance") , anyOf (contains ("InvocationTargetException") , contains ("NoSuchMethodException") , contains ("ReflectiveOperationException") , contains ("newInstance"))) ;
   }
 }

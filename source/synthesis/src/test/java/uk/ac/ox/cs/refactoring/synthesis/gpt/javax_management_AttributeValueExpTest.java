@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_management_AttributeValueExpTest {
   @Test
   void setMBeanServer() throws Exception {
-assertThat (synthesiseGPT ("this.setMBeanServer(param0);" , "" , "javax.management.AttributeValueExp" , "setMBeanServer" , "javax.management.MBeanServer") , anyOf (contains ("getMBeanServer"))) ;
+assertThat (synthesiseGPT ("setMBeanServer" , "this.setMBeanServer(param0);" , "" , "javax.management.AttributeValueExp" , "setMBeanServer" , "javax.management.MBeanServer") , anyOf (contains ("getMBeanServer"))) ;
   }
 }

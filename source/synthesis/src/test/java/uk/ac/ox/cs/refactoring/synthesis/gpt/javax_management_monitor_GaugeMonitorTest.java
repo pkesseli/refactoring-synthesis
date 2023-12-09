@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_GaugeMonitorTest {
   @Test
   void getDerivedGauge() throws Exception {
-assertThat (synthesiseGPT ("this.getDerivedGauge();" , "" , "javax.management.monitor.GaugeMonitor" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
+assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "" , "javax.management.monitor.GaugeMonitor" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
   }
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("this.getDerivedGaugeTimeStamp();" , "\n// Assuming the correct replacement method is getDerivedGaugeTimestamp()\nthis.getDerivedGaugeTimestamp();\n" , "javax.management.monitor.GaugeMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\n// Assuming the correct replacement method is getDerivedGaugeTimestamp()\nthis.getDerivedGaugeTimestamp();\n" , "javax.management.monitor.GaugeMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 }

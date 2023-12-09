@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_ComponentOrientationTest {
   @Test
   void getOrientation() throws Exception {
-assertThat (synthesiseGPT ("this.getOrientation(param0);" , "\nLocale locale = param0.getLocale();\nComponentOrientation orientation = ComponentOrientation.getOrientation(locale);\n" , "java.awt.ComponentOrientation" , "getOrientation" , "java.util.ResourceBundle") , anyOf (contains ("getOrientation"))) ;
+assertThat (synthesiseGPT ("getOrientation" , "this.getOrientation(param0);" , "\nLocale locale = param0.getLocale();\nComponentOrientation orientation = ComponentOrientation.getOrientation(locale);\n" , "java.awt.ComponentOrientation" , "getOrientation" , "java.util.ResourceBundle") , anyOf (contains ("getOrientation"))) ;
   }
 }

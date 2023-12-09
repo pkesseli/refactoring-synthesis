@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_JListTest {
   @Test
   void getSelectedValues() throws Exception {
-assertThat (synthesiseGPT ("this.getSelectedValues();" , "\nthis.getSelectedValuesList().toArray(new Object[0])\n;" , "javax.swing.JList" , "getSelectedValues") , anyOf (contains ("getSelectedValuesList"))) ;
+assertThat (synthesiseGPT ("getSelectedValues" , "this.getSelectedValues();" , "\nthis.getSelectedValuesList().toArray(new Object[0])\n;" , "javax.swing.JList" , "getSelectedValues") , anyOf (contains ("getSelectedValuesList"))) ;
   }
 }

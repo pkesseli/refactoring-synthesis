@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_security_SignatureSpiTest {
   @Test
   void engineGetParameter() throws Exception {
-assertThat (synthesiseGPT ("this.engineGetParameter(param0);" , "" , "java.security.SignatureSpi" , "engineGetParameter" , "java.lang.String") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("engineGetParameter" , "this.engineGetParameter(param0);" , "" , "java.security.SignatureSpi" , "engineGetParameter" , "java.lang.String") , Matchers . anything ()) ;
   }
 
   @Test
   void engineSetParameter() throws Exception {
-assertThat (synthesiseGPT ("this.engineSetParameter(param0, param1);" , "" , "java.security.SignatureSpi" , "engineSetParameter" , "java.lang.String" , "java.lang.Object") , anyOf (contains ("engineSetParameter"))) ;
+assertThat (synthesiseGPT ("engineSetParameter" , "this.engineSetParameter(param0, param1);" , "" , "java.security.SignatureSpi" , "engineSetParameter" , "java.lang.String" , "java.lang.Object") , anyOf (contains ("engineSetParameter"))) ;
   }
 }

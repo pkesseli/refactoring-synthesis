@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_rmi_dgc_VMIDTest {
   @Test
   void isUnique() throws Exception {
-assertThat (synthesiseGPT ("this.isUnique();" , "" , "java.rmi.dgc.VMID" , "isUnique") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("isUnique" , "this.isUnique();" , "" , "java.rmi.dgc.VMID" , "isUnique") , Matchers . anything ()) ;
   }
 }

@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_rmi_server_RMIClassLoaderTest {
   @Test
   void loadClass() throws Exception {
-assertThat (synthesiseGPT ("this.loadClass(param0);" , "" , "java.rmi.server.RMIClassLoader" , "loadClass" , "java.lang.String") , anyOf (contains ("loadClass"))) ;
+assertThat (synthesiseGPT ("loadClass" , "this.loadClass(param0);" , "" , "java.rmi.server.RMIClassLoader" , "loadClass" , "java.lang.String") , anyOf (contains ("loadClass"))) ;
   }
 }

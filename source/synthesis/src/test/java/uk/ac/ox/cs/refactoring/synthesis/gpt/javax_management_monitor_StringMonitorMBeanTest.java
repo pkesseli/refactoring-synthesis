@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_StringMonitorMBeanTest {
   @Test
   void getDerivedGauge() throws Exception {
-assertThat (synthesiseGPT ("this.getDerivedGauge();" , "" , "javax.management.monitor.StringMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
+assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "" , "javax.management.monitor.StringMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
   }
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("this.getDerivedGaugeTimeStamp();" , "" , "javax.management.monitor.StringMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "" , "javax.management.monitor.StringMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 }

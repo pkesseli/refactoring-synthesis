@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_ChoiceTest {
   @Test
   void countItems() throws Exception {
-assertThat (synthesiseGPT ("this.countItems();" , "\nthis.getItemCount()\n;" , "java.awt.Choice" , "countItems") , anyOf (contains ("getItemCount"))) ;
+assertThat (synthesiseGPT ("countItems" , "this.countItems();" , "\nthis.getItemCount()\n;" , "java.awt.Choice" , "countItems") , anyOf (contains ("getItemCount"))) ;
   }
 }

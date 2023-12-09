@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_swing_JTableTest {
   @Test
   void createScrollPaneForTable() throws Exception {
-assertThat (synthesiseGPT ("this.createScrollPaneForTable(param0);" , "" , "javax.swing.JTable" , "createScrollPaneForTable" , "javax.swing.JTable") , anyOf (contains ("new JScrollPane"))) ;
+assertThat (synthesiseGPT ("createScrollPaneForTable" , "this.createScrollPaneForTable(param0);" , "" , "javax.swing.JTable" , "createScrollPaneForTable" , "javax.swing.JTable") , anyOf (contains ("new JScrollPane"))) ;
   }
 
   @Test
   void sizeColumnsToFit() throws Exception {
-assertThat (synthesiseGPT ("this.sizeColumnsToFit(param0);" , "\nthis.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);\n```\n\nIf you were using `sizeColumnsToFit` with a specific column index, you would replace `param0` with the actual column index:\n\n```java\nthis.sizeColumnsToFit(columnIndex);\n" , "javax.swing.JTable" , "sizeColumnsToFit" , "boolean") , anyOf (contains ("doLayout"))) ;
+assertThat (synthesiseGPT ("sizeColumnsToFit" , "this.sizeColumnsToFit(param0);" , "\nthis.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);\n```\n\nIf you were using `sizeColumnsToFit` with a specific column index, you would replace `param0` with the actual column index:\n\n```java\nthis.sizeColumnsToFit(columnIndex);\n" , "javax.swing.JTable" , "sizeColumnsToFit" , "boolean") , anyOf (contains ("doLayout"))) ;
   }
 }

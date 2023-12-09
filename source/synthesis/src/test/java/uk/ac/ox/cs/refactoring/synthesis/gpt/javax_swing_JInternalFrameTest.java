@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_swing_JInternalFrameTest {
   @Test
   void getMenuBar() throws Exception {
-assertThat (synthesiseGPT ("this.getMenuBar();" , "" , "javax.swing.JInternalFrame" , "getMenuBar") , anyOf (contains ("getJMenuBar"))) ;
+assertThat (synthesiseGPT ("getMenuBar" , "this.getMenuBar();" , "" , "javax.swing.JInternalFrame" , "getMenuBar") , anyOf (contains ("getJMenuBar"))) ;
   }
 
   @Test
   void setMenuBar() throws Exception {
-assertThat (synthesiseGPT ("this.setMenuBar(param0);" , "\nthis.setJMenuBar(param0);\n" , "javax.swing.JInternalFrame" , "setMenuBar" , "javax.swing.JMenuBar") , anyOf (contains ("setJMenuBar"))) ;
+assertThat (synthesiseGPT ("setMenuBar" , "this.setMenuBar(param0);" , "\nthis.setJMenuBar(param0);\n" , "javax.swing.JInternalFrame" , "setMenuBar" , "javax.swing.JMenuBar") , anyOf (contains ("setJMenuBar"))) ;
   }
 }

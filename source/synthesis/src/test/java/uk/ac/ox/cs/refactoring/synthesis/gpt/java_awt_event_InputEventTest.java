@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_event_InputEventTest {
   @Test
   void getModifiers() throws Exception {
-assertThat (synthesiseGPT ("this.getModifiers();" , "\nthis.getModifiersEx()\n;" , "java.awt.event.InputEvent" , "getModifiers") , anyOf (contains ("getModifiersEx"))) ;
+assertThat (synthesiseGPT ("getModifiers" , "this.getModifiers();" , "\nthis.getModifiersEx()\n;" , "java.awt.event.InputEvent" , "getModifiers") , anyOf (contains ("getModifiersEx"))) ;
   }
 }

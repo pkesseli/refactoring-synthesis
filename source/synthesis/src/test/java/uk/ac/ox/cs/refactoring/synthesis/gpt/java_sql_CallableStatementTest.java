@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_sql_CallableStatementTest {
   @Test
   void getBigDecimal() throws Exception {
-assertThat (synthesiseGPT ("this.getBigDecimal(param0, param1);" , "\nthis.getBigDecimal(param0)\n;" , "java.sql.CallableStatement" , "getBigDecimal" , "int" , "int") , anyOf (contains ("getBigDecimal"))) ;
+assertThat (synthesiseGPT ("getBigDecimal" , "this.getBigDecimal(param0, param1);" , "\nthis.getBigDecimal(param0)\n;" , "java.sql.CallableStatement" , "getBigDecimal" , "int" , "int") , anyOf (contains ("getBigDecimal"))) ;
   }
 }

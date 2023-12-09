@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Test;
 class com_sun_management_OperatingSystemMXBeanTest {
   @Test
   void getFreePhysicalMemorySize() throws Exception {
-assertThat (synthesiseGPT ("this.getFreePhysicalMemorySize();" , "\nthis.getFreeMemorySize()\n;" , "com.sun.management.OperatingSystemMXBean" , "getFreePhysicalMemorySize") , anyOf (contains ("getFreeMemorySize"))) ;
+assertThat (synthesiseGPT ("getFreePhysicalMemorySize" , "this.getFreePhysicalMemorySize();" , "\nthis.getFreeMemorySize()\n;" , "com.sun.management.OperatingSystemMXBean" , "getFreePhysicalMemorySize") , anyOf (contains ("getFreeMemorySize"))) ;
   }
 
   @Test
   void getSystemCpuLoad() throws Exception {
-assertThat (synthesiseGPT ("this.getSystemCpuLoad();" , "\nthis.getCpuLoad()\n;" , "com.sun.management.OperatingSystemMXBean" , "getSystemCpuLoad") , anyOf (contains ("getCpuLoad"))) ;
+assertThat (synthesiseGPT ("getSystemCpuLoad" , "this.getSystemCpuLoad();" , "\nthis.getCpuLoad()\n;" , "com.sun.management.OperatingSystemMXBean" , "getSystemCpuLoad") , anyOf (contains ("getCpuLoad"))) ;
   }
 
   @Test
   void getTotalPhysicalMemorySize() throws Exception {
-assertThat (synthesiseGPT ("this.getTotalPhysicalMemorySize();" , "\nthis.getTotalMemorySize()\n;" , "com.sun.management.OperatingSystemMXBean" , "getTotalPhysicalMemorySize") , anyOf (contains ("getTotalMemorySize"))) ;
+assertThat (synthesiseGPT ("getTotalPhysicalMemorySize" , "this.getTotalPhysicalMemorySize();" , "\nthis.getTotalMemorySize()\n;" , "com.sun.management.OperatingSystemMXBean" , "getTotalPhysicalMemorySize") , anyOf (contains ("getTotalMemorySize"))) ;
   }
 }

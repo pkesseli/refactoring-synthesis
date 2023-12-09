@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_security_ProviderTest {
   @Test
   void getVersion() throws Exception {
-assertThat (synthesiseGPT ("this.getVersion();" , "\nthis.getVersionStr()\n```\n\nIf you need the version as a `double` value, you could parse the string:\n\n```java\nDouble.parseDouble(this.getVersionStr())\n;" , "java.security.Provider" , "getVersion") , anyOf (contains ("getVersionStr"))) ;
+assertThat (synthesiseGPT ("getVersion" , "this.getVersion();" , "\nthis.getVersionStr()\n```\n\nIf you need the version as a `double` value, you could parse the string:\n\n```java\nDouble.parseDouble(this.getVersionStr())\n;" , "java.security.Provider" , "getVersion") , anyOf (contains ("getVersionStr"))) ;
   }
 }

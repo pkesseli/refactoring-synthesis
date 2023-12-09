@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_text_TableViewTest {
   @Test
   void createTableCell() throws Exception {
-assertThat (synthesiseGPT ("this.createTableCell(param0);" , "" , "javax.swing.text.TableView" , "createTableCell" , "javax.swing.text.Element") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("createTableCell" , "this.createTableCell(param0);" , "" , "javax.swing.text.TableView" , "createTableCell" , "javax.swing.text.Element") , Matchers . anything ()) ;
   }
 }
