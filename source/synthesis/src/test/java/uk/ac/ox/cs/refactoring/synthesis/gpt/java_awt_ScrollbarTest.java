@@ -27,7 +27,7 @@ assertThat (synthesiseGPT ("this.getVisible();" , "\nthis.getVisibleAmount()\n``
 
   @Test
   void setLineIncrement() throws Exception {
-assertThat (synthesiseGPT ("this.setLineIncrement(param0);" , "\nthis.setBlockIncrement(param0);\n;" , "java.awt.Scrollbar" , "setLineIncrement" , "int") , anyOf (contains ("setUnitIncrement"))) ;
+assertThat (synthesiseGPT ("this.setLineIncrement(param0);" , "\nthis.setBlockIncrement(param0);\n" , "java.awt.Scrollbar" , "setLineIncrement" , "int") , anyOf (contains ("setUnitIncrement"))) ;
   }
 
   @Test

@@ -17,7 +17,7 @@ assertThat (synthesiseGPT ("this.modelToView(param0, param1);" , "\nparam0.model
 
   @Test
   void modelToView2() throws Exception {
-assertThat (synthesiseGPT ("this.modelToView(param0, param1, param2);" , "\ntry {\n    Rectangle2D modelToView = param0.modelToView2D(param1);\n    return new Point((int) modelToView.getX(), (int) modelToView.getY());\n} catch (BadLocationException e) {\n    // Handle exception\n    return null;\n}\n;" , "javax.swing.plaf.basic.BasicTextUI" , "modelToView" , "javax.swing.text.JTextComponent" , "int" , "javax.swing.text.Position$Bias") , anyOf (contains ("modelToView2D"))) ;
+assertThat (synthesiseGPT ("this.modelToView(param0, param1, param2);" , "\ntry {\n    Rectangle2D modelToView = param0.modelToView2D(param1);\n    return new Point((int) modelToView.getX(), (int) modelToView.getY());\n} catch (BadLocationException e) {\n    // Handle exception\n    return null;\n}\n" , "javax.swing.plaf.basic.BasicTextUI" , "modelToView" , "javax.swing.text.JTextComponent" , "int" , "javax.swing.text.Position$Bias") , anyOf (contains ("modelToView2D"))) ;
   }
 
   @Test

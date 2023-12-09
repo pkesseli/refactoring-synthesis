@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 class java_awt_ToolkitTest {
   @Test
   void getFontList() throws Exception {
-assertThat (synthesiseGPT ("this.getFontList();" , "\nGraphics g = this.getGraphics();\nFontMetrics fm = g.getFontMetrics();\n// Use fm.getLineMetrics(...) as needed\n;" , "java.awt.Toolkit" , "getFontList") , anyOf (contains ("getAvailableFontFamilyNames"))) ;
+assertThat (synthesiseGPT ("this.getFontList();" , "\nGraphics g = this.getGraphics();\nFontMetrics fm = g.getFontMetrics();\n// Use fm.getLineMetrics(...) as needed\n" , "java.awt.Toolkit" , "getFontList") , anyOf (contains ("getAvailableFontFamilyNames"))) ;
   }
 
   @Test
   void getFontMetrics() throws Exception {
-assertThat (synthesiseGPT ("this.getFontMetrics(param0);" , "\n@Override\npublic void paint(Graphics g) {\n    super.paint(g);\n    FontMetrics fm = g.getFontMetrics(param0);\n    // Use fm as needed\n}\n```\n\nIf you need to obtain `FontMetrics` outside of a paint method, you can get a `Graphics` object from any component, like this:\n\n```java\nFontMetrics fm = this.getFontMetrics(param0);\n;" , "java.awt.Toolkit" , "getFontMetrics" , "java.awt.Font") , anyOf (contains ("Font") , contains ("getLineMetrics"))) ;
+assertThat (synthesiseGPT ("this.getFontMetrics(param0);" , "\n@Override\npublic void paint(Graphics g) {\n    super.paint(g);\n    FontMetrics fm = g.getFontMetrics(param0);\n    // Use fm as needed\n}\n```\n\nIf you need to obtain `FontMetrics` outside of a paint method, you can get a `Graphics` object from any component, like this:\n\n```java\nFontMetrics fm = this.getFontMetrics(param0);\n" , "java.awt.Toolkit" , "getFontMetrics" , "java.awt.Font") , anyOf (contains ("Font") , contains ("getLineMetrics"))) ;
   }
 
   @Test

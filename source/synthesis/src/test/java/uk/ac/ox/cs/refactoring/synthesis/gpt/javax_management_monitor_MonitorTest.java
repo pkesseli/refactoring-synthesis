@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("this.getObservedObject();" , "The information provid
 
   @Test
   void setObservedObject() throws Exception {
-assertThat (synthesiseGPT ("this.setObservedObject(param0);" , "\n// Assuming 'this' is an instance of a Monitor subclass\nObjectName observedObjectName = param0;\nthis.addObservedObject(observedObjectName);\n;" , "javax.management.monitor.Monitor" , "setObservedObject" , "javax.management.ObjectName") , anyOf (contains ("addObservedObject"))) ;
+assertThat (synthesiseGPT ("this.setObservedObject(param0);" , "\n// Assuming 'this' is an instance of a Monitor subclass\nObjectName observedObjectName = param0;\nthis.addObservedObject(observedObjectName);\n" , "javax.management.monitor.Monitor" , "setObservedObject" , "javax.management.ObjectName") , anyOf (contains ("addObservedObject"))) ;
   }
 }

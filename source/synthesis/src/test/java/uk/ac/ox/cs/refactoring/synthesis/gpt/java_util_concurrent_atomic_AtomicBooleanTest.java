@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_util_concurrent_atomic_AtomicBooleanTest {
   @Test
   void weakCompareAndSet() throws Exception {
-assertThat (synthesiseGPT ("this.weakCompareAndSet(param0, param1);" , "\nthis.weakCompareAndSetVolatile(param0, param1);\n;" , "java.util.concurrent.atomic.AtomicBoolean" , "weakCompareAndSet" , "boolean" , "boolean") , anyOf (contains ("weakCompareAndSetPlain"))) ;
+assertThat (synthesiseGPT ("this.weakCompareAndSet(param0, param1);" , "\nthis.weakCompareAndSetVolatile(param0, param1);\n" , "java.util.concurrent.atomic.AtomicBoolean" , "weakCompareAndSet" , "boolean" , "boolean") , anyOf (contains ("weakCompareAndSetPlain"))) ;
   }
 }

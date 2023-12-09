@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class javax_swing_text_JTextComponentTest {
   @Test
   void modelToView() throws Exception {
-assertThat (synthesiseGPT ("this.modelToView(param0);" , "\nthis.modelToView2D(param0).getBounds();\n;" , "javax.swing.text.JTextComponent" , "modelToView" , "int") , anyOf (contains ("modelToView2D"))) ;
+assertThat (synthesiseGPT ("this.modelToView(param0);" , "\nthis.modelToView2D(param0).getBounds();\n" , "javax.swing.text.JTextComponent" , "modelToView" , "int") , anyOf (contains ("modelToView2D"))) ;
   }
 
   @Test

@@ -17,7 +17,7 @@ assertThat (synthesiseGPT ("this.countComponents();" , "\nthis.getComponentCount
 
   @Test
   void deliverEvent() throws Exception {
-assertThat (synthesiseGPT ("this.deliverEvent(param0);" , "\nthis.dispatchEvent(param0);\n;" , "java.awt.Container" , "deliverEvent" , "java.awt.Event") , anyOf (contains ("dispatchEvent"))) ;
+assertThat (synthesiseGPT ("this.deliverEvent(param0);" , "\nthis.dispatchEvent(param0);\n" , "java.awt.Container" , "deliverEvent" , "java.awt.Event") , anyOf (contains ("dispatchEvent"))) ;
   }
 
   @Test
@@ -27,7 +27,7 @@ assertThat (synthesiseGPT ("this.insets();" , "\nthis.getInsets()\n;" , "java.aw
 
   @Test
   void layout() throws Exception {
-assertThat (synthesiseGPT ("this.layout();" , "\nthis.doLayout();\n```\n\nOr, if you want to trigger a layout pass for the entire component hierarchy, you might use:\n\n```java\nthis.validate();\n;" , "java.awt.Container" , "layout") , anyOf (contains ("doLayout"))) ;
+assertThat (synthesiseGPT ("this.layout();" , "\nthis.doLayout();\n```\n\nOr, if you want to trigger a layout pass for the entire component hierarchy, you might use:\n\n```java\nthis.validate();\n" , "java.awt.Container" , "layout") , anyOf (contains ("doLayout"))) ;
   }
 
   @Test

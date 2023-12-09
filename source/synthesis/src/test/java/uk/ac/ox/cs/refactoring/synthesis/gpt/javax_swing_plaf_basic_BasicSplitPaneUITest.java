@@ -17,7 +17,7 @@ assertThat (synthesiseGPT ("this.createKeyboardDownRightListener();" , "" , "jav
 
   @Test
   void createKeyboardEndListener() throws Exception {
-assertThat (synthesiseGPT ("this.createKeyboardEndListener();" , "\nJSplitPane splitPane = ...; // your JSplitPane instance\n\nKeyAdapter endKeyListener = new KeyAdapter() {\n    @Override\n    public void keyPressed(KeyEvent e) {\n        if (e.getKeyCode() == KeyEvent.VK_END) {\n            // Handle the end key press event\n            // You need to define what should happen when the end key is pressed\n        }\n    }\n};\n\nsplitPane.addKeyListener(endKeyListener);\n;" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardEndListener") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("this.createKeyboardEndListener();" , "\nJSplitPane splitPane = ...; // your JSplitPane instance\n\nKeyAdapter endKeyListener = new KeyAdapter() {\n    @Override\n    public void keyPressed(KeyEvent e) {\n        if (e.getKeyCode() == KeyEvent.VK_END) {\n            // Handle the end key press event\n            // You need to define what should happen when the end key is pressed\n        }\n    }\n};\n\nsplitPane.addKeyListener(endKeyListener);\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardEndListener") , Matchers . anything ()) ;
   }
 
   @Test
@@ -32,7 +32,7 @@ assertThat (synthesiseGPT ("this.createKeyboardResizeToggleListener();" , "" , "
 
   @Test
   void createKeyboardUpLeftListener() throws Exception {
-assertThat (synthesiseGPT ("this.createKeyboardUpLeftListener();" , "\nActionMap actionMap = this.getActionMap();\nif (actionMap != null) {\n    Action action = actionMap.get(\"negativeIncrement\");\n    if (action != null) {\n        action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));\n    }\n}\n;" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardUpLeftListener") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("this.createKeyboardUpLeftListener();" , "\nActionMap actionMap = this.getActionMap();\nif (actionMap != null) {\n    Action action = actionMap.get(\"negativeIncrement\");\n    if (action != null) {\n        action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));\n    }\n}\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardUpLeftListener") , Matchers . anything ()) ;
   }
 
   @Test

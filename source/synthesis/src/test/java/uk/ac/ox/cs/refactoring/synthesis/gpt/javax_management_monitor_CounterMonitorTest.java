@@ -17,7 +17,7 @@ assertThat (synthesiseGPT ("this.getDerivedGauge();" , "\nstringMonitorMBean.get
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("this.getDerivedGaugeTimeStamp();" , "\n// Assuming 'stringMonitorMBean' is an instance of a class that implements StringMonitorMBean\n// and 'objectName' is an instance of ObjectName that represents the MBean being monitored.\n\nstringMonitorMBean.getDerivedGaugeTimeStamp(objectName);\n;" , "javax.management.monitor.CounterMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("this.getDerivedGaugeTimeStamp();" , "\n// Assuming 'stringMonitorMBean' is an instance of a class that implements StringMonitorMBean\n// and 'objectName' is an instance of ObjectName that represents the MBean being monitored.\n\nstringMonitorMBean.getDerivedGaugeTimeStamp(objectName);\n" , "javax.management.monitor.CounterMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 
   @Test
@@ -27,6 +27,6 @@ assertThat (synthesiseGPT ("this.getThreshold();" , "\n((CounterMonitorMBean) Qu
 
   @Test
   void setThreshold() throws Exception {
-assertThat (synthesiseGPT ("this.setThreshold(param0);" , "\n// Assuming 'this' is an instance of CounterMonitor and 'param0' is a Number object representing the threshold\nthis.setInitThreshold(param0);\nthis.setOffset(0); // Set offset if needed\nthis.setModulus(0); // Set modulus if needed\nthis.setNotify(true); // Enable notifications\nthis.start(); // Start the monitor\n;" , "javax.management.monitor.CounterMonitor" , "setThreshold" , "java.lang.Number") , anyOf (contains ("setInitThreshold"))) ;
+assertThat (synthesiseGPT ("this.setThreshold(param0);" , "\n// Assuming 'this' is an instance of CounterMonitor and 'param0' is a Number object representing the threshold\nthis.setInitThreshold(param0);\nthis.setOffset(0); // Set offset if needed\nthis.setModulus(0); // Set modulus if needed\nthis.setNotify(true); // Enable notifications\nthis.start(); // Start the monitor\n" , "javax.management.monitor.CounterMonitor" , "setThreshold" , "java.lang.Number") , anyOf (contains ("setInitThreshold"))) ;
   }
 }

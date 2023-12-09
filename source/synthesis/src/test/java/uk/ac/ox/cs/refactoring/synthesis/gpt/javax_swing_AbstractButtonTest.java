@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("this.getLabel();" , "\nthis.getText()\n;" , "javax.s
 
   @Test
   void setLabel() throws Exception {
-assertThat (synthesiseGPT ("this.setLabel(param0);" , "\nthis.setText(param0);\n;" , "javax.swing.AbstractButton" , "setLabel" , "java.lang.String") , anyOf (contains ("setText"))) ;
+assertThat (synthesiseGPT ("this.setLabel(param0);" , "\nthis.setText(param0);\n" , "javax.swing.AbstractButton" , "setLabel" , "java.lang.String") , anyOf (contains ("setText"))) ;
   }
 }

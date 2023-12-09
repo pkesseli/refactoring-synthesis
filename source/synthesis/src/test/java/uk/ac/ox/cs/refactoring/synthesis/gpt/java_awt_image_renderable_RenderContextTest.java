@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class java_awt_image_renderable_RenderContextTest {
   @Test
   void concetenateTransform() throws Exception {
-assertThat (synthesiseGPT ("this.concetenateTransform(param0);" , "\nthis.preConcatenateTransform(param0);\n;" , "java.awt.image.renderable.RenderContext" , "concetenateTransform" , "java.awt.geom.AffineTransform") , anyOf (contains ("concatenateTransform"))) ;
+assertThat (synthesiseGPT ("this.concetenateTransform(param0);" , "\nthis.preConcatenateTransform(param0);\n" , "java.awt.image.renderable.RenderContext" , "concetenateTransform" , "java.awt.geom.AffineTransform") , anyOf (contains ("concatenateTransform"))) ;
   }
 
   @Test

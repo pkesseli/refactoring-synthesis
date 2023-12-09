@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("this.getCursorType();" , "\nthis.getCursor().getType
 
   @Test
   void setCursor() throws Exception {
-assertThat (synthesiseGPT ("this.setCursor(param0);" , "\nthis.setCursor(Cursor.getPredefinedCursor(param0));\n;" , "java.awt.Frame" , "setCursor" , "int") , anyOf (contains ("setCursor"))) ;
+assertThat (synthesiseGPT ("this.setCursor(param0);" , "\nthis.setCursor(Cursor.getPredefinedCursor(param0));\n" , "java.awt.Frame" , "setCursor" , "int") , anyOf (contains ("setCursor"))) ;
   }
 }

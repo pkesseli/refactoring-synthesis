@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("this.getText();" , "\nthis.getPassword()\n;" , "java
 
   @Test
   void getText2() throws Exception {
-assertThat (synthesiseGPT ("this.getText(param0, param1);" , "\nthis.getPassword();\n;" , "javax.swing.JPasswordField" , "getText" , "int" , "int") , anyOf (contains ("getPassword"))) ;
+assertThat (synthesiseGPT ("this.getText(param0, param1);" , "\nthis.getPassword();\n" , "javax.swing.JPasswordField" , "getText" , "int" , "int") , anyOf (contains ("getPassword"))) ;
   }
 }

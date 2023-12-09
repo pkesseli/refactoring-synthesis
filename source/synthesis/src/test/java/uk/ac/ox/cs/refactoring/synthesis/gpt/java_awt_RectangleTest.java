@@ -17,16 +17,16 @@ assertThat (synthesiseGPT ("this.inside(param0, param1);" , "\nthis.contains(par
 
   @Test
   void move() throws Exception {
-assertThat (synthesiseGPT ("this.move(param0, param1);" , "\nthis.setBounds(param0, param1, this.width, this.height);\n;" , "java.awt.Rectangle" , "move" , "int" , "int") , anyOf (contains ("setLocation"))) ;
+assertThat (synthesiseGPT ("this.move(param0, param1);" , "\nthis.setBounds(param0, param1, this.width, this.height);\n" , "java.awt.Rectangle" , "move" , "int" , "int") , anyOf (contains ("setLocation"))) ;
   }
 
   @Test
   void reshape() throws Exception {
-assertThat (synthesiseGPT ("this.reshape(param0, param1, param2, param3);" , "\nthis.setBounds(param0, param1, param2, param3);\n;" , "java.awt.Rectangle" , "reshape" , "int" , "int" , "int" , "int") , anyOf (contains ("setBounds"))) ;
+assertThat (synthesiseGPT ("this.reshape(param0, param1, param2, param3);" , "\nthis.setBounds(param0, param1, param2, param3);\n" , "java.awt.Rectangle" , "reshape" , "int" , "int" , "int" , "int") , anyOf (contains ("setBounds"))) ;
   }
 
   @Test
   void resize() throws Exception {
-assertThat (synthesiseGPT ("this.resize(param0, param1);" , "\nthis.setSize(param0, param1);\n;" , "java.awt.Rectangle" , "resize" , "int" , "int") , anyOf (contains ("setSize"))) ;
+assertThat (synthesiseGPT ("this.resize(param0, param1);" , "\nthis.setSize(param0, param1);\n" , "java.awt.Rectangle" , "resize" , "int" , "int") , anyOf (contains ("setSize"))) ;
   }
 }
