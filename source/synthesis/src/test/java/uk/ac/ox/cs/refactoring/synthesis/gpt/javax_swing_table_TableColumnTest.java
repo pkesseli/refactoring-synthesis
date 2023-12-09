@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("this.disableResizedPosting();" , "" , "javax.swing.t
 
   @Test
   void enableResizedPosting() throws Exception {
-assertThat (synthesiseGPT ("this.enableResizedPosting();" , "\n// Deprecated method, use setResizingAllowed(false) instead\nthis.setResizingAllowed(false);\n;" , "javax.swing.table.TableColumn" , "enableResizedPosting") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("this.enableResizedPosting();" , "" , "javax.swing.table.TableColumn" , "enableResizedPosting") , Matchers . anything ()) ;
   }
 }

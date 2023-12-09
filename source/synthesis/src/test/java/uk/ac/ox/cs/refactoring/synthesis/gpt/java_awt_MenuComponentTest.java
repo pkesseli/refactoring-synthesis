@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_MenuComponentTest {
   @Test
   void postEvent() throws Exception {
-assertThat (synthesiseGPT ("this.postEvent(param0);" , "\nthis.dispatchEvent(param0);\n;" , "java.awt.MenuComponent" , "postEvent" , "java.awt.Event") , anyOf (contains ("dispatchEvent"))) ;
+assertThat (synthesiseGPT ("this.postEvent(param0);" , "\nthis.dispatchEvent(new java.awt.event.ActionEvent(this, java.awt.event.ActionEvent.ACTION_PERFORMED, null));\n;" , "java.awt.MenuComponent" , "postEvent" , "java.awt.Event") , anyOf (contains ("dispatchEvent"))) ;
   }
 }

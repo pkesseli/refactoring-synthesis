@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 class java_awt_ListTest {
   @Test
   void addItem1() throws Exception {
-assertThat (synthesiseGPT ("this.addItem(param0);" , "this.add(param0, this.getItemCount());" , "java.awt.List" , "addItem" , "java.lang.String") , anyOf (contains ("add"))) ;
+assertThat (synthesiseGPT ("this.addItem(param0);" , "\nthis.add(param0);\n;" , "java.awt.List" , "addItem" , "java.lang.String") , anyOf (contains ("add"))) ;
   }
 
   @Test
   void addItem2() throws Exception {
-assertThat (synthesiseGPT ("this.addItem(param0, param1);" , "this.add(param0);\nif (this.isMultipleMode()) {\n    this.select(this.getItemCount() - 1);\n} else {\n    this.select(this.getItemCount() - 1);\n};" , "java.awt.List" , "addItem" , "java.lang.String" , "int") , anyOf (contains ("add"))) ;
+assertThat (synthesiseGPT ("this.addItem(param0, param1);" , "\nthis.add(param0, param1);\n;" , "java.awt.List" , "addItem" , "java.lang.String" , "int") , anyOf (contains ("add"))) ;
   }
 
   @Test
@@ -27,7 +27,7 @@ assertThat (synthesiseGPT ("this.allowsMultipleSelections();" , "\nthis.isMultip
 
   @Test
   void clear() throws Exception {
-assertThat (synthesiseGPT ("this.clear();" , "\nthis.removeAll();\n;" , "java.awt.List" , "clear") , anyOf (contains ("removeAll"))) ;
+assertThat (synthesiseGPT ("this.clear();" , "\nfor (int i = this.getItemCount() - 1; i >= 0; i--) {\n    this.remove(i);\n}\n;" , "java.awt.List" , "clear") , anyOf (contains ("removeAll"))) ;
   }
 
   @Test
@@ -37,22 +37,22 @@ assertThat (synthesiseGPT ("this.countItems();" , "this.getItemCount();" , "java
 
   @Test
   void delItem() throws Exception {
-assertThat (synthesiseGPT ("this.delItem(param0);" , "\nthis.remove(param0)\n;" , "java.awt.List" , "delItem" , "int") , anyOf (contains ("remove"))) ;
+assertThat (synthesiseGPT ("this.delItem(param0);" , "\nthis.remove(param0);\n;" , "java.awt.List" , "delItem" , "int") , anyOf (contains ("remove"))) ;
   }
 
   @Test
   void isSelected() throws Exception {
-assertThat (synthesiseGPT ("this.isSelected(param0);" , "\nthis.getItem(param0).isSelected()\n;" , "java.awt.List" , "isSelected" , "int") , anyOf (contains ("isIndexSelected"))) ;
+assertThat (synthesiseGPT ("this.isSelected(param0);" , "\nthis.isIndexSelected(param0)\n;" , "java.awt.List" , "isSelected" , "int") , anyOf (contains ("isIndexSelected"))) ;
   }
 
   @Test
   void minimumSize1() throws Exception {
-assertThat (synthesiseGPT ("this.minimumSize();" , "\nthis.getMinimumSize(0)\n;" , "java.awt.List" , "minimumSize") , anyOf (contains ("getMinimumSize"))) ;
+assertThat (synthesiseGPT ("this.minimumSize();" , "\nthis.getMinimumSize(this.getItemCount())\n;" , "java.awt.List" , "minimumSize") , anyOf (contains ("getMinimumSize"))) ;
   }
 
   @Test
   void minimumSize2() throws Exception {
-assertThat (synthesiseGPT ("this.minimumSize(param0);" , "this.getPreferredSize();" , "java.awt.List" , "minimumSize" , "int") , anyOf (contains ("getMinimumSize"))) ;
+assertThat (synthesiseGPT ("this.minimumSize(param0);" , "\nthis.getPreferredSize()\n;" , "java.awt.List" , "minimumSize" , "int") , anyOf (contains ("getMinimumSize"))) ;
   }
 
   @Test
@@ -62,11 +62,11 @@ assertThat (synthesiseGPT ("this.preferredSize();" , "\nthis.getPreferredSize()\
 
   @Test
   void preferredSize2() throws Exception {
-assertThat (synthesiseGPT ("this.preferredSize(param0);" , "this.setMultipleMode(false);" , "java.awt.List" , "preferredSize" , "int") , anyOf (contains ("getPreferredSize"))) ;
+assertThat (synthesiseGPT ("this.preferredSize(param0);" , "\nthis.getPreferredSize();\n```\n\nIf you need to set the preferred size explicitly, you would use the `setPreferredSize(Dimension)` method, where `Dimension` is a class that includes both width and height:\n\n```java\nthis.setPreferredSize(new Dimension(width, height));\n;" , "java.awt.List" , "preferredSize" , "int") , anyOf (contains ("getPreferredSize"))) ;
   }
 
   @Test
   void setMultipleSelections() throws Exception {
-assertThat (synthesiseGPT ("this.setMultipleSelections(param0);" , "" , "java.awt.List" , "setMultipleSelections" , "boolean") , anyOf (contains ("setMultipleMode"))) ;
+assertThat (synthesiseGPT ("this.setMultipleSelections(param0);" , "\nthis.setMultipleMode(param0);\n;" , "java.awt.List" , "setMultipleSelections" , "boolean") , anyOf (contains ("setMultipleMode"))) ;
   }
 }

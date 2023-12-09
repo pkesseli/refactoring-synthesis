@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_CounterMonitorMBeanTest {
   @Test
   void getDerivedGauge() throws Exception {
-assertThat (synthesiseGPT ("this.getDerivedGauge();" , "" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
+assertThat (synthesiseGPT ("this.getDerivedGauge();" , "The deprecation comment provided seems to be unrelated to the `CounterMonitorMBean.getDerivedGauge()` method. It appears to be a mistake, as the comment refers to SSLSession's `getPeerCertificates()` method, which is unrelated to JMX monitoring.\n\nIf `getDerivedGauge()` from `CounterMonitorMBean` is indeed deprecated, you would typically find an alternative method suggested in the Javadoc for the `CounterMonitorMBean` interface. However, without the correct deprecation comment or alternative method provided, it's not possible to refactor the code as requested.\n\nIf you have access to the correct Javadoc or API documentation, please refer to that for the non-deprecated method that should be used in place of `getDerivedGauge()`. If a new method is provided, you would replace `this.getDerivedGauge()` with the new method call as suggested by the documentation.;" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
   }
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("this.getDerivedGaugeTimeStamp();" , "" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("this.getDerivedGaugeTimeStamp();" , "\nthis.getDerivedGaugeTimestamp()\n;" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 
   @Test
@@ -27,6 +27,6 @@ assertThat (synthesiseGPT ("this.getThreshold();" , "\nthis.getText()\n;" , "jav
 
   @Test
   void setThreshold() throws Exception {
-assertThat (synthesiseGPT ("this.setThreshold(param0);" , "\nthis.setText(String.valueOf(param0));\n;" , "javax.management.monitor.CounterMonitorMBean" , "setThreshold" , "java.lang.Number") , anyOf (contains ("setInitThreshold"))) ;
+assertThat (synthesiseGPT ("this.setThreshold(param0);" , "setText(param0.toString());" , "javax.management.monitor.CounterMonitorMBean" , "setThreshold" , "java.lang.Number") , anyOf (contains ("setInitThreshold"))) ;
   }
 }

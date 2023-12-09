@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_net_ssl_HandshakeCompletedEventTest {
   @Test
   void getPeerCertificateChain() throws Exception {
-assertThat (synthesiseGPT ("this.getPeerCertificateChain();" , "" , "javax.net.ssl.HandshakeCompletedEvent" , "getPeerCertificateChain") , anyOf (contains ("Certificate") , contains ("getPeerCertificates"))) ;
+assertThat (synthesiseGPT ("this.getPeerCertificateChain();" , "\n((X509Certificate[]) this.getPeerCertificates())\n;" , "javax.net.ssl.HandshakeCompletedEvent" , "getPeerCertificateChain") , anyOf (contains ("Certificate") , contains ("getPeerCertificates"))) ;
   }
 }

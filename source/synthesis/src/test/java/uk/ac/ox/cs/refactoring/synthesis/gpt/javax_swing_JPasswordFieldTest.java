@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_swing_JPasswordFieldTest {
   @Test
   void getText1() throws Exception {
-assertThat (synthesiseGPT ("this.getText();" , "\nnew String(this.getPassword())\n;" , "javax.swing.JPasswordField" , "getText") , anyOf (contains ("getPassword"))) ;
+assertThat (synthesiseGPT ("this.getText();" , "\nthis.getPassword()\n;" , "javax.swing.JPasswordField" , "getText") , anyOf (contains ("getPassword"))) ;
   }
 
   @Test
   void getText2() throws Exception {
-assertThat (synthesiseGPT ("this.getText(param0, param1);" , "\nthis.getPassword().subSequence(param0, param1).toString()\n;" , "javax.swing.JPasswordField" , "getText" , "int" , "int") , anyOf (contains ("getPassword"))) ;
+assertThat (synthesiseGPT ("this.getText(param0, param1);" , "\nthis.getPassword();\n;" , "javax.swing.JPasswordField" , "getText" , "int" , "int") , anyOf (contains ("getPassword"))) ;
   }
 }

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class java_awt_MenuItemTest {
   @Test
   void disable() throws Exception {
-assertThat (synthesiseGPT ("this.disable();" , "this.setEnabled(false);" , "java.awt.MenuItem" , "disable") , anyOf (contains ("setEnabled"))) ;
+assertThat (synthesiseGPT ("this.disable();" , "\nthis.setEnabled(false);\n;" , "java.awt.MenuItem" , "disable") , anyOf (contains ("setEnabled"))) ;
   }
 
   @Test

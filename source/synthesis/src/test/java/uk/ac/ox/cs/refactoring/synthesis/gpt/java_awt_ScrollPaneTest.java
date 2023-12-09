@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_ScrollPaneTest {
   @Test
   void layout() throws Exception {
-assertThat (synthesiseGPT ("this.layout();" , "\nthis.doLayout()\n;" , "java.awt.ScrollPane" , "layout") , anyOf (contains ("doLayout"))) ;
+assertThat (synthesiseGPT ("this.layout();" , "" , "java.awt.ScrollPane" , "layout") , anyOf (contains ("doLayout"))) ;
   }
 }

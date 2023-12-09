@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("this.getMenuBar();" , "" , "javax.swing.JInternalFra
 
   @Test
   void setMenuBar() throws Exception {
-assertThat (synthesiseGPT ("this.setMenuBar(param0);" , "\nJMenuBar menuBar = new JMenuBar();\nthis.setJMenuBar(menuBar);\nmenuBar.add(param0);\n;" , "javax.swing.JInternalFrame" , "setMenuBar" , "javax.swing.JMenuBar") , anyOf (contains ("setJMenuBar"))) ;
+assertThat (synthesiseGPT ("this.setMenuBar(param0);" , "\nthis.setJMenuBar(param0);\n;" , "javax.swing.JInternalFrame" , "setMenuBar" , "javax.swing.JMenuBar") , anyOf (contains ("setJMenuBar"))) ;
   }
 }

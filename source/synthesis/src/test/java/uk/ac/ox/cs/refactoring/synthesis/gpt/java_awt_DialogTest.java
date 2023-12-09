@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("this.hide();" , "\nthis.setVisible(false);\n;" , "ja
 
   @Test
   void show() throws Exception {
-assertThat (synthesiseGPT ("this.show();" , "" , "java.awt.Dialog" , "show") , anyOf (contains ("setVisible"))) ;
+assertThat (synthesiseGPT ("this.show();" , "\nthis.setVisible(true);\n;" , "java.awt.Dialog" , "show") , anyOf (contains ("setVisible"))) ;
   }
 }

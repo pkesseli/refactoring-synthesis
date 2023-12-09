@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class java_rmi_server_RemoteRefTest {
   @Test
   void done() throws Exception {
-assertThat (synthesiseGPT ("this.done(param0);" , "\nremoteRef.invoke(this, method, params, opnum);\n;" , "java.rmi.server.RemoteRef" , "done" , "java.rmi.server.RemoteCall") , anyOf (contains ("done") , contains ("invoke") , contains ("newCall"))) ;
+assertThat (synthesiseGPT ("this.done(param0);" , "" , "java.rmi.server.RemoteRef" , "done" , "java.rmi.server.RemoteCall") , anyOf (contains ("done") , contains ("invoke") , contains ("newCall"))) ;
   }
 
   @Test

@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_util_concurrent_atomic_AtomicLongTest {
   @Test
   void weakCompareAndSet() throws Exception {
-assertThat (synthesiseGPT ("this.weakCompareAndSet(param0, param1);" , "\nthis.compareAndSet(param0, param1)\n;" , "java.util.concurrent.atomic.AtomicLong" , "weakCompareAndSet" , "long" , "long") , anyOf (contains ("weakCompareAndSetPlain"))) ;
+assertThat (synthesiseGPT ("this.weakCompareAndSet(param0, param1);" , "" , "java.util.concurrent.atomic.AtomicLong" , "weakCompareAndSet" , "long" , "long") , anyOf (contains ("weakCompareAndSetPlain"))) ;
   }
 }

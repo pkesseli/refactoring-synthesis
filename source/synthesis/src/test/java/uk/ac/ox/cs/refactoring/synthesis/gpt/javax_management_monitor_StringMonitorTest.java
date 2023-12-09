@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("this.getDerivedGauge();" , "" , "javax.management.mo
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("this.getDerivedGaugeTimeStamp();" , "" , "javax.management.monitor.StringMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("this.getDerivedGaugeTimeStamp();" , "\nObjectName mbeanName = // ... obtain the ObjectName for the MBean you are monitoring\nlong timeStamp = stringMonitor.getDerivedGaugeTimeStamp(mbeanName);\n;" , "javax.management.monitor.StringMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 }

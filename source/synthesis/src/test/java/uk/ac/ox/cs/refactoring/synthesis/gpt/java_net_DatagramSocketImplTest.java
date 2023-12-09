@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("this.getTTL();" , "\nthis.getTimeToLive()\n;" , "jav
 
   @Test
   void setTTL() throws Exception {
-assertThat (synthesiseGPT ("this.setTTL(param0);" , "\nMulticastSocket socket = new MulticastSocket();\nsocket.setTimeToLive(param0);\nNetworkInterface networkInterface = socket.getNetworkInterface();\n;" , "java.net.DatagramSocketImpl" , "setTTL" , "byte") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("this.setTTL(param0);" , "\n// Assuming 'this' is an instance of MulticastSocket\nthis.setTimeToLive(param0 & 0xff);\n;" , "java.net.DatagramSocketImpl" , "setTTL" , "byte") , Matchers . anything ()) ;
   }
 }
