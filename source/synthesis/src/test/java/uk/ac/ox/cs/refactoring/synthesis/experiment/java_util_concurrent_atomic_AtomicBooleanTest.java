@@ -14,4 +14,3 @@ class java_util_concurrent_atomic_AtomicBooleanTest {
         contains("weakCompareAndSetPlain"));
   }
 }
-        
