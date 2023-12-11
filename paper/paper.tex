@@ -194,8 +194,8 @@
   %semantic information about the code. Our refactoring procedure
   performing semantic reasoning and search in the space of possible
   refactorings using automated program synthesis. In particular, the
-  program synthesis is guided by Javadoc code hints and type information and makes use of
-  fuzz testing. %% We
+  program synthesis is guided by Javadoc code hints and type information,
+  and makes use of fuzz testing. %% We
   %% encode both the synthesis of refactoring candidates and their
   %% verification as program safety problems that we then solve with
   %% coverage-guided property-based testing.
@@ -240,6 +240,16 @@
 
 
 \section{Introduction}\label{sec:intro}
+
+
+%There are also practical problems
+
+%Implementation -> Practical problem (express them as questions):
+
+%How to isolate .....
+
+
+%Types: Type-directed synthesis has been particulary successful in functional programming. We want to investigate how successful is in imperative programming.
 
 As a project evolves, there are certain fields, methods or classes
 that the developers are discouraged from using in the future as
@@ -315,7 +325,8 @@ Indeed, when referring back to the example in
 Figure~\ref{ex:deprecated-method-other}, it's not immediately obvious
 that the original and the refactored code behave in the same manner.
 One needs a good understanding of the code's semantics in order to
-reach such a conclusion.  Refactorings that rely solely on a
+reach such a conclusion. As we will see later in the paper, guaranteeing semantic equivalence is particularly difficult in the presence of aliasing, when there may be multiple references to the same memory location.
+On the other hand, refactorings that rely solely on a
 program's syntax and do not consider its semantics end up being overly
 conservative, mostly addressing structural changes to the program.
 The observation that refactoring generally benefits from semantic
@@ -323,18 +334,23 @@ analyses of a program is not new, e.g. previous works made use of
 program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or
 types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
 
-\emph{Current solution.}  In this paper, we investigate a symbolic approach for automatically refactoring uses of deprecated APIs based on program synthesis
+
+%Allowing changes that go beyond syntax, and attempting to prove semantic equivalence is a very difficult task, in particular for code that accesses the heap. 
+
+\emph{Current solution.}  In this paper, we investigate an approach for automatically refactoring uses of deprecated APIs based on program synthesis.
 %and fuzzing
-that makes use of semantic information
-to offer guarantees about the preservation of the original behaviour.
-Additionally, we are interested in comparing our symbolic approach against a neural one using Large Language Models (LLMs).
+%that makes use of semantic information
+%to offer guarantees about the preservation of the original behaviour.
+To verify that the refactoring maintains the behaviour of the original code, we design a semantic equivalence check.
+
+Additionally, we are interested in comparing our symbolic approach against a neural one using Large Language Models (LLMs), which we augment with our semantic equivalence checking procedure.
 In particular, given the recent advances that LLMs made in code generation,
 we want to investigate whether they completely subsume symbolic methods, or whether, for specialised tasks such as the current refactoring,
 symbolic methods are still useful at lower computational costs.
 %
 %Research [60], [52] have proposed using LLMs to answer software engineering questions. 
 %
-Given its recent attention, we picked ChatGPT~\cite{chatgpt}, which is a LLM trained using Reinforcement Learning from Human Feedback.
+Given its recent attention, we picked ChatGPT~\cite{chatgpt}. %, which is a LLM trained using Reinforcement Learning from Human Feedback.
 There are several studies of ChatGPT's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and 
 prompt pattern design for refactoring, requirements elicitation, and software design ~\cite{white2023chatgpt}.
 %
@@ -409,16 +425,28 @@ symbolic code generation methods such as ours to outperform general-purpose LLMs
 %% which weaves together components from a library
 %% (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
 
-Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
-%
-The vast search space is particularly a challenge in the current
-setting given that, in the absence of any additional guidance, the
-entire \texttt{java.lang} could be considered when synthesising the
-refactoring.  In order to prune the search space, we start by
-investigating the information available to our refactoring procedure.
+Program synthesis is generally concerned with code generation via symbolic reasoning \todo{add more about program synthesis?}.
+Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
 
 
+%%---
+%% Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
+%% %
+%% The vast search space is particularly a challenge in the current
+%% setting given that, in the absence of any additional guidance, the
+%% entire \texttt{java.lang} could be considered when synthesising the
+%% refactoring.  In order to prune the search space, we start by
+%% investigating the information available to our refactoring procedure.
+
+In this work we will make use of:
 {\bf (1)} {\em Type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+
+
+\todo{
+Traditionally, the idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
+enables types to fully describe the behaviour of the program. Thus, our work also serves as an investigation of the usefulness of type information
+in generating imperative code.}
+
 However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient to solve the problem. 
 
 {\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
@@ -464,6 +492,8 @@ It's not straightforward to use this code to generate the refactoring, with some
 
 %While it might seem that this hint ma solve the entire problem, 
 
+\todo{possible other challenges: parsing, abstract classes. remove challenge 3.}
+
 {\bf Challenge 1.}  Although it may seem as if
 method \texttt{get} is static allowing an immediate call,
 it is actually an instance method, requiring us to have an object of
@@ -488,8 +518,14 @@ and/or the current object. Adding the latter components to the library will
 significantly slow down the code generation process by
 adding infeasible programs to the search space.
 
-{\bf Challenge 4.} An additional difficulty is that the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that it must preserve its behaviour.
+{\bf Challenge 4.} As previously mentioned, the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that it must preserve its behaviour.
 However, proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
+
+
+Checking equivalence between two functions is undecidable. We only check it for a finite number of inputs.
+
+Even given a particular input, when can we deduce that two functions are equivalent? For side-effect free ones, this is easy: two pieces of code are observational equivalent if, given the same inputs, they produce the same result. However, when we do have side effects, expressing obseravtional equivalence is much harder.
+
 
 
 Proving semantic equivalence is a very difficult task especially given the possible side effects. We must consider:
@@ -500,8 +536,8 @@ We address challenges 1-3 by dynamically building the component library for each
 such that it only contains components specific to that particular use case.
 This process is described in detail in Section~\ref{sec:components-seeding}.
 The fourth challenge is addressed
-%In this work, instead of aiming for a formal proof,  we
-by using fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
+by designing a semantic equivalence relation, which we then check with fuzz testing.
+%by using fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
 While we can't provide full correctness guarantees,
 given a large number of test inputs, we consider this a close approximation.
 %our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
@@ -598,6 +634,68 @@ $$target\_types = \{\texttt{int, Calendar}\}$$
 \begin{definition}[Realisable method]\label{def:realizable}
 Method \var{i} is {\em realisable} iff $\forall t \in required\_types(i). t \in available\_types \vee t~is~a~primitive~type$.
 \end{definition}
+
+
+%\subsection{Parsing the @code hints} \label{sec:parse}
+
+%As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
+%interpret Javadoc hints. 
+One challenge in this phase is interpreting the
+\texttt{@code} blocks inside \texttt{@deprecated} sections, which 
+we attempt to parse as Java expressions. In particular, we parse each hint as if it were invoked in the context of
+the method to refactor, such that imports or the implicit \texttt{this} argument
+are considered during parsing.
+
+\todo{needs some rewriting?}
+The issue is that code hints are not always expressed as well-formed Java.
+In some sense, the task of parsing code hints lies in between parsing Java code and interpreting natural language. 
+%
+Thus, we customised the
+GitHub Java parser
+to accept undeclared identifiers and type names
+as arguments. For instance, the Javadoc hint for deprecating \texttt{boolean inside(int X, int Y)}
+%suggests using 
+in Figure~\ref{ex:javadoc-hint} suggests using
+\texttt{contains(int, int)}, which would normally cause a parsing error as the \texttt{int} type
+appears in the place of argument names. In our setting, we accept this hint as valid.
+There are still situations where our parser is too strict and fails to accept
+some of the code hints. Additionally, there are scenarios where, while the Javadoc
+does contain a useful code hint, it is not tagged accordingly with
+the \texttt{@code} tag. %% These situations are reflected in the experimental results
+%% in Section~\ref{sec:experimental-results}
+%% as some of the benchmarks for which we failed to identify a code hint.
+%We will improve our technique for collecting code hints as future work.
+
+%% These benchmarks
+%% are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\ref{tab:configuration-results-ch} (some of the missing benchmarks from Table~\ref{tab:configuration-results-ch} do genuinely miss a code hint). 
+ 
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+/**
+* Checks whether or not this {@code Rectangle}
+* contains the point at the specified location
+* {@code (X,Y)}.
+*
+* @param  X the specified X coordinate
+* @param  Y the specified Y coordinate
+* @return    {@code true} if the point
+*            {@code (X,Y)} is inside this
+*            {@code Rectangle};
+*            {@code false} otherwise.
+* @deprecated As of JDK version 1.1,
+* replaced by {@code contains(int, int)}.
+*/
+@Deprecated
+public boolean inside(int X, int Y) {
+  // ...
+}
+\end{lstlisting}
+\caption{Javadoc hint example.}
+\label{ex:javadoc-hint}
+\end{figure}
+
+
+
 
 \paragraph{{\bf Phase 2: Add generators for $target\_types$}}
 
@@ -700,7 +798,7 @@ the Javadoc hints, would be to add all the classes from the
 in a very large component library, most likely outside the capabilities of existing
 synthesis techniques.
 
-\section{Program synthesis and fuzzing based refactoring} \label{sec:encoding}
+\section{Program synthesis based refactoring} \label{sec:encoding}
 
 %% Once the component library is built, for the actual synthesis,
 %% we use a counterexample-guided iterative process that enables us
@@ -833,14 +931,20 @@ the $equivalent$ predicate. This is far from trivial as it requires handling
 of notions such as aliasing, loaded classes, static fields etc.. This will be
 described in detail in the next section.
 
-\section{Checking program equivalence}\label{sec:equiv}
+\subsection{Checking program equivalence}\label{sec:equiv}
 
 A core part of the synthesis procedure is the $equivalent(P_1(\vec{i}), P_2(\vec{i}))$ predicate,
 which checks that the original code $P_1$ and a candidate refactoring $P_2$
-are equivalent for a given input $\vec{i}$ (where the inputs are obtained by fuzzing, as explained in the previous section).
+are equivalent for a given input $\vec{i}$. %(where the inputs are obtained by fuzzing, as explained in the previous section).
 %This is used for both the symbolic and the neural approach.
 In this section, we provide details on how we check this equivalence.
-One of the main challenges is aliasing, which we will discuss later in the section.
+
+The state of a Java program is modelled by the current program stack
+(consisting of method-specific values and references to objects in the
+heap) as well as its heap (consisting of instance variables and static
+field values). Static field values are stored with their respective
+classes, which in turn are loaded by class loaders.  Our equivalence
+check must take all these into consideration. One of the main challenges is aliasing, which we will discuss later in the section.
 
 We start by introducing some notation:
 \begin{itemize}
@@ -929,7 +1033,9 @@ all their static fields must be assigned equal objects by the
 two executions, respectively.  Here, equality refers
 to value equality, which we
 check by recursively following attribute chains until we reach
-primitive types.  We generally do not consider existing \texttt{equals} methods
+primitive types.
+\todo{check the description about equals}
+We generally do not consider existing \texttt{equals} methods
 unless (i)~the method was not written by the user (i.e.  JCL classes),
 (ii)~the type inherits from \texttt{java.lang.Object}, (iii)~the class
 implements \texttt{java.lang.Comparable} and (iv)~the type declares an
@@ -942,6 +1048,7 @@ considered unreliable and ignored.
 %% By equal objects we mean objects where the values of the
 %% corresponding attributes are equal.
 
+\todo{this may be mentioned in several places}
 Regarding the loaded classes, in our implementation, if either the deprecated or the refactored code didn't load a class, we load it for it,
 and check that the initial state of that class is the same for both blocks of code.
 
@@ -1113,77 +1220,26 @@ if and only if they are in the same equivalence class induced by the aliasing re
 
   We abuse the notation to use \var{staticFields} over a set of classes, rather than just one class.
   The objective is to return the union of all static fields defined in all the classes in the set of classes taken as argument.
-  
-
-
-  \section{Implementation} \label{sec:implementation}
-
-  In the previous sections we presented our technique from a formal point of view.
-  Conversely, in this section we discuss details related to our implementation choices.  
-
-
-
-\subsection{Checking aliasing}
-
-While in Section~\ref{sec:equiv}, we discussed aliasing preservation in terms of
-preserving the equivalence classes induced by the aliasing relation,
-in our implementation we enforce a simpler but stricter  than necessary check.
-In particular, all the objects
-%(memory locations)
-that are being referenced during the code's execution
-are assigned increasing symbolic identifiers.
-Then, we enforce aliasing preservation (condition (4) in Definition~\ref{def:prog-equiv-add}),
-by checking that, for all variables defined by both the original and the refactored code,
-the objects they reference have the same symbolic id.
-
-For illustration, in the original code in Example~\ref{ex:aliasing}, the object of type \texttt{Dimension} referenced by variable \var{dim1}
-is assigned symbolic value \var{s_1}, whereas the object referenced by \var{dim2} is assigned symbolic value \var{s_2}.
-In a similar manner, the object referenced by both \var{dim1} and \var{dim2} in the refactored code is assigned value \var{s_1}.
-Then, the aliasing check fails as, in the original code, the object referenced by \var{dim2} has symbolic value \var{s_2},
-whereas, in the refactored code, the object referenced by \var{dim2} has symbolic value \var{s_1}.
-
-While this is a  stronger than needed requirement, it was sufficient for our experiments.
-In particular, we didn't find any benchmark where a sound refactoring
-was rejected due to it.
-If it did prove too restrictive in practice, we could
-relax it by explicitly tracking the equivalence classes induced by the aliasing
-relation.
-
-%\todo{Refer to the new example obtained from Pascal.}
-
-%% heap equivalence, we enforce a strict notion of aliasing
-%% equivalence.
-%% While exploring the heaps and comparing
-%% them for value equivalence, every pointer encountered is assigned
-%% a strictly increasing symbolic id $sid(v)$.
-%% Two heaps $H_A$, $H_B$ are only considered equivalent if
-%% $\mathop \forall \limits_{i=1}^{n} sid(v^A_i)=sid(v^B_i)$. This is a strong
-%% under-approximation and may be subject to improvement in future work, but was
-%% sufficient for the scope of our experiments.
-
-%% Then, we can check whether the set of aliases is preserved in the
-%% refactored program. For instance, if \texttt{obj1} and \texttt{obj2}
-%% are aliases in the original program, then they must be aliases also
-%% in the second program.
-%\todo{check exactly what this is used for.}
-
 
 
 \subsection{Instrumentation and isolation}
 
 We use reflection to invoke the original method to refactor with fuzzed inputs,
 as well as our synthesised refactoring candidates. This allows us to dynamically
-invoke new candidates without the need for compilation. The state of a Java
-program is modelled by the current program stack as well as its heap consisting
-of instance variables and static field values. Static field values are stored
-with their respective classes, which in turn are loaded by class loaders. Java
+invoke new candidates without the need for compilation.
+%The state of a Java
+%program is modelled by the current program stack as well as its heap consisting
+%of instance variables and static field values. Static field values are stored
+%with their respective classes, which in turn are loaded by class loaders.
+Regarding static fields, Java
 allows to load the same class in different class loaders, which creates
 independent copies of its static fields.
 
-In the verification phase, in order to fully isolate the program state during the execution of the original and refactored code from each other, we load all involved classes in separate
+%In the verification phase,
+In order to fully isolate the program state during the execution of the original and refactored code from each other, we load all involved classes in separate
 class loaders. These class loaders are disposed immediately after the current set
 of fuzzed inputs are executed, and new class loaders are created for the next
-inputs (which will be used in the next iteration of the CEGIS loop).
+inputs. %(which will be used in the next iteration of the CEGIS loop).
 Classes that do not maintain a static state are loaded in a shared
 parent class loader to improve performance.
 
@@ -1287,6 +1343,9 @@ were irrelevant to our refactorings.
 %% \label{ex:date-instrumentation}
 %% \end{figure}
 
+  
+ 
+
 \subsection{Abstract classes and interfaces}
 
 The counterexamples generated by the verification phase may refer to
@@ -1297,7 +1356,7 @@ Alternatively, we also curate a
 list of explicit constructors
 of subclasses to be used in favour of Mockito mocks for certain types, and users
 have the option to extend this list with a custom configuration. This is
-particularly useful when the default behaviour of mocked objects under-approximate
+particularly useful when the default behaviour of mocked objects under-approximates
 the behaviour of the explicit constructors of subclasses.
 %\todo{think if it's over or under-approximation.}
 In such situations, the use of mocked objects can lead to
@@ -1318,6 +1377,12 @@ We explicitly avoid constructors that are not amenable to fuzzing, such as
 collection constructors that take an integer capacity argument, where an
 unlucky fuzzed input might lead to an out of memory error.
 
+
+
+  \section{Implementation} \label{sec:implementation}
+
+  In the previous sections we presented our technique from a formal point of view.
+  Conversely, in this section we discuss details related to our implementation choices.  
 
 \subsection{Using fuzz testing for synthesis} \label{sec:fuzzing}
 
@@ -1344,6 +1409,56 @@ JQF generators for the synthesis and verification phase of the CEGIS loop. %% In
 %% guidance mode, which incorporates feedback from the test program in the form of
 %% semantic validity of test inputs and the code coverage achieved during test
 %% execution.
+ 
+
+
+\subsection{Checking aliasing}
+
+While in Section~\ref{sec:equiv}, we discussed aliasing preservation in terms of
+preserving the equivalence classes induced by the aliasing relation,
+in our implementation we enforce a simpler but stricter  than necessary check.
+In particular, all the objects
+%(memory locations)
+that are being referenced during the code's execution
+are assigned increasing symbolic identifiers.
+Then, we enforce aliasing preservation (condition (4) in Definition~\ref{def:prog-equiv-add}),
+by checking that, for all variables defined by both the original and the refactored code,
+the objects they reference have the same symbolic id.
+
+For illustration, in the original code in Example~\ref{ex:aliasing}, the object of type \texttt{Dimension} referenced by variable \var{dim1}
+is assigned symbolic value \var{s_1}, whereas the object referenced by \var{dim2} is assigned symbolic value \var{s_2}.
+In a similar manner, the object referenced by both \var{dim1} and \var{dim2} in the refactored code is assigned value \var{s_1}.
+Then, the aliasing check fails as, in the original code, the object referenced by \var{dim2} has symbolic value \var{s_2},
+whereas, in the refactored code, the object referenced by \var{dim2} has symbolic value \var{s_1}.
+
+While this is a  stronger than needed requirement, it was sufficient for our experiments.
+In particular, we didn't find any benchmark where a sound refactoring
+was rejected due to it.
+If it did prove too restrictive in practice, we could
+relax it by explicitly tracking the equivalence classes induced by the aliasing
+relation.
+
+%\todo{Refer to the new example obtained from Pascal.}
+
+%% heap equivalence, we enforce a strict notion of aliasing
+%% equivalence.
+%% While exploring the heaps and comparing
+%% them for value equivalence, every pointer encountered is assigned
+%% a strictly increasing symbolic id $sid(v)$.
+%% Two heaps $H_A$, $H_B$ are only considered equivalent if
+%% $\mathop \forall \limits_{i=1}^{n} sid(v^A_i)=sid(v^B_i)$. This is a strong
+%% under-approximation and may be subject to improvement in future work, but was
+%% sufficient for the scope of our experiments.
+
+%% Then, we can check whether the set of aliases is preserved in the
+%% refactored program. For instance, if \texttt{obj1} and \texttt{obj2}
+%% are aliases in the original program, then they must be aliases also
+%% in the second program.
+%\todo{check exactly what this is used for.}
+
+
+
+
 
 
 \subsection{Sources of unsoundness and incompleteness}\label{sec:incompleteness}
@@ -1417,58 +1532,6 @@ under the ``Missed refactorings'' and ``Unsound refactorings'' paragraphs, respe
 %% that are syntactically different, yet semantically equivalent.
 %% We plan on investigating some of these directions as part of future work.
 
-\subsection{Parsing the @code hints} \label{sec:parse}
-
-As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
-interpret Javadoc hints. 
-In particular, \texttt{@code} blocks inside \texttt{@deprecated} sections are interpreted as code
-hints, and we attempt to parse them as Java expressions. Since code hints are
-not always expressed as well-formed Java, we customised the
-GitHub Java parser
-to accept undeclared identifiers and type names
-as arguments. For instance, the Javadoc hint for deprecating \texttt{boolean inside(int X, int Y)}
-suggests using 
-%in Figure~\ref{ex:javadoc-hint} suggests using
-\texttt{contains(int, int)}, which would normally cause a parsing error as the \texttt{int} type
-appears in the place of argument names. In our setting, we accept this hint as valid.
-There are still situations where our parser is too strict and fails to accept
-some of the code hints. Additionally, there are scenarios where, while the Javadoc
-does contain a useful code hint, it is not tagged accordingly with
-the \texttt{@code} tag. %% These situations are reflected in the experimental results
-%% in Section~\ref{sec:experimental-results}
-%% as some of the benchmarks for which we failed to identify a code hint.
-%We will improve our technique for collecting code hints as future work.
-The code example is parsed as if it were invoked in the context of
-the method to refactor, such that imports or the implicit \texttt{this} argument
-are considered during parsing.
-
-%% These benchmarks
-%% are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\ref{tab:configuration-results-ch} (some of the missing benchmarks from Table~\ref{tab:configuration-results-ch} do genuinely miss a code hint). 
- 
-%% \begin{figure}
-%% \begin{lstlisting}[mathescape=true,showstringspaces=false]
-%% /**
-%% * Checks whether or not this {@code Rectangle}
-%% * contains the point at the specified location
-%% * {@code (X,Y)}.
-%% *
-%% * @param  X the specified X coordinate
-%% * @param  Y the specified Y coordinate
-%% * @return    {@code true} if the point
-%% *            {@code (X,Y)} is inside this
-%% *            {@code Rectangle};
-%% *            {@code false} otherwise.
-%% * @deprecated As of JDK version 1.1,
-%% * replaced by {@code contains(int, int)}.
-%% */
-%% @Deprecated
-%% public boolean inside(int X, int Y) {
-%%   // ...
-%% }
-%% \end{lstlisting}
-%% \caption{Javadoc hint example.}
-%% \label{ex:javadoc-hint}
-%% \end{figure}
 
 \section{Experimental results}\label{sec:experimental-results}
 
