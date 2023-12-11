@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_GaugeMonitorTest {
   @Test
   void getDerivedGauge() throws Exception {
-    assertThat(synthesiseGPT("double derivedGauge = gaugeMonitor.getDerivedGauge();\n\n", "ObjectName objectName = gaugeMonitor.getObservedObject();\ndouble derivedGauge = gaugeMonitor.getDerivedGauge(objectName);\n", "javax.management.monitor.GaugeMonitor", "getDerivedGauge"), anyOf(contains("getDerivedGauge")));
+assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "" , "javax.management.monitor.GaugeMonitor" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
   }
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-    assertThat(synthesiseGPT("long timeStamp = this.getDerivedGaugeTimeStamp();\n\n", "ObjectName objectName = this.getObservedObject();\nlong timeStamp = ((GaugeMonitor) this.getMonitor()).getDerivedGaugeTimeStamp(objectName);\n", "javax.management.monitor.GaugeMonitor", "getDerivedGaugeTimeStamp"), anyOf(contains("getDerivedGaugeTimeStamp")));
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\n// Assuming the correct replacement method is getDerivedGaugeTimestamp()\nthis.getDerivedGaugeTimestamp();\n" , "javax.management.monitor.GaugeMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 }

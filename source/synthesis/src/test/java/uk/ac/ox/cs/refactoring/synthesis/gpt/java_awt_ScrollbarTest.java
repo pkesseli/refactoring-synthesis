@@ -12,26 +12,26 @@ import org.junit.jupiter.api.Test;
 class java_awt_ScrollbarTest {
   @Test
   void getLineIncrement() throws Exception {
-    assertThat(synthesiseGPT("int lineIncrement = this.getLineIncrement();\n\n", "int lineIncrement = this.getUnitIncrement();\n", "java.awt.Scrollbar", "getLineIncrement"), anyOf(contains("getUnitIncrement")));
+assertThat (synthesiseGPT ("getLineIncrement" , "this.getLineIncrement();" , "\nthis.getBlockIncrement()\n;" , "java.awt.Scrollbar" , "getLineIncrement") , anyOf (contains ("getUnitIncrement"))) ;
   }
 
   @Test
   void getPageIncrement() throws Exception {
-    assertThat(synthesiseGPT("int pageIncrement = this.getPageIncrement();\n\n", "int pageIncrement = this.getBlockIncrement();\n", "java.awt.Scrollbar", "getPageIncrement"), anyOf(contains("getBlockIncrement")));
+assertThat (synthesiseGPT ("getPageIncrement" , "this.getPageIncrement();" , "\nthis.getVisibleAmount()\n;" , "java.awt.Scrollbar" , "getPageIncrement") , anyOf (contains ("getBlockIncrement"))) ;
   }
 
   @Test
   void getVisible() throws Exception {
-    assertThat(synthesiseGPT("boolean visible = this.getVisible();", "int visibleAmount = this.getVisibleAmount();\nboolean visible = visibleAmount > 0;", "java.awt.Scrollbar", "getVisible"), anyOf(contains("getVisibleAmount")));
+assertThat (synthesiseGPT ("getVisible" , "this.getVisible();" , "\nthis.getVisibleAmount()\n```\n\nFor the visibility status of the scrollbar:\n```java\nthis.isVisible()\n```\n\nPlease check the context of your code to determine which one is appropriate. If you're dealing with the unit increment, then you would use `setUnitIncrement(int)` to set it, and `getUnitIncrement()` to get the current value.\n\nFor setting the unit increment:\n```java\nthis.setUnitIncrement(someValue)\n```\n\nFor getting the unit increment:\n```java\nthis.getUnitIncrement()\n;" , "java.awt.Scrollbar" , "getVisible") , anyOf (contains ("getVisibleAmount"))) ;
   }
 
   @Test
   void setLineIncrement() throws Exception {
-    assertThat(synthesiseGPT("this.setLineIncrement(a);\n", "this.setUnitIncrement(a);\n", "java.awt.Scrollbar", "setLineIncrement", "int"), anyOf(contains("setUnitIncrement")));
+assertThat (synthesiseGPT ("setLineIncrement" , "this.setLineIncrement(param0);" , "\nthis.setBlockIncrement(param0);\n" , "java.awt.Scrollbar" , "setLineIncrement" , "int") , anyOf (contains ("setUnitIncrement"))) ;
   }
 
   @Test
   void setPageIncrement() throws Exception {
-    assertThat(synthesiseGPT("this.setPageIncrement(a);\n", "this.setBlockIncrement(a);\n", "java.awt.Scrollbar", "setPageIncrement", "int"), anyOf(contains("setBlockIncrement")));
+assertThat (synthesiseGPT ("setPageIncrement" , "this.setPageIncrement(param0);" , "" , "java.awt.Scrollbar" , "setPageIncrement" , "int") , anyOf (contains ("setBlockIncrement"))) ;
   }
 }

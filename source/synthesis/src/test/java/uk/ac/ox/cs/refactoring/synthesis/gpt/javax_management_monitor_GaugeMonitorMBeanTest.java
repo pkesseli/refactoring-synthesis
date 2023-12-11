@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_GaugeMonitorMBeanTest {
   @Test
   void getDerivedGauge() throws Exception {
-    assertThat(synthesiseGPT("double derivedGauge = gaugeMonitorMBean.getDerivedGauge();\n\n", "ObjectName objectName = gaugeMonitorMBean.getObservedObject();\ndouble derivedGauge = gaugeMonitorMBean.getDerivedGauge(objectName);\n", "javax.management.monitor.GaugeMonitorMBean", "getDerivedGauge"), anyOf(contains("getDerivedGauge")));
+assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "The deprecation comment seems to be incorrect or misplaced, as `InputVerifier.shouldYieldFocus(JComponent, JComponent)` is not a replacement for `javax.management.monitor.GaugeMonitorMBean.getDerivedGauge()`. These methods are unrelated and serve different purposes; one is for Swing input verification, and the other is for JMX monitoring.\n\nIf `getDerivedGauge()` is deprecated, you would typically look for a new method within the `GaugeMonitorMBean` interface or its implementing classes that serves a similar purpose. However, without a proper alternative method provided in the deprecation comment, it's not possible to refactor the code as requested.\n\nYou should check the latest JMX documentation or the API documentation for the correct method to use instead of `getDerivedGauge()`. If a new method has been introduced to replace `getDerivedGauge()`, you would use that method. If not, you may continue to use `getDerivedGauge()` until an alternative is provided, but be aware that it may be removed in future versions of the API." , "javax.management.monitor.GaugeMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
   }
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-    assertThat(synthesiseGPT("long timeStamp = this.getDerivedGaugeTimeStamp();\n\n", "ObjectName objectName = this.getObservedObject();\nlong timeStamp = ((GaugeMonitorMBean) this.getMBeanServerConnection().newProxyInstance(objectName,\n                GaugeMonitorMBean.class, false)).getDerivedGaugeTimeStamp(objectName);\n", "javax.management.monitor.GaugeMonitorMBean", "getDerivedGaugeTimeStamp"), anyOf(contains("getDerivedGaugeTimeStamp")));
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "" , "javax.management.monitor.GaugeMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 }

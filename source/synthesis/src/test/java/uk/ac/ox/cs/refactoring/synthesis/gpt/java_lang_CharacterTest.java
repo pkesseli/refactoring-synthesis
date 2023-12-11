@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Test;
 class java_lang_CharacterTest {
   @Test
   void isJavaLetter() throws Exception {
-    assertThat(synthesiseGPT("this.isJavaLetter(a);\n\n", "Character.isJavaIdentifierStart(a);\n", "java.lang.Character", "isJavaLetter", "char"), Matchers.anything());
+assertThat (synthesiseGPT ("isJavaLetter" , "this.isJavaLetter(param0);" , "\nCharacter.isJavaIdentifierPart(param0)\n;" , "java.lang.Character" , "isJavaLetter" , "char") , Matchers . anything ()) ;
   }
 
   @Test
   void isJavaLetterOrDigit() throws Exception {
-    assertThat(synthesiseGPT("if (Character.isJavaLetterOrDigit(a)) {\n    // do something\n}\n\n", "if (Character.isJavaIdentifierPart(a)) {\n    // do something\n}\n", "java.lang.Character", "isJavaLetterOrDigit", "char"), Matchers.anything());
+assertThat (synthesiseGPT ("isJavaLetterOrDigit" , "this.isJavaLetterOrDigit(param0);" , "\nCharacter.isJavaIdentifierStart(param0) || Character.isJavaIdentifierPart(param0)\n;" , "java.lang.Character" , "isJavaLetterOrDigit" , "char") , Matchers . anything ()) ;
   }
 
   @Test
   void isSpace() throws Exception {
-    assertThat(synthesiseGPT("boolean isSpace = Character.isSpace(a);\n\n", "boolean isSpace = Character.isWhitespace(a);\n", "java.lang.Character", "isSpace", "char"), Matchers.anything());
+assertThat (synthesiseGPT ("isSpace" , "this.isSpace(param0);" , "\nCharacter.isWhitespace(param0)\n```\n\nor\n\n```java\nCharacter.isSpaceChar(param0)\n;" , "java.lang.Character" , "isSpace" , "char") , Matchers . anything ()) ;
   }
 }

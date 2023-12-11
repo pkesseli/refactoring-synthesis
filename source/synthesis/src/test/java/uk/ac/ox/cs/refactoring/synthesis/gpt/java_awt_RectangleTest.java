@@ -12,21 +12,21 @@ import org.junit.jupiter.api.Test;
 class java_awt_RectangleTest {
   @Test
   void inside() throws Exception {
-    assertThat(synthesiseGPT("if (this.inside(a, b)) {\n    // do something\n}\n\n", "if (this.contains(a, b)) {\n    // do something\n}\n", "java.awt.Rectangle", "inside", "int", "int"), anyOf(contains("contains")));
+assertThat (synthesiseGPT ("inside" , "this.inside(param0, param1);" , "\nthis.contains(param0, param1)\n;" , "java.awt.Rectangle" , "inside" , "int" , "int") , anyOf (contains ("contains"))) ;
   }
 
   @Test
   void move() throws Exception {
-    assertThat(synthesiseGPT("this.move(a, b);\n\n", "this.setLocation(a, b);\n", "java.awt.Rectangle", "move", "int", "int"), anyOf(contains("setLocation")));
+assertThat (synthesiseGPT ("move" , "this.move(param0, param1);" , "\nthis.setBounds(param0, param1, this.width, this.height);\n" , "java.awt.Rectangle" , "move" , "int" , "int") , anyOf (contains ("setLocation"))) ;
   }
 
   @Test
   void reshape() throws Exception {
-    assertThat(synthesiseGPT("this.reshape(a, b, c, d);\n\n", "this.setBounds(a, b, c, d);\n", "java.awt.Rectangle", "reshape", "int", "int", "int", "int"), anyOf(contains("setBounds")));
+assertThat (synthesiseGPT ("reshape" , "this.reshape(param0, param1, param2, param3);" , "\nthis.setBounds(param0, param1, param2, param3);\n" , "java.awt.Rectangle" , "reshape" , "int" , "int" , "int" , "int") , anyOf (contains ("setBounds"))) ;
   }
 
   @Test
   void resize() throws Exception {
-    assertThat(synthesiseGPT("this.resize(a, b);\n", "this.setSize(a, b);\n", "java.awt.Rectangle", "resize", "int", "int"), anyOf(contains("setSize")));
+assertThat (synthesiseGPT ("resize" , "this.resize(param0, param1);" , "\nthis.setSize(param0, param1);\n" , "java.awt.Rectangle" , "resize" , "int" , "int") , anyOf (contains ("setSize"))) ;
   }
 }

@@ -27,7 +27,7 @@ public final class Deprecation {
     return synthesiseAliasBenchmark(null, fullyQualifiedClassName, methodName, fullyQualifiedParameterClassNames);
   }
 
-  public static SnippetCandidate synthesiseGPT(final String before, final String after, final String fullyQualifiedClassName, final String methodName,
+  public static SnippetCandidate synthesiseGPT(final String benchmarkMethodName, final String before, final String after, final String fullyQualifiedClassName, final String methodName,
       final String... fullyQualifiedParameterClassNames) throws ClassNotFoundException, IllegalAccessException,
       NoSuchElementException, NoSuchFieldException, NoSuchMethodException, IOException {
 
@@ -36,7 +36,7 @@ public final class Deprecation {
 
     final GPTHints hints = new GPTHints(before, after, methodToRefactor);
     return Synthesis.synthesise(GeneratorConfigurations.experimentConfiguration(methodToRefactor), methodToRefactor,
-        null, hints);
+        benchmarkMethodName, hints);
   }
 
   private Deprecation() {

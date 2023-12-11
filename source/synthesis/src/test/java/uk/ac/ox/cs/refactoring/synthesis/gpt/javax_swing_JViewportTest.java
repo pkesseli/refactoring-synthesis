@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_swing_JViewportTest {
   @Test
   void isBackingStoreEnabled() throws Exception {
-    assertThat(synthesiseGPT("boolean isBackingStoreEnabled = this.isBackingStoreEnabled();\n\n", "boolean isBackingStoreEnabled = this.getScrollMode() == JViewport.BACKINGSTORE_SCROLL_MODE;\n", "javax.swing.JViewport", "isBackingStoreEnabled"), anyOf(contains("getScrollMode")));
+assertThat (synthesiseGPT ("isBackingStoreEnabled" , "this.isBackingStoreEnabled();" , "" , "javax.swing.JViewport" , "isBackingStoreEnabled") , anyOf (contains ("getScrollMode"))) ;
   }
 
   @Test
   void setBackingStoreEnabled() throws Exception {
-    assertThat(synthesiseGPT("this.setBackingStoreEnabled(a);\n", "this.setScrollMode(a ? JViewport.BACKINGSTORE_SCROLL_MODE : JViewport.BLIT_SCROLL_MODE);\n", "javax.swing.JViewport", "setBackingStoreEnabled", "boolean"), anyOf(contains("setScrollMode")));
+assertThat (synthesiseGPT ("setBackingStoreEnabled" , "this.setBackingStoreEnabled(param0);" , "" , "javax.swing.JViewport" , "setBackingStoreEnabled" , "boolean") , anyOf (contains ("setScrollMode"))) ;
   }
 }

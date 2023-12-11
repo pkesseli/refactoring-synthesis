@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_plaf_metal_MetalScrollPaneUITest {
   @Test
   void uninstallListeners() throws Exception {
-    assertThat(synthesiseGPT("this.uninstallListeners(a);\n\n", "BasicScrollPaneUI ui = (BasicScrollPaneUI) a.getUI();\nui.uninstallListeners(a);\n", "javax.swing.plaf.metal.MetalScrollPaneUI", "uninstallListeners", "javax.swing.JScrollPane"), anyOf(contains("uninstallListeners")));
+assertThat (synthesiseGPT ("uninstallListeners" , "this.uninstallListeners(param0);" , "" , "javax.swing.plaf.metal.MetalScrollPaneUI" , "uninstallListeners" , "javax.swing.JScrollPane") , anyOf (contains ("uninstallListeners"))) ;
   }
 }

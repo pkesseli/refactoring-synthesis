@@ -12,36 +12,36 @@ import org.junit.jupiter.api.Test;
 class java_awt_TextAreaTest {
   @Test
   void appendText() throws Exception {
-    assertThat(synthesiseGPT("this.appendText(a);\n", "this.append(a);\n", "java.awt.TextArea", "appendText", "java.lang.String"), anyOf(contains("append")));
+assertThat (synthesiseGPT ("appendText" , "this.appendText(param0);" , "\nthis.insert(param0, this.getText().length());\n" , "java.awt.TextArea" , "appendText" , "java.lang.String") , anyOf (contains ("append"))) ;
   }
 
   @Test
   void insertText() throws Exception {
-    assertThat(synthesiseGPT("this.insertText(a, b);\n\n", "this.insert(a, b);\n", "java.awt.TextArea", "insertText", "java.lang.String", "int"), anyOf(contains("insert")));
+assertThat (synthesiseGPT ("insertText" , "this.insertText(param0, param1);" , "\nthis.insert(param0, param1);\n" , "java.awt.TextArea" , "insertText" , "java.lang.String" , "int") , anyOf (contains ("insert"))) ;
   }
 
   @Test
   void minimumSize1() throws Exception {
-    assertThat(synthesiseGPT("this.minimumSize();\n\n", "this.getMinimumSize();\n", "java.awt.TextArea", "minimumSize"), anyOf(contains("getMinimumSize")));
+assertThat (synthesiseGPT ("minimumSize1" , "this.minimumSize();" , "\nthis.getMinimumSize(this.getColumns(), this.getRows())\n;" , "java.awt.TextArea" , "minimumSize") , anyOf (contains ("getMinimumSize"))) ;
   }
 
   @Test
   void minimumSize2() throws Exception {
-    assertThat(synthesiseGPT("this.minimumSize(a, b);\n\n", "this.getMinimumSize(a, b);\n", "java.awt.TextArea", "minimumSize", "int", "int"), anyOf(contains("getMinimumSize")));
+assertThat (synthesiseGPT ("minimumSize2" , "this.minimumSize(param0, param1);" , "\nthis.getPreferredSize()\n;" , "java.awt.TextArea" , "minimumSize" , "int" , "int") , anyOf (contains ("getMinimumSize"))) ;
   }
 
   @Test
   void preferredSize1() throws Exception {
-    assertThat(synthesiseGPT("Dimension preferredSize = this.preferredSize();\n\n", "Dimension preferredSize = this.getPreferredSize();\n", "java.awt.TextArea", "preferredSize"), anyOf(contains("getPreferredSize")));
+assertThat (synthesiseGPT ("preferredSize1" , "this.preferredSize();" , "\nthis.getPreferredSize()\n;" , "java.awt.TextArea" , "preferredSize") , anyOf (contains ("getPreferredSize"))) ;
   }
 
   @Test
   void preferredSize2() throws Exception {
-    assertThat(synthesiseGPT("this.preferredSize(a, b);\n\n", "this.getPreferredSize(a, b);\n", "java.awt.TextArea", "preferredSize", "int", "int"), anyOf(contains("getPreferredSize")));
+assertThat (synthesiseGPT ("preferredSize2" , "this.preferredSize(param0, param1);" , "\nthis.setPreferredSize(new Dimension(param0, param1));\n" , "java.awt.TextArea" , "preferredSize" , "int" , "int") , anyOf (contains ("getPreferredSize"))) ;
   }
 
   @Test
   void replaceText() throws Exception {
-    assertThat(synthesiseGPT("this.replaceText(a, b, c);\n\n", "this.replaceRange(a, b, c);\n", "java.awt.TextArea", "replaceText", "java.lang.String", "int", "int"), anyOf(contains("replaceRange")));
+assertThat (synthesiseGPT ("replaceText" , "this.replaceText(param0, param1, param2);" , "\nthis.replaceRange(param0, param1, param1 + param2);\n" , "java.awt.TextArea" , "replaceText" , "java.lang.String" , "int" , "int") , anyOf (contains ("replaceRange"))) ;
   }
 }

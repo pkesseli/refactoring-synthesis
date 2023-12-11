@@ -12,26 +12,26 @@ import org.junit.jupiter.api.Test;
 class javax_swing_plaf_TextUITest {
   @Test
   void getToolTipText() throws Exception {
-    assertThat(synthesiseGPT("String tooltip = this.getToolTipText(a, b);\n\n", "String tooltip = ((javax.swing.plaf.basic.BasicTextUI) this.getUI()).getToolTipText2D(a, b).toString();\n", "javax.swing.plaf.TextUI", "getToolTipText", "javax.swing.text.JTextComponent", "java.awt.Point"), anyOf(contains("getToolTipText2D")));
+assertThat (synthesiseGPT ("getToolTipText" , "this.getToolTipText(param0, param1);" , "\nMouseEvent me = new MouseEvent(param0, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, param1.x, param1.y, 0, false);\nString toolTipText = param0.getToolTipText(me);\n" , "javax.swing.plaf.TextUI" , "getToolTipText" , "javax.swing.text.JTextComponent" , "java.awt.Point") , anyOf (contains ("getToolTipText2D"))) ;
   }
 
   @Test
   void modelToView1() throws Exception {
-    assertThat(synthesiseGPT("Rectangle rect = textUI.modelToView(a, b);\n\n", "Rectangle2D rect = textUI.modelToView2D(a, b, Position.Bias.Forward);\n", "javax.swing.plaf.TextUI", "modelToView", "javax.swing.text.JTextComponent", "int"), anyOf(contains("modelToView2D")));
+assertThat (synthesiseGPT ("modelToView1" , "this.modelToView(param0, param1);" , "\nUtilities.getPositionAbove(param0, param1, 0.5f)\n;" , "javax.swing.plaf.TextUI" , "modelToView" , "javax.swing.text.JTextComponent" , "int") , anyOf (contains ("modelToView2D"))) ;
   }
 
   @Test
   void modelToView2() throws Exception {
-    assertThat(synthesiseGPT("Rectangle rect = textUI.modelToView(a, b, c);\n\n", "Rectangle2D rect = textUI.modelToView2D(a, b, c);\n", "javax.swing.plaf.TextUI", "modelToView", "javax.swing.text.JTextComponent", "int", "javax.swing.text.Position$Bias"), anyOf(contains("modelToView2D")));
+assertThat (synthesiseGPT ("modelToView2" , "this.modelToView(param0, param1, param2);" , "\nUtilities.getPositionBelow(param0, param1, 1.0f)\n;" , "javax.swing.plaf.TextUI" , "modelToView" , "javax.swing.text.JTextComponent" , "int" , "javax.swing.text.Position$Bias") , anyOf (contains ("modelToView2D"))) ;
   }
 
   @Test
   void viewToModel1() throws Exception {
-    assertThat(synthesiseGPT("int pos = this.viewToModel(a, b);\n\n", "Position.Bias[] bias = new Position.Bias[1];\nint pos = this.viewToModel2D(a, b, bias);\n", "javax.swing.plaf.TextUI", "viewToModel", "javax.swing.text.JTextComponent", "java.awt.Point"), anyOf(contains("viewToModel2D")));
+assertThat (synthesiseGPT ("viewToModel1" , "this.viewToModel(param0, param1);" , "\nint offset = Utilities.getTabbedTextOffset(\n    new Segment(param0.getText().toCharArray(), 0, param0.getDocument().getLength()),\n    param0.getFontMetrics(param0.getFont()),\n    param1.x,\n    param1.x,\n    this,\n    this.viewToModel(param0, new Point(0, param1.y)),\n    false\n);\n" , "javax.swing.plaf.TextUI" , "viewToModel" , "javax.swing.text.JTextComponent" , "java.awt.Point") , anyOf (contains ("viewToModel2D"))) ;
   }
 
   @Test
   void viewToModel2() throws Exception {
-    assertThat(synthesiseGPT("int pos = this.viewToModel(a, b, c);\n\n", "int pos = this.viewToModel2D(a, b, c);\n", "javax.swing.plaf.TextUI", "viewToModel", "javax.swing.text.JTextComponent", "java.awt.Point", "Position.Bias[]"), anyOf(contains("viewToModel2D")));
+assertThat (synthesiseGPT ("viewToModel2" , "this.viewToModel(param0, param1, param2);" , "\nint offset = param0.viewToModel(param1);\n" , "javax.swing.plaf.TextUI" , "viewToModel" , "javax.swing.text.JTextComponent" , "java.awt.Point" , "Position.Bias[]") , anyOf (contains ("viewToModel2D"))) ;
   }
 }

@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_awt_DialogTest {
   @Test
   void hide() throws Exception {
-    assertThat(synthesiseGPT("this.hide();\n\n", "this.setVisible(false);\n", "java.awt.Dialog", "hide"), anyOf(contains("setVisible")));
+assertThat (synthesiseGPT ("hide" , "this.hide();" , "\nthis.setVisible(false);\n" , "java.awt.Dialog" , "hide") , anyOf (contains ("setVisible"))) ;
   }
 
   @Test
   void show() throws Exception {
-    assertThat(synthesiseGPT("this.show();\n\n", "this.setVisible(true);\n", "java.awt.Dialog", "show"), anyOf(contains("setVisible")));
+assertThat (synthesiseGPT ("show" , "this.show();" , "\nthis.setVisible(true);\n" , "java.awt.Dialog" , "show") , anyOf (contains ("setVisible"))) ;
   }
 }

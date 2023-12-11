@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_security_SignatureTest {
   @Test
   void getParameter() throws Exception {
-    assertThat(synthesiseGPT("Signature signature = Signature.getInstance(\"SHA256withRSA\");\nString parameterValue = signature.getParameter(\"parameterName\");\n\n", "Signature signature = Signature.getInstance(\"SHA256withRSA\");\nString parameterValue = signature.getParameterValue(\"parameterName\");\n", "java.security.Signature", "getParameter", "java.lang.String"), Matchers.anything());
+assertThat (synthesiseGPT ("getParameter" , "this.getParameter(param0);" , "\nAlgorithmParameterSpec paramSpec = // ... initialize with appropriate parameter spec\nsignature.setParameter(paramSpec);\n" , "java.security.Signature" , "getParameter" , "java.lang.String") , Matchers . anything ()) ;
   }
 
   @Test
   void setParameter() throws Exception {
-    assertThat(synthesiseGPT("this.setParameter(a, b);\n\n", "this.setParameter(Parameter.valueOf(a), b);\n", "java.security.Signature", "setParameter", "java.lang.String", "java.lang.Object"), anyOf(contains("setParameter")));
+assertThat (synthesiseGPT ("setParameter" , "this.setParameter(param0, param1);" , "\n// Assuming 'signature' is an instance of java.security.Signature and 'paramSpec' is an appropriate AlgorithmParameterSpec\nAlgorithmParameterSpec paramSpec = /* initialize with appropriate parameters */;\ntry {\n    signature.setParameter(paramSpec);\n} catch (InvalidAlgorithmParameterException e) {\n    // Handle exception\n}\n" , "java.security.Signature" , "setParameter" , "java.lang.String" , "java.lang.Object") , anyOf (contains ("setParameter"))) ;
   }
 }

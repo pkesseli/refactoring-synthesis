@@ -1,0 +1,177 @@
+[
+  {
+    "Method": "com.sun.management.OperatingSystemMXBean#getFreePhysicalMemorySize",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "java.awt.Component#hide",
+    "Solution": "{\n    boolean tmp1052546395 = false;\n    this.setVisible(false);\n    this.setVisible(true);\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "java.awt.Component#inside",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "java.awt.Component#keyDown",
+    "Solution": "{\n    java.awt.Event tmp1311152251 = param0;\n    int tmp1354439711 = param1;\n    boolean tmp959718932 = this.action(param0, param0);\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "java.awt.Component#keyUp",
+    "Solution": "{\n    int tmp1464652578 = param1;\n    this.move(param1, param1);\n    boolean tmp404648659 = this.handleEvent(param0);\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "java.awt.Component#lostFocus",
+    "Solution": "{\n    boolean tmp364389956 = this.action(param0, param1);\n    java.awt.Component tmp466056887 = this;\n    boolean tmp1196836564 = tmp466056887.postEvent(param0);\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "java.awt.Component#postEvent",
+    "Solution": "{\n    java.awt.Event tmp2015521846 = param0;\n    java.awt.Event tmp20084184 = tmp2015521846;\n    boolean tmp295466076 = this.lostFocus(param0, this);\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "java.awt.Component#show",
+    "Solution": "{\n    this.setVisible(false);\n    this.setVisible(true);\n    this.setVisible(false);\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "java.awt.List#delItem",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "java.awt.Window#postEvent",
+    "Solution": "{\n    java.awt.Event tmp623169658 = param0;\n    java.awt.Window tmp1714823857 = this;\n    boolean tmp864186602 = this.action(param0, this);\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "java.awt.Window#reshape",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "java.awt.Window#show",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "java.net.DatagramSocketImpl#getTTL",
+    "Solution": "{\n    byte tmp1831010686 = 0;\n    int tmp207471778 = 11;\n    byte tmp1243171897 = tmp1831010686;\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "java.net.MulticastSocket#setTTL",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "java.net.URLDecoder#decode",
+    "Solution": "{\n    java.lang.String tmp188791662 = new java.lang.String(new java.lang.String()).trim().replaceAll(param0.toString().stripIndent(), param0);\n    java.net.URLDecoder tmp61426020 = new java.net.URLDecoder();\n    java.lang.String tmp1347016882 = param0;\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "java.net.URLEncoder#encode",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "java.security.Signature#setParameter",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "java.security.SignatureSpi#engineSetParameter",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "java.util.concurrent.atomic.AtomicBoolean#weakCompareAndSet",
+    "Solution": "{\n    boolean tmp1168079523 = true;\n    java.util.concurrent.atomic.AtomicBoolean tmp2093319848 = this;\n    boolean tmp2109027570 = false;\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "javax.management.monitor.GaugeMonitor#getDerivedGauge",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.management.monitor.GaugeMonitor#getDerivedGaugeTimeStamp",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.management.monitor.Monitor#setObservedObject",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.management.monitor.StringMonitor#getDerivedGauge",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.management.monitor.StringMonitor#getDerivedGaugeTimeStamp",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.swing.FocusManager#disableSwingFocusManager",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.swing.JComponent#disable",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.swing.JComponent#enable",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.swing.JTable#createScrollPaneForTable",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.swing.JTable#sizeColumnsToFit",
+    "Solution": "{\n    this.sizeColumnsToFit(param0);\n    this.sizeColumnsToFit(param0);\n    this.setShowHorizontalLines(param0);\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "javax.swing.JViewport#setBackingStoreEnabled",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.swing.text.PasswordView#drawSelectedText",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.swing.text.PasswordView#drawUnselectedText",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "javax.swing.text.Utilities#getBreakLocation",
+    "Solution": null,
+    "Unsound": false
+  },
+  {
+    "Method": "org.ietf.jgss.GSSContext#acceptSecContext",
+    "Solution": "{\n    org.ietf.jgss.GSSContext tmp373973695 = this;\n    java.io.InputStream tmp300659126 = java.io.InputStream.nullInputStream();\n    param1.flush();\n}",
+    "Unsound": true
+  },
+  {
+    "Method": "org.ietf.jgss.GSSContext#initSecContext",
+    "Solution": "{\n    org.ietf.jgss.GSSContext tmp1414013111 = this;\n    java.io.InputStream tmp778162712 = param0;\n    int tmp896138248 = 0;\n}",
+    "Unsound": true
+  }
+]

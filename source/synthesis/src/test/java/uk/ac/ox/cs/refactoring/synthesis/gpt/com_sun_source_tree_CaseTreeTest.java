@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class com_sun_source_tree_CaseTreeTest {
   @Test
   void getExpression() throws Exception {
-    assertThat(synthesiseGPT("CaseTree caseTree = ...;\nExpressionTree expressionTree = caseTree.getExpression();\n\n", "CaseTree caseTree = ...;\nList<? extends ExpressionTree> expressions = caseTree.getExpressions();\nExpressionTree expressionTree = expressions.get(0);\n", "com.sun.source.tree.CaseTree", "getExpression"), anyOf(contains("getExpressions")));
+assertThat (synthesiseGPT ("getExpression" , "this.getExpression();" , "\nthis.getExpressions().get(0)\n;" , "com.sun.source.tree.CaseTree" , "getExpression") , anyOf (contains ("getExpressions"))) ;
   }
 }
