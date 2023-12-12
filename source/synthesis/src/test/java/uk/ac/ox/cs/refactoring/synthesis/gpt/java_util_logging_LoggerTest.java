@@ -22,7 +22,7 @@ assertThat (synthesiseGPT ("logrb2" , "this.logrb(param0, param1, param2, param3
 
   @Test
   void logrb3() throws Exception {
-assertThat (synthesiseGPT ("logrb3" , "this.logrb(param0, param1, param2, param3, param4, param5);" , "\nResourceBundle bundle = ResourceBundle.getBundle(param2);\nString message = MessageFormat.format(bundle.getString(param3), param5);\nthis.log(Level.parse(param0), message);\n" , "java.util.logging.Logger" , "logrb" , "java.util.logging.Level" , "java.lang.String" , "java.lang.String" , "java.lang.String" , "java.lang.String" , "Object[]") , anyOf (contains ("logrb"))) ;
+assertThat (synthesiseGPT ("logrb3" , "this.logrb(param0, param1, param2, param3, param4, param5);" , "\nResourceBundle bundle = ResourceBundle.getBundle(param2);\nString message = MessageFormat.format(bundle.getString(param3), param5);\nthis.log(Level.parse(param0), message);\n" , "java.util.logging.Logger" , "logrb" , "java.util.logging.Level" , "java.lang.String" , "java.lang.String" , "java.lang.String" , "java.lang.String" , "java.lang.Object[]") , anyOf (contains ("logrb"))) ;
   }
 
   @Test

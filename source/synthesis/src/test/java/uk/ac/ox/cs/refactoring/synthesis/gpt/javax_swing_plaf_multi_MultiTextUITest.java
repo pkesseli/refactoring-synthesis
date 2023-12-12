@@ -27,6 +27,6 @@ assertThat (synthesiseGPT ("viewToModel1" , "this.viewToModel(param0, param1);" 
 
   @Test
   void viewToModel2() throws Exception {
-assertThat (synthesiseGPT ("viewToModel2" , "this.viewToModel(param0, param1, param2);" , "\nTextUI ui = param0.getUI();\nint offset = ui.viewToModel(param0, param1, param2);\n" , "javax.swing.plaf.multi.MultiTextUI" , "viewToModel" , "javax.swing.text.JTextComponent" , "java.awt.Point" , "Position.Bias[]") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("viewToModel2" , "this.viewToModel(param0, param1, param2);" , "\nTextUI ui = param0.getUI();\nint offset = ui.viewToModel(param0, param1, param2);\n" , "javax.swing.plaf.multi.MultiTextUI" , "viewToModel" , "javax.swing.text.JTextComponent" , "java.awt.Point" , "javax.swing.text.Position$Bias[]") , Matchers . anything ()) ;
   }
 }

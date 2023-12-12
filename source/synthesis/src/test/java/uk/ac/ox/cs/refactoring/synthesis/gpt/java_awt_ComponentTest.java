@@ -162,7 +162,7 @@ assertThat (synthesiseGPT ("resize1" , "this.resize(param0, param1);" , "\nthis.
 
   @Test
   void resize2() throws Exception {
-assertThat (synthesiseGPT ("resize2" , "this.resize(param0);" , "\nthis.setSize(param0);\n" , "java.awt.Component" , "resize" , "Dimension") , anyOf (contains ("setSize"))) ;
+assertThat (synthesiseGPT ("resize2" , "this.resize(param0);" , "\nthis.setSize(param0);\n" , "java.awt.Component" , "resize" , "java.awt.Dimension") , anyOf (contains ("setSize"))) ;
   }
 
   @Test

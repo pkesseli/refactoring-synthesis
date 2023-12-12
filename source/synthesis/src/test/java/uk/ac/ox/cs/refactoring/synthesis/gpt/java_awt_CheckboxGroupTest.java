@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("getCurrent" , "this.getCurrent();" , "\nthis.getSele
 
   @Test
   void setCurrent() throws Exception {
-assertThat (synthesiseGPT ("setCurrent" , "this.setCurrent(param0);" , "\nparam0.setState(true);\n" , "java.awt.CheckboxGroup" , "setCurrent" , "java.awt.CheckBox") , anyOf (contains ("setSelectedCheckbox"))) ;
+assertThat (synthesiseGPT ("setCurrent" , "this.setCurrent(param0);" , "\nparam0.setState(true);\n" , "java.awt.CheckboxGroup" , "setCurrent" , "java.awt.Checkbox") , anyOf (contains ("setSelectedCheckbox"))) ;
   }
 }
