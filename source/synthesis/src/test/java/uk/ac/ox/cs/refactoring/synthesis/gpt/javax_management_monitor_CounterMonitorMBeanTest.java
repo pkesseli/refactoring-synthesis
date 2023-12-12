@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_CounterMonitorMBeanTest {
   @Test
   void getDerivedGauge() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "The deprecation comment provided seems to be unrelated to the `CounterMonitorMBean.getDerivedGauge()` method. It appears to be a mistake, as the comment refers to SSLSession's `getPeerCertificates()` method, which is unrelated to JMX monitoring.\n\nIf `getDerivedGauge()` from `CounterMonitorMBean` is indeed deprecated, you would typically find an alternative method suggested in the Javadoc for the `CounterMonitorMBean` interface. However, without the correct deprecation comment or alternative method provided, it's not possible to refactor the code as requested.\n\nIf you have access to the correct Javadoc or API documentation, please refer to that for the non-deprecated method that should be used in place of `getDerivedGauge()`. If a new method is provided, you would replace `this.getDerivedGauge()` with the new method call as suggested by the documentation.;" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
+assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
   }
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\nthis.getDerivedGaugeTimestamp()\n;" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "It seems there is a mistake in the deprecation comment provided. The method `getCharacterStream` is not related to `CounterMonitorMBean` or its functionality. It's likely that the deprecation comment is incorrect or refers to a different context.\n\nThe `getDerivedGaugeTimeStamp()` method in `CounterMonitorMBean` is used to retrieve the timestamp of the most recently derived gauge. If it's deprecated, you would typically look for a replacement method within the same class or interface that provides the same or similar functionality.\n\nHowever, without a correct replacement method specified in the deprecation comment, it's not possible to provide a direct code refactoring. You would need to consult the official documentation or API changes for `CounterMonitorMBean` to find the correct method to use as a replacement.\n\nIf the deprecation comment is indeed incorrect and there is no direct replacement, you might have to continue using `getDerivedGaugeTimeStamp()` until a proper alternative is provided, or refactor your code to avoid the need for this method altogether, which would require a more in-depth understanding of your application's requirements and the available JMX monitoring alternatives.;" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 
   @Test
@@ -27,6 +27,6 @@ assertThat (synthesiseGPT ("getThreshold" , "this.getThreshold();" , "\nthis.get
 
   @Test
   void setThreshold() throws Exception {
-assertThat (synthesiseGPT ("setThreshold" , "this.setThreshold(param0);" , "setText(param0.toString());" , "javax.management.monitor.CounterMonitorMBean" , "setThreshold" , "java.lang.Number") , anyOf (contains ("setInitThreshold"))) ;
+assertThat (synthesiseGPT ("setThreshold" , "this.setThreshold(param0);" , "\nthis.setNewThresholdMethod(param0);\n" , "javax.management.monitor.CounterMonitorMBean" , "setThreshold" , "java.lang.Number") , anyOf (contains ("setInitThreshold"))) ;
   }
 }

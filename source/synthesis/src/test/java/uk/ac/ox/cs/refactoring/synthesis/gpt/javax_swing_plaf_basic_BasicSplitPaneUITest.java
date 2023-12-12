@@ -17,7 +17,7 @@ assertThat (synthesiseGPT ("createKeyboardDownRightListener" , "this.createKeybo
 
   @Test
   void createKeyboardEndListener() throws Exception {
-assertThat (synthesiseGPT ("createKeyboardEndListener" , "this.createKeyboardEndListener();" , "\nJSplitPane splitPane = ...; // your JSplitPane instance\n\nKeyAdapter endKeyListener = new KeyAdapter() {\n    @Override\n    public void keyPressed(KeyEvent e) {\n        if (e.getKeyCode() == KeyEvent.VK_END) {\n            // Handle the end key press event\n            // You need to define what should happen when the end key is pressed\n        }\n    }\n};\n\nsplitPane.addKeyListener(endKeyListener);\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardEndListener") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("createKeyboardEndListener" , "this.createKeyboardEndListener();" , "\nJSplitPane splitPane = new JSplitPane();\n\n// Define the action to be taken when the key is pressed\nAction moveDividerToEnd = new AbstractAction() {\n    @Override\n    public void actionPerformed(ActionEvent e) {\n        // Your logic to move the divider to the end\n        splitPane.setDividerLocation(splitPane.getMaximumDividerLocation());\n    }\n};\n\n// Bind the action to a key stroke\nKeyStroke endKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_END, 0);\nInputMap inputMap = splitPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);\nActionMap actionMap = splitPane.getActionMap();\n\ninputMap.put(endKeyStroke, \"moveDividerToEnd\");\nactionMap.put(\"moveDividerToEnd\", moveDividerToEnd);\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardEndListener") , Matchers . anything ()) ;
   }
 
   @Test

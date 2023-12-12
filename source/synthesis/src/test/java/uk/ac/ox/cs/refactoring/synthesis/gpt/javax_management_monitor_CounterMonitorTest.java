@@ -17,16 +17,16 @@ assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "\nst
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\n// Assuming 'stringMonitorMBean' is an instance of a class that implements StringMonitorMBean\n// and 'objectName' is an instance of ObjectName that represents the MBean being monitored.\n\nstringMonitorMBean.getDerivedGaugeTimeStamp(objectName);\n" , "javax.management.monitor.CounterMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\n// Assuming 'stringMonitorMBean' is an instance of a class that implements StringMonitorMBean\n// and 'objectName' is an instance of ObjectName that represents the MBean being monitored.\n\nlong timeStamp = stringMonitorMBean.getDerivedGaugeTimeStamp(objectName);\n" , "javax.management.monitor.CounterMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 
   @Test
   void getThreshold() throws Exception {
-assertThat (synthesiseGPT ("getThreshold" , "this.getThreshold();" , "\n((CounterMonitorMBean) QueryEval.getMBeanServer().queryMBeans(new ObjectName(this.getObservedObject()), null).iterator().next().getObjectName()).getThreshold()\n;" , "javax.management.monitor.CounterMonitor" , "getThreshold") , anyOf (contains ("getThreshold"))) ;
+assertThat (synthesiseGPT ("getThreshold" , "this.getThreshold();" , "\n((CounterMonitor) QueryEval.getMBeanServer()).getThreshold()\n;" , "javax.management.monitor.CounterMonitor" , "getThreshold") , anyOf (contains ("getThreshold"))) ;
   }
 
   @Test
   void setThreshold() throws Exception {
-assertThat (synthesiseGPT ("setThreshold" , "this.setThreshold(param0);" , "\n// Assuming 'this' is an instance of CounterMonitor and 'param0' is a Number object representing the threshold\nthis.setInitThreshold(param0);\nthis.setOffset(0); // Set offset if needed\nthis.setModulus(0); // Set modulus if needed\nthis.setNotify(true); // Enable notifications\nthis.start(); // Start the monitor\n" , "javax.management.monitor.CounterMonitor" , "setThreshold" , "java.lang.Number") , anyOf (contains ("setInitThreshold"))) ;
+assertThat (synthesiseGPT ("setThreshold" , "this.setThreshold(param0);" , "It seems there is a confusion in the deprecation comment provided. The `setThreshold(Number)` method from `javax.management.monitor.CounterMonitor` and `HandshakeCompletedEvent.getPeerCertificates()` from SSL handshake monitoring are unrelated. The deprecation comment seems to be mistakenly referring to a different method or class.\n\nIf `setThreshold(Number)` is indeed deprecated, there should be an alternative method in the `CounterMonitor` class to set the threshold. However, without the correct deprecation comment or documentation, it's not possible to provide an accurate refactoring of the code.\n\nPlease provide the correct deprecation details or check the official Java documentation for the correct method to use instead of `setThreshold(Number)`. If there is an alternative method provided, you would replace the call to `setThreshold(param0)` with the new method as specified in the documentation.;" , "javax.management.monitor.CounterMonitor" , "setThreshold" , "java.lang.Number") , anyOf (contains ("setInitThreshold"))) ;
   }
 }

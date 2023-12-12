@@ -17,11 +17,11 @@ assertThat (synthesiseGPT ("deserialize1" , "this.deserialize(param0, param1);" 
 
   @Test
   void deserialize2() throws Exception {
-assertThat (synthesiseGPT ("deserialize2" , "this.deserialize(param0, param1, param2);" , "\n// Assuming param2 is a byte array containing the serialized object\nByteArrayInputStream bis = new ByteArrayInputStream(param2);\nObjectInput in = null;\nObject deserializedObject = null;\n\ntry {\n    in = new ObjectInputStream(bis);\n    deserializedObject = in.readObject();\n} finally {\n    try {\n        if (in != null) {\n            in.close();\n        }\n    } catch (IOException ex) {\n        // Handle the close exception\n    }\n}\n" , "javax.management.MBeanServer" , "deserialize" , "java.lang.String" , "javax.management.ObjectName" , "byte[]") , anyOf (contains ("getClassLoader"))) ;
+assertThat (synthesiseGPT ("deserialize2" , "this.deserialize(param0, param1, param2);" , "\ntry (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(param2))) {\n    Object deserializedObject = ois.readObject();\n    // Use the deserialized object as needed\n} catch (IOException | ClassNotFoundException e) {\n    // Handle exceptions\n}\n" , "javax.management.MBeanServer" , "deserialize" , "java.lang.String" , "javax.management.ObjectName" , "byte[]") , anyOf (contains ("getClassLoader"))) ;
   }
 
   @Test
   void deserialize3() throws Exception {
-assertThat (synthesiseGPT ("deserialize3" , "this.deserialize(param0, param1);" , "\n// Assuming param1 is a byte array containing the serialized object\nByteArrayInputStream bis = new ByteArrayInputStream(param1);\nObjectInput in = null;\nObject deserializedObject = null;\ntry {\n  in = new ObjectInputStream(bis);\n  deserializedObject = in.readObject();\n} finally {\n  try {\n    if (in != null) {\n      in.close();\n    }\n  } catch (IOException ex) {\n    // Handle the close exception\n  }\n}\n" , "javax.management.MBeanServer" , "deserialize" , "javax.management.ObjectName" , "byte[]") , anyOf (contains ("getClassLoaderFor"))) ;
+assertThat (synthesiseGPT ("deserialize3" , "this.deserialize(param0, param1);" , "\n// Assuming param1 is a byte[] containing the serialized object\ntry (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(param1))) {\n    Object deserializedObject = ois.readObject();\n    // Use deserializedObject as needed\n} catch (IOException | ClassNotFoundException e) {\n    // Handle exceptions\n}\n" , "javax.management.MBeanServer" , "deserialize" , "javax.management.ObjectName" , "byte[]") , anyOf (contains ("getClassLoaderFor"))) ;
   }
 }

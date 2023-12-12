@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class java_awt_ComponentTest {
   @Test
   void action() throws Exception {
-assertThat (synthesiseGPT ("action" , "this.action(param0, param1);" , "\n// Assuming 'this' is a Button or a component that can generate an ActionEvent\nthis.addActionListener(new ActionListener() {\n    @Override\n    public void actionPerformed(ActionEvent e) {\n        // Your action code here, using e and any other necessary parameters\n    }\n});\n" , "java.awt.Component" , "action" , "java.awt.Event" , "java.lang.Object") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("action" , "this.action(param0, param1);" , "\n// Assuming 'this' is a component that can generate action events, like a Button\nthis.addActionListener(new ActionListener() {\n    @Override\n    public void actionPerformed(ActionEvent e) {\n        // Your action handling code here\n    }\n});\n" , "java.awt.Component" , "action" , "java.awt.Event" , "java.lang.Object") , Matchers . anything ()) ;
   }
 
   @Test
@@ -47,7 +47,7 @@ assertThat (synthesiseGPT ("gotFocus" , "this.gotFocus(param0, param1);" , "\nth
 
   @Test
   void handleEvent() throws Exception {
-assertThat (synthesiseGPT ("handleEvent" , "this.handleEvent(param0);" , "\n// Assuming param0 is an Event object that somehow indicates visibility\nboolean shouldBeVisible = ...; // Determine visibility based on the event\n\nthis.setVisible(shouldBeVisible);\n" , "java.awt.Component" , "handleEvent" , "java.awt.Event") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("handleEvent" , "this.handleEvent(param0);" , "\nthis.setVisible(param0);\n" , "java.awt.Component" , "handleEvent" , "java.awt.Event") , Matchers . anything ()) ;
   }
 
   @Test
@@ -72,12 +72,12 @@ assertThat (synthesiseGPT ("keyDown" , "this.keyDown(param0, param1);" , "\nKeyE
 
   @Test
   void keyUp() throws Exception {
-assertThat (synthesiseGPT ("keyUp" , "this.keyUp(param0, param1);" , "\nthis.addKeyListener(new KeyAdapter() {\n    @Override\n    public void keyReleased(KeyEvent e) {\n        if (e.getKeyCode() == param1) {\n            // Your key handling code here\n        }\n    }\n});\n" , "java.awt.Component" , "keyUp" , "java.awt.Event" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("keyUp" , "this.keyUp(param0, param1);" , "\n// Add a KeyListener to the component\nthis.addKeyListener(new KeyAdapter() {\n    @Override\n    public void keyReleased(KeyEvent e) {\n        // Handle the key released event here\n        if (e.getKeyCode() == param1) {\n            // Your key handling code\n        }\n    }\n});\n" , "java.awt.Component" , "keyUp" , "java.awt.Event" , "int") , Matchers . anything ()) ;
   }
 
   @Test
   void layout() throws Exception {
-assertThat (synthesiseGPT ("layout" , "this.layout();" , "\nthis.getComponentAt(x, y);\n" , "java.awt.Component" , "layout") , anyOf (contains ("doLayout"))) ;
+assertThat (synthesiseGPT ("layout" , "this.layout();" , "" , "java.awt.Component" , "layout") , anyOf (contains ("doLayout"))) ;
   }
 
   @Test
@@ -102,7 +102,7 @@ assertThat (synthesiseGPT ("minimumSize" , "this.minimumSize();" , "\nthis.getMi
 
   @Test
   void mouseDown() throws Exception {
-assertThat (synthesiseGPT ("mouseDown" , "this.mouseDown(param0, param1, param2);" , "\nMouseEvent mouseEvent = new MouseEvent(this, MouseEvent.MOUSE_PRESSED, \n                                       System.currentTimeMillis(), 0, \n                                       param1, param2, 0, false);\nthis.processMouseEvent(mouseEvent);\n" , "java.awt.Component" , "mouseDown" , "java.awt.Event" , "int" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("mouseDown" , "this.mouseDown(param0, param1, param2);" , "\nMouseEvent mouseEvent = new MouseEvent(\n    this,\n    MouseEvent.MOUSE_PRESSED,\n    System.currentTimeMillis(),\n    0, // You might need to specify the correct modifiers here\n    param1,\n    param2,\n    1, // Assuming a single click\n    false\n);\n\nthis.processMouseEvent(mouseEvent);\n" , "java.awt.Component" , "mouseDown" , "java.awt.Event" , "int" , "int") , Matchers . anything ()) ;
   }
 
   @Test
@@ -112,7 +112,7 @@ assertThat (synthesiseGPT ("mouseDrag" , "this.mouseDrag(param0, param1, param2)
 
   @Test
   void mouseEnter() throws Exception {
-assertThat (synthesiseGPT ("mouseEnter" , "this.mouseEnter(param0, param1, param2);" , "\nMouseEvent mouseEvent = new MouseEvent(this, MouseEvent.MOUSE_ENTERED, \n                                       System.currentTimeMillis(), 0, \n                                       param1, param2, 0, false);\nthis.processMouseEvent(mouseEvent);\n" , "java.awt.Component" , "mouseEnter" , "java.awt.Event" , "int" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("mouseEnter" , "this.mouseEnter(param0, param1, param2);" , "\nMouseEvent me = new MouseEvent(this, MouseEvent.MOUSE_ENTERED, \n    System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseEvent(me);\n" , "java.awt.Component" , "mouseEnter" , "java.awt.Event" , "int" , "int") , Matchers . anything ()) ;
   }
 
   @Test
@@ -122,12 +122,12 @@ assertThat (synthesiseGPT ("mouseExit" , "this.mouseExit(param0, param1, param2)
 
   @Test
   void mouseMove() throws Exception {
-assertThat (synthesiseGPT ("mouseMove" , "this.mouseMove(param0, param1, param2);" , "\nMouseEvent mouseEvent = new MouseEvent(\n    this,\n    MouseEvent.MOUSE_MOVED,\n    System.currentTimeMillis(),\n    0, // no modifiers\n    param1,\n    param2,\n    0, // no click count\n    false // not a popup trigger\n);\n\nthis.processMouseEvent(mouseEvent);\n" , "java.awt.Component" , "mouseMove" , "java.awt.Event" , "int" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("mouseMove" , "this.mouseMove(param0, param1, param2);" , "\nMouseEvent me = new MouseEvent(this, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseEvent(me);\n" , "java.awt.Component" , "mouseMove" , "java.awt.Event" , "int" , "int") , Matchers . anything ()) ;
   }
 
   @Test
   void mouseUp() throws Exception {
-assertThat (synthesiseGPT ("mouseUp" , "this.mouseUp(param0, param1, param2);" , "\n// Add a MouseListener to the component\nthis.addMouseListener(new MouseAdapter() {\n    @Override\n    public void mouseReleased(MouseEvent e) {\n        // Handle the mouse release event here\n        // Use e.getX() and e.getY() to get the x and y coordinates of the mouse release\n    }\n});\n```\n\nIf you need to simulate the mouse release event programmatically, you can do so by dispatching a `MouseEvent` to the component:\n\n```java\n// Create a MouseEvent to simulate a mouse release\nMouseEvent mouseReleaseEvent = new MouseEvent(\n    this, MouseEvent.MOUSE_RELEASED, System.currentTimeMillis(),\n    0, param1, param2, 1, false\n);\n\n// Dispatch the event to the component\nToolkit.getDefaultToolkit().getSystemEventQueue().postEvent(mouseReleaseEvent);\n" , "java.awt.Component" , "mouseUp" , "java.awt.Event" , "int" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("mouseUp" , "this.mouseUp(param0, param1, param2);" , "\nthis.addMouseListener(new MouseAdapter() {\n    @Override\n    public void mouseReleased(MouseEvent e) {\n        // Your code to handle the mouse release event\n        // Use e.getX() and e.getY() to get the x and y coordinates of the mouse\n    }\n});\n" , "java.awt.Component" , "mouseUp" , "java.awt.Event" , "int" , "int") , Matchers . anything ()) ;
   }
 
   @Test
@@ -142,7 +142,7 @@ assertThat (synthesiseGPT ("nextFocus" , "this.nextFocus();" , "\nthis.transferF
 
   @Test
   void postEvent() throws Exception {
-assertThat (synthesiseGPT ("postEvent" , "this.postEvent(param0);" , "\nthis.dispatchEvent(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, \"\"));\n" , "java.awt.Component" , "postEvent" , "java.awt.Event") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("postEvent" , "this.postEvent(param0);" , "\nthis.dispatchEvent(new Event(this, param0.id, param0.arg));\n" , "java.awt.Component" , "postEvent" , "java.awt.Event") , Matchers . anything ()) ;
   }
 
   @Test

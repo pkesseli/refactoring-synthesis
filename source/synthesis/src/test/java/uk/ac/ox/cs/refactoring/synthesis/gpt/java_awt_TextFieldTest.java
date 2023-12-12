@@ -27,11 +27,11 @@ assertThat (synthesiseGPT ("preferredSize1" , "this.preferredSize();" , "\nthis.
 
   @Test
   void preferredSize2() throws Exception {
-assertThat (synthesiseGPT ("preferredSize2" , "this.preferredSize(param0);" , "\nTextField textField = new TextField();\ntextField.setColumns(param0); // Set the number of columns to define the preferred width\nDimension preferredSize = textField.getPreferredSize(); // Get the preferred size\n```\n\nIf you need to set the preferred size explicitly, you can use the `setPreferredSize(Dimension)` method:\n\n```java\nTextField textField = new TextField();\ntextField.setPreferredSize(new Dimension(width, height)); // Set the preferred size explicitly\n" , "java.awt.TextField" , "preferredSize" , "int") , anyOf (contains ("getPreferredSize"))) ;
+assertThat (synthesiseGPT ("preferredSize2" , "this.preferredSize(param0);" , "\n// Assuming 'this' is a TextField instance and 'param0' is the number of columns\nthis.setColumns(param0); // Set the desired number of columns\nDimension preferredSize = this.getPreferredSize(); // Get the preferred size\nthis.setPreferredSize(preferredSize); // Set the preferred size\n" , "java.awt.TextField" , "preferredSize" , "int") , anyOf (contains ("getPreferredSize"))) ;
   }
 
   @Test
   void setEchoCharacter() throws Exception {
-assertThat (synthesiseGPT ("setEchoCharacter" , "this.setEchoCharacter(param0);" , "\n// Assuming 'this' is an instance of TextField, you would replace it with an instance of JPasswordField\nJPasswordField passwordField = new JPasswordField();\npasswordField.setEchoChar(param0);\n" , "java.awt.TextField" , "setEchoCharacter" , "char") , anyOf (contains ("setEchoChar"))) ;
+assertThat (synthesiseGPT ("setEchoCharacter" , "this.setEchoCharacter(param0);" , "\nimport javax.swing.JPasswordField;\n\n// Assuming 'this' is an instance of a class that previously extended TextField\nJPasswordField passwordField = new JPasswordField();\npasswordField.setEchoChar(param0);\n" , "java.awt.TextField" , "setEchoCharacter" , "char") , anyOf (contains ("setEchoChar"))) ;
   }
 }

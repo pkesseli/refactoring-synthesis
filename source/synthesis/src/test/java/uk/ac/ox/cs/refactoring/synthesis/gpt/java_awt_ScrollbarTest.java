@@ -22,7 +22,7 @@ assertThat (synthesiseGPT ("getPageIncrement" , "this.getPageIncrement();" , "\n
 
   @Test
   void getVisible() throws Exception {
-assertThat (synthesiseGPT ("getVisible" , "this.getVisible();" , "\nthis.getVisibleAmount()\n```\n\nFor the visibility status of the scrollbar:\n```java\nthis.isVisible()\n```\n\nPlease check the context of your code to determine which one is appropriate. If you're dealing with the unit increment, then you would use `setUnitIncrement(int)` to set it, and `getUnitIncrement()` to get the current value.\n\nFor setting the unit increment:\n```java\nthis.setUnitIncrement(someValue)\n```\n\nFor getting the unit increment:\n```java\nthis.getUnitIncrement()\n;" , "java.awt.Scrollbar" , "getVisible") , anyOf (contains ("getVisibleAmount"))) ;
+assertThat (synthesiseGPT ("getVisible" , "this.getVisible();" , "\nthis.isVisible()\n;" , "java.awt.Scrollbar" , "getVisible") , anyOf (contains ("getVisibleAmount"))) ;
   }
 
   @Test

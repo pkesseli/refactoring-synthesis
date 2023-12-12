@@ -17,7 +17,7 @@ assertThat (synthesiseGPT ("getFontList" , "this.getFontList();" , "\nGraphics g
 
   @Test
   void getFontMetrics() throws Exception {
-assertThat (synthesiseGPT ("getFontMetrics" , "this.getFontMetrics(param0);" , "\n@Override\npublic void paint(Graphics g) {\n    super.paint(g);\n    FontMetrics fm = g.getFontMetrics(param0);\n    // Use fm as needed\n}\n```\n\nIf you need to obtain `FontMetrics` outside of a paint method, you can get a `Graphics` object from any component, like this:\n\n```java\nFontMetrics fm = this.getFontMetrics(param0);\n" , "java.awt.Toolkit" , "getFontMetrics" , "java.awt.Font") , anyOf (contains ("Font") , contains ("getLineMetrics"))) ;
+assertThat (synthesiseGPT ("getFontMetrics" , "this.getFontMetrics(param0);" , "\nthis.getFontMetrics(param0)\n;" , "java.awt.Toolkit" , "getFontMetrics" , "java.awt.Font") , anyOf (contains ("Font") , contains ("getLineMetrics"))) ;
   }
 
   @Test

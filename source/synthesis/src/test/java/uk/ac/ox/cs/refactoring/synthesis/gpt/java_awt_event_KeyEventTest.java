@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_awt_event_KeyEventTest {
   @Test
   void getKeyModifiersText() throws Exception {
-assertThat (synthesiseGPT ("getKeyModifiersText" , "this.getKeyModifiersText(param0);" , "\nKeyEvent.getModifiersExText(param0)\n;" , "java.awt.event.KeyEvent" , "getKeyModifiersText" , "int") , anyOf (contains ("getModifiersExText"))) ;
+assertThat (synthesiseGPT ("getKeyModifiersText" , "this.getKeyModifiersText(param0);" , "\nKeyEvent.getModifiersExText(param0);\n" , "java.awt.event.KeyEvent" , "getKeyModifiersText" , "int") , anyOf (contains ("getModifiersExText"))) ;
   }
 
   @Test
   void setModifiers() throws Exception {
-assertThat (synthesiseGPT ("setModifiers" , "this.setModifiers(param0);" , "\nthis.setModifiersEx(param0);\n```\n\nHowever, please note that `param0` should represent the extended modifiers, not the old modifiers. The extended modifiers are a set of modifier keys (like `SHIFT_DOWN_MASK`, `CTRL_DOWN_MASK`, etc.) that you can find in the `InputEvent` class.\n\nIf you are creating a new `KeyEvent`, you should use the appropriate constructor directly:\n\n```java\nKeyEvent event = new KeyEvent(component, id, when, modifiersEx, keyCode, keyChar);\n" , "java.awt.event.KeyEvent" , "setModifiers" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("setModifiers" , "this.setModifiers(param0);" , "\nKeyEvent newEvent = new KeyEvent(\n    this, // the source component\n    KeyEvent.KEY_PRESSED, // the type of key event\n    System.currentTimeMillis(), // the time the event occurred\n    param0, // the modifiers\n    KeyEvent.VK_UNDEFINED, // the key code (undefined if not known)\n    KeyEvent.CHAR_UNDEFINED // the key char (undefined if not known)\n);\n" , "java.awt.event.KeyEvent" , "setModifiers" , "int") , Matchers . anything ()) ;
   }
 }

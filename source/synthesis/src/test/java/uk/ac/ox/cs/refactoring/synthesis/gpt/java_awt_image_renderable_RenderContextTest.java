@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("concetenateTransform" , "this.concetenateTransform(p
 
   @Test
   void preConcetenateTransform() throws Exception {
-assertThat (synthesiseGPT ("preConcetenateTransform" , "this.preConcetenateTransform(param0);" , "" , "java.awt.image.renderable.RenderContext" , "preConcetenateTransform" , "java.awt.geom.AffineTransform") , anyOf (contains ("preConcatenateTransform"))) ;
+assertThat (synthesiseGPT ("preConcetenateTransform" , "this.preConcetenateTransform(param0);" , "\nAffineTransform transform = new AffineTransform();\n// Assuming 'param0' is an AffineTransform that we want to concatenate\ntransform.concatenate(param0);\nthis.setTransform(transform);\n" , "java.awt.image.renderable.RenderContext" , "preConcetenateTransform" , "java.awt.geom.AffineTransform") , anyOf (contains ("preConcatenateTransform"))) ;
   }
 }

@@ -17,11 +17,11 @@ assertThat (synthesiseGPT ("divide1" , "this.divide(param0, param1);" , "\nthis.
 
   @Test
   void divide2() throws Exception {
-assertThat (synthesiseGPT ("divide2" , "this.divide(param0, param1, param2);" , "\nthis.divide(param0).setScale(param1, RoundingMode.valueOf(param2))\n;" , "java.math.BigDecimal" , "divide" , "java.math.BigDecimal" , "int" , "int") , anyOf (contains ("divide"))) ;
+assertThat (synthesiseGPT ("divide2" , "this.divide(param0, param1, param2);" , "\nthis.divide(param0, new MathContext(param1, RoundingMode.valueOf(param2)))\n;" , "java.math.BigDecimal" , "divide" , "java.math.BigDecimal" , "int" , "int") , anyOf (contains ("divide"))) ;
   }
 
   @Test
   void setScale() throws Exception {
-assertThat (synthesiseGPT ("setScale" , "this.setScale(param0, param1);" , "\nimport java.math.BigDecimal;\nimport java.math.RoundingMode;\n\n// ...\n\nBigDecimal thisBigDecimal = new BigDecimal(\"123.456\"); // Example BigDecimal initialization\nint newScale = param0; // The new scale you want to set\nint roundingModeInt = param1; // The rounding mode as an integer\nRoundingMode roundingMode = RoundingMode.valueOf(roundingModeInt); // Convert int to RoundingMode\n\nthisBigDecimal = thisBigDecimal.setScale(newScale, roundingMode);\n" , "java.math.BigDecimal" , "setScale" , "int" , "int") , anyOf (contains ("setScale"))) ;
+assertThat (synthesiseGPT ("setScale" , "this.setScale(param0, param1);" , "\nimport java.math.BigDecimal;\nimport java.math.RoundingMode;\n\n// ...\n\nthis.setScale(param0, RoundingMode.valueOf(param1));\n" , "java.math.BigDecimal" , "setScale" , "int" , "int") , anyOf (contains ("setScale"))) ;
   }
 }
