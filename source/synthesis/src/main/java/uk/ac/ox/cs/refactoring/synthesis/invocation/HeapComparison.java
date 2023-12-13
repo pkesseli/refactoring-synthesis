@@ -135,15 +135,6 @@ public final class HeapComparison {
       return false;
     }
 
-    // TODO maybe put it here
-    if (!isRelevant(lhsClass.getName())
-          || Polymorphism.isMockitoCodegen(lhsClass)
-          // || !CounterexampleGenerator.isSupported(typeResolver.resolve(declaringClass))
-          || Polymorphism.isDynamic(lhsClass)) {
-            // System.out.println("Skipping " + lhsClass.getName());
-            return true;
-          }
-
     if (shouldUseNativeEquals(lhsClassLoader, lhsClass))
       try {
         return lhs.equals(rhs);
