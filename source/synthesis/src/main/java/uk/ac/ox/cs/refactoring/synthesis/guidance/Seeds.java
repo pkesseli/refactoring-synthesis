@@ -6,7 +6,7 @@ import java.util.Random;
 import edu.berkeley.cs.jqf.fuzz.ei.ZestGuidance;
 import edu.berkeley.cs.jqf.fuzz.random.NoGuidance;
 
-final class Seeds {
+public final class Seeds {
   private Seeds() {
   }
 
@@ -31,10 +31,14 @@ final class Seeds {
     } catch (final IllegalAccessException e) {
       throw new IllegalStateException(e);
     }
+    random.setSeed(getSeed());
+  }
+
+  public static long getSeed() {
     final Long seed = Long.getLong("resynth.seed");
     if (seed == null) {
       throw new IllegalStateException("Specify a seed using -Dresynth.seed=<seed>");
     }
-    random.setSeed(seed);
+    return seed;
   }
 }
