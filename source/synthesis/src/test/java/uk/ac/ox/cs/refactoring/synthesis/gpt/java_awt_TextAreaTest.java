@@ -37,7 +37,7 @@ assertThat (synthesiseGPT ("preferredSize1" , "this.preferredSize();" , "\nthis.
 
   @Test
   void preferredSize2() throws Exception {
-assertThat (synthesiseGPT ("preferredSize2" , "this.preferredSize(param0, param1);" , "\nthis.setPreferredSize(new Dimension(param0, param1));\n" , "java.awt.TextArea" , "preferredSize" , "int" , "int") , anyOf (contains ("getPreferredSize"))) ;
+assertThat (synthesiseGPT ("preferredSize2" , "this.preferredSize(param0, param1);" , "\nthis.setPreferredSize(new Dimension(param0, param1));\nDimension preferredSize = this.getPreferredSize();\n" , "java.awt.TextArea" , "preferredSize" , "int" , "int") , anyOf (contains ("getPreferredSize"))) ;
   }
 
   @Test

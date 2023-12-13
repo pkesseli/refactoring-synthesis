@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("createScrollPaneForTable" , "this.createScrollPaneFo
 
   @Test
   void sizeColumnsToFit() throws Exception {
-assertThat (synthesiseGPT ("sizeColumnsToFit" , "this.sizeColumnsToFit(param0);" , "\nthis.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);\n```\n\nIf you were using `sizeColumnsToFit` with a specific column index, you would replace `param0` with the actual column index:\n\n```java\nthis.sizeColumnsToFit(columnIndex);\n" , "javax.swing.JTable" , "sizeColumnsToFit" , "boolean") , anyOf (contains ("doLayout"))) ;
+assertThat (synthesiseGPT ("sizeColumnsToFit" , "this.sizeColumnsToFit(param0);" , "\n// Assuming 'this' is an instance of JTable\nthis.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);\n" , "javax.swing.JTable" , "sizeColumnsToFit" , "boolean") , anyOf (contains ("doLayout"))) ;
   }
 }

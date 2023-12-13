@@ -62,7 +62,7 @@ assertThat (synthesiseGPT ("preferredSize1" , "this.preferredSize();" , "\nthis.
 
   @Test
   void preferredSize2() throws Exception {
-assertThat (synthesiseGPT ("preferredSize2" , "this.preferredSize(param0);" , "\nthis.getPreferredSize();\n```\n\nIf you need to set the preferred size explicitly, you would use the `setPreferredSize(Dimension)` method, where `Dimension` is a class that includes both width and height:\n\n```java\nthis.setPreferredSize(new Dimension(width, height));\n" , "java.awt.List" , "preferredSize" , "int") , anyOf (contains ("getPreferredSize"))) ;
+assertThat (synthesiseGPT ("preferredSize2" , "this.preferredSize(param0);" , "\nthis.getPreferredSize();\n" , "java.awt.List" , "preferredSize" , "int") , anyOf (contains ("getPreferredSize"))) ;
   }
 
   @Test

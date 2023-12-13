@@ -22,6 +22,6 @@ assertThat (synthesiseGPT ("invoke" , "this.invoke(param0);" , "" , "java.rmi.se
 
   @Test
   void newCall() throws Exception {
-assertThat (synthesiseGPT ("newCall" , "this.newCall(param0, param1, param2, param3);" , "" , "java.rmi.server.RemoteRef" , "newCall" , "java.rmi.server.RemoteObject" , "Operation[]" , "int" , "long") , anyOf (contains ("done") , contains ("invoke") , contains ("newCall"))) ;
+assertThat (synthesiseGPT ("newCall" , "this.newCall(param0, param1, param2, param3);" , "" , "java.rmi.server.RemoteRef" , "newCall" , "java.rmi.server.RemoteObject" , "java.rmi.server.Operation[]" , "int" , "long") , anyOf (contains ("done") , contains ("invoke") , contains ("newCall"))) ;
   }
 }

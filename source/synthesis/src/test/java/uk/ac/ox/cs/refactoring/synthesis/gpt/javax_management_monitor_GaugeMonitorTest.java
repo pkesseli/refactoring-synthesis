@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "" , 
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\n// Assuming the correct replacement method is getDerivedGaugeTimestamp()\nthis.getDerivedGaugeTimestamp();\n" , "javax.management.monitor.GaugeMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "" , "javax.management.monitor.GaugeMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 }
