@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -181,6 +182,10 @@ public final class GeneratorConfigurations {
     final byte maxInstructionLength = 3;
 
     final Method method = Methods.getMethod(classLoader, methodToRefactor);
+    if (!Boolean.parseBoolean("resynth.synthesis.javadoc") && Modifier.isAbstract(method.getModifiers())) {
+      // Do not try to synthesise for abstract methods without code hints.
+      throw new NoSuchElementException();
+    }
     final TypeResolver typeResolver = new TypeResolver();
     final ResolvedType instanceType = typeResolver.resolve(method.getDeclaringClass());
     final MemberResolver memberResolver = new MemberResolver(typeResolver);
