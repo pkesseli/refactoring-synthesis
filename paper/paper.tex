@@ -492,7 +492,7 @@ It's not straightforward to use this code to generate the refactoring, with some
 
 %While it might seem that this hint ma solve the entire problem, 
 
-\todo{possible other challenges: parsing, abstract classes. remove challenge 3.}
+%\todo{possible other challenges: parsing, abstract classes. remove challenge 3.}
 
 {\bf Challenge 1.}  Although it may seem as if
 method \texttt{get} is static allowing an immediate call,
@@ -507,8 +507,7 @@ fields. For instance,
 in Figure~\ref{ex:deprecated-method-other}, we must call
 \texttt{calendar.setTime(date)} to set the calendar's date
 based on the existing \texttt{date} object.
-
-{\bf Challenge 3.} Adding too many components to the library will
+Adding too many components to the library will
 make the code generation task infeasible. In particular, we should
 be able to differentiate between components that we can use
 (we have or we are able to generate
@@ -517,6 +516,10 @@ that we can't because we can't obtain some of the arguments
 and/or the current object. Adding the latter components to the library will
 significantly slow down the code generation process by
 adding infeasible programs to the search space.
+
+{\bf Challenge 3.} Code hints are
+not always expressed as well-formed Java. In some sense, the task of
+parsing code hints lies in between parsing Java code and interpreting natural language.
 
 {\bf Challenge 4.} As previously mentioned, the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that it must preserve its behaviour.
 However, proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
@@ -646,11 +649,12 @@ we attempt to parse as Java expressions. In particular, we parse each hint as if
 the method to refactor, such that imports or the implicit \texttt{this} argument
 are considered during parsing.
 
-\todo{needs some rewriting?}
-The issue is that code hints are not always expressed as well-formed Java.
-In some sense, the task of parsing code hints lies in between parsing Java code and interpreting natural language. 
+%\todo{needs some rewriting?}
+%% The issue is that code hints are not always expressed as well-formed Java.
+%% In some sense, the task of parsing code hints lies in between parsing Java code and interpreting natural language. 
 %
-Thus, we customised the
+In order to address challenge 3 related to the fact that code hints are not always expressed as well-formed Java,
+we customised the
 GitHub Java parser
 to accept undeclared identifiers and type names
 as arguments. For instance, the Javadoc hint for deprecating \texttt{boolean inside(int X, int Y)}
