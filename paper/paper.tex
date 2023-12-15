@@ -303,7 +303,7 @@ one of the directions is to
 replace calls
 to deprecated methods by their
 bodies~\cite{DBLP:conf/paste/Perkins05}.
-The issue is that, this
+However, this
 strategy doesn't usually follow the intention of the language designers, who
 use deprecation to signal that there is a safer and generally better
 way of achieving a given goal.
@@ -432,7 +432,7 @@ symbolic code generation methods such as ours to outperform general-purpose LLMs
 %% which weaves together components from a library
 %% (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
 
-Program synthesis is generally concerned with code generation via symbolic reasoning \todo{add more about program synthesis?}.
+Program synthesis is generally concerned with code generation via symbolic reasoning. % \todo{add more about program synthesis?}.
 Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
 
 
@@ -446,15 +446,15 @@ Although powerful, program synthesis is very hard due to the vast search space, 
 %% investigating the information available to our refactoring procedure.
 
 In this work we will make use of:
+
 {\bf (1)} {\em Type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
 
 
-\todo{
-Traditionally, the idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
-enables types to fully describe the behaviour of the program. Thus, our work also serves as an investigation of the usefulness of type information
-in generating imperative code.}
 
-However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient to solve the problem. 
+Traditionally, the idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
+enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, our work also serves as an investigation of the usefulness of type information in generating imperative code.
+
+%However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient to solve the problem. 
 
 {\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
 comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show next,
@@ -1644,6 +1644,10 @@ Table~\ref{tab:configuration-results} provides an overview of the number of
 sound refactorings (\checkmark), missed refactorings (\xmark), unsound
 refactorings (\lightning), the percentage of sound refactorings (\%)
 produced per configuration, as well as the average runtime per refactoring. 
+Missed refactorings are those that failed our equivalence check, whereas unsound ones are
+those that passed the equivalence check, but were manually detected by us.
+We describe the reasons this can happen later in this section.
+
 Many of the refactorings missed when
 using the CodeHints-library are
 due to the fact that no code hints were provided by the Javadoc.
@@ -1656,7 +1660,7 @@ using code hints compared to simply relying on types,
 Table~\ref{tab:configuration-results-ch} shows the same evaluation as  
 Table~\ref{tab:configuration-results}, but excluding methods where
 %we failed to identify a code hint
-no hint is provided in the Javadoc (or, in a few cases, we were unable to parse it, as explained in Section~\ref{sec:parse}). %% Next, we discuss the results of our
+no hint is provided in the Javadoc (or, in a few cases, we were unable to parse it as it was too far from well-formed Java code). %, as explained in Section~\ref{sec:parse}). %% Next, we discuss the results of our
 %% experiments, as captured by Table~\ref{tab:configuration-results-ch}.
 
 {\bf Missed refactorings.}
@@ -1693,6 +1697,7 @@ be added.
 %% which is not part of the JVM state. We currently don't check
 %% that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 %
+\todo{mention fuzzing}
 Firstly, our algorithm does currently not explore the entire classpath for
 potential overrides of the method to refactor. This may lead to unsound results
 when different subclasses of the original class are used polymorphically in the
@@ -1818,14 +1823,17 @@ With respect to the average runtime, that of GPT-4 Turbo is lower than that of \
 As a future direction we want to combine the two approaches, by using GPT-4 Turbo as the synthesis engine that provides candidate refactorings to \tool.
 
 {\bf (RQ3) Do code hints help the generation of refactorings?}
-The performance of both \tool and GPT-4 Turbo is improved by using the Javadoc code hints. 
+The performance of both \tool and GPT-4 Turbo when code hints are present and used.
 %Using the CodeHints-library enables our technique to find more refactorings
 %than with the Type-library.
 For the former, when code hints are present and used, the success rate goes from 49\% to 81\% (Table~\ref{tab:configuration-results-ch}).
 The higher quality of the instructions in the CodeHints-library compared to the
 Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
-For GPT-4 Turbo, the use of code hints allows it to go from 36\% success rate to 69\% (last two rows of Table~\ref{tab:gpt-results}).
+This also allows us to conclude that,
+while useful, types are not sufficient when synthesising code with side effects.
+
+For GPT-4 Turbo, the success rate improves from 33\% success rate to 44\% (last two rows of Table~\ref{tab:gpt-results}) when only considering benchmarks where code hints are present.
 
 %{\bf (RQ2) How often does Chat GPT generate refactorings that preserve the semantics of the original code?}
 
@@ -2030,7 +2038,11 @@ As opposed to that, our work is guided by program testing. This is similar in na
 
 With respect to works targeting the refactoring of deprecated instances, the work of Perkins directly replaces calls to deprecated methods by their bodies~\cite{DBLP:conf/paste/Perkins05}.
 As mentioned earlier in the paper, we believe that this solution does not follow the intention of the language designers. Moreover, it can
-introduce concurrency bugs. Notably, the authors of \cite{10.1007/978-3-642-14107-2_11}
+introduce concurrency bugs as inlining calls to deprecated
+methods can cause undesirable effects if the original function was
+synchronised.  While it is not possible for two invocations on the
+same object of the synchronised original method to interleave, this is
+not guaranteed after inlining the method's body. Notably, the authors of \cite{10.1007/978-3-642-14107-2_11}
 show that it is very easy for a refactoring that works on concurrent
 programs to introduce concurrency bugs by enabling new interactions between
 parallel threads. %They also provide techniques to make such refactorings behavior-preserving.
