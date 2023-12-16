@@ -1569,8 +1569,7 @@ We implemented the program synthesis and fuzzing refactoring technique in a tool
 %
 Our benchmark suite contains 236 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
-We included all the deprecated methods except those that were deprecated without a replacement
-(e.g. \texttt{java.rmi.registry.RegistryHandler.\ registryImpl(int)}), 
+We included all the deprecated methods except those that were deprecated without a replacement (e.g.\\ \texttt{java.rmi.registry.RegistryHandler.\ registryImpl(int)}), \\
 %methods that do not have a semantically equivalent refactoring
 %(see Section~\ref{sec:semantically-different-refactorings}),
 methods inaccessible by non-JCL classes (i.e. all the finalize methods, which are called by the garbage collector, not user code, meaning that we can't modify their calls), 
