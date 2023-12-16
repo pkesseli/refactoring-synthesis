@@ -529,24 +529,25 @@ not always expressed as well-formed Java. In some sense, the task of
 parsing code hints lies in between parsing Java code and interpreting natural language.
 
 {\bf Challenge 4.} As previously mentioned, the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that it must preserve its behaviour.
-However, proving semantic equivalence is expensive and undecidable in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
+Coming up with an equivalence check is very difficult, especially in the presence of side-effects, as we must take into consideration both the state of the stack and the heap (including the static fields).
+%We will describe how we construct our equivalence check in Section~\ref{sec:equiv}.
+%Also, in general, proving full semantic equivalence is expensive and undecidable. % in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
+%Checking equivalence between two functions is undecidable. We only check it for a finite number of inputs.
+
+%Even given a particular input, when can we deduce that two functions are equivalent? For side-effect free ones, this is easy: two pieces of code are observational equivalent if, given the same inputs, they produce the same result. However, when we do have side effects, expressing obseravtional equivalence is much harder.
 
 
-Checking equivalence between two functions is undecidable. We only check it for a finite number of inputs.
 
-Even given a particular input, when can we deduce that two functions are equivalent? For side-effect free ones, this is easy: two pieces of code are observational equivalent if, given the same inputs, they produce the same result. However, when we do have side effects, expressing obseravtional equivalence is much harder.
+%Proving semantic equivalence is a very difficult task especially given the possible side effects. We must consider:
+%* the effects on the memory
+%* the effects on global variables ... static?
 
-
-
-Proving semantic equivalence is a very difficult task especially given the possible side effects. We must consider:
-* the effects on the memory
-* the effects on global variables ... static?
-
-We address challenges 1-3 by dynamically building the component library for each refactoring
+We address challenges 1 and 2 by dynamically building the component library for each refactoring
 such that it only contains components specific to that particular use case.
 This process is described in detail in Section~\ref{sec:components-seeding}.
+The third challenge is further discussed under ``Phase 1: Initialise with code hints'' in Section~\ref{sec:components-seeding}.
 The fourth challenge is addressed
-by designing a semantic equivalence relation, which we then check with fuzz testing.
+by designing an equivalence relation, which we then check with fuzz testing.
 %by using fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
 While we can't provide full correctness guarantees,
 given a large number of test inputs, we consider this a close approximation.
