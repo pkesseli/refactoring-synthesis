@@ -1,9 +1,0 @@
-# Response Time: 3.6204464435577393
-```
-// Code before refactoring
-this.mouseDrag(a, b, c);
-
-// Code after refactoring
-MouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_DRAGGED, System.currentTimeMillis(), 0, a, b, c, false);
-this.processMouseMotionEvent(event);
-```

@@ -1,8 +1,0 @@
-# Response Time: 4.242152690887451
-```
-// Code before refactoring
-XMLEventFactory eventFactory = XMLEventFactory.newInstance("com.sun.xml.internal.stream.events.XMLEventFactoryImpl", this.getClass().getClassLoader());
-
-// Code after refactoring
-XMLEventFactory eventFactory = XMLEventFactory.newFactory();
-```

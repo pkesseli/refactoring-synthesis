@@ -1,9 +1,0 @@
-# Response Time: 3.9476518630981445
-```
-// Code before refactoring
-this.addDirtyRegion(a, b, c, d, e);
-```
-```
-// Code after refactoring
-RepaintManager.currentManager(this).addDirtyRegion(this, b, c, d, e);
-```

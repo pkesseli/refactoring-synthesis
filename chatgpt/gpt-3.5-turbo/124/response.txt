@@ -1,8 +1,0 @@
-# Response Time: 2.7179150581359863
-```
-// Code before refactoring
-this.reshape(a, b, c, d);
-
-// Code after refactoring
-this.setBounds(a, b, c, d);
-```

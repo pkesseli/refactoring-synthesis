@@ -1,8 +1,0 @@
-# Response Time: 3.1550991535186768
-```
-// Code before refactoring
-double derivedGauge = monitor.getDerivedGauge();
-
-// Code after refactoring
-double derivedGauge = ((GaugeMonitor) monitor).getDerivedGauge();
-```

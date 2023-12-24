@@ -1,9 +1,0 @@
-# Response Time: 3.1032044887542725
-```
-// Code before refactoring
-this.drawLine(a, b, c, d);
-
-// Code after refactoring
-Graphics g = getGraphics();
-g.drawLine(a, b, c, d);
-```

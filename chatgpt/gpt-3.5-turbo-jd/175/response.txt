@@ -1,8 +1,0 @@
-# Response Time: 1.702899694442749
-```
-// Code before refactoring
-this.isUnique();
-
-// Code after refactoring
-UUID.randomUUID().toString();
-```

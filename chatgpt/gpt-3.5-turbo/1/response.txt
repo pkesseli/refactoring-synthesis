@@ -1,8 +1,0 @@
-# Response Time: 2.6501476764678955
-```
-// Code before refactoring
-this.canUnrestrictedlyRedefineClasses();
-
-// Code after refactoring
-this.canRedefineClasses();
-```

@@ -1,9 +1,0 @@
-# Response Time: 2.4814372062683105
-```
-// Code before refactoring
-this.allowThreadSuspension(a);
-```
-```
-// Code after refactoring
-Thread.currentThread().suspend();
-```

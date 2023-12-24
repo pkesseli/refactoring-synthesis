@@ -1,8 +1,0 @@
-# Response Time: 3.2201733589172363
-```
-// Code before refactoring
-String tooltip = this.getToolTipText(a, b);
-
-// Code after refactoring
-JToolTip tooltip = a.getUI().getToolTipText(a, b);
-```

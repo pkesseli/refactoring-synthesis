@@ -1,8 +1,0 @@
-# Response Time: 2.4035279750823975
-```
-// Code before refactoring
-JScrollPane scrollPane = this.createScrollPaneForTable(a);
-
-// Code after refactoring
-JScrollPane scrollPane = new JScrollPane(a);
-```

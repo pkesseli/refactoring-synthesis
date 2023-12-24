@@ -1,8 +1,0 @@
-# Response Time: 3.106865406036377
-```
-// Code before refactoring
-Rectangle rect = this.modelToView(a, b);
-
-// Code after refactoring
-Rectangle2D rect = this.modelToView2D(a, b, Position.Bias.Forward);
-```

@@ -1,8 +1,0 @@
-# Response Time: 3.545722246170044
-```
-// Code before refactoring
-int shortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
-// Code after refactoring
-int shortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
-```

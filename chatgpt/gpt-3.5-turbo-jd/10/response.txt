@@ -1,9 +1,0 @@
-# Response Time: 1.847344160079956
-```
-// Code before refactoring
-this.setCurrent(a);
-```
-```
-// Code after refactoring
-a.setState(true);
-```

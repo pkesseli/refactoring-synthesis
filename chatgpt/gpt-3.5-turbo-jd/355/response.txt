@@ -1,8 +1,0 @@
-# Response Time: 2.072910785675049
-```
-// Code before refactoring
-this.disableResizedPosting();
-
-// Code after refactoring
-this.setResizingAllowed(false);
-```

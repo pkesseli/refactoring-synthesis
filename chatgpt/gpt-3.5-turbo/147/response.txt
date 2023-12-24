@@ -1,8 +1,0 @@
-# Response Time: 2.9637959003448486
-```
-// Code before refactoring
-this.getBytes(a, b, c, d);
-
-// Code after refactoring
-this.getBytes().get(a, b, c, d);
-```

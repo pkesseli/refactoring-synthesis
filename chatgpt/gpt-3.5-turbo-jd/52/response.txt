@@ -1,8 +1,0 @@
-# Response Time: 2.381577491760254
-```
-// Code before refactoring
-Component component = this.locate(a, b);
-
-// Code after refactoring
-Component component = this.getComponentAt(a, b);
-```

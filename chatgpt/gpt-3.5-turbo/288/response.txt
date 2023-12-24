@@ -1,8 +1,0 @@
-# Response Time: 3.072721004486084
-```
-// Code before refactoring
-double derivedGauge = this.getDerivedGauge();
-
-// Code after refactoring
-double derivedGauge = (Double)getAttribute("DerivedGauge");
-```

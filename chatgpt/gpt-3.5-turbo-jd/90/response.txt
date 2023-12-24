@@ -1,8 +1,0 @@
-# Response Time: 1.6552393436431885
-```
-// Code before refactoring
-this.enable();
-
-// Code after refactoring
-this.setEnabled(true);
-```

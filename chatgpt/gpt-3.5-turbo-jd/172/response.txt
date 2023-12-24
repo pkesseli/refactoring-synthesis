@@ -1,8 +1,0 @@
-# Response Time: 2.576749801635742
-```
-// Code before refactoring
-String decodedString = URLDecoder.decode(a);
-
-// Code after refactoring
-String decodedString = URLDecoder.decode(a, StandardCharsets.UTF_8.toString());
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.2218282222747803
-```
-// Code before refactoring
-MyClass obj = MyClass.class.newInstance();
-
-// Code after refactoring
-MyClass obj = MyClass.class.getDeclaredConstructor().newInstance();
-```

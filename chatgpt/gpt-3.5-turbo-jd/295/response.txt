@@ -1,9 +1,0 @@
-# Response Time: 3.423288345336914
-```
-// Code before refactoring
-long timeStamp = this.getDerivedGaugeTimeStamp();
-
-// Code after refactoring
-ObjectName objectName = this.getObservedObject();
-long timeStamp = ((StringMonitor) this.getMonitor()).getDerivedGaugeTimeStamp(objectName);
-```

@@ -1,8 +1,0 @@
-# Response Time: 3.1658968925476074
-```
-// Code before refactoring
-this.locate(a, b);
-
-// Code after refactoring
-SwingUtilities.convertPointToScreen(new Point(0, 0), this).getLocation();
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.5142407417297363
-```
-// Code before refactoring
-this.insertText(a, b);
-
-// Code after refactoring
-this.insert(a, b, a.length());
-```

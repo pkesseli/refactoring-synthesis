@@ -1,8 +1,0 @@
-# Response Time: 2.412907361984253
-```
-// Code before refactoring
-this.setDate(a);
-
-// Code after refactoring
-this.setTime(this.getTime() + TimeUnit.DAYS.toMillis(a));
-```

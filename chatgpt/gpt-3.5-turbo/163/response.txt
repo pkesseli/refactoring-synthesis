@@ -1,8 +1,0 @@
-# Response Time: 2.440176248550415
-```
-// Code before refactoring
-int ttl = this.getTTL();
-
-// Code after refactoring
-int ttl = this.getTimeToLive();
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.9772870540618896
-```
-// Code before refactoring
-int offset = this.viewToModel(a);
-
-// Code after refactoring
-int offset = this.getUI().viewToModel(this, a);
-```

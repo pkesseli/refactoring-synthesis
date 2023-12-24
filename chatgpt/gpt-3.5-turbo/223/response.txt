@@ -1,7 +1,0 @@
-# Response Time: 2.124086856842041
-```
-this.setUnicodeStream(a, b, c);
-```
-```
-this.setBinaryStream(a, b, c);
-```

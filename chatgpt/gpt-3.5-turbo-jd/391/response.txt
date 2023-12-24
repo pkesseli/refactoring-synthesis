@@ -1,9 +1,0 @@
-# Response Time: 3.1053292751312256
-```
-// Code before refactoring
-this.wrap(a, b, c);
-
-// Code after refactoring
-byte[] wrappedData = this.wrap(a, 0, a.length, c);
-b.write(wrappedData);
-```

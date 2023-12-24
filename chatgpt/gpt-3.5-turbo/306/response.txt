@@ -1,8 +1,0 @@
-# Response Time: 2.764526844024658
-```
-// Code before refactoring
-this.isFocusManagerEnabled();
-
-// Code after refactoring
-this.getFocusTraversalPolicy().getDefaultComponent(this) != null;
-```

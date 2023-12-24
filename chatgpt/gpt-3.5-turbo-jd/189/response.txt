@@ -1,8 +1,0 @@
-# Response Time: 2.4440274238586426
-```
-// Code before refactoring
-this.write(a);
-
-// Code after refactoring
-// There is no replacement for this deprecated method, so you can simply remove the call to it.
-```

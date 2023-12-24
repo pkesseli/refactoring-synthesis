@@ -1,8 +1,0 @@
-# Response Time: 3.2220077514648438
-```
-// Code before refactoring
-this.getTimezoneOffset();
-
-// Code after refactoring
-TimeZone.getTimeZone(ZoneId.systemDefault()).getOffset(Instant.now()) / (60 * 1000);
-```

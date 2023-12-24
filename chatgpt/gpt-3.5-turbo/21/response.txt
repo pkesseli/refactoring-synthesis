@@ -1,8 +1,0 @@
-# Response Time: 1.7773547172546387
-```
-// Code before refactoring
-this.hide();
-
-// Code after refactoring
-this.setVisible(false);
-```

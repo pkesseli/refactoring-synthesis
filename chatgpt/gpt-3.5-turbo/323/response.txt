@@ -1,8 +1,0 @@
-# Response Time: 3.232570171356201
-```
-// Code before refactoring
-JMenuBar menuBar = this.getMenuBar();
-
-// Code after refactoring
-JMenuBar menuBar = JRootPane.class.cast(this.getRootPane()).getJMenuBar();
-```

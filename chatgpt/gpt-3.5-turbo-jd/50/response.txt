@@ -1,8 +1,0 @@
-# Response Time: 2.0055904388427734
-```
-// Code before refactoring
-Insets insets = this.insets();
-
-// Code after refactoring
-Insets insets = this.getInsets();
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.8370752334594727
-```
-// Code before refactoring
-int pageIncrement = this.getPageIncrement();
-
-// Code after refactoring
-int pageIncrement = this.getUnitIncrement() * 10;
-```

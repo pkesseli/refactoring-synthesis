@@ -1,8 +1,0 @@
-# Response Time: 2.247281789779663
-```
-// Code before refactoring
-this.isFocusTraversable()
-
-// Code after refactoring
-this.isFocusable()
-```

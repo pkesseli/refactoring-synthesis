@@ -1,9 +1,0 @@
-# Response Time: 2.930466890335083
-```
-// Code before refactoring
-InputStream inputStream = this.getInputStream();
-
-// Code after refactoring
-RemoteCall remoteCall = (RemoteCall) this;
-InputStream inputStream = remoteCall.getInputStream();
-```

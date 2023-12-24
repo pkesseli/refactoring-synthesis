@@ -1,9 +1,0 @@
-# Response Time: 3.9628231525421143
-```
-// Code before refactoring
-this.drawLine(a, b, c, d, e);
-
-// Code after refactoring
-Graphics2D g2d = (Graphics2D) c;
-g2d.drawLine(a, b, c, d, e);
-```

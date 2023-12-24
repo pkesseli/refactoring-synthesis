@@ -1,9 +1,0 @@
-# Response Time: 2.7543129920959473
-```
-// Code before refactoring
-this.setObservedObject(a);
-```
-```
-// Code after refactoring
-this.setObservedObject(ObjectName.getInstance(a.toString()));
-```

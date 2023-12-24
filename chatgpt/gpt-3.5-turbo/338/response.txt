@@ -1,8 +1,0 @@
-# Response Time: 3.02468204498291
-```
-// Code before refactoring
-int caretPosition = this.viewToModel(a, b);
-
-// Code after refactoring
-int caretPosition = a.viewToModel2D(b);
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.6857690811157227
-```
-// Code before refactoring
-this.setUnicodeStream(a, b, c);
-
-// Code after refactoring
-this.setCharacterStream(a, new InputStreamReader(b, StandardCharsets.UTF_8), c);
-```

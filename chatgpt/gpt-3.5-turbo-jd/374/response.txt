@@ -1,9 +1,0 @@
-# Response Time: 3.4048967361450195
-```
-// Code before refactoring
-this.getTabbedTextWidth(a, b, c, d, e);
-```
-```
-// Code after refactoring
-Utilities.getTabbedTextWidth(a, b, (float) c, d, e);
-```

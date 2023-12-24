@@ -1,9 +1,0 @@
-# Response Time: 3.7938766479492188
-```
-// Code before refactoring
-this.logrb(a, b, c, d, e);
-
-// Code after refactoring
-Logger logger = Logger.getLogger(c);
-logger.log(Level.parse(a.toString()), d, new Object[]{e});
-```

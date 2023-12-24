@@ -1,8 +1,0 @@
-# Response Time: 2.3526663780212402
-```
-// Code before refactoring
-this.equals(a);
-
-// Code after refactoring
-DataFlavor.stringFlavor.getMimeType().equals(a);
-```

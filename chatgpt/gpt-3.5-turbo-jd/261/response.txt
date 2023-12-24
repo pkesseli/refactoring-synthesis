@@ -1,8 +1,0 @@
-# Response Time: 2.7739648818969727
-```
-// Code before refactoring
-this.logrb(a, b, c, d, e);
-
-// Code after refactoring
-this.logrb(a, b, c, null, d, e);
-```

@@ -1,8 +1,0 @@
-# Response Time: 3.097109317779541
-```
-// Code before refactoring
-String encodedString = URLEncoder.encode(a);
-
-// Code after refactoring
-String encodedString = URLEncoder.encode(a, StandardCharsets.UTF_8.toString());
-```

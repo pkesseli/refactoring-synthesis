@@ -1,9 +1,0 @@
-# Response Time: 2.7206788063049316
-```
-// Code before refactoring
-this.setLogStream(a);
-```
-```
-// Code after refactoring
-DriverManager.setLogWriter(new PrintWriter(a));
-```

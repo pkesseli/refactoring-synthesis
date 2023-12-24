@@ -1,8 +1,0 @@
-# Response Time: 2.077683448791504
-```
-// Code before refactoring
-int modifiers = this.getModifiers();
-
-// Code after refactoring
-int modifiers = this.getModifiersEx();
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.297438621520996
-```
-// Code before refactoring
-this.minimumSize(a, b);
-
-// Code after refactoring
-new Dimension(a, b);
-```

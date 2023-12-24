@@ -1,9 +1,0 @@
-# Response Time: 2.527188301086426
-```
-// Code before refactoring
-int seconds = this.getSeconds();
-
-// Code after refactoring
-Calendar calendar = Calendar.getInstance();
-int seconds = calendar.get(Calendar.SECOND);
-```

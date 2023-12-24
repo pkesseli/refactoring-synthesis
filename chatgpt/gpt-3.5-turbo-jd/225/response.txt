@@ -1,8 +1,0 @@
-# Response Time: 1.880291223526001
-```
-// Code before refactoring
-this.getBigDecimal(a, b);
-
-// Code after refactoring
-this.getBigDecimal(b);
-```

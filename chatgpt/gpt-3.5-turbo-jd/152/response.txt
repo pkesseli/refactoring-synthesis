@@ -1,8 +1,0 @@
-# Response Time: 2.8701024055480957
-```
-// Code before refactoring
-this.allowThreadSuspension​(true);
-
-// Code after refactoring
-// The method is deprecated and its behavior was never specified, so it's safe to remove the call
-```

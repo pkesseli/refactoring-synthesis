@@ -1,9 +1,0 @@
-# Response Time: 3.0090157985687256
-```
-// Code before refactoring
-int cursorType = this.getCursorType();
-
-// Code after refactoring
-Cursor cursor = this.getCursor();
-int cursorType = cursor.getType();
-```

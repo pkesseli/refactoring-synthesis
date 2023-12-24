@@ -1,8 +1,0 @@
-# Response Time: 2.3054282665252686
-```
-// Code before refactoring
-this.releaseOutputStream();
-
-// Code after refactoring
-// The method has no replacement, so you can simply remove the call to it
-```

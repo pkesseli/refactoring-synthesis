@@ -1,9 +1,0 @@
-# Response Time: 3.4943668842315674
-```
-// Code before refactoring
-int pos = this.viewToModel(a, b, c);
-
-// Code after refactoring
-Point2D.Float point = new Point2D.Float(a, b);
-pos = this.viewToModel(point, c);
-```

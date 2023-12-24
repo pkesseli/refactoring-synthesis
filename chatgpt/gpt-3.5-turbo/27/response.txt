@@ -1,8 +1,0 @@
-# Response Time: 3.0326504707336426
-```
-// Code before refactoring
-this.locate(a, b);
-
-// Code after refactoring
-this.getLocationOnScreen().x + a, this.getLocationOnScreen().y + b);
-```

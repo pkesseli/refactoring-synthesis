@@ -1,9 +1,0 @@
-# Response Time: 2.9342377185821533
-```
-// Code before refactoring
-String password = this.getText(a, b);
-
-// Code after refactoring
-char[] passwordChars = this.getPassword();
-String password = new String(passwordChars, a, b-a);
-```

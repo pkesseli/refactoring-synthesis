@@ -1,8 +1,0 @@
-# Response Time: 2.400614023208618
-```
-// Code before refactoring
-String str = this.toString(a);
-
-// Code after refactoring
-String str = new String(this.toByteArray(), StandardCharsets.UTF_8);
-```

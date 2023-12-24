@@ -1,8 +1,0 @@
-# Response Time: 3.2470202445983887
-```
-// Code before refactoring
-this.setMultipleSelections(a);
-
-// Code after refactoring
-this.setSelectionMode(a ? ListSelectionModel.MULTIPLE_INTERVAL_SELECTION : ListSelectionModel.SINGLE_SELECTION);
-```

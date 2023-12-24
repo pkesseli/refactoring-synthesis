@@ -1,9 +1,0 @@
-# Response Time: 2.8663837909698486
-```
-// Code before refactoring
-this.write(a, b, c);
-```
-```
-// Code after refactoring
-this.getLogWriter().write(a, b, c);
-```

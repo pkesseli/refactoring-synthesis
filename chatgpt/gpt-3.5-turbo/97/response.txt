@@ -1,7 +1,0 @@
-# Response Time: 2.2800869941711426
-```
-this.reshape(a, b, c, d);
-```
-```
-this.setBounds(a, b, c, d);
-```

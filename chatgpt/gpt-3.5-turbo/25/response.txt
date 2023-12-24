@@ -1,9 +1,0 @@
-# Response Time: 3.834196090698242
-```
-// Code before refactoring
-this.keyUp(a, b);
-
-// Code after refactoring
-KeyEvent keyEvent = new KeyEvent(this, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, b, (char) b);
-dispatchEvent(keyEvent);
-```

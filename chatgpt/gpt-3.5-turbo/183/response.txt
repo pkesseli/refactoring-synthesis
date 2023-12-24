@@ -1,8 +1,0 @@
-# Response Time: 2.4332189559936523
-```
-// Code before refactoring
-this.log(a);
-
-// Code after refactoring
-Logger.getLogger("myLogger").log(Level.INFO, a);
-```

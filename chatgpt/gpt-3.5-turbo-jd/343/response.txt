@@ -1,8 +1,0 @@
-# Response Time: 3.124666452407837
-```
-// Code before refactoring
-Rectangle rect = textUI.modelToView(a, b);
-
-// Code after refactoring
-Rectangle2D rect = textUI.modelToView2D(a, b, Position.Bias.Forward);
-```

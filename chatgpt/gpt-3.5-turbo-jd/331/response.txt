@@ -1,8 +1,0 @@
-# Response Time: 2.1209118366241455
-```
-// Code before refactoring
-this.createKeyboardEndListener();
-
-// Code after refactoring
-this.getHandler().createKeyboardEndHandler();
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.299816846847534
-```
-// Code before refactoring
-this.shouldYieldFocus(a);
-
-// Code after refactoring
-InputVerifier.shouldYieldFocus(this, a);
-```

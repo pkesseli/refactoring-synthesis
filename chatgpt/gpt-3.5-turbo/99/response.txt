@@ -1,8 +1,0 @@
-# Response Time: 2.5750977993011475
-```
-// Code before refactoring
-int lineIncrement = this.getLineIncrement();
-
-// Code after refactoring
-int lineIncrement = this.getUnitIncrement();
-```

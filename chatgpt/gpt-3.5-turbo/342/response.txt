@@ -1,9 +1,0 @@
-# Response Time: 3.1205129623413086
-```
-// Code before refactoring
-this.uninstallListeners(a);
-
-// Code after refactoring
-MetalScrollPaneUI ui = (MetalScrollPaneUI) a.getUI();
-ui.uninstallListeners(a);
-```

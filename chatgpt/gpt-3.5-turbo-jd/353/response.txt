@@ -1,8 +1,0 @@
-# Response Time: 2.0390233993530273
-```
-// Code before refactoring
-this.getViewportBorderBounds(a);
-
-// Code after refactoring
-a.getViewportBorderBounds();
-```

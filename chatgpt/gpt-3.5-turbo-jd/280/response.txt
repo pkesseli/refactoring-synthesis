@@ -1,8 +1,0 @@
-# Response Time: 1.9398319721221924
-```
-// Code before refactoring
-this.getThreshold();
-
-// Code after refactoring
-counterMonitor.getThreshold(monitor.getMBean()); 
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.1683712005615234
-```
-// Code before refactoring
-this.addLayoutComponent(a, b);
-
-// Code after refactoring
-this.addLayoutComponent(b, a);
-```

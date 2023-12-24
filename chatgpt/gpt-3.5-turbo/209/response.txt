@@ -1,8 +1,0 @@
-# Response Time: 3.2348029613494873
-```
-// Code before refactoring
-String property = Security.getAlgorithmProperty(a, b);
-
-// Code after refactoring
-String property = Security.getProperty("Alg.Alias." + a + "." + b);
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.570666551589966
-```
-// Code before refactoring
-this.createKeyboardResizeToggleListener();
-
-// Code after refactoring
-splitPane.setDividerKeyboardAction(new ToggleAction());
-```

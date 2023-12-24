@@ -1,8 +1,0 @@
-# Response Time: 2.6825990676879883
-```
-// Code before refactoring
-this.createKeyboardUpLeftListener();
-
-// Code after refactoring
-this.getHandler().getKeyboardUpLeftHandler().run(); 
-```

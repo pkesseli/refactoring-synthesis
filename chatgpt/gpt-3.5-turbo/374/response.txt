@@ -1,9 +1,0 @@
-# Response Time: 4.57068943977356
-```
-// Code before refactoring
-int width = javax.swing.text.Utilities.getTabbedTextWidth(a, b, c, d, e);
-
-// Code after refactoring
-TabExpander expander = d;
-int width = (int) expander.nextTabStop(c, e) - c;
-```

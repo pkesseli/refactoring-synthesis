@@ -1,8 +1,0 @@
-# Response Time: 2.0002565383911133
-```
-// Code before refactoring
-this.concetenateTransform(a);
-
-// Code after refactoring
-this.concatenateTransform(a);
-```

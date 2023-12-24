@@ -1,8 +1,0 @@
-# Response Time: 1.646662712097168
-```
-// Code before refactoring
-this.show();
-
-// Code after refactoring
-this.setVisible(true);
-```

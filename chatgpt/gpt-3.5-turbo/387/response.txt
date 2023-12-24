@@ -1,8 +1,0 @@
-# Response Time: 3.256080150604248
-```
-// Code before refactoring
-this.getMIC(a, b, c);
-
-// Code after refactoring
-this.getMIC(a, 0, a.length, b, 0, b.length, c);
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.31264066696167
-```
-// Code before refactoring
-this.done();
-
-// Code after refactoring
-// There is no replacement for this method, so it can be safely removed
-```

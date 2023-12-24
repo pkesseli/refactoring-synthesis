@@ -1,8 +1,0 @@
-# Response Time: 2.959526300430298
-```
-// Code before refactoring
-long timeStamp = this.getDerivedGaugeTimeStamp();
-
-// Code after refactoring
-long timeStamp = this.getDerivedGauge().getTimestamp();
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.6172854900360107
-```
-// Code before refactoring
-OutputStream outputStream = this.getOutputStream();
-
-// Code after refactoring
-OutputStream outputStream = ((java.rmi.server.RemoteCall) this).getOutputStream();
-```

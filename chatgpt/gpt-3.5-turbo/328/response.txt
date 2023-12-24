@@ -1,9 +1,0 @@
-# Response Time: 2.736844778060913
-```
-// Code before refactoring
-this.setBackingStoreEnabled(a);
-```
-```
-// Code after refactoring
-this.getViewport().setBackingStoreEnabled(a);
-```

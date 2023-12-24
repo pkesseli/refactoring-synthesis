@@ -1,8 +1,0 @@
-# Response Time: 2.1533350944519043
-```
-// Code before refactoring
-this.toURL();
-
-// Code after refactoring
-this.toURI().toURL();
-```

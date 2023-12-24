@@ -1,9 +1,0 @@
-# Response Time: 2.53863525390625
-```
-// Code before refactoring
-this.requestDefaultFocus();
-```
-```
-// Code after refactoring
-this.getFocusTraversalPolicy().getDefaultComponent(this).requestFocus();
-```

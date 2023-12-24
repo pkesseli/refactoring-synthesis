@@ -1,9 +1,0 @@
-# Response Time: 3.341775417327881
-```
-// Code before refactoring
-this.setHours(a);
-
-// Code after refactoring
-LocalDateTime localDateTime = this.toLocalDateTime().withHour(a);
-this.setTime(Timestamp.valueOf(localDateTime).getTime());
-```

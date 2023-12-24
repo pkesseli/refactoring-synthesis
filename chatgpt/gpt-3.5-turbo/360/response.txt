@@ -1,8 +1,0 @@
-# Response Time: 3.1216328144073486
-```
-// Code before refactoring
-FontMetrics fontMetrics = this.getFontMetrics();
-
-// Code after refactoring
-FontMetrics fontMetrics = this.getFont().getFontMetrics(this.getFontRenderContext());
-```

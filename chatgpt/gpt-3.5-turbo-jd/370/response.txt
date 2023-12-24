@@ -1,8 +1,0 @@
-# Response Time: 2.8182084560394287
-```
-// Code before refactoring
-int position = Utilities.getPositionAbove(a, b, c);
-
-// Code after refactoring
-int position = Utilities.getPositionAbove(a, b, (float) c);
-```

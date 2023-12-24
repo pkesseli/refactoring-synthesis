@@ -1,8 +1,0 @@
-# Response Time: 4.514909505844116
-```
-// Code before refactoring
-int offset = javax.swing.text.Utilities.getTabbedTextOffset(a, b, c, d, e, f);
-
-// Code after refactoring
-int offset = javax.swing.text.Utilities.getTabbedTextOffset(null, a, b, c, d, e, f);
-```

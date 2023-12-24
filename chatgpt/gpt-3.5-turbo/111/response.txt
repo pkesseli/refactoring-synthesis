@@ -1,8 +1,0 @@
-# Response Time: 2.8053534030914307
-```
-// Code before refactoring
-this.replaceText(a, b, c);
-
-// Code after refactoring
-this.getTextArea().replaceRange(a, b, c);
-```

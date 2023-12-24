@@ -1,9 +1,0 @@
-# Response Time: 5.074846029281616
-```
-// Code before refactoring
-this.createKeyboardUpLeftListener();
-
-// Code after refactoring
-this.getHandler().keyPressed(new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_UP, KeyEvent.CHAR_UNDEFINED));
-this.getHandler().keyPressed(new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, KeyEvent.CHAR_UNDEFINED));
-```

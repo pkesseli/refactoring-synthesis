@@ -1,9 +1,0 @@
-# Response Time: 2.3024511337280273
-```
-// Code before refactoring
-this.setMultipleSelections(a);
-```
-```
-// Code after refactoring
-this.setMultipleMode(a);
-```

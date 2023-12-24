@@ -1,8 +1,0 @@
-# Response Time: 2.5232596397399902
-```
-// Code before refactoring
-InputStream resultStream = this.getResultStream(a);
-
-// Code after refactoring
-InputStream resultStream = this.getInputStream();
-```

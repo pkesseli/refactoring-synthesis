@@ -1,8 +1,0 @@
-# Response Time: 2.121469020843506
-```
-// Code before refactoring
-this.write(a);
-
-// Code after refactoring
-this.write(Integer.toString(a));
-```

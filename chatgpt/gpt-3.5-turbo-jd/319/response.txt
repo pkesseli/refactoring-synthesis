@@ -1,8 +1,0 @@
-# Response Time: 1.8095078468322754
-```
-// Code before refactoring
-this.getComponentAtIndex(a);
-
-// Code after refactoring
-this.getComponent(a);
-```

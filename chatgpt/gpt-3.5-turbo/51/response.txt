@@ -1,8 +1,0 @@
-# Response Time: 1.852849006652832
-```
-// Code before refactoring
-this.layout();
-
-// Code after refactoring
-this.doLayout();
-```

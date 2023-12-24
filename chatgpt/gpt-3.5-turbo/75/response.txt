@@ -1,8 +1,0 @@
-# Response Time: 1.7442915439605713
-```
-// Code before refactoring
-this.clear();
-
-// Code after refactoring
-this.removeAll();
-```

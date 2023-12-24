@@ -1,8 +1,0 @@
-# Response Time: 2.411774158477783
-```
-// Code before refactoring
-this.registryImpl(a);
-
-// Code after refactoring
-LocateRegistry.getRegistry(a);
-```

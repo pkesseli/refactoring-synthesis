@@ -1,9 +1,0 @@
-# Response Time: 2.9617764949798584
-```
-// Code before refactoring
-this.disableSwingFocusManager();
-```
-```
-// Code after refactoring
-FocusManager.getCurrentManager().setFocusTraversalPolicyProvider(true);
-```

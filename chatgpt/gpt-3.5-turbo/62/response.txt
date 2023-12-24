@@ -1,8 +1,0 @@
-# Response Time: 2.141084671020508
-```
-// Code before refactoring
-this.setModifiers(a);
-
-// Code after refactoring
-this.setModifiersEx(a);
-```

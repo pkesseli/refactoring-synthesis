@@ -1,8 +1,0 @@
-# Response Time: 4.061700344085693
-```
-// Code before refactoring
-XMLInputFactory factory = XMLInputFactory.newInstance("com.sun.xml.internal.stream.XMLInputFactoryImpl", getClass().getClassLoader());
-
-// Code after refactoring
-XMLInputFactory factory = XMLInputFactory.newFactory("com.sun.xml.internal.stream.XMLInputFactoryImpl", getClass().getClassLoader());
-```

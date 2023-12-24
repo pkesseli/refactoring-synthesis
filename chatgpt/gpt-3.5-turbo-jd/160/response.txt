@@ -1,8 +1,0 @@
-# Response Time: 1.9197003841400146
-```
-// Code before refactoring
-this.setTTL(a);
-
-// Code after refactoring
-this.setTimeToLive(a);
-```

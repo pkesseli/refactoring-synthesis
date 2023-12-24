@@ -1,8 +1,0 @@
-# Response Time: 3.0248398780822754
-```
-// Code before refactoring
-Rectangle rect = this.modelToView(a, b, c);
-
-// Code after refactoring
-Rectangle rect = a.modelToView(b, c);
-```

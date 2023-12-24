@@ -1,9 +1,0 @@
-# Response Time: 3.1961610317230225
-```
-// Code before refactoring
-int year = this.getYear() + 1900;
-
-// Code after refactoring
-LocalDateTime dateTime = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault());
-int year = dateTime.getYear();
-```

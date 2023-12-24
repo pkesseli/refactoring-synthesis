@@ -1,8 +1,0 @@
-# Response Time: 1.6798272132873535
-```
-// Code before refactoring
-this.getLogStream();
-
-// Code after refactoring
-this.getLogWriter();
-```

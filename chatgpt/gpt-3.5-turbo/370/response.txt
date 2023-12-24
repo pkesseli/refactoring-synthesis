@@ -1,9 +1,0 @@
-# Response Time: 4.817860841751099
-```
-// Code before refactoring
-int positionAbove = this.getPositionAbove(a, b, c);
-
-// Code after refactoring
-Rectangle rectangle = a.getUI().modelToView(a, b);
-int positionAbove = a.getUI().viewToModel(a, new Point(rectangle.x, rectangle.y - 1));
-```

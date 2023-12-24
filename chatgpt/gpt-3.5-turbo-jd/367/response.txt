@@ -1,8 +1,0 @@
-# Response Time: 2.448185920715332
-```
-// Code before refactoring
-TableCell cell = this.createTableCell(a);
-
-// Code after refactoring
-TableCell cell = getEditorKit().getViewFactory().create(a);
-```

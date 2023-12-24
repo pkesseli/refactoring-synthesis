@@ -1,9 +1,0 @@
-# Response Time: 2.376959800720215
-```
-// Code before refactoring
-this.addItem(a);
-```
-```
-// Code after refactoring
-this.add(new ListItem(a));
-```

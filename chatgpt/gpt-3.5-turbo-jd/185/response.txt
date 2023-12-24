@@ -1,9 +1,0 @@
-# Response Time: 2.707651376724243
-```
-// Code before refactoring
-this.setDefaultStream(a);
-```
-```
-// Code after refactoring
-// There is no replacement for this method, so you can simply remove the call
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.427093982696533
-```
-// Code before refactoring
-ComponentOrientation orientation = this.getOrientation(a);
-
-// Code after refactoring
-ComponentOrientation orientation = ComponentOrientation.getOrientation(a.getLocale());
-```

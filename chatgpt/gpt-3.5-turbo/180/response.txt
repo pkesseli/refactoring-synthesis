@@ -1,8 +1,0 @@
-# Response Time: 2.742471218109131
-```
-// Code before refactoring
-this.loadClass(a, b);
-
-// Code after refactoring
-URLClassLoader.newInstance(new URL[]{a}).loadClass(b);
-```

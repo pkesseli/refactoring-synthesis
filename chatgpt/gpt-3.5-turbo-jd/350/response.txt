@@ -1,9 +1,0 @@
-# Response Time: 3.5465292930603027
-```
-// Code before refactoring
-int pos = this.viewToModel(a, b);
-
-// Code after refactoring
-Position.Bias[] bias = new Position.Bias[1];
-int pos = this.viewToModel2D(a, b, bias);
-```

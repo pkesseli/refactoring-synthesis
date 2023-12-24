@@ -1,9 +1,0 @@
-# Response Time: 2.6093766689300537
-```
-// Code before refactoring
-this.acceptSecContext​(a, b);
-```
-```
-// Code after refactoring
-this.acceptSecContext​();
-```

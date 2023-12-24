@@ -1,9 +1,0 @@
-# Response Time: 3.250657081604004
-```
-// Code before refactoring
-this.applyResourceBundle(a);
-
-// Code after refactoring
-ResourceBundle bundle = ResourceBundle.getBundle(a);
-applyComponentOrientation(ComponentOrientation.getOrientation(bundle.getLocale()));
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.343597888946533
-```
-// Code before refactoring
-boolean visible = this.getVisible();
-
-// Code after refactoring
-boolean visible = this.isVisible();
-```

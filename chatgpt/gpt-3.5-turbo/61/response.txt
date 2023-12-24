@@ -1,8 +1,0 @@
-# Response Time: 2.741582155227661
-```
-// Code before refactoring
-String modifiers = this.getKeyModifiersText(a);
-
-// Code after refactoring
-String modifiers = KeyEvent.getKeyModifiersText(a);
-```

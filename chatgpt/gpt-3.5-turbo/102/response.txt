@@ -1,9 +1,0 @@
-# Response Time: 2.595989942550659
-```
-// Code before refactoring
-this.setLineIncrement(a);
-```
-```
-// Code after refactoring
-this.setUnitIncrement(a);
-```

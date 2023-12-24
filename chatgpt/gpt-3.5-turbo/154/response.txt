@@ -1,8 +1,0 @@
-# Response Time: 2.291165828704834
-```
-// Code before refactoring
-this.stop();
-
-// Code after refactoring
-Thread.currentThread().getThreadGroup().interrupt(); 
-```

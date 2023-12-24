@@ -1,8 +1,0 @@
-# Response Time: 2.5619301795959473
-```
-// Code before refactoring
-boolean allowMultipleSelections = this.allowsMultipleSelections();
-
-// Code after refactoring
-boolean allowMultipleSelections = this.isMultipleMode();
-```

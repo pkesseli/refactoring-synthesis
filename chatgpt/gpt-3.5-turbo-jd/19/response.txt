@@ -1,9 +1,0 @@
-# Response Time: 2.7483432292938232
-```
-// Code before refactoring
-this.gotFocus(a, b);
-```
-```
-// Code after refactoring
-this.processFocusEvent(new FocusEvent(this, FocusEvent.FOCUS_GAINED));
-```

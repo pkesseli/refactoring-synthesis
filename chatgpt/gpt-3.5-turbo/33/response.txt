@@ -1,9 +1,0 @@
-# Response Time: 3.931304454803467
-```
-// Code before refactoring
-this.mouseEnter(a, b, c);
-
-// Code after refactoring
-MouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(), 0, b, c, 0, false);
-this.dispatchEvent(event);
-```

@@ -1,8 +1,0 @@
-# Response Time: 3.093808174133301
-```
-// Code before refactoring
-this.setURL(a, b, c, d, e, f);
-
-// Code after refactoring
-this.setURL(a, b, c, d, e, f, null, null);
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.3754565715789795
-```
-// Code before refactoring
-ClassLoader toolClassLoader = this.getSystemToolClassLoader();
-
-// Code after refactoring
-ClassLoader toolClassLoader = ClassLoader.getSystemClassLoader();
-```

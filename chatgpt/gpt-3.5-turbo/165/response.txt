@@ -1,8 +1,0 @@
-# Response Time: 3.0558533668518066
-```
-// Code before refactoring
-this.leaveGroup(a);
-
-// Code after refactoring
-this.leaveGroup(new InetSocketAddress(a, 0), NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
-```

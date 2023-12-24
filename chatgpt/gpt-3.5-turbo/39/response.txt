@@ -1,9 +1,0 @@
-# Response Time: 2.754359722137451
-```
-// Code before refactoring
-this.postEvent(a);
-```
-```
-// Code after refactoring
-Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(a);
-```

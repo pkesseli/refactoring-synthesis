@@ -1,9 +1,0 @@
-# Response Time: 2.50500750541687
-```
-// Code before refactoring
-this.setCursor(a);
-
-// Code after refactoring
-Cursor cursor = Cursor.getPredefinedCursor(a);
-this.setCursor(cursor);
-```

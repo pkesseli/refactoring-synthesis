@@ -1,9 +1,0 @@
-# Response Time: 2.784156560897827
-```
-// Code before refactoring
-this.setRef(a, b);
-```
-```
-// Code after refactoring
-((RemoteStub) a).setRef(b);
-```

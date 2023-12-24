@@ -1,9 +1,0 @@
-# Response Time: 2.910022020339966
-```
-// Code before refactoring
-this.setMBeanServer(a);
-```
-```
-// Code after refactoring
-MBeanServerFactory.setMBeanServer(a);
-```

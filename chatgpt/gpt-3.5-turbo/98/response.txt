@@ -1,9 +1,0 @@
-# Response Time: 2.444737195968628
-```
-// Code before refactoring
-this.resize(a, b);
-```
-```
-// Code after refactoring
-this.setSize(a, b);
-```

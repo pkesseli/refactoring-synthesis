@@ -1,8 +1,0 @@
-# Response Time: 3.6625945568084717
-```
-// Code before refactoring
-TableCell tableCell = this.createTableCell(a);
-
-// Code after refactoring
-TableCell tableCell = new DefaultTableCellRenderer().getTableCellRendererComponent(null, null, false, false, 0, 0);
-```

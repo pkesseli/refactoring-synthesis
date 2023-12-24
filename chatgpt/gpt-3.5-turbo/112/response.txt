@@ -1,8 +1,0 @@
-# Response Time: 2.138335704803467
-```
-// Code before refactoring
-this.minimumSize();
-
-// Code after refactoring
-this.getMinimumSize();
-```

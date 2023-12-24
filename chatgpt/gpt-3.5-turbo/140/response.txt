@@ -1,8 +1,0 @@
-# Response Time: 2.5548620223999023
-```
-// Code before refactoring
-Package p = this.getPackage(a);
-
-// Code after refactoring
-Package p = Package.getPackage(a);
-```

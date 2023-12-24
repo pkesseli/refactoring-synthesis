@@ -1,8 +1,0 @@
-# Response Time: 2.264270067214966
-```
-// Code before refactoring
-this.getBigDecimal(a, b);
-
-// Code after refactoring
-this.getBigDecimal(a).setScale(b);
-```

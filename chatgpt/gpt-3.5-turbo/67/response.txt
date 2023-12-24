@@ -1,9 +1,0 @@
-# Response Time: 3.0559113025665283
-```
-// Code before refactoring
-Rectangle clipRect = this.getClipRect();
-
-// Code after refactoring
-Shape clipShape = this.getClip();
-Rectangle clipRect = clipShape.getBounds();
-```

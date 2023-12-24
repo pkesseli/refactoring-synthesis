@@ -1,8 +1,0 @@
-# Response Time: 2.5755045413970947
-```
-// Code before refactoring
-this.setInterface(a);
-
-// Code after refactoring
-this.setNetworkInterface(NetworkInterface.getByInetAddress(a));
-```

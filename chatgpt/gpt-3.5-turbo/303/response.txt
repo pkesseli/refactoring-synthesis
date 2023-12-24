@@ -1,8 +1,0 @@
-# Response Time: 2.234060525894165
-```
-// Code before refactoring
-String label = this.getLabel();
-
-// Code after refactoring
-String label = this.getText();
-```

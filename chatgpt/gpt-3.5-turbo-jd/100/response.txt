@@ -1,8 +1,0 @@
-# Response Time: 2.220399856567383
-```
-// Code before refactoring
-int pageIncrement = this.getPageIncrement();
-
-// Code after refactoring
-int pageIncrement = this.getBlockIncrement();
-```

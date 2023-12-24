@@ -1,9 +1,0 @@
-# Response Time: 2.6136770248413086
-```
-// Code before refactoring
-this.done();
-
-// Code after refactoring
-// Use the new method `this.releaseInputStream()` instead
-this.releaseInputStream();
-```

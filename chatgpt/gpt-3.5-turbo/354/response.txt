@@ -1,8 +1,0 @@
-# Response Time: 3.212052822113037
-```
-// Code before refactoring
-Component focusOwner = this.findFocusOwner(a);
-
-// Code after refactoring
-Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-```

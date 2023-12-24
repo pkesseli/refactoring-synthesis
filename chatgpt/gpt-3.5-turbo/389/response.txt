@@ -1,9 +1,0 @@
-# Response Time: 3.365546464920044
-```
-// Code before refactoring
-this.unwrap(a, b, c);
-```
-```
-// Code after refactoring
-this.unwrap(a.readAllBytes(), 0, a.available(), b, 0, c);
-```

@@ -1,8 +1,0 @@
-# Response Time: 2.415431499481201
-```
-// Code before refactoring
-this.divide(a, b);
-
-// Code after refactoring
-this.divide(a, b, RoundingMode.HALF_UP);
-```

@@ -1,9 +1,0 @@
-# Response Time: 3.0013644695281982
-```
-// Code before refactoring
-this.setMBeanServer(a);
-```
-```
-// Code after refactoring
-// Remove the call to setMBeanServer and use QueryEval.getMBeanServer() instead
-```

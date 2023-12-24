@@ -1,8 +1,0 @@
-# Response Time: 1.9719195365905762
-```
-// Code before refactoring
-this.resume();
-
-// Code after refactoring
-Thread.currentThread().resume();
-```

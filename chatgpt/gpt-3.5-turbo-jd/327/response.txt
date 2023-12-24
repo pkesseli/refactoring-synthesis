@@ -1,8 +1,0 @@
-# Response Time: 3.0906245708465576
-```
-// Code before refactoring
-boolean isBackingStoreEnabled = this.isBackingStoreEnabled();
-
-// Code after refactoring
-boolean isBackingStoreEnabled = this.getScrollMode() == JViewport.BACKINGSTORE_SCROLL_MODE;
-```

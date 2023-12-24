@@ -1,8 +1,0 @@
-# Response Time: 3.8816871643066406
-```
-// Code before refactoring
-int pos = this.getPositionBelow(a, b, c);
-
-// Code after refactoring
-int pos = javax.swing.text.Utilities.getPositionBelow(a, b, c, javax.swing.text.DefaultCaret.NEXT);
-```

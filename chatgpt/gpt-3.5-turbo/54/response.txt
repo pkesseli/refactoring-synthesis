@@ -1,8 +1,0 @@
-# Response Time: 2.4915404319763184
-```
-// Code before refactoring
-Dimension preferredSize = this.preferredSize();
-
-// Code after refactoring
-Dimension preferredSize = this.getPreferredSize();
-```

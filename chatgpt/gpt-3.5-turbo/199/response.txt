@@ -1,9 +1,0 @@
-# Response Time: 2.186701536178589
-```
-// Code before refactoring
-this.done(a);
-```
-```
-// Code after refactoring
-a.release();
-```

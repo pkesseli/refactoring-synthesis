@@ -1,8 +1,0 @@
-# Response Time: 2.5196382999420166
-```
-// Code before refactoring
-this.setScale(a, b);
-
-// Code after refactoring
-this = this.setScale(a, RoundingMode.valueOf(b));
-```

@@ -1,9 +1,0 @@
-# Response Time: 2.2548911571502686
-```
-// Code before refactoring
-this.setEchoCharacter(a);
-```
-```
-// Code after refactoring
-this.setEchoChar(a);
-```

@@ -1,9 +1,0 @@
-# Response Time: 3.025078296661377
-```
-// Code before refactoring
-int ttl = this.getTTL();
-
-// Code after refactoring
-DatagramSocket socket = new DatagramSocket();
-socket.getOption(IP_MULTICAST_TTL);
-```
