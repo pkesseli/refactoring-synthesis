@@ -53,7 +53,8 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       final Class<Candidate> candidateType, final Method frameworkMethodPlaceholder,
       final CandidateExecutor<Candidate> executor, final CegisLoopListener<Candidate> listener,
       final GPTHints hints) {
-    super(generatorConfiguration, generatorRepository, sourceOfRandomness, candidateType, frameworkMethodPlaceholder, executor, listener);
+    super(generatorConfiguration, generatorRepository, sourceOfRandomness, candidateType, frameworkMethodPlaceholder,
+        executor, listener);
     this.hints = hints;
     final ClassLoader classLoader = ClassLoaders.createIsolated();
     final ParserContext parserContext = ParserFactory.create(classLoader);
@@ -64,9 +65,6 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
   @Override
   public Candidate getDefault() {
-
-    // final ClassLoader classLoader = generatorConfiguration.classLoader;
-    // final ParserContext parserContext = generatorConfiguration.parserContext;
     final ComponentDirectory components = generatorConfiguration.Components;
 
     final String className = hints.methodToRefactor.FullyQualifiedClassName;
@@ -74,83 +72,76 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     final TypeSolver typeSolver = parserContext.TypeSolver;
     final JavaParser javaParser = parserContext.JavaParser;
 
-
     final ParseResult<CompilationUnit> parseResult;
-    try {
-      parseResult = sourceFinder.findSource(javaParser, className);
-    } catch (final IOException e) {
-      // TODO log info
-      return null;
-    }
-    final MethodDeclaration method = sourceFinder.findMethod(symbolResolver, typeSolver, parseResult);
+    final MethodDeclaration method;
     final Type defaultType;
     try {
+      parseResult = sourceFinder.findSource(javaParser, className);
+      method = sourceFinder.findMethod(symbolResolver, typeSolver, parseResult);
       defaultType = TypeFactory.createClassType(ClassLoaders.loadClass(classLoader, className));
-    } catch (final ClassNotFoundException e) {
-      // TODO log info
-      return null;
+    } catch (Exception e) {
+      listener.initial(null);
+      throw new NoSuchElementException(e.getMessage());
     }
 
-
     var before = parseHints(hints.before);
-    // var after = parseHints(hints.after);
-
     if (before instanceof BlockStmt) {
-      final Map<String, IExpression> environment = new HashMap<>();
-
-
-      final var remapper = new ParameterMapping(hints.methodToRefactor, javaParser);
-      for (final var originalStatement: ((BlockStmt) before).getStatements()) {
-
-        final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
-            method, originalStatement);
-        final var expression = statement.asExpressionStmt().getExpression();
-
-        remapper.checkExpression(expression);
-      }
-      environment.putAll(remapper.arguments);
-
-      var after = (BlockStmt) parseHints(hints.after);
-      var arguments = resolveArguments(environment);
-      for (final var argument : arguments) {
-        after.addStatement(0, argument);
-      }
-
-
-      final var candidate = new SnippetCandidate();
-      final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver, components.InvolvedClasses,
-          environment, candidate);
-
-      for (final var suggestedStatement: after.getStatements()) {
-
-        final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType, parseResult,
-            method, suggestedStatement);
-        final var expression = statement.asExpressionStmt().getExpression();
-  
-        System.out.println("parsed expression: " + expression.toString());
-        final var instructionExpression = convertor.convertExpression(expression);
-        if (instructionExpression == null) {
-          continue;
-        }
-        var convertedExpression = new ExpressionStatement(instructionExpression);
-        candidate.Block.Statements.add(convertedExpression);
-  
-      }
-
-      System.out.println(candidate.Block.toNode().toString());
-      System.out.println("done");
-
       try {
+        final Map<String, IExpression> environment = new HashMap<>();
+        final var mapping = new ParameterMapping(hints.methodToRefactor, javaParser);
+        for (final var originalStatement : ((BlockStmt) before).getStatements()) {
+          final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType,
+              parseResult,
+              method, originalStatement);
+          final var expression = statement.asExpressionStmt().getExpression();
+
+          mapping.checkExpression(expression);
+        }
+        environment.putAll(mapping.arguments);
+
+        var after = (BlockStmt) parseHints(hints.after);
+        var arguments = resolveArguments(environment);
+        for (final var argument : arguments) {
+          after.addStatement(0, argument);
+        }
+
+        final var candidate = new SnippetCandidate();
+        final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver,
+            components.InvolvedClasses,
+            environment, candidate);
+
+        for (final var suggestedStatement : after.getStatements()) {
+
+          final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType,
+              parseResult,
+              method, suggestedStatement);
+          final var expression = statement.asExpressionStmt().getExpression();
+
+          // System.out.println("parsed expression: " + expression.toString());
+          final var instructionExpression = convertor.convertExpression(expression);
+          if (instructionExpression == null) {
+            continue;
+          }
+          var convertedExpression = new ExpressionStatement(instructionExpression);
+          candidate.Block.Statements.add(convertedExpression);
+
+        }
+
+        // System.out.println(candidate.Block.toNode().toString());
+        // System.out.println("done");
+
         @SuppressWarnings("unchecked")
         Candidate res = (Candidate) candidate;
         listener.initial(res);
         return res;
-      } catch (ClassCastException e) {
-        throw new NoSuchElementException("only SnippetCandidate is supported");
+
+      } catch (Exception e) {
+        listener.initial(null);
+        throw new NoSuchElementException("parse error: " + e.getMessage());
       }
 
-
     } else {
+      listener.initial(null);
       throw new NoSuchElementException("not implemented");
     }
   }
@@ -176,7 +167,7 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     ParseResult<Statement> statement = parserContext.JavaParser.parseStatement(hints);
     if (statement.getResult().isPresent() && statement.getResult().get() instanceof IfStmt) {
       var ifStmt = (IfStmt) statement.getResult().get();
-      if (ifStmt.getThenStmt() instanceof BlockStmt && 
+      if (ifStmt.getThenStmt() instanceof BlockStmt &&
           ((BlockStmt) ifStmt.getThenStmt()).getStatements().isEmpty() &&
           ifStmt.getElseStmt().isEmpty()) {
         return new BlockStmt(new NodeList<>(new ExpressionStmt(ifStmt.getCondition())));
@@ -193,27 +184,16 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       return unit.getResult().get();
     }
 
-
     throw new NoSuchElementException("hints not parsable");
   }
 
-  // private String resolveArguments(final Map<String, IExpression> environment) {
-  
-  //   var result = "";
-
-  //   for (Entry<String, IExpression> entry : environment.entrySet()) {
-  //     result += entry.getValue().getType().asString() + " " + entry.getKey() + ";\n";
-  //   }
-
-  //   return result;
-  // }
-
   private NodeList<Statement> resolveArguments(final Map<String, IExpression> environment) {
-  
+
     final NodeList<Statement> result = new NodeList<>();
 
     for (Entry<String, IExpression> entry : environment.entrySet()) {
-      result.add(parserContext.JavaParser.parseStatement(entry.getValue().getType().asString() + " " + entry.getKey() + ";").getResult().get());
+      result.add(parserContext.JavaParser
+          .parseStatement(entry.getValue().getType().asString() + " " + entry.getKey() + ";").getResult().get());
     }
 
     return result;
