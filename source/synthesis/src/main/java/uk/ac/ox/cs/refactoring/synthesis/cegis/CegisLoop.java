@@ -16,6 +16,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidateGene
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.CounterexampleGenerator;
+import uk.ac.ox.cs.refactoring.synthesis.guidance.Seeds;
 import uk.ac.ox.cs.refactoring.synthesis.induction.FuzzingSynthesis;
 import uk.ac.ox.cs.refactoring.synthesis.induction.GPTSynthesis;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
@@ -62,6 +63,7 @@ public class CegisLoop<Candidate> {
       final GeneratorConfiguration generatorConfiguration, final Class<Candidate> candidateType,
       final CegisLoopListener<Candidate> listener, final GPTHints hints) {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
+    sourceOfRandomness.setSeed(Seeds.getSeed());
     final GeneratorRepository baseRepository = new GeneratorRepository(sourceOfRandomness)
         .register(new ObjectGenerator())
         .register(new ServiceLoaderGeneratorSource())

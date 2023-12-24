@@ -102,7 +102,7 @@ class java_awt_ComponentTest {
 
   @Test
   void keyUp() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "keyUp", "java.awt.Event", "int"),
+    assertThat(synthesiseAlias("com.sun.beans.editors.ColorEditor", "keyUp", "java.awt.Event", "int"),
         contains(".processKeyEvent("));
   }
 
@@ -181,6 +181,7 @@ class java_awt_ComponentTest {
 
   @Test
   void postEvent() throws Exception {
+    // NPE bug in the engine, not a unsound
     assertThat(synthesiseAlias("java.awt.Component", "postEvent", "java.awt.Event"), contains(".dispatchEvent("));
   }
 
