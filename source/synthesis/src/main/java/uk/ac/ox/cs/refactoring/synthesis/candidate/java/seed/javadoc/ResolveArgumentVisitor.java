@@ -17,14 +17,14 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier
 /**
  * Handles 'simple' method calls only
  */
-public class ParameterMappingVisitor extends VoidVisitorAdapter<Void> {
+public class ResolveArgumentVisitor extends VoidVisitorAdapter<Void> {
   public final Map<String, IExpression> arguments;
 
   public final MethodIdentifier methodToRefactor;
 
   private final JavaParser javaParser;
 
-  public ParameterMappingVisitor(final Map<String, IExpression> arguments, final MethodIdentifier methodToRefactor,
+  public ResolveArgumentVisitor(final Map<String, IExpression> arguments, final MethodIdentifier methodToRefactor,
       final JavaParser javaParser) {
     this.arguments = arguments;
     this.methodToRefactor = methodToRefactor;

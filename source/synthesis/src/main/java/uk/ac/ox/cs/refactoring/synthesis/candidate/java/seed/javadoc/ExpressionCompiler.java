@@ -10,17 +10,20 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 
-public class IRGenerator {
-  private final IRGenerationVisitor visitor;
+/**
+ * Compiling simple expressions to our instruction set
+ */
+public class ExpressionCompiler {
+  private final ExpressionCompilerVisitor visitor;
 
-  public IRGenerator(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
+  public ExpressionCompiler(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
       final Set<String> involvedClasses, final Map<String, IExpression> environment,
       final SnippetCandidate candidate) {
-    this.visitor = new IRGenerationVisitor(classLoader, javaParser, typeSolver, involvedClasses, environment,
+    this.visitor = new ExpressionCompilerVisitor(classLoader, javaParser, typeSolver, involvedClasses, environment,
         candidate);
   }
 
-  public IExpression convertExpression(Expression expr) {
+  public IExpression compile(Expression expr) {
     expr.accept(visitor, null);
     return visitor.getExpression();
   }

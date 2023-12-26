@@ -30,8 +30,8 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserContext;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.parser.ParserFactory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.IRGenerator;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.ParameterMapping;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.ExpressionCompiler;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.ResolveArgument;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.SourceFinder;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
@@ -88,7 +88,7 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     if (before instanceof BlockStmt) {
       try {
         final Map<String, IExpression> environment = new HashMap<>();
-        final var mapping = new ParameterMapping(hints.methodToRefactor, javaParser);
+        final var mapping = new ResolveArgument(hints.methodToRefactor, javaParser);
         for (final var originalStatement : ((BlockStmt) before).getStatements()) {
           final var statement = sourceFinder.parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType,
               parseResult,
@@ -106,7 +106,7 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
         }
 
         final var candidate = new SnippetCandidate();
-        final var convertor = new IRGenerator(classLoader, parserContext.JavaParser, parserContext.TypeSolver,
+        final var compiler = new ExpressionCompiler(classLoader, parserContext.JavaParser, parserContext.TypeSolver,
             components.InvolvedClasses,
             environment, candidate);
 
@@ -118,7 +118,7 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
           final var expression = statement.asExpressionStmt().getExpression();
 
           // System.out.println("parsed expression: " + expression.toString());
-          final var instructionExpression = convertor.convertExpression(expression);
+          final var instructionExpression = compiler.compile(expression);
           if (instructionExpression == null) {
             continue;
           }

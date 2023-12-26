@@ -58,7 +58,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 /**
  * Extending {@link SnippetComponentVisitor} with `this` expression
  */
-class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
+class ExpressionCompilerVisitor extends VoidVisitorAdapter<Void> {
 
   /** Used to look up a method by its identifier. */
   private final ClassLoader classLoader;
@@ -99,7 +99,7 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
    * @param typeSolver      {@link #typeSolver}
    * @param involvedClasses {@link #involvedClasses}
    */
-  IRGenerationVisitor(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
+  ExpressionCompilerVisitor(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
       final Set<String> involvedClasses, final Map<String, IExpression> environment,
       final SnippetCandidate candidate) {
     this.classLoader = classLoader;
@@ -339,7 +339,7 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
 
     if (environment.containsKey(name)) {
       // converting parameters to proper ones.
-      System.out.println("Discarding declaration of " + name);
+      // System.out.println("Discarding declaration of " + name);
       return;
     }
 
