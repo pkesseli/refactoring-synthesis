@@ -87,8 +87,8 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
   /** Mapping local names to {@link SymbolExpression} */
   final Map<String, IExpression> environment;
 
-  /** 
-   * Partially constructed candidate. Keep a reference here to store 
+  /**
+   * Partially constructed candidate. Keep a reference here to store
    * intermediate statements
    */
   final SnippetCandidate candidate;
@@ -192,7 +192,6 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
     stack.add(binaryExpression);
   }
 
-  
   @Override
   public void visit(final UnaryExpr n, final Void arg) {
     super.visit(n, arg);
@@ -212,7 +211,7 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
     }
   }
 
-    /**
+  /**
    * Assumes that the type of {@code node} is {@code int} and puts an integer
    * unary expression on {@link #stack}.
    * 
@@ -237,7 +236,6 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
     stack.add(This.create(TypeFactory.create(javaParser, n.calculateResolvedType())));
   }
 
-
   @Override
   public void visit(final ObjectCreationExpr n, final Void unused) {
     super.visit(n, unused);
@@ -247,7 +245,7 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
       arguments.add(stack.removeLast());
 
     Collections.reverse(arguments);
-    
+
     final List<IExpression> invocationArguments = arguments;
 
     // FIXME find constructor
@@ -352,7 +350,7 @@ class IRGenerationVisitor extends VoidVisitorAdapter<Void> {
 
     // TODO is this better?
     // if (rhs instanceof SymbolExpression) {
-    //   stack.add(rhs);
+    // stack.add(rhs);
     // } else {
     final IStatement rhsStmt = new ExpressionStatement(rhs);
     candidate.Block.Statements.add(rhsStmt);

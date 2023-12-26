@@ -16,7 +16,8 @@ public class IRGenerator {
   public IRGenerator(final ClassLoader classLoader, final JavaParser javaParser, final TypeSolver typeSolver,
       final Set<String> involvedClasses, final Map<String, IExpression> environment,
       final SnippetCandidate candidate) {
-    this.visitor = new IRGenerationVisitor(classLoader, javaParser, typeSolver, involvedClasses, environment, candidate);
+    this.visitor = new IRGenerationVisitor(classLoader, javaParser, typeSolver, involvedClasses, environment,
+        candidate);
   }
 
   public IExpression convertExpression(Expression expr) {
