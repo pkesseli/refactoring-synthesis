@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_GraphicsTest {
   @Test
   void getClipRect() throws Exception {
-assertThat (synthesiseGPT ("getClipRect" , "this.getClipRect();" , "\nthis.getClipBounds()\n;" , "java.awt.Graphics" , "getClipRect") , anyOf (contains ("getClipBounds"))) ;
+assertThat (synthesiseGPT ("getClipRect" , "this.getClipRect();" , "\nthis.getClipBounds();\n" , "java.awt.Graphics" , "getClipRect") , anyOf (contains ("getClipBounds"))) ;
   }
 }

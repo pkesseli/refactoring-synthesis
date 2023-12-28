@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_security_ProviderTest {
   @Test
   void getVersion() throws Exception {
-assertThat (synthesiseGPT ("getVersion" , "this.getVersion();" , "\nthis.getVersionStr()\n;" , "java.security.Provider" , "getVersion") , anyOf (contains ("getVersionStr"))) ;
+assertThat (synthesiseGPT ("getVersion" , "this.getVersion();" , "\nthis.getVersionStr();\n" , "java.security.Provider" , "getVersion") , anyOf (contains ("getVersionStr"))) ;
   }
 }

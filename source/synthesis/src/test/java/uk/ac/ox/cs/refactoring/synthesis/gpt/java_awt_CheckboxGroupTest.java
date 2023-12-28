@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_awt_CheckboxGroupTest {
   @Test
   void getCurrent() throws Exception {
-assertThat (synthesiseGPT ("getCurrent" , "this.getCurrent();" , "\nthis.getSelectedCheckbox()\n;" , "java.awt.CheckboxGroup" , "getCurrent") , anyOf (contains ("getSelectedCheckbox"))) ;
+assertThat (synthesiseGPT ("getCurrent" , "this.getCurrent();" , "\nthis.getSelectedCheckbox();\n" , "java.awt.CheckboxGroup" , "getCurrent") , anyOf (contains ("getSelectedCheckbox"))) ;
   }
 
   @Test
   void setCurrent() throws Exception {
-assertThat (synthesiseGPT ("setCurrent" , "this.setCurrent(param0);" , "\nparam0.setState(true);\n" , "java.awt.CheckboxGroup" , "setCurrent" , "java.awt.Checkbox") , anyOf (contains ("setSelectedCheckbox"))) ;
+assertThat (synthesiseGPT ("setCurrent" , "this.setCurrent(param0);" , "\nthis.setSelectedCheckbox(param0);\n" , "java.awt.CheckboxGroup" , "setCurrent" , "java.awt.Checkbox") , anyOf (contains ("setSelectedCheckbox"))) ;
   }
 }

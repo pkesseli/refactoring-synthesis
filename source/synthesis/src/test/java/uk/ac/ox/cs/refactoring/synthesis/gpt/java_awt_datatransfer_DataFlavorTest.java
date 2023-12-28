@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_datatransfer_DataFlavorTest {
   @Test
   void equals() throws Exception {
-assertThat (synthesiseGPT ("equals" , "this.equals(param0);" , "\nthis.isMimeTypeEqual(param0)\n;" , "java.awt.datatransfer.DataFlavor" , "equals" , "java.lang.String") , anyOf (contains ("hashCode") , contains ("isMimeTypeEqual"))) ;
+assertThat (synthesiseGPT ("equals" , "this.equals(param0);" , "\nthis.isMimeTypeEqual(param0);\n" , "java.awt.datatransfer.DataFlavor" , "equals" , "java.lang.String") , anyOf (contains ("hashCode") , contains ("isMimeTypeEqual"))) ;
   }
 }

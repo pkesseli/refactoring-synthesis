@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_swing_FocusManagerTest {
   @Test
   void disableSwingFocusManager() throws Exception {
-assertThat (synthesiseGPT ("disableSwingFocusManager" , "this.disableSwingFocusManager();" , "\n// this.disableSwingFocusManager() // Deprecated method call removed\n;" , "javax.swing.FocusManager" , "disableSwingFocusManager") , anyOf (contains ("setDefaultFocusTraversalPolicy"))) ;
+assertThat (synthesiseGPT ("disableSwingFocusManager" , "this.disableSwingFocusManager();" , "\nfinal KeyboardFocusManager kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();\nkfm.setDefaultFocusTraversalPolicy(FocusTraversalPolicy);\n" , "javax.swing.FocusManager" , "disableSwingFocusManager") , anyOf (contains ("setDefaultFocusTraversalPolicy"))) ;
   }
 
   @Test
   void isFocusManagerEnabled() throws Exception {
-assertThat (synthesiseGPT ("isFocusManagerEnabled" , "this.isFocusManagerEnabled();" , "\nthis.isFocusOwner()\n;" , "javax.swing.FocusManager" , "isFocusManagerEnabled") , anyOf (contains ("getDefaultFocusTraversalPolicy"))) ;
+assertThat (synthesiseGPT ("isFocusManagerEnabled" , "this.isFocusManagerEnabled();" , "\nKeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalPolicy();\n" , "javax.swing.FocusManager" , "isFocusManagerEnabled") , anyOf (contains ("getDefaultFocusTraversalPolicy"))) ;
   }
 }

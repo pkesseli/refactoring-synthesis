@@ -7,36 +7,43 @@ import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseGPT;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class javax_swing_plaf_basic_BasicSplitPaneUITest {
+  @Disabled("No replacement")
   @Test
   void createKeyboardDownRightListener() throws Exception {
-assertThat (synthesiseGPT ("createKeyboardDownRightListener" , "this.createKeyboardDownRightListener();" , "" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardDownRightListener") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("createKeyboardDownRightListener" , "this.createKeyboardDownRightListener();" , "\nfinal BasicSplitPaneUI.KeyboardDownRightHandler handler = new BasicSplitPaneUI.KeyboardDownRightHandler();\nhandler.actionPerformed(null);\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardDownRightListener") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void createKeyboardEndListener() throws Exception {
-assertThat (synthesiseGPT ("createKeyboardEndListener" , "this.createKeyboardEndListener();" , "\nJSplitPane splitPane = new JSplitPane();\n\n// Define the action to be taken when the key is pressed\nAction moveDividerToEnd = new AbstractAction() {\n    @Override\n    public void actionPerformed(ActionEvent e) {\n        // Your logic to move the divider to the end\n        splitPane.setDividerLocation(splitPane.getMaximumDividerLocation());\n    }\n};\n\n// Bind the action to a key stroke\nKeyStroke endKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_END, 0);\nInputMap inputMap = splitPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);\nActionMap actionMap = splitPane.getActionMap();\n\ninputMap.put(endKeyStroke, \"moveDividerToEnd\");\nactionMap.put(\"moveDividerToEnd\", moveDividerToEnd);\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardEndListener") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("createKeyboardEndListener" , "this.createKeyboardEndListener();" , "\nfinal BasicSplitPaneUI.KeyboardEndHandler keyboardEndHandler = new BasicSplitPaneUI.KeyboardEndHandler();\nkeyboardEndHandler.actionPerformed(null);\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardEndListener") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void createKeyboardHomeListener() throws Exception {
-assertThat (synthesiseGPT ("createKeyboardHomeListener" , "this.createKeyboardHomeListener();" , "\nKeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner()\n;" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardHomeListener") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("createKeyboardHomeListener" , "this.createKeyboardHomeListener();" , "\nfinal KeyStroke homeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0);\nfinal Action homeAction = new AbstractAction() {\n    @Override\n    public void actionPerformed(final ActionEvent e) {\n        final BasicSplitPaneUI ui = (BasicSplitPaneUI) e.getSource();\n        final JSplitPane splitPane = ui.getSplitPane();\n        final Component leftComponent = splitPane.getLeftComponent();\n        if (leftComponent != null) {\n            final Rectangle bounds = leftComponent.getBounds();\n            bounds.x = 0;\n            bounds.y = 0;\n            bounds.width = splitPane.getDividerLocation();\n            bounds.height = splitPane.getHeight();\n            splitPane.setDividerLocation(0);\n            leftComponent.scrollRectToVisible(bounds);\n        }\n    }\n};\nfinal InputMap inputMap = this.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);\ninputMap.put(homeKeyStroke, \"home\");\nthis.getActionMap().put(\"home\", homeAction);\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardHomeListener") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void createKeyboardResizeToggleListener() throws Exception {
-assertThat (synthesiseGPT ("createKeyboardResizeToggleListener" , "this.createKeyboardResizeToggleListener();" , "" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardResizeToggleListener") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("createKeyboardResizeToggleListener" , "this.createKeyboardResizeToggleListener();" , "\n// Create a new instance of the KeyboardResizeToggleListener class\nfinal KeyboardResizeToggleListener listener = new KeyboardResizeToggleListener() {\n    @Override\n    public void keyPressed(final KeyEvent e) {\n        // Handle key press event\n    }\n\n    @Override\n    public void keyReleased(final KeyEvent e) {\n        // Handle key release event\n    }\n};\n\n// Add the listener to the split pane UI\nthis.addKeyListener(listener);\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardResizeToggleListener") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void createKeyboardUpLeftListener() throws Exception {
-assertThat (synthesiseGPT ("createKeyboardUpLeftListener" , "this.createKeyboardUpLeftListener();" , "\nActionMap actionMap = this.getActionMap();\nif (actionMap != null) {\n    Action action = actionMap.get(\"negativeIncrement\");\n    if (action != null) {\n        action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));\n    }\n}\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardUpLeftListener") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("createKeyboardUpLeftListener" , "this.createKeyboardUpLeftListener();" , "\nfinal ActionListener[] keyboardListeners = this.getKeyboardListeners();\nfor (final ActionListener listener : keyboardListeners) {\n    if (listener instanceof BasicSplitPaneUI.KeyboardUpLeftHandler) {\n        return (BasicSplitPaneUI.KeyboardUpLeftHandler) listener;\n    }\n}\nreturn null;\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "createKeyboardUpLeftListener") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void getDividerBorderSize() throws Exception {
-assertThat (synthesiseGPT ("getDividerBorderSize" , "this.getDividerBorderSize();" , "" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "getDividerBorderSize") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getDividerBorderSize" , "this.getDividerBorderSize();" , "\nfinal BasicSplitPaneDivider divider = this.getDivider();\nfinal Border border = divider.getBorder();\nfinal Insets insets = border.getBorderInsets(divider);\ninsets.left + insets.right + insets.top + insets.bottom;\n" , "javax.swing.plaf.basic.BasicSplitPaneUI" , "getDividerBorderSize") , Matchers . anything ()) ;
   }
 }

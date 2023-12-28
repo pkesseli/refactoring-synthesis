@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_MonitorMBeanTest {
   @Test
   void getObservedObject() throws Exception {
-assertThat (synthesiseGPT ("getObservedObject" , "this.getObservedObject();" , "" , "javax.management.monitor.MonitorMBean" , "getObservedObject") , anyOf (contains ("getObservedObjects"))) ;
+assertThat (synthesiseGPT ("getObservedObject" , "this.getObservedObject();" , "\nfinal ObjectName[] observedObjects = this.getObservedObjects();\nif (observedObjects != null && observedObjects.length > 0) {\n    return observedObjects[0];\n} else {\n    return null;\n}\n" , "javax.management.monitor.MonitorMBean" , "getObservedObject") , anyOf (contains ("getObservedObjects"))) ;
   }
 
   @Test
   void setObservedObject() throws Exception {
-assertThat (synthesiseGPT ("setObservedObject" , "this.setObservedObject(param0);" , "\n// Assuming 'this' is an instance of a Monitor class or its subclass\nObjectName observedObject = param0;\n\n// Remove the old observed object if necessary\n// this.removeObservedObject(observedObject);\n\n// Add the new observed object\nthis.addObservedObject(observedObject);\n" , "javax.management.monitor.MonitorMBean" , "setObservedObject" , "javax.management.ObjectName") , anyOf (contains ("addObservedObject"))) ;
+assertThat (synthesiseGPT ("setObservedObject" , "this.setObservedObject(param0);" , "\nthis.addObservedObject(param0);\n" , "javax.management.monitor.MonitorMBean" , "setObservedObject" , "javax.management.ObjectName") , anyOf (contains ("addObservedObject"))) ;
   }
 }

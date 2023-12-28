@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class java_awt_image_renderable_RenderContextTest {
   @Test
   void concetenateTransform() throws Exception {
-assertThat (synthesiseGPT ("concetenateTransform" , "this.concetenateTransform(param0);" , "\nthis.preConcatenateTransform(param0);\n" , "java.awt.image.renderable.RenderContext" , "concetenateTransform" , "java.awt.geom.AffineTransform") , anyOf (contains ("concatenateTransform"))) ;
+assertThat (synthesiseGPT ("concetenateTransform" , "this.concetenateTransform(param0);" , "\nthis.concatenateTransform(param0);\n" , "java.awt.image.renderable.RenderContext" , "concetenateTransform" , "java.awt.geom.AffineTransform") , anyOf (contains ("concatenateTransform"))) ;
   }
 
   @Test
   void preConcetenateTransform() throws Exception {
-assertThat (synthesiseGPT ("preConcetenateTransform" , "this.preConcetenateTransform(param0);" , "\nAffineTransform transform = new AffineTransform();\n// Assuming 'param0' is an AffineTransform that we want to concatenate\ntransform.concatenate(param0);\nthis.setTransform(transform);\n" , "java.awt.image.renderable.RenderContext" , "preConcetenateTransform" , "java.awt.geom.AffineTransform") , anyOf (contains ("preConcatenateTransform"))) ;
+assertThat (synthesiseGPT ("preConcetenateTransform" , "this.preConcetenateTransform(param0);" , "\nthis.preConcatenateTransform(param0);\n" , "java.awt.image.renderable.RenderContext" , "preConcetenateTransform" , "java.awt.geom.AffineTransform") , anyOf (contains ("preConcatenateTransform"))) ;
   }
 }

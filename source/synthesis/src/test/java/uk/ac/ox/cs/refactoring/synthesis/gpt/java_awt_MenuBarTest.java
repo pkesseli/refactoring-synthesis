@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_MenuBarTest {
   @Test
   void countMenus() throws Exception {
-assertThat (synthesiseGPT ("countMenus" , "this.countMenus();" , "\nthis.getMenuCount()\n;" , "java.awt.MenuBar" , "countMenus") , anyOf (contains ("getMenuCount"))) ;
+assertThat (synthesiseGPT ("countMenus" , "this.countMenus();" , "\nthis.getMenuCount();\n" , "java.awt.MenuBar" , "countMenus") , anyOf (contains ("getMenuCount"))) ;
   }
 }

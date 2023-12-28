@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_swing_JTableTest {
   @Test
   void createScrollPaneForTable() throws Exception {
-assertThat (synthesiseGPT ("createScrollPaneForTable" , "this.createScrollPaneForTable(param0);" , "" , "javax.swing.JTable" , "createScrollPaneForTable" , "javax.swing.JTable") , anyOf (contains ("new JScrollPane"))) ;
+assertThat (synthesiseGPT ("createScrollPaneForTable" , "this.createScrollPaneForTable(param0);" , "\nnew JScrollPane(param0);\n" , "javax.swing.JTable" , "createScrollPaneForTable" , "javax.swing.JTable") , anyOf (contains ("new JScrollPane"))) ;
   }
 
   @Test
   void sizeColumnsToFit() throws Exception {
-assertThat (synthesiseGPT ("sizeColumnsToFit" , "this.sizeColumnsToFit(param0);" , "\n// Assuming 'this' is an instance of JTable\nthis.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);\n" , "javax.swing.JTable" , "sizeColumnsToFit" , "boolean") , anyOf (contains ("doLayout"))) ;
+assertThat (synthesiseGPT ("sizeColumnsToFit" , "this.sizeColumnsToFit(param0);" , "\nthis.doLayout();\n" , "javax.swing.JTable" , "sizeColumnsToFit" , "boolean") , anyOf (contains ("doLayout"))) ;
   }
 }

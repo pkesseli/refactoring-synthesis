@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class javax_swing_AbstractButtonTest {
   @Test
   void getLabel() throws Exception {
-assertThat (synthesiseGPT ("getLabel" , "this.getLabel();" , "\nthis.getText()\n;" , "javax.swing.AbstractButton" , "getLabel") , anyOf (contains ("getText"))) ;
+assertThat (synthesiseGPT ("getLabel" , "this.getLabel();" , "\nthis.getText();\n" , "javax.swing.AbstractButton" , "getLabel") , anyOf (contains ("getText"))) ;
   }
 
   @Test

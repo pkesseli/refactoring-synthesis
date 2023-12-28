@@ -7,16 +7,18 @@ import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseGPT;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class java_awt_event_KeyEventTest {
   @Test
   void getKeyModifiersText() throws Exception {
-assertThat (synthesiseGPT ("getKeyModifiersText" , "this.getKeyModifiersText(param0);" , "\nKeyEvent.getModifiersExText(param0);\n" , "java.awt.event.KeyEvent" , "getKeyModifiersText" , "int") , anyOf (contains ("getModifiersExText"))) ;
+assertThat (synthesiseGPT ("getKeyModifiersText" , "this.getKeyModifiersText(param0);" , "\nInputEvent.getModifiersExText(param0);\n" , "java.awt.event.KeyEvent" , "getKeyModifiersText" , "int") , anyOf (contains ("getModifiersExText"))) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void setModifiers() throws Exception {
-assertThat (synthesiseGPT ("setModifiers" , "this.setModifiers(param0);" , "\nKeyEvent newEvent = new KeyEvent(\n    this, // the source component\n    KeyEvent.KEY_PRESSED, // the type of key event\n    System.currentTimeMillis(), // the time the event occurred\n    param0, // the modifiers\n    KeyEvent.VK_UNDEFINED, // the key code (undefined if not known)\n    KeyEvent.CHAR_UNDEFINED // the key char (undefined if not known)\n);\n" , "java.awt.event.KeyEvent" , "setModifiers" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("setModifiers" , "this.setModifiers(param0);" , "\nfinal int modifiers = param0;\nfinal KeyEvent event = new KeyEvent(this.getComponent(), this.getID(), this.getWhen(), modifiers, this.getKeyCode(), this.getKeyChar(), this.getKeyLocation());\n" , "java.awt.event.KeyEvent" , "setModifiers" , "int") , Matchers . anything ()) ;
   }
 }

@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_KeyStrokeTest {
   @Test
   void getKeyStroke() throws Exception {
-assertThat (synthesiseGPT ("getKeyStroke" , "this.getKeyStroke(param0, param1);" , "\nKeyStroke.getKeyStroke(param0, param1 ? java.awt.event.InputEvent.SHIFT_DOWN_MASK : 0)\n;" , "javax.swing.KeyStroke" , "getKeyStroke" , "char" , "boolean") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getKeyStroke" , "this.getKeyStroke(param0, param1);" , "\nKeyStroke.getKeyStroke(param0);\n" , "javax.swing.KeyStroke" , "getKeyStroke" , "char" , "boolean") , anyOf (contains ("getKeyStrok"))) ;
   }
 }

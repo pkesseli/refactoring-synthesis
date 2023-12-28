@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 class java_awt_RectangleTest {
   @Test
   void inside() throws Exception {
-assertThat (synthesiseGPT ("inside" , "this.inside(param0, param1);" , "\nthis.contains(param0, param1)\n;" , "java.awt.Rectangle" , "inside" , "int" , "int") , anyOf (contains ("contains"))) ;
+assertThat (synthesiseGPT ("inside" , "this.inside(param0, param1);" , "\nthis.contains(param0, param1);\n" , "java.awt.Rectangle" , "inside" , "int" , "int") , anyOf (contains ("contains"))) ;
   }
 
   @Test
   void move() throws Exception {
-assertThat (synthesiseGPT ("move" , "this.move(param0, param1);" , "\nthis.setBounds(param0, param1, this.width, this.height);\n" , "java.awt.Rectangle" , "move" , "int" , "int") , anyOf (contains ("setLocation"))) ;
+assertThat (synthesiseGPT ("move" , "this.move(param0, param1);" , "\nthis.setLocation(param0, param1);\n" , "java.awt.Rectangle" , "move" , "int" , "int") , anyOf (contains ("setLocation"))) ;
   }
 
   @Test

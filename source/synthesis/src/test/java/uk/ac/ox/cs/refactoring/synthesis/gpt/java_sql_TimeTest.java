@@ -7,41 +7,49 @@ import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseGPT;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class java_sql_TimeTest {
+  @Disabled("No replacement")
   @Test
   void getDate() throws Exception {
-assertThat (synthesiseGPT ("getDate" , "this.getDate();" , "\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\nint minute = calendar.get(Calendar.MINUTE);\n" , "java.sql.Time" , "getDate") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getDate" , "this.getDate();" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.get(Calendar.DAY_OF_MONTH);\n" , "java.sql.Time" , "getDate") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void getDay() throws Exception {
-assertThat (synthesiseGPT ("getDay" , "this.getDay();" , "\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\nint dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);\n" , "java.sql.Time" , "getDay") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getDay" , "this.getDay();" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.get(Calendar.DAY_OF_WEEK);\n" , "java.sql.Time" , "getDay") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void getMonth() throws Exception {
-assertThat (synthesiseGPT ("getMonth" , "this.getMonth();" , "\nCalendar calendar = Calendar.getInstance();\ncalendar.setTimeInMillis(this.getTime());\nint month = calendar.get(Calendar.MONTH);\n" , "java.sql.Time" , "getMonth") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getMonth" , "this.getMonth();" , "The `java.sql.Time` class does not have a `getMonth()` method. It only has `getHours()`, `getMinutes()`, `getSeconds()`, and `getTime()`. \n\nPerhaps you meant to refer to a different class or method? If you provide more information, I can assist you further.;" , "java.sql.Time" , "getMonth") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void getYear() throws Exception {
-assertThat (synthesiseGPT ("getYear" , "this.getYear();" , "\nCalendar cal = Calendar.getInstance();\ncal.setTime(this); // Assuming 'this' is a java.sql.Time object\nint year = cal.get(Calendar.YEAR);\n" , "java.sql.Time" , "getYear") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getYear" , "this.getYear();" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.get(Calendar.YEAR);\n" , "java.sql.Time" , "getYear") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void setDate() throws Exception {
-assertThat (synthesiseGPT ("setDate" , "this.setDate(param0);" , "\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(this); // Assuming 'this' is a java.sql.Date object\ncalendar.set(Calendar.YEAR, param0 + 1900); // param0 is the year minus 1900\nthis.setTime(calendar.getTimeInMillis()); // Update the java.sql.Date object\n" , "java.sql.Time" , "setDate" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("setDate" , "this.setDate(param0);" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.set(Calendar.DAY_OF_MONTH, param0);\nthis.setTime(calendar.getTimeInMillis());\n" , "java.sql.Time" , "setDate" , "int") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void setMonth() throws Exception {
-assertThat (synthesiseGPT ("setMonth" , "this.setMonth(param0);" , "\nCalendar calendar = Calendar.getInstance();\ncalendar.setTime(this); // Assuming 'this' is a java.util.Date object\ncalendar.set(Calendar.MONTH, param0);\nthis.setTime(calendar.getTimeInMillis());\n" , "java.sql.Time" , "setMonth" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("setMonth" , "this.setMonth(param0);" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.set(Calendar.MONTH, param0);\nthis.setTime(calendar.getTimeInMillis());\n" , "java.sql.Time" , "setMonth" , "int") , Matchers . anything ()) ;
   }
 
+  @Disabled("No replacement")
   @Test
   void setYear() throws Exception {
-assertThat (synthesiseGPT ("setYear" , "this.setYear(param0);" , "\n// Assuming 'this' is an instance of java.sql.Time and 'param0' is the year you want to set\nCalendar cal = Calendar.getInstance();\ncal.setTime(this);\ncal.set(Calendar.YEAR, param0);\nthis.setTime(cal.getTime().getTime());\n" , "java.sql.Time" , "setYear" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("setYear" , "this.setYear(param0);" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.set(Calendar.YEAR, param0 + 1900);\nthis.setTime(calendar.getTimeInMillis());\n" , "java.sql.Time" , "setYear" , "int") , Matchers . anything ()) ;
   }
 }

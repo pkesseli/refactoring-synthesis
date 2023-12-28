@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_net_ssl_SSLSessionTest {
   @Test
   void getPeerCertificateChain() throws Exception {
-assertThat (synthesiseGPT ("getPeerCertificateChain" , "this.getPeerCertificateChain();" , "\nthis.getPeerCertificates()\n;" , "javax.net.ssl.SSLSession" , "getPeerCertificateChain") , anyOf (contains ("Certificate") , contains ("getPeerCertificates"))) ;
+assertThat (synthesiseGPT ("getPeerCertificateChain" , "this.getPeerCertificateChain();" , "\nfinal Certificate[] peerCertificates = this.getPeerCertificates();\nif (peerCertificates != null && peerCertificates.length > 0 && peerCertificates[0] instanceof X509Certificate) {\n    final X509Certificate[] peerCertificateChain = new X509Certificate[peerCertificates.length];\n    for (int i = 0; i < peerCertificates.length; i++) {\n        peerCertificateChain[i] = (X509Certificate) peerCertificates[i];\n    }\n    return peerCertificateChain;\n} else {\n    return null;\n}\n" , "javax.net.ssl.SSLSession" , "getPeerCertificateChain") , anyOf (contains ("Certificate") , contains ("getPeerCertificates"))) ;
   }
 }

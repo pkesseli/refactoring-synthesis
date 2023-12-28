@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_CardLayoutTest {
   @Test
   void addLayoutComponent() throws Exception {
-assertThat (synthesiseGPT ("addLayoutComponent" , "this.addLayoutComponent(param0, param1);" , "\nCardLayout cardLayout = (CardLayout) this.getLayout();\ncardLayout.addLayoutComponent(param1, param0);\n" , "java.awt.CardLayout" , "addLayoutComponent" , "java.lang.String" , "java.awt.Component") , anyOf (contains ("addLayoutComponent"))) ;
+assertThat (synthesiseGPT ("addLayoutComponent" , "this.addLayoutComponent(param0, param1);" , "\nthis.addLayoutComponent(param1, param0);\n" , "java.awt.CardLayout" , "addLayoutComponent" , "java.lang.String" , "java.awt.Component") , anyOf (contains ("addLayoutComponent"))) ;
   }
 }

@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_util_logging_LogRecordTest {
   @Test
   void setMillis() throws Exception {
-assertThat (synthesiseGPT ("setMillis" , "this.setMillis(param0);" , "" , "java.util.logging.LogRecord" , "setMillis" , "long") , anyOf (contains ("Instant") , contains ("setInstant") , contains ("setMillis"))) ;
+assertThat (synthesiseGPT ("setMillis" , "this.setMillis(param0);" , "\nthis.setInstant(Instant.ofEpochMilli(param0));\n" , "java.util.logging.LogRecord" , "setMillis" , "long") , anyOf (contains ("Instant") , contains ("setInstant"))) ;
   }
 }

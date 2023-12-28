@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_lang_reflect_ProxyTest {
   @Test
   void getProxyClass() throws Exception {
-assertThat (synthesiseGPT ("getProxyClass" , "this.getProxyClass(param0, param1);" , "\nProxy.newProxyInstance(param0, new Class<?>[]{param1}, invocationHandler)\n;" , "java.lang.reflect.Proxy" , "getProxyClass" , "java.lang.ClassLoader" , "java.lang.Class") , anyOf (contains ("IllegalAccessException") , contains ("newInstance") , contains ("newProxyInstance"))) ;
+assertThat (synthesiseGPT ("getProxyClass" , "this.getProxyClass(param0, param1);" , "\nfinal Class<?>[] interfaces = new Class<?>[] { param1 };\nProxy.getProxyClass(param0, interfaces);\n" , "java.lang.reflect.Proxy" , "getProxyClass" , "java.lang.ClassLoader" , "java.lang.Class") , anyOf (contains ("IllegalAccessException") , contains ("newInstance") , contains ("newProxyInstance"))) ;
   }
 }
