@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class java_awt_datatransfer_DataFlavorTest {
 
   @Test
-  void equals​() throws Exception {
+  void equals() throws Exception {
     assertThat(synthesiseAlias("java.awt.datatransfer.DataFlavor", "equals", "java.lang.String"),
         contains(".isMimeTypeEqual("));
   }

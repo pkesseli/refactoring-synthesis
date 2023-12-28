@@ -38,10 +38,4 @@ class java_awt_RectangleTest {
   void resize() throws Exception {
     assertThat(synthesiseAlias("java.awt.Rectangle", "resize", "int", "int"), contains(".setSize("));
   }
-
-
-  @Test
-  void moveGPT() throws Exception {
-    // assertTrue(GPT.verify("{\n    java.awt.Rectangle tmp224085112 = this;\n    java.awt.Rectangle tmp221055169 = this;\n    tmp224085112.setLocation(param0, param1);\n}", "java.awt.Rectangle", "move", "int", "int"));
-  }
 }

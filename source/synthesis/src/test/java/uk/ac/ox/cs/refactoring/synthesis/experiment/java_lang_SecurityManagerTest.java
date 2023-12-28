@@ -13,6 +13,6 @@ class java_lang_SecurityManagerTest {
   @Test
   @Disabled("Requires mapping an InetAddress to a policy, not possible with the minimal instruction set.")
   void checkMulticast() throws Exception {
-    assertThat(synthesiseAlias("java.lang.SecurityManager", "checkMulticast​"), contains(".checkPermission("));
+    assertThat(synthesiseAlias("java.lang.SecurityManager", "checkMulticast"), contains(".checkPermission("));
   }
 }

@@ -17,7 +17,7 @@ class java_awt_ContainerTest {
   @Test
   @Disabled("Method signatures differ, can't find conversion with minimal grammar.")
   void deliverEvent() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Container", "deliverEvent​", "java.awt.Event"), contains(".dispatchEvent("));
+    assertThat(synthesiseAlias("java.awt.Container", "deliverEvent", "java.awt.Event"), contains(".dispatchEvent("));
   }
 
   @Test

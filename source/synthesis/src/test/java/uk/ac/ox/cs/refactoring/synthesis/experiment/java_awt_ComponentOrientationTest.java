@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 class java_awt_ComponentOrientationTest {
 
   @Test
-  void getOrientation​() throws Exception {
-    assertThat(synthesiseAlias("java.awt.ComponentOrientation", "getOrientation​", "java.util.ResourceBundle"),
+  void getOrientation() throws Exception {
+    assertThat(synthesiseAlias("java.awt.ComponentOrientation", "getOrientation", "java.util.ResourceBundle"),
         contains(".getOrientation("));
   }
 }

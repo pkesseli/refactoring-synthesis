@@ -15,8 +15,8 @@ class java_lang_CharacterTest {
   }
 
   @Test
-  void isJavaLetterOrDigit​() throws Exception {
-    assertThat(synthesiseAlias("java.lang.Character", "isJavaLetterOrDigit​", "char"),
+  void isJavaLetterOrDigit() throws Exception {
+    assertThat(synthesiseAlias("java.lang.Character", "isJavaLetterOrDigit", "char"),
         contains(".isJavaIdentifierPart("));
   }
 

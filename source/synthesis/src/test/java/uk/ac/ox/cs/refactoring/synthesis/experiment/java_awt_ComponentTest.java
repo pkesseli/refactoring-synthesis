@@ -133,38 +133,38 @@ class java_awt_ComponentTest {
   }
 
   @Test
-  void mouseDown​() throws Exception {
+  void mouseDown() throws Exception {
     assertThat(synthesiseAlias("java.awt.Component", "mouseUp", "java.awt.Event", "int", "int"),
         contains(".processMouseEvent("));
   }
 
   @Test
-  void mouseDrag​() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "mouseDrag​", "java.awt.Event", "int", "int"),
+  void mouseDrag() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseDrag", "java.awt.Event", "int", "int"),
         contains(".processMouseMotionEvent("));
   }
 
   @Test
-  void mouseEnter​() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "mouseEnter​", "java.awt.Event", "int", "int"),
+  void mouseEnter() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseEnter", "java.awt.Event", "int", "int"),
         contains(".processMouseEvent("));
   }
 
   @Test
-  void mouseExit​() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "mouseExit​", "java.awt.Event", "int", "int"),
+  void mouseExit() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseExit", "java.awt.Event", "int", "int"),
         contains(".processMouseEvent("));
   }
 
   @Test
-  void mouseMove​() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "mouseMove​", "java.awt.Event", "int", "int"),
+  void mouseMove() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseMove", "java.awt.Event", "int", "int"),
         contains(".processMouseMotionEvent("));
   }
 
   @Test
-  void mouseUp​() throws Exception {
-    assertThat(synthesiseAlias("java.awt.Component", "mouseUp​", "java.awt.Event", "int", "int"),
+  void mouseUp() throws Exception {
+    assertThat(synthesiseAlias("java.awt.Component", "mouseUp", "java.awt.Event", "int", "int"),
         contains(".processMouseEvent("));
   }
 
