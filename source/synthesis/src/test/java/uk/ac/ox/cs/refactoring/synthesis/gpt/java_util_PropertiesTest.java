@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_util_PropertiesTest {
   @Test
   void save() throws Exception {
-assertThat (synthesiseGPT ("save" , "this.save(param0, param1);" , "\ntry (final OutputStream outputStream = param0) {\n    this.store(outputStream, param1);\n}\n" , "java.util.Properties" , "save" , "java.io.OutputStream" , "java.lang.String") , anyOf (contains ("store") , contains ("storeToXML"))) ;
+assertThat (synthesiseGPT ("save" , "this.save(param0, param1);" , "\nthis.store(param0, param1);\n" , "java.util.Properties" , "save" , "java.io.OutputStream" , "java.lang.String") , anyOf (contains ("store") , contains ("storeToXML"))) ;
   }
 }

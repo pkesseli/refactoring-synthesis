@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_net_URLDecoderTest {
   @Test
   void decode() throws Exception {
-assertThat (synthesiseGPT ("decode" , "this.decode(param0);" , "\njava.net.URLDecoder.decode(param0, java.nio.charset.StandardCharsets.UTF_8.name());\n" , "java.net.URLDecoder" , "decode" , "java.lang.String") , anyOf (contains ("decode"))) ;
+assertThat (synthesiseGPT ("decode" , "this.decode(param0);" , "\nthis.decode(param0, StandardCharsets.UTF_8.name());\n" , "java.net.URLDecoder" , "decode" , "java.lang.String") , anyOf (contains ("decode"))) ;
   }
 }

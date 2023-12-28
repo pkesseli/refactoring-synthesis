@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class java_awt_WindowTest {
   @Test
   void applyResourceBundle1() throws Exception {
-assertThat (synthesiseGPT ("applyResourceBundle1" , "this.applyResourceBundle(param0);" , "\nthis.applyComponentOrientation(ComponentOrientation.getOrientation(ResourceBundle.getBundle(param0).getLocale()));\n" , "java.awt.Window" , "applyResourceBundle" , "java.lang.String") , anyOf (contains ("applyComponentOrientation"))) ;
+assertThat (synthesiseGPT ("applyResourceBundle1" , "this.applyResourceBundle(param0);" , "\nthis.applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));\n" , "java.awt.Window" , "applyResourceBundle" , "java.lang.String") , anyOf (contains ("applyComponentOrientation"))) ;
   }
 
   @Test

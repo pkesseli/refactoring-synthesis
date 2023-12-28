@@ -14,6 +14,6 @@ class javax_management_ValueExpTest {
   @Disabled("No replacement")
   @Test
   void setMBeanServer() throws Exception {
-assertThat (synthesiseGPT ("setMBeanServer" , "this.setMBeanServer(param0);" , "\n// Remove the call to setMBeanServer\n// Use QueryEval.getMBeanServer() instead\nfinal MBeanServer mBeanServer = QueryEval.getMBeanServer();\n// Use mBeanServer as needed\n" , "javax.management.ValueExp" , "setMBeanServer" , "javax.management.MBeanServer") , anyOf (contains ("ValueExp") , contains ("getMBeanServer"))) ;
+assertThat (synthesiseGPT ("setMBeanServer" , "this.setMBeanServer(param0);" , "\n// Remove this line since setMBeanServer is not needed\n// this.setMBeanServer(param0);\n\n// Instead, use QueryEval.getMBeanServer() to access the MBean server in which the ValueExp is being evaluated\nMBeanServer mbs = QueryEval.getMBeanServer();\n" , "javax.management.ValueExp" , "setMBeanServer" , "javax.management.MBeanServer") , anyOf (contains ("ValueExp") , contains ("getMBeanServer"))) ;
   }
 }

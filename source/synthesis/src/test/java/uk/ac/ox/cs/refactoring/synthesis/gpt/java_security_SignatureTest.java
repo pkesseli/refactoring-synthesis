@@ -14,11 +14,11 @@ class java_security_SignatureTest {
   @Disabled("No replacement")
   @Test
   void getParameter() throws Exception {
-assertThat (synthesiseGPT ("getParameter" , "this.getParameter(param0);" , "\nfinal AlgorithmParameters algorithmParameters = this.getParameters();\nalgorithmParameters.getParameter(param0);\n" , "java.security.Signature" , "getParameter" , "java.lang.String") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getParameter" , "this.getParameter(param0);" , "" , "java.security.Signature" , "getParameter" , "java.lang.String") , Matchers . anything ()) ;
   }
 
   @Test
   void setParameter() throws Exception {
-assertThat (synthesiseGPT ("setParameter" , "this.setParameter(param0, param1);" , "\nthis.setParameter((java.security.spec.AlgorithmParameterSpec) param1);\n" , "java.security.Signature" , "setParameter" , "java.lang.String" , "java.lang.Object") , anyOf (contains ("setParameter"))) ;
+assertThat (synthesiseGPT ("setParameter" , "this.setParameter(param0, param1);" , "\nthis.setParameter(param0, param1);\n" , "java.security.Signature" , "setParameter" , "java.lang.String" , "java.lang.Object") , anyOf (contains ("setParameter"))) ;
   }
 }

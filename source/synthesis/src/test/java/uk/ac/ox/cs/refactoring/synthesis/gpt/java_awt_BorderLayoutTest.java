@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_awt_BorderLayoutTest {
   @Test
   void addLayoutComponent() throws Exception {
-assertThat (synthesiseGPT ("addLayoutComponent" , "this.addLayoutComponent(param0, param1);" , "\nthis.addLayoutComponent((Component) param1, param0);\n" , "java.awt.BorderLayout" , "addLayoutComponent" , "java.lang.String" , "java.awt.Component") , anyOf (contains ("addLayoutComponent"))) ;
+assertThat (synthesiseGPT ("addLayoutComponent" , "this.addLayoutComponent(param0, param1);" , "\nthis.addLayoutComponent(param1, param0);\n" , "java.awt.BorderLayout" , "addLayoutComponent" , "java.lang.String" , "java.awt.Component") , anyOf (contains ("addLayoutComponent"))) ;
   }
 }

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class java_awt_ComponentTest {
   @Test
   void action() throws Exception {
-assertThat (synthesiseGPT ("action" , "this.action(param0, param1);" , "" , "java.awt.Component" , "action" , "java.awt.Event" , "java.lang.Object") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("action" , "this.action(param0, param1);" , "\n// Register this component as ActionListener on component which fires action events\ncomponent.addActionListener(this);\n" , "java.awt.Component" , "action" , "java.awt.Event" , "java.lang.Object") , Matchers . anything ()) ;
   }
 
   @Test
@@ -42,12 +42,12 @@ assertThat (synthesiseGPT ("enable2" , "this.enable(param0);" , "\nthis.setEnabl
 
   @Test
   void gotFocus() throws Exception {
-assertThat (synthesiseGPT ("gotFocus" , "this.gotFocus(param0, param1);" , "\nfinal FocusEvent focusEvent = new FocusEvent(this, FocusEvent.FOCUS_GAINED);\nthis.processFocusEvent(focusEvent);\n" , "java.awt.Component" , "gotFocus" , "java.awt.Event" , "java.lang.Object") , anyOf (contains ("processFocusEvent"))) ;
+assertThat (synthesiseGPT ("gotFocus" , "this.gotFocus(param0, param1);" , "\nFocusEvent focusEvent = new FocusEvent(this, FocusEvent.FOCUS_GAINED);\nthis.processFocusEvent(focusEvent);\n" , "java.awt.Component" , "gotFocus" , "java.awt.Event" , "java.lang.Object") , anyOf (contains ("processFocusEvent"))) ;
   }
 
   @Test
   void handleEvent() throws Exception {
-assertThat (synthesiseGPT ("handleEvent" , "this.handleEvent(param0);" , "\nfinal AWTEvent event = param0;\nthis.processEvent(event);\n" , "java.awt.Component" , "handleEvent" , "java.awt.Event") , anyOf (contains ("processEvent"))) ;
+assertThat (synthesiseGPT ("handleEvent" , "this.handleEvent(param0);" , "\nthis.processEvent(param0);\n" , "java.awt.Component" , "handleEvent" , "java.awt.Event") , anyOf (contains ("processEvent"))) ;
   }
 
   @Test
@@ -67,12 +67,12 @@ assertThat (synthesiseGPT ("isFocusTraversable" , "this.isFocusTraversable();" ,
 
   @Test
   void keyDown() throws Exception {
-assertThat (synthesiseGPT ("keyDown" , "this.keyDown(param0, param1);" , "\nfinal KeyEvent keyEvent = new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, param1, param0.getKeyChar(), KeyEvent.KEY_LOCATION_STANDARD);\nthis.processKeyEvent(keyEvent);\n" , "java.awt.Component" , "keyDown" , "java.awt.Event" , "int") , anyOf (contains ("processKeyEvent"))) ;
+assertThat (synthesiseGPT ("keyDown" , "this.keyDown(param0, param1);" , "\nKeyEvent keyEvent = new KeyEvent(this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, param1, param0.key);\nthis.processKeyEvent(keyEvent);\n" , "java.awt.Component" , "keyDown" , "java.awt.Event" , "int") , anyOf (contains ("processKeyEvent"))) ;
   }
 
   @Test
   void keyUp() throws Exception {
-assertThat (synthesiseGPT ("keyUp" , "this.keyUp(param0, param1);" , "\nfinal KeyEvent keyEvent = new KeyEvent(this, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, param1, (char)param1);\nthis.processKeyEvent(keyEvent);\n" , "java.awt.Component" , "keyUp" , "java.awt.Event" , "int") , anyOf (contains ("processKeyEvent"))) ;
+assertThat (synthesiseGPT ("keyUp" , "this.keyUp(param0, param1);" , "\nKeyEvent keyEvent = new KeyEvent(this, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, param1, param0.key);\nthis.processKeyEvent(keyEvent);\n" , "java.awt.Component" , "keyUp" , "java.awt.Event" , "int") , anyOf (contains ("processKeyEvent"))) ;
   }
 
   @Test
@@ -92,7 +92,7 @@ assertThat (synthesiseGPT ("location" , "this.location();" , "\nthis.getLocation
 
   @Test
   void lostFocus() throws Exception {
-assertThat (synthesiseGPT ("lostFocus" , "this.lostFocus(param0, param1);" , "\nfinal FocusEvent focusEvent = new FocusEvent(this, FocusEvent.FOCUS_LOST);\nthis.processFocusEvent(focusEvent);\n" , "java.awt.Component" , "lostFocus" , "java.awt.Event" , "java.lang.Object") , anyOf (contains ("processFocusEvent"))) ;
+assertThat (synthesiseGPT ("lostFocus" , "this.lostFocus(param0, param1);" , "\nFocusEvent focusEvent = new FocusEvent(this, FocusEvent.FOCUS_LOST);\nthis.processFocusEvent(focusEvent);\n" , "java.awt.Component" , "lostFocus" , "java.awt.Event" , "java.lang.Object") , anyOf (contains ("processFocusEvent"))) ;
   }
 
   @Test
@@ -102,32 +102,32 @@ assertThat (synthesiseGPT ("minimumSize" , "this.minimumSize();" , "\nthis.getMi
 
   @Test
   void mouseDown() throws Exception {
-assertThat (synthesiseGPT ("mouseDown" , "this.mouseDown(param0, param1, param2);" , "\nfinal MouseEvent mouseEvent = new MouseEvent(this, MouseEvent.MOUSE_PRESSED, System.currentTimeMillis(), 0, param1, param2, 1, false);\nthis.processMouseEvent(mouseEvent);\n" , "java.awt.Component" , "mouseDown" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseEvent"))) ;
+assertThat (synthesiseGPT ("mouseDown" , "this.mouseDown(param0, param1, param2);" , "\nMouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_PRESSED, System.currentTimeMillis(), 0, param1, param2, 1, false);\nthis.processMouseEvent(event);\n" , "java.awt.Component" , "mouseDown" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseEvent"))) ;
   }
 
   @Test
   void mouseDrag() throws Exception {
-assertThat (synthesiseGPT ("mouseDrag" , "this.mouseDrag(param0, param1, param2);" , "\nfinal MouseEvent mouseEvent = new MouseEvent(this, MouseEvent.MOUSE_DRAGGED, System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseMotionEvent(mouseEvent);\n" , "java.awt.Component" , "mouseDrag" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseMotionEvent"))) ;
+assertThat (synthesiseGPT ("mouseDrag" , "this.mouseDrag(param0, param1, param2);" , "\nMouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_DRAGGED, System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseMotionEvent(event);\n" , "java.awt.Component" , "mouseDrag" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseMotionEvent"))) ;
   }
 
   @Test
   void mouseEnter() throws Exception {
-assertThat (synthesiseGPT ("mouseEnter" , "this.mouseEnter(param0, param1, param2);" , "\nfinal MouseEvent mouseEvent = new MouseEvent(this, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseEvent(mouseEvent);\n" , "java.awt.Component" , "mouseEnter" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseEvent"))) ;
+assertThat (synthesiseGPT ("mouseEnter" , "this.mouseEnter(param0, param1, param2);" , "\nMouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseEvent(event);\n" , "java.awt.Component" , "mouseEnter" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseEvent"))) ;
   }
 
   @Test
   void mouseExit() throws Exception {
-assertThat (synthesiseGPT ("mouseExit" , "this.mouseExit(param0, param1, param2);" , "\nfinal MouseEvent mouseEvent = new MouseEvent(this, MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseEvent(mouseEvent);\n" , "java.awt.Component" , "mouseExit" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseEvent"))) ;
+assertThat (synthesiseGPT ("mouseExit" , "this.mouseExit(param0, param1, param2);" , "\nMouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseEvent(event);\n" , "java.awt.Component" , "mouseExit" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseEvent"))) ;
   }
 
   @Test
   void mouseMove() throws Exception {
-assertThat (synthesiseGPT ("mouseMove" , "this.mouseMove(param0, param1, param2);" , "\nfinal MouseEvent mouseEvent = new MouseEvent(this, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseMotionEvent(mouseEvent);\n" , "java.awt.Component" , "mouseMove" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseMotionEvent"))) ;
+assertThat (synthesiseGPT ("mouseMove" , "this.mouseMove(param0, param1, param2);" , "\nMouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, param1, param2, 0, false);\nthis.processMouseMotionEvent(event);\n" , "java.awt.Component" , "mouseMove" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseMotionEvent"))) ;
   }
 
   @Test
   void mouseUp() throws Exception {
-assertThat (synthesiseGPT ("mouseUp" , "this.mouseUp(param0, param1, param2);" , "\nfinal MouseEvent mouseEvent = new MouseEvent(this, MouseEvent.MOUSE_RELEASED, System.currentTimeMillis(), 0, param1, param2, 1, false);\nthis.processMouseEvent(mouseEvent);\n" , "java.awt.Component" , "mouseUp" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseEvent"))) ;
+assertThat (synthesiseGPT ("mouseUp" , "this.mouseUp(param0, param1, param2);" , "\nMouseEvent event = new MouseEvent(this, MouseEvent.MOUSE_RELEASED, System.currentTimeMillis(), 0, param1, param2, 1, false);\nthis.processMouseEvent(event);\n" , "java.awt.Component" , "mouseUp" , "java.awt.Event" , "int" , "int") , anyOf (contains ("processMouseEvent"))) ;
   }
 
   @Test
@@ -142,7 +142,7 @@ assertThat (synthesiseGPT ("nextFocus" , "this.nextFocus();" , "\nthis.transferF
 
   @Test
   void postEvent() throws Exception {
-assertThat (synthesiseGPT ("postEvent" , "this.postEvent(param0);" , "\nfinal AWTEvent event = param0;\nthis.dispatchEvent(event);\n" , "java.awt.Component" , "postEvent" , "java.awt.Event") , anyOf (contains ("dispatchEvent"))) ;
+assertThat (synthesiseGPT ("postEvent" , "this.postEvent(param0);" , "\nthis.dispatchEvent(param0);\n" , "java.awt.Component" , "postEvent" , "java.awt.Event") , anyOf (contains ("dispatchEvent"))) ;
   }
 
   @Test

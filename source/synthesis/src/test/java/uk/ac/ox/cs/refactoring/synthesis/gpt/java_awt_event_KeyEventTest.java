@@ -19,6 +19,6 @@ assertThat (synthesiseGPT ("getKeyModifiersText" , "this.getKeyModifiersText(par
   @Disabled("No replacement")
   @Test
   void setModifiers() throws Exception {
-assertThat (synthesiseGPT ("setModifiers" , "this.setModifiers(param0);" , "\nfinal int modifiers = param0;\nfinal KeyEvent event = new KeyEvent(this.getComponent(), this.getID(), this.getWhen(), modifiers, this.getKeyCode(), this.getKeyChar(), this.getKeyLocation());\n" , "java.awt.event.KeyEvent" , "setModifiers" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("setModifiers" , "this.setModifiers(param0);" , "" , "java.awt.event.KeyEvent" , "setModifiers" , "int") , Matchers . anything ()) ;
   }
 }

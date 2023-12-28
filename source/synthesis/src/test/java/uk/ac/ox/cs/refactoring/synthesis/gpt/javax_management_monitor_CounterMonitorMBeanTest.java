@@ -12,17 +12,17 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_CounterMonitorMBeanTest {
   @Test
   void getDerivedGauge() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "\nfinal ObjectName objectName = new ObjectName(\"javax.management.monitor:type=CounterMonitor\");\n((CounterMonitorMBean) MBeanServerInvocationHandler.newProxyInstance(\n        ManagementFactory.getPlatformMBeanServer(),\n        objectName,\n        CounterMonitorMBean.class,\n        false)).getDerivedGauge(objectName);\n" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
+assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "\nthis.getDerivedGauge(null);\n" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
   }
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\nfinal ObjectName objectName = new ObjectName(\"javax.management.monitor:type=CounterMonitor\");\n((CounterMonitorMBean) MBeanServerInvocationHandler.newProxyInstance(\n        ManagementFactory.getPlatformMBeanServer(),\n        objectName,\n        CounterMonitorMBean.class,\n        false)).getDerivedGaugeTimeStamp(objectName);\n" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\nthis.getDerivedGaugeTimeStamp(null);\n" , "javax.management.monitor.CounterMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 
   @Test
   void getThreshold() throws Exception {
-assertThat (synthesiseGPT ("getThreshold" , "this.getThreshold();" , "\nfinal ObjectName objectName = new ObjectName(\"javax.management.monitor.CounterMonitorMBean\");\nthis.getThreshold(objectName);\n" , "javax.management.monitor.CounterMonitorMBean" , "getThreshold") , anyOf (contains ("getThreshold"))) ;
+assertThat (synthesiseGPT ("getThreshold" , "this.getThreshold();" , "\nthis.getThreshold(null);\n" , "javax.management.monitor.CounterMonitorMBean" , "getThreshold") , anyOf (contains ("getThreshold"))) ;
   }
 
   @Test

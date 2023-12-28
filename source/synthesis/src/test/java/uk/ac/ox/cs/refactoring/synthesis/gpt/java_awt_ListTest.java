@@ -37,7 +37,7 @@ assertThat (synthesiseGPT ("countItems" , "this.countItems();" , "\nthis.getItem
 
   @Test
   void delItem() throws Exception {
-assertThat (synthesiseGPT ("delItem" , "this.delItem(param0);" , "\nthis.remove(param0);\n" , "java.awt.List" , "delItem" , "int") , anyOf (contains ("remove"))) ;
+assertThat (synthesiseGPT ("delItem" , "this.delItem(param0);" , "" , "java.awt.List" , "delItem" , "int") , anyOf (contains ("remove"))) ;
   }
 
   @Test

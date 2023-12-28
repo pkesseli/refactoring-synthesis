@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_rmi_server_UnicastRemoteObjectTest {
   @Test
   void exportObject() throws Exception {
-assertThat (synthesiseGPT ("exportObject" , "this.exportObject(param0);" , "\nfinal int port = 0; // set the desired port number\nfinal RMIClientSocketFactory csf = null; // set the desired client socket factory\nfinal RMIServerSocketFactory ssf = null; // set the desired server socket factory\nUnicastRemoteObject.exportObject(param0, port, csf, ssf);\n" , "java.rmi.server.UnicastRemoteObject" , "exportObject" , "java.rmi.Remote") , anyOf (contains ("exportObject"))) ;
+assertThat (synthesiseGPT ("exportObject" , "this.exportObject(param0);" , "\nthis.exportObject(param0, 0);\n" , "java.rmi.server.UnicastRemoteObject" , "exportObject" , "java.rmi.Remote") , anyOf (contains ("exportObject"))) ;
   }
 }

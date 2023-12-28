@@ -23,7 +23,7 @@ assertThat (synthesiseGPT ("enable" , "this.enable();" , "\nthis.setEnabled(true
 
   @Test
   void getNextFocusableComponent() throws Exception {
-assertThat (synthesiseGPT ("getNextFocusableComponent" , "this.getNextFocusableComponent();" , "\nfinal FocusTraversalPolicy policy = this.getFocusTraversalPolicy();\npolicy.getComponentAfter(this);\n" , "javax.swing.JComponent" , "getNextFocusableComponent") , anyOf (contains ("FocusTraversalPolicy"))) ;
+assertThat (synthesiseGPT ("getNextFocusableComponent" , "this.getNextFocusableComponent();" , "\nthis.getFocusTraversalPolicy().getComponentAfter(this);\n" , "javax.swing.JComponent" , "getNextFocusableComponent") , anyOf (contains ("FocusTraversalPolicy"))) ;
   }
 
   @Disabled("No replacement")
@@ -34,12 +34,12 @@ assertThat (synthesiseGPT ("hide" , "this.hide();" , "\nthis.setVisible(false);\
 
   @Test
   void isManagingFocus() throws Exception {
-assertThat (synthesiseGPT ("isManagingFocus" , "this.isManagingFocus();" , "\nthis.isFocusCycleRoot();\n" , "javax.swing.JComponent" , "isManagingFocus") , anyOf (contains ("setFocusCycleRoot") , contains ("setFocusTraversalKeys"))) ;
+assertThat (synthesiseGPT ("isManagingFocus" , "this.isManagingFocus();" , "\nthis.setFocusTraversalKeysEnabled(true);\nthis.setFocusCycleRoot(true);\n" , "javax.swing.JComponent" , "isManagingFocus") , anyOf (contains ("setFocusCycleRoot") , contains ("setFocusTraversalKeys"))) ;
   }
 
   @Test
   void requestDefaultFocus() throws Exception {
-assertThat (synthesiseGPT ("requestDefaultFocus" , "this.requestDefaultFocus();" , "\nfinal Container container = this.getParent();\nif (container != null) {\n    final Component defaultComponent = container.getFocusTraversalPolicy().getDefaultComponent(container);\n    if (defaultComponent != null) {\n        defaultComponent.requestFocus();\n    }\n}\n" , "javax.swing.JComponent" , "requestDefaultFocus") , anyOf (contains ("requestFocus"))) ;
+assertThat (synthesiseGPT ("requestDefaultFocus" , "this.requestDefaultFocus();" , "\nFocusTraversalPolicy.getDefaulComponent(this).requestFocus();\n" , "javax.swing.JComponent" , "requestDefaultFocus") , anyOf (contains ("requestFocus"))) ;
   }
 
   @Test
@@ -49,6 +49,6 @@ assertThat (synthesiseGPT ("reshape" , "this.reshape(param0, param1, param2, par
 
   @Test
   void setNextFocusableComponent() throws Exception {
-assertThat (synthesiseGPT ("setNextFocusableComponent" , "this.setNextFocusableComponent(param0);" , "\nfinal FocusTraversalPolicy policy = this.getFocusTraversalPolicy();\npolicy.setComponentAfter(this, param0);\nthis.setFocusTraversalPolicy(policy);\n" , "javax.swing.JComponent" , "setNextFocusableComponent" , "java.awt.Component") , anyOf (contains ("FocusTraversalPolicy"))) ;
+assertThat (synthesiseGPT ("setNextFocusableComponent" , "this.setNextFocusableComponent(param0);" , "\nthis.setFocusTraversalPolicyProvider(true);\nthis.setFocusTraversalPolicy(new LayoutFocusTraversalPolicy() {\n    public Component getDefaultComponent(Container focusCycleRoot) {\n        return param0;\n    }\n});\n" , "javax.swing.JComponent" , "setNextFocusableComponent" , "java.awt.Component") , anyOf (contains ("FocusTraversalPolicy"))) ;
   }
 }

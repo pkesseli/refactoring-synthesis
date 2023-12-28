@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("isBackingStoreEnabled" , "this.isBackingStoreEnabled
 
   @Test
   void setBackingStoreEnabled() throws Exception {
-assertThat (synthesiseGPT ("setBackingStoreEnabled" , "this.setBackingStoreEnabled(param0);" , "\nthis.setScrollMode(param0 ? JViewport.BACKINGSTORE_SCROLL_MODE : JViewport.BLIT_SCROLL_MODE);\n" , "javax.swing.JViewport" , "setBackingStoreEnabled" , "boolean") , anyOf (contains ("setScrollMode"))) ;
+assertThat (synthesiseGPT ("setBackingStoreEnabled" , "this.setBackingStoreEnabled(param0);" , "\nthis.setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);\n" , "javax.swing.JViewport" , "setBackingStoreEnabled" , "boolean") , anyOf (contains ("setScrollMode"))) ;
   }
 }

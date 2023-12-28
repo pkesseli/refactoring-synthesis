@@ -14,36 +14,36 @@ class java_sql_DateTest {
   @Disabled("No replacement")
   @Test
   void getHours() throws Exception {
-assertThat (synthesiseGPT ("getHours" , "this.getHours();" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.get(Calendar.HOUR_OF_DAY);\n" , "java.sql.Date" , "getHours") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getHours" , "this.getHours();" , "\nLocalDateTime localDateTime = LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault());\nlocalDateTime.getHour();\n" , "java.sql.Date" , "getHours") , Matchers . anything ()) ;
   }
 
   @Disabled("No replacement")
   @Test
   void getMinutes() throws Exception {
-assertThat (synthesiseGPT ("getMinutes" , "this.getMinutes();" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.get(Calendar.MINUTE);\n" , "java.sql.Date" , "getMinutes") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getMinutes" , "this.getMinutes();" , "\nthis.toLocalDateTime().getMinute();\n" , "java.sql.Date" , "getMinutes") , Matchers . anything ()) ;
   }
 
   @Disabled("No replacement")
   @Test
   void getSeconds() throws Exception {
-assertThat (synthesiseGPT ("getSeconds" , "this.getSeconds();" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.get(Calendar.SECOND);\n" , "java.sql.Date" , "getSeconds") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getSeconds" , "this.getSeconds();" , "\nthis.toLocalDateTime().getSecond();\n" , "java.sql.Date" , "getSeconds") , Matchers . anything ()) ;
   }
 
   @Disabled("No replacement")
   @Test
   void setHours() throws Exception {
-assertThat (synthesiseGPT ("setHours" , "this.setHours(param0);" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.set(Calendar.HOUR_OF_DAY, param0);\nthis.setTime(calendar.getTimeInMillis());\n" , "java.sql.Date" , "setHours" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("setHours" , "this.setHours(param0);" , "\nthis.toInstant().atZone(ZoneId.systemDefault()).withHour(param0).toLocalDateTime().toLocalDate();\n" , "java.sql.Date" , "setHours" , "int") , Matchers . anything ()) ;
   }
 
   @Disabled("No replacement")
   @Test
   void setMinutes() throws Exception {
-assertThat (synthesiseGPT ("setMinutes" , "this.setMinutes(param0);" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.set(Calendar.MINUTE, param0);\nthis.setTime(calendar.getTimeInMillis());\n" , "java.sql.Date" , "setMinutes" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("setMinutes" , "this.setMinutes(param0);" , "\nthis.setMinutes(param0);\n" , "java.sql.Date" , "setMinutes" , "int") , Matchers . anything ()) ;
   }
 
   @Disabled("No replacement")
   @Test
   void setSeconds() throws Exception {
-assertThat (synthesiseGPT ("setSeconds" , "this.setSeconds(param0);" , "\nfinal Calendar calendar = Calendar.getInstance();\ncalendar.setTime(this);\ncalendar.set(Calendar.SECOND, param0);\nthis.setTime(calendar.getTimeInMillis());\n" , "java.sql.Date" , "setSeconds" , "int") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("setSeconds" , "this.setSeconds(param0);" , "\nthis.toInstant().atZone(ZoneId.systemDefault()).withSecond(param0).toLocalDateTime().toLocalDate();\n" , "java.sql.Date" , "setSeconds" , "int") , Matchers . anything ()) ;
   }
 }

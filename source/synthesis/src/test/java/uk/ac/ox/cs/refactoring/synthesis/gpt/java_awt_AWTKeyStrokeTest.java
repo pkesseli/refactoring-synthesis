@@ -14,6 +14,6 @@ class java_awt_AWTKeyStrokeTest {
   @Disabled("No replacement")
   @Test
   void registerSubclass() throws Exception {
-assertThat (synthesiseGPT ("registerSubclass" , "this.registerSubclass(param0);" , "\nAWTKeyStroke awtKeyStroke = (AWTKeyStroke) param0.newInstance();\nAWTKeyStroke.registerSubclass(awtKeyStroke.getClass());\n" , "java.awt.AWTKeyStroke" , "registerSubclass" , "java.lang.Class") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("registerSubclass" , "this.registerSubclass(param0);" , "" , "java.awt.AWTKeyStroke" , "registerSubclass" , "java.lang.Class") , Matchers . anything ()) ;
   }
 }

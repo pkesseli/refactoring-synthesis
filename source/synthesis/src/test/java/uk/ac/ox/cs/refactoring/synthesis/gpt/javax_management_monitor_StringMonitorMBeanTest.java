@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_StringMonitorMBeanTest {
   @Test
   void getDerivedGauge() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "\nfinal ObjectName objectName = new ObjectName(\"com.example:type=StringMonitorMBean\");\nthis.getDerivedGauge(objectName);\n" , "javax.management.monitor.StringMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
+assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "\nthis.getDerivedGauge(null);\n" , "javax.management.monitor.StringMonitorMBean" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
   }
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\nfinal ObjectName objectName = new ObjectName(\"javax.management.monitor:type=StringMonitor\");\n((StringMonitorMBean) MBeanServerInvocationHandler.newProxyInstance(\n        ManagementFactory.getPlatformMBeanServer(),\n        objectName,\n        StringMonitorMBean.class,\n        false)).getDerivedGaugeTimeStamp(objectName);\n" , "javax.management.monitor.StringMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\nthis.getDerivedGaugeTimeStamp(null);\n" , "javax.management.monitor.StringMonitorMBean" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 }

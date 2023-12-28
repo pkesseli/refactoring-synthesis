@@ -17,7 +17,7 @@ assertThat (synthesiseGPT ("major" , "this.major();" , "\nthis.version().feature
 
   @Test
   void minor() throws Exception {
-assertThat (synthesiseGPT ("minor" , "this.minor();" , "\nfinal int minorVersion = this.version().interim();\n" , "java.lang.Runtime$Version" , "minor") , anyOf (contains ("interim"))) ;
+assertThat (synthesiseGPT ("minor" , "this.minor();" , "\nthis.version().interim();\n" , "java.lang.Runtime$Version" , "minor") , anyOf (contains ("interim"))) ;
   }
 
   @Test

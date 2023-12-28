@@ -14,7 +14,7 @@ class java_security_SignatureSpiTest {
   @Disabled("No replacement")
   @Test
   void engineGetParameter() throws Exception {
-assertThat (synthesiseGPT ("engineGetParameter" , "this.engineGetParameter(param0);" , "\nthis.engineGetParameters().getParameter(param0);\n" , "java.security.SignatureSpi" , "engineGetParameter" , "java.lang.String") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("engineGetParameter" , "this.engineGetParameter(param0);" , "" , "java.security.SignatureSpi" , "engineGetParameter" , "java.lang.String") , Matchers . anything ()) ;
   }
 
   @Test

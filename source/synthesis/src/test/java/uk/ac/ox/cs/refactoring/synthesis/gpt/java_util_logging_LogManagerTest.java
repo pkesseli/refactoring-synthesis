@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_util_logging_LogManagerTest {
   @Test
   void getLoggingMXBean() throws Exception {
-assertThat (synthesiseGPT ("getLoggingMXBean" , "this.getLoggingMXBean();" , "\nfinal PlatformLoggingMXBean platformLoggingMXBean = ManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class);\nplatformLoggingMXBean;\n" , "java.util.logging.LogManager" , "getLoggingMXBean") , anyOf (contains ("LoggingMXBean") , contains ("PlatformLoggingMXBean") , contains ("getPlatformMXBean"))) ;
+assertThat (synthesiseGPT ("getLoggingMXBean" , "this.getLoggingMXBean();" , "\nManagementFactory.getPlatformMXBean(PlatformLoggingMXBean.class);\n" , "java.util.logging.LogManager" , "getLoggingMXBean") , anyOf (contains ("LoggingMXBean") , contains ("PlatformLoggingMXBean") , contains ("getPlatformMXBean"))) ;
   }
 }

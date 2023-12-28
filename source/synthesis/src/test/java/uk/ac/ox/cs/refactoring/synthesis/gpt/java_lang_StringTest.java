@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_lang_StringTest {
   @Test
   void getBytes() throws Exception {
-assertThat (synthesiseGPT ("getBytes" , "this.getBytes(param0, param1, param2, param3);" , "\nfinal byte[] bytes = this.substring(param0, param1).getBytes();\nSystem.arraycopy(bytes, 0, param2, param3, bytes.length);\n" , "java.lang.String" , "getBytes" , "int" , "int" , "byte[]" , "int") , anyOf (contains ("getBytes"))) ;
+assertThat (synthesiseGPT ("getBytes" , "this.getBytes(param0, param1, param2, param3);" , "\nbyte[] bytes = this.substring(param0, param1).getBytes();\nSystem.arraycopy(bytes, 0, param2, param3, bytes.length);\n" , "java.lang.String" , "getBytes" , "int" , "int" , "byte[]" , "int") , anyOf (contains ("getBytes"))) ;
   }
 }

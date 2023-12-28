@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_JPopupMenuTest {
   @Test
   void getComponentAtIndex() throws Exception {
-assertThat (synthesiseGPT ("getComponentAtIndex" , "this.getComponentAtIndex(param0);" , "\n((Container) this).getComponent(param0);\n" , "javax.swing.JPopupMenu" , "getComponentAtIndex" , "int") , anyOf (contains ("getComponent"))) ;
+assertThat (synthesiseGPT ("getComponentAtIndex" , "this.getComponentAtIndex(param0);" , "\nthis.getComponent(param0);\n" , "javax.swing.JPopupMenu" , "getComponentAtIndex" , "int") , anyOf (contains ("getComponent"))) ;
   }
 }

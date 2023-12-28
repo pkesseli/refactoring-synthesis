@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_MonitorTest {
   @Test
   void getObservedObject() throws Exception {
-assertThat (synthesiseGPT ("getObservedObject" , "this.getObservedObject();" , "\nfinal ObjectName[] observedObjects = this.getObservedObjects();\nif (observedObjects != null && observedObjects.length > 0) {\n    return observedObjects[0];\n} else {\n    return null;\n}\n" , "javax.management.monitor.Monitor" , "getObservedObject") , anyOf (contains ("getObservedObjects"))) ;
+assertThat (synthesiseGPT ("getObservedObject" , "this.getObservedObject();" , "\nthis.getObservedObjects()[0];\n" , "javax.management.monitor.Monitor" , "getObservedObject") , anyOf (contains ("getObservedObjects"))) ;
   }
 
   @Test

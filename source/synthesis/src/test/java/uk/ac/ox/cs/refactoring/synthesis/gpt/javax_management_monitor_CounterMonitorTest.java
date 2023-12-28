@@ -12,17 +12,17 @@ import org.junit.jupiter.api.Test;
 class javax_management_monitor_CounterMonitorTest {
   @Test
   void getDerivedGauge() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "\nfinal ObjectName objectName = new ObjectName(\"com.example:type=CounterMonitor\");\n((CounterMonitor) this).getDerivedGauge(objectName);\n" , "javax.management.monitor.CounterMonitor" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
+assertThat (synthesiseGPT ("getDerivedGauge" , "this.getDerivedGauge();" , "\nthis.getDerivedGauge(null);\n" , "javax.management.monitor.CounterMonitor" , "getDerivedGauge") , anyOf (contains ("getDerivedGauge"))) ;
   }
 
   @Test
   void getDerivedGaugeTimeStamp() throws Exception {
-assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\nfinal ObjectName objectName = new ObjectName(\"com.example:type=CounterMonitor\");\nfinal CounterMonitor counterMonitor = new CounterMonitor();\ncounterMonitor.getDerivedGaugeTimeStamp(objectName);\n" , "javax.management.monitor.CounterMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
+assertThat (synthesiseGPT ("getDerivedGaugeTimeStamp" , "this.getDerivedGaugeTimeStamp();" , "\nthis.getDerivedGaugeTimeStamp(null);\n" , "javax.management.monitor.CounterMonitor" , "getDerivedGaugeTimeStamp") , anyOf (contains ("getDerivedGaugeTimeStamp"))) ;
   }
 
   @Test
   void getThreshold() throws Exception {
-assertThat (synthesiseGPT ("getThreshold" , "this.getThreshold();" , "\nfinal ObjectName objectName = new ObjectName(\"com.example:type=CounterMonitor\");\nfinal MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();\nfinal CounterMonitor counterMonitor = JMX.newMBeanProxy(mBeanServer, objectName, CounterMonitor.class);\ncounterMonitor.getThreshold(objectName);\n" , "javax.management.monitor.CounterMonitor" , "getThreshold") , anyOf (contains ("getThreshold"))) ;
+assertThat (synthesiseGPT ("getThreshold" , "this.getThreshold();" , "\nCounterMonitor.getThreshold(monitor.getMBeanName());\n" , "javax.management.monitor.CounterMonitor" , "getThreshold") , anyOf (contains ("getThreshold"))) ;
   }
 
   @Test

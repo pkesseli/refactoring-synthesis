@@ -17,6 +17,6 @@ assertThat (synthesiseGPT ("getLogStream" , "this.getLogStream();" , "\nthis.get
 
   @Test
   void setLogStream() throws Exception {
-assertThat (synthesiseGPT ("setLogStream" , "this.setLogStream(param0);" , "\nfinal PrintWriter printWriter = new PrintWriter(param0);\nDriverManager.setLogWriter(printWriter);\n" , "java.sql.DriverManager" , "setLogStream" , "java.io.PrintStream") , anyOf (contains ("setLogWriter"))) ;
+assertThat (synthesiseGPT ("setLogStream" , "this.setLogStream(param0);" , "\nthis.setLogWriter(new PrintWriter(param0));\n" , "java.sql.DriverManager" , "setLogStream" , "java.io.PrintStream") , anyOf (contains ("setLogWriter"))) ;
   }
 }

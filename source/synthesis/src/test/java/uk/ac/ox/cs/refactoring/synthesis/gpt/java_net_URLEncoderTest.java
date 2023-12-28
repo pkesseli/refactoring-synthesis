@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_net_URLEncoderTest {
   @Test
   void encode() throws Exception {
-assertThat (synthesiseGPT ("encode" , "this.encode(param0);" , "\nURLEncoder.encode(param0, StandardCharsets.UTF_8.toString());\n" , "java.net.URLEncoder" , "encode" , "java.lang.String") , anyOf (contains ("encode"))) ;
+assertThat (synthesiseGPT ("encode" , "this.encode(param0);" , "\nthis.encode(param0, StandardCharsets.UTF_8.toString());\n" , "java.net.URLEncoder" , "encode" , "java.lang.String") , anyOf (contains ("encode"))) ;
   }
 }

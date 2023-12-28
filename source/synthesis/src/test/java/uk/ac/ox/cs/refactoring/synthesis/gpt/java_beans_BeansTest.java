@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class java_beans_BeansTest {
   @Test
   void instantiate() throws Exception {
-assertThat (synthesiseGPT ("instantiate" , "this.instantiate(param0, param1, param2, param3);" , "\nBeans.instantiate(param0, param1, param2);\n" , "java.beans.Beans" , "instantiate" , "java.lang.ClassLoader" , "java.lang.String" , " java.beans.beancontext.BeanContext" , "java.beans.AppletInitializer") , anyOf (contains ("instantiate"))) ;
+assertThat (synthesiseGPT ("instantiate" , "this.instantiate(param0, param1, param2, param3);" , "\nthis.instantiate(param0, param1, param2);\n" , "java.beans.Beans" , "instantiate" , "java.lang.ClassLoader" , "java.lang.String" , " java.beans.beancontext.BeanContext" , "java.beans.AppletInitializer") , anyOf (contains ("instantiate"))) ;
   }
 }

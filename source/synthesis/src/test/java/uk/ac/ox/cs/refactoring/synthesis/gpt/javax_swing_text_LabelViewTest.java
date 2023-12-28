@@ -14,6 +14,6 @@ class javax_swing_text_LabelViewTest {
   @Disabled("No replacement")
   @Test
   void getFontMetrics() throws Exception {
-assertThat (synthesiseGPT ("getFontMetrics" , "this.getFontMetrics();" , "\nfinal Font font = this.getFont();\nfinal FontRenderContext frc = new FontRenderContext(null, true, true);\nfont.getLineMetrics(\"Sample Text\", frc);\n" , "javax.swing.text.LabelView" , "getFontMetrics") , Matchers . anything ()) ;
+assertThat (synthesiseGPT ("getFontMetrics" , "this.getFontMetrics();" , "\nthis.getFont().getMetrics(this.getFont().getFontMetrics(this.getFont().getGraphics()));\n" , "javax.swing.text.LabelView" , "getFontMetrics") , Matchers . anything ()) ;
   }
 }
