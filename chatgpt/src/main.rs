@@ -21,12 +21,11 @@ async fn main() -> anyhow::Result<()> {
     let html_content = response.text().await?;
     let document = scraper::Html::parse_document(&html_content);
     let method_selector =
-        scraper::Selector::parse(".deprecated-summary#method").expect("wrong css selector");
+        scraper::Selector::parse(".deprecated-summary#method tbody").expect("wrong css selector");
     let deprecated_methods = document.select(&method_selector);
     let item_selector =
         scraper::Selector::parse(".col-deprecated-item-name").expect("wrong css selector");
-    let comment_selector =
-        scraper::Selector::parse(".deprecation-comment").expect("wrong css selector");
+    let comment_selector = scraper::Selector::parse(".col-last").expect("wrong css selector");
 
     let deprecated_methods = deprecated_methods
         .flat_map(|deprecated_methods| {
@@ -48,9 +47,14 @@ async fn main() -> anyhow::Result<()> {
 
     let responses = futures::future::join_all(deprecated_methods.iter().map(
         |(path_name, deprecation_comment)| {
-            let (_, method_name, args) = decompose_path(path_name);
+            let path_name = path_name.replace("​", "");
+            let deprecation_comment = deprecation_comment
+                .replace("​", "")
+                .replace("&nbsp;", "")
+                .replace("&quot;", "\"");
+            let (_, method_name, args) = decompose_path(&path_name);
             let prompt =
-                openai::construct_prompt(path_name, method_name, args, deprecation_comment);
+                openai::construct_prompt(&path_name, method_name, args, &deprecation_comment);
             async {
                 (
                     serde_json::to_value(&prompt),
@@ -66,7 +70,7 @@ async fn main() -> anyhow::Result<()> {
 
     for ((path_name, _), (prompt, response)) in deprecated_methods.into_iter().zip(responses) {
         match response {
-            Ok(response) => {
+            Ok((response, elapsed)) => {
                 let path_name = path_name.replace("​", "");
                 let response = response.replace("​", "");
                 let prompt = remove_strange_char(prompt?);
@@ -76,6 +80,7 @@ async fn main() -> anyhow::Result<()> {
                     "response": response.clone(),
                     "before": openai::invoke_method(method_name, args),
                     "after": extract_code(response),
+                    "elapsed": elapsed,
                 });
                 match classes.entry(class_name) {
                     serde_json::map::Entry::Vacant(vacant) => {
