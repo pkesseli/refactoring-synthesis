@@ -27,7 +27,7 @@ class ExperimentCommand implements Callable<Integer> {
     final Path surefireReportsDirectory = Reports.getSurefireReportsDirectory();
     final Report summary = new Report();
     final ObjectMapper objectMapper = new ObjectMapper();
-    try (DirectoryStream<Path> stream = Files.newDirectoryStream(surefireReportsDirectory, "zest-*.log")) {
+    try (DirectoryStream<Path> stream = Files.newDirectoryStream(surefireReportsDirectory, "*.log")) {
       for (final Path entry : stream) {
         final String logFileName = entry.getFileName().toString();
         if (logFileName.contains("GPT"))
