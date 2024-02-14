@@ -1,0 +1,35 @@
+State not perceptible on heap:
+drawEchoCharacter* // Fixed by GraphicsGenerator
+drawLine* // Fixed by GraphicsGenerator
+drawSelectedText* // Fixed by GraphicsGenerator
+drawTabbedText* // Fixed by GraphicsGenerator
+drawUnselectedText // Fixed by GraphicsGenerator
+--> Arguments are not compared?
+
+Incomplete component: Missing size/UI
+getPositionAbove
+getPositionBelow
+findFocusOwner
+
+Incomplete component: Always true or false
+isManagingFocus
+requestDefaultFocus
+
+Incompleteness:
+decode // no-op
+isBackingStoreEnabled // 1 out of 2^32 values
+loadClass // always exception
+setUnicodeStream // always exception
+
+Abstract class:
+InputVerifier#shouldYieldFocus
+
+Native method:
+weakCompareAndSet5
+weakCompareAndSet2
+weakCompareAndSet5
+
+No explanation yet:
+disableSwingFocusManager
+getLabel
+setLogStream
