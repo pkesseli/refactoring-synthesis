@@ -1383,7 +1383,6 @@ Alternatively, we also curate a
 list of explicit constructors
 of subclasses to be used in favour of Mockito mocks for certain types, and users
 have the option to extend this list with a custom configuration.
-\todo{add discussion on unsound refactorings if that's still happening}
 %This is
 %particularly useful when the default behaviour of mocked objects under-approximates
 %the behaviour of the explicit constructors of subclasses.
@@ -1709,6 +1708,17 @@ strictly filter which \texttt{equals} implementations we consider, if any of
 them do not accurately identify an equivalent program state, our refactoring
 may be unsound.
 %
+Furthermore, we also describe in Sec.~\ref{sec:equiv} the inherent unsoundness
+using fuzzing to verify our solution. We observe four examples in our
+benchmarks where we are very unlikely to explore enough counterexamples to
+detect incorrect solutions. Examples include string input sequences, where only
+valid class names exhibit desired behaviour, or where only one integer constant
+out of all possible integer values triggers a critical code path.
+%
+We further observe three native methods where our heap abstraction does not
+cover the native state, and thus our algorithm cannot observe that the produced
+candidates are unsound.
+%
 Lastly, some solutions were unsound
 because the method to refactor was a default method with an empty body, meant
 to be overridden by subclasses. To find a sound refactoring in these cases, our
@@ -1826,7 +1836,7 @@ As a future direction we want to combine the two approaches, by using GPT-4 Turb
 The performance of both \tool and GPT-4 Turbo when code hints are present and used.
 %Using the CodeHints-library enables our technique to find more refactorings
 %than with the Type-library.
-For the former, when code hints are present and used, the success rate goes from 49\% to 81\% (Table~\ref{tab:configuration-results-ch}).
+For the former, when code hints are present and used, the success rate goes from 52\% to 81\% (Table~\ref{tab:configuration-results-ch}).
 The higher quality of the instructions in the CodeHints-library compared to the
 Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
