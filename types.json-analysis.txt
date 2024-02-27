@@ -30,6 +30,6 @@ weakCompareAndSet2
 weakCompareAndSet5
 
 No explanation yet:
-disableSwingFocusManager
-getLabel
-setLogStream
+disableSwingFocusManager // Requires static state of parent.
+getLabel // Unsound because `getActionCommand` is equivalent if button model is always `null`
+setLogStream // Requires static state of parent.
