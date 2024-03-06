@@ -3,9 +3,12 @@ package uk.ac.ox.cs.refactoring.synthesis.induction;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -40,6 +43,8 @@ import uk.ac.ox.cs.refactoring.synthesis.cegis.GPTHints;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.neural.CodeEngine;
+import uk.ac.ox.cs.refactoring.synthesis.neural.Prompt;
+import uk.ac.ox.cs.refactoring.synthesis.neural.TextTagger;
 
 public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   public GPTHints hints;
@@ -73,7 +78,35 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   @Override
   public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples)
       throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchElementException, NoSuchFieldException {
-    throw new NoSuchElementException();
+
+    List<String> candidates = codeEngine.generateCodeN(inductionPrompt(counterexamples), 3);
+
+    String original = hints.after;
+    for (int i = 0; i < candidates.size(); i++) {
+      try {
+        hints.after = candidates.get(i);
+        return extractCandidate();
+      } catch (Exception e) {
+        hints.after = original;
+      }
+    }
+    throw new NoSuchElementException("Failed to find a compilable candidate");
+  }
+
+  public Prompt basePrompt() {
+    throw new NotImplementedException();
+  }
+
+  public Prompt inductionPrompt(final Map<Counterexample, ExecutionResult> counterexamples) {
+    String context = "I have a code snippet below that contains a call to a deprecated method.\n" +
+      TextTagger.tag("code", hints.before) +
+      "Below is a plausible refactoring that potentially removes the deprecated method.\n" +
+      TextTagger.tag("code", hints.after) +
+      "However, it is not semantically equivalent to the original code snippet.";
+    Prompt prompt = new Prompt(context, "Give me a correct refactoring.");
+    prompt.constraints.add("Your code must only contain a sequence of Java statements.");
+
+    return prompt;
   }
 
   private Candidate extractCandidate() {

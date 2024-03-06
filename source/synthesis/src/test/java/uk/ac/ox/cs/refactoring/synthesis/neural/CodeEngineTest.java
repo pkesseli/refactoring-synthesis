@@ -35,7 +35,8 @@ public class CodeEngineTest {
   @Test
   void testConstraints() {
     CodeEngine codeEngine = new CodeEngine();
-    String prompt = "Show me how to solve n-queens puzzle in Java.";
+    String instruction = "Show me how to solve n-queens puzzle in Java.";
+    Prompt prompt = new Prompt(instruction);
     String code = codeEngine.generateCode(prompt);
     System.out.println(code);
   }

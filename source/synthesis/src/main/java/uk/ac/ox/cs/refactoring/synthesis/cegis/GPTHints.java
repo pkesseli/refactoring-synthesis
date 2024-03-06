@@ -4,7 +4,7 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.methods.MethodIdentifier
 
 public class GPTHints {
   public final String before;
-  public final String after;
+  public String after;
   public final MethodIdentifier methodToRefactor;
 
   public GPTHints(final String before, final String after, final MethodIdentifier methodToRefactor) {
