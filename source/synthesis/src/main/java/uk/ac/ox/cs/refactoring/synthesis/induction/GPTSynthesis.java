@@ -39,9 +39,11 @@ import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.GPTHints;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
+import uk.ac.ox.cs.refactoring.synthesis.neural.CodeEngine;
 
 public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
-  public final GPTHints hints;
+  public GPTHints hints;
+  private CodeEngine codeEngine = new CodeEngine();
 
   public SourceFinder sourceFinder;
 
@@ -65,6 +67,16 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
   @Override
   public Candidate getDefault() {
+    return extractCandidate();
+  }
+
+  @Override
+  public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples)
+      throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchElementException, NoSuchFieldException {
+    throw new NoSuchElementException();
+  }
+
+  private Candidate extractCandidate() {
     final ComponentDirectory components = generatorConfiguration.Components;
 
     final String className = hints.methodToRefactor.FullyQualifiedClassName;
@@ -146,11 +158,6 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     }
   }
 
-  @Override
-  public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples)
-      throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchElementException, NoSuchFieldException {
-    throw new NoSuchElementException();
-  }
 
   /**
    * 
