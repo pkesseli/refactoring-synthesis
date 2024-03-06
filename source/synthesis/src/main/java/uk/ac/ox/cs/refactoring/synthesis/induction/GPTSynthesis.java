@@ -97,12 +97,19 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     throw new NotImplementedException();
   }
 
+
+  public String textualCounterExamples(final Map<Counterexample, ExecutionResult> counterexamples) {
+    throw new NotImplementedException();
+  }
+
   public Prompt inductionPrompt(final Map<Counterexample, ExecutionResult> counterexamples) {
+    String ce = textualCounterExamples(counterexamples);
     String context = "I have a code snippet below that contains a call to a deprecated method.\n" +
       TextTagger.tag("code", hints.before) +
       "Below is a plausible refactoring that potentially removes the deprecated method.\n" +
       TextTagger.tag("code", hints.after) +
-      "However, it is not semantically equivalent to the original code snippet.";
+      "However, it is not semantically equivalent to the original code snippet." +
+      "A set of counter examples is given below\n" + ce;
     Prompt prompt = new Prompt(context, "Give me a correct refactoring.");
     prompt.constraints.add("Your code must only contain a sequence of Java statements.");
 
