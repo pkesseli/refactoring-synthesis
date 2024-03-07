@@ -46,7 +46,7 @@ import uk.ac.ox.cs.refactoring.synthesis.neural.CodeEngine;
 import uk.ac.ox.cs.refactoring.synthesis.neural.Prompt;
 import uk.ac.ox.cs.refactoring.synthesis.neural.TextTagger;
 
-public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
+public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   public GPTHints hints;
   private CodeEngine codeEngine = new CodeEngine();
 
@@ -55,7 +55,7 @@ public class GPTSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   private final ClassLoader classLoader;
   private final ParserContext parserContext;
 
-  public GPTSynthesis(final GeneratorConfiguration generatorConfiguration,
+  public NeuralSynthesis(final GeneratorConfiguration generatorConfiguration,
       final GeneratorRepository generatorRepository, final SourceOfRandomness sourceOfRandomness,
       final Class<Candidate> candidateType, final Method frameworkMethodPlaceholder,
       final CandidateExecutor<Candidate> executor, final CegisLoopListener<Candidate> listener,

@@ -18,7 +18,7 @@ import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.CounterexampleGenerator;
 import uk.ac.ox.cs.refactoring.synthesis.guidance.Seeds;
 import uk.ac.ox.cs.refactoring.synthesis.induction.FuzzingSynthesis;
-import uk.ac.ox.cs.refactoring.synthesis.induction.GPTSynthesis;
+import uk.ac.ox.cs.refactoring.synthesis.induction.NeuralSynthesis;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.Invoker;
 import uk.ac.ox.cs.refactoring.synthesis.verification.FuzzingVerification;
@@ -90,7 +90,7 @@ public class CegisLoop<Candidate> {
       synthesis = new FuzzingSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
           fuzzingSynthesisFrameworkMethod, executor, listener);
     } else {
-      synthesis = new GPTSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
+      synthesis = new NeuralSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
           fuzzingSynthesisFrameworkMethod, executor, listener, hints);
     }
     verification = new FuzzingVerification<>(generatorConfiguration, verificationRepository, executor, invoker,
