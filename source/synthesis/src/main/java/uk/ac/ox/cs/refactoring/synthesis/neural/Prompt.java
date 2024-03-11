@@ -10,6 +10,7 @@ public class Prompt {
     public String context = "";
     public String instruction;
     public List<String> constraints = new ArrayList<>();
+    public String extraInformation = "";
 
     public Prompt(String instruction) {
         this.instruction = instruction;
@@ -31,6 +32,7 @@ public class Prompt {
             .mapToObj(i -> String.format("\t%d. %s", i + 1, constraints.get(i)))
             .collect(Collectors.joining("\n"));
         return context + "\n" + instruction + "\n\nTake the following constraints into consideration:\n"
-                + TextTagger.tag("list", constraintsList);
+                + TextTagger.tag("list", constraintsList)
+                + extraInformation + "\n";
     }
 }
