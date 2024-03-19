@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.TextUI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +57,9 @@ public class ClassLoaderCloner {
     if (object == null)
       return null;
 
+    if (object instanceof ComponentUI)
+        return object;
+
     final Class<?> cls = object.getClass();
     if (Polymorphism.isDynamic(cls)) {
       if (ClassLoaders.isUserClass(classLoader, cls)) {
@@ -90,6 +96,7 @@ public class ClassLoaderCloner {
       return clone;
     }
 
+    System.out.println("Type: " + cls);
     final Class<?> cloneableClass = Polymorphism.getModelledClass(cls);
     final Object clone = createObject(cloneableClass);
     objectsToClones.put(object, clone);

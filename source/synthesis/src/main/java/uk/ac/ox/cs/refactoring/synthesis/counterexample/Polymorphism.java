@@ -24,6 +24,8 @@ public final class Polymorphism {
 
   private static final String JQF_MARKER = "edu.berkeley.cs.jqf";
 
+  private static final String INTERNAL_ICU_TEXT_MARKER = "jdk.internal.icu.text";
+
   /**
    * Decides whether the given type can be instantiated directly.
    * 
@@ -94,6 +96,6 @@ public final class Polymorphism {
   public static boolean isDynamic(final Class<?> cls) {
     final String name = cls.getName();
     return name.contains(PROXY_MARKER) || name.contains(LAMBDA_MARKER) || name.contains(BYTE_BUDDY_ACCESSOR)
-        || name.contains(SUREFIRE_MARKER) || name.contains(JQF_MARKER);
+        || name.contains(SUREFIRE_MARKER) || name.contains(JQF_MARKER) || name.contains(INTERNAL_ICU_TEXT_MARKER);
   }
 }

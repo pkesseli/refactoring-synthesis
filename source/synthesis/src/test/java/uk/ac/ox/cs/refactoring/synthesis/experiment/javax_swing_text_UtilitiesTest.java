@@ -3,12 +3,22 @@ package uk.ac.ox.cs.refactoring.synthesis.experiment;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
+
+import javax.swing.JTextField;
 
 import org.junit.jupiter.api.Test;
 
 class javax_swing_text_UtilitiesTest {
+
+  @Test
+  void test() {
+    System.out.println(new JTextField().getUI());
+  }
+
   @Test
   void drawTabbedText() throws Exception {
     assertThat(synthesiseAlias("javax.swing.text.Utilities", "drawTabbedText", "javax.swing.text.Segment", "int", "int", "java.awt.Graphics", "javax.swing.text.TabExpander", "int"), anyOf(contains("drawTabbedText")));
