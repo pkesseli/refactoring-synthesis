@@ -2,6 +2,8 @@ package uk.ac.ox.cs.refactoring.synthesis.neural;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
 public class CodeEngineTest {
@@ -33,8 +35,8 @@ public class CodeEngineTest {
   }
 
   @Test
-  void testConstraints() {
-    CodeEngine codeEngine = new CodeEngine();
+  void testConstraints() throws IOException {
+    CodeEngine codeEngine = new LocalCodeLLaMa2();
     String instruction = "Show me how to solve n-queens puzzle in Java.";
     Prompt prompt = new Prompt(instruction);
     String code = codeEngine.generateCode(prompt);

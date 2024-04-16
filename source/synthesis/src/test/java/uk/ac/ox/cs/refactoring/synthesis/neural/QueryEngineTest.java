@@ -6,7 +6,7 @@ public class QueryEngineTest {
     
   @Test
   void testAPIKey() throws Exception {
-    QueryEngine engine = new QueryEngine();
+    QueryEngine engine = new LocalCodeLLaMa2();
     String question = "Show me how to solve n-queens puzzle in Java.";
     String response = engine.query(question);
     System.out.println(response);
