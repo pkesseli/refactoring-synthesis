@@ -40,11 +40,4 @@ public class GPT4 implements CodeEngine {
   public String query(ChatMessage message) {
     return queryN(message, 1).get(0);
   }
-
-	@Override
-  public List<String> queryN(String prompt, int beamSize) {
-    ChatMessage message = new ChatMessage(ChatMessageRole.USER.value(), prompt);
-    return queryN(message, beamSize);
-  }
-  
 }

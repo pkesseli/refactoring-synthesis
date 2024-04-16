@@ -3,12 +3,12 @@ package uk.ac.ox.cs.refactoring.synthesis.induction;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -17,12 +17,10 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -31,23 +29,21 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.pholser.junit.quickcheck.internal.generator.GeneratorRepository;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
-import uk.ac.ox.cs.refactoring.classloader.ClassLoaders;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.api.CandidateExecutor;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.IExpression;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.api.SnippetCandidate;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.api.GeneratorConfiguration;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.ExpressionCompiler;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.JavaDocSeed;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.ResolveArgument;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
-import uk.ac.ox.cs.refactoring.synthesis.candidate.java.type.TypeFactory;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.GPTHints;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.neural.CodeEngine;
 import uk.ac.ox.cs.refactoring.synthesis.neural.Legacy;
+import uk.ac.ox.cs.refactoring.synthesis.neural.LocalCodeLLaMa2;
 import uk.ac.ox.cs.refactoring.synthesis.neural.Prompt;
 import uk.ac.ox.cs.refactoring.synthesis.neural.TextTagger;
 
@@ -57,7 +53,6 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   private String templateCallString = null;
   private ParseResult<CompilationUnit> parseResult = null;
   private MethodDeclaration method = null;
-  private Type defaultType = null;
   private Map<String, IExpression> environment = null;
 
   public NeuralSynthesis(final GeneratorConfiguration generatorConfiguration,
@@ -68,7 +63,8 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     super(generatorConfiguration, generatorRepository, sourceOfRandomness, candidateType, frameworkMethodPlaceholder,
         executor, listener);
 
-    codeEngine = new Legacy(hints);
+    // codeEngine = new Legacy(hints);
+    codeEngine = new LocalCodeLLaMa2();
 
     final String className = generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName;
     final CombinedTypeSolver typeSolver = generatorConfiguration.javaDocSeed.parserContext.TypeSolver;
@@ -76,7 +72,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     final JavaParser javaParser = generatorConfiguration.javaDocSeed.parserContext.JavaParser;
     try {
       parseResult = generatorConfiguration.javaDocSeed.findSource(javaParser, className);
-      defaultType = TypeFactory.createClassType(ClassLoaders.loadClass(generatorConfiguration.javaDocSeed.classLoader, className));
+      // defaultType = TypeFactory.createClassType(ClassLoaders.loadClass(generatorConfiguration.javaDocSeed.classLoader, className));
     } catch (final Exception e) {
       return;
     }
@@ -92,6 +88,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     templateCallString.append(method.getNameAsString());
     templateCallString.append('(');
     templateCallString.append(method.getParameters().stream().map(param -> param.getNameAsString()).collect(Collectors.joining(", ")));
+    // templateCallString.append(IntStream.range(0 ,method.getParameters().size()).mapToObj(index -> "param" + index).collect(Collectors.joining(", ")));
     templateCallString.append(");");
     this.templateCallString = templateCallString.toString();
 
@@ -109,9 +106,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       environment = new HashMap<>();
       final var resolveArg = new ResolveArgument(generatorConfiguration.javaDocSeed.methodToRefactor, javaParser);
       for (final var stmt : ((BlockStmt) callStmt).getStatements()) {
-        final var statement = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType,
-            parseResult,
-            method, stmt);
+        final var statement = parseInMethodContext(symbolResolver, typeSolver, javaParser, stmt);
         final var expression = statement.asExpressionStmt().getExpression();
         resolveArg.checkExpression(expression);
       }
@@ -138,14 +133,14 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   @Override
   public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples)
       throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchElementException, NoSuchFieldException {
-
-    String code = codeEngine.generateCode(inductionPrompt(counterexamples));
-    try {
-      Candidate candidate = processCode(code);
-      return candidate;
-    } catch (final NoSuchElementException e) {
-      throw e;
-    }
+    throw new NoSuchElementException("Not implemented");
+    // String code = codeEngine.generateCode(inductionPrompt(counterexamples));
+    // try {
+    //   Candidate candidate = processCode(code);
+    //   return candidate;
+    // } catch (final NoSuchElementException e) {
+    //   throw e;
+    // }
   }
 
   public Prompt basePrompt() {
@@ -176,8 +171,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   }
 
   public Statement parseInMethodContext(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
-      final JavaParser javaParser, final Type defaultType, final ParseResult<CompilationUnit> compilationUnit,
-      final MethodDeclaration method, final Statement statement) {
+      final JavaParser javaParser, final Statement statement) {
     final Optional<BlockStmt> optionalBody = method.getBody();
     if (optionalBody.isPresent())
       optionalBody.get().addStatement(0, statement);
@@ -188,8 +182,8 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     }
     System.out.println(statement.toString());
     System.out.println(method.toString());
-    final ParseResult<CompilationUnit> parseResult = javaParser.parse(compilationUnit.getResult().get().toString());
-    final MethodDeclaration container = generatorConfiguration.javaDocSeed.findMethod(symbolResolver, typeSolver, parseResult);
+    final ParseResult<CompilationUnit> compilationUnit = javaParser.parse(parseResult.getResult().get().toString());
+    final MethodDeclaration container = generatorConfiguration.javaDocSeed.findMethod(symbolResolver, typeSolver, compilationUnit);
     final Statement result = container.getBody().get().getStatement(0);
     return result;
   }
@@ -263,9 +257,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
       for (final var stmt : stmts.getStatements()) {
 
-        final var statement = parseInMethodContext(symbolResolver, typeSolver, javaParser, defaultType,
-            parseResult,
-            method, stmt);
+        final var statement = parseInMethodContext(symbolResolver, typeSolver, javaParser, stmt);
         final var expression = statement.asExpressionStmt().getExpression();
 
         // System.out.println("parsed expression: " + expression.toString());

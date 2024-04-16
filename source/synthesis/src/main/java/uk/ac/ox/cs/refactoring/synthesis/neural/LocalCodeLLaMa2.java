@@ -1,56 +1,28 @@
 package uk.ac.ox.cs.refactoring.synthesis.neural;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.List;
-import java.util.NoSuchElementException;
+import de.kherud.llama.InferenceParameters;
+import de.kherud.llama.LlamaModel;
+import de.kherud.llama.ModelParameters;
 
 public class LocalCodeLLaMa2 implements CodeEngine {
-  private final URL host;
-
-  public LocalCodeLLaMa2() throws IOException {
-    host = new URL("http://localhost:8080/completion");
-  }
-
-
   @Override
   public String query(String prompt) throws Exception {
-    HttpURLConnection connection = (HttpURLConnection) host.openConnection();
-    connection.setRequestMethod("POST");
-    connection.setRequestProperty("Content-Type", "application/json");
-
-		connection.setDoOutput(true);
-		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-		writer.write("{\"prompt\": \"Show me how to solve n-queens puzzle in Java. \",\"n_predict\": 256}");
-		writer.flush();
-		writer.close();
-		connection.getOutputStream().close();
-
-    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-      BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-      return response.toString();
-    } else {
-      throw new NoSuchElementException();
+    String homeDir = System.getProperty("user.home");
+    ModelParameters modelParams = new ModelParameters()
+      .setNCtx(4096)
+      .setModelFilePath(homeDir + "/models/codellama-7b-instruct.Q5_K_M.gguf");
+    // String instructed = String.format("[INST] Write code to solve the following coding problem that obeys the constraints and passes the example test cases. Please wrap your code answer using ```:\n%s\n[/INST]", prompt);
+    InferenceParameters inferParams = new InferenceParameters(prompt)
+      .setTemperature((float) 0.2);
+    try (LlamaModel model = new LlamaModel(modelParams)) {
+      String response = model.complete(inferParams);
+      return response;
     }
   }
 
   @Override
-  public List<String> queryN(String prompt, int beamSize) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'queryN'");
+  public String query(Prompt prompt) throws Exception {
+    return query(String.format("[INST]\n%s[/INST]", prompt.toString()));
   }
   
 }

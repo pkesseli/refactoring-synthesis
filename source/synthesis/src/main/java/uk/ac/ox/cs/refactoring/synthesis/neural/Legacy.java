@@ -1,8 +1,5 @@
 package uk.ac.ox.cs.refactoring.synthesis.neural;
 
-import java.util.Collections;
-import java.util.List;
-
 import uk.ac.ox.cs.refactoring.synthesis.cegis.GPTHints;
 
 public class Legacy implements CodeEngine {
@@ -14,10 +11,5 @@ public class Legacy implements CodeEngine {
   @Override
   public String query(String prompt) {
     return answer;
-  }
-
-  @Override
-  public List<String> queryN(String prompt, int beamSize) {
-    return Collections.singletonList(answer);
   }
 }
