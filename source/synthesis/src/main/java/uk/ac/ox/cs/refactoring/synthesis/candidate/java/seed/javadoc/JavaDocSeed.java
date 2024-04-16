@@ -74,13 +74,13 @@ public class JavaDocSeed implements InstructionSetSeed {
   private static final Logger logger = LoggerFactory.getLogger(JavaDocSeed.class);
 
   /** Used to parse JavaDoc hints. */
-  private final ParserContext parserContext;
+  public final ParserContext parserContext;
 
   /** Used to load pre-configured classes. */
-  private final ClassLoader classLoader;
+  public final ClassLoader classLoader;
 
   /** Method to be replaced. */
-  private final MethodIdentifier methodToRefactor;
+  public final MethodIdentifier methodToRefactor;
 
   /** Source directories and ZIP files. */
   private final List<Path> sourceContainers = new ArrayList<>();
@@ -386,7 +386,7 @@ public class JavaDocSeed implements InstructionSetSeed {
    * @return {@link MethodDeclaration} for {@link #methodToRefactor}, if
    *         available. {@code null} otherwise.
    */
-  private MethodDeclaration findMethod(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
+  public MethodDeclaration findMethod(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
       final ParseResult<CompilationUnit> parseResult) {
     return parseResult.getResult().stream().map(CompilationUnit::getTypes).flatMap(Collection::stream)
         .flatMap(JavaDocSeed::expandInnerTypes)
@@ -577,7 +577,7 @@ public class JavaDocSeed implements InstructionSetSeed {
    * @return Parsed compilation unit, if available.
    * @throws IOException if file access fails.
    */
-  private ParseResult<CompilationUnit> findSource(final JavaParser javaParser, final String className)
+  public ParseResult<CompilationUnit> findSource(final JavaParser javaParser, final String className)
       throws IOException {
     final String relativePath = getRelativeSourceFilePath(className);
     final Pattern pattern = Pattern.compile(".*" + relativePath + ".java");

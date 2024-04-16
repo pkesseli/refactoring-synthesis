@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.classmate.ResolvedType;
 
 import uk.ac.ox.cs.refactoring.synthesis.candidate.builder.ComponentDirectory;
+import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.JavaDocSeed;
 
 /** Configures candidate generators. */
 public class GeneratorConfiguration {
@@ -48,6 +49,8 @@ public class GeneratorConfiguration {
   /** Maximum number of inputs in the second stage. */
   public final long Stage2MaxInputs;
 
+  public final JavaDocSeed javaDocSeed;
+
   /**
    * @param components               {@link #Components}
    * @param minInstructions          {@link #MinInstructions}
@@ -63,7 +66,7 @@ public class GeneratorConfiguration {
    * @param stage2MaxCounterexamples {@link #Stage2MaxCounterexamples}
    * @param stage2MaxInputs          {@link #Stage2MaxInputs}
    */
-  public GeneratorConfiguration(final ComponentDirectory components, final byte minInstructions,
+  public GeneratorConfiguration(final JavaDocSeed javaDocSeed, final ComponentDirectory components, final byte minInstructions,
       final byte maxInstructions, final byte maxInstructionLength, final boolean foundCodeHints,
       final ResolvedType instanceType, final List<ResolvedType> parameterTypes, final ResolvedType resultType,
       final boolean useRandomGuidance, final long stage1MaxCounterexamples, final long stage1MaxInputs,
@@ -81,5 +84,6 @@ public class GeneratorConfiguration {
     Stage1MaxInputs = stage1MaxInputs;
     Stage2MaxCounterexamples = stage2MaxCounterexamples;
     Stage2MaxInputs = stage2MaxInputs;
+    this.javaDocSeed = javaDocSeed;
   }
 }

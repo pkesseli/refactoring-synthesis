@@ -84,7 +84,7 @@ public final class GeneratorConfigurations {
     final ComponentDirectory components = new ComponentDirectory();
     seed(components, new TypeSeed(classLoader, methodToRefactor), new SignatureSeed(classLoader, methodToRefactor),
         new ConstantSeed(), new StatementSeed());
-    return deprecatedMethod(methodToRefactor, classLoader, components, false, (byte) 1, false, 100, 10, 400, 1);
+    return deprecatedMethod(methodToRefactor, classLoader, components, null, false, (byte) 1, false, 100, 10, 400, 1);
   }
 
   /**
@@ -132,7 +132,7 @@ public final class GeneratorConfigurations {
     final long stage1MaxInputs = Long.getLong(STAGE_1_MAX_INPUTS, 500);
     final long stage2MaxCounterexamples = Long.getLong(STAGE_2_MAX_COUNTEREXAMPLES, 0);
     final long stage2MaxInputs = Long.getLong(STAGE_2_MAX_INPUTS, 0);
-    return deprecatedMethod(methodToRefactor, classLoader, components, foundCodeHints, (byte) 3, useRandomGuidance,
+    return deprecatedMethod(methodToRefactor, classLoader, components, javaDocSeed, foundCodeHints, (byte) 3, useRandomGuidance,
         stage1MaxCounterexamples, stage1MaxInputs, stage2MaxCounterexamples, stage2MaxInputs);
   }
 
@@ -173,7 +173,7 @@ public final class GeneratorConfigurations {
    * @throws NoSuchMethodException  {@link #seed(ComponentDirectory, InstructionSetSeed...)}
    */
   private static GeneratorConfiguration deprecatedMethod(final MethodIdentifier methodToRefactor,
-      final ClassLoader classLoader, final ComponentDirectory components, final boolean foundCodeHints,
+      final ClassLoader classLoader, final ComponentDirectory components, final JavaDocSeed javaDocSeed, final boolean foundCodeHints,
       final byte minInstructions, final boolean useRandomGuidance, final long stage1MaxCounterexamples,
       final long stage1MaxInputs, final long stage2MaxCounterexamples, final long stage2MaxInputs)
       throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException {
@@ -196,7 +196,7 @@ public final class GeneratorConfigurations {
         .mapToObj(resolvedMethod::getArgumentType).collect(Collectors.toList());
     final ResolvedType returnType = resolvedMethod.getReturnType();
     final ResolvedType resultType = returnType != null ? returnType : typeResolver.resolve(void.class);
-    return new GeneratorConfiguration(components, minInstructions, maxInstructions, maxInstructionLength,
+    return new GeneratorConfiguration(javaDocSeed, components, minInstructions, maxInstructions, maxInstructionLength,
         foundCodeHints, instanceType, parameterTypes, resultType, useRandomGuidance, stage1MaxCounterexamples,
         stage1MaxInputs, stage2MaxCounterexamples, stage2MaxInputs);
   }
