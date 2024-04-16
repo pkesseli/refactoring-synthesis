@@ -61,7 +61,7 @@ public class CegisLoop<Candidate> {
    */
   public CegisLoop(final CandidateExecutor<Candidate> executor, final Invoker invoker,
       final GeneratorConfiguration generatorConfiguration, final Class<Candidate> candidateType,
-      final CegisLoopListener<Candidate> listener, final GPTHints hints) {
+      final CegisLoopListener<Candidate> listener) {
     final SourceOfRandomness sourceOfRandomness = new SourceOfRandomness(new Random());
     sourceOfRandomness.setSeed(Seeds.getSeed());
     final GeneratorRepository baseRepository = new GeneratorRepository(sourceOfRandomness)
@@ -87,12 +87,12 @@ public class CegisLoop<Candidate> {
     final Method fuzzingSynthesisFrameworkMethod = SnippetCandidateGenerator.TestClass
         .getFrameworkMethodPlaceholder(null);
 
-    if (hints == null) {
+    if (!System.getProperty("engine").equals("neural")) {
       synthesis = new FuzzingSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
           fuzzingSynthesisFrameworkMethod, executor, listener);
     } else {
       synthesis = new NeuralSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
-          fuzzingSynthesisFrameworkMethod, executor, listener, hints);
+          fuzzingSynthesisFrameworkMethod, executor, listener);
     }
     verification = new FuzzingVerification<>(generatorConfiguration, verificationRepository, executor, invoker,
         listener);

@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAlias;
 import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseAliasBenchmark;
-import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseGPT;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -48,10 +47,5 @@ class java_awt_TextAreaTest {
   void replaceText() throws Exception {
     assertThat(synthesiseAlias("java.awt.TextArea", "replaceText", "java.lang.String", "int", "int"),
         contains(".replaceRange("));
-  }
-
-  @Test
-  void appendTextGPT() throws Exception {
-    assertThat(synthesiseGPT("{ TextArea textArea = new TextArea(); String newText = \"New text to append\"; textArea.appendText(newText);}", "{ TextArea textArea = new TextArea(); String newText = \"New text to append\"; textArea.append(newText);}", "java.awt.TextArea", "appendText", "java.lang.String"), contains(".append("));
   }
 }

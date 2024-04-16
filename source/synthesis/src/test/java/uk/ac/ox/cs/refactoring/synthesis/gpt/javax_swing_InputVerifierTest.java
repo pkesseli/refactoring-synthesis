@@ -4,7 +4,7 @@ package uk.ac.ox.cs.refactoring.synthesis.gpt;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
-import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseGPT;
+import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseNeural;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,6 @@ import org.junit.jupiter.api.Test;
 class javax_swing_InputVerifierTest {
   @Test
   void shouldYieldFocus() throws Exception {
-assertThat (synthesiseGPT ("shouldYieldFocus" , "this.shouldYieldFocus(param0);" , "\nthis.shouldYieldFocus(param0, null);\n" , "javax.swing.InputVerifier" , "shouldYieldFocus" , "javax.swing.JComponent") , anyOf (contains ("shouldYieldFocus"))) ;
+assertThat (synthesiseNeural ("shouldYieldFocus" , "this.shouldYieldFocus(param0);" , "\nthis.shouldYieldFocus(param0, null);\n" , "javax.swing.InputVerifier" , "shouldYieldFocus" , "javax.swing.JComponent") , anyOf (contains ("shouldYieldFocus"))) ;
   }
 }

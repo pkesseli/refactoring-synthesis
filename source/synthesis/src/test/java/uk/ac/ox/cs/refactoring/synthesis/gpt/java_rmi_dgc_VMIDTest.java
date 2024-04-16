@@ -4,7 +4,7 @@ package uk.ac.ox.cs.refactoring.synthesis.gpt;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static uk.ac.ox.cs.refactoring.synthesis.matchers.CegisMatchers.contains;
-import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseGPT;
+import static uk.ac.ox.cs.refactoring.synthesis.presets.Deprecation.synthesiseNeural;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Disabled;
@@ -14,6 +14,6 @@ class java_rmi_dgc_VMIDTest {
   @Disabled("No replacement")
   @Test
   void isUnique() throws Exception {
-assertThat (synthesiseGPT ("isUnique" , "this.isUnique();" , "" , "java.rmi.dgc.VMID" , "isUnique") , Matchers . anything ()) ;
+assertThat (synthesiseNeural ("isUnique" , "this.isUnique();" , "" , "java.rmi.dgc.VMID" , "isUnique") , Matchers . anything ()) ;
   }
 }

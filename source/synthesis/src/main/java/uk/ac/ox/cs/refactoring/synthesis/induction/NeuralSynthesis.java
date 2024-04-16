@@ -8,7 +8,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -38,11 +37,9 @@ import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.ExpressionC
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc.ResolveArgument;
 import uk.ac.ox.cs.refactoring.synthesis.candidate.java.statement.ExpressionStatement;
 import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
-import uk.ac.ox.cs.refactoring.synthesis.cegis.GPTHints;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.neural.CodeEngine;
-import uk.ac.ox.cs.refactoring.synthesis.neural.Legacy;
 import uk.ac.ox.cs.refactoring.synthesis.neural.LocalCodeLLaMa2;
 import uk.ac.ox.cs.refactoring.synthesis.neural.Prompt;
 import uk.ac.ox.cs.refactoring.synthesis.neural.TextTagger;
@@ -58,8 +55,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   public NeuralSynthesis(final GeneratorConfiguration generatorConfiguration,
       final GeneratorRepository generatorRepository, final SourceOfRandomness sourceOfRandomness,
       final Class<Candidate> candidateType, final Method frameworkMethodPlaceholder,
-      final CandidateExecutor<Candidate> executor, final CegisLoopListener<Candidate> listener,
-      final GPTHints hints) {
+      final CandidateExecutor<Candidate> executor, final CegisLoopListener<Candidate> listener) {
     super(generatorConfiguration, generatorRepository, sourceOfRandomness, candidateType, frameworkMethodPlaceholder,
         executor, listener);
 
