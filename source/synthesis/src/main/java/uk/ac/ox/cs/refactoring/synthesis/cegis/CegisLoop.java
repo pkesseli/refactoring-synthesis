@@ -72,7 +72,8 @@ public class CegisLoop<Candidate> {
         .register(new OperatingSystemMXBeanGenerator())
         .register(new AffineTransformGenerator())
         .register(new FontMetricsGenerator())
-        .register(new OfflineMulticastSocketGenerator());
+        .register(new OfflineMulticastSocketGenerator())
+        .register(new GraphicsGenerator());
     baseRepository.register(new RuntimeVersionGenerator(baseRepository))
         .register(new TextAreaGenerator(baseRepository));
     final GeneratorRepository verificationRepository = new GeneratorRepository(sourceOfRandomness)

@@ -305,7 +305,11 @@ public class CounterexampleGenerator extends Generator<Counterexample> {
    */
   public static boolean isSupported(final ResolvedType type) {
     final Class<?> cls = type.getErasedType();
-    return !Reference.class.isAssignableFrom(cls) && !type.getTypeName().equals("sun.awt.AppContext");
+    if (Reference.class.isAssignableFrom(cls))
+      return false;
+
+    final String typeName = type.getTypeName();
+    return !typeName.equals("sun.awt.AppContext") && !typeName.equals("jdk.internal.access.foreign.MemorySegmentProxy");
   }
 
   /**

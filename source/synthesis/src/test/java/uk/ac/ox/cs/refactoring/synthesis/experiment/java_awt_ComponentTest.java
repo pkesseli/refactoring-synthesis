@@ -13,7 +13,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Panel;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class java_awt_ComponentTest {

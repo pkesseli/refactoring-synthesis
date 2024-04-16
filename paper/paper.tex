@@ -1383,7 +1383,6 @@ Alternatively, we also curate a
 list of explicit constructors
 of subclasses to be used in favour of Mockito mocks for certain types, and users
 have the option to extend this list with a custom configuration.
-\todo{add discussion on unsound refactorings if that's still happening}
 %This is
 %particularly useful when the default behaviour of mocked objects under-approximates
 %the behaviour of the explicit constructors of subclasses.
@@ -1632,9 +1631,9 @@ Experiments were performed on an Ubuntu
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-\tool w/ types      &         78 &     57 &        101 & 33 & 226.9 \\
-\tool w/ code hints &        114 &    109 &         13 & 48 & 205.0 \\
-\tool combined      &        123 &     85 &         28 & 52 & 202.0 \\  \hline\hline
+\tool w/ types      &         78 &    126 &         32 & 33 & 221.7 \\
+\tool w/ code hints &        102 &    131 &          3 & 43 & 225.8 \\
+\tool combined      &        111 &    106 &         19 & 47 & 216.6 \\  \hline\hline
 \end{tabular} 
 \caption{Experimental results for \tool.}
 \label{tab:configuration-results}   
@@ -1697,23 +1696,63 @@ be added.
 %% which is not part of the JVM state. We currently don't check
 %% that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 %
-\todo{mention fuzzing}
-Firstly, our algorithm does currently not explore the entire classpath for
-potential overrides of the method to refactor. This may lead to unsound results
-when different subclasses of the original class are used polymorphically in the
-refactored context.
+There are multiple scenarios where our heap model and
+$equivalent(P_1(\vec{i}), P_2(\vec{i}))$ predicate are insufficient to identify
+that a synthesised candidate is not equivalent to the original program. We
+identified the following sources of unsoundness in our benchmark set:
+
+Unobservable state: I/O operations, static state in the boot class loader and
+native methods are not observable to our equivalence predicate implementation,
+since we only rely on reflection to examine objects inside the Java runtime. As
+a consequence cannot distinguish programs that only differ in these aspects.
+This is not a fundamental limitation, but instead just an implementation detail.
+
+Abstract methods: For our equivalence predicate implementation, we pick a single
+concrete subclass for deprecated abstract methods. This proved sufficient for
+all benchmarks in our set. However, there are classes in the JCL without any
+existing implementation (e.g. $javax.swing.InputVerifier$) and thus no concrete
+method against we can verify equivalence of candidates.
+
+Insufficient counterexamples: Our fuzzing-based equivalence check is inherently
+incomplete, and for some benchmarks we do not explore counterexamples in
+sufficient number or quality to identify unsound candidates. An example for this
+category is $javax.swing.JViewport#isBackingStoreEnabled$, where only one value
+out of the $2^32-1$ possible input values will trigger an alternate code path.
+On the other hand, the method $java.rmi.server.RMIClassLoader#loadClass$ is an
+example where our counterexample does not produce counterexamples of sufficient
+quality. The method accepts a string as an input, but will throw for any string
+that is not a valid class name. Since our fuzzer does not consider such context,
+it is very unlikely to randomly produce a string which matches an valid class
+name.
+
+%% \todo{mention fuzzing}
+%% Firstly, our algorithm does currently not explore the entire classpath for
+%% potential overrides of the method to refactor. This may lead to unsound results
+%% when different subclasses of the original class are used polymorphically in the
+%% refactored context.
 %
-Secondly, as described in Sec.~\ref{sec:equiv}, we rely in some cases on
-\texttt{equals} implementations for equivalence comparison.  While we
-strictly filter which \texttt{equals} implementations we consider, if any of
-them do not accurately identify an equivalent program state, our refactoring
-may be unsound.
+%% Secondly, as described in Sec.~\ref{sec:equiv}, we rely in some cases on
+%% \texttt{equals} implementations for equivalence comparison.  While we
+%% strictly filter which \texttt{equals} implementations we consider, if any of
+%% them do not accurately identify an equivalent program state, our refactoring
+%% may be unsound.
 %
-Lastly, some solutions were unsound
-because the method to refactor was a default method with an empty body, meant
-to be overridden by subclasses. To find a sound refactoring in these cases, our
-algorithm should expand its equivalence constraint to types that override the
-method to refactor. 
+%% Furthermore, we also describe in Sec.~\ref{sec:equiv} the inherent unsoundness
+%% using fuzzing to verify our solution. We observe four examples in our
+%% benchmarks where we are very unlikely to explore enough counterexamples to
+%% detect incorrect solutions. Examples include string input sequences, where only
+%% valid class names exhibit desired behaviour, or where only one integer constant
+%% out of all possible integer values triggers a critical code path.
+%
+%% We further observe three native methods where our heap abstraction does not
+%% cover the native state, and thus our algorithm cannot observe that the produced
+%% candidates are unsound.
+%
+%% Lastly, some solutions were unsound
+%% because the method to refactor was a default method with an empty body, meant
+%% to be overridden by subclasses. To find a sound refactoring in these cases, our
+%% algorithm should expand its equivalence constraint to types that override the
+%% method to refactor. 
 
 
 %% In order to catch the unsound refactorings (for both the CodeHints-library and the
@@ -1731,9 +1770,9 @@ method to refactor.
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-\tool w/ types      &         71 &     31 &  42         & 49 & 233.0 \\
-\tool w/ code hints &        114 &     19 &  11         & 79 & 205.0 \\
-\tool combined      &        116 &     15 &  13         & 81 & 204.2 \\  \hline\hline
+\tool w/ types      &         71 &     36 &  18         & 57 & 233.8 \\
+\tool w/ code hints &        102 &     22 &   1         & 82 & 225.8 \\
+\tool combined      &        104 &     17 &   4         & 83 & 224.5 \\  \hline\hline
 %\hline
 \end{tabular} 
 \caption{\tool results when code hints were present in the Javadoc.}
@@ -1826,7 +1865,7 @@ As a future direction we want to combine the two approaches, by using GPT-4 Turb
 The performance of both \tool and GPT-4 Turbo when code hints are present and used.
 %Using the CodeHints-library enables our technique to find more refactorings
 %than with the Type-library.
-For the former, when code hints are present and used, the success rate goes from 49\% to 81\% (Table~\ref{tab:configuration-results-ch}).
+For the former, when code hints are present and used, the success rate goes from 52\% to 81\% (Table~\ref{tab:configuration-results-ch}).
 The higher quality of the instructions in the CodeHints-library compared to the
 Types-library leads to  a reduction in 
 the number of both unsound and missed refactorings.
