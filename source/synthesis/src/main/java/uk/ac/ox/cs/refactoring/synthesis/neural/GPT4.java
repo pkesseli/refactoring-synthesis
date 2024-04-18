@@ -10,7 +10,7 @@ import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
 
-public class GPT4 implements CodeEngine {
+public class GPT4 extends CodeEngine {
   private static final int TIMEOUT = 300;
   public final OpenAiService service = new OpenAiService(System.getenv("OPENAI_API_KEY"), Duration.ofSeconds(TIMEOUT));
   private static final String MODEL = "gpt-4-turbo-preview";

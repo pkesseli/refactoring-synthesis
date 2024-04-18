@@ -69,7 +69,6 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     super(generatorConfiguration, generatorRepository, sourceOfRandomness, candidateType, frameworkMethodPlaceholder,
         executor, listener);
 
-    // codeEngine = new Legacy(hints);
     codeEngine = new LocalCodeLLaMa2();
 
     final String className = generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName;
@@ -94,7 +93,6 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     templateCallString.append(method.getNameAsString());
     templateCallString.append('(');
     templateCallString.append(method.getParameters().stream().map(param -> param.getNameAsString()).collect(Collectors.joining(", ")));
-    // templateCallString.append(IntStream.range(0 ,method.getParameters().size()).mapToObj(index -> "param" + index).collect(Collectors.joining(", ")));
     templateCallString.append(");");
     this.templateCallString = templateCallString.toString();
 
@@ -107,7 +105,6 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
 
     var callStmt = parseString(this.templateCallString);
-    // System.out.println(callStmt);
     if (callStmt instanceof BlockStmt) {
       environment = new HashMap<>();
       final var resolveArg = new ResolveArgument(generatorConfiguration.javaDocSeed.methodToRefactor, javaParser);
@@ -154,19 +151,20 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
   public Prompt basePrompt() {
     StringBuilder contextBuilder = new StringBuilder();
-    contextBuilder.append("The method" + generatorConfiguration.javaDocSeed.methodToRefactor.MethodName + "is deprecated.");
+    contextBuilder.append(String.format("The method %s of the class %s is deprecated.\n",
+        generatorConfiguration.javaDocSeed.methodToRefactor.MethodName, generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName));
     if (javadocComment != null) {
-      contextBuilder.append("The related deprecation comment in the Javadoc is contained in the following <deprecation-comment> tag\n");
+      contextBuilder.append("The related deprecation comment in the Javadoc is contained in the following <deprecation-comment> tag:\n");
       contextBuilder.append(TextTagger.tag("deprecation-comment", javadocComment));
     }
-    contextBuilder.append("However, I used this method call in my code base, the code snippet is contained in the following <code> tag:");
+    contextBuilder.append("However, I used this method call in my code base, the code snippet is contained in the following <code> tag:\n");
     contextBuilder.append(TextTagger.tag("code", templateCallString));
 
     String context = contextBuilder.toString();
     String instruction = "Help me refactor this code snippet.";
     Prompt prompt = new Prompt(context, instruction);
     prompt.constraints.add("Your answer must only contain a sequence of Java statements");
-    return new Prompt(context, instruction);
+    return prompt;
   }
 
 
