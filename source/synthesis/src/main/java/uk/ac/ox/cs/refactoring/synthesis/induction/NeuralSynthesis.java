@@ -52,6 +52,16 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   private MethodDeclaration method = null;
   private Map<String, IExpression> environment = null;
 
+  private int budget = 5;
+
+  private void consumeBudget() {
+    budget -= 1;
+  }
+
+  private boolean noBudget() {
+    return budget == 0;
+  }
+
   public NeuralSynthesis(final GeneratorConfiguration generatorConfiguration,
       final GeneratorRepository generatorRepository, final SourceOfRandomness sourceOfRandomness,
       final Class<Candidate> candidateType, final Method frameworkMethodPlaceholder,
@@ -97,7 +107,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
 
     var callStmt = parseString(this.templateCallString);
-    System.out.println(callStmt);
+    // System.out.println(callStmt);
     if (callStmt instanceof BlockStmt) {
       environment = new HashMap<>();
       final var resolveArg = new ResolveArgument(generatorConfiguration.javaDocSeed.methodToRefactor, javaParser);
@@ -129,14 +139,17 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   @Override
   public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples)
       throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchElementException, NoSuchFieldException {
-    throw new NoSuchElementException("Not implemented");
-    // String code = codeEngine.generateCode(inductionPrompt(counterexamples));
-    // try {
-    //   Candidate candidate = processCode(code);
-    //   return candidate;
-    // } catch (final NoSuchElementException e) {
-    //   throw e;
-    // }
+    consumeBudget();
+    if (noBudget()) {
+      throw new NoSuchElementException("Running out of budget.");
+    }
+    String code = codeEngine.generateCode(inductionPrompt(counterexamples));
+    try {
+      Candidate candidate = processCode(code);
+      return candidate;
+    } catch (final NoSuchElementException e) {
+      throw e;
+    }
   }
 
   public Prompt basePrompt() {
@@ -176,8 +189,8 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       newBody.addStatement(0, statement);
       method.setBody(newBody);
     }
-    System.out.println(statement.toString());
-    System.out.println(method.toString());
+    // System.out.println(statement.toString());
+    // System.out.println(method.toString());
     final ParseResult<CompilationUnit> compilationUnit = javaParser.parse(parseResult.getResult().get().toString());
     final MethodDeclaration container = generatorConfiguration.javaDocSeed.findMethod(symbolResolver, typeSolver, compilationUnit);
     final Statement result = container.getBody().get().getStatement(0);
