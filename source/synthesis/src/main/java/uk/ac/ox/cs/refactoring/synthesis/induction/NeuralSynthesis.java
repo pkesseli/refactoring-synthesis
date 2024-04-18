@@ -2,15 +2,19 @@ package uk.ac.ox.cs.refactoring.synthesis.induction;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import org.apache.commons.lang3.NotImplementedException;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
@@ -167,14 +171,55 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     return prompt;
   }
 
+  private String marshalObject(Object object) throws JsonProcessingException {
+    var mapper = new ObjectMapper()
+      .enable(SerializationFeature.INDENT_OUTPUT);
+    // mapper.setVisibility
+    var json = mapper.writeValueAsString(object);
+    return json;
+  }
 
-  public String textualCounterExamples(final Map<Counterexample, ExecutionResult> counterexamples) {
-    throw new NotImplementedException();
+  public class SerializableExecution {
+    public Object classInstance;
+    public List<Object> methodArguments;
+    public Object returnValue;
+  }
+  private List<String> counterexamplesReprs(final Map<Counterexample, ExecutionResult> counterexamples) throws JsonProcessingException {
+    ArrayList<String> representables = new ArrayList<>();
+    for (Map.Entry<Counterexample, ExecutionResult> entry : counterexamples.entrySet()) {
+      Counterexample counterexample = entry.getKey();
+      ExecutionResult executionResult = entry.getValue();
+      Object instance = counterexample.Instance;
+      List<Object> arguments = counterexample.Arguments;
+      Throwable error = executionResult.Error;
+      Object returnValue = executionResult.Value;
+      if (error == null && returnValue != null) {
+        var serialisable = new SerializableExecution();
+        serialisable.classInstance = instance;
+        serialisable.methodArguments = arguments;
+        serialisable.returnValue = returnValue;
+        representables.add(marshalObject(serialisable));
+      }
+    }
+
+    return representables;
   }
 
   public Prompt inductionPrompt(final Map<Counterexample, ExecutionResult> counterexamples) {
-    Prompt prompt = basePrompt();
-    return prompt;
+    try {
+      Prompt prompt = basePrompt();
+      List<String> reprs = counterexamplesReprs(counterexamples);
+      StringBuilder extraInformationBuilder = new StringBuilder();
+      extraInformationBuilder.append("Here is a set of input/output specifications that you should respect:\n");
+      extraInformationBuilder.append(TextTagger.tag("input-output-examples", 
+          IntStream.range(0, reprs.size())
+              .mapToObj(index -> String.format("\t%d. %s", index + 1, reprs.get(index)))
+              .collect(Collectors.joining("\n"))));
+      prompt.extraInformation = extraInformationBuilder.toString();
+      return prompt;
+    } catch (JsonProcessingException e) {
+      return basePrompt();
+    }
   }
 
   public Statement parseInMethodContext(final SymbolResolver symbolResolver, final TypeSolver typeSolver,
