@@ -87,7 +87,8 @@ public class CegisLoop<Candidate> {
     final Method fuzzingSynthesisFrameworkMethod = SnippetCandidateGenerator.TestClass
         .getFrameworkMethodPlaceholder(null);
 
-    if (!System.getProperty("engine").equals("neural")) {
+    String engineSelection = System.getProperty("engine");
+    if (engineSelection == null || !engineSelection.equals("neural")) {
       synthesis = new FuzzingSynthesis<>(generatorConfiguration, synthesisRepository, sourceOfRandomness, candidateType,
           fuzzingSynthesisFrameworkMethod, executor, listener);
     } else {
