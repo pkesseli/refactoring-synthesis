@@ -105,7 +105,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     if (!javadocComment.isPresent())
       return;
 
-    this.javadocComment = javadocComment.get().toText();
+    this.javadocComment = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4(javadocComment.get().toText());
 
 
     var callStmt = parseString(this.templateCallString);
@@ -126,6 +126,10 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
   @Override
   public Candidate getDefault() {
+    if (noBudget()) {
+      throw new NoSuchElementException("Running out of budget.");
+    }
+    consumeBudget();
     String code = codeEngine.generateCode(basePrompt());
     try {
       Candidate candidate = processCode(code);
@@ -133,23 +137,25 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       return candidate;
     } catch (final NoSuchElementException e) {
       listener.initial(null);
-      throw e;
+      // throw e;
+      return null;
     }
   }
 
   @Override
   public Candidate synthesise(final Map<Counterexample, ExecutionResult> counterexamples)
       throws ClassNotFoundException, IOException, IllegalAccessException, NoSuchElementException, NoSuchFieldException {
-    consumeBudget();
     if (noBudget()) {
       throw new NoSuchElementException("Running out of budget.");
     }
+    consumeBudget();
     String code = codeEngine.generateCode(inductionPrompt(counterexamples));
     try {
       Candidate candidate = processCode(code);
       return candidate;
     } catch (final NoSuchElementException e) {
-      throw e;
+      // throw e;
+      return null;
     }
   }
 
@@ -209,6 +215,9 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     try {
       Prompt prompt = basePrompt();
       List<String> reprs = counterexamplesReprs(counterexamples);
+      if (reprs.size() == 0) {
+        return prompt;
+      }
       StringBuilder extraInformationBuilder = new StringBuilder();
       extraInformationBuilder.append("Here is a set of input/output specifications that you should respect:\n");
       extraInformationBuilder.append(TextTagger.tag("input-output-examples", 

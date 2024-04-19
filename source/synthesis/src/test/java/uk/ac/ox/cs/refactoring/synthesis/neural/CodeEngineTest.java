@@ -35,6 +35,26 @@ public class CodeEngineTest {
   }
 
   @Test
+  void testMultiple() {
+    String multiple = """
+ <code>
+this.drawEchoCharacter(g, x, y, c);
+</code>
+
+This method call is deprecated and should be replaced with the following code:
+
+<code>
+this.drawEchoCharacter(g, (float) x, (float) y, c);
+</code>
+
+The method signature has changed to accept a float for the X and Y coordinates, and the method is now part of the Graphics2D class instead of the Graphics class.
+        """;
+
+    System.out.println(CodeEngine.extract(multiple));
+    assertTrue(CodeEngine.extract(multiple).contains("this.drawEchoCharacter(g, x, y, c);"));
+  }
+
+  @Test
   void testConstraints() throws IOException {
     CodeEngine codeEngine = new LocalCodeLLaMa2();
     String instruction = "Show me how to solve n-queens puzzle in Java.";

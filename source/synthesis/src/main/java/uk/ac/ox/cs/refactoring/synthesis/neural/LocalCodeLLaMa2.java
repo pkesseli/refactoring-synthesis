@@ -10,8 +10,10 @@ public class LocalCodeLLaMa2 extends CodeEngine {
     String homeDir = System.getProperty("user.home");
     ModelParameters modelParams = new ModelParameters()
       .setNCtx(4096)
+      .setDisableLog(true)
       .setModelFilePath(homeDir + "/Desktop/Research/llama.cpp" + "/models/codellama-7b-instruct.Q5_K_M.gguf");
     InferenceParameters inferParams = new InferenceParameters(prompt)
+      .setRepeatPenalty((float) 0.8)
       .setTemperature((float) 0.2);
     try (LlamaModel model = new LlamaModel(modelParams)) {
       String response = model.complete(inferParams);

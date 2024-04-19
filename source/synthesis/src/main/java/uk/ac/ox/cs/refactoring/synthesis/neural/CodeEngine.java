@@ -1,5 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.neural;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,16 +28,22 @@ public abstract class CodeEngine implements QueryEngine {
 
 
     public static String extract(String response) {
-        Pattern tagged = Pattern.compile("<code>(?<code>[\\s\\S]*)</code>");
-        Matcher taggedBlock = tagged.matcher(response);
-        if (taggedBlock.find()) {
-            return taggedBlock.group("code");
-        }
-        Pattern backticked = Pattern.compile("```(java)?(?<code>[\\s\\S]*)```");
-        Matcher backtickedBlock = backticked.matcher(response);
-        if (backtickedBlock.find()) {
-            return backtickedBlock.group("code");
-        }
-        return response;
+      // Match as less as possible
+      Pattern tagged = Pattern.compile("<code>(?<code>[\\s\\S]*?)</code>");
+      Matcher taggedBlock = tagged.matcher(response);
+      List<String> allMatches = new ArrayList<String>();
+      while (taggedBlock.find()) {
+        allMatches.add(taggedBlock.group("code"));
+      }
+      Pattern backticked = Pattern.compile("```(java)?(?<code>[\\s\\S]*?)```");
+      Matcher backtickedBlock = backticked.matcher(response);
+      while (backtickedBlock.find()) {
+        allMatches.add(backtickedBlock.group("code"));
+      }
+
+      if (allMatches.size() > 0) {
+        return allMatches.get(0);
+      }
+      throw new NoSuchElementException();
     }
 }
