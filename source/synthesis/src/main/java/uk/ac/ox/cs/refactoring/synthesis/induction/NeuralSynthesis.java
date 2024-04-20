@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -186,7 +187,8 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   }
 
   public class SerializableExecution {
-    public Object classInstance;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public Object receiverInstance;
     public List<Object> methodArguments;
     public Object returnValue;
   }
@@ -201,7 +203,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       Object returnValue = executionResult.Value;
       if (error == null && returnValue != null) {
         var serialisable = new SerializableExecution();
-        serialisable.classInstance = instance;
+        serialisable.receiverInstance = instance;
         serialisable.methodArguments = arguments;
         serialisable.returnValue = returnValue;
         representables.add(marshalObject(serialisable));
