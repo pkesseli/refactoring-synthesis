@@ -1,0 +1,2249 @@
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent                                                             [pom]
+[[1;34mINFO[m] benchmarks                                                         [jar]
+[[1;34mINFO[m] classloader                                                        [jar]
+[[1;34mINFO[m] fuzzer-experiments                                                 [jar]
+[[1;34mINFO[m] instrument                                                         [jar]
+[[1;34mINFO[m] rewrite                                                            [jar]
+[[1;34mINFO[m] synthesis                                                          [jar]
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------------< [0;36muk.ac.ox.cs.refactoring:parent[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding parent 0.0.1-SNAPSHOT                                     [1/7][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mparent[0;1m ---[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:benchmarks[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding benchmarks 0.0.1-SNAPSHOT                                 [2/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/benchmarks/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/benchmarks/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/benchmarks/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/benchmarks/target/benchmarks-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m----------------< [0;36muk.ac.ox.cs.refactoring:classloader[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding classloader 0.0.1-SNAPSHOT                                [3/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/classloader/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/classloader/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/classloader/target/classloader-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------< [0;36muk.ac.ox.cs.refactoring:fuzzer-experiments[0;1m >-------------[m
+[[1;34mINFO[m] [1mBuilding fuzzer-experiments 0.0.1-SNAPSHOT                         [4/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/fuzzer-experiments-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:instrument[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding instrument 0.0.1-SNAPSHOT                                 [5/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/instrument/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/instrument/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 2 source files to /home/pkesseli/refactoring-synthesis/source/instrument/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/instrument/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/instrument/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/instrument/target/instrument-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36muk.ac.ox.cs.refactoring:rewrite[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding rewrite 0.0.1-SNAPSHOT                                    [6/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/rewrite/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 2 source files to /home/pkesseli/refactoring-synthesis/source/rewrite/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/rewrite/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/rewrite/target/rewrite-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:synthesis[0;1m >------------------[m
+[[1;34mINFO[m] [1mBuilding synthesis 0.0.1-SNAPSHOT                                  [7/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/synthesis/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 142 source files to /home/pkesseli/refactoring-synthesis/source/synthesis/target/classes
+[[1;34mINFO[m] /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java: /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java uses or overrides a deprecated API.
+[[1;34mINFO[m] /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java: Recompile with -Xlint:deprecation for details.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 388 source files to /home/pkesseli/refactoring-synthesis/source/synthesis/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/synthesis/target/synthesis-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Summary for parent 0.0.1-SNAPSHOT:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent ............................................. [1;32mSUCCESS[m [  0.505 s]
+[[1;34mINFO[m] benchmarks ......................................... [1;32mSUCCESS[m [  4.660 s]
+[[1;34mINFO[m] classloader ........................................ [1;32mSUCCESS[m [  0.451 s]
+[[1;34mINFO[m] fuzzer-experiments ................................. [1;32mSUCCESS[m [  0.529 s]
+[[1;34mINFO[m] instrument ......................................... [1;32mSUCCESS[m [  0.512 s]
+[[1;34mINFO[m] rewrite ............................................ [1;32mSUCCESS[m [  0.337 s]
+[[1;34mINFO[m] synthesis .......................................... [1;32mSUCCESS[m [ 14.990 s]
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  22.289 s
+[[1;34mINFO[m] Finished at: 2024-01-10T13:30:18+01:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+Run CEGIS-Fuzz w/ code hints
+Run test: com_sun_management_OperatingSystemMXBeanTest#getFreePhysicalMemorySize
+Run test: com_sun_management_OperatingSystemMXBeanTest#getSystemCpuLoad
+Run test: com_sun_management_OperatingSystemMXBeanTest#getTotalPhysicalMemorySize
+Run test: com_sun_source_tree_CaseTreeTest#getExpression
+Run test: java_awt_CheckboxGroupTest#getCurrent
+Run test: java_awt_CheckboxGroupTest#setCurrent
+Run test: java_awt_ChoiceTest#countItems
+Run test: java_awt_ComponentOrientationTest#getOrientation​
+Run test: java_awt_ComponentTest#action
+Run test: java_awt_ComponentTest#bounds
+Run test: java_awt_ComponentTest#deliverEvent
+Run test: java_awt_ComponentTest#disable
+Run test: java_awt_ComponentTest#enable
+Run test: java_awt_ComponentTest#enableBoolean
+Run test: java_awt_ComponentTest#gotFocus
+Run test: java_awt_ComponentTest#hide
+Run test: java_awt_ComponentTest#inside
+Run test: java_awt_ComponentTest#isFocusTraversable
+Run test: java_awt_ComponentTest#keyDown
+Run test: java_awt_ComponentTest#keyUp
+Run test: java_awt_ComponentTest#layout
+Run test: java_awt_ComponentTest#locate
+Run test: java_awt_ComponentTest#location
+Run test: java_awt_ComponentTest#lostFocus
+Run test: java_awt_ComponentTest#minimumSize
+Run test: java_awt_ComponentTest#mouseDown​
+Run test: java_awt_ComponentTest#mouseDrag​
+Run test: java_awt_ComponentTest#mouseEnter​
+Run test: java_awt_ComponentTest#mouseExit​
+Run test: java_awt_ComponentTest#mouseMove​
+Run test: java_awt_ComponentTest#mouseUp​
+Run test: java_awt_ComponentTest#move
+Run test: java_awt_ComponentTest#nextFocus
+Run test: java_awt_ComponentTest#postEvent
+Run test: java_awt_ComponentTest#preferredSize
+Run test: java_awt_ComponentTest#reshape
+Run test: java_awt_ComponentTest#resize
+Run test: java_awt_ComponentTest#resizeDimension
+Run test: java_awt_ComponentTest#show
+Run test: java_awt_ComponentTest#showBoolean
+Run test: java_awt_ComponentTest#size
+Run test: java_awt_ContainerTest#countComponents
+Run test: java_awt_ContainerTest#insets
+Run test: java_awt_ContainerTest#layout
+Run test: java_awt_ContainerTest#locate
+Run test: java_awt_ContainerTest#minimumSize
+Run test: java_awt_ContainerTest#preferredSize
+Run test: java_awt_datatransfer_DataFlavorTest#equals​
+Run test: java_awt_DialogTest#hide
+Run test: java_awt_DialogTest#show
+Run test: java_awt_FontMetricsTest#getMaxDecent
+Run test: java_awt_GraphicsTest#getClipRect
+Run test: java_awt_image_renderable_RenderContextTest#concetenateTransform
+Run test: java_awt_image_renderable_RenderContextTest#preConcetenateTransform
+Run test: java_awt_ListTest#addItem
+Run test: java_awt_ListTest#addItemStringInt
+Run test: java_awt_ListTest#allowsMultipleSelections
+Run test: java_awt_ListTest#clear
+Run test: java_awt_ListTest#countItems
+Run test: java_awt_ListTest#delItem
+Run test: java_awt_ListTest#isSelected
+Run test: java_awt_ListTest#minimumSize
+Run test: java_awt_ListTest#minimumSizeInt
+Run test: java_awt_ListTest#preferredSize
+Run test: java_awt_ListTest#preferredSizeInt
+Run test: java_awt_ListTest#setMultipleSelections
+Run test: java_awt_MenuBarTest#countMenus
+Run test: java_awt_MenuBarTest#countMenusGPT
+Run test: java_awt_MenuItemTest#disable
+Run test: java_awt_MenuItemTest#enable
+Run test: java_awt_MenuItemTest#enableBoolean
+Run test: java_awt_MenuTest#countItems
+Run test: java_awt_PolygonTest#getBoundingBox
+Run test: java_awt_PolygonTest#inside
+Run test: java_awt_RectangleTest#inside
+Run test: java_awt_RectangleTest#move
+Run test: java_awt_RectangleTest#reshape
+Run test: java_awt_RectangleTest#resize
+Run test: java_awt_RectangleTest#moveGPT
+Run test: java_awt_ScrollbarTest#getLineIncrement
+Run test: java_awt_ScrollbarTest#getPageIncrement
+Run test: java_awt_ScrollbarTest#getVisible
+Run test: java_awt_ScrollbarTest#setLineIncrement
+Run test: java_awt_ScrollbarTest#setPageIncrement
+Run test: java_awt_ScrollPaneTest#layout
+Run test: java_awt_TextAreaTest#appendText
+Run test: java_awt_TextAreaTest#insertText
+Run test: java_awt_TextAreaTest#minimumSize
+Run test: java_awt_TextAreaTest#minimumSizeIntInt
+Run test: java_awt_TextAreaTest#preferredSize
+Run test: java_awt_TextAreaTest#preferredSizeIntInt
+Run test: java_awt_TextAreaTest#replaceText
+Run test: java_awt_TextAreaTest#appendTextGPT
+Run test: java_awt_TextFieldTest#minimumSize
+Run test: java_awt_TextFieldTest#minimumSizeInt
+Run test: java_awt_TextFieldTest#preferredSize
+Run test: java_awt_TextFieldTest#preferredSizeInt
+Run test: java_awt_TextFieldTest#setEchoCharacter
+Run test: java_awt_ToolkitTest#getFontMetrics
+Run test: java_awt_WindowTest#hide
+Run test: java_awt_WindowTest#postEvent
+Run test: java_awt_WindowTest#reshape
+Run test: java_awt_WindowTest#show
+Run test: java_beans_BeansTest#instantiate
+Run test: java_lang_CharacterTest#isJavaLetter
+Run test: java_lang_CharacterTest#isJavaLetterOrDigit​
+Run test: java_lang_CharacterTest#isSpace
+Run test: java_lang_ClassLoaderTest#getPackage
+Run test: java_lang_ClassTest#newInstance
+Run test: java_lang_invoke_MethodHandles_LookupTest#hasPrivateAccess
+Run test: java_lang_PackageTest#getPackage
+Run test: java_lang_reflect_AccessibleObjectTest#isAccessible
+Run test: java_lang_Runtime_VersionTest#major
+Run test: java_lang_Runtime_VersionTest#minor
+Run test: java_lang_Runtime_VersionTest#security
+Run test: java_lang_StringTest#getBytes
+Run test: java_net_DatagramSocketImplTest#getTTL
+Run test: java_net_DatagramSocketImplTest#setTTL
+Run test: java_net_MulticastSocketTest#getTTL
+Run test: java_net_MulticastSocketTest#setTTL
+Run test: java_net_URLDecoderTest#decode
+Run test: java_net_URLEncoderTest#encode
+Run test: java_net_URLStreamHandlerTest#setURL
+Run test: java_rmi_server_RemoteRefTest#done
+Run test: java_rmi_server_RemoteRefTest#invoke
+Run test: java_rmi_server_RemoteRefTest#newCall
+Run test: java_rmi_server_RMIClassLoaderTest#loadClass
+Run test: java_rmi_server_UnicastRemoteObjectTest#exportObject
+Run test: java_security_ProviderTest#getVersion
+Run test: java_security_SignatureSpiTest#engineSetParameter
+Run test: java_security_SignatureTest#setParameter
+Run test: java_sql_CallableStatementTest#getBigDecimal
+Run test: java_sql_DriverManagerTest#getLogStream
+Run test: java_sql_DriverManagerTest#setLogStream
+Run test: java_sql_ResultSetTest#getBigDecimal1
+Run test: java_sql_ResultSetTest#getBigDecimal2
+Run test: java_sql_ResultSetTest#getUnicodeStream1
+Run test: java_sql_ResultSetTest#getUnicodeStream2
+Run test: java_util_concurrent_atomic_AtomicBooleanTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicIntegerArrayTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicIntegerTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicLongArrayTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicLongTest#weakCompareAndSet
+Run test: java_util_DateTest#getYear
+Run test: java_util_DateTest#getTimezoneOffset
+Run test: java_util_logging_LoggerTest#logrb1
+Run test: java_util_logging_LoggerTest#logrb2
+Run test: java_util_logging_LoggerTest#logrb3
+Run test: java_util_logging_LoggerTest#logrb4
+Run test: java_util_logging_LogManagerTest#getLoggingMXBean
+Run test: java_util_logging_LogRecord_setMillisTest#setMillis
+Run test: java_util_PropertiesTest#save
+Run test: javax_management_AttributeValueExpTest#setMBeanServer
+Run test: javax_management_MBeanServerTest#deserialize1
+Run test: javax_management_MBeanServerTest#deserialize2
+Run test: javax_management_MBeanServerTest#deserialize3
+Run test: javax_management_monitor_CounterMonitorMBeanTest#getDerivedGauge
+Run test: javax_management_monitor_CounterMonitorMBeanTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_CounterMonitorMBeanTest#getThreshold
+Run test: javax_management_monitor_CounterMonitorMBeanTest#setThreshold
+Run test: javax_management_monitor_CounterMonitorTest#getDerivedGauge
+Run test: javax_management_monitor_CounterMonitorTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_CounterMonitorTest#getThreshold
+Run test: javax_management_monitor_CounterMonitorTest#setThreshold
+Run test: javax_management_monitor_GaugeMonitorMBeanTest#getDerivedGauge
+Run test: javax_management_monitor_GaugeMonitorMBeanTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_GaugeMonitorTest#getDerivedGauge
+Run test: javax_management_monitor_GaugeMonitorTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_MonitorMBeanTest#getDerivedGauge
+Run test: javax_management_monitor_MonitorMBeanTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_MonitorMBeanTest#getThreshold
+Run test: javax_management_monitor_MonitorMBeanTest#setObservedObject
+Run test: javax_management_monitor_MonitorTest#getObservedObject
+Run test: javax_management_monitor_MonitorTest#setObservedObject
+Run test: javax_management_monitor_StringMonitorMBeanTest#getDerivedGauge
+Run test: javax_management_monitor_StringMonitorMBeanTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_StringMonitorTest#getDerivedGauge
+Run test: javax_management_monitor_StringMonitorTest#getDerivedGaugeTimeStamp
+Run test: javax_net_ssl_HandshakeCompletedEventTest#getPeerCertificateChain
+Run test: javax_net_ssl_SSLSessionTest#getPeerCertificateChain
+Run test: javax_sql_rowset_BaseRowSetTest#setUnicodeStream
+Run test: javax_swing_AbstractButtonTest#getLabel
+Run test: javax_swing_AbstractButtonTest#setLabel
+Run test: javax_swing_FocusManagerTest#disableSwingFocusManager
+Run test: javax_swing_FocusManagerTest#isFocusManagerEnabled
+Run test: javax_swing_InputVerifierTest#shouldYieldFocus
+Run test: javax_swing_JComponentTest#disable
+Run test: javax_swing_JComponentTest#enable
+Run test: javax_swing_JComponentTest#getNextFocusableComponent
+Run test: javax_swing_JComponentTest#isManagingFocus
+Run test: javax_swing_JComponentTest#requestDefaultFocus
+Run test: javax_swing_JComponentTest#reshape
+Run test: javax_swing_JComponentTest#setNextFocusableComponent
+Run test: javax_swing_JInternalFrameTest#getMenuBar
+Run test: javax_swing_JInternalFrameTest#setMenuBar
+Run test: javax_swing_JListTest#getSelectedValues
+Run test: javax_swing_JMenuBarTest#getMenuBar
+Run test: javax_swing_JPasswordFieldTest#getText1
+Run test: javax_swing_JPasswordFieldTest#getText2
+Run test: javax_swing_JPopupMenuTest#getComponentAtIndex
+Run test: javax_swing_JRootPaneTest#getMenuBar
+Run test: javax_swing_JRootPaneTest#setMenuBar
+Run test: javax_swing_JTableTest#createScrollPaneForTable
+Run test: javax_swing_JTableTest#sizeColumnsToFit
+Run test: javax_swing_JViewportTest#isBackingStoreEnabled
+Run test: javax_swing_JViewportTest#setBackingStoreEnabled
+Run test: javax_swing_KeyStrokeTest#getKeyStroke
+Run test: javax_swing_plaf_basic_BasicTextUITest#modelToView1
+Run test: javax_swing_plaf_basic_BasicTextUITest#modelToView2
+Run test: javax_swing_plaf_basic_BasicTextUITest#viewToModel1
+Run test: javax_swing_plaf_basic_BasicTextUITest#viewToModel2
+Run test: javax_swing_plaf_metal_MetalScrollPaneUITest#uninstallListeners
+Run test: javax_swing_ScrollPaneLayoutTest#getViewportBorderBounds
+Run test: javax_swing_SwingUtilitiesTest#findFocusOwner
+Run test: javax_swing_text_html_HTMLEditorKit_InsertHTMLTextActionTest#insertAtBoundry
+Run test: javax_swing_text_JTextComponentTest#modelToView
+Run test: javax_swing_text_JTextComponentTest#viewToModel
+Run test: javax_swing_text_PasswordViewTest#drawEchoCharacter
+Run test: javax_swing_text_PasswordViewTest#drawSelectedText
+Run test: javax_swing_text_PasswordViewTest#drawUnselectedText
+Run test: javax_swing_text_UtilitiesTest#drawTabbedText
+Run test: javax_swing_text_UtilitiesTest#getBreakLocation
+Run test: javax_swing_text_UtilitiesTest#getPositionAbove
+Run test: javax_swing_text_UtilitiesTest#getPositionBelow
+Run test: javax_swing_text_UtilitiesTest#getTabbedTextOffset1
+Run test: javax_swing_text_UtilitiesTest#getTabbedTextOffset2
+Run test: javax_swing_text_UtilitiesTest#getTabbedTextWidth3
+Run test: javax_swing_text_WrappedPlainViewTest#drawLine
+Run test: javax_swing_text_WrappedPlainViewTest#drawSelectedText
+Run test: javax_swing_text_WrappedPlainViewTest#drawUnselectedText
+Run test: javax_xml_stream_XMLEventFactoryTest#newInstance
+Run test: javax_xml_stream_XMLInputFactoryTest#newInstance
+Run test: javax_xml_stream_XMLOutputFactoryTest#newInstance
+Run test: org_ietf_jgss_GSSContextTest#acceptSecContext
+Run test: org_ietf_jgss_GSSContextTest#getMIC
+Run test: org_ietf_jgss_GSSContextTest#initSecContext
+Run test: org_ietf_jgss_GSSContextTest#unwrap
+Run test: org_ietf_jgss_GSSContextTest#verifyMIC
+Run test: org_ietf_jgss_GSSContextTest#wrap
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent                                                             [pom]
+[[1;34mINFO[m] benchmarks                                                         [jar]
+[[1;34mINFO[m] classloader                                                        [jar]
+[[1;34mINFO[m] fuzzer-experiments                                                 [jar]
+[[1;34mINFO[m] rewrite                                                            [jar]
+[[1;34mINFO[m] synthesis                                                          [jar]
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------------< [0;36muk.ac.ox.cs.refactoring:parent[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding parent 0.0.1-SNAPSHOT                                     [1/6][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mparent[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:benchmarks[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding benchmarks 0.0.1-SNAPSHOT                                 [2/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/benchmarks/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m----------------< [0;36muk.ac.ox.cs.refactoring:classloader[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding classloader 0.0.1-SNAPSHOT                                [3/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------< [0;36muk.ac.ox.cs.refactoring:fuzzer-experiments[0;1m >-------------[m
+[[1;34mINFO[m] [1mBuilding fuzzer-experiments 0.0.1-SNAPSHOT                         [4/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36muk.ac.ox.cs.refactoring:rewrite[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding rewrite 0.0.1-SNAPSHOT                                    [5/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:synthesis[0;1m >------------------[m
+[[1;34mINFO[m] [1mBuilding synthesis 0.0.1-SNAPSHOT                                  [6/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36msynthesis[0;1m ---[m
+java.util.concurrent.atomic.AtomicInteger#weakCompareAndSet
+javax.swing.JPopupMenu#getComponentAtIndex
+javax.management.monitor.CounterMonitorMBean#setThreshold
+java.util.logging.Logger#logrb3
+java.util.concurrent.atomic.AtomicIntegerArray#weakCompareAndSet
+java.awt.Dialog#show
+com.sun.source.tree.CaseTree#getExpression
+org.ietf.jgss.GSSContext#wrap
+java.sql.ResultSet#getUnicodeStream1
+java.awt.Component#mouseUp​
+javax.swing.plaf.basic.BasicTextUI#modelToView1
+javax.swing.text.JTextComponent#modelToView
+java.sql.ResultSet#getBigDecimal1
+javax.swing.SwingUtilities#findFocusOwner
+javax.management.monitor.CounterMonitorMBean#getDerivedGaugeTimeStamp
+java.net.URLStreamHandler#setURL
+java.util.concurrent.atomic.AtomicLongArray#weakCompareAndSet
+javax.swing.JPasswordField#getText2
+java.lang.String#getBytes
+javax.management.monitor.StringMonitorMBean#getDerivedGauge
+java.util.logging.Logger#logrb1
+java.rmi.server.RemoteRef#invoke
+javax.swing.FocusManager#isFocusManagerEnabled
+javax.swing.JInternalFrame#setMenuBar
+java.security.Provider#getVersion
+java.util.Properties#save
+javax.management.monitor.CounterMonitorMBean#getThreshold
+javax.management.monitor.CounterMonitor#getThreshold
+java.net.DatagramSocketImpl#setTTL
+java.awt.datatransfer.DataFlavor#equals​
+javax.net.ssl.SSLSession#getPeerCertificateChain
+javax.swing.JComponent#requestDefaultFocus
+java.awt.Component#action
+java.rmi.server.RemoteRef#newCall
+javax.management.AttributeValueExp#setMBeanServer
+java.sql.DriverManager#getLogStream
+javax.sql.rowset.BaseRowSet#setUnicodeStream
+javax.xml.stream.XMLOutputFactory#newInstance
+java.awt.Component#keyUp
+java.rmi.server.UnicastRemoteObject#exportObject
+java.awt.Component#deliverEvent
+org.ietf.jgss.GSSContext#acceptSecContext
+org.ietf.jgss.GSSContext#getMIC
+java.sql.ResultSet#getUnicodeStream2
+javax.management.monitor.GaugeMonitorMBean#getDerivedGaugeTimeStamp
+java.beans.Beans#instantiate
+java.awt.Window#postEvent
+javax.swing.JMenuBar#getMenuBar
+org.ietf.jgss.GSSContext#verifyMIC
+java.awt.TextArea#insertText
+java.lang.Character#isJavaLetterOrDigit​
+java.security.SignatureSpi#engineSetParameter
+java.awt.Dialog#hide
+javax.management.monitor.MonitorMBean#getDerivedGaugeTimeStamp
+javax.swing.JComponent#isManagingFocus
+java.util.concurrent.atomic.AtomicLong#weakCompareAndSet
+java.net.DatagramSocketImpl#getTTL
+javax.swing.plaf.basic.BasicTextUI#modelToView2
+java.util.logging.LogManager#getLoggingMXBean
+java.util.logging.Logger#logrb2
+java.lang.reflect.AccessibleObject#isAccessible
+java.lang.Package#getPackage
+javax.swing.JRootPane#setMenuBar
+java.awt.ComponentOrientation#getOrientation​
+java.rmi.server.RemoteRef#done
+org.ietf.jgss.GSSContext#initSecContext
+javax.swing.text.Utilities#getTabbedTextOffset2
+java.awt.Component#mouseEnter​
+javax.management.monitor.CounterMonitor#getDerivedGauge
+javax.management.monitor.Monitor#getObservedObject
+java.awt.Component#mouseDown​
+javax.swing.plaf.basic.BasicTextUI#viewToModel2
+java.awt.Component#gotFocus
+java.sql.CallableStatement#getBigDecimal
+javax.swing.text.Utilities#getTabbedTextOffset1
+java.util.logging.Logger#logrb4
+javax.management.monitor.CounterMonitorMBean#getDerivedGauge
+javax.swing.text.html.HTMLEditorKit.InsertHTMLTextAction#insertAtBoundry
+javax.swing.JComponent#getNextFocusableComponent
+javax.swing.JComponent#setNextFocusableComponent
+javax.management.monitor.MonitorMBean#setObservedObject
+javax.management.MBeanServer#deserialize1
+javax.management.monitor.GaugeMonitorMBean#getDerivedGauge
+java.awt.Component#mouseMove​
+javax.net.ssl.HandshakeCompletedEvent#getPeerCertificateChain
+java.awt.Component#postEvent
+javax.swing.JViewport#isBackingStoreEnabled
+javax.management.monitor.MonitorMBean#getDerivedGauge
+javax.management.MBeanServer#deserialize3
+javax.management.monitor.StringMonitorMBean#getDerivedGaugeTimeStamp
+java.lang.Class#newInstance
+javax.management.MBeanServer#deserialize2
+javax.swing.text.Utilities#getTabbedTextWidth3
+java.awt.Component#mouseExit​
+java.util.logging.LogRecord.setMillis#setMillis
+java.sql.ResultSet#getBigDecimal2
+java.awt.Component#lostFocus
+javax.swing.JPasswordField#getText1
+javax.swing.JList#getSelectedValues
+javax.management.monitor.CounterMonitor#getDerivedGaugeTimeStamp
+java.lang.ClassLoader#getPackage
+java.awt.Component#mouseDrag​
+org.ietf.jgss.GSSContext#unwrap
+javax.management.monitor.MonitorMBean#getThreshold
+javax.swing.ScrollPaneLayout#getViewportBorderBounds
+javax.swing.plaf.basic.BasicTextUI#viewToModel1
+java.awt.Toolkit#getFontMetrics
+Run CEGIS-Fuzz w/ type
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent                                                             [pom]
+[[1;34mINFO[m] benchmarks                                                         [jar]
+[[1;34mINFO[m] classloader                                                        [jar]
+[[1;34mINFO[m] fuzzer-experiments                                                 [jar]
+[[1;34mINFO[m] instrument                                                         [jar]
+[[1;34mINFO[m] rewrite                                                            [jar]
+[[1;34mINFO[m] synthesis                                                          [jar]
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------------< [0;36muk.ac.ox.cs.refactoring:parent[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding parent 0.0.1-SNAPSHOT                                     [1/7][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mparent[0;1m ---[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:benchmarks[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding benchmarks 0.0.1-SNAPSHOT                                 [2/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/benchmarks/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/benchmarks/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/benchmarks/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/benchmarks/target/benchmarks-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m----------------< [0;36muk.ac.ox.cs.refactoring:classloader[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding classloader 0.0.1-SNAPSHOT                                [3/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/classloader/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/classloader/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/classloader/target/classloader-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------< [0;36muk.ac.ox.cs.refactoring:fuzzer-experiments[0;1m >-------------[m
+[[1;34mINFO[m] [1mBuilding fuzzer-experiments 0.0.1-SNAPSHOT                         [4/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/fuzzer-experiments-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:instrument[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding instrument 0.0.1-SNAPSHOT                                 [5/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/instrument/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/instrument/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 2 source files to /home/pkesseli/refactoring-synthesis/source/instrument/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/instrument/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/instrument/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/instrument/target/instrument-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36muk.ac.ox.cs.refactoring:rewrite[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding rewrite 0.0.1-SNAPSHOT                                    [6/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/rewrite/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 2 source files to /home/pkesseli/refactoring-synthesis/source/rewrite/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/rewrite/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/rewrite/target/rewrite-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:synthesis[0;1m >------------------[m
+[[1;34mINFO[m] [1mBuilding synthesis 0.0.1-SNAPSHOT                                  [7/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/synthesis/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 142 source files to /home/pkesseli/refactoring-synthesis/source/synthesis/target/classes
+[[1;34mINFO[m] /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java: /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java uses or overrides a deprecated API.
+[[1;34mINFO[m] /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java: Recompile with -Xlint:deprecation for details.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 388 source files to /home/pkesseli/refactoring-synthesis/source/synthesis/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/synthesis/target/synthesis-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Summary for parent 0.0.1-SNAPSHOT:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent ............................................. [1;32mSUCCESS[m [  0.137 s]
+[[1;34mINFO[m] benchmarks ......................................... [1;32mSUCCESS[m [  2.011 s]
+[[1;34mINFO[m] classloader ........................................ [1;32mSUCCESS[m [  0.237 s]
+[[1;34mINFO[m] fuzzer-experiments ................................. [1;32mSUCCESS[m [  0.447 s]
+[[1;34mINFO[m] instrument ......................................... [1;32mSUCCESS[m [  0.394 s]
+[[1;34mINFO[m] rewrite ............................................ [1;32mSUCCESS[m [  0.312 s]
+[[1;34mINFO[m] synthesis .......................................... [1;32mSUCCESS[m [ 11.456 s]
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  15.122 s
+[[1;34mINFO[m] Finished at: 2024-01-10T22:01:36+01:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+Run test: com_sun_management_OperatingSystemMXBeanTest#getFreePhysicalMemorySize
+Run test: com_sun_management_OperatingSystemMXBeanTest#getSystemCpuLoad
+Run test: com_sun_management_OperatingSystemMXBeanTest#getTotalPhysicalMemorySize
+Run test: com_sun_source_tree_CaseTreeTest#getExpression
+Run test: java_awt_CheckboxGroupTest#getCurrent
+Run test: java_awt_CheckboxGroupTest#setCurrent
+Run test: java_awt_ChoiceTest#countItems
+Run test: java_awt_ComponentOrientationTest#getOrientation​
+Run test: java_awt_ComponentTest#action
+Run test: java_awt_ComponentTest#bounds
+Run test: java_awt_ComponentTest#deliverEvent
+Run test: java_awt_ComponentTest#disable
+Run test: java_awt_ComponentTest#enable
+Run test: java_awt_ComponentTest#enableBoolean
+Run test: java_awt_ComponentTest#gotFocus
+Run test: java_awt_ComponentTest#hide
+Run test: java_awt_ComponentTest#inside
+Run test: java_awt_ComponentTest#isFocusTraversable
+Run test: java_awt_ComponentTest#keyDown
+Run test: java_awt_ComponentTest#keyUp
+Run test: java_awt_ComponentTest#layout
+Run test: java_awt_ComponentTest#locate
+Run test: java_awt_ComponentTest#location
+Run test: java_awt_ComponentTest#lostFocus
+Run test: java_awt_ComponentTest#minimumSize
+Run test: java_awt_ComponentTest#mouseDown​
+Run test: java_awt_ComponentTest#mouseDrag​
+Run test: java_awt_ComponentTest#mouseEnter​
+Run test: java_awt_ComponentTest#mouseExit​
+Run test: java_awt_ComponentTest#mouseMove​
+Run test: java_awt_ComponentTest#mouseUp​
+Run test: java_awt_ComponentTest#move
+Run test: java_awt_ComponentTest#nextFocus
+Run test: java_awt_ComponentTest#postEvent
+Run test: java_awt_ComponentTest#preferredSize
+Run test: java_awt_ComponentTest#reshape
+Run test: java_awt_ComponentTest#resize
+Run test: java_awt_ComponentTest#resizeDimension
+Run test: java_awt_ComponentTest#show
+Run test: java_awt_ComponentTest#showBoolean
+Run test: java_awt_ComponentTest#size
+Run test: java_awt_ContainerTest#countComponents
+Run test: java_awt_ContainerTest#insets
+Run test: java_awt_ContainerTest#layout
+Run test: java_awt_ContainerTest#locate
+Run test: java_awt_ContainerTest#minimumSize
+Run test: java_awt_ContainerTest#preferredSize
+Run test: java_awt_datatransfer_DataFlavorTest#equals​
+Run test: java_awt_DialogTest#hide
+Run test: java_awt_DialogTest#show
+Run test: java_awt_FontMetricsTest#getMaxDecent
+Run test: java_awt_GraphicsTest#getClipRect
+Run test: java_awt_image_renderable_RenderContextTest#concetenateTransform
+Run test: java_awt_image_renderable_RenderContextTest#preConcetenateTransform
+Run test: java_awt_ListTest#addItem
+Run test: java_awt_ListTest#addItemStringInt
+Run test: java_awt_ListTest#allowsMultipleSelections
+Run test: java_awt_ListTest#clear
+Run test: java_awt_ListTest#countItems
+Run test: java_awt_ListTest#delItem
+Run test: java_awt_ListTest#isSelected
+Run test: java_awt_ListTest#minimumSize
+Run test: java_awt_ListTest#minimumSizeInt
+Run test: java_awt_ListTest#preferredSize
+Run test: java_awt_ListTest#preferredSizeInt
+Run test: java_awt_ListTest#setMultipleSelections
+Run test: java_awt_MenuBarTest#countMenus
+Run test: java_awt_MenuBarTest#countMenusGPT
+Run test: java_awt_MenuItemTest#disable
+Run test: java_awt_MenuItemTest#enable
+Run test: java_awt_MenuItemTest#enableBoolean
+Run test: java_awt_MenuTest#countItems
+Run test: java_awt_PolygonTest#getBoundingBox
+Run test: java_awt_PolygonTest#inside
+Run test: java_awt_RectangleTest#inside
+Run test: java_awt_RectangleTest#move
+Run test: java_awt_RectangleTest#reshape
+Run test: java_awt_RectangleTest#resize
+Run test: java_awt_RectangleTest#moveGPT
+Run test: java_awt_ScrollbarTest#getLineIncrement
+Run test: java_awt_ScrollbarTest#getPageIncrement
+Run test: java_awt_ScrollbarTest#getVisible
+Run test: java_awt_ScrollbarTest#setLineIncrement
+Run test: java_awt_ScrollbarTest#setPageIncrement
+Run test: java_awt_ScrollPaneTest#layout
+Run test: java_awt_TextAreaTest#appendText
+Run test: java_awt_TextAreaTest#insertText
+Run test: java_awt_TextAreaTest#minimumSize
+Run test: java_awt_TextAreaTest#minimumSizeIntInt
+Run test: java_awt_TextAreaTest#preferredSize
+Run test: java_awt_TextAreaTest#preferredSizeIntInt
+Run test: java_awt_TextAreaTest#replaceText
+Run test: java_awt_TextAreaTest#appendTextGPT
+Run test: java_awt_TextFieldTest#minimumSize
+Run test: java_awt_TextFieldTest#minimumSizeInt
+Run test: java_awt_TextFieldTest#preferredSize
+Run test: java_awt_TextFieldTest#preferredSizeInt
+Run test: java_awt_TextFieldTest#setEchoCharacter
+Run test: java_awt_ToolkitTest#getFontMetrics
+Run test: java_awt_WindowTest#hide
+Run test: java_awt_WindowTest#postEvent
+Run test: java_awt_WindowTest#reshape
+Run test: java_awt_WindowTest#show
+Run test: java_beans_BeansTest#instantiate
+Run test: java_lang_CharacterTest#isJavaLetter
+Run test: java_lang_CharacterTest#isJavaLetterOrDigit​
+Run test: java_lang_CharacterTest#isSpace
+Run test: java_lang_ClassLoaderTest#getPackage
+Run test: java_lang_ClassTest#newInstance
+Run test: java_lang_invoke_MethodHandles_LookupTest#hasPrivateAccess
+Run test: java_lang_PackageTest#getPackage
+Run test: java_lang_reflect_AccessibleObjectTest#isAccessible
+Run test: java_lang_Runtime_VersionTest#major
+Run test: java_lang_Runtime_VersionTest#minor
+Run test: java_lang_Runtime_VersionTest#security
+Run test: java_lang_StringTest#getBytes
+Run test: java_net_DatagramSocketImplTest#getTTL
+Run test: java_net_DatagramSocketImplTest#setTTL
+Run test: java_net_MulticastSocketTest#getTTL
+Run test: java_net_MulticastSocketTest#setTTL
+Run test: java_net_URLDecoderTest#decode
+Run test: java_net_URLEncoderTest#encode
+Run test: java_net_URLStreamHandlerTest#setURL
+Run test: java_rmi_server_RemoteRefTest#done
+Run test: java_rmi_server_RemoteRefTest#invoke
+Run test: java_rmi_server_RemoteRefTest#newCall
+Run test: java_rmi_server_RMIClassLoaderTest#loadClass
+Run test: java_rmi_server_UnicastRemoteObjectTest#exportObject
+Run test: java_security_ProviderTest#getVersion
+Run test: java_security_SignatureSpiTest#engineSetParameter
+Run test: java_security_SignatureTest#setParameter
+Run test: java_sql_CallableStatementTest#getBigDecimal
+Run test: java_sql_DriverManagerTest#getLogStream
+Run test: java_sql_DriverManagerTest#setLogStream
+Run test: java_sql_ResultSetTest#getBigDecimal1
+Run test: java_sql_ResultSetTest#getBigDecimal2
+Run test: java_sql_ResultSetTest#getUnicodeStream1
+Run test: java_sql_ResultSetTest#getUnicodeStream2
+Run test: java_util_concurrent_atomic_AtomicBooleanTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicIntegerArrayTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicIntegerTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicLongArrayTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicLongTest#weakCompareAndSet
+Run test: java_util_DateTest#getYear
+Run test: java_util_DateTest#getTimezoneOffset
+Run test: java_util_logging_LoggerTest#logrb1
+Run test: java_util_logging_LoggerTest#logrb2
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent                                                             [pom]
+[[1;34mINFO[m] benchmarks                                                         [jar]
+[[1;34mINFO[m] classloader                                                        [jar]
+[[1;34mINFO[m] fuzzer-experiments                                                 [jar]
+[[1;34mINFO[m] instrument                                                         [jar]
+[[1;34mINFO[m] rewrite                                                            [jar]
+[[1;34mINFO[m] synthesis                                                          [jar]
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------------< [0;36muk.ac.ox.cs.refactoring:parent[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding parent 0.0.1-SNAPSHOT                                     [1/7][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mparent[0;1m ---[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:benchmarks[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding benchmarks 0.0.1-SNAPSHOT                                 [2/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/benchmarks/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/benchmarks/target/classes
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Summary for parent 0.0.1-SNAPSHOT:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent ............................................. [1;32mSUCCESS[m [  0.410 s]
+[[1;34mINFO[m] benchmarks ......................................... [1;31mFAILURE[m [  2.058 s]
+[[1;34mINFO[m] classloader ........................................ [1;33mSKIPPED[m
+[[1;34mINFO[m] fuzzer-experiments ................................. [1;33mSKIPPED[m
+[[1;34mINFO[m] instrument ......................................... [1;33mSKIPPED[m
+[[1;34mINFO[m] rewrite ............................................ [1;33mSKIPPED[m
+[[1;34mINFO[m] synthesis .......................................... [1;33mSKIPPED[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;31mBUILD FAILURE[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  2.843 s
+[[1;34mINFO[m] Finished at: 2024-01-12T19:35:24+01:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;31mERROR[m] Failed to execute goal [32morg.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m on project [36mbenchmarks[m: [1;31mFatal error compiling[m: invalid flag: --release -> [1m[Help 1][m
+[[1;31mERROR[m] 
+[[1;31mERROR[m] To see the full stack trace of the errors, re-run Maven with the [1m-e[m switch.
+[[1;31mERROR[m] Re-run Maven using the [1m-X[m switch to enable full debug logging.
+[[1;31mERROR[m] 
+[[1;31mERROR[m] For more information about the errors and possible solutions, please read the following articles:
+[[1;31mERROR[m] [1m[Help 1][m http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+[[1;31mERROR[m] 
+[[1;31mERROR[m] After correcting the problems, you can resume the build with the command
+[[1;31mERROR[m]   [1mmvn <args> -rf :benchmarks[m
+Run CEGIS-Fuzz w/ type
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent                                                             [pom]
+[[1;34mINFO[m] benchmarks                                                         [jar]
+[[1;34mINFO[m] classloader                                                        [jar]
+[[1;34mINFO[m] fuzzer-experiments                                                 [jar]
+[[1;34mINFO[m] instrument                                                         [jar]
+[[1;34mINFO[m] rewrite                                                            [jar]
+[[1;34mINFO[m] synthesis                                                          [jar]
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------------< [0;36muk.ac.ox.cs.refactoring:parent[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding parent 0.0.1-SNAPSHOT                                     [1/7][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mparent[0;1m ---[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:benchmarks[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding benchmarks 0.0.1-SNAPSHOT                                 [2/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/benchmarks/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/benchmarks/target/classes
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Summary for parent 0.0.1-SNAPSHOT:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent ............................................. [1;32mSUCCESS[m [  0.132 s]
+[[1;34mINFO[m] benchmarks ......................................... [1;31mFAILURE[m [  0.592 s]
+[[1;34mINFO[m] classloader ........................................ [1;33mSKIPPED[m
+[[1;34mINFO[m] fuzzer-experiments ................................. [1;33mSKIPPED[m
+[[1;34mINFO[m] instrument ......................................... [1;33mSKIPPED[m
+[[1;34mINFO[m] rewrite ............................................ [1;33mSKIPPED[m
+[[1;34mINFO[m] synthesis .......................................... [1;33mSKIPPED[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;31mBUILD FAILURE[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  0.961 s
+[[1;34mINFO[m] Finished at: 2024-01-12T19:35:27+01:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;31mERROR[m] Failed to execute goal [32morg.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m on project [36mbenchmarks[m: [1;31mFatal error compiling[m: invalid flag: --release -> [1m[Help 1][m
+[[1;31mERROR[m] 
+[[1;31mERROR[m] To see the full stack trace of the errors, re-run Maven with the [1m-e[m switch.
+[[1;31mERROR[m] Re-run Maven using the [1m-X[m switch to enable full debug logging.
+[[1;31mERROR[m] 
+[[1;31mERROR[m] For more information about the errors and possible solutions, please read the following articles:
+[[1;31mERROR[m] [1m[Help 1][m http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+[[1;31mERROR[m] 
+[[1;31mERROR[m] After correcting the problems, you can resume the build with the command
+[[1;31mERROR[m]   [1mmvn <args> -rf :benchmarks[m
+mkdir: cannot create directory ‘source/synthesis/target/surefire-reports’: File exists
+Run test: com_sun_management_OperatingSystemMXBeanTest#getFreePhysicalMemorySize
+Run test: com_sun_management_OperatingSystemMXBeanTest#getSystemCpuLoad
+Run test: com_sun_management_OperatingSystemMXBeanTest#getTotalPhysicalMemorySize
+Run test: com_sun_source_tree_CaseTreeTest#getExpression
+Run test: java_awt_CheckboxGroupTest#getCurrent
+Run test: java_awt_CheckboxGroupTest#setCurrent
+Run test: java_awt_ChoiceTest#countItems
+Run test: java_awt_ComponentOrientationTest#getOrientation​
+Run test: java_awt_ComponentTest#action
+Run test: java_awt_ComponentTest#bounds
+Run test: java_awt_ComponentTest#deliverEvent
+Run test: java_awt_ComponentTest#disable
+Run test: java_awt_ComponentTest#enable
+Run test: java_awt_ComponentTest#enableBoolean
+Run test: java_awt_ComponentTest#gotFocus
+Run test: java_awt_ComponentTest#hide
+Run test: java_awt_ComponentTest#inside
+Run test: java_awt_ComponentTest#isFocusTraversable
+Run test: java_awt_ComponentTest#keyDown
+Run test: java_awt_ComponentTest#keyUp
+Run test: java_awt_ComponentTest#layout
+Run test: java_awt_ComponentTest#locate
+Run test: java_awt_ComponentTest#location
+Run test: java_awt_ComponentTest#lostFocus
+Run test: java_awt_ComponentTest#minimumSize
+Run test: java_awt_ComponentTest#mouseDown​
+Run test: java_awt_ComponentTest#mouseDrag​
+Run test: java_awt_ComponentTest#mouseEnter​
+Run test: java_awt_ComponentTest#mouseExit​
+Run test: java_awt_ComponentTest#mouseMove​
+Run test: java_awt_ComponentTest#mouseUp​
+Run test: java_awt_ComponentTest#move
+Run test: java_awt_ComponentTest#nextFocus
+Run test: java_awt_ComponentTest#postEvent
+Run test: java_awt_ComponentTest#preferredSize
+Run test: java_awt_ComponentTest#reshape
+Run test: java_awt_ComponentTest#resize
+Run test: java_awt_ComponentTest#resizeDimension
+Run test: java_awt_ComponentTest#show
+Run test: java_awt_ComponentTest#showBoolean
+Run test: java_awt_ComponentTest#size
+Run test: java_awt_ContainerTest#countComponents
+Run test: java_awt_ContainerTest#insets
+Run test: java_awt_ContainerTest#layout
+Run test: java_awt_ContainerTest#locate
+Run test: java_awt_ContainerTest#minimumSize
+Run test: java_awt_ContainerTest#preferredSize
+Run test: java_awt_datatransfer_DataFlavorTest#equals​
+Run test: java_awt_DialogTest#hide
+Run test: java_awt_DialogTest#show
+Run test: java_awt_FontMetricsTest#getMaxDecent
+Run test: java_awt_GraphicsTest#getClipRect
+Run test: java_awt_image_renderable_RenderContextTest#concetenateTransform
+Run test: java_awt_image_renderable_RenderContextTest#preConcetenateTransform
+Run test: java_awt_ListTest#addItem
+Run test: java_awt_ListTest#addItemStringInt
+Run test: java_awt_ListTest#allowsMultipleSelections
+Run test: java_awt_ListTest#clear
+Run test: java_awt_ListTest#countItems
+Run test: java_awt_ListTest#delItem
+Run test: java_awt_ListTest#isSelected
+Run test: java_awt_ListTest#minimumSize
+Run test: java_awt_ListTest#minimumSizeInt
+Run test: java_awt_ListTest#preferredSize
+Run test: java_awt_ListTest#preferredSizeInt
+Run test: java_awt_ListTest#setMultipleSelections
+Run test: java_awt_MenuBarTest#countMenus
+Run test: java_awt_MenuBarTest#countMenusGPT
+Run test: java_awt_MenuItemTest#disable
+Run test: java_awt_MenuItemTest#enable
+Run test: java_awt_MenuItemTest#enableBoolean
+Run test: java_awt_MenuTest#countItems
+Run test: java_awt_PolygonTest#getBoundingBox
+Run test: java_awt_PolygonTest#inside
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent                                                             [pom]
+[[1;34mINFO[m] benchmarks                                                         [jar]
+[[1;34mINFO[m] classloader                                                        [jar]
+[[1;34mINFO[m] fuzzer-experiments                                                 [jar]
+[[1;34mINFO[m] instrument                                                         [jar]
+[[1;34mINFO[m] rewrite                                                            [jar]
+[[1;34mINFO[m] synthesis                                                          [jar]
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------------< [0;36muk.ac.ox.cs.refactoring:parent[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding parent 0.0.1-SNAPSHOT                                     [1/7][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mparent[0;1m ---[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:benchmarks[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding benchmarks 0.0.1-SNAPSHOT                                 [2/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/benchmarks/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/benchmarks/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/benchmarks/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/benchmarks/target/benchmarks-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m----------------< [0;36muk.ac.ox.cs.refactoring:classloader[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding classloader 0.0.1-SNAPSHOT                                [3/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/classloader/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/classloader/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/classloader/target/classloader-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------< [0;36muk.ac.ox.cs.refactoring:fuzzer-experiments[0;1m >-------------[m
+[[1;34mINFO[m] [1mBuilding fuzzer-experiments 0.0.1-SNAPSHOT                         [4/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/fuzzer-experiments-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:instrument[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding instrument 0.0.1-SNAPSHOT                                 [5/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/instrument/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/instrument/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 2 source files to /home/pkesseli/refactoring-synthesis/source/instrument/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/instrument/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/instrument/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/instrument/target/instrument-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36muk.ac.ox.cs.refactoring:rewrite[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding rewrite 0.0.1-SNAPSHOT                                    [6/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/rewrite/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 2 source files to /home/pkesseli/refactoring-synthesis/source/rewrite/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/rewrite/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/rewrite/target/rewrite-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:synthesis[0;1m >------------------[m
+[[1;34mINFO[m] [1mBuilding synthesis 0.0.1-SNAPSHOT                                  [7/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/synthesis/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 142 source files to /home/pkesseli/refactoring-synthesis/source/synthesis/target/classes
+[[1;34mINFO[m] /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java: /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java uses or overrides a deprecated API.
+[[1;34mINFO[m] /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java: Recompile with -Xlint:deprecation for details.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 388 source files to /home/pkesseli/refactoring-synthesis/source/synthesis/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/synthesis/target/synthesis-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Summary for parent 0.0.1-SNAPSHOT:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent ............................................. [1;32mSUCCESS[m [  0.145 s]
+[[1;34mINFO[m] benchmarks ......................................... [1;32mSUCCESS[m [  3.787 s]
+[[1;34mINFO[m] classloader ........................................ [1;32mSUCCESS[m [  0.667 s]
+[[1;34mINFO[m] fuzzer-experiments ................................. [1;32mSUCCESS[m [  0.703 s]
+[[1;34mINFO[m] instrument ......................................... [1;32mSUCCESS[m [  0.838 s]
+[[1;34mINFO[m] rewrite ............................................ [1;32mSUCCESS[m [  0.447 s]
+[[1;34mINFO[m] synthesis .......................................... [1;32mSUCCESS[m [ 14.217 s]
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  21.002 s
+[[1;34mINFO[m] Finished at: 2024-01-12T19:38:20+01:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+Run CEGIS-Fuzz w/ type
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent                                                             [pom]
+[[1;34mINFO[m] benchmarks                                                         [jar]
+[[1;34mINFO[m] classloader                                                        [jar]
+[[1;34mINFO[m] fuzzer-experiments                                                 [jar]
+[[1;34mINFO[m] instrument                                                         [jar]
+[[1;34mINFO[m] rewrite                                                            [jar]
+[[1;34mINFO[m] synthesis                                                          [jar]
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------------< [0;36muk.ac.ox.cs.refactoring:parent[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding parent 0.0.1-SNAPSHOT                                     [1/7][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mparent[0;1m ---[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:benchmarks[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding benchmarks 0.0.1-SNAPSHOT                                 [2/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/benchmarks/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/benchmarks/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/benchmarks/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/benchmarks/target/benchmarks-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m----------------< [0;36muk.ac.ox.cs.refactoring:classloader[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding classloader 0.0.1-SNAPSHOT                                [3/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/classloader/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/classloader/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/classloader/target/classloader-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------< [0;36muk.ac.ox.cs.refactoring:fuzzer-experiments[0;1m >-------------[m
+[[1;34mINFO[m] [1mBuilding fuzzer-experiments 0.0.1-SNAPSHOT                         [4/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/target/fuzzer-experiments-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:instrument[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding instrument 0.0.1-SNAPSHOT                                 [5/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/instrument/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/instrument/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 2 source files to /home/pkesseli/refactoring-synthesis/source/instrument/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/instrument/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 5 source files to /home/pkesseli/refactoring-synthesis/source/instrument/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36minstrument[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/instrument/target/instrument-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36muk.ac.ox.cs.refactoring:rewrite[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding rewrite 0.0.1-SNAPSHOT                                    [6/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/rewrite/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 2 source files to /home/pkesseli/refactoring-synthesis/source/rewrite/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/pkesseli/refactoring-synthesis/source/rewrite/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/rewrite/target/rewrite-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:synthesis[0;1m >------------------[m
+[[1;34mINFO[m] [1mBuilding synthesis 0.0.1-SNAPSHOT                                  [7/7][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-clean-plugin:2.5:clean[m [1m(default-clean)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Deleting /home/pkesseli/refactoring-synthesis/source/synthesis/target
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 142 source files to /home/pkesseli/refactoring-synthesis/source/synthesis/target/classes
+[[1;34mINFO[m] /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java: /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java uses or overrides a deprecated API.
+[[1;34mINFO[m] /home/pkesseli/refactoring-synthesis/source/synthesis/src/main/java/uk/ac/ox/cs/refactoring/synthesis/cegis/OfflineMulticastSocketGenerator.java: Recompile with -Xlint:deprecation for details.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 388 source files to /home/pkesseli/refactoring-synthesis/source/synthesis/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.2:test[m [1m(default-test)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Tests are skipped.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-jar-plugin:2.4:jar[m [1m(default-jar)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Building jar: /home/pkesseli/refactoring-synthesis/source/synthesis/target/synthesis-0.0.1-SNAPSHOT.jar
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Summary for parent 0.0.1-SNAPSHOT:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent ............................................. [1;32mSUCCESS[m [  0.153 s]
+[[1;34mINFO[m] benchmarks ......................................... [1;32mSUCCESS[m [  2.636 s]
+[[1;34mINFO[m] classloader ........................................ [1;32mSUCCESS[m [  0.433 s]
+[[1;34mINFO[m] fuzzer-experiments ................................. [1;32mSUCCESS[m [  0.442 s]
+[[1;34mINFO[m] instrument ......................................... [1;32mSUCCESS[m [  0.371 s]
+[[1;34mINFO[m] rewrite ............................................ [1;32mSUCCESS[m [  0.208 s]
+[[1;34mINFO[m] synthesis .......................................... [1;32mSUCCESS[m [ 12.533 s]
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  16.987 s
+[[1;34mINFO[m] Finished at: 2024-01-12T19:38:39+01:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+Run test: com_sun_management_OperatingSystemMXBeanTest#getFreePhysicalMemorySize
+Run test: com_sun_management_OperatingSystemMXBeanTest#getSystemCpuLoad
+Run test: com_sun_management_OperatingSystemMXBeanTest#getTotalPhysicalMemorySize
+Run test: com_sun_source_tree_CaseTreeTest#getExpression
+Run test: java_awt_CheckboxGroupTest#getCurrent
+Run test: java_awt_CheckboxGroupTest#setCurrent
+Run test: java_awt_ChoiceTest#countItems
+Run test: java_awt_ComponentOrientationTest#getOrientation​
+Run test: java_awt_ComponentTest#action
+Run test: java_awt_ComponentTest#bounds
+Run test: java_awt_ComponentTest#deliverEvent
+Run test: java_awt_ComponentTest#disable
+Run test: java_awt_ComponentTest#enable
+Run test: java_awt_ComponentTest#enableBoolean
+Run test: java_awt_ComponentTest#gotFocus
+Run test: java_awt_ComponentTest#hide
+Run test: java_awt_ComponentTest#inside
+Run test: java_awt_ComponentTest#isFocusTraversable
+Run test: java_awt_ComponentTest#keyDown
+Run test: java_awt_ComponentTest#keyUp
+Run test: java_awt_ComponentTest#layout
+Run test: java_awt_ComponentTest#locate
+Run test: java_awt_ComponentTest#location
+Run test: java_awt_ComponentTest#lostFocus
+Run test: java_awt_ComponentTest#minimumSize
+Run test: java_awt_ComponentTest#mouseDown​
+Run test: java_awt_ComponentTest#mouseDrag​
+Run test: java_awt_ComponentTest#mouseEnter​
+Run test: java_awt_ComponentTest#mouseExit​
+Run test: java_awt_ComponentTest#mouseMove​
+Run test: java_awt_ComponentTest#mouseUp​
+Run test: java_awt_ComponentTest#move
+Run test: java_awt_ComponentTest#nextFocus
+Run test: java_awt_ComponentTest#postEvent
+Run test: java_awt_ComponentTest#preferredSize
+Run test: java_awt_ComponentTest#reshape
+Run test: java_awt_ComponentTest#resize
+Run test: java_awt_ComponentTest#resizeDimension
+Run test: java_awt_ComponentTest#show
+Run test: java_awt_ComponentTest#showBoolean
+Run test: java_awt_ComponentTest#size
+Run test: java_awt_ContainerTest#countComponents
+Run test: java_awt_ContainerTest#insets
+Run test: java_awt_ContainerTest#layout
+Run test: java_awt_ContainerTest#locate
+Run test: java_awt_ContainerTest#minimumSize
+Run test: java_awt_ContainerTest#preferredSize
+Run test: java_awt_datatransfer_DataFlavorTest#equals​
+Run test: java_awt_DialogTest#hide
+Run test: java_awt_DialogTest#show
+Run test: java_awt_FontMetricsTest#getMaxDecent
+Run test: java_awt_GraphicsTest#getClipRect
+Run test: java_awt_image_renderable_RenderContextTest#concetenateTransform
+Run test: java_awt_image_renderable_RenderContextTest#preConcetenateTransform
+Run test: java_awt_ListTest#addItem
+Run test: java_awt_ListTest#addItemStringInt
+Run test: java_awt_ListTest#allowsMultipleSelections
+Run test: java_awt_ListTest#clear
+Run test: java_awt_ListTest#countItems
+Run test: java_awt_ListTest#delItem
+Run test: java_awt_ListTest#isSelected
+Run test: java_awt_ListTest#minimumSize
+Run test: java_awt_ListTest#minimumSizeInt
+Run test: java_awt_ListTest#preferredSize
+Run test: java_awt_ListTest#preferredSizeInt
+Run test: java_awt_ListTest#setMultipleSelections
+Run test: java_awt_MenuBarTest#countMenus
+Run test: java_awt_MenuBarTest#countMenusGPT
+Run test: java_awt_MenuItemTest#disable
+Run test: java_awt_MenuItemTest#enable
+Run test: java_awt_MenuItemTest#enableBoolean
+Run test: java_awt_MenuTest#countItems
+Run test: java_awt_PolygonTest#getBoundingBox
+Run test: java_awt_PolygonTest#inside
+Run test: java_awt_RectangleTest#inside
+Run test: java_awt_RectangleTest#move
+Run test: java_awt_RectangleTest#reshape
+Run test: java_awt_RectangleTest#resize
+Run test: java_awt_RectangleTest#moveGPT
+Run test: java_awt_ScrollbarTest#getLineIncrement
+Run test: java_awt_ScrollbarTest#getPageIncrement
+Run test: java_awt_ScrollbarTest#getVisible
+Run test: java_awt_ScrollbarTest#setLineIncrement
+Run test: java_awt_ScrollbarTest#setPageIncrement
+Run test: java_awt_ScrollPaneTest#layout
+Run test: java_awt_TextAreaTest#appendText
+Run test: java_awt_TextAreaTest#insertText
+Run test: java_awt_TextAreaTest#minimumSize
+Run test: java_awt_TextAreaTest#minimumSizeIntInt
+Run test: java_awt_TextAreaTest#preferredSize
+Run test: java_awt_TextAreaTest#preferredSizeIntInt
+Run test: java_awt_TextAreaTest#replaceText
+Run test: java_awt_TextAreaTest#appendTextGPT
+Run test: java_awt_TextFieldTest#minimumSize
+Run test: java_awt_TextFieldTest#minimumSizeInt
+Run test: java_awt_TextFieldTest#preferredSize
+Run test: java_awt_TextFieldTest#preferredSizeInt
+Run test: java_awt_TextFieldTest#setEchoCharacter
+Run test: java_awt_ToolkitTest#getFontMetrics
+Run test: java_awt_WindowTest#hide
+Run test: java_awt_WindowTest#postEvent
+Run test: java_awt_WindowTest#reshape
+Run test: java_awt_WindowTest#show
+Run test: java_beans_BeansTest#instantiate
+Run test: java_lang_CharacterTest#isJavaLetter
+Run test: java_lang_CharacterTest#isJavaLetterOrDigit​
+Run test: java_lang_CharacterTest#isSpace
+Run test: java_lang_ClassLoaderTest#getPackage
+Run test: java_lang_ClassTest#newInstance
+Run test: java_lang_invoke_MethodHandles_LookupTest#hasPrivateAccess
+Run test: java_lang_PackageTest#getPackage
+Run test: java_lang_reflect_AccessibleObjectTest#isAccessible
+Run test: java_lang_Runtime_VersionTest#major
+Run test: java_lang_Runtime_VersionTest#minor
+Run test: java_lang_Runtime_VersionTest#security
+Run test: java_lang_StringTest#getBytes
+Run test: java_net_DatagramSocketImplTest#getTTL
+Run test: java_net_DatagramSocketImplTest#setTTL
+Run test: java_net_MulticastSocketTest#getTTL
+Run test: java_net_MulticastSocketTest#setTTL
+Run test: java_net_URLDecoderTest#decode
+Run test: java_net_URLEncoderTest#encode
+Run test: java_net_URLStreamHandlerTest#setURL
+Run test: java_rmi_server_RemoteRefTest#done
+Run test: java_rmi_server_RemoteRefTest#invoke
+Run test: java_rmi_server_RemoteRefTest#newCall
+Run test: java_rmi_server_RMIClassLoaderTest#loadClass
+Run test: java_rmi_server_UnicastRemoteObjectTest#exportObject
+Run test: java_security_ProviderTest#getVersion
+Run test: java_security_SignatureSpiTest#engineSetParameter
+Run test: java_security_SignatureTest#setParameter
+Run test: java_sql_CallableStatementTest#getBigDecimal
+Run test: java_sql_DriverManagerTest#getLogStream
+Run test: java_sql_DriverManagerTest#setLogStream
+Run test: java_sql_ResultSetTest#getBigDecimal1
+Run test: java_sql_ResultSetTest#getBigDecimal2
+Run test: java_sql_ResultSetTest#getUnicodeStream1
+Run test: java_sql_ResultSetTest#getUnicodeStream2
+Run test: java_util_concurrent_atomic_AtomicBooleanTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicIntegerArrayTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicIntegerTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicLongArrayTest#weakCompareAndSet
+Run test: java_util_concurrent_atomic_AtomicLongTest#weakCompareAndSet
+Run test: java_util_DateTest#getYear
+Run test: java_util_DateTest#getTimezoneOffset
+Run test: java_util_logging_LoggerTest#logrb1
+Run test: java_util_logging_LoggerTest#logrb2
+Run test: java_util_logging_LoggerTest#logrb3
+Run test: java_util_logging_LoggerTest#logrb4
+Run test: java_util_logging_LogManagerTest#getLoggingMXBean
+Run test: java_util_logging_LogRecord_setMillisTest#setMillis
+Run test: java_util_PropertiesTest#save
+Run test: javax_management_AttributeValueExpTest#setMBeanServer
+Run test: javax_management_MBeanServerTest#deserialize1
+Run test: javax_management_MBeanServerTest#deserialize2
+Run test: javax_management_MBeanServerTest#deserialize3
+Run test: javax_management_monitor_CounterMonitorMBeanTest#getDerivedGauge
+Run test: javax_management_monitor_CounterMonitorMBeanTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_CounterMonitorMBeanTest#getThreshold
+Run test: javax_management_monitor_CounterMonitorMBeanTest#setThreshold
+Run test: javax_management_monitor_CounterMonitorTest#getDerivedGauge
+Run test: javax_management_monitor_CounterMonitorTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_CounterMonitorTest#getThreshold
+Run test: javax_management_monitor_CounterMonitorTest#setThreshold
+Run test: javax_management_monitor_GaugeMonitorMBeanTest#getDerivedGauge
+Run test: javax_management_monitor_GaugeMonitorMBeanTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_GaugeMonitorTest#getDerivedGauge
+Run test: javax_management_monitor_GaugeMonitorTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_MonitorMBeanTest#getDerivedGauge
+Run test: javax_management_monitor_MonitorMBeanTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_MonitorMBeanTest#getThreshold
+Run test: javax_management_monitor_MonitorMBeanTest#setObservedObject
+Run test: javax_management_monitor_MonitorTest#getObservedObject
+Run test: javax_management_monitor_MonitorTest#setObservedObject
+Run test: javax_management_monitor_StringMonitorMBeanTest#getDerivedGauge
+Run test: javax_management_monitor_StringMonitorMBeanTest#getDerivedGaugeTimeStamp
+Run test: javax_management_monitor_StringMonitorTest#getDerivedGauge
+Run test: javax_management_monitor_StringMonitorTest#getDerivedGaugeTimeStamp
+Run test: javax_net_ssl_HandshakeCompletedEventTest#getPeerCertificateChain
+Run test: javax_net_ssl_SSLSessionTest#getPeerCertificateChain
+Run test: javax_sql_rowset_BaseRowSetTest#setUnicodeStream
+Run test: javax_swing_AbstractButtonTest#getLabel
+Run test: javax_swing_AbstractButtonTest#setLabel
+Run test: javax_swing_FocusManagerTest#disableSwingFocusManager
+Run test: javax_swing_FocusManagerTest#isFocusManagerEnabled
+Run test: javax_swing_InputVerifierTest#shouldYieldFocus
+Run test: javax_swing_JComponentTest#disable
+Run test: javax_swing_JComponentTest#enable
+Run test: javax_swing_JComponentTest#getNextFocusableComponent
+Run test: javax_swing_JComponentTest#isManagingFocus
+Run test: javax_swing_JComponentTest#requestDefaultFocus
+Run test: javax_swing_JComponentTest#reshape
+Run test: javax_swing_JComponentTest#setNextFocusableComponent
+Run test: javax_swing_JInternalFrameTest#getMenuBar
+Run test: javax_swing_JInternalFrameTest#setMenuBar
+Run test: javax_swing_JListTest#getSelectedValues
+Run test: javax_swing_JMenuBarTest#getMenuBar
+Run test: javax_swing_JPasswordFieldTest#getText1
+Run test: javax_swing_JPasswordFieldTest#getText2
+Run test: javax_swing_JPopupMenuTest#getComponentAtIndex
+Run test: javax_swing_JRootPaneTest#getMenuBar
+Run test: javax_swing_JRootPaneTest#setMenuBar
+Run test: javax_swing_JTableTest#createScrollPaneForTable
+Run test: javax_swing_JTableTest#sizeColumnsToFit
+Run test: javax_swing_JViewportTest#isBackingStoreEnabled
+Run test: javax_swing_JViewportTest#setBackingStoreEnabled
+Run test: javax_swing_KeyStrokeTest#getKeyStroke
+Run test: javax_swing_plaf_basic_BasicTextUITest#modelToView1
+Run test: javax_swing_plaf_basic_BasicTextUITest#modelToView2
+Run test: javax_swing_plaf_basic_BasicTextUITest#viewToModel1
+Run test: javax_swing_plaf_basic_BasicTextUITest#viewToModel2
+Run test: javax_swing_plaf_metal_MetalScrollPaneUITest#uninstallListeners
+Run test: javax_swing_ScrollPaneLayoutTest#getViewportBorderBounds
+Run test: javax_swing_SwingUtilitiesTest#findFocusOwner
+Run test: javax_swing_text_html_HTMLEditorKit_InsertHTMLTextActionTest#insertAtBoundry
+Run test: javax_swing_text_JTextComponentTest#modelToView
+Run test: javax_swing_text_JTextComponentTest#viewToModel
+Run test: javax_swing_text_PasswordViewTest#drawEchoCharacter
+Run test: javax_swing_text_PasswordViewTest#drawSelectedText
+Run test: javax_swing_text_PasswordViewTest#drawUnselectedText
+Run test: javax_swing_text_UtilitiesTest#drawTabbedText
+Run test: javax_swing_text_UtilitiesTest#getBreakLocation
+Run test: javax_swing_text_UtilitiesTest#getPositionAbove
+Run test: javax_swing_text_UtilitiesTest#getPositionBelow
+Run test: javax_swing_text_UtilitiesTest#getTabbedTextOffset1
+Run test: javax_swing_text_UtilitiesTest#getTabbedTextOffset2
+Run test: javax_swing_text_UtilitiesTest#getTabbedTextWidth3
+Run test: javax_swing_text_WrappedPlainViewTest#drawLine
+Run test: javax_swing_text_WrappedPlainViewTest#drawSelectedText
+Run test: javax_swing_text_WrappedPlainViewTest#drawUnselectedText
+Run test: javax_xml_stream_XMLEventFactoryTest#newInstance
+Run test: javax_xml_stream_XMLInputFactoryTest#newInstance
+Run test: javax_xml_stream_XMLOutputFactoryTest#newInstance
+Run test: org_ietf_jgss_GSSContextTest#acceptSecContext
+Run test: org_ietf_jgss_GSSContextTest#getMIC
+Run test: org_ietf_jgss_GSSContextTest#initSecContext
+Run test: org_ietf_jgss_GSSContextTest#unwrap
+Run test: org_ietf_jgss_GSSContextTest#verifyMIC
+Run test: org_ietf_jgss_GSSContextTest#wrap
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent                                                             [pom]
+[[1;34mINFO[m] benchmarks                                                         [jar]
+[[1;34mINFO[m] classloader                                                        [jar]
+[[1;34mINFO[m] fuzzer-experiments                                                 [jar]
+[[1;34mINFO[m] rewrite                                                            [jar]
+[[1;34mINFO[m] synthesis                                                          [jar]
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------------< [0;36muk.ac.ox.cs.refactoring:parent[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding parent 0.0.1-SNAPSHOT                                     [1/6][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mparent[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:benchmarks[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding benchmarks 0.0.1-SNAPSHOT                                 [2/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/benchmarks/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m----------------< [0;36muk.ac.ox.cs.refactoring:classloader[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding classloader 0.0.1-SNAPSHOT                                [3/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------< [0;36muk.ac.ox.cs.refactoring:fuzzer-experiments[0;1m >-------------[m
+[[1;34mINFO[m] [1mBuilding fuzzer-experiments 0.0.1-SNAPSHOT                         [4/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36muk.ac.ox.cs.refactoring:rewrite[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding rewrite 0.0.1-SNAPSHOT                                    [5/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:synthesis[0;1m >------------------[m
+[[1;34mINFO[m] [1mBuilding synthesis 0.0.1-SNAPSHOT                                  [6/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36msynthesis[0;1m ---[m
+javax.management.monitor.CounterMonitorMBean#setThreshold
+java.util.logging.Logger#logrb3
+java.awt.Dialog#show
+com.sun.source.tree.CaseTree#getExpression
+org.ietf.jgss.GSSContext#wrap
+java.sql.ResultSet#getUnicodeStream1
+java.awt.Component#mouseUp​
+javax.swing.plaf.basic.BasicTextUI#modelToView1
+java.sql.ResultSet#getBigDecimal1
+javax.management.monitor.CounterMonitorMBean#getDerivedGaugeTimeStamp
+java.net.URLStreamHandler#setURL
+javax.swing.JPasswordField#getText2
+java.lang.String#getBytes
+javax.management.monitor.StringMonitorMBean#getDerivedGauge
+java.util.logging.Logger#logrb1
+java.rmi.server.RemoteRef#invoke
+javax.swing.FocusManager#isFocusManagerEnabled
+javax.management.monitor.CounterMonitorMBean#getThreshold
+javax.management.monitor.CounterMonitor#getThreshold
+java.net.DatagramSocketImpl#setTTL
+java.awt.datatransfer.DataFlavor#equals​
+javax.net.ssl.SSLSession#getPeerCertificateChain
+java.rmi.server.RemoteRef#newCall
+javax.management.AttributeValueExp#setMBeanServer
+java.sql.DriverManager#getLogStream
+java.awt.Component#keyUp
+org.ietf.jgss.GSSContext#acceptSecContext
+org.ietf.jgss.GSSContext#getMIC
+java.sql.ResultSet#getUnicodeStream2
+javax.management.monitor.GaugeMonitorMBean#getDerivedGaugeTimeStamp
+java.beans.Beans#instantiate
+javax.swing.JMenuBar#getMenuBar
+org.ietf.jgss.GSSContext#verifyMIC
+java.awt.TextArea#insertText
+java.lang.Character#isJavaLetterOrDigit​
+java.security.SignatureSpi#engineSetParameter
+java.awt.Dialog#hide
+javax.management.monitor.MonitorMBean#getDerivedGaugeTimeStamp
+java.net.DatagramSocketImpl#getTTL
+javax.swing.plaf.basic.BasicTextUI#modelToView2
+java.util.logging.LogManager#getLoggingMXBean
+java.util.logging.Logger#logrb2
+java.lang.Package#getPackage
+java.awt.ComponentOrientation#getOrientation​
+java.rmi.server.RemoteRef#done
+org.ietf.jgss.GSSContext#initSecContext
+javax.swing.text.Utilities#getTabbedTextOffset2
+java.awt.Component#mouseEnter​
+javax.management.monitor.CounterMonitor#getDerivedGauge
+java.awt.Component#mouseDown​
+javax.swing.plaf.basic.BasicTextUI#viewToModel2
+java.awt.Component#gotFocus
+java.sql.CallableStatement#getBigDecimal
+javax.swing.text.Utilities#getTabbedTextOffset1
+java.util.logging.Logger#logrb4
+javax.management.monitor.CounterMonitorMBean#getDerivedGauge
+javax.swing.text.html.HTMLEditorKit.InsertHTMLTextAction#insertAtBoundry
+javax.management.monitor.MonitorMBean#setObservedObject
+javax.management.MBeanServer#deserialize1
+javax.management.monitor.GaugeMonitorMBean#getDerivedGauge
+java.awt.Component#mouseMove​
+javax.net.ssl.HandshakeCompletedEvent#getPeerCertificateChain
+javax.management.monitor.MonitorMBean#getDerivedGauge
+javax.management.monitor.StringMonitor#getDerivedGaugeTimeStamp
+javax.management.MBeanServer#deserialize3
+javax.management.monitor.StringMonitorMBean#getDerivedGaugeTimeStamp
+javax.management.monitor.GaugeMonitor#getDerivedGaugeTimeStamp
+javax.management.MBeanServer#deserialize2
+javax.swing.text.Utilities#getTabbedTextWidth3
+java.awt.Component#mouseExit​
+java.util.logging.LogRecord.setMillis#setMillis
+java.sql.ResultSet#getBigDecimal2
+javax.swing.JPasswordField#getText1
+javax.swing.JList#getSelectedValues
+javax.management.monitor.CounterMonitor#getDerivedGaugeTimeStamp
+java.awt.Component#mouseDrag​
+org.ietf.jgss.GSSContext#unwrap
+javax.management.monitor.MonitorMBean#getThreshold
+javax.swing.plaf.basic.BasicTextUI#viewToModel1
+java.awt.Toolkit#getFontMetrics
+Generate experimental table.tex
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Build Order:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent                                                             [pom]
+[[1;34mINFO[m] benchmarks                                                         [jar]
+[[1;34mINFO[m] classloader                                                        [jar]
+[[1;34mINFO[m] fuzzer-experiments                                                 [jar]
+[[1;34mINFO[m] rewrite                                                            [jar]
+[[1;34mINFO[m] synthesis                                                          [jar]
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------------< [0;36muk.ac.ox.cs.refactoring:parent[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding parent 0.0.1-SNAPSHOT                                     [1/6][m
+[[1;34mINFO[m] [1m--------------------------------[ pom ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mparent[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:benchmarks[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding benchmarks 0.0.1-SNAPSHOT                                 [2/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 10 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mbenchmarks[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m----------------< [0;36muk.ac.ox.cs.refactoring:classloader[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding classloader 0.0.1-SNAPSHOT                                [3/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/classloader/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mclassloader[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-------------< [0;36muk.ac.ox.cs.refactoring:fuzzer-experiments[0;1m >-------------[m
+[[1;34mINFO[m] [1mBuilding fuzzer-experiments 0.0.1-SNAPSHOT                         [4/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/fuzzer-experiments/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mfuzzer-experiments[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36muk.ac.ox.cs.refactoring:rewrite[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding rewrite 0.0.1-SNAPSHOT                                    [5/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/pkesseli/refactoring-synthesis/source/rewrite/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36mrewrite[0;1m ---[m
+[[1;34mINFO[m] skipping execute as per configuration
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m-----------------< [0;36muk.ac.ox.cs.refactoring:synthesis[0;1m >------------------[m
+[[1;34mINFO[m] [1mBuilding synthesis 0.0.1-SNAPSHOT                                  [6/6][m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 1 resource
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mexec-maven-plugin:3.1.0:java[m [1m(default-cli)[m @ [36msynthesis[0;1m ---[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1mReactor Summary for parent 0.0.1-SNAPSHOT:[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] parent ............................................. [1;32mSUCCESS[m [  0.155 s]
+[[1;34mINFO[m] benchmarks ......................................... [1;32mSUCCESS[m [  0.940 s]
+[[1;34mINFO[m] classloader ........................................ [1;32mSUCCESS[m [  0.028 s]
+[[1;34mINFO[m] fuzzer-experiments ................................. [1;32mSUCCESS[m [  0.063 s]
+[[1;34mINFO[m] rewrite ............................................ [1;32mSUCCESS[m [  0.034 s]
+[[1;34mINFO[m] synthesis .......................................... [1;32mSUCCESS[m [  0.616 s]
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  2.046 s
+[[1;34mINFO[m] Finished at: 2024-01-13T05:41:05+01:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m

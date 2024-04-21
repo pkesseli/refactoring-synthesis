@@ -1,4 +1,4 @@
-mvn --file source/pom.xml clean package --define skipTests=true
+# mvn --file source/pom.xml clean package --define skipTests=true
 
 experimentRunName=experiment-CHANGE-ME
 seed=6639355510491368
@@ -7,8 +7,8 @@ maxCounterexamples=1
 unset DISPLAY
 
 # Single example test run
-# mvn --file source/pom.xml --define java.awt.headless=true --define resynth.synthesis.javadoc=true --define resynth.fuzzing.random=false --define resynth.verification.stage1.maxInputs=$maxInputs --define resynth.verification.stage1.maxCounterexamples=$maxCounterexamples --define resynth.verification.stage2.maxInputs=0 --define resynth.verification.stage2.maxCounterexamples=0 --define resynth.seed=$seed --define failIfNoTests=false --define trimStackTrace=false --define test=uk.ac.ox.cs.refactoring.synthesis.experiment.java_awt_ListTest#clear test
-# exit 0
+mvn --file source/pom.xml --define java.awt.headless=true --define resynth.synthesis.javadoc=false --define resynth.fuzzing.random=false --define resynth.verification.stage1.maxInputs=$maxInputs --define resynth.verification.stage1.maxCounterexamples=$maxCounterexamples --define resynth.verification.stage2.maxInputs=0 --define resynth.verification.stage2.maxCounterexamples=0 --define resynth.seed=$seed --define failIfNoTests=false --define trimStackTrace=false --define test=uk.ac.ox.cs.refactoring.synthesis.experiment.javax_swing_text_UtilitiesTest#getPositionAbove test
+exit 0
 
 # Find all benchmark names
 allTestNames=()
