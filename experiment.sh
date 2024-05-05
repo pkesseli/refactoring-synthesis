@@ -1,6 +1,8 @@
+#!/bin/bash
+
 mvn --file source/pom.xml clean package --define skipTests=true
 
-experimentRunName=experiment-CHANGE-ME
+experimentRunName=experiment-2024-05-04_13-00
 seed=6639355510491368
 maxInputs=500
 maxCounterexamples=1
@@ -22,24 +24,33 @@ for testCompilationUnit in source/synthesis/src/test/java/uk/ac/ox/cs/refactorin
   done
 done
 
-# Run CEGIS-Fuzz w/ code hints
-mkdir source/synthesis/target/surefire-reports
+echo 'Run CEGIS-Fuzz w/ code hints'
+mkdir source/synthesis/target/surefire-reports 2>/dev/null
 for testName in ${allTestNames[@]}; do
+  echo "Running ${testName}..."
   mvn --file source/pom.xml --define java.awt.headless=true --define resynth.synthesis.javadoc=true --define resynth.fuzzing.random=false --define resynth.verification.stage1.maxInputs=$maxInputs --define resynth.verification.stage1.maxCounterexamples=$maxCounterexamples --define resynth.verification.stage2.maxInputs=0 --define resynth.verification.stage2.maxCounterexamples=0 --define resynth.seed=$seed --define failIfNoTests=false --define trimStackTrace=false --define test="uk.ac.ox.cs.refactoring.synthesis.experiment.$testName" test >"source/synthesis/target/surefire-reports/$testName.log" 2>&1
+  echo "Finished ${testName}."
 done
+echo "Collecting reperiment results..."
 mvn --file source/pom.xml --projects='!instrument' --also-make --define exec.classpathScope=test --define exec.mainClass=uk.ac.ox.cs.refactoring.synthesis.cli.Experiment compile test-compile exec:java
-mv source/synthesis/target/surefire-reports/summary.json source/synthesis/target/surefire-reports/type.json
+mv source/synthesis/target/surefire-reports/summary.json source/synthesis/target/surefire-reports/code-hints.json
 cp -r source/synthesis/target/surefire-reports source/synthesis/$experimentRunName/zest-javadoc
+echo "Collected reperiment results."
 
-# Run CEGIS-Fuzz w/ type
+echo 'Run CEGIS-Fuzz w/ type'
 mvn --file source/pom.xml clean package --define skipTests=true
 mkdir source/synthesis/target/surefire-reports
 for testName in ${allTestNames[@]}; do
+  echo "Running ${testName}..."
   mvn --file source/pom.xml --define java.awt.headless=true --define resynth.synthesis.javadoc=false --define resynth.fuzzing.random=false --define resynth.verification.stage1.maxInputs=$maxInputs --define resynth.verification.stage1.maxCounterexamples=$maxCounterexamples --define resynth.verification.stage2.maxInputs=0 --define resynth.verification.stage2.maxCounterexamples=0 --define resynth.seed=$seed --define failIfNoTests=false --define trimStackTrace=false --define test="uk.ac.ox.cs.refactoring.synthesis.experiment.$testName" test >"source/synthesis/target/surefire-reports/$testName.log" 2>&1
+  echo "Finished ${testName}."
 done
+echo "Collecting reperiment results..."
 mvn --file source/pom.xml --projects='!instrument' --also-make --define exec.classpathScope=test --define exec.mainClass=uk.ac.ox.cs.refactoring.synthesis.cli.Experiment compile test-compile exec:java
-mv source/synthesis/target/surefire-reports/summary.json source/synthesis/target/surefire-reports/code-hints.json
+mv source/synthesis/target/surefire-reports/summary.json source/synthesis/target/surefire-reports/type.json
 cp -r source/synthesis/target/surefire-reports source/synthesis/$experimentRunName/zest
+echo "Collected reperiment results."
 
-# Generate experimental table.tex
+echo "Generating experimental table.tex..."
 mvn --file source/pom.xml --projects='!instrument' --also-make --define exec.classpathScope=test --define exec.mainClass=uk.ac.ox.cs.refactoring.synthesis.cli.TableGenerator --define exec.args="source/synthesis/$experimentRunName/zest/type.json source/synthesis/$experimentRunName/zest-javadoc/code-hints.json" compile exec:java
+echo "Generated experimental table.tex."
