@@ -16,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
@@ -150,7 +152,8 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       throw new NoSuchElementException("Running out of budget.");
     }
     consumeBudget();
-    String code = codeEngine.generateCode(inductionPrompt(counterexamples));
+    Prompt prompt = inductionPrompt(counterexamples);
+    String code = codeEngine.generateCode(prompt);
     try {
       Candidate candidate = processCode(code);
       return candidate;
@@ -181,6 +184,13 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   private String marshalObject(Object object) throws JsonProcessingException {
     var mapper = new ObjectMapper()
       .enable(SerializationFeature.INDENT_OUTPUT);
+    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    mapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector() {
+      @Override
+      public boolean hasIgnoreMarker(final AnnotatedMember m) {
+        return super.hasIgnoreMarker(m) || m.getName().contains("Mockito");
+      }
+    });
     // mapper.setVisibility
     var json = mapper.writeValueAsString(object);
     return json;

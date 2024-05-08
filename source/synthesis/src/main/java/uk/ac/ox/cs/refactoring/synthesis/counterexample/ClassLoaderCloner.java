@@ -57,7 +57,7 @@ public class ClassLoaderCloner {
     final Class<?> cls = object.getClass();
     if (Polymorphism.isDynamic(cls)) {
       if (ClassLoaders.isUserClass(classLoader, cls)) {
-        logger.warn("Lambdas in user classes are not yet supported.");
+        // logger.warn("Lambdas in user classes are not yet supported.");
       }
       return object;
     }
