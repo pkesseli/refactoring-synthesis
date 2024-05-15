@@ -3,6 +3,7 @@ package uk.ac.ox.cs.refactoring.synthesis.candidate.java.seed.javadoc;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +107,8 @@ class ExpressionCompilerVisitor extends VoidVisitorAdapter<Void> {
     this.javaParser = javaParser;
     this.typeSolver = typeSolver;
     this.involvedClasses = involvedClasses;
-    this.environment = environment;
+    this.environment = new HashMap<>();
+    this.environment.putAll(environment);
     this.candidate = candidate;
   }
 
@@ -117,7 +119,6 @@ class ExpressionCompilerVisitor extends VoidVisitorAdapter<Void> {
    * @return Instruction set expression.
    */
   IExpression getExpression() {
-    // TODO `null` represent noop. It is appropriate?
     if (stack.isEmpty()) {
       return null;
     } else {
@@ -137,10 +138,7 @@ class ExpressionCompilerVisitor extends VoidVisitorAdapter<Void> {
 
   @Override
   public void visit(final StringLiteralExpr n, final Void arg) {
-    // TODO
-    // System.out.println(n.asString());
     stack.add(new Literal(n.asString(), getType(n), null));
-    // throw new IllegalArgumentException("string literals are not supported");
   }
 
   @Override

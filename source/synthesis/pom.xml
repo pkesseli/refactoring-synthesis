@@ -164,6 +164,17 @@
     </plugins>
   </build>
 
+  <dependencyManagement>
+      <dependencies>
+          <dependency>
+              <groupId>software.amazon.awssdk</groupId>
+              <artifactId>bom</artifactId>
+              <version>2.24.0</version>
+              <type>pom</type>
+              <scope>import</scope>
+          </dependency>
+      </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>uk.ac.ox.cs.refactoring</groupId>
@@ -248,7 +259,20 @@
         <groupId>de.kherud</groupId>
         <artifactId>llama</artifactId>
         <version>3.0.0</version>
-</dependency>
+    </dependency>
+    <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>bedrockruntime</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>sts</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20231013</version>
+    </dependency>
   </dependencies>
 
 </project>
