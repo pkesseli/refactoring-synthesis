@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -47,11 +49,15 @@ import uk.ac.ox.cs.refactoring.synthesis.cegis.CegisLoopListener;
 import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.neural.CodeEngine;
+import uk.ac.ox.cs.refactoring.synthesis.neural.Claude2;
 import uk.ac.ox.cs.refactoring.synthesis.neural.LocalCodeLLaMa2;
+import uk.ac.ox.cs.refactoring.synthesis.neural.MockEngine;
 import uk.ac.ox.cs.refactoring.synthesis.neural.Prompt;
 import uk.ac.ox.cs.refactoring.synthesis.neural.TextTagger;
 
 public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
+  private static final Logger LOGGER = Logger.getLogger(NeuralSynthesis.class.getName());
+
   private CodeEngine codeEngine;
   private String javadocComment = null;
   private String templateCallString = null;
@@ -59,7 +65,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   private MethodDeclaration method = null;
   private Map<String, IExpression> environment = null;
 
-  private int budget = 5;
+  private int budget = 2;
 
   private void consumeBudget() {
     budget -= 1;
@@ -77,6 +83,8 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
         executor, listener);
 
     codeEngine = new LocalCodeLLaMa2();
+    // codeEngine = new Claude2();
+    // codeEngine = new MockEngine();
 
     final String className = generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName;
     final CombinedTypeSolver typeSolver = generatorConfiguration.javaDocSeed.parserContext.TypeSolver;
@@ -140,7 +148,6 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       return candidate;
     } catch (final NoSuchElementException e) {
       listener.initial(null);
-      // throw e;
       return null;
     }
   }
@@ -158,7 +165,6 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       Candidate candidate = processCode(code);
       return candidate;
     } catch (final NoSuchElementException e) {
-      // throw e;
       return null;
     }
   }
@@ -175,7 +181,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     contextBuilder.append(TextTagger.tag("code", templateCallString));
 
     String context = contextBuilder.toString();
-    String instruction = "Help me refactor this code snippet.";
+    String instruction = "Help me refactor this code snippet so that it doesn't use the deprecated method. Try to make use of the deprecation comments given above.";
     Prompt prompt = new Prompt(context, instruction);
     prompt.constraints.add("Your answer must only contain a sequence of Java statements");
     return prompt;
@@ -253,8 +259,6 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       newBody.addStatement(0, statement);
       method.setBody(newBody);
     }
-    // System.out.println(statement.toString());
-    // System.out.println(method.toString());
     final ParseResult<CompilationUnit> compilationUnit = javaParser.parse(parseResult.getResult().get().toString());
     final MethodDeclaration container = generatorConfiguration.javaDocSeed.findMethod(symbolResolver, typeSolver, compilationUnit);
     final Statement result = container.getBody().get().getStatement(0);
@@ -315,16 +319,19 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     final TypeSolver typeSolver = generatorConfiguration.javaDocSeed.parserContext.TypeSolver;
     final JavaParser javaParser = generatorConfiguration.javaDocSeed.parserContext.JavaParser;
 
-
+    // System.out.printf("Processing %s\n", code);
     try {
       var stmts = (BlockStmt) parseString(code);
+      // System.out.printf("getting %d statements\n", stmts.getStatements().size());
       var arguments = resolveArguments(environment);
       for (final var argument : arguments) {
         stmts.addStatement(0, argument);
       }
 
       SnippetCandidate candidate = new SnippetCandidate();
-      final var compiler = new ExpressionCompiler(generatorConfiguration.javaDocSeed.classLoader, generatorConfiguration.javaDocSeed.parserContext.JavaParser, generatorConfiguration.javaDocSeed.parserContext.TypeSolver,
+      final var compiler = new ExpressionCompiler(generatorConfiguration.javaDocSeed.classLoader, 
+          generatorConfiguration.javaDocSeed.parserContext.JavaParser, 
+          generatorConfiguration.javaDocSeed.parserContext.TypeSolver,
           components.InvolvedClasses,
           environment, candidate);
 
@@ -333,20 +340,28 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
         final var statement = parseInMethodContext(symbolResolver, typeSolver, javaParser, stmt);
         final var expression = statement.asExpressionStmt().getExpression();
 
+        // System.out.printf("Compiling expression: %s of kind %s\n", expression.toString(), expression.getClass().getName());
+
         // System.out.println("parsed expression: " + expression.toString());
         final var instructionExpression = compiler.compile(expression);
         if (instructionExpression == null) {
+          // System.out.println("results: noop");
           continue;
         }
+        // System.out.printf("%s\n", instructionExpression.toString());
         var convertedExpression = new ExpressionStatement(instructionExpression);
         candidate.Block.Statements.add(convertedExpression);
 
+      }
+      if (candidate.Block.Statements.isEmpty()) {
+        LOGGER.log(Level.WARNING, "getting empty solution!");
       }
       @SuppressWarnings("unchecked")
       Candidate res = (Candidate) candidate;
       return res;
 
     } catch (final Exception e) {
+      LOGGER.log(Level.INFO, "Exception was thrown during code processing", e);
       throw new NoSuchElementException(e.getMessage());
     }
   }
