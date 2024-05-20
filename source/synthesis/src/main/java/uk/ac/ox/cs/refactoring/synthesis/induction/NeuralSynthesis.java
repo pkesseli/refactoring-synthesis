@@ -188,7 +188,14 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     StringBuilder contextBuilder = new StringBuilder();
     contextBuilder.append(String.format("The method %s of the class %s is deprecated.\n",
         generatorConfiguration.javaDocSeed.methodToRefactor.MethodName, generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName));
-    contextBuilder.append(String.format("Here is the complete method definition:\n%s\n", TextTagger.tag("method-definition", methodString)));
+    contextBuilder.append("Here is the complete method definition");
+    if (WITH_CODE_HINTS) {
+      var deprecationCommentDescription = "with Javadoc comments that may contains a @deprecated tag explaining why the item has been deprecated and suggesting what to use instead";
+      contextBuilder.append(' ');
+      contextBuilder.append(deprecationCommentDescription);
+    }
+    contextBuilder.append(":\n");
+    contextBuilder.append(String.format("\n%s\n", TextTagger.tag("method-definition", methodString)));
     // if (javadocComment != null && WITH_CODE_HINTS) {
     //   contextBuilder.append("The related deprecation comment in the Javadoc is contained in the following <deprecation-comment> tag:\n");
     //   contextBuilder.append(TextTagger.tag("deprecation-comment", javadocComment));
@@ -199,7 +206,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     String context = contextBuilder.toString();
     String instruction = "Help me refactor this code snippet so that it doesn't use the deprecated method.";
     if (WITH_CODE_HINTS) {
-      instruction += " The comments of the method definition might be useful.";
+      instruction += " The comments in the method definition might be useful.";
     }
     Prompt prompt = new Prompt(context, instruction);
     prompt.constraints.add("Your answer must only contain a sequence of Java statements");
