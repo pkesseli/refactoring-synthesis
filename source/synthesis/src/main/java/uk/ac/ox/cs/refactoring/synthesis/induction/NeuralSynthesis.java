@@ -29,7 +29,6 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -51,21 +50,24 @@ import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.neural.CodeEngine;
 import uk.ac.ox.cs.refactoring.synthesis.neural.Claude2;
 import uk.ac.ox.cs.refactoring.synthesis.neural.LocalCodeLLaMa2;
-import uk.ac.ox.cs.refactoring.synthesis.neural.MockEngine;
 import uk.ac.ox.cs.refactoring.synthesis.neural.Prompt;
 import uk.ac.ox.cs.refactoring.synthesis.neural.TextTagger;
 
 public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   private static final Logger LOGGER = Logger.getLogger(NeuralSynthesis.class.getName());
+  private static final String MODEL = System.getProperty("model");
+  private static final Boolean WITH_CODE_HINTS = Boolean.getBoolean("codehints");
+  private final CodeEngine codeEngine;
 
-  private CodeEngine codeEngine;
-  private String javadocComment = null;
+  // private CodeEngine codeEngine;
+  private String methodString = null;
+  // private String javadocComment = null;
   private String templateCallString = null;
   private ParseResult<CompilationUnit> parseResult = null;
   private MethodDeclaration method = null;
   private Map<String, IExpression> environment = null;
 
-  private int budget = 2;
+  private int budget = Integer.getInteger("budget");
 
   private void consumeBudget() {
     budget -= 1;
@@ -82,9 +84,22 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     super(generatorConfiguration, generatorRepository, sourceOfRandomness, candidateType, frameworkMethodPlaceholder,
         executor, listener);
 
-    codeEngine = new LocalCodeLLaMa2();
-    // codeEngine = new Claude2();
-    // codeEngine = new MockEngine();
+    if (MODEL != null) {
+      switch (MODEL) {
+        case "codellama2":
+          codeEngine = new LocalCodeLLaMa2();
+          break;
+        case "claude2":
+          codeEngine = new Claude2();
+          break;
+        default:
+          codeEngine = null;
+          break;
+      }      
+    } else {
+      codeEngine = null;
+    }
+
 
     final String className = generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName;
     final CombinedTypeSolver typeSolver = generatorConfiguration.javaDocSeed.parserContext.TypeSolver;
@@ -92,7 +107,6 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     final JavaParser javaParser = generatorConfiguration.javaDocSeed.parserContext.JavaParser;
     try {
       parseResult = generatorConfiguration.javaDocSeed.findSource(javaParser, className);
-      // defaultType = TypeFactory.createClassType(ClassLoaders.loadClass(generatorConfiguration.javaDocSeed.classLoader, className));
     } catch (final Exception e) {
       return;
     }
@@ -100,6 +114,11 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     method = generatorConfiguration.javaDocSeed.findMethod(symbolResolver, typeSolver, parseResult);
     if (method == null)
       return;
+
+    if (!WITH_CODE_HINTS) {
+      method.setComment(null);
+    }
+    methodString = method.toString();
 
     StringBuilder templateCallString = new StringBuilder();
     if (!method.isStatic()) {
@@ -112,12 +131,10 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     this.templateCallString = templateCallString.toString();
 
 
-    final Optional<Javadoc> javadocComment = method.getJavadoc();
-    if (!javadocComment.isPresent())
-      return;
-
-    this.javadocComment = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4(javadocComment.get().toText());
-
+    // final Optional<Javadoc> javadocComment = method.getJavadoc();
+    // if (javadocComment.isPresent()) {
+    //   this.javadocComment = org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4(javadocComment.get().toText());
+    // }
 
     var callStmt = parseString(this.templateCallString);
     if (callStmt instanceof BlockStmt) {
@@ -130,8 +147,6 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       }
       environment.putAll(resolveArg.arguments);
 
-    } else {
-      return;
     }
   }
 
@@ -173,15 +188,19 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     StringBuilder contextBuilder = new StringBuilder();
     contextBuilder.append(String.format("The method %s of the class %s is deprecated.\n",
         generatorConfiguration.javaDocSeed.methodToRefactor.MethodName, generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName));
-    if (javadocComment != null) {
-      contextBuilder.append("The related deprecation comment in the Javadoc is contained in the following <deprecation-comment> tag:\n");
-      contextBuilder.append(TextTagger.tag("deprecation-comment", javadocComment));
-    }
+    contextBuilder.append(String.format("Here is the complete method definition:\n%s\n", TextTagger.tag("method-definition", methodString)));
+    // if (javadocComment != null && WITH_CODE_HINTS) {
+    //   contextBuilder.append("The related deprecation comment in the Javadoc is contained in the following <deprecation-comment> tag:\n");
+    //   contextBuilder.append(TextTagger.tag("deprecation-comment", javadocComment));
+    // }
     contextBuilder.append("However, I used this method call in my code base, the code snippet is contained in the following <code> tag:\n");
     contextBuilder.append(TextTagger.tag("code", templateCallString));
 
     String context = contextBuilder.toString();
-    String instruction = "Help me refactor this code snippet so that it doesn't use the deprecated method. Try to make use of the deprecation comments given above.";
+    String instruction = "Help me refactor this code snippet so that it doesn't use the deprecated method.";
+    if (WITH_CODE_HINTS) {
+      instruction += " The comments of the method definition might be useful.";
+    }
     Prompt prompt = new Prompt(context, instruction);
     prompt.constraints.add("Your answer must only contain a sequence of Java statements");
     return prompt;
