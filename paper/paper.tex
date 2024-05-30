@@ -24,9 +24,9 @@
 %\usepackage[scaled]{helvet} % see www.ctan.org/get/macros/latex/required/psnfss/psnfss2e.pdf
 
 %% \BibTeX command to typeset BibTeX logo in the docs
-
-\documentclass[sigconf,review, anonymous]{acmart}
-\acmConference[ISSTA 2024]{ACM SIGSOFT International Symposium on Software Testing and Analysis}{16-20 September, 2024}{Vienna, Austria}
+\documentclass[sigconf,review,anonymous]{acmart}
+%\documentclass[sigconf,review, anonymous]{acmart}
+%\acmConference[ISSTA 2024]{ACM SIGSOFT International Symposium on Software Testing and Analysis}{16-20 September, 2024}{Vienna, Austria}
 
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
@@ -62,8 +62,8 @@
 \usepackage[ruled,vlined]{algorithm2e}
 
 \usepackage{amsthm}
-\newtheorem{definition}{Definition}
-\newtheorem{example}{Example}
+%\newtheorem{definition}{Definition}
+%\newtheorem{example}{Example}
 
 %\usepackage{algorithm}
 \usepackage{amsfonts}
@@ -126,7 +126,7 @@
                                   % (paid open-access papers, 
                                   % short abstracts)
 
-\title{Automatic refactoring of deprecated APIs} % guided by types and code hints}
+\title{Symbolic vs neural refactoring of deprecated APIs} % guided by types and code hints}
 %\subtitle{Subtitle Text, if any}
 % double-blind submission
 % single-blind only for Technical Research: http://icse2017.gatech.edu/technical-research-cfp
@@ -292,28 +292,89 @@ void main(String[] args) {
 \label{ex:deprecated-method-other}
 \end{figure}
 
-While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to
-recognise the use of deprecated APIs and warn the programmer about it,
-refactoring the code to a preferred API is significantly more
-complex. Indeed neither Eclipse 4.27.0 nor IntelliJ IDEA 2023.1.1 make
-any attempt to suggest an alternative to the user.
+%While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to
+%recognise the use of deprecated APIs and warn the programmer about it,
+%refactoring the code to a preferred API is significantly more
+%complex. Indeed neither Eclipse 4.27.0 nor IntelliJ IDEA 2023.1.1 make
+%any attempt to suggest an alternative to the user.
 
-With respect to the work pursued by the academic community, 
-one of the directions is to 
-replace calls
-to deprecated methods by their
-bodies~\cite{DBLP:conf/paste/Perkins05}.
-However, this
-strategy doesn't usually follow the intention of the language designers, who
-use deprecation to signal that there is a safer and generally better
-way of achieving a given goal.
-%Moreover, inlining calls to deprecated
-%methods can cause undesirable effects if the original function was
-%synchronised.  While it is not possible for two invocations on the
-%same object of the synchronised original method to interleave, this is
-%not guaranteed after inlining the method's body.
-Other direction is specifically targeted at the Android API, and requires existing examples of how the updates were handled by other programmers~\cite{DBLP:conf/issta/FazziniXO19,DBLP:conf/iwpc/HaryonoTKSML0J20,DBLP:journals/ese/HaryonoTLJLKSM22}.
-Conversely, as explained in the rest of the paper, we only use type information and the Javadoc deprecation comments.
+
+In this paper, we contrast a symbolic and a neural approach based on Large Language Models (LLMs) for automatically generating such refactorings. Both approaches have access to the same information: type signatures and Javadoc deprecation messages. We make the two approaches as similar as possible. In particular, they are both iterative, such that, in each itaration a candidate refactoring is being generated, which is then verified for semantic equivalence with the original codeby the same verifier. If the verification succeeds, then the solution is returned to the user. Otherwise, the counterexample is used  to refine the current solution.
+
+
+%In this paper, we investigate two of the most common types pf program synthesis: type-directed synthesis and component-based synthesis. In particular, we want to see how a symbolic and a neural approach comapre against each other for for of these cases.
+
+%* Type-directed synthesis has been widely used for functional programs, but less so for procedural programming. The exception is using very sophisticates type systems such as graded linear type systems, or ... In this work, our focus is on Java so we rely on a traditional type system. On the side of the neural approach, we are not aware of any type-based investigation. 
+%* For component ... For the LLM-based approach, this translates into providing the daprecates message and allowing the LLM to make use of the corresponding code hints.
+
+
+For code generation, in the literature, there is a focus on the functional properties of the generated code, which generally refers to correctness. In the case of program refactoring,
+there are also qualitative expectations as the refactoring is meant to improve the code quality (while also maintaining functional correctness).
+
+
+%While symbolic approaches have been investigated for a long time, recently, there is a new direction for program synthesis powered by the evolution of LLMs.
+%In this paper, we will contrast the two approaches:
+%*  a symbolic, type and components based approach
+%* a neural approach based on LLMs
+
+
+%RQs:
+%* Can LLMs reason about type?
+%* Can LLMs follow component based synthesis? 
+
+
+
+
+Two of the most common symbolic program synthesis techniques are type-directed and component-based. 
+
+%[Talk about type-directed synthesis]
+%[Component-based using the Deprecation messages]
+
+
+The questions that we are trying to answer are:
+\begin{itemize}
+\item[RQ1] How do the two approaches take advantage of type information?
+\item[RQ2] How do the two approaches take advantage of the deprecation message?
+\item[RQ3] How do the two approaches deal with qualitative requirements?
+\end{itemize}  
+
+
+%* For the symbolic approach, we are interested in how type-directed synthesis works for Java. This has been effective mostly in functional programming, where the types provide a comprehensive description of the code. How does this extend to Java?
+%For the symbolic approach, we will answer the first question by using type-directed synthesis, and the second by using component-based synthesis.
+
+
+%* For the neural approach, we will construct the prompt in two different ways:
+%** firstly, we only provide the type signature.
+%** then, we also provide the deprecated message containing the code hints.
+
+%* What happens when we add components?
+%* How does the LLM work with components?
+
+%Usually for LLMs, we expect a natural language description of the task and a few i/o examples. In this work, we investigate their abilities in a different setting, which is borrowed from symbolic synthesis: we provide types and components.
+
+%We are the first to investigate ....
+
+
+%For both approaches, we have an iterative approach where in each iteration:
+%* we use a synthesiser (symbolic or neural) to get a solution
+%* we verify it for semantic equivalence to the deprecated function
+%* if equivalent, we return to the user
+%* if not true, than we provide the counterexample back to the synthesis engine. 
+
+%For LLM, I want the following:
+%* results just with types
+%* results with code hints.
+
+%For the LLM results, I want:
+%* unsound solution
+%* correct solution that obeys the code hint
+%* correct solution that doesn't obey the code hint
+%* incorrect solution (because it has loops)
+
+%Q: Should we provide the code of the deprecated function in the prompt?
+
+
+
 
 
 %% There is also
@@ -321,24 +382,6 @@ Conversely, as explained in the rest of the paper, we only use type information 
 %% focusing on replacing calls to deprecated methods by their
 %% bodies~\cite{DBLP:conf/paste/Perkins05}. 
 
-
-Another closely related class of works focus on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. Notably, {\em change rules are different from refactorings} as they don't provide the actual replacement code. Instead, the programmer is still required to perform a lot of the work
-manually: for instance, she has to figure out lines 6--8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
-responsibility of guaranteeing that the refactored code maintains the original behaviour
-is left to the programmer.
-
-Indeed, when referring back to the example in
-Figure~\ref{ex:deprecated-method-other}, it's not immediately obvious
-that the original and the refactored code behave in the same manner.
-One needs a good understanding of the code's semantics in order to
-reach such a conclusion. As we will see later in the paper, guaranteeing semantic equivalence is particularly difficult in the presence of aliasing, when there may be multiple references to the same memory location.
-On the other hand, refactorings that rely solely on a
-program's syntax and do not consider its semantics end up being overly
-conservative, mostly addressing structural changes to the program.
-The observation that refactoring generally benefits from semantic
-analyses of a program is not new, e.g. previous works made use of
-program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or
-types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
 
 
 %Allowing changes that go beyond syntax, and attempting to prove semantic equivalence is a very difficult task, in particular for code that accesses the heap. 
@@ -402,6 +445,45 @@ technique can be applied to deprecated fields and classes.
 
 %% We believe RQ1 is particularly important given the high computational cost of LLMs. Our results highlight the fact that there is room for
 %% symbolic code generation methods to outperform general-purpose LLMs at a much lower cost.
+
+\paragraph{Other approaches to program refactoring}
+With respect to the work pursued by the academic community, 
+one of the directions is to 
+replace calls
+to deprecated methods by their
+bodies~\cite{DBLP:conf/paste/Perkins05}.
+However, this
+strategy doesn't usually follow the intention of the language designers, who
+use deprecation to signal that there is a safer and generally better
+way of achieving a given goal.
+%Moreover, inlining calls to deprecated
+%methods can cause undesirable effects if the original function was
+%synchronised.  While it is not possible for two invocations on the
+%same object of the synchronised original method to interleave, this is
+%not guaranteed after inlining the method's body.
+Other direction is specifically targeted at the Android API, and requires existing examples of how the updates were handled by other programmers~\cite{DBLP:conf/issta/FazziniXO19,DBLP:conf/iwpc/HaryonoTKSML0J20,DBLP:journals/ese/HaryonoTLJLKSM22}.
+Conversely, we do not require such example, and instead use type information and the Javadoc deprecation comments.
+
+
+Another closely related class of works focus on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. Notably, {\em change rules are different from refactorings} as they don't provide the actual replacement code. Instead, the programmer is still required to perform a lot of the work
+manually: for instance, she has to figure out lines 6--8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
+responsibility of guaranteeing that the refactored code maintains the original behaviour
+is left to the programmer.
+
+Indeed, when referring back to the example in
+Figure~\ref{ex:deprecated-method-other}, it's not immediately obvious
+that the original and the refactored code behave in the same manner.
+One needs a good understanding of the code's semantics in order to
+reach such a conclusion. As we will see later in the paper, guaranteeing semantic equivalence is particularly difficult in the presence of aliasing, when there may be multiple references to the same memory location.
+On the other hand, refactorings that rely solely on a
+program's syntax and do not consider its semantics end up being overly
+conservative, mostly addressing structural changes to the program.
+The observation that refactoring generally benefits from semantic
+analyses of a program is not new, e.g. previous works made use of
+program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or
+types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
+
+
 
 \paragraph{Contributions:}
 
@@ -1716,9 +1798,9 @@ method against we can verify equivalence of candidates.
 Insufficient counterexamples: Our fuzzing-based equivalence check is inherently
 incomplete, and for some benchmarks we do not explore counterexamples in
 sufficient number or quality to identify unsound candidates. An example for this
-category is $javax.swing.JViewport#isBackingStoreEnabled$, where only one value
+category is $javax.swing.JViewport\#isBackingStoreEnabled$, where only one value
 out of the $2^32-1$ possible input values will trigger an alternate code path.
-On the other hand, the method $java.rmi.server.RMIClassLoader#loadClass$ is an
+On the other hand, the method $java.rmi.server.RMIClassLoader\#loadClass$ is an
 example where our counterexample does not produce counterexamples of sufficient
 quality. The method accepts a string as an input, but will throw for any string
 that is not a valid class name. Since our fuzzer does not consider such context,
