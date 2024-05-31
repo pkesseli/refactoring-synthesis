@@ -298,8 +298,32 @@ void main(String[] args) {
 %complex. Indeed neither Eclipse 4.27.0 nor IntelliJ IDEA 2023.1.1 make
 %any attempt to suggest an alternative to the user.
 
+Program synthesis is generally concerned with code generation via symbolic reasoning. 
+Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
 
-In this paper, we contrast a symbolic and a neural approach based on Large Language Models (LLMs) for automatically generating such refactorings. Both approaches have access to the same information: type signatures and Javadoc deprecation messages. We make the two approaches as similar as possible. In particular, they are both iterative, such that, in each itaration a candidate refactoring is being generated, which is then verified for semantic equivalence with the original codeby the same verifier. If the verification succeeds, then the solution is returned to the user. Otherwise, the counterexample is used  to refine the current solution.
+
+In this paper, we are interested in the automatic code generation of refactorings for deprecated APIs. For this purpose, we will take advantage of the following information:
+
+
+{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+
+
+
+Traditionally, the idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
+enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, our work also serves as an investigation of the usefulness of type information in generating imperative code.
+
+{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
+comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show next,
+these hints don't provide the whole refactoring, but can be used to guide the search process.
+Our aim in this paper is to use them as the building blocks
+of the new refactoring. 
+For this purpose, we take inspiration from component-based program synthesis,
+which weaves together components from a library
+(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
+
+
+We contrast a symbolic and a neural approach based on Large Language Models (LLMs) for automatically generating such refactorings. %Both approaches have access to the same information: type signatures and Javadoc deprecation messages.
+We make the two approaches as similar as possible. In particular, they are both iterative, such that, in each itaration a candidate refactoring is being generated, which is then verified for semantic equivalence with the original codeby the same verifier. If the verification succeeds, then the solution is returned to the user. Otherwise, the counterexample is used  to refine the current solution.
 
 
 %In this paper, we investigate two of the most common types pf program synthesis: type-directed synthesis and component-based synthesis. In particular, we want to see how a symbolic and a neural approach comapre against each other for for of these cases.
@@ -384,29 +408,19 @@ The questions that we are trying to answer are:
 
 
 
-%Allowing changes that go beyond syntax, and attempting to prove semantic equivalence is a very difficult task, in particular for code that accesses the heap. 
-
 \emph{Current solution.}  In this paper, we investigate an approach for automatically refactoring uses of deprecated APIs based on program synthesis.
-%and fuzzing
-%that makes use of semantic information
-%to offer guarantees about the preservation of the original behaviour.
 To verify that the refactoring maintains the behaviour of the original code, we design a semantic equivalence check.
 
 Additionally, we are interested in comparing our symbolic approach against a neural one using Large Language Models (LLMs), which we augment with our semantic equivalence checking procedure.
 In particular, given the recent advances that LLMs made in code generation,
 we want to investigate whether they completely subsume symbolic methods, or whether, for specialised tasks such as the current refactoring,
 symbolic methods are still useful at lower computational costs.
-%
-%Research [60], [52] have proposed using LLMs to answer software engineering questions. 
-%
-%Given its recent attention, we picked GPT-4 Turbo~\cite{chatgpt}. %, which is a LLM trained using Reinforcement Learning from Human Feedback.
 We picked GPT-4 Turbo.
 There are several studies of ChatGPT's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and 
 prompt pattern design for refactoring, requirements elicitation, and software design ~\cite{white2023chatgpt}.
-%
-%
 While, in this paper, we focus on the refactoring of deprecated methods, the same
 technique can be applied to deprecated fields and classes.
+
 
 %The first one is a symbolic approach based on Counter-Example Guided Inductive Synthesis (CEGIS), whereas the second is neural approach based on Large 
 %
@@ -514,8 +528,6 @@ symbolic code generation methods such as ours to outperform general-purpose LLMs
 %% which weaves together components from a library
 %% (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
 
-Program synthesis is generally concerned with code generation via symbolic reasoning. % \todo{add more about program synthesis?}.
-Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
 
 
 %%---
@@ -526,33 +538,6 @@ Although powerful, program synthesis is very hard due to the vast search space, 
 %% entire \texttt{java.lang} could be considered when synthesising the
 %% refactoring.  In order to prune the search space, we start by
 %% investigating the information available to our refactoring procedure.
-
-In this work we will make use of:
-
-{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
-
-
-
-Traditionally, the idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
-enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, our work also serves as an investigation of the usefulness of type information in generating imperative code.
-
-%However, as shown by our experimental evaluation in Section~\ref{sec:experimental-results}, while useful, types are not sufficient to solve the problem. 
-
-{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
-comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show next,
-%show in Section~\ref{sec:overview},
-these hints don't provide the whole refactoring, but can be used to guide the search process.
-%(While code hints have been previously used to generate change rules~\cite{DBLP:conf/kbse/Huang0PW021}, our aim is to generate complete refactorings.)
-Our aim in this paper is to use them as the building blocks
-% scaffolding
-of the new refactoring. 
-%At a high level, the new code is obtained by composing methods
-%that are accessible from that respective location. 
-%Consequently,
-For this purpose, we take inspiration from component-based program synthesis,
-which weaves together components from a library
-(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
-
 
   
 %As mentioned in Section~\ref{sec:intro}, for both approaches, we want to use  
