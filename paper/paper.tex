@@ -81,6 +81,9 @@
 \usepackage{longtable}
 \usepackage{afterpage}
 \usepackage{wasysym}
+\usepackage{tcolorbox}
+\definecolor{prompt_bg}{RGB}{252,255,221}
+\definecolor{prompt_title}{RGB}{0,51,102}
 
 \usepackage[justification=centering]{caption}
 \input{macros}
@@ -1790,6 +1793,25 @@ We are interested in comparing \tool against
 %without it (GPT w/o code hints).
 The results are summarised in Table~\ref{tab:gpt-results}, where the second row
 considers only those benchmarks where the Javadoc contains a code hint.
+
+\definecolor{Role}{RGB}{0,0,204}
+\begin{figure}
+  \centering
+  \begin{tcolorbox}[
+    colback=prompt_bg,
+    colframe=prompt_title,
+    title=Prompt Template,
+    subtitle style={boxrule=0.4pt, colback=yellow!50!blue!25!white, colupper=black}
+  ]
+  \scriptsize
+
+  % \tcbsubtitle{Prompt 1}
+  \color{Role}{\textbf{User:}}\\
+  
+  
+  \color{Role}{\textbf{Assistant:}\\
+  \end{tcolorbox}
+\end{figure}
 
 An example of a prompt is given next:
 
