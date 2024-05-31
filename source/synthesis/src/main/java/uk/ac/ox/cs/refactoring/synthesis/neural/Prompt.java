@@ -3,7 +3,6 @@ package uk.ac.ox.cs.refactoring.synthesis.neural;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /** A structured representation of a prompt */
 public class Prompt {
@@ -28,11 +27,11 @@ public class Prompt {
     }
 
     public String toString() {
-        String constraintsList = IntStream.range(0, constraints.size())
-            .mapToObj(i -> String.format("\t%d. %s", i + 1, constraints.get(i)))
-            .collect(Collectors.joining("\n"));
-        return context + "\n" + instruction + "\n\nTake the following constraints into consideration:\n"
-                + TextTagger.tag("list", constraintsList)
-                + extraInformation + "\n";
+      String constraintsList = constraints.stream().map(constraint -> String.format("  <constraint>\n    %s\n  </constraint>", constraint)).collect(Collectors.joining("\n"));
+      return context + "\n" 
+          + TextTagger.tag("instruction", instruction)
+          + "\n\nTake the following constraints into consideration:\n"
+          + TextTagger.tag("constraints-list", constraintsList)
+          + extraInformation + "\n";
     }
 }

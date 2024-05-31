@@ -1,6 +1,7 @@
 package uk.ac.ox.cs.refactoring.synthesis.neural;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.json.JSONObject;
 
@@ -32,7 +33,7 @@ public class Bedrock {
     String claudeModelId = "anthropic.claude-v2";
 
     // Claude requires you to enclose the prompt as follows:
-    String enclosedPrompt = "Human: " + prompt + "\n\nAssistant:";
+    String enclosedPrompt = "Human: " + prompt + "\n\nAssistant:\n<code>";
 
     BedrockRuntimeClient client = BedrockRuntimeClient.builder()
         .region(Region.US_EAST_1)
@@ -43,7 +44,8 @@ public class Bedrock {
         .put("prompt", enclosedPrompt)
         .put("max_tokens_to_sample", 10000)
         .put("temperature", 0.2)
-        .put("stop_sequences", List.of("\n\nHuman:"))
+        // .put("stop_sequences", List.of("\n\nHuman:"))
+        .put("stop_sequences", new ArrayList<>(Arrays.asList("\n\nHuman:", "</code>")))
         .toString();
 
     InvokeModelRequest request = InvokeModelRequest.builder()

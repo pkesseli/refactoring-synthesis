@@ -20,6 +20,7 @@ import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
@@ -124,6 +125,12 @@ class ExpressionCompilerVisitor extends VoidVisitorAdapter<Void> {
     } else {
       return stack.removeLast();
     }
+  }
+
+  @Override
+  public void visit(final NullLiteralExpr n, final Void arg) {
+    // stack.add(new Literal(null, getType(n)));
+    throw new UnsupportedOperationException("Cannot determine type for null literal");
   }
 
   @Override
@@ -246,7 +253,6 @@ class ExpressionCompilerVisitor extends VoidVisitorAdapter<Void> {
 
     final List<IExpression> invocationArguments = arguments;
 
-    // FIXME find constructor
     stack.add(new InvokeConstructor(invocationArguments, null));
   }
 
@@ -337,7 +343,6 @@ class ExpressionCompilerVisitor extends VoidVisitorAdapter<Void> {
 
     if (environment.containsKey(name)) {
       // converting parameters to proper ones.
-      // System.out.println("Discarding declaration of " + name);
       return;
     }
 
@@ -346,16 +351,11 @@ class ExpressionCompilerVisitor extends VoidVisitorAdapter<Void> {
     initialiser.accept(this, null);
     final IExpression rhs = stack.removeLast();
 
-    // TODO is this better?
-    // if (rhs instanceof SymbolExpression) {
-    // stack.add(rhs);
-    // } else {
     final IStatement rhsStmt = new ExpressionStatement(rhs);
     candidate.Block.Statements.add(rhsStmt);
     final IExpression rhsRepr = rhsStmt.getSymbolExpression().get();
     environment.put(name, rhsRepr);
     stack.add(rhsRepr);
-    // }
   }
 
   /**

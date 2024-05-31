@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,8 +25,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -60,7 +57,8 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   private final CodeEngine codeEngine;
 
   // private CodeEngine codeEngine;
-  private String methodString = null;
+  private String methodCommentContext = null;
+  private String methodSignatureContext = null;
   // private String javadocComment = null;
   private String templateCallString = null;
   private ParseResult<CompilationUnit> parseResult = null;
@@ -115,10 +113,15 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     if (method == null)
       return;
 
-    if (!WITH_CODE_HINTS) {
-      method.setComment(null);
+    if (WITH_CODE_HINTS && method.getJavadocComment().isPresent()) {
+      var javadocComment = method.getJavadocComment().get();
+      methodCommentContext = javadocComment.getContent();
     }
-    methodString = method.toString();
+    // if (!WITH_CODE_HINTS) {
+    //   method.setComment(null);
+    // }
+    methodSignatureContext = method.getSignature().asString();
+    // methodContext = method.toString();
 
     StringBuilder templateCallString = new StringBuilder();
     if (!method.isStatic()) {
@@ -187,29 +190,32 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
   public Prompt basePrompt() {
     StringBuilder contextBuilder = new StringBuilder();
     contextBuilder.append(String.format("The method %s of the class %s is deprecated.\n",
-        generatorConfiguration.javaDocSeed.methodToRefactor.MethodName, generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName));
-    contextBuilder.append("Here is the complete method definition");
-    if (WITH_CODE_HINTS) {
-      var deprecationCommentDescription = "with Javadoc comments that may contains a @deprecated tag explaining why the item has been deprecated and suggesting what to use instead";
-      contextBuilder.append(' ');
-      contextBuilder.append(deprecationCommentDescription);
-    }
+        TextTagger.tag("method-name", generatorConfiguration.javaDocSeed.methodToRefactor.MethodName, true),
+        TextTagger.tag("class-name", generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName, true)));
+    contextBuilder.append("Below is the method signature");
     contextBuilder.append(":\n");
-    contextBuilder.append(String.format("\n%s\n", TextTagger.tag("method-definition", methodString)));
+    contextBuilder.append(String.format("\n%s\n", TextTagger.tag("method-signature", methodSignatureContext)));
+    if (WITH_CODE_HINTS) {
+      var deprecationCommentDescription = "Here are its Javadoc comments that may contain a @deprecated tag explaining why the item has been deprecated and suggesting what to use instead:\n";
+      contextBuilder.append(deprecationCommentDescription);
+      contextBuilder.append(TextTagger.tag("javadoc-comment", methodCommentContext));
+    }
     // if (javadocComment != null && WITH_CODE_HINTS) {
     //   contextBuilder.append("The related deprecation comment in the Javadoc is contained in the following <deprecation-comment> tag:\n");
     //   contextBuilder.append(TextTagger.tag("deprecation-comment", javadocComment));
     // }
-    contextBuilder.append("However, I used this method call in my code base, the code snippet is contained in the following <code> tag:\n");
-    contextBuilder.append(TextTagger.tag("code", templateCallString));
+    contextBuilder.append("However, I used this method call in my code base, the code snippet is contained in the following <code-snippet> tag:\n");
+    contextBuilder.append(TextTagger.tag("code-snippet", templateCallString));
 
     String context = contextBuilder.toString();
     String instruction = "Help me refactor this code snippet so that it doesn't use the deprecated method.";
-    if (WITH_CODE_HINTS) {
-      instruction += " The comments in the method definition might be useful.";
-    }
     Prompt prompt = new Prompt(context, instruction);
-    prompt.constraints.add("Your answer must only contain a sequence of Java statements");
+    if (WITH_CODE_HINTS) {
+      prompt.constraints.add("The javaDoc comments might contain useful components for you to construct your answer.");
+    }
+    // prompt.constraints.add("Prefer method invocations over operators (e.g. choose `append` over String `+` operator).");
+    prompt.constraints.add("Your answer must only contain a straight line Java program. Use variables available in the <code-snippet>. Do not use if-conditions or loops.");
+    // prompt.constraints.add("Do not simply inline original implementations");
     return prompt;
   }
 
@@ -230,7 +236,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
   public class SerializableExecution {
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public Object receiverInstance;
+    public Object thisInstance;
     public List<Object> methodArguments;
     public Object returnValue;
   }
@@ -245,7 +251,7 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
       Object returnValue = executionResult.Value;
       if (error == null && returnValue != null) {
         var serialisable = new SerializableExecution();
-        serialisable.receiverInstance = instance;
+        serialisable.thisInstance = instance;
         serialisable.methodArguments = arguments;
         serialisable.returnValue = returnValue;
         representables.add(marshalObject(serialisable));
@@ -263,11 +269,11 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
         return prompt;
       }
       StringBuilder extraInformationBuilder = new StringBuilder();
-      extraInformationBuilder.append("Here is a set of input/output specifications that you should respect:\n");
-      extraInformationBuilder.append(TextTagger.tag("input-output-examples", 
-          IntStream.range(0, reprs.size())
-              .mapToObj(index -> String.format("\t%d. %s", index + 1, reprs.get(index)))
-              .collect(Collectors.joining("\n"))));
+      extraInformationBuilder.append("Here is a set of input/output examples that you should respect:\n");
+      String examplesList = reprs.stream()
+          .map(example -> String.format("  <example>\n    %s\n  </example>", example))
+          .collect(Collectors.joining("\n"));
+      extraInformationBuilder.append(TextTagger.tag("examples-list", examplesList));
       prompt.extraInformation = extraInformationBuilder.toString();
       return prompt;
     } catch (JsonProcessingException e) {
@@ -299,32 +305,26 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
    */
   private Object parseString(final String code) {
 
-    ParseResult<BlockStmt> block = generatorConfiguration.javaDocSeed.parserContext.JavaParser.parseBlock(code);
-    if (block.getResult().isPresent()) {
+    var parser = generatorConfiguration.javaDocSeed.parserContext.JavaParser;
+
+
+    ParseResult<BlockStmt> block = parser.parseBlock(code);
+    if (block.isSuccessful()) {
       return block.getResult().get();
     }
 
-    ParseResult<Statement> statement = generatorConfiguration.javaDocSeed.parserContext.JavaParser.parseStatement(code);
-    if (statement.getResult().isPresent() && statement.getResult().get() instanceof IfStmt) {
-      var ifStmt = (IfStmt) statement.getResult().get();
-      if (ifStmt.getThenStmt() instanceof BlockStmt &&
-          ((BlockStmt) ifStmt.getThenStmt()).getStatements().isEmpty() &&
-          ifStmt.getElseStmt().isEmpty()) {
-        return new BlockStmt(new NodeList<>(new ExpressionStmt(ifStmt.getCondition())));
-      }
-    }
-
-    block = generatorConfiguration.javaDocSeed.parserContext.JavaParser.parseBlock("{" + code + "}");
-    if (block.getResult().isPresent()) {
+    block = parser.parseBlock("{" + code + "}");
+    if (block.isSuccessful()) {
       return block.getResult().get();
     }
 
-    final ParseResult<CompilationUnit> unit = generatorConfiguration.javaDocSeed.parserContext.JavaParser.parse(code);
-    if (unit.getResult().isPresent()) {
-      return unit.getResult().get();
+    block = parser.parseBlock(String.format("{%s;}", code));
+    if (block.isSuccessful()) {
+      return block.getResult().get();
     }
 
-    throw new NoSuchElementException("hints not parsable");
+
+    throw new NoSuchElementException(String.format("Failed to Parse Code:\n%s\n", code));
   }
 
   private NodeList<Statement> resolveArguments(final Map<String, IExpression> environment) {
@@ -348,6 +348,8 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     // System.out.printf("Processing %s\n", code);
     try {
       var stmts = (BlockStmt) parseString(code);
+      System.out.println("Parsed code:");
+      System.out.println(stmts.toString());
       // System.out.printf("getting %d statements\n", stmts.getStatements().size());
       var arguments = resolveArguments(environment);
       for (final var argument : arguments) {

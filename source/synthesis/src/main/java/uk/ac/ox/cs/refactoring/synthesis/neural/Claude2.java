@@ -7,5 +7,10 @@ public class Claude2 extends CodeEngine {
     String response = Bedrock.invokeClaude(prompt.toString());
     return response;
   }
+
+  @Override
+  public String extract(String response) {
+    return response;
+  }
   
 }

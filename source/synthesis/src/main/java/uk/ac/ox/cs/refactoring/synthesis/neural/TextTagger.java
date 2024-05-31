@@ -5,6 +5,13 @@ public class TextTagger {
         return startTag(tagName) + "\n" + content + "\n" + endTag(tagName) + "\n";
     }
 
+    public static String tag(String tagName, String content, Boolean inline) {
+      if (inline) {
+        return startTag(tagName) + content + endTag(tagName);
+      }
+      return startTag(tagName) + "\n" + content + "\n" + endTag(tagName) + "\n";
+  }
+
     private static String startTag(String tagName) {
         return "<" + tagName + ">";
     }

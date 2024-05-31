@@ -9,12 +9,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class CodeEngine implements QueryEngine {
-    private static final String CONSTRAINT_NOEXPLAIN = "Show me code only, no explanation";
+    // private static final String CONSTRAINT_NOEXPLAIN = "Show me code only, no explanation";
     private static final String CONSTRAINT_FORMAT = "Place your code inside a <code></code> tag";
     private static final Logger LOGGER = Logger.getLogger(CodeEngine.class.getName());
 
     public final String generateCode(Prompt prompt) throws NoSuchElementException {
-      prompt.constraints.add(CONSTRAINT_NOEXPLAIN);
+      // prompt.constraints.add(CONSTRAINT_NOEXPLAIN);
       prompt.constraints.add(CONSTRAINT_FORMAT);
       try {
         String response = extract(query(prompt));
@@ -26,8 +26,12 @@ public abstract class CodeEngine implements QueryEngine {
       }
     }
 
+    public String extract(String response) {
+      return extractAll(response).get(0);
+    }
 
-    public static String extract(String response) {
+
+    public List<String> extractAll(String response) {
       // Match as less as possible
       Pattern tagged = Pattern.compile("<code>(?<code>[\\s\\S]*?)</code>");
       Matcher taggedBlock = tagged.matcher(response);
@@ -41,9 +45,10 @@ public abstract class CodeEngine implements QueryEngine {
         allMatches.add(backtickedBlock.group("code"));
       }
 
-      if (allMatches.size() > 0) {
-        return allMatches.get(0);
+      if (allMatches.isEmpty()) {
+        return List.of(response);
       }
-      throw new NoSuchElementException();
+
+      return allMatches;
     }
 }
