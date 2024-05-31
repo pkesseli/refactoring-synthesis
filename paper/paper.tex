@@ -84,6 +84,7 @@
 \usepackage{tcolorbox}
 \definecolor{prompt_bg}{RGB}{252,255,221}
 \definecolor{prompt_title}{RGB}{0,51,102}
+\newcommand{\templatevar}[1]{\$\{\textcolor{red}{#1}\}}
 
 \usepackage[justification=centering]{caption}
 \input{macros}
@@ -1794,7 +1795,23 @@ We are interested in comparing \tool against
 The results are summarised in Table~\ref{tab:gpt-results}, where the second row
 considers only those benchmarks where the Javadoc contains a code hint.
 
-\definecolor{Role}{RGB}{0,0,204}
+
+% An example of a prompt is given next:
+
+% %\begin{quote}
+% \emph{The method java.awt.TextField.minimumSize() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1, replaced by getMinimumSize()."
+% I have a call to this deprecated method in my codebase `this.minimumSize()`, show me how to refactor my code.
+% The example code should be a straight-line code block. Don't provide extra explanations.} When available,
+% we always provide the code hints in the prompt.
+
+%\end{quote}
+
+For each deprecated method, we construct a prompt as shown in \autoref{fig:prompt}. The method
+signature and the JavaDoc comment (if present) are provided in the context. Furthermore, we
+provide a synthetic code snippet as an example of the deprecated method usage to be refactored
+(e.g. \lstinline{this.minimumSize();}). Finally, we attach a list of formatting constraints.
+In addition to this, we have followed the prompting guidelines provided by Anthropic \llm\footnote{https://docs.anthropic.com/en/docs/prompt-engineering} (e.g. using XML tags).
+
 \begin{figure}
   \centering
   \begin{tcolorbox}[
@@ -1806,22 +1823,29 @@ considers only those benchmarks where the Javadoc contains a code hint.
   \scriptsize
 
   % \tcbsubtitle{Prompt 1}
-  \color{Role}{\textbf{User:}}\\
-  
-  
-  \color{Role}{\textbf{Assistant:}\\
+  \textbf{User:}\\
+  \textit{\# Context}\\
+  \texttt{The method \templatevar{METHOD\_NAME} of the class \templatevar{CLASS\_NAME} is deprecated. Below is the method signature:}\\
+  \texttt{\templatevar{METHOD\_SIGNATURE}}\\
+
+  \texttt{Here are its Javadoc comment that may contain a @deprecated tag explaining why the item has been deprecated and suggesting what to use instead.}\\
+  \texttt{\templatevar{JAVADOC\_COMMENT}}\\
+
+  \texttt{However, I used this method call in my code base, the code snippet is given below:}\\
+  \texttt{\templatevar{CODE\_SNIPPET}}\\
+
+  \textit{\# Instruction}\\
+  \texttt{Help me refactor this code snippet so that it doesn't use the deprecated method.}\\
+
+  \textit{\# Constraints}\\
+  \texttt{Take the following constraints into consideration:}\\
+  \texttt{\templatevar{FORMATTING\_CONSTRAINTS}}\\
+
+  \textbf{Assistant:}\\
   \end{tcolorbox}
+  \caption{LLMs Prompt Template.}
+  \label{fig:prompt}
 \end{figure}
-
-An example of a prompt is given next:
-
-%\begin{quote}
-\emph{The method java.awt.TextField.minimumSize() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1, replaced by getMinimumSize()."
-I have a call to this deprecated method in my codebase `this.minimumSize()`, show me how to refactor my code.
-The example code should be a straight-line code block. Don't provide extra explanations.} When available,
-we always provide the code hints in the prompt.
-
-%\end{quote}
 
 
 For each refactoring returned by \llm, we use fuzzing to check program equivalence (according to the
