@@ -1836,6 +1836,29 @@ In order to have a fair comparison to \tool, the average runtime for \llm includ
 \end{table}
 
 
+\begin{table}[h]
+  \begin{tabular} {|l|r|r|r|r|r|}
+  \hline
+  Config                  & \checkmark & \xmark     & \%         & $\diameter$ runtime (s) \\ \hline
+  \llm type-directed      &         43 &     186    &         18 & 253.23 \\
+  \llm code-hints         &        111 &     123    &         47 & 205.23 \\  \hline\hline
+  \end{tabular} 
+  \caption{Overall \llm experimental results.}
+  \label{tab:claude-results-overall}   
+\end{table}
+
+\begin{table}[h]
+  \begin{tabular} {|l|r|r|r|r|r|}
+  \hline
+  Config                  & \checkmark & \xmark     & \%         & $\diameter$ runtime (s) \\ \hline
+  \llm type-directed      &         42 &     104    &         27 & 259.04 \\
+  \llm code-hints         &        108 &      44    &         71 & 208.09 \\  \hline\hline
+  \end{tabular} 
+  \caption{\llm experimental results with code hints.}
+  \label{tab:claude-results-code-hints}   
+\end{table}
+
+
 %% As expected, the GPT-4 Turbo results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
 
 \subsection{Research questions}
