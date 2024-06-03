@@ -1936,9 +1936,9 @@ In order to have a fair comparison to \tool, the average runtime for \llm includ
 \begin{table}[h]
   \begin{tabular} {|l|r|r|r|r|r|}
   \hline
-  Config                       & \checkmark & \xmark & \% & $\diameter$ runtime (s) \\ \hline
-  \llm (only code hints)      &        108 &     44  &         71 & 208.09 \\
-  \llm    &        111 &     123    &         47 & 205.23 \\  \hline\hline
+  Config                       & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
+  \llm (only code hints)      &        108 &     44  & 1 &         71 & 208.09 \\
+  \llm    &        111 &     123    &         2 & 47 & 205.23 \\  \hline\hline
   \end{tabular} 
   \caption{\llm experimental results.}
   \label{tab:gpt-results}   
@@ -1948,9 +1948,9 @@ In order to have a fair comparison to \tool, the average runtime for \llm includ
 \begin{table}[h]
   \begin{tabular} {|l|r|r|r|r|r|}
   \hline
-  Config                  & \checkmark & \xmark     & \%         & $\diameter$ runtime (s) \\ \hline
-  \llm type-directed      &         43 &     186    &         18 & 253.23 \\
-  \llm code-hints         &        111 &     123    &         47 & 205.23 \\  \hline\hline
+  Config                  & \checkmark & \xmark & \lightning     & \%         & $\diameter$ runtime (s) \\ \hline
+  \llm type-directed      &         43 &     186 & 7   &         18 & 253.23 \\
+  \llm code-hints         &        111 &     123 & 2   &         47 & 205.23 \\  \hline\hline
   \end{tabular} 
   \caption{Overall \llm experimental results.}
   \label{tab:claude-results-overall}   
@@ -1959,9 +1959,9 @@ In order to have a fair comparison to \tool, the average runtime for \llm includ
 \begin{table}[h]
   \begin{tabular} {|l|r|r|r|r|r|}
   \hline
-  Config                  & \checkmark & \xmark     & \%         & $\diameter$ runtime (s) \\ \hline
-  \llm type-directed      &         42 &     104    &         27 & 259.04 \\
-  \llm code-hints         &        108 &      44    &         71 & 208.09 \\  \hline\hline
+  Config                  & \checkmark & \xmark & \lightning     & \%         & $\diameter$ runtime (s) \\ \hline
+  \llm type-directed      &         42 &     104 & 7    &         27 & 259.04 \\
+  \llm code-hints         &        108 &      44 & 1    &         71 & 208.09 \\  \hline\hline
   \end{tabular} 
   \caption{\llm experimental results with code hints.}
   \label{tab:claude-results-code-hints}   
