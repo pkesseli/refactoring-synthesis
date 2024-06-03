@@ -308,7 +308,7 @@ void main(String[] args) {
 
 In this paper, we are interested in the automatic code generation of refactorings for deprecated APIs. For this purpose, we design both a symbolic and a neural approach based on Large Language Models (LLMs). More than simply generating refactorings for deprecated APIs, given the recent focus on LLM based code generation, we are interested in investigating whether, for specialised problems such as the current one, symbolic approaches can still be of use at much lower computational costs compared to neural ones.
 
-When attempting to come up with a refactoring for deprecated APIs, one must use the following knowledge:
+When attempting to come up with a refactoring for deprecated APIs, one has access to the following information:
 %The information that we have about the current problem is that:
 
 {\bf (1)} The orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
@@ -523,367 +523,20 @@ symbolic code generation to outperform general-purpose LLMs in specialised setti
 
 
 \end{itemize}  
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%The fourth challenge is addressed
+%by designing an equivalence relation, which we then check with fuzz testing.
+%While we can't provide full correctness guarantees,
+%given a large number of test inputs, we consider this a close approximation.
+%More details about the semantic equivalence check are given in Section~\ref{sec:equiv}.
+%Additionally, in Section~\ref{sec:encoding}, we provide technical details about the synthesis and fuzzing based refactoring procedure, 
+%and in Section~\ref{sec:implementation} we discuss some implementation details.
 
 
 \section{Overview of our approach} \label{sec:overview}
+\todo{Make this more general, to cover both neural and symbolic.}
 
-%% At a high level, the new code is obtained by composing methods
-%% that are accessible from that respective location. 
-%% Consequently, we take inspiration from component-based program synthesis,
-%% which weaves together components from a library
-%% (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
-
-
-
-%%---
-%% Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
-%% %
-%% The vast search space is particularly a challenge in the current
-%% setting given that, in the absence of any additional guidance, the
-%% entire \texttt{java.lang} could be considered when synthesising the
-%% refactoring.  In order to prune the search space, we start by
-%% investigating the information available to our refactoring procedure.
-
-  
-%As mentioned in Section~\ref{sec:intro}, for both approaches, we want to use  
-%the code hints provided in the Javadoc. In particular, we use these code hints to build a library of components that we can then use to generate the refactoring.
-For illustration, let's look at our running example in Figure~\ref{ex:deprecated-method-other}. The source code for the \texttt{getHours} method in class \texttt{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests replacing the deprecated \texttt{getHours}
-with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
-%
-%Note that this hint is not immediately usable.
-It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
-
-
-\begin{figure}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-/*
- * @return  the hour represented by this date.
- * @see     java.util.Calendar
- * @deprecated As of JDK version 1.1,
- * replaced by {@code Calendar.get
- *              (Calendar.HOUR_OF_DAY)}.
- */  
-\end{lstlisting}
-\caption{Code hints for the running example.}
-\label{ex:code-hints}
-\end{figure}
-
-
-%While it might seem that this hint ma solve the entire problem, 
-
-%\todo{possible other challenges: parsing, abstract classes. remove challenge 3.}
-
-{\bf Challenge 1.}  Although it may seem as if
-method \texttt{get} is static allowing an immediate call,
-it is actually an instance method, requiring us to have an object of
-class \texttt{Calendar}. However, no such object is available in the
-original code meaning that it must be created by the refactored code.
-Consequently, we must find the necessary
-components (i.e. instructions) that consume existing objects and create a \texttt{Calendar} object.
-
-{\bf Challenge 2.} Besides adding components that allow us to generate the required objects, we also need components for setting their
-fields. For instance,
-in Figure~\ref{ex:deprecated-method-other}, we must call
-\texttt{calendar.setTime(date)} to set the calendar's date
-based on the existing \texttt{date} object.
-Adding too many components to the library will
-make the code generation task infeasible. In particular, we should
-be able to differentiate between components that we can use
-(we have or we are able to generate
-all the necessary arguments and the current object for calling them), and those
-that we can't because we can't obtain some of the arguments
-and/or the current object. Adding the latter components to the library will
-significantly slow down the code generation process by
-adding infeasible programs to the search space.
-
-{\bf Challenge 3.} Code hints are
-not always expressed as well-formed Java. In some sense, the task of
-parsing code hints lies in between parsing Java code and interpreting natural language.
-
-{\bf Challenge 4.} As previously mentioned, the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that it must preserve its behaviour.
-Coming up with an equivalence check is very difficult, especially in the presence of side-effects, as we must take into consideration both the state of the stack and the heap (including the static fields).
-%We will describe how we construct our equivalence check in Section~\ref{sec:equiv}.
-%Also, in general, proving full semantic equivalence is expensive and undecidable. % in the general case. %very difficult, having been the subject of extended research over the years \cite{}.
-%Checking equivalence between two functions is undecidable. We only check it for a finite number of inputs.
-
-%Even given a particular input, when can we deduce that two functions are equivalent? For side-effect free ones, this is easy: two pieces of code are observational equivalent if, given the same inputs, they produce the same result. However, when we do have side effects, expressing obseravtional equivalence is much harder.
-
-
-
-%Proving semantic equivalence is a very difficult task especially given the possible side effects. We must consider:
-%* the effects on the memory
-%* the effects on global variables ... static?
-
-We address challenges 1 and 2 by dynamically building the component library for each refactoring
-such that it only contains components specific to that particular use case.
-This process is described in detail in Section~\ref{sec:components-seeding}.
-The third challenge is further discussed under ``Phase 1: Initialise with code hints'' in Section~\ref{sec:components-seeding}.
-The fourth challenge is addressed
-by designing an equivalence relation, which we then check with fuzz testing.
-%by using fuzz testing to check equivalence. %, which only requires limited instrumentation of the programs under test.
-While we can't provide full correctness guarantees,
-given a large number of test inputs, we consider this a close approximation.
-%our experiments show that, when considering a large number of test inputs, a large proportion of the generated refactorings preserve the behaviour of the original code.
-More details about the semantic equivalence check are given in Section~\ref{sec:equiv}.
-Additionally, in Section~\ref{sec:encoding}, we provide technical details about the synthesis and fuzzing based refactoring procedure, 
-%Then, we provide details about the semantics preservation check in Section~\ref{sec:equiv},
-and in Section~\ref{sec:implementation} we discuss some implementation details.
-
-%% In Section~\ref{sec:components-seeding}, we provide in-depth details about the
-%% seeding of the component library and how to tackle the above challenges. 
-%% At a high level, the process is guided by types and code hints.
-
-%% \section{{\bf Seeding of the component library}}\label{sec:components-seeding}
-%% As mentioned in Section~\ref{sec:overview}, a critical aspect of our technique is the construction
-%% of the component library. 
-%% If the component library is too small, meaning that it doesn't contain all
-%% the required components, then synthesis will fail to find a refactoring.
-%% Similarly, if it contains too many components, then synthesis quickly becomes infeasible
-%% due to the large search space.
-
-
-\section{Seeding of the component library} \label{sec:components-seeding}
-%% We designed two versions of the library, differentiated by the seeding guidance:
-%% \begin{itemize}
-%% \item For the {\bf CodeHints-library} the seeding is guided
-%%   by both Javadoc code hints and types.
-%% \item For the {\bf Types-library} the seeding is only guided by types.
-%% \end{itemize}  
-
-%% \subsection{CodeHints-library} \label{sec:core-library}
-In this section, we'll explain how we populate the component library used by the synthesis procedure starting from the code hints. We'll refer to this library as the Codehints-library.
-In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \texttt{date} of type \texttt{Date} as the input to the code to be refactored, and the integer \texttt{hour} as the output. Generally speaking, the refactoring technique will weave together components from the component library that consume the inputs and generate the required outputs.
-
-Throughout the seeding process, we keep track of the following sets:
-$consumable\_ objs$ (inputs to the code to be refactored, which need to be consumed by the refactoring),  
-$available\_types$ (types for which we either have consumable objects or the corresponding generators to create them) and 
-$target\_types$ (types for which we must be able to generate objects). To start with, the $target\_types$ set
-contains the types of the original code's outputs. %, as well as the types of the code hints' arguments (required in order to make use of the code hints).
-%(objects directly generated by the code hints or objects created by the generators added to make the code hints realisable)
-
-For the running example, we start with:
-%considering the hints are given in Figure~\ref{ex:code-hints} after the
-%\texttt{@code} tag., at the beginning of the seeding algorithm, we have:
-%For the running example, after initialising the component library with the code hints, we have:
-\[
-\begin{aligned}
-  consumable\_objs &=  \{\texttt{date}\}\\  
-  available\_types &=  \{\texttt{Date}\}\\
-  target\_types &= \{\texttt{int}\}
-\end{aligned}
-\]
-
-%% the library seeding algorithm must add components that are able to consume the
-%% inputs to the deprecated code and produce the objects required to make use
-%% of the Javadoc hints.
-%
-
-%From a type-guided perspective,
-The objective of the seeding algorithm is to
-add components to the library that make use of the $available\_types$ to generate objects
-of $target\_types$. At the same time, we want to consume the objects from the
-$consumable\_objs$ set, i.e. the inputs of the original code.
-
-The seeding algorithm for the CodeHints-library is provided in Figure~\ref{alg:seeding-core} and consists of three phases, which we discuss next.
-
-\paragraph{{\bf Phase 1: Initialise with code hints}}
-During the first phase, the initialisation, we add all the constants and instructions from the code hints to the library.
-%
-%% Intuitively, the Javadoc code hints should help with that, so we start by adding the
-%% suggested instructions to the component library.
-For our running example, the hints in Figure~\ref{ex:code-hints} %% after the
-%% \texttt{@code} tag.
-%% These hints
-instruct us to add method \texttt{``int get(int field)''} from class
-\texttt{Calendar} and constant \texttt{``Calendar.HOUR\_OF\_DAY''} to our library.
-%For the core library, we actually fix the \texttt{``Calendar.HOUR\_OF\_DAY''} constant
-%in place, thus adding \texttt{``int get(Calendar.HOUR\_OF\_DAY)''}.
-As a side note, finding the right constants is a well known
-challenge for program synthesis~\cite{DBLP:conf/cav/AbateDKKP18}, and thus the subsequent
-synthesis process will always attempt to use the constants provided in the code hints before generating new ones.
-
-Intuitively, we need to make sure that the Javadoc suggestions
-are realisable as captured by Definition~\ref{def:realizable}, where 
-%We formally refer to such a component as {\em realisable} as captured by Definition~\ref{def:realizable}, where
-%$source\_types$ to refer to types for which we have the means to generate objects, and
-$required\_types(method)$ refers to the types of the objects required to call $method$ (i.e. the types corresponding to its arguments and current object).
-%for $instr$ to be realisable.
-In our running example, $required\_types(\texttt{get}) = \{\texttt{int, Calendar}\}$
-given that, in order to call \texttt{get}, we must provide an argument of type \texttt{int} and a current object of type \texttt{Calendar}.
-Method \texttt{get} is not realisable as the library doesn't contain any generator for \texttt{Calendar}.
-Consequently, \texttt{Calendar} is added to $target\_types$, resulting in:
-$$target\_types = \{\texttt{int, Calendar}\}$$
-
-\begin{definition}[Realisable method]\label{def:realizable}
-Method \var{i} is {\em realisable} iff $\forall t \in required\_types(i). t \in available\_types \vee t~is~a~primitive~type$.
-\end{definition}
-
-
-%\subsection{Parsing the @code hints} \label{sec:parse}
-
-%As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
-%interpret Javadoc hints. 
-One challenge in this phase is interpreting the
-\texttt{@code} blocks inside \texttt{@deprecated} sections, which 
-we attempt to parse as Java expressions. In particular, we parse each hint as if it were invoked in the context of
-the method to refactor, such that imports or the implicit \texttt{this} argument
-are considered during parsing.
-
-%\todo{needs some rewriting?}
-%% The issue is that code hints are not always expressed as well-formed Java.
-%% In some sense, the task of parsing code hints lies in between parsing Java code and interpreting natural language. 
-%
-In order to address challenge 3 related to the fact that code hints are not always expressed as well-formed Java,
-we customised the
-GitHub Java parser
-to accept undeclared identifiers and type names
-as arguments. For instance, the Javadoc hint for deprecating \texttt{boolean inside(int X, int Y)}
-%suggests using 
-in Figure~\ref{ex:javadoc-hint} suggests using
-\texttt{contains(int, int)}, which would normally cause a parsing error as the \texttt{int} type
-appears in the place of argument names. In our setting, we accept this hint as valid.
-There are still situations where our parser is too strict and fails to accept
-some of the code hints. Additionally, there are scenarios where, while the Javadoc
-does contain a useful code hint, it is not tagged accordingly with
-the \texttt{@code} tag. %% These situations are reflected in the experimental results
-%% in Section~\ref{sec:experimental-results}
-%% as some of the benchmarks for which we failed to identify a code hint.
-%We will improve our technique for collecting code hints as future work.
-
-%% These benchmarks
-%% are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\ref{tab:configuration-results-ch} (some of the missing benchmarks from Table~\ref{tab:configuration-results-ch} do genuinely miss a code hint). 
- 
-\begin{figure}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-/**
-* Checks whether or not this {@code Rectangle}
-* contains the point at the specified location
-* {@code (X,Y)}.
-*
-* @param  X the specified X coordinate
-* @param  Y the specified Y coordinate
-* @return    {@code true} if the point
-*            {@code (X,Y)} is inside this
-*            {@code Rectangle};
-*            {@code false} otherwise.
-* @deprecated As of JDK version 1.1,
-* replaced by {@code contains(int, int)}.
-*/
-@Deprecated
-public boolean inside(int X, int Y) {
-  // ...
-}
-\end{lstlisting}
-\caption{Javadoc hint example.}
-\label{ex:javadoc-hint}
-\end{figure}
-
-
-
-
-\paragraph{{\bf Phase 2: Add generators for $target\_types$}}
-
-By generators we refer to constructors and any other methods returning objects of that particular type.
-In the algorithm in Figure~\ref{alg:seeding-core},
-once we added a generator for a new type, we must add that type to $available\_types$.
-Additionally, if the new generator consumes any objects from $consumable\_objs$,
-we must remove them from the set.
-
-For our running example, we must seed our component library with generators for \texttt{Calendar}.
-%
-We first scan all the public constructors of class \texttt{Calendar}
-and all the public methods from class \texttt{Calendar} that return an object of type \texttt{Calendar}. We find the following four options:
-
-\begin{enumerate}
-  \item \texttt{static Calendar	getInstance()} -- creates a \texttt{Calendar} object using the default time zone and locale.
-  \item \texttt{static Calendar getInstance(Locale aLocale)} -- creates a \texttt{Calendar} object using the default time zone and specified locale.
-  \item \texttt{static Calendar	getInstance(TimeZone zone)} -- creates a \texttt{Calendar} object using the specified time zone and default locale.
-  \item \texttt{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- creates a \texttt{Calendar} object with the specified time zone and locale.
-\end{enumerate}
-
-Out of the four methods,
-only the first one is realisable. Conversely, in order to call the second method, we would need to generate an object of type \texttt{Locale},
-for which we don't have a corresponding component in the library.
-The last two methods are in a similar situation as the second. Thus, we only add the first method to the CodeHints-library.
-
-\paragraph{{\bf Phase 3: Add transformers for $target\_types$}}
-The third and last phase adds  transformers for the target types.
-By transformers we refer to methods that modify the value of an instance variable.
-Given our objective to generate objects for the $target\_types$ while consuming objects from $consumable\_objs$,
-we prioritise transformers that consume such objects.
-For instance, for our running example there are 16 public transformers for the \texttt{Calendar} class.
-However, instead of adding all of them to the CodeHints-library, we prioritise those that
-consume the \texttt{date} object. There is only one such transformer \texttt{void setTime(Date date)}.
-Once we added any new transformers to the library, we remove the consumed objects from \texttt{consumable\_obj}.
-
-Notably, all the components that
-we add to the library must be accessible from the current location.
-
-\begin{figure}
-\removelatexerror% Nullify \@latex@error
-\begin{algorithm}[H]
-\SetAlgoLined
-\KwOut{CodeHints-library}
-%<<<<<<< HEAD
-// {\bf Phase 1: Initialise}\\
-Add constants and instructions from the code hints to the library\;
-\For{each unrealisable instruction $i$ in library}{
-  $target\_types$ = $target\_types \cup required\_types(i)$\;
-}
-$\newline$
-// {\bf Phase 2: Add generators for $target\_types$}\\
-\For{each $t \in target\_types$ for which there is no generator}{
-  Add realisable generators for $t$ to library\;
-  $available\_types = available\_types \cup \{t\}$\;
-  Remove consumed objs from $consumable\_objs$\;
-}
-$\newline$
-// {\bf Phase 3: Add transformers for $target\_types$}\\
-\While{$consumable\_obj\neq\emptyset$}{
-Add realisable transformers to the library for types in $target\_types$ that consume objects from $consumable\_objs$\;
-Remove consumed objs from $consumable\_objs$\;
-}
-\end{algorithm}
- \caption{Seeding algorithm for the CodeHints-library}
-\label{alg:seeding-core}
-\end{figure}
-
-It may be the case that there is no realisable generator for a target type, or no transformers for the $target\_types$ that can consume all the
-$consumable\_objs$. When we finish exploring all the available methods, we exit the corresponding loops in phases 2 and 3.
-As a consequence, the synthesiser may fail to generate a valid refactoring from the CodeHints-library.
-%% For such a situation, we extend the component library as explained in Section~\ref{sec:extend-library}.
-A possible future direction is allowing unrealisable generators and transformers to be added to the library and iterating phases 2 and 3 a given number of times (potentially until reaching a fixed point).
-%% iterate phase 2 and 3 until fixed point to 
-
-\subsection{Types-library} \label{sec:extend-library}
-
-For comparison reasons, in addition to the CodeHints-library, we also provide a components library that is populated only based on the type signature
-of the deprecated method. Next, we describe how this Types-library is being built.
-
-For the CodeHints-library, the Javadoc code hints guidance results in the code hints being
-used to collect the $target\_types$ set during the initialisation phase.
-If we don't have access to code hints and we are seeding solely
-based on types, we start with the $target\_types$ set containing
-the class where the original code resides, as well as the types of the inputs and outputs of the
-original code (essentially using the signature of the original code).
-Phases 2 and 3 of the seeding algorithm are the same as those in Figure~\ref{alg:seeding-core},
-where we attempt to add generators and transformers for the $target\_types$ to the library.
-
-%For our running example, we would have $target\_types = \{\}$
-
-Given that both the CodeHints-library and the Types-library consider the output of the
-original code as a target type, we expect some overlap between the two libraries.
-From our experience, the seeding process for the Types-library may end up missing critical types provided by the Javadoc code hints. For instance, in our running example, the \texttt{Calendar} class is only mentioned by the
-code hints and would not be included in the seeding of the Types-library.
-One possibility for adding
-\texttt{Calendar} to the target types without considering
-the Javadoc hints, would be to add all the classes from the
-\texttt{java.util} package, which contains \texttt{Date}. However, doing so would result
-in a very large component library, most likely outside the capabilities of existing
-synthesis techniques.
-
-\section{Program synthesis based refactoring} \label{sec:encoding}
+%\section{Program synthesis based refactoring} \label{sec:encoding}
 
 %% Once the component library is built, for the actual synthesis,
 %% we use a counterexample-guided iterative process that enables us
@@ -931,7 +584,8 @@ the original code on a finite set of inputs. Then, the verification phase tries 
 
 We next show how we encode the problem corresponding to each of the two phases. This is done so that fuzz testing can be used as the safety checker.
 
-\paragraph{The synthesis phase} In this phase, we have 
+\paragraph{The synthesis phase}
+In this phase, we have 
 a finite set of input examples $\{\vec{i_1} \cdots \vec{i_n}\}$ and we must find a candidate refactoring
 that is observationally equivalent to the original code for the given inputs.
 For this purpose, we construct the following \texttt{Synthesise} method, which
@@ -1320,6 +974,346 @@ if and only if they are in the same equivalence class induced by the aliasing re
 
   We abuse the notation to use \var{staticFields} over a set of classes, rather than just one class.
   The objective is to return the union of all static fields defined in all the classes in the set of classes taken as argument.
+
+
+%% At a high level, the new code is obtained by composing methods
+%% that are accessible from that respective location. 
+%% Consequently, we take inspiration from component-based program synthesis,
+%% which weaves together components from a library
+%% (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
+
+
+
+%%---
+%% Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
+%% %
+%% The vast search space is particularly a challenge in the current
+%% setting given that, in the absence of any additional guidance, the
+%% entire \texttt{java.lang} could be considered when synthesising the
+%% refactoring.  In order to prune the search space, we start by
+%% investigating the information available to our refactoring procedure.
+
+  
+%As mentioned in Section~\ref{sec:intro}, for both approaches, we want to use  
+%the code hints provided in the Javadoc. In particular, we use these code hints to build a library of components that we can then use to generate the refactoring.
+
+
+\section{Seeding of the component library} \label{sec:components-seeding}
+%% We designed two versions of the library, differentiated by the seeding guidance:
+%% \begin{itemize}
+%% \item For the {\bf CodeHints-library} the seeding is guided
+%%   by both Javadoc code hints and types.
+%% \item For the {\bf Types-library} the seeding is only guided by types.
+%% \end{itemize}  
+
+In this section, we describe how we populate the component library used by the symbolic approach starting from code hints.
+For illustration, let's look at our running example in Figure~\ref{ex:deprecated-method-other}. The source code for the \texttt{getHours} method in class \texttt{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests replacing the deprecated \texttt{getHours}
+with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
+%
+%Note that this hint is not immediately usable.
+It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
+
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+/*
+ * @return  the hour represented by this date.
+ * @see     java.util.Calendar
+ * @deprecated As of JDK version 1.1,
+ * replaced by {@code Calendar.get
+ *              (Calendar.HOUR_OF_DAY)}.
+ */  
+\end{lstlisting}
+\caption{Code hints for the running example.}
+\label{ex:code-hints}
+\end{figure}
+
+
+%While it might seem that this hint ma solve the entire problem, 
+
+%\todo{possible other challenges: parsing, abstract classes. remove challenge 3.}
+
+{\bf Challenge 1.}  Although it may seem as if
+method \texttt{get} is static allowing an immediate call,
+it is actually an instance method, requiring us to have an object of
+class \texttt{Calendar}. However, no such object is available in the
+original code meaning that it must be created by the refactored code.
+Consequently, we must find the necessary
+components (i.e. instructions) that consume existing objects and create a \texttt{Calendar} object.
+
+{\bf Challenge 2.} Besides adding components that allow us to generate the required objects, we also need components for setting their
+fields. For instance,
+in Figure~\ref{ex:deprecated-method-other}, we must call
+\texttt{calendar.setTime(date)} to set the calendar's date
+based on the existing \texttt{date} object.
+Adding too many components to the library will
+make the code generation task infeasible. In particular, we should
+be able to differentiate between components that we can use
+(we have or we are able to generate
+all the necessary arguments and the current object for calling them), and those
+that we can't because we can't obtain some of the arguments
+and/or the current object. Adding the latter components to the library will
+significantly slow down the code generation process by
+adding infeasible programs to the search space.
+
+{\bf Challenge 3.} Code hints are
+not always expressed as well-formed Java. In some sense, the task of
+parsing code hints lies in between parsing Java code and interpreting natural language.
+
+%{\bf Challenge 4.} As previously mentioned, the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that it must preserve its behaviour.
+%Coming up with an equivalence check is very difficult, especially in the presence of side-effects, as we must take into consideration both the state of the stack and the heap (including the static fields).
+
+We address challenges 1 and 2 by dynamically building the component library for each refactoring
+such that it only contains components specific to that particular use case.
+This process is described in detail in Section~\ref{sec:components-seeding}.
+The third challenge is further discussed under ``Phase 1: Initialise with code hints'' in Section~\ref{sec:components-seeding}.
+
+%% In Section~\ref{sec:components-seeding}, we provide in-depth details about the
+%% seeding of the component library and how to tackle the above challenges. 
+%% At a high level, the process is guided by types and code hints.
+
+%% \section{{\bf Seeding of the component library}}\label{sec:components-seeding}
+%% As mentioned in Section~\ref{sec:overview}, a critical aspect of our technique is the construction
+%% of the component library. 
+%% If the component library is too small, meaning that it doesn't contain all
+%% the required components, then synthesis will fail to find a refactoring.
+%% Similarly, if it contains too many components, then synthesis quickly becomes infeasible
+%% due to the large search space.
+
+
+
+%% \subsection{CodeHints-library} \label{sec:core-library}
+In this section, we'll explain how we populate the component library used by the synthesis procedure starting from the code hints. We'll refer to this library as the Codehints-library.
+In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \texttt{date} of type \texttt{Date} as the input to the code to be refactored, and the integer \texttt{hour} as the output. Generally speaking, the refactoring technique will weave together components from the component library that consume the inputs and generate the required outputs.
+
+Throughout the seeding process, we keep track of the following sets:
+$consumable\_ objs$ (inputs to the code to be refactored, which need to be consumed by the refactoring),  
+$available\_types$ (types for which we either have consumable objects or the corresponding generators to create them) and 
+$target\_types$ (types for which we must be able to generate objects). To start with, the $target\_types$ set
+contains the types of the original code's outputs. %, as well as the types of the code hints' arguments (required in order to make use of the code hints).
+%(objects directly generated by the code hints or objects created by the generators added to make the code hints realisable)
+
+For the running example, we start with:
+%considering the hints are given in Figure~\ref{ex:code-hints} after the
+%\texttt{@code} tag., at the beginning of the seeding algorithm, we have:
+%For the running example, after initialising the component library with the code hints, we have:
+\[
+\begin{aligned}
+  consumable\_objs &=  \{\texttt{date}\}\\  
+  available\_types &=  \{\texttt{Date}\}\\
+  target\_types &= \{\texttt{int}\}
+\end{aligned}
+\]
+
+%% the library seeding algorithm must add components that are able to consume the
+%% inputs to the deprecated code and produce the objects required to make use
+%% of the Javadoc hints.
+%
+
+%From a type-guided perspective,
+The objective of the seeding algorithm is to
+add components to the library that make use of the $available\_types$ to generate objects
+of $target\_types$. At the same time, we want to consume the objects from the
+$consumable\_objs$ set, i.e. the inputs of the original code.
+
+The seeding algorithm for the CodeHints-library is provided in Figure~\ref{alg:seeding-core} and consists of three phases, which we discuss next.
+
+\paragraph{{\bf Phase 1: Initialise with code hints}}
+During the first phase, the initialisation, we add all the constants and instructions from the code hints to the library.
+%
+%% Intuitively, the Javadoc code hints should help with that, so we start by adding the
+%% suggested instructions to the component library.
+For our running example, the hints in Figure~\ref{ex:code-hints} %% after the
+%% \texttt{@code} tag.
+%% These hints
+instruct us to add method \texttt{``int get(int field)''} from class
+\texttt{Calendar} and constant \texttt{``Calendar.HOUR\_OF\_DAY''} to our library.
+%For the core library, we actually fix the \texttt{``Calendar.HOUR\_OF\_DAY''} constant
+%in place, thus adding \texttt{``int get(Calendar.HOUR\_OF\_DAY)''}.
+As a side note, finding the right constants is a well known
+challenge for program synthesis~\cite{DBLP:conf/cav/AbateDKKP18}, and thus the subsequent
+synthesis process will always attempt to use the constants provided in the code hints before generating new ones.
+
+Intuitively, we need to make sure that the Javadoc suggestions
+are realisable as captured by Definition~\ref{def:realizable}, where 
+%We formally refer to such a component as {\em realisable} as captured by Definition~\ref{def:realizable}, where
+%$source\_types$ to refer to types for which we have the means to generate objects, and
+$required\_types(method)$ refers to the types of the objects required to call $method$ (i.e. the types corresponding to its arguments and current object).
+%for $instr$ to be realisable.
+In our running example, $required\_types(\texttt{get}) = \{\texttt{int, Calendar}\}$
+given that, in order to call \texttt{get}, we must provide an argument of type \texttt{int} and a current object of type \texttt{Calendar}.
+Method \texttt{get} is not realisable as the library doesn't contain any generator for \texttt{Calendar}.
+Consequently, \texttt{Calendar} is added to $target\_types$, resulting in:
+$$target\_types = \{\texttt{int, Calendar}\}$$
+
+\begin{definition}[Realisable method]\label{def:realizable}
+Method \var{i} is {\em realisable} iff $\forall t \in required\_types(i). t \in available\_types \vee t~is~a~primitive~type$.
+\end{definition}
+
+
+%\subsection{Parsing the @code hints} \label{sec:parse}
+
+%As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
+%interpret Javadoc hints. 
+One challenge in this phase is interpreting the
+\texttt{@code} blocks inside \texttt{@deprecated} sections, which 
+we attempt to parse as Java expressions. In particular, we parse each hint as if it were invoked in the context of
+the method to refactor, such that imports or the implicit \texttt{this} argument
+are considered during parsing.
+
+%\todo{needs some rewriting?}
+%% The issue is that code hints are not always expressed as well-formed Java.
+%% In some sense, the task of parsing code hints lies in between parsing Java code and interpreting natural language. 
+%
+In order to address challenge 3 related to the fact that code hints are not always expressed as well-formed Java,
+we customised the
+GitHub Java parser
+to accept undeclared identifiers and type names
+as arguments. For instance, the Javadoc hint for deprecating \texttt{boolean inside(int X, int Y)}
+%suggests using 
+in Figure~\ref{ex:javadoc-hint} suggests using
+\texttt{contains(int, int)}, which would normally cause a parsing error as the \texttt{int} type
+appears in the place of argument names. In our setting, we accept this hint as valid.
+There are still situations where our parser is too strict and fails to accept
+some of the code hints. Additionally, there are scenarios where, while the Javadoc
+does contain a useful code hint, it is not tagged accordingly with
+the \texttt{@code} tag. %% These situations are reflected in the experimental results
+%% in Section~\ref{sec:experimental-results}
+%% as some of the benchmarks for which we failed to identify a code hint.
+%We will improve our technique for collecting code hints as future work.
+
+%% These benchmarks
+%% are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\ref{tab:configuration-results-ch} (some of the missing benchmarks from Table~\ref{tab:configuration-results-ch} do genuinely miss a code hint). 
+ 
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+/**
+* Checks whether or not this {@code Rectangle}
+* contains the point at the specified location
+* {@code (X,Y)}.
+*
+* @param  X the specified X coordinate
+* @param  Y the specified Y coordinate
+* @return    {@code true} if the point
+*            {@code (X,Y)} is inside this
+*            {@code Rectangle};
+*            {@code false} otherwise.
+* @deprecated As of JDK version 1.1,
+* replaced by {@code contains(int, int)}.
+*/
+@Deprecated
+public boolean inside(int X, int Y) {
+  // ...
+}
+\end{lstlisting}
+\caption{Javadoc hint example.}
+\label{ex:javadoc-hint}
+\end{figure}
+
+
+
+
+\paragraph{{\bf Phase 2: Add generators for $target\_types$}}
+
+By generators we refer to constructors and any other methods returning objects of that particular type.
+In the algorithm in Figure~\ref{alg:seeding-core},
+once we added a generator for a new type, we must add that type to $available\_types$.
+Additionally, if the new generator consumes any objects from $consumable\_objs$,
+we must remove them from the set.
+
+For our running example, we must seed our component library with generators for \texttt{Calendar}.
+%
+We first scan all the public constructors of class \texttt{Calendar}
+and all the public methods from class \texttt{Calendar} that return an object of type \texttt{Calendar}. We find the following four options:
+
+\begin{enumerate}
+  \item \texttt{static Calendar	getInstance()} -- creates a \texttt{Calendar} object using the default time zone and locale.
+  \item \texttt{static Calendar getInstance(Locale aLocale)} -- creates a \texttt{Calendar} object using the default time zone and specified locale.
+  \item \texttt{static Calendar	getInstance(TimeZone zone)} -- creates a \texttt{Calendar} object using the specified time zone and default locale.
+  \item \texttt{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- creates a \texttt{Calendar} object with the specified time zone and locale.
+\end{enumerate}
+
+Out of the four methods,
+only the first one is realisable. Conversely, in order to call the second method, we would need to generate an object of type \texttt{Locale},
+for which we don't have a corresponding component in the library.
+The last two methods are in a similar situation as the second. Thus, we only add the first method to the CodeHints-library.
+
+\paragraph{{\bf Phase 3: Add transformers for $target\_types$}}
+The third and last phase adds  transformers for the target types.
+By transformers we refer to methods that modify the value of an instance variable.
+Given our objective to generate objects for the $target\_types$ while consuming objects from $consumable\_objs$,
+we prioritise transformers that consume such objects.
+For instance, for our running example there are 16 public transformers for the \texttt{Calendar} class.
+However, instead of adding all of them to the CodeHints-library, we prioritise those that
+consume the \texttt{date} object. There is only one such transformer \texttt{void setTime(Date date)}.
+Once we added any new transformers to the library, we remove the consumed objects from \texttt{consumable\_obj}.
+
+Notably, all the components that
+we add to the library must be accessible from the current location.
+
+\begin{figure}
+\removelatexerror% Nullify \@latex@error
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwOut{CodeHints-library}
+%<<<<<<< HEAD
+// {\bf Phase 1: Initialise}\\
+Add constants and instructions from the code hints to the library\;
+\For{each unrealisable instruction $i$ in library}{
+  $target\_types$ = $target\_types \cup required\_types(i)$\;
+}
+$\newline$
+// {\bf Phase 2: Add generators for $target\_types$}\\
+\For{each $t \in target\_types$ for which there is no generator}{
+  Add realisable generators for $t$ to library\;
+  $available\_types = available\_types \cup \{t\}$\;
+  Remove consumed objs from $consumable\_objs$\;
+}
+$\newline$
+// {\bf Phase 3: Add transformers for $target\_types$}\\
+\While{$consumable\_obj\neq\emptyset$}{
+Add realisable transformers to the library for types in $target\_types$ that consume objects from $consumable\_objs$\;
+Remove consumed objs from $consumable\_objs$\;
+}
+\end{algorithm}
+ \caption{Seeding algorithm for the CodeHints-library}
+\label{alg:seeding-core}
+\end{figure}
+
+It may be the case that there is no realisable generator for a target type, or no transformers for the $target\_types$ that can consume all the
+$consumable\_objs$. When we finish exploring all the available methods, we exit the corresponding loops in phases 2 and 3.
+As a consequence, the synthesiser may fail to generate a valid refactoring from the CodeHints-library.
+%% For such a situation, we extend the component library as explained in Section~\ref{sec:extend-library}.
+A possible future direction is allowing unrealisable generators and transformers to be added to the library and iterating phases 2 and 3 a given number of times (potentially until reaching a fixed point).
+%% iterate phase 2 and 3 until fixed point to 
+
+\subsection{Types-library} \label{sec:extend-library}
+
+For comparison reasons, in addition to the CodeHints-library, we also provide a components library that is populated only based on the type signature
+of the deprecated method. Next, we describe how this Types-library is being built.
+
+For the CodeHints-library, the Javadoc code hints guidance results in the code hints being
+used to collect the $target\_types$ set during the initialisation phase.
+If we don't have access to code hints and we are seeding solely
+based on types, we start with the $target\_types$ set containing
+the class where the original code resides, as well as the types of the inputs and outputs of the
+original code (essentially using the signature of the original code).
+Phases 2 and 3 of the seeding algorithm are the same as those in Figure~\ref{alg:seeding-core},
+where we attempt to add generators and transformers for the $target\_types$ to the library.
+
+%For our running example, we would have $target\_types = \{\}$
+
+Given that both the CodeHints-library and the Types-library consider the output of the
+original code as a target type, we expect some overlap between the two libraries.
+From our experience, the seeding process for the Types-library may end up missing critical types provided by the Javadoc code hints. For instance, in our running example, the \texttt{Calendar} class is only mentioned by the
+code hints and would not be included in the seeding of the Types-library.
+One possibility for adding
+\texttt{Calendar} to the target types without considering
+the Javadoc hints, would be to add all the classes from the
+\texttt{java.util} package, which contains \texttt{Date}. However, doing so would result
+in a very large component library, most likely outside the capabilities of existing
+synthesis techniques.
+
 
 
 \subsection{Instrumentation and isolation}
@@ -1853,7 +1847,7 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 \end{table}
 
 
-\subsection{Baseline: \llm} \label{sec:chatgpt}
+\subsection{Neural approach: \llm} \label{sec:chatgpt}
 We are interested in comparing \tool against
 \llm.
 %, and we did not perform any fine-tuning. We will consider
