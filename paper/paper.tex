@@ -302,32 +302,38 @@ void main(String[] args) {
 %complex. Indeed neither Eclipse 4.27.0 nor IntelliJ IDEA 2023.1.1 make
 %any attempt to suggest an alternative to the user.
 
-Program synthesis is generally concerned with code generation via symbolic reasoning. 
-Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
+%Program synthesis is generally concerned with code generation via symbolic reasoning. 
+%Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
 
 
-In this paper, we are interested in the automatic code generation of refactorings for deprecated APIs. For this purpose, we will take advantage of the following information:
+In this paper, we are interested in the automatic code generation of refactorings for deprecated APIs. For this purpose, we design both a symbolic and a neural approach based on Large Language Models (LLMs). More than simply generating refactorings for deprecated APIs, given the recent focus on LLM based code generation, we are interested in investigating whether, for specialised problems such as the current one, symbolic approaches can still be of use at much lower computational costs compared to neural ones.
 
+When attempting to come up with a refactoring for deprecated APIs, one must use the following knowledge:
+%The information that we have about the current problem is that:
 
-{\bf (1)} {\em Type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+{\bf (1)} The orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
 
+%{\em type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
 
+ Traditionally, types are commonly used to guide program synthesis. The idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
+ enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, our work also serves as an investigation of the usefulness of type information in generating imperative code.
 
-Traditionally, the idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
-enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, our work also serves as an investigation of the usefulness of type information in generating imperative code.
-
-{\bf (2)} {\em Code hints} present in the Javadoc comments. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
+{\bf (2)} The Javadoc comments may contain {\em code hints}. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
 comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show next,
 these hints don't provide the whole refactoring, but can be used to guide the search process.
-Our aim in this paper is to use them as the building blocks
+While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach 
+we use them as the building blocks
 of the new refactoring. 
 For this purpose, we take inspiration from component-based program synthesis,
 which weaves together components from a library
 (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
 
+{\bf (3)} The original code and the refactoring must have {\em the same behaviour}, i.e. 
+the generated refactoring needs to be semantically equivalent to the original.
+To ensure this for the current setting, we come up with an equivalence check, which takes into consideration both the state of the stack and the heap (including the static fields).
 
-We contrast a symbolic and a neural approach based on Large Language Models (LLMs) for automatically generating such refactorings. %Both approaches have access to the same information: type signatures and Javadoc deprecation messages.
-We make the two approaches as similar as possible. In particular, they are both iterative, such that, in each itaration a candidate refactoring is being generated, which is then verified for semantic equivalence with the original codeby the same verifier. If the verification succeeds, then the solution is returned to the user. Otherwise, the counterexample is used  to refine the current solution.
+%We contrast a symbolic and a neural approach based on Large Language Models (LLMs) for automatically generating such refactorings. 
+We make the symbolic and the neural approach as similar as possible. In particular, they are both iterative, such that, in each iteration, a candidate refactoring is being generated, which is then verified for semantic equivalence with the original code. If the verification succeeds, then the solution is returned to the user. Otherwise, the counterexample is used  to refine the current solution.
 
 
 %In this paper, we investigate two of the most common types pf program synthesis: type-directed synthesis and component-based synthesis. In particular, we want to see how a symbolic and a neural approach comapre against each other for for of these cases.
@@ -335,7 +341,7 @@ We make the two approaches as similar as possible. In particular, they are both 
 %* Type-directed synthesis has been widely used for functional programs, but less so for procedural programming. The exception is using very sophisticates type systems such as graded linear type systems, or ... In this work, our focus is on Java so we rely on a traditional type system. On the side of the neural approach, we are not aware of any type-based investigation. 
 %* For component ... For the LLM-based approach, this translates into providing the daprecates message and allowing the LLM to make use of the corresponding code hints.
 
-
+\todo{unsure whether this fits, if at all.}
 For code generation, in the literature, there is a focus on the functional properties of the generated code, which generally refers to correctness. In the case of program refactoring,
 there are also qualitative expectations as the refactoring is meant to improve the code quality (while also maintaining functional correctness).
 
@@ -353,18 +359,12 @@ there are also qualitative expectations as the refactoring is meant to improve t
 
 
 
-Two of the most common symbolic program synthesis techniques are type-directed and component-based. 
-
-%[Talk about type-directed synthesis]
-%[Component-based using the Deprecation messages]
-
-
-The questions that we are trying to answer are:
-\begin{itemize}
-\item[RQ1] How do the two approaches take advantage of type information?
-\item[RQ2] How do the two approaches take advantage of the deprecation message?
-\item[RQ3] How do the two approaches deal with qualitative requirements?
-\end{itemize}  
+%The questions that we are trying to answer are:
+%\begin{itemize}
+%\item[RQ1] How do the two approaches take advantage of type information?
+%\item[RQ2] How do the two approaches take advantage of the deprecation message?
+%\item[RQ3] How do the two approaches deal with qualitative requirements?
+%\end{itemize}  
 
 
 %* For the symbolic approach, we are interested in how type-directed synthesis works for Java. This has been effective mostly in functional programming, where the types provide a comprehensive description of the code. How does this extend to Java?
@@ -412,18 +412,18 @@ The questions that we are trying to answer are:
 
 
 
-\emph{Current solution.}  In this paper, we investigate an approach for automatically refactoring uses of deprecated APIs based on program synthesis.
-To verify that the refactoring maintains the behaviour of the original code, we design a semantic equivalence check.
+%\emph{Current solution.}  In this paper, we investigate an approach for automatically refactoring uses of deprecated APIs based on program synthesis.
+%To verify that the refactoring maintains the behaviour of the original code, we design a semantic equivalence check.
 
-Additionally, we are interested in comparing our symbolic approach against a neural one using Large Language Models (LLMs), which we augment with our semantic equivalence checking procedure.
-In particular, given the recent advances that LLMs made in code generation,
-we want to investigate whether they completely subsume symbolic methods, or whether, for specialised tasks such as the current refactoring,
-symbolic methods are still useful at lower computational costs.
-We picked GPT-4 Turbo.
-There are several studies of ChatGPT's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and 
-prompt pattern design for refactoring, requirements elicitation, and software design ~\cite{white2023chatgpt}.
-While, in this paper, we focus on the refactoring of deprecated methods, the same
-technique can be applied to deprecated fields and classes.
+%Additionally, we are interested in comparing our symbolic approach against a neural one using Large Language Models (LLMs), which we augment with our semantic equivalence checking procedure.
+%In particular, given the recent advances that LLMs made in code generation,
+%we want to investigate whether they completely subsume symbolic methods, or whether, for specialised tasks such as the current refactoring,
+%symbolic methods are still useful at lower computational costs.
+%We picked GPT-4 Turbo.
+%There are several studies of ChatGPT's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and 
+%prompt pattern design for refactoring, requirements elicitation, and software design ~\cite{white2023chatgpt}.
+%While, in this paper, we focus on the refactoring of deprecated methods, the same
+%technique can be applied to deprecated fields and classes.
 
 
 %The first one is a symbolic approach based on Counter-Example Guided Inductive Synthesis (CEGIS), whereas the second is neural approach based on Large 
@@ -464,9 +464,9 @@ technique can be applied to deprecated fields and classes.
 %% We believe RQ1 is particularly important given the high computational cost of LLMs. Our results highlight the fact that there is room for
 %% symbolic code generation methods to outperform general-purpose LLMs at a much lower cost.
 
-\paragraph{Other approaches to program refactoring}
-With respect to the work pursued by the academic community, 
-one of the directions is to 
+\paragraph{Existing approaches to automated program refactoring}
+%With respect to the work pursued by the academic community, 
+One of the existing directions is to 
 replace calls
 to deprecated methods by their
 bodies~\cite{DBLP:conf/paste/Perkins05}.
@@ -507,17 +507,19 @@ types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
 
 \begin{itemize}
 
-\item We proposed a symbolic refactoring technique for deprecated APIs that uses program synthesis and fuzzing. The technique incorporates semantic information about the code and it is guided by Javadoc code hints and type information.
+\item We proposed a symbolic and a neural refactoring technique for deprecated APIs. The former makes use of type-directed and component-based synthesis, whereas the latter is LLM based. In order to check the correctness of the refactorings, we designed an equivalence check, which takes into consideration both the state of the stack and the heap.
+  %The technique incorporates semantic information about the code and it is guided by Javadoc code hints and type information.
 
 %\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
 
-\item We implemented our technique and used it to refactor deprecated methods from the Oracle
+\item We implemented our techniques and used them to refactor deprecated methods from the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 
-\item We investigated how our symbolic refactoring technique compares against a general purpose LLM. %In particular, we want to find out whether there is still space for specialised techniques
+\item We investigated how the symbolic refactoring technique compares against the neural one. %In particular, we want to find out whether there is still space for specialised techniques
   %such as ours in a GPT-4 Turbo era.
+  \todo{come back to this after investigating experimental results}
   Our results highlight the fact that there is room for
-symbolic code generation methods such as ours to outperform general-purpose LLMs in specialised settings, at a lower computational cost.
+symbolic code generation to outperform general-purpose LLMs in specialised settings, at a lower computational cost.
 
 
 \end{itemize}  
