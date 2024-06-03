@@ -1932,6 +1932,18 @@ In order to have a fair comparison to \tool, the average runtime for \llm includ
 %%   \label{tab:gpt-results}   
 %% \end{table}
 
+{\bf Comparing to symbolic approach.}
+\autoref{tab:gpt-results} show that our neural approach performs better than the symbolic approach.
+In particular, the neural approach is able to provide correct refactoring for \emph{deprecated concurrency primitives}
+(e.g. \lstinline{weakCompareAndSet}). We have also found that \llm is more aggressive in refactoring methods
+of which return value is dependent on external system states. For example, the deprecated method \lstinline{java.net.URLEncoder#encode}
+translates a string using a platform-specific encoding scheme. A correct refactoring requires explicitly providing
+this scheme, and \llm chose "UTF-8" which works on our platform.
+
+{\bf Missed and unsound refactoring.}
+Since our neural engine shares the same verification approach with our symbolic engine, many missed/unsound refactorings
+are due to the same reasons (i.e. JVM crashes).
+
 
 \begin{table}[h]
   \begin{tabular} {|l|r|r|r|r|r|}
