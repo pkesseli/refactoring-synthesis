@@ -569,8 +569,8 @@ symbolic code generation to outperform general-purpose LLMs in specialised setti
 
 In this section, we describe the two synthesis engines.
 For both approaches, we make use of a CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, where we
-iteratively attempt to improve a candidate refactoring (generated using a component library as built in Section~\ref{sec:components-seeding}) until it obeys a given specification
-(as it will be explained later in the section, for the neural engine, the CEGIS architecture is not followed exactly by the synthesis phase).
+iteratively attempt to improve a candidate refactoring (generated using a component library as built in Section~\ref{sec:components-seeding}) until it obeys a given specification.
+As it will be explained later in the section, for the neural engine, the CEGIS architecture is not followed exactly by the synthesis phase.
 In our case, the specification expresses the fact that the original and
 the refactored blocks of code must behave indistinguishably, i.e. they are observationally equivalent.
 %
@@ -1644,7 +1644,7 @@ under the ``Missed refactorings'' and ``Unsound refactorings'' paragraphs, respe
 
 \section{Experimental results}\label{sec:experimental-results}
 
-We implemented the program synthesis and fuzzing refactoring technique in a tool called \tool (available together with all the experiments at \url{https://anonymous.4open.science/r/resynth-artifact-43D6}).
+We implemented the refactoring generation techniques in two tools called \tool and \llm, corresponding to the symbolic and the neural approach, respectively (available together with all the experiments at \url{https://anonymous.4open.science/r/resynth-artifact-43D6}).
 %
 Our benchmark suite contains 236 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
