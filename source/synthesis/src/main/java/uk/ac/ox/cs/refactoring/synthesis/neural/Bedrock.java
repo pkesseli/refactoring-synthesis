@@ -44,7 +44,6 @@ public class Bedrock {
         .put("prompt", enclosedPrompt)
         .put("max_tokens_to_sample", 10000)
         .put("temperature", 0.2)
-        // .put("stop_sequences", List.of("\n\nHuman:"))
         .put("stop_sequences", new ArrayList<>(Arrays.asList("\n\nHuman:", "</code>")))
         .toString();
 
@@ -60,6 +59,46 @@ public class Bedrock {
     JSONObject responseBody = new JSONObject(response.body().asUtf8String());
 
     String generatedText = responseBody.getString("completion");
+
+    return generatedText;
+  }
+
+  public static String invokeClaude3(String prompt) {
+    String modelId = "anthropic.claude-3-sonnet-20240229-v1:0";
+
+    BedrockRuntimeClient client = BedrockRuntimeClient.builder()
+        .region(Region.US_EAST_1)
+        .credentialsProvider(ProfileCredentialsProvider.create())
+        .build();
+
+    // Prepare the JSON payload for the Messages API request
+    var payload = new JSONObject()
+        .put("anthropic_version", "bedrock-2023-05-31")
+        .put("max_tokens", 10000)
+        .put("temperature", 0.2)
+        .put("stop_sequences", new ArrayList<>(Arrays.asList("</code>")))
+        .append("messages", new JSONObject()
+            .put("role", "user")
+            .append("content", new JSONObject()
+                .put("type", "text")
+                .put("text", prompt)
+            ));
+
+    var request = InvokeModelRequest.builder()
+        .body(SdkBytes.fromUtf8String(payload.toString()))
+        .modelId(modelId)
+        .contentType("application/json")
+        .accept("application/json")
+        .build();
+    
+    InvokeModelResponse response = client.invokeModel(request);
+
+    JSONObject responseBody = new JSONObject(response.body().asUtf8String());
+
+    String generatedText = responseBody.getJSONArray("content").getJSONObject(0).getString("text");
+    if (responseBody.getString("stop_reason").equals("stop_sequence")) {
+      generatedText += responseBody.getString("stop_sequence");
+    }
 
     return generatedText;
   }

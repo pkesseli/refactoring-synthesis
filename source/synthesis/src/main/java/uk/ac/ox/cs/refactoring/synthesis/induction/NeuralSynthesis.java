@@ -46,6 +46,7 @@ import uk.ac.ox.cs.refactoring.synthesis.counterexample.Counterexample;
 import uk.ac.ox.cs.refactoring.synthesis.invocation.ExecutionResult;
 import uk.ac.ox.cs.refactoring.synthesis.neural.CodeEngine;
 import uk.ac.ox.cs.refactoring.synthesis.neural.Claude2;
+import uk.ac.ox.cs.refactoring.synthesis.neural.Claude3;
 import uk.ac.ox.cs.refactoring.synthesis.neural.LocalCodeLLaMa2;
 import uk.ac.ox.cs.refactoring.synthesis.neural.Prompt;
 import uk.ac.ox.cs.refactoring.synthesis.neural.TextTagger;
@@ -90,6 +91,9 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
         case "claude2":
           codeEngine = new Claude2();
           break;
+        case "claude3":
+          codeEngine = new Claude3();
+          break;
         default:
           codeEngine = null;
           break;
@@ -120,8 +124,9 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     // if (!WITH_CODE_HINTS) {
     //   method.setComment(null);
     // }
-    methodSignatureContext = method.getSignature().asString();
-    // methodContext = method.toString();
+    // methodSignatureContext = method.getSignature().asString();
+    method.setComment(null);
+    methodSignatureContext = method.toString();
 
     StringBuilder templateCallString = new StringBuilder();
     if (!method.isStatic()) {
@@ -192,9 +197,11 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
     contextBuilder.append(String.format("The method %s of the class %s is deprecated.\n",
         TextTagger.tag("method-name", generatorConfiguration.javaDocSeed.methodToRefactor.MethodName, true),
         TextTagger.tag("class-name", generatorConfiguration.javaDocSeed.methodToRefactor.FullyQualifiedClassName, true)));
-    contextBuilder.append("Below is the method signature");
-    contextBuilder.append(":\n");
-    contextBuilder.append(String.format("\n%s\n", TextTagger.tag("method-signature", methodSignatureContext)));
+    // contextBuilder.append("Below is the method signature");
+    // contextBuilder.append(":\n");
+    // contextBuilder.append(String.format("\n%s\n", TextTagger.tag("method-signature", methodSignatureContext)));
+    contextBuilder.append("The method definition can be found below\n");
+    contextBuilder.append(String.format("\n%s\n", TextTagger.tag("method-definition", methodSignatureContext)));
     if (WITH_CODE_HINTS) {
       var deprecationCommentDescription = "Here are its Javadoc comments that may contain a @deprecated tag explaining why the item has been deprecated and suggesting what to use instead:\n";
       contextBuilder.append(deprecationCommentDescription);
@@ -209,10 +216,15 @@ public class NeuralSynthesis<Candidate> extends FuzzingSynthesis<Candidate> {
 
     String context = contextBuilder.toString();
     String instruction = "Help me refactor this code snippet so that it doesn't use the deprecated method.";
-    Prompt prompt = new Prompt(context, instruction);
     if (WITH_CODE_HINTS) {
-      prompt.constraints.add("The javaDoc comments might contain useful components for you to construct your answer.");
+      instruction += " Do not simply inline the method body, use APIs suggested by <javadoc-comment> if there is any.";
+    } else {
+      instruction += " Do not simply inline the method body.";
     }
+    Prompt prompt = new Prompt(context, instruction);
+    // if (WITH_CODE_HINTS) {
+    //   prompt.constraints.add("The javaDoc comments might contain useful components for you to construct your answer.");
+    // }
     // prompt.constraints.add("Prefer method invocations over operators (e.g. choose `append` over String `+` operator).");
     prompt.constraints.add("Your answer must only contain a straight line Java program. Use variables available in the <code-snippet>. Do not use if-conditions or loops.");
     // prompt.constraints.add("Do not simply inline original implementations");
