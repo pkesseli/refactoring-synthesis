@@ -1105,46 +1105,25 @@ if and only if they are in the same equivalence class induced by the aliasing re
 %% \item For the {\bf Types-library} the seeding is only guided by types.
 %% \end{itemize}  
 
-In this section, we describe how we populate the component library used by the symbolic approach starting from code hints.
-For illustration, let's look at our running example in Figure~\ref{ex:deprecated-method-other}. The source code for the \texttt{getHours} method in class \texttt{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests replacing the deprecated \texttt{getHours}
-with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
+In this section, we describe how we populate the component library used by the symbolic approach starting from code hints. We'll refer to this library as the Codehints-library.
 %
-%Note that this hint is not immediately usable.
-It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
-
-
-\begin{figure}
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
-/*
- * @return  the hour represented by this date.
- * @see     java.util.Calendar
- * @deprecated As of JDK version 1.1,
- * replaced by {@code Calendar.get
- *              (Calendar.HOUR_OF_DAY)}.
- */  
-\end{lstlisting}
-\caption{Code hints for the running example.}
-\label{ex:code-hints}
-\end{figure}
-
-
-%While it might seem that this hint ma solve the entire problem, 
-
-%\todo{possible other challenges: parsing, abstract classes. remove challenge 3.}
-
-{\bf Challenge 1.}  Although it may seem as if
-method \texttt{get} is static allowing an immediate call,
-it is actually an instance method, requiring us to have an object of
-class \texttt{Calendar}. However, no such object is available in the
-original code meaning that it must be created by the refactored code.
-Consequently, we must find the necessary
-components (i.e. instructions) that consume existing objects and create a \texttt{Calendar} object.
-
-{\bf Challenge 2.} Besides adding components that allow us to generate the required objects, we also need components for setting their
-fields. For instance,
-in Figure~\ref{ex:deprecated-method-other}, we must call
+As a reminder, we go back to the running example in Figure~\ref{ex:deprecated-method-other} (with the corresponding Javadoc comment in Figure~\ref{ex:code-hints}), as
+discussed in Section~\ref{sec:intro}.
+As mentioned there, when building the corresponding component library for this example, 
+%
+%{\bf Challenge 1.}  Although it may seem as if
+%method \texttt{get} is static allowing an immediate call,
+%it is actually an instance method, requiring us to have an object of
+%class \texttt{Calendar}. However, no such object is available in the
+%original code meaning that it must be created by the refactored code.
+%Consequently,
+we must find the necessary
+components that consume existing objects and create a \texttt{Calendar} object, so that we can call method \texttt{get} as suggested by the code hint.
+Besides adding components that allow us to generate the required objects, we also need components for setting their
+fields. In our example, we must call
 \texttt{calendar.setTime(date)} to set the calendar's date
 based on the existing \texttt{date} object.
+
 Adding too many components to the library will
 make the code generation task infeasible. In particular, we should
 be able to differentiate between components that we can use
@@ -1154,18 +1133,19 @@ that we can't because we can't obtain some of the arguments
 and/or the current object. Adding the latter components to the library will
 significantly slow down the code generation process by
 adding infeasible programs to the search space.
+We address these challenges by dynamically building the component library for each refactoring
+such that it only contains components specific to that particular use case.
 
-{\bf Challenge 3.} Code hints are
-not always expressed as well-formed Java. In some sense, the task of
-parsing code hints lies in between parsing Java code and interpreting natural language.
+
+%{\bf Challenge 3.} Code hints are
+%not always expressed as well-formed Java. In some sense, the task of
+%parsing code hints lies in between parsing Java code and interpreting natural language.
 
 %{\bf Challenge 4.} As previously mentioned, the generated refactoring needs to be {\em semantically equivalent to the original}, meaning that it must preserve its behaviour.
 %Coming up with an equivalence check is very difficult, especially in the presence of side-effects, as we must take into consideration both the state of the stack and the heap (including the static fields).
 
-We address challenges 1 and 2 by dynamically building the component library for each refactoring
-such that it only contains components specific to that particular use case.
-This process is described in detail in Section~\ref{sec:components-seeding}.
-The third challenge is further discussed under ``Phase 1: Initialise with code hints'' in Section~\ref{sec:components-seeding}.
+%This process is described in detail in Section~\ref{sec:components-seeding}.
+%The third challenge is further discussed under ``Phase 1: Initialise with code hints'' in Section~\ref{sec:components-seeding}.
 
 %% In Section~\ref{sec:components-seeding}, we provide in-depth details about the
 %% seeding of the component library and how to tackle the above challenges. 
@@ -1182,8 +1162,8 @@ The third challenge is further discussed under ``Phase 1: Initialise with code h
 
 
 %% \subsection{CodeHints-library} \label{sec:core-library}
-In this section, we'll explain how we populate the component library used by the synthesis procedure starting from the code hints. We'll refer to this library as the Codehints-library.
-In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \texttt{date} of type \texttt{Date} as the input to the code to be refactored, and the integer \texttt{hour} as the output. Generally speaking, the refactoring technique will weave together components from the component library that consume the inputs and generate the required outputs.
+
+%In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \texttt{date} of type \texttt{Date} as the input to the code to be refactored, and the integer \texttt{hour} as the output. Generally speaking, the refactoring technique will weave together components from the component library that consume the inputs and generate the required outputs.
 
 Throughout the seeding process, we keep track of the following sets:
 $consumable\_ objs$ (inputs to the code to be refactored, which need to be consumed by the refactoring),  
