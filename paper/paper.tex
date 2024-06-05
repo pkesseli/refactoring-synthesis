@@ -1790,15 +1790,15 @@ This is not a fundamental limitation, but instead just an implementation detail.
 Abstract methods: For our equivalence predicate implementation, we pick a single
 concrete subclass for deprecated abstract methods. This proved sufficient for
 all benchmarks in our set. However, there are classes in the JCL without any
-existing implementation (e.g. $javax.swing.InputVerifier$) and thus no concrete
+existing implementation (e.g. \lstinline{javax.swing.InputVerifier}) and thus no concrete
 method against we can verify equivalence of candidates.
 
 Insufficient counterexamples: Our fuzzing-based equivalence check is inherently
 incomplete, and for some benchmarks we do not explore counterexamples in
 sufficient number or quality to identify unsound candidates. An example for this
-category is $javax.swing.JViewport\#isBackingStoreEnabled$, where only one value
+category is \lstinline{javax.swing.JViewport#isBackingStoreEnabled}, where only one value
 out of the $2^32-1$ possible input values will trigger an alternate code path.
-On the other hand, the method $java.rmi.server.RMIClassLoader\#loadClass$ is an
+On the other hand, the method \lstinline{java.rmi.server.RMIClassLoader#loadClass} is an
 example where our counterexample does not produce counterexamples of sufficient
 quality. The method accepts a string as an input, but will throw for any string
 that is not a valid class name. Since our fuzzer does not consider such context,
