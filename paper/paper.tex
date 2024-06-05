@@ -1963,7 +1963,14 @@ translates a string using a platform-specific encoding scheme. A correct refacto
 this scheme, and \llm chose "UTF-8" which works on our platform.
 
 {\bf Missed and unsound refactoring.}
-Since our neural engine shares the same verification approach with our symbolic engine, many missed/unsound refactorings
+Some of the missed refactorings are due to that fact that deprecation comments provide suggestions
+that are not semantically equivalent to the original method. For instance, the method \lstinline{javax.swing.JMenuBar#getComponentAtIndex(int)}
+that retrieves \lstinline{Component} at a specific index performs bound-checking: if the index is not within
+range then a \lstinline{null} value is returned. However, the suggested replacement \lstinline{javax.swing.JMenuBar#getComponent(int)}
+does not perform bound-checking. We have noticed that \llm is able to generate the correct replacement, but
+it fails equivalence checking and hence misses this refactoring.
+
+Additionally, since our neural engine shares the same verification approach with our symbolic engine, many missed/unsound refactorings
 are due to the same reasons (i.e. JVM crashes).
 
 
