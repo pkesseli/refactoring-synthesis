@@ -130,7 +130,7 @@
                                   % (paid open-access papers, 
                                   % short abstracts)
 
-\title{Symbolic vs neural refactoring of deprecated APIs} % guided by types and code hints}
+\title{Symbolic vs. Neural Refactoring of Deprecated APIs} % guided by types and code hints}
 %\subtitle{Subtitle Text, if any}
 % double-blind submission
 % single-blind only for Technical Research: http://icse2017.gatech.edu/technical-research-cfp
@@ -1368,7 +1368,7 @@ A possible future direction is allowing unrealisable generators and transformers
 
 \subsection{Types-library} \label{sec:extend-library}
 
-For comparison reasons, in addition to the CodeHints-library, we also provide a components library that is populated only based on the type signature
+For cases when code hints are not provided, in addition to the CodeHints-library, we also provide a components library that is populated only based on the type signature
 of the deprecated method. Next, we describe how this Types-library is being built.
 
 For the CodeHints-library, the Javadoc code hints guidance results in the code hints being
@@ -1382,9 +1382,9 @@ where we attempt to add generators and transformers for the $target\_types$ to t
 
 %For our running example, we would have $target\_types = \{\}$
 
-Given that both the CodeHints-library and the Types-library consider the output of the
-original code as a target type, we expect some overlap between the two libraries.
-From our experience, the seeding process for the Types-library may end up missing critical types provided by the Javadoc code hints. For instance, in our running example, the \texttt{Calendar} class is only mentioned by the
+%Given that both the CodeHints-library and the Types-library consider the output of the
+%original code as a target type, we expect some overlap between the two libraries.
+Compared to the CodeHints-library, the seeding process for the Types-library may end up missing critical types provided by the Javadoc code hints. For instance, in our running example, the \texttt{Calendar} class is only mentioned by the
 code hints and would not be included in the seeding of the Types-library.
 One possibility for adding
 \texttt{Calendar} to the target types without considering
@@ -1393,6 +1393,10 @@ the Javadoc hints, would be to add all the classes from the
 in a very large component library, most likely outside the capabilities of existing
 synthesis techniques.
 
+  \section{Implementation} \label{sec:implementation}
+
+  %In the previous sections we presented our technique from a formal point of view.
+  %Conversely, in this section we discuss details related to our implementation choices.  
 
 
 \subsection{Instrumentation and isolation}
@@ -1554,10 +1558,6 @@ unlucky fuzzed input might lead to an out of memory error.
 
 
 
-  \section{Implementation} \label{sec:implementation}
-
-  In the previous sections we presented our technique from a formal point of view.
-  Conversely, in this section we discuss details related to our implementation choices.  
 
 %\subsection{Using fuzz testing for synthesis} \label{sec:fuzzing}
 
@@ -1634,7 +1634,7 @@ relation.
 
 
 \subsection{Sources of unsoundness and incompleteness}\label{sec:incompleteness}
-As explained in Section~\ref{sec:encoding}, due to the use of fuzz
+As aforementioned, due to the use of fuzz
 testing in the synthesis phase, our technique may fail to find a
 refactoring even when one exists (i.e. it is {\em incomplete}),
 whereas using fuzz testing in the verification phase may result in
