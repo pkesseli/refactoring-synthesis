@@ -1869,15 +1869,15 @@ This is not a fundamental limitation, but instead just an implementation detail.
 Abstract methods: For our equivalence predicate implementation, we pick a single
 concrete subclass for deprecated abstract methods. This proved sufficient for
 all benchmarks in our set. However, there are classes in the JCL without any
-existing implementation (e.g. $javax.swing.InputVerifier$) and thus no concrete
+existing implementation (e.g. \lstinline{javax.swing.InputVerifier}) and thus no concrete
 method against we can verify equivalence of candidates.
 
 Insufficient counterexamples: Our fuzzing-based equivalence check is inherently
 incomplete, and for some benchmarks we do not explore counterexamples in
 sufficient number or quality to identify unsound candidates. An example for this
-category is $javax.swing.JViewport\#isBackingStoreEnabled$, where only one value
+category is \lstinline{javax.swing.JViewport#isBackingStoreEnabled}, where only one value
 out of the $2^32-1$ possible input values will trigger an alternate code path.
-On the other hand, the method $java.rmi.server.RMIClassLoader\#loadClass$ is an
+On the other hand, the method \lstinline{java.rmi.server.RMIClassLoader#loadClass} is an
 example where our counterexample does not produce counterexamples of sufficient
 quality. The method accepts a string as an input, but will throw for any string
 that is not a valid class name. Since our fuzzer does not consider such context,
@@ -2042,7 +2042,14 @@ translates a string using a platform-specific encoding scheme. A correct refacto
 this scheme, and \llm chose "UTF-8" which works on our platform.
 
 {\bf Missed and unsound refactoring.}
-Since our neural engine shares the same verification approach with our symbolic engine, many missed/unsound refactorings
+Some of the missed refactorings are due to that fact that deprecation comments provide suggestions
+that are not semantically equivalent to the original method. For instance, the method \lstinline{javax.swing.JMenuBar#getComponentAtIndex(int)}
+that retrieves \lstinline{Component} at a specific index performs bound-checking: if the index is not within
+range then a \lstinline{null} value is returned. However, the suggested replacement \lstinline{javax.swing.JMenuBar#getComponent(int)}
+does not perform bound-checking. We have noticed that \llm is able to generate the correct replacement, but
+it fails equivalence checking and hence misses this refactoring.
+
+Additionally, since our neural engine shares the same verification approach with our symbolic engine, many missed/unsound refactorings
 are due to the same reasons (i.e. JVM crashes).
 
 
