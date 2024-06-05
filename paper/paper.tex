@@ -305,45 +305,109 @@ void main(String[] args) {
 %Program synthesis is generally concerned with code generation via symbolic reasoning. 
 %Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
 
+In this paper, we are interested in the automatic generation of refactorings for deprecated APIs. In recent years, Large Language Models (LLMs) have gained a lot of popularity as they have been successfully applied to a wide range of tasks including code generation~\cite{}. While they may seem like the generic solution to any code generation problem, they come at a high computational cost as their  the efficacy hinges heavily on the parameter count. The other option when considering code generation relies on symbolic methods, which make use of hard coded rules~\cite{}. Thus, the question we are trying to answer in the current paper is: for specialised problems, such as the automatic refactoring of deprecated APIs, are symbolic methods still useful, or were they completely overtaken by LLM-based ones? Answering this question is particularly important given the rise of architectures such as  Mixture-of-Experts~\cite{}, which adopt a conditional computation paradigm by only selecting parts of an ensemble, referred to as experts, based on the data at hand. In the context of such an architecture, one needs to consider the best option for each expert, e.g. the one responsible for the current deprecated refactoring problem.
+ 
 
-In this paper, we are interested in the automatic code generation of refactorings for deprecated APIs. For this purpose, we design both a symbolic and a neural approach based on Large Language Models (LLMs). More than simply generating refactorings for deprecated APIs, given the recent focus on LLM based code generation, we are interested in investigating whether, for specialised problems such as the current one, symbolic approaches can still be of use at much lower computational costs compared to neural ones.
+%To answer this question, we design both a symbolic and a neural approach based on Large Language Models (LLMs). More than simply generating refactorings for deprecated APIs, given the recent focus on LLM based code generation, we are interested in investigating whether, for specialised problems such as the current one, symbolic approaches can still be of use at much lower computational costs compared to neural ones. An answer to this question is useful especially given that the efficacy of LLMs hinges heavily on their parameter count. Notably, as an answer to this problem, architectures such as
+%Mixture-of-Experts (MoE), which adopts a conditional computation paradigm by only selecting parts of an ensemble, referred to as experts, and activating them depending on the data at hand. In the context of such an architecture, one needs to consider what should play as an expert for the current deprecated refactoring problem.
 
-When attempting to come up with a refactoring for deprecated APIs, one has access to the following information:
+In order to conduct our investigation, let us first  consider the information available when trying to find a refactoring:
+%When attempting to come up with a refactoring for deprecated APIs, one has access to the following information:
 %The information that we have about the current problem is that:
 
-{\bf (1)} The orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+{\bf (1)} The original code and the refactoring must have {\em the same behaviour}, i.e. 
+the generated refactoring needs to be semantically equivalent to the original.
+%To ensure this for the current setting, we come up with an equivalence check, which takes into consideration both the state of the stack and the heap (including the static fields).
+One implication is that the orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
 
 %{\em type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
 
- Traditionally, types are commonly used to guide program synthesis. The idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
- enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, our work also serves as an investigation of the usefulness of type information in generating imperative code.
-
 {\bf (2)} The Javadoc comments may contain {\em code hints}. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
-comment section to inform the developer of the reason for deprecation and what can be used in its place. As we will show next,
-these hints don't provide the whole refactoring, but can be used to guide the search process.
-While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach 
-we use them as the building blocks
-of the new refactoring. 
-For this purpose, we take inspiration from component-based program synthesis,
-which weaves together components from a library
-(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
+comment section to inform the developer of the reason for deprecation and what can be used in its place. 
+These hints don't provide the whole refactoring, but can be used to guide the search process.
+%
+For illustration, let's look at our running example in Figure~\ref{ex:deprecated-method-other}. The source code for the \texttt{getHours} method in class \texttt{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests replacing the deprecated \texttt{getHours}
+with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
+%It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
 
-{\bf (3)} The original code and the refactoring must have {\em the same behaviour}, i.e. 
-the generated refactoring needs to be semantically equivalent to the original.
-To ensure this for the current setting, we come up with an equivalence check, which takes into consideration both the state of the stack and the heap (including the static fields).
 
-%We contrast a symbolic and a neural approach based on Large Language Models (LLMs) for automatically generating such refactorings. 
-We make the symbolic and the neural approach as similar as possible. In particular, they are both iterative, such that, in each iteration, a candidate refactoring is being generated, which is then verified for semantic equivalence with the original code. If the verification succeeds, then the solution is returned to the user. Otherwise, the counterexample is used  to refine the current solution.
+
+
+
+
+\begin{figure}
+\begin{lstlisting}[mathescape=true,showstringspaces=false]
+/*
+ * @return  the hour represented by this date.
+ * @see     java.util.Calendar
+ * @deprecated As of JDK version 1.1,
+ * replaced by {@code Calendar.get
+ *              (Calendar.HOUR_OF_DAY)}.
+ */  
+\end{lstlisting}
+\caption{Code hints for the running example.}
+\label{ex:code-hints}
+\end{figure}
+
+
+%While it might seem that this hint ma solve the entire problem, 
+
+%\todo{possible other challenges: parsing, abstract classes. remove challenge 3.}
+
+%{\bf Challenge 1.}
+Although it may seem as if
+method \texttt{get} is static allowing an immediate call,
+it is actually an instance method, requiring us to have an object of
+class \texttt{Calendar}. However, no such object is available in the
+original code meaning that it must be created by the refactored code.
+Consequently, we must find the necessary
+instructions that consume existing objects and create a \texttt{Calendar} object.
+Besides generating the required objects, we also need to set their
+fields. For instance,
+in Figure~\ref{ex:deprecated-method-other}, we must call
+\texttt{calendar.setTime(date)} to set the calendar's date
+based on the existing \texttt{date} object.
+
+
+As part of our investigation, we build two code generation engines, namely a symbolic and a neural one.
+In an attempt to make them follow the same general structure, we base them both on CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, which 
+iteratively improves a candidate refactoring, until it obeys a given specification. In our case, the specification expresses the fact that the original and
+the refactored code must behave indistinguishably.
+
+For the symbolic engine, the candidate refactorings are built using component-based synthesis\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}
+and type-directed synthesis~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Essentially, we use types and code hints to populate
+a component library (i.e. library of instructions) which are then weaved together to generate the desired program.
+For the neural engine, we generate candidate refactorings by querying an LLM -- in this work we used Claude 2.1~\cite{} and Claude 3~\cite{}.
+
+%While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach 
+%we use them as the building blocks
+%of the new refactoring. 
+%For this purpose, we take inspiration from component-based program synthesis,
+%which weaves together components from a library
+%(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
+
+
+ %Traditionally, types are commonly used to guide program synthesis. The idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
+ %enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, our work also serves as an investigation of the usefulness of type information in generating imperative code.
+
+
+%For both approaches, we make use of a CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, where we
+%iteratively attempt to improve a candidate refactoring (generated using a component library as built in Section~\ref{sec:components-seeding}) until it obeys a given specification.
+%As it will be explained later in the section, for the neural engine, the CEGIS architecture is not followed exactly by the synthesis phase.
+
+
+%\todo{unsure whether this fits, if at all.}
+%For code generation, in the literature, there is a focus on the functional properties of the generated code, which generally refers to correctness. In the case of program refactoring,
+%there are also qualitative expectations as the refactoring is meant to improve the code quality (while also maintaining functional correctness).
+
+
+
 
 
 %In this paper, we investigate two of the most common types pf program synthesis: type-directed synthesis and component-based synthesis. In particular, we want to see how a symbolic and a neural approach comapre against each other for for of these cases.
 
 %* Type-directed synthesis has been widely used for functional programs, but less so for procedural programming. The exception is using very sophisticates type systems such as graded linear type systems, or ... In this work, our focus is on Java so we rely on a traditional type system. On the side of the neural approach, we are not aware of any type-based investigation. 
 %* For component ... For the LLM-based approach, this translates into providing the daprecates message and allowing the LLM to make use of the corresponding code hints.
-
-\todo{unsure whether this fits, if at all.}
-For code generation, in the literature, there is a focus on the functional properties of the generated code, which generally refers to correctness. In the case of program refactoring,
-there are also qualitative expectations as the refactoring is meant to improve the code quality (while also maintaining functional correctness).
 
 
 %While symbolic approaches have been investigated for a long time, recently, there is a new direction for program synthesis powered by the evolution of LLMs.
@@ -568,6 +632,21 @@ symbolic code generation to outperform general-purpose LLMs in specialised setti
 %\section{Synthesising the refactoring}\label{sec:encoding}
 
 In this section, we describe the two synthesis engines.
+
+%We make the symbolic and the neural approach as similar as possible. In particular, they are both iterative, such that, in each iteration, a candidate refactoring is being generated, which is then verified for semantic equivalence with the original code. If the verification succeeds, then the solution is returned to the user. Otherwise, the counterexample is used  to refine the current solution.
+
+%While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach 
+%we use them as the building blocks
+%of the new refactoring. 
+%For this purpose, we take inspiration from component-based program synthesis,
+%which weaves together components from a library
+%(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
+
+
+ %Traditionally, types are commonly used to guide program synthesis. The idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
+ %enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, our work also serves as %an investigation of the usefulness of type information in generating imperative code.
+
+
 For both approaches, we make use of a CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, where we
 iteratively attempt to improve a candidate refactoring (generated using a component library as built in Section~\ref{sec:components-seeding}) until it obeys a given specification.
 As it will be explained later in the section, for the neural engine, the CEGIS architecture is not followed exactly by the synthesis phase.
