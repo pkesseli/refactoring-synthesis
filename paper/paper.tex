@@ -376,8 +376,18 @@ the refactored code must behave indistinguishably.
 
 For the symbolic engine, the candidate refactorings are built using component-based synthesis\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}
 and type-directed synthesis~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Essentially, we use types and code hints to populate
-a component library (i.e. library of instructions) which are then weaved together to generate the desired program.
-For the neural engine, we generate candidate refactorings by querying an LLM -- in this work we used Claude 2.1~\cite{} and Claude 3~\cite{}.
+a component library (i.e. a library of instructions), such that these components are then weaved together to generate the desired program.
+For the neural engine, we generate candidate refactorings by querying an LLM -- we used Claude 2.1~\cite{} and Claude 3~\cite{}.
+
+
+Our experiments show that, if Javadoc contains code hints, thus allowing us to build an effective component library (as shown in Section~\ref{sec:components-seeding}), then the symbolic
+approach is preferable to the neural one (at much lower computational cost). In the absence of such code hints, when we can only use types, both approaches perform worse, with the neural one
+marginally better. This makes sense as a general strategy: symbolically searching for a solution program only works if there is enough information about
+the solution to effectively prune the vast solution space. While types were successfully used in generating functional programs (where the absence of side-effects
+enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}),
+they are not as useful for Java programs. In such cases, the LLM may have a better chance.
+
+
 
 %While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach 
 %we use them as the building blocks
@@ -528,42 +538,36 @@ For the neural engine, we generate candidate refactorings by querying an LLM -- 
 %% We believe RQ1 is particularly important given the high computational cost of LLMs. Our results highlight the fact that there is room for
 %% symbolic code generation methods to outperform general-purpose LLMs at a much lower cost.
 
-\paragraph{Existing approaches to automated program refactoring}
-%With respect to the work pursued by the academic community, 
-One of the existing directions is to 
-replace calls
-to deprecated methods by their
-bodies~\cite{DBLP:conf/paste/Perkins05}.
-However, this
-strategy doesn't usually follow the intention of the language designers, who
-use deprecation to signal that there is a safer and generally better
-way of achieving a given goal.
-%Moreover, inlining calls to deprecated
-%methods can cause undesirable effects if the original function was
-%synchronised.  While it is not possible for two invocations on the
-%same object of the synchronised original method to interleave, this is
-%not guaranteed after inlining the method's body.
-Other direction is specifically targeted at the Android API, and requires existing examples of how the updates were handled by other programmers~\cite{DBLP:conf/issta/FazziniXO19,DBLP:conf/iwpc/HaryonoTKSML0J20,DBLP:journals/ese/HaryonoTLJLKSM22}.
-Conversely, we do not require such example, and instead use type information and the Javadoc deprecation comments.
+%\paragraph{Existing approaches to automated program refactoring}
+%One of the existing directions is to 
+%replace calls
+%to deprecated methods by their
+%bodies~\cite{DBLP:conf/paste/Perkins05}.
+%However, this
+%strategy doesn't usually follow the intention of the language designers, who
+%use deprecation to signal that there is a safer and generally better
+%way of achieving a given goal.
+%Other direction is specifically targeted at the Android API, and requires existing examples of how the updates were handled by other programmers~\cite{DBLP:conf/issta/FazziniXO19,DBLP:conf/iwpc/HaryonoTKSML0J20,DBLP:journals/ese/HaryonoTLJLKSM22}.
+%Conversely, we do not require such example, and instead use type information and the Javadoc deprecation comments.
 
 
-Another closely related class of works focus on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. Notably, {\em change rules are different from refactorings} as they don't provide the actual replacement code. Instead, the programmer is still required to perform a lot of the work
-manually: for instance, she has to figure out lines 6--8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
-responsibility of guaranteeing that the refactored code maintains the original behaviour
-is left to the programmer.
+%Another closely related class of works focus on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. Notably, {\em change rules are different from refactorings} as they don't provide the actual replacement code. Instead, the programmer is still required to perform a lot of the work
+%manually: for instance, she has to figure out lines 6--8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
+%responsibility of guaranteeing that the refactored code maintains the original behaviour
+%is left to the programmer.
 
-Indeed, when referring back to the example in
-Figure~\ref{ex:deprecated-method-other}, it's not immediately obvious
-that the original and the refactored code behave in the same manner.
-One needs a good understanding of the code's semantics in order to
-reach such a conclusion. As we will see later in the paper, guaranteeing semantic equivalence is particularly difficult in the presence of aliasing, when there may be multiple references to the same memory location.
-On the other hand, refactorings that rely solely on a
-program's syntax and do not consider its semantics end up being overly
-conservative, mostly addressing structural changes to the program.
-The observation that refactoring generally benefits from semantic
-analyses of a program is not new, e.g. previous works made use of
-program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or
-types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
+%Indeed, when referring back to the example in
+%Figure~\ref{ex:deprecated-method-other}, it's not immediately obvious
+%that the original and the refactored code behave in the same manner.
+%One needs a good understanding of the code's semantics in order to
+%reach such a conclusion. As we will see later in the paper, guaranteeing semantic equivalence is particularly difficult in the presence of aliasing, when there may be multiple references to the same memory location.
+%On the other hand, refactorings that rely solely on a
+%program's syntax and do not consider its semantics end up being overly
+%conservative, mostly addressing structural changes to the program.
+%The observation that refactoring generally benefits from semantic
+%analyses of a program is not new, e.g. previous works made use of
+%program invariants~\cite{Kataoka:2001:ASP:846228.848644}, or
+%types~\cite{Steimann2011,Steimann2012Pilgrim,Steimann2011KollePilgrim}.
 
 
 
@@ -631,7 +635,7 @@ symbolic code generation to outperform general-purpose LLMs in specialised setti
 
 %\section{Synthesising the refactoring}\label{sec:encoding}
 
-In this section, we describe the two synthesis engines.
+
 
 %We make the symbolic and the neural approach as similar as possible. In particular, they are both iterative, such that, in each iteration, a candidate refactoring is being generated, which is then verified for semantic equivalence with the original code. If the verification succeeds, then the solution is returned to the user. Otherwise, the counterexample is used  to refine the current solution.
 
@@ -646,12 +650,12 @@ In this section, we describe the two synthesis engines.
  %Traditionally, types are commonly used to guide program synthesis. The idea of type-directed synthesis has been used for generation of functional programs, where the absence of side-effects
  %enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, our work also serves as %an investigation of the usefulness of type information in generating imperative code.
 
-
-For both approaches, we make use of a CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, where we
-iteratively attempt to improve a candidate refactoring (generated using a component library as built in Section~\ref{sec:components-seeding}) until it obeys a given specification.
-As it will be explained later in the section, for the neural engine, the CEGIS architecture is not followed exactly by the synthesis phase.
-In our case, the specification expresses the fact that the original and
-the refactored blocks of code must behave indistinguishably, i.e. they are observationally equivalent.
+%As it will be explained later in the section, for the neural engine, the CEGIS architecture is not followed exactly by the synthesis phase.
+In this section, we describe the two code generation engines.
+For both approaches, we make use of a CEGIS architecture, where we
+iteratively attempt to improve a candidate refactoring (generated using a component library as built in Section~\ref{sec:components-seeding}) until it behaves indistiguishably
+from the orignal code, i.e. the original and
+the refactored blocks of code are observationally equivalent.
 %
 In the rest of the paper, we will use the predicate
 $equivalent(P_1(\vec{i}), P_2(\vec{i}))$ to denote that code $P_1$ is
@@ -702,10 +706,10 @@ Given that fuzzers rely on testing, they may fail to find inputs that trigger un
 Consequently, we cannot guarantee that we will always find a refactoring whenever one exists. We will provide more details about our decision to use fuzzing as the safety checker in 
 Section~\ref{sec:implementation}.
 
-For the neural approach, we query the LLM with the prompt in Figure~\ref{}. Similarly to the symbolic approach, we use counterexamples found in prior verification
+For the neural approach, we query the LLM to obtain a candidate refactoring. Similarly to the symbolic approach, we use counterexamples found in prior verification
 iterations. However, as opposed to the symbolic approach, the LLM doesn't give any guarantees that the counterexamples were taken into consideration.
-Also, we found that the neural engine works better when we don't provide the previous faulty refactoring in the prompt,
-as that seems to make the LLM's initial mistakes stick for longer.
+%Also, we found that the neural engine works better when we don't provide the previous faulty refactoring in the prompt,
+%as that seems to make the LLM less likely to fix initial mistakes.
 
 %% In other words, answering the initial question posed by the
 %% synthesis phase is now reduced to checking the safety of the \texttt{Synthesise} method.
