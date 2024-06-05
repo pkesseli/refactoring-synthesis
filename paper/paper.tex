@@ -305,7 +305,7 @@ void main(String[] args) {
 %Program synthesis is generally concerned with code generation via symbolic reasoning. 
 %Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
 
-In this paper, we are interested in the automatic generation of refactorings for deprecated APIs. In recent years, Large Language Models (LLMs) have gained a lot of popularity as they have been successfully applied to a wide range of tasks including code generation~\cite{}. While they may seem like the generic solution to any code generation problem, they come at a high computational cost as their  the efficacy hinges heavily on the parameter count. The other option when considering code generation relies on symbolic methods, which make use of hard coded rules~\cite{}. Thus, the question we are trying to answer in the current paper is: for specialised problems, such as the automatic refactoring of deprecated APIs, are symbolic methods still useful, or were they completely overtaken by LLM-based ones? Answering this question is particularly important given the rise of architectures such as  Mixture-of-Experts~\cite{}, which adopt a conditional computation paradigm by only selecting parts of an ensemble, referred to as experts, based on the data at hand. In the context of such an architecture, one needs to consider the best option for each expert, e.g. the one responsible for the current deprecated refactoring problem.
+In this paper, we are interested in the automatic generation of refactorings for deprecated APIs. In recent years, Large Language Models (LLMs) have gained a lot of popularity as they have been successfully applied to a wide range of tasks including code generation~\cite{}. While they may seem like the panacea for all code generation problems, they come at a high computational cost as their  the efficacy hinges heavily on the parameter count. The other option when considering code generation relies on symbolic methods, which make use of hard coded rules~\cite{}. Thus, the question we are trying to answer in the current paper is: for specialised problems, such as the automatic refactoring of deprecated APIs, are symbolic methods still useful, or were they completely overtaken by LLM-based ones? Answering this question is particularly important given the rise of architectures such as  Mixture-of-Experts~\cite{}, which adopt a conditional computation paradigm by only selecting parts of an ensemble, referred to as experts, based on the data at hand. In the context of such an architecture, one needs to consider the best option for each expert, e.g. the one responsible for the current deprecated refactoring problem.
  
 
 %To answer this question, we design both a symbolic and a neural approach based on Large Language Models (LLMs). More than simply generating refactorings for deprecated APIs, given the recent focus on LLM based code generation, we are interested in investigating whether, for specialised problems such as the current one, symbolic approaches can still be of use at much lower computational costs compared to neural ones. An answer to this question is useful especially given that the efficacy of LLMs hinges heavily on their parameter count. Notably, as an answer to this problem, architectures such as
@@ -1722,16 +1722,20 @@ and native methods.
 
 \subsection{Experiment design}
 
-In our experiments, we run three versions of \tool: (1) \tool with the Types-library; (2) \tool with the CodeHints-library;
-(3) a combined best configuration for \tool, where we start with the CodeHints-library and fall back to the Types-library if the synthesis phase (as described in Section~\ref{sec:encoding}) times out.
-%Moreover, we run GPT-4 Turbo with and without Javadoc code hints.
+In our experiments, we run \tool and \llm as follows. For \tool, if code hints are present, we start with the CodeHints-library and fall back to the Types-library if the synthesis phase (as described in Section~\ref{sec:overview}) times out; if no code hints exist then we use the Types-library. For \llm, we use Claude 2.1 and Claude 3, denoted by \llma and \llmb, respectively.
+
+
+%three versions of \tool: (1) \tool with the Types-library; (2) \tool with the CodeHints-library;
+%(3) a combined best configuration for \tool, where we start with the CodeHints-library and fall back to the Types-library if the synthesis phase (as described in Section~\ref{sec:encoding}) times out.
 We are interested in answering the following research questions:
 \begin{itemize}
-\item (RQ1) How well does \tool work?
+\item (RQ1) How do \tool, \llma and \llmb compare to each other on all the benchmarks?
 
-\item (RQ2) How does \tool compare against GPT-4 Turbo for the current refactoring task?
+\item (RQ2) How do \tool, \llma and \llmb compare to each other on the benchmarks that provide code hints?  
 
-\item (RQ3) Do code hints help the generation of refactorings?
+%\item (RQ2) How does \tool compare against GPT-4 Turbo for the current refactoring task?
+
+%\item (RQ3) Do code hints help the generation of refactorings?
 \end{itemize}
   
 %and two configurations for GPT-4 Turbo (one where the prompt contains the code hints, and one where it doesn't).
@@ -1756,6 +1760,7 @@ We are interested in answering the following research questions:
 %refactorings are produced, how many refactoring opportunities were missed
 %and the average time to successfully produce a refactoring.
 
+\todo{update the following}
 For \tool, we bound the search by at most 500 inputs and 5 minutes per verification phase, and at
 most 2 minutes per synthesis phase.
 For each refactoring found by GPT-4 Turbo, we use fuzzing to check program equivalence (according to the
@@ -1765,7 +1770,7 @@ Experiments were performed on an Ubuntu
 2 Intel Core i7-4790CPU cores at 3.60 GHz.  The JVM used was Oracle JDK 15.02.
 
 
-\subsection{Results for \tool}\label{sec:experimental-results}
+\subsection{Results}\label{sec:experimental-results}
 
 %the configuration marked as {\bf Types}
 %is based on the Types-library, whereas the one marked as ({\bf CodeHints}) uses the CodeHints-library.
@@ -1918,7 +1923,7 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 \tool combined      &        101 &     21 &   3         & 81 & 231.1 \\  \hline\hline
 %\hline
 \end{tabular} 
-\caption{\tool results for benchmarks where code hints were present in the Javadoc (and could be parsed).}
+\caption{Results for benchmarks where code hints were present in the Javadoc.}
 \label{tab:configuration-results-ch}   
 \end{table}
 
