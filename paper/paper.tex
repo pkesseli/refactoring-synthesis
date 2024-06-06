@@ -1783,7 +1783,7 @@ In addition to this, we have followed the prompting guidelines provided by Anthr
 
 \subsection{Experiment setup}
 For both tools, we bound the search by at most 500 inputs and 5 minutes per verification phase, and at
-most 2 minutes per synthesis phase.
+most 2 minutes per synthesis phase. For \llm, we set the model temperature to $0.2$.
 %For each refactoring found by GPT-4 Turbo, we use fuzzing to check program equivalence (according to the
 %description in Section~\ref{sec:equiv}), and bound the verification time to 5 minutes.
 
