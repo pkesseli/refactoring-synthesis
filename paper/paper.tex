@@ -1782,15 +1782,14 @@ In addition to this, we have followed the prompting guidelines provided by Anthr
 %while unsound refactorings are those for which the equivalence check returned false.
 
 \subsection{Experiment setup}
-\todo{update the following}
 For both tools, we bound the search by at most 500 inputs and 5 minutes per verification phase, and at
 most 2 minutes per synthesis phase.
 %For each refactoring found by GPT-4 Turbo, we use fuzzing to check program equivalence (according to the
 %description in Section~\ref{sec:equiv}), and bound the verification time to 5 minutes.
 
 Experiments were performed on an Ubuntu
-22.04 x64 operating system running in a VirtualBox machine with 8GB RAM and
-2 Intel Core i7-4790CPU cores at 3.60 GHz.  The JVM used was Oracle JDK 15.02.
+22.04 x64 operating system running in a laptop with 16GB RAM and
+11th Gen Intel(R) Core(TM) i7-11850H at 2.50GHz.  The JVM used was Oracle JDK 15.02.
 
 
 
