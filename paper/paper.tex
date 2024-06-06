@@ -2045,36 +2045,50 @@ are due to the same reasons (i.e. JVM crashes).
 \begin{table}[h]
   \begin{tabular} {|l|r|r|r|r|r|}
   \hline
-  Config                       & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-  \llm (only code hints)      &        101 &     50  & 1 &         66 & 208.09 \\
-  \llm    &        104 &     130    &         2 & 44 & 205.23 \\  \hline\hline
+  Config                         & \checkmark & \xmark  & \lightning & \% & $\diameter$ runtime (s) \\ \hline
+  Claude 2.1                     &        104 &     130 &         2  & 44 & 205.23 \\
+  Claude 2.1 (only code hints)   &        101 &     50  &         1  & 66 & 208.09 \\
+  Claude 3                       &        105 &     128 &         3  & 47 & 204.25 \\
+  Claude 3 (only code hints)     &        103 &     47  &         2  & 68 & 205.27 \\
+  \hline\hline
   \end{tabular} 
-  \caption{\llm experimental results.}
-  \label{tab:gpt-results}   
+  \caption{LLMs experimental results.}
+  \label{tab:llms-results}   
 \end{table}
 
+% \begin{table}[h]
+%   \begin{tabular} {|l|r|r|r|r|r|}
+%   \hline
+%   Config                       & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
+%   \llm (only code hints)      &        101 &     50  & 1 &         66 & 208.09 \\
+%   \llm    &        104 &     130    &         2 & 44 & 205.23 \\  \hline\hline
+%   \end{tabular} 
+%   \caption{\llm experimental results.}
+%   \label{tab:gpt-results}   
+% \end{table}
 
-\begin{table}[h]
-  \begin{tabular} {|l|r|r|r|r|r|}
-  \hline
-  Config                  & \checkmark & \xmark & \lightning     & \%         & $\diameter$ runtime (s) \\ \hline
-  \llm type-directed      &         54 &     164 & 18  &         23 & 184.5  \\
-  \llm code-hints         &        104 &     130 & 2   &         44 & 205.23 \\  \hline\hline
-  \end{tabular} 
-  \caption{Overall \llm experimental results.}
-  \label{tab:claude-results-overall}   
-\end{table}
 
-\begin{table}[h]
-  \begin{tabular} {|l|r|r|r|r|r|}
-  \hline
-  Config                  & \checkmark & \xmark & \lightning     & \%         & $\diameter$ runtime (s) \\ \hline
-  \llm type-directed      &         52 &      82 & 18    &         27 & 259.04 \\
-  \llm code-hints         &        101 &      50 & 1    &          66 & 206.53 \\  \hline\hline
-  \end{tabular} 
-  \caption{\llm experimental results with code hints.}
-  \label{tab:claude-results-code-hints}   
-\end{table}
+% \begin{table}[h]
+%   \begin{tabular} {|l|r|r|r|r|r|}
+%   \hline
+%   Config                  & \checkmark & \xmark & \lightning     & \%         & $\diameter$ runtime (s) \\ \hline
+%   \llm type-directed      &         54 &     164 & 18  &         23 & 184.5  \\
+%   \llm code-hints         &        104 &     130 & 2   &         44 & 205.23 \\  \hline\hline
+%   \end{tabular} 
+%   \caption{Overall \llm experimental results.}
+%   \label{tab:claude-results-overall}   
+% \end{table}
+
+% \begin{table}[h]
+%   \begin{tabular} {|l|r|r|r|r|r|}
+%   \hline
+%   Config                  & \checkmark & \xmark & \lightning     & \%         & $\diameter$ runtime (s) \\ \hline
+%   \llm type-directed      &         52 &      82 & 18    &         27 & 259.04 \\
+%   \llm code-hints         &        101 &      50 & 1    &          66 & 206.53 \\  \hline\hline
+%   \end{tabular} 
+%   \caption{\llm experimental results with code hints.}
+%   \label{tab:claude-results-code-hints}   
+% \end{table}
 
 
 %% As expected, the GPT-4 Turbo results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
