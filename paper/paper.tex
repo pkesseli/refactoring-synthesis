@@ -1179,11 +1179,14 @@ if and only if they are in the same equivalence class induced by the aliasing re
 %% \item For the {\bf Types-library} the seeding is only guided by types.
 %% \end{itemize}  
 
-In this section, we describe how we populate the component library used by the symbolic approach starting from code hints. We'll refer to this library as the Codehints-library.
+In this section, we describe how we populate the instruction library (also referred to as the component library)
+used by the symbolic approach starting from code hints. We'll refer to this library as the Codehints-library.
+This step is critical as, in order for the symbolic engine to succeed, the library must be as small as possible, while containing all the instructions necessary
+for constructing the solution.
+
+For illustration, let's go back to the running example in Figure~\ref{ex:deprecated-method-other} (with the corresponding Javadoc comment in Figure~\ref{ex:code-hints}).
 %
-As a reminder, we go back to the running example in Figure~\ref{ex:deprecated-method-other} (with the corresponding Javadoc comment in Figure~\ref{ex:code-hints}), as
-discussed in Section~\ref{sec:intro}.
-As mentioned there, when building the corresponding component library for this example, 
+As mentioned in Section~\ref{sec:intro}, when building the corresponding component library for this example, 
 %
 %{\bf Challenge 1.}  Although it may seem as if
 %method \texttt{get} is static allowing an immediate call,
@@ -1442,7 +1445,7 @@ A possible future direction is allowing unrealisable generators and transformers
 
 \subsection{Types-library} \label{sec:extend-library}
 
-For cases when code hints are not provided, in addition to the CodeHints-library, we also provide a components library that is populated only based on the type signature
+For cases when code hints are not provided, in addition to the CodeHints-library, we also provide a component library that is populated based only on the type signature
 of the deprecated method. Next, we describe how this Types-library is being built.
 
 For the CodeHints-library, the Javadoc code hints guidance results in the code hints being
