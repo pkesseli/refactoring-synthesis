@@ -326,7 +326,7 @@ In order to conduct our investigation, let us first  consider the information av
 %When attempting to come up with a refactoring for deprecated APIs, one has access to the following information:
 %The information that we have about the current problem is that:
 
-{\bf (1)} The original code and the refactoring must have {\em the same behaviour}, i.e. 
+{\bf (1)} The original code and the refactoring must have {\em the same behaviour}, i.e., 
 the generated refactoring needs to be semantically equivalent to the original.
 %To ensure this for the current setting, we come up with an equivalence check, which takes into consideration both the state of the stack and the heap (including the static fields).
 One implication is that the orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
