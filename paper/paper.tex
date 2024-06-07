@@ -2210,7 +2210,8 @@ Different sized component libraries may help mitigate this effect.
 
 \paragraph{Prompt engineering for Claude}
 In our current experiments, we only used prompt engineering for Claude.
-While we made best efforts to follow the official prompt engineering guidelines\footnote{https://docs.anthropic.com/en/docs/prompt-engineering}, which presents prompt design techniques to improve model performance, as future work, we plan on alos fine-tuning Claude 2.1 and Claude 3.
+While we made best efforts to follow the official prompt engineering guidelines\footnote{https://docs.anthropic.com/en/docs/prompt-engineering}, which presents prompt design techniques to improve model performance, there might be better ways of composing it.
+%as future work, we plan on alos fine-tuning Claude 2.1 and Claude 3.
 % While we made efforts to provide a comprehensive prompt (e.g. we took inspiration from \cite{white2023chatgpt}, which
 % presents prompt design techniques for software engineering in the form of patterns), as future work, we plan on also fine-tuning GPT-4 Turbo. 
 
@@ -2295,11 +2296,14 @@ While we made best efforts to follow the official prompt engineering guidelines\
   
 \section{Conclusions and related Works}
 
-In this paper, we presented an automated program refactoring
-technique that eliminates uses of deprecated methods. Our
-technique is guided by types and Javadoc code hints, and
-performs semantic reasoning and search in the space of possible
-refactorings using automated program synthesis. Next, we discuss some of the related works.
+In this paper, we presented and contrasted a symbolic and a neural automatic program refactoring
+techniques that eliminate uses of deprecated methods. After implementing and testing them, we drew
+conclusions about their respective strenghts, and ways in which they compliment each other.
+Next, we discuss some of the related works.
+%Our
+%techniques are guided by types and Javadoc code hints, and
+%performs semantic reasoning and search in the space of possible
+%refactorings using automated program synthesis. 
 
 \paragraph{Program synthesis}
 
