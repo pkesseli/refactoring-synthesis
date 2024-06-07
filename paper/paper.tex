@@ -381,7 +381,7 @@ the refactored code must behave indistinguishably.
 For the symbolic engine, the candidate refactorings are built using component-based synthesis\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}
 and type-directed synthesis~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Essentially, we use types and code hints to populate
 a component library (i.e. a library of instructions), such that these components are then weaved together to generate the desired program.
-For the neural engine, we generate candidate refactorings by querying an LLM -- we used Claude 2.1~\cite{} and Claude 3~\cite{}.
+For the neural engine, we generate candidate refactorings by querying an LLM -- we used Claude 2.1~\cite{claude} and Claude 3~\cite{claude}.
 
 
 Our experiments show that, if Javadoc contains code hints, thus allowing us to build an effective component library (as shown in Section~\ref{sec:components-seeding}), then the symbolic
@@ -2569,7 +2569,7 @@ component-based and counterexample-guided inductive synthesis.
 \paragraph{Large Language Models}
 LLMs have been used successfully in recent years for code generation tasks, with applications in function completions to repository-level generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}.
 Those models are typically pre-trained on vast amount of data, fine-tuned for specific tasks, used by applying advanced prompt engineering techniques~\cite{jiang2024survey}.
-Among them, GPT-4~\cite{openai2024gpt4}, Claude2.1, Claude3, 
+Among them, GPT-4~\cite{openai2024gpt4}, Claude2.1~\cite{claude}, Claude3~\cite{claude}, 
 LLaMa~\cite{touvron2023llama} are general-purpose models covering a diverse set of language-related applications; there are also models pre-trained/fine-tuned specifically for code generation and programming-related task like CodeLLaMa2~\cite{roziere2024code}, 
 StarCoder2~\cite{lozhkov2024starcoder}, DeepSeek-Coder~\cite{guo2024deepseekcoder}, GrammarT5~\cite{grammart5}, etc.
 
