@@ -1431,8 +1431,10 @@ classes contained in the \texttt{java.lang} package in such an isolated class
 loader. For such classes we cannot apply refactorings that depend on static
 fields, as they cannot be reset and will retain the state of previous
 executions. Instead of observing the effect of one isolated refactoring
-candidate, we would observe their accumulated effect, leading to both
-incompleteness and unsoundness depending on the context. For the scope of our
+candidate, we would observe their accumulated effect, which would be incorrect.
+%leading to both
+%incompleteness and unsoundness depending on the context.
+For the scope of our
 experiments this did not pose a problem, since most of the affected classes in
 the \texttt{java.lang} package do not maintain a static state, and the ones who do
 were irrelevant to our refactorings.
@@ -1539,24 +1541,23 @@ Alternatively, we also curate a
 list of explicit constructors
 of subclasses to be used in favour of Mockito mocks for certain types, and users
 have the option to extend this list with a custom configuration.
-%This is
-%particularly useful when the default behaviour of mocked objects under-approximates
-%the behaviour of the explicit constructors of subclasses.
-%In such situations, the use of mocked objects can lead to
-%spurious refactorings.
+This is particularly useful when the default behaviour of mocked objects under-approximates
+the behaviour of the explicit constructors of subclasses.
+In such situations, the use of mocked objects can lead to
+spurious refactorings (this will be further discussed in Section~\ref{}).
 %
 %This problem generally appears whenever methods are overriden in subclasses.
-An example of this situation is the refactoring of the
-method \texttt{layout} in the abstract class \texttt{java.awt.Component}. The
-method is not abstract, but has an empty body and is meant to be overriden by
-subclasses. Using this empty body as a specification will only guarantee a sound
-refactoring for subclasses that do not override it. Our approach is still
-guaranteed to find the preferred refactoring of using \texttt{doLayout} instead,
-since we take the Javadoc hint into account. However, a more complete approach
-in general would be to
-% fuzz against
-consider all available subclasses of
-\texttt{Component} on the classpath.
+%An example of this situation is the refactoring of the
+%method \texttt{layout} in the abstract class \texttt{java.awt.Component}. The
+%method is not abstract, but has an empty body and is meant to be overriden by
+%subclasses. Using this empty body as a specification will only guarantee a sound
+%refactoring for subclasses that do not override it. Our approach is still
+%guaranteed to find the preferred refactoring of using \texttt{doLayout} instead,
+%since we take the Javadoc hint into account. However, a more complete approach
+%in general would be to
+%fuzz against
+%all available subclasses of
+%\texttt{Component} on the classpath.
 
 We explicitly avoid constructors that are not amenable to fuzzing, such as
 collection constructors that take an integer capacity argument, where an
@@ -1595,7 +1596,7 @@ observe effects that are not visible through this API, such as I/O operations or
 varibles maintained in native code only. I/O operations could be recorded using
 additional bytecode instrumentation in future work, but for the scope of our current
 implementation, if programs only differ in such for our current engine invisible
-side effects, our engine is prone to producing unsound results.
+side effects, our engine is prone to producing a refactoring that it's not fully equivalent to the original.
 
 
 
@@ -1722,13 +1723,13 @@ under the ``Missed refactorings'' and ``Unsound refactorings'' paragraphs, respe
 %% We plan on investigating some of these directions as part of future work.
 
 
-\section{Experimental results}\label{sec:experimental-results}
+\section{Experimental evaluation}\label{sec:experimental-results}
 
 We implemented the refactoring generation techniques in two tools called \tool and \llm, corresponding to the symbolic and the neural approach, respectively (available together with all the experiments at \url{https://anonymous.4open.science/r/resynth-artifact-43D6}).
 %
 Our benchmark suite contains 236 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
-We included all the deprecated methods except those that were deprecated without a replacement (e.g.\\ \texttt{java.rmi.registry.RegistryHandler.\ registryImpl(int)}), \\
+We included all the deprecated methods except those that were deprecated without a replacement (e.g. \lstinline[breaklines=true]{java.rmi.registry.RegistryHandler.registryImpl(int)}), 
 %methods that do not have a semantically equivalent refactoring
 %(see Section~\ref{sec:semantically-different-refactorings}),
 methods inaccessible by non-JCL classes (i.e. all the finalize methods, which are called by the garbage collector, not user code, meaning that we can't modify their calls), 
@@ -1737,13 +1738,26 @@ and native methods.
 %methods with I/O side-effects and native methods, which are currently
 %unsupported by our implementation (see Sec.~\ref{sec:incompleteness}).
 
-\subsection{Engines design}
+\subsection{Experimental setup}
+
+For \llm, we use Claude 2.1 and Claude 3 (both accessed via Amazon Bedrock), denoted as \llma and \llmb, respectively. We set the model temperature to $0.2$.
+%
+For both tools, we bound the search by at most 500 inputs and 5 minutes per verification phase, and at
+most 2 minutes per synthesis phase. 
+%For each refactoring found by GPT-4 Turbo, we use fuzzing to check program equivalence (according to the
+%description in Section~\ref{sec:equiv}), and bound the verification time to 5 minutes.
+
+Experiments were performed on an Ubuntu
+22.04 x64 operating system running in a laptop with 16GB RAM and
+11th Gen Intel(R) Core(TM) i7-11850H at 2.50GHz.  The JVM used was Oracle JDK 15.02.
+
+\subsection{Engines setup}
+
 \paragraph{Symbolic engine}
 %In our experiments, we run \tool and \llm as follows.
 For \tool, if code hints are present, we start with the CodeHints-library and fall back to the Types-library if the synthesis phase (as described in Section~\ref{sec:overview}) times out; if no code hints exist then we use the Types-library.
 
 \paragraph{Neural engine}
-For \llm, we use Claude 2.1 and Claude 3, denoted as \llma and \llmb, respectively.
 
 For each deprecated method, we query the corresponding LLM by constructing a prompt as shown in \autoref{fig:prompt}. The method
 definition and the JavaDoc comment (if present) are provided in the context. Furthermore, we
@@ -1753,7 +1767,7 @@ provide a synthetic code snippet as an example of the deprecated method usage to
 As explained in Section~\ref{sec:overview}, the code returned by the LLM is verified against the original code. 
 If the verification fails, we attach the set of counterexamples generated by the fuzzing
 engine to subsequent prompts. We apply object serialisation to obtain structured-views of the input and output states.
-In addition to this, we have followed the prompting guidelines provided by Anthropic Claude\footnote{https://docs.anthropic.com/en/docs/prompt-engineering} (e.g. using XML tags).
+In addition to this, we followed the prompting guidelines provided by Anthropic Claude\footnote{https://docs.anthropic.com/en/docs/prompt-engineering} (e.g. using XML tags).
 
 \begin{figure}
   \centering
@@ -1797,18 +1811,11 @@ In addition to this, we have followed the prompting guidelines provided by Anthr
 \end{figure}
 
 
+
+
 %due to JVM crashes or timeouts of the equivalence check,
 %while unsound refactorings are those for which the equivalence check returned false.
 
-\subsection{Experiment setup}
-For both tools, we bound the search by at most 500 inputs and 5 minutes per verification phase, and at
-most 2 minutes per synthesis phase. For \llm, we set the model temperature to $0.2$.
-%For each refactoring found by GPT-4 Turbo, we use fuzzing to check program equivalence (according to the
-%description in Section~\ref{sec:equiv}), and bound the verification time to 5 minutes.
-
-Experiments were performed on an Ubuntu
-22.04 x64 operating system running in a laptop with 16GB RAM and
-11th Gen Intel(R) Core(TM) i7-11850H at 2.50GHz.  The JVM used was Oracle JDK 15.02.
 
 
 
@@ -1886,31 +1893,14 @@ Regarding the average runtime, it includes both the time taken to generate a ref
 %For each refactoring returned by \llm, we use fuzzing to check program equivalence (according to the
 %description in Section~\ref{sec:equiv}). The missed refactorings count for code generated by \llm that didn't compile or fail our equivalence check.
 
-The results in Table~\ref{tab:configuration-results} prove that this is a difficult refactoring.
-None of the engines manages to solve even half the problems.
-Some of the refactorings were valid, but rejected by our verification engine due to ...
+The results in Table~\ref{tab:configuration-results} support our assumption that this is a difficult refactoring as both engines only
+manage to solve a little under half the benchmarks. In an attempt to understand the results,
+we next provide a discussion on missed and unsound refactorings.
+%None of the engines manages to solve even half the problems.
+%Some of the refactorings were valid, but rejected by our verification engine due to ...
 
-We had some crashes of the verifier, which, in order to be conservative, we consider as failures ...
-% which we manually inspected.
-The reason for this is the fact that we use reflection to produce counterexamples,
-and some may violate internal invariants.
-% we may create some that violate internal invariants
-If they execute methods which eventually call native code, this can lead to the entire JVM
-crashing rather than e.g. throwing an exception. %% Currently, this terminates our synthesis
-%% loop immediately, but in future versions we plan on treating our test VM crashing for a given input
-%% as a regular type of outcome in the heap comparison.
 
-Some of the missed refactorings were caused by the fact that the return
-value was dependent on an external system state which changed frequently between
-invocations (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
-and thus appeared nondeterministic to our engine.
 
-Some of the missed refactorings are due to that fact that deprecation comments provide suggestions
-that are not semantically equivalent to the original method. For instance, the method \lstinline{javax.swing.JMenuBar#getComponentAtIndex(int)}
-that retrieves the \lstinline{Component} at a specific index performs bound-checking: if the index is not within
-range then a \lstinline{null} value is returned. However, the suggested replacement \lstinline{javax.swing.JMenuBar#getComponent(int)}
-does not perform bound-checking. We noticed that \llm is able to generate the correct replacement, but
-it fails equivalence checking and hence misses this refactoring.
 
 
 {\bf Missed refactorings.}
@@ -1927,7 +1917,7 @@ it fails equivalence checking and hence misses this refactoring.
 %Additionally, since our neural engine shares the same verification approach with our symbolic engine, many missed/unsound refactorings
 %are due to the same reasons (i.e. JVM crashes).
 %
-For the symbolic engine, the missed refactorings were due to fuzzing timeouts, which are likely 
+For the symbolic engine, the majority of the missed refactorings were due to fuzzing timeouts, which are likely 
 caused by the component libraries missing some
 instructions needed in the synthesis phase.
 As explained in Section~\ref{sec:components-seeding}, one option 
@@ -1939,6 +1929,17 @@ be added.
 
 For the neural approach, the LLMs were unable to generate the refactoring from the provided prompt.
 
+For methods that eventually run native code, we encountered crashes of the verifier, which, in order to be conservative, we counted as overall failures.
+% which we manually inspected.
+The reason for this is the fact that we use reflection to produce counterexamples,
+and some may violate internal invariants.
+% we may create some that violate internal invariants
+If they execute methods which eventually call native code, this can lead to the entire JVM
+crashing rather than e.g. throwing an exception. %% Currently, this terminates our synthesis
+%% loop immediately, but in future versions we plan on treating our test VM crashing for a given input
+%% as a regular type of outcome in the heap comparison.
+
+
 {\bf Unsound refactorings.}
 %
 % Q: We do not consider I/O for synthesis, but consider it for verification?
@@ -1946,9 +1947,12 @@ For the neural approach, the LLMs were unable to generate the refactoring from t
 %% which is not part of the JVM state. We currently don't check
 %% that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 %
-One of the observations of our work is that it is actually very difficult to come up with a useful equivalence verifier 
-While we already gave up soundness by relying on fuzzing, we were confrunted with the following additional
-sources of unsoundness (which led to unsound refactorings passing the verification stage):
+In several cases, refactorings that are not equivalent to the original code managed to incorrectly pass our verifier.
+While we expected this behaviour due to the use of fuzzing (which may miss generating distinguishing inputs between the original and refactored code),
+we also encountered other problems, as follows:
+%One of the observations of our work is that it is actually very difficult to come up with a useful equivalence verifier 
+%While we already gave up soundness by relying on fuzzing, we were confrunted with the following additional
+%sources of unsoundness (which led to unsound refactorings passing the verification stage):
 
 %As particularly obvious for the symbolic engine's results, 
 %there are multiple scenarios where the equivalence check
@@ -1956,13 +1960,13 @@ sources of unsoundness (which led to unsound refactorings passing the verificati
 %that a synthesised candidate is not equivalent to the original program. We
 %identified the following sources of unsoundness in our benchmark set:
 
-Unobservable state: I/O operations, static state in the boot class loader and
+\paragraph{Unobservable state} I/O operations, static state in the boot class loader and
 native methods are not observable to our equivalence predicate implementation,
 since we only rely on reflection to examine objects inside the Java runtime. As
 a consequence, we cannot distinguish programs that only differ in these aspects.
 %This is not a fundamental limitation, but instead just an implementation detail.
 
-Abstract methods: While, as explained in Section~\ref{}, we pick ... for our equivalence checking predicate implementation, we pick a single
+\paragraph{Abstract methods} While, as explained in Section~\ref{}, we pick ... for our equivalence checking predicate implementation, we pick a single
 concrete subclass for deprecated abstract methods. This proved sufficient for
 all benchmarks in our set. However, there are classes in the JCL without any
 existing implementation (e.g. \lstinline{javax.swing.InputVerifier}) and thus no concrete
@@ -1971,9 +1975,9 @@ method against we can verify equivalence of candidates.
 Insufficient counterexamples: Our fuzzing-based equivalence check is inherently
 incomplete, and for some benchmarks we do not explore counterexamples in
 sufficient number or quality to identify unsound candidates. An example for this
-category is \lstinline{javax.swing.JViewport#isBackingStoreEnabled}, where only one value
+category is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only one value
 out of the $2^32-1$ possible input values will trigger an alternate code path.
-On the other hand, the method \lstinline{java.rmi.server.RMIClassLoader#loadClass} is an
+On the other hand, the method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass} is an
 example where our counterexample does not produce counterexamples of sufficient
 quality. The method accepts a string as an input, but will throw for any string
 that is not a valid class name. Since our fuzzer does not consider such context,
@@ -2054,82 +2058,6 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 \label{tab:configuration-results-ch}   
 \end{table}
 
-
-
-% An example of a prompt is given next:
-
-% %\begin{quote}
-% \emph{The method java.awt.TextField.minimumSize() is deprecated. The related deprecation comment in Javadoc is "As of JDK version 1.1, replaced by getMinimumSize()."
-% I have a call to this deprecated method in my codebase `this.minimumSize()`, show me how to refactor my code.
-% The example code should be a straight-line code block. Don't provide extra explanations.} When available,
-% we always provide the code hints in the prompt.
-
-%\end{quote}
-
-
-%This is in line with our aim to investigate how
-%% \begin{table}[h]
-%%   \begin{tabular} {|l|r|r|r|r|r|}
-%%   \hline
-%%   Config                       & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-%%  % GPT w/o code hints                   &         43 &     166  &         27 & 18 & 258.6 \\
-%%   GPT                  &         80 &     127  &         29 & 34 & 200.9 \\
-%%  % GPT* w/o code hints             &         41 &     46   &         27 & 36 & 263.8 \\
-%%   GPT*     &         79 &     7    &         28 & 69 & 199.6 \\  \hline\hline
-%%   \end{tabular} 
-%%   \caption{GPT-4 Turbo experimental results.}
-%%   \label{tab:gpt-results}   
-%% \end{table}
-
-
-%{\bf Missed and unsound refactoring.}
-
-
-%\begin{table}[h]
- % \begin{tabular} {|l|r|r|r|r|r|}
- % \hline
- % Config                         & \checkmark & \xmark  & \lightning & \% & $\diameter$ runtime (s) \\ \hline
- % Claude 2.1 (only code hints)   &        101 &     50  &         1  & 66 & 208.09 \\
- % Claude 3 (only code hints)     &        103 &     47  &         2  & 68 & 205.27 \\
- % \hline\hline
- % \end{tabular} 
- % \caption{LLMs experimental results.}
- % \label{tab:llms-results}   
-%\end{table}
-
-% \begin{table}[h]
-%   \begin{tabular} {|l|r|r|r|r|r|}
-%   \hline
-%   Config                       & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-%   \llm (only code hints)      &        101 &     50  & 1 &         66 & 208.09 \\
-%   \llm    &        104 &     130    &         2 & 44 & 205.23 \\  \hline\hline
-%   \end{tabular} 
-%   \caption{\llm experimental results.}
-%   \label{tab:gpt-results}   
-% \end{table}
-
-
-% \begin{table}[h]
-%   \begin{tabular} {|l|r|r|r|r|r|}
-%   \hline
-%   Config                  & \checkmark & \xmark & \lightning     & \%         & $\diameter$ runtime (s) \\ \hline
-%   \llm type-directed      &         54 &     164 & 18  &         23 & 184.5  \\
-%   \llm code-hints         &        104 &     130 & 2   &         44 & 205.23 \\  \hline\hline
-%   \end{tabular} 
-%   \caption{Overall \llm experimental results.}
-%   \label{tab:claude-results-overall}   
-% \end{table}
-
-% \begin{table}[h]
-%   \begin{tabular} {|l|r|r|r|r|r|}
-%   \hline
-%   Config                  & \checkmark & \xmark & \lightning     & \%         & $\diameter$ runtime (s) \\ \hline
-%   \llm type-directed      &         52 &      82 & 18    &         27 & 259.04 \\
-%   \llm code-hints         &        101 &      50 & 1    &          66 & 206.53 \\  \hline\hline
-%   \end{tabular} 
-%   \caption{\llm experimental results with code hints.}
-%   \label{tab:claude-results-code-hints}   
-% \end{table}
 
 
 %% As expected, the GPT-4 Turbo results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
@@ -2599,6 +2527,21 @@ against general-purpose LLMs.
 %\appendix
 %\input{appendix}
 
+\if 0
+We found a situation where the code hint provided by the Javadoc deprecation comments is
+not semantically equivalent to the original method. For instance, the method \lstinline{javax.swing.JMenuBar#getComponentAtIndex(int)}
+that retrieves the \lstinline{Component} at a specific index performs bound-checking: if the index is not within
+range then a \lstinline{null} value is returned. However, the suggested replacement \lstinline{javax.swing.JMenuBar#getComponent(int)}
+does not perform bound-checking. We noticed that \llm is able to generate the correct replacement, but
+it fails equivalence checking and hence misses this refactoring.
+
+
+Some of the missed refactorings were caused by the fact that the return
+value was dependent on an external system state which changed frequently between
+invocations (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
+and thus appeared nondeterministic to our engine.
+
+\fi
 
 \end{document}
 
