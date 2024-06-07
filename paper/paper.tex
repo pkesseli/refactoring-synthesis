@@ -329,7 +329,7 @@ In order to conduct our investigation, let us first  consider the information av
 {\bf (1)} The original code and the refactoring must have {\em the same behaviour}, i.e., 
 the generated refactoring needs to be semantically equivalent to the original.
 %To ensure this for the current setting, we come up with an equivalence check, which takes into consideration both the state of the stack and the heap (including the static fields).
-One implication is that the orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+One implication is that the orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e., the inputs), as well as the types of the objects that need to be produced (i.e., the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
 
 %{\em type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
 
@@ -384,7 +384,7 @@ the refactored code must behave indistinguishably.
 
 For the symbolic engine, the candidate refactorings are built using component-based synthesis~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}
 and type-directed synthesis~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Essentially, we use types and code hints to populate
-a component library (i.e. a library of instructions), such that these components are then weaved together to generate the desired program.
+a component library (i.e., a library of instructions), such that these components are then weaved together to generate the desired program.
 For the neural engine, we generate candidate refactorings by querying an LLM -- we used Claude 2.1~\cite{claude} and Claude 3~\cite{claude}.
 
 
@@ -670,7 +670,7 @@ For both approaches, we make use of a CEGIS architecture, where we
 iteratively attempt to improve a candidate refactoring
 %(generated using a component library as built in Section~\ref{sec:components-seeding})
 until it behaves indistiguishably
-from the orignal code, i.e. the original and
+from the orignal code, i.e., the original and
 the refactored blocks of code are observationally equivalent.
 %
 In the rest of the paper, we will use the predicate
@@ -825,7 +825,7 @@ Verify($\vec{i}$) { assert(equivalent($P_1(\vec{i})$, $P_2(\vec{i})$)); }
 
 In other words, answering the question posed by the verification
 phase is reduced to checking the safety of this method: if
-\texttt{Verify} is safe (i.e. the assertion is not violated) for any
+\texttt{Verify} is safe (i.e., the assertion is not violated) for any
 input~$\vec{i}$, then there is no input that can distinguish
 between the original code and the candidate refactoring (this
 is indeed a sound refactoring). However, if \texttt{Verify} is not safe,
@@ -966,7 +966,7 @@ Equality refers to value equality, which we
 check by recursively following attribute chains until we reach
 primitive types.
 We generally do not consider existing \texttt{equals} methods
-unless (i)~the method was not written by the user (i.e.  JCL classes),
+unless (i)~the method was not written by the user (i.e.,  JCL classes),
 (ii)~the type inherits from \texttt{java.lang.Object}, (iii)~the class
 implements \texttt{java.lang.Comparable} and (iv)~the type declares an
 \texttt{equals} implementation.  Examples of classes that satisfy these
@@ -1063,7 +1063,8 @@ uses \texttt{getPreferredSize}.
 We note that, the original code above defines two variables \var{dim1} and
 \var{dim2}, each assigned an object of type \texttt{Dimension} returned by calling
 \var{container.preferredSize()}.
-Conversely, in the refactored code, \var{dim1} and \var{dim2} are aliases, i.e. they point to the same
+Conversely, in the refactored code, \var{dim1} and \var{dim2} are aliases,
+i.e., they point to the same
 object of type \texttt{Dimension}.
 
 The original and the refactored code are equivalent according to Definition~\ref{def:prog-equiv}.
@@ -1141,9 +1142,9 @@ Next, we complete Definition~\ref{def:prog-equiv} by capturing the aliasing aspe
    
   \end{definition}
 
-where, given a program $P$, variables $v_1$ and $v_2$ are aliases, i.e. $aliases(P, v_1, v_2)$ holds,
+where, given a program $P$, variables $v_1$ and $v_2$ are aliases, i.e., $aliases(P, v_1, v_2)$ holds,
 if and only if they are in the same equivalence class induced by the aliasing relation,\\
-  i.e. $aliasEquivClass(\{v_1,v_2\}) = \{\{v_1,v_2\}\}$.
+  i.e., $aliasEquivClass(\{v_1,v_2\}) = \{\{v_1,v_2\}\}$.
 
   We abuse the notation to use \var{staticFields} over a set of classes, rather than just one class.
   The objective is to return the union of all static fields defined in all the classes in the set of classes taken as argument.
@@ -1270,7 +1271,7 @@ For the running example, we start with:
 The objective of the seeding algorithm is to
 add components to the library that make use of the $available\_types$ to generate objects
 of $target\_types$. At the same time, we want to consume the objects from the
-$consumable\_objs$ set, i.e. the inputs of the original code.
+$consumable\_objs$ set, i.e., the inputs of the original code.
 
 The seeding algorithm for the CodeHints-library is provided in Figure~\ref{alg:seeding-core} and consists of three phases, which we discuss next.
 
@@ -1294,7 +1295,7 @@ Intuitively, we need to make sure that the Javadoc suggestions
 are realisable as captured by Definition~\ref{def:realizable}, where 
 %We formally refer to such a component as {\em realisable} as captured by Definition~\ref{def:realizable}, where
 %$source\_types$ to refer to types for which we have the means to generate objects, and
-$required\_types(method)$ refers to the types of the objects required to call $method$ (i.e. the types corresponding to its arguments and current object).
+$required\_types(method)$ refers to the types of the objects required to call $method$ (i.e., the types corresponding to its arguments and current object).
 %for $instr$ to be realisable.
 In our running example, $required\_types(\texttt{get}) = \{\texttt{int, Calendar}\}$
 given that, in order to call \texttt{get}, we must provide an argument of type \texttt{int} and a current object of type \texttt{Calendar}.
@@ -1732,10 +1733,10 @@ relation.
 \subsection{Sources of unsoundness and incompleteness}\label{sec:incompleteness}
 As aforementioned, due to the use of fuzz
 testing in the synthesis phase, our technique may fail to find a
-refactoring even when one exists (i.e. it is {\em incomplete}),
+refactoring even when one exists (i.e., it is {\em incomplete}),
 whereas using fuzz testing in the verification phase may result in
 finding a refactoring that is not equivalent to the original on all
-inputs (i.e. our technique is {\em unsond}).
+inputs (i.e., our technique is {\em unsond}).
 
 While we could attempt to swap fuzz testing with a formal verification technique,
 program verification is undecidable in general.
@@ -1810,7 +1811,7 @@ JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 We included all the deprecated methods except those that were deprecated without a replacement (e.g. \lstinline[breaklines=true]{java.rmi.registry.RegistryHandler.registryImpl(int)}), 
 %methods that do not have a semantically equivalent refactoring
 %(see Section~\ref{sec:semantically-different-refactorings}),
-methods inaccessible by non-JCL classes (i.e. all the finalize methods, which are called by the garbage collector, not user code, meaning that we can't modify their calls), 
+methods inaccessible by non-JCL classes (i.e., all the finalize methods, which are called by the garbage collector, not user code, meaning that we can't modify their calls), 
 methods that only perform I/O (as our equivalence check doesn't include I/O side effects),
 and native methods.
 %methods with I/O side-effects and native methods, which are currently
@@ -2113,7 +2114,7 @@ One example of a benchmark that was solved by \tool but where both \llma and \ll
 example in Figure~\ref{ex:deprecated-method-other}. In all our runs, the LLMs failed to come up with \lstinline[breaklines=true]{calendar.setTime(date)}. 
 
 When code hints are not present, both engines perform badly. In particular, they only solve:
-7/105 for \tool, 12/105 for \llma, and 10/105 for \llmb  (i.e. the difference between the first column of Table~\ref{tab:configuration-results} and
+7/105 for \tool, 12/105 for \llma, and 10/105 for \llmb  (i.e., the difference between the first column of Table~\ref{tab:configuration-results} and
 Table~\ref{tab:configuration-results-ch}). 
 For the symbolic engine, this can be explained by the fact that the Types-library may be missing
 critical components (see Section~\ref{sec:extend-library}). The neural engine does marginally better than the symbolic approach.
