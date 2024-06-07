@@ -1587,7 +1587,18 @@ unlucky fuzzed input might lead to an out of memory error.
 %% guidance mode, which incorporates feedback from the test program in the form of
 %% semantic validity of test inputs and the code coverage achieved during test
 %% execution.
- 
+\subsection{Observable state}
+
+Our equivalence check uses the Java Reflection API to observe the side effects
+of programs, such as assigning new values to fields. As a consequence, we cannot
+observe effects that are not visible through this API, such as I/O operations or
+varibles maintained in native code only. I/O operations could be recorded using
+additional bytecode instrumentation in future work, but for the scope of our current
+implementation, if programs only differ in such for our current engine invisible
+side effects, our engine is prone to producing unsound results.
+
+
+
 
 
 \subsection{Checking aliasing}
@@ -1790,15 +1801,14 @@ In addition to this, we have followed the prompting guidelines provided by Anthr
 %while unsound refactorings are those for which the equivalence check returned false.
 
 \subsection{Experiment setup}
-\todo{update the following}
 For both tools, we bound the search by at most 500 inputs and 5 minutes per verification phase, and at
-most 2 minutes per synthesis phase.
+most 2 minutes per synthesis phase. For \llm, we set the model temperature to $0.2$.
 %For each refactoring found by GPT-4 Turbo, we use fuzzing to check program equivalence (according to the
 %description in Section~\ref{sec:equiv}), and bound the verification time to 5 minutes.
 
 Experiments were performed on an Ubuntu
-22.04 x64 operating system running in a VirtualBox machine with 8GB RAM and
-2 Intel Core i7-4790CPU cores at 3.60 GHz.  The JVM used was Oracle JDK 15.02.
+22.04 x64 operating system running in a laptop with 16GB RAM and
+11th Gen Intel(R) Core(TM) i7-11850H at 2.50GHz.  The JVM used was Oracle JDK 15.02.
 
 
 
