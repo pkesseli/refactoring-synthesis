@@ -295,6 +295,9 @@ void main(String[] args) {
 \label{ex:deprecated-method-other}
 \end{figure}
 
+Another seemingly simple example is the call to the static \lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} method, which should be refactored to \lstinline[breaklines=true]{java.net.URLDecoder.decode(s, "UTF-8")}.
+However, this requires guessing the ``UTF-8'' constant denoting a platform-specific
+string encoding scheme, which, while easy for humans, is very difficult for an automatic code generation technique, especially when using symbolic reasoning~\cite{DBLP:conf/cav/AbateDKKP18}.
 %While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to
 %recognise the use of deprecated APIs and warn the programmer about it,
 %refactoring the code to a preferred API is significantly more
@@ -304,7 +307,10 @@ void main(String[] args) {
 %Program synthesis is generally concerned with code generation via symbolic reasoning. 
 %Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
 
-In this paper, we are interested in the automatic generation of refactorings for deprecated APIs. In recent years, Large Language Models (LLMs) have gained a lot of popularity as they have been successfully applied to a wide range of tasks including code generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}. While they may seem like the panacea for all code generation problems, they come at a high computational cost as their  the efficacy hinges heavily on the parameter count. The other option when considering code generation relies on symbolic methods, which make use of hard coded rules~\cite{DBLP:conf/kdd/MaZYCHC18,DBLP:conf/iclr/Zuo00KHZGZ22,DBLP:conf/ppopp/HeZAWLSL22}. Thus, the question we are trying to answer in the current paper is: for specialised problems, such as the automatic refactoring of deprecated APIs, are symbolic methods still useful, or were they completely overtaken by LLM-based ones? Answering this question is particularly important given the rise of architectures such as  Mixture-of-Experts~\cite{}, which adopt a conditional computation paradigm by only selecting parts of an ensemble, referred to as experts, based on the data at hand. In the context of such an architecture, one needs to consider the best option for each expert, e.g. the one responsible for the current deprecated refactoring problem.
+Besides general challenges related to automatic code generation, there are other language-specific ones. For instance, the code to be refactored might be using abstract classes and abstract methods which is not obvious how to subclass from the code to be refactored (e.g. \lstinline[breaklines=true]{engineGetParameter} in \lstinline[breaklines=true]{java.security.SignatureSpi}); it might call methods that, while not abstract, need to be overridden by subclasses (e.g. method \lstinline[breaklines=true]{layout} in class \lstinline[breaklines=true]{java.awt.Component} has an empty body); or it might be calling native methods whose implementation is written in another programming language such as C/C++ (e.g. \lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference<V>#weakCompareAndSet}). In order to even understand the behaviour of the code to be refactored, one needs to know how to subclass the abstract classes, override methods, and to understand the behaviour of code written in other languages.
+
+In this paper, we are interested in the automatic generation of refactorings for deprecated APIs. In particular, we focus on the refactoring of deprecated methods, but the same
+techniques can be applied to deprecated fields and classes. In recent years, Large Language Models (LLMs) have gained a lot of popularity as they have been successfully applied to a wide range of tasks including code generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}. While they may seem like the panacea for all code generation problems, they come at a high computational cost as their  the efficacy hinges heavily on the parameter count. The other option when considering code generation relies on symbolic methods, which make use of hard coded rules~\cite{DBLP:conf/cav/AbateDKKP18}. Thus, the question we are trying to answer in the current paper is: for specialised problems, such as the automatic refactoring of deprecated APIs, are symbolic methods still useful, or were they completely overtaken by LLM-based ones? Answering this question is particularly important given the rise of architectures such as  Mixture-of-Experts~\cite{DBLP:conf/kdd/MaZYCHC18,DBLP:conf/iclr/Zuo00KHZGZ22,DBLP:conf/ppopp/HeZAWLSL22}, which adopt a conditional computation paradigm by only selecting parts of an ensemble, referred to as experts, based on the data at hand. In the context of such an architecture, one needs to consider the best option for each expert, e.g. the one responsible for the current deprecated refactoring problem.
 
 %To answer this question, we design both a symbolic and a neural approach based on Large Language Models (LLMs). More than simply generating refactorings for deprecated APIs, given the recent focus on LLM based code generation, we are interested in investigating whether, for specialised problems such as the current one, symbolic approaches can still be of use at much lower computational costs compared to neural ones. An answer to this question is useful especially given that the efficacy of LLMs hinges heavily on their parameter count. Notably, as an answer to this problem, architectures such as
 %Mixture-of-Experts (MoE), which adopts a conditional computation paradigm by only selecting parts of an ensemble, referred to as experts, and activating them depending on the data at hand. In the context of such an architecture, one needs to consider what should play as an expert for the current deprecated refactoring problem.
@@ -380,10 +386,12 @@ For the neural engine, we generate candidate refactorings by querying an LLM -- 
 
 Our experiments show that, if Javadoc contains code hints, thus allowing us to build an effective component library (as shown in Section~\ref{sec:components-seeding}), then the symbolic
 approach is preferable to the neural one (at much lower computational cost). In the absence of such code hints, when we can only use types, both approaches perform worse, with the neural one
-marginally better. This makes sense as a general strategy: symbolically searching for a solution program only works if there is enough information about
-the solution to effectively prune the vast solution space. While types were successfully used in generating functional programs (where the absence of side-effects
+slightly better. This makes sense as a general strategy: whenever there is enough information about
+the solution to effectively prune the solution space (in our case, when code hints are present), symbolic code generation can work effectively, at low computational cost.
+Otherwise, LLMs may have a better chance.
+For the current problem, while, traditionally, types have been successfully used in generating functional programs (where the absence of side-effects
 enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}),
-they are not as useful for Java programs. In such cases, the LLM may have a better chance.
+they are not as useful for Java programs. 
 
 
 
@@ -583,9 +591,9 @@ JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 
 \item We investigated how the symbolic refactoring technique compares against the neural one. %In particular, we want to find out whether there is still space for specialised techniques
   %such as ours in a GPT-4 Turbo era.
-  \todo{come back to this after investigating experimental results}
-  Our results highlight the fact that there is room for
-symbolic code generation to outperform general-purpose LLMs in specialised settings, at a lower computational cost.
+  %\todo{come back to this after investigating experimental results}
+  Our results highlight the fact that the symbolic and neural methods can be used in a complimentary fashion, which reduces the computational cost.
+%symbolic code generation (which require much less compute) to outperform general-purpose LLMs in specialised settings, at a lower computational cost.
 
 
 \end{itemize}  
@@ -1796,17 +1804,17 @@ Experiments were performed on an Ubuntu
 
 %three versions of \tool: (1) \tool with the Types-library; (2) \tool with the CodeHints-library;
 %(3) a combined best configuration for \tool, where we start with the CodeHints-library and fall back to the Types-library if the synthesis phase (as described in Section~\ref{sec:encoding}) times out.
-\subsection{Research questions}
-We are interested in answering the following research questions:
-\begin{itemize}
-\item (RQ1) How do \tool, \llma and \llmb compare to each other on all the benchmarks?
+%\subsection{Research questions}
+%We are interested in answering the following research questions:
+%\begin{itemize}
+%\item (RQ1) How do \tool, \llma and \llmb compare to each other on all the benchmarks?
 
-\item (RQ2) How do \tool, \llma and \llmb compare to each other on the benchmarks that provide code hints?  
+%\item (RQ2) How do \tool, \llma and \llmb compare to each other on the benchmarks that provide code hints?  
 
 %\item (RQ2) How does \tool compare against GPT-4 Turbo for the current refactoring task?
 
 %\item (RQ3) Do code hints help the generation of refactorings?
-\end{itemize}
+%\end{itemize}
   
 %and two configurations for GPT-4 Turbo (one where the prompt contains the code hints, and one where it doesn't).
 %The configurations differ in terms of the component library
@@ -1928,21 +1936,23 @@ For the neural approach, the LLMs were unable to generate the refactoring from t
 %% which is not part of the JVM state. We currently don't check
 %% that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 %
-As particularly obvious for the symbolic engine's results, 
-there are multiple scenarios where the equivalence check
-%our heap model and
-%$equivalent(P_1(\vec{i}), P_2(\vec{i}))$ predicate 
-is insufficient to identify
-that a synthesised candidate is not equivalent to the original program. We
-identified the following sources of unsoundness in our benchmark set:
+One of the observations of our work is that it is actually very difficult to come up with a useful equivalence verifier 
+While we already gave up soundness by relying on fuzzing, we were confrunted with the following additional
+sources of unsoundness (which led to unsound refactorings passing the verification stage):
+
+%As particularly obvious for the symbolic engine's results, 
+%there are multiple scenarios where the equivalence check
+%is insufficient to identify
+%that a synthesised candidate is not equivalent to the original program. We
+%identified the following sources of unsoundness in our benchmark set:
 
 Unobservable state: I/O operations, static state in the boot class loader and
 native methods are not observable to our equivalence predicate implementation,
 since we only rely on reflection to examine objects inside the Java runtime. As
-a consequence cannot distinguish programs that only differ in these aspects.
-This is not a fundamental limitation, but instead just an implementation detail.
+a consequence, we cannot distinguish programs that only differ in these aspects.
+%This is not a fundamental limitation, but instead just an implementation detail.
 
-Abstract methods: For our equivalence predicate implementation, we pick a single
+Abstract methods: While, as explained in Section~\ref{}, we pick ... for our equivalence checking predicate implementation, we pick a single
 concrete subclass for deprecated abstract methods. This proved sufficient for
 all benchmarks in our set. However, there are classes in the JCL without any
 existing implementation (e.g. \lstinline{javax.swing.InputVerifier}) and thus no concrete
@@ -2061,13 +2071,6 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 %%   \label{tab:gpt-results}   
 %% \end{table}
 
-{\bf Comparison of the symbolic and the neural approach.}
-\autoref{tab:gpt-results} show that our neural approach performs better than the symbolic approach.
-In particular, the neural approach is able to provide correct refactoring for \emph{deprecated concurrency primitives}
-(e.g. \lstinline{weakCompareAndSet}). We have also found that \llm is more aggressive in refactoring methods
-of which return value is dependent on external system states. For example, the deprecated method \lstinline{java.net.URLEncoder#encode}
-translates a string using a platform-specific encoding scheme. A correct refactoring requires explicitly providing
-this scheme, and \llm chose "UTF-8" which works on our platform.
 
 %{\bf Missed and unsound refactoring.}
 
@@ -2123,16 +2126,7 @@ this scheme, and \llm chose "UTF-8" which works on our platform.
 
 \subsection{Research questions}
 
-{\bf (RQ1) How well does \tool work?}
-In the absence of code hints, when relying only on type information about the method to refactor,
-\tool refactors only 33\% of all deprecated calls (first row in Table~\ref{tab:configuration-results}).
-However, if we consider those benchmarks where code hints are given by Javadoc,
-\tool succeeds in finding a refactoring in 79\% of cases (second row of Table~\ref{tab:configuration-results-ch}). 
-The combined best solver succeeds in 81\% of the cases for the benchmarks where we identified code hints (third row of Table~\ref{tab:configuration-results-ch}). 
-\tool guarantees (to the extent checked by JQF) that all of the found refactorings preserve the semantics of the original code.
-
-{\bf (RQ2) How does \tool compare against GPT-4 Turbo for the current refactoring task?}
- % Can GPT-4 Turbo replace symbolic code generation techniques such as our program synthesis and fuzzing based refactoring?
+{\bf (RQ1) How do the symbolic and the neural approach compare against each other?}
 When considering all the benchmarks and using the code hints whenever possible, GPT-4 Turbo only refactors 33\% of the benchmarks, compared to ??\% for \tool (first row in Table~\ref{tab:gpt-results} and second row in Table~\ref{tab:configuration-results}, respectively).
 When considering only benchmarks that do have code hints, GPT-4 Turbo finds refactorings in 44\% of the cases (second row in Table~\ref{tab:gpt-results}), compared to
 ??\% by \tool (third row in Table~\ref{tab:configuration-results-ch}). 
@@ -2144,18 +2138,38 @@ techniques such as \tool can still provide better results GPT-4 Turbo at a lower
 With respect to the average runtime, that of GPT-4 Turbo is lower than that of \tool.
 As a future direction we want to combine the two approaches, by using GPT-4 Turbo as the synthesis engine that provides candidate refactorings to \tool.
 
-{\bf (RQ3) Do code hints help the generation of refactorings?}
-The performance of both \tool and GPT-4 Turbo when code hints are present and used.
+%{\bf Comparison of the symbolic and the neural approach.}
+
+We observed that the neural engines are able to solve problems that access native code...?
+
+%\autoref{tab:gpt-results} show that our neural approach performs better than the symbolic approach.
+Compared to the symbolic engine, the neural one is able to provide correct refactoring for \emph{deprecated concurrency primitives}
+(e.g. \lstinline{weakCompareAndSet}). We have also found that \llm is more aggressive in refactoring methods
+of which return value is dependent on external system states. For example, the deprecated method \lstinline{java.net.URLEncoder#encode}
+translates a string using a platform-specific encoding scheme. A correct refactoring requires explicitly providing
+this scheme, and \llm chose "UTF-8" which works on our platform.
+
+\todo{use example here}
+
+
+{\bf (RQ2) Do code hints help the generation of refactorings?}
+The performance of both the symbolic and the neural engine improves considerable when code hints are present.
+Actually, both engines fail to solve most of the benchmarks where code hints are not present. In particular, they only solve:
+7/105 for \tool, 12/105 for \llma, and 10/105 for \llmb  (i.e. the difference between the first column of Table~\ref{tab:configuration-results} and
+Table~\ref{tab:configuration-results-ch}). Thus, it seems that the neural approach is doing marginally better in solving
+benchmarks where there are no code hints.
+
+
 %Using the CodeHints-library enables our technique to find more refactorings
 %than with the Type-library.
-For the former, when code hints are present and used, the success rate goes from 52\% to 81\% (Table~\ref{tab:configuration-results-ch}).
-The higher quality of the instructions in the CodeHints-library compared to the
-Types-library leads to  a reduction in 
-the number of both unsound and missed refactorings.
-This also allows us to conclude that,
-while useful, types are not sufficient when synthesising code with side effects.
+%For the former, when code hints are present and used, the success rate goes from 52\% to 81\% (Table~\ref{tab:configuration-results-ch}).
+%The higher quality of the instructions in the CodeHints-library compared to the
+%Types-library leads to  a reduction in 
+%the number of both unsound and missed refactorings.
+%This also allows us to conclude that,
+%while useful, types are not sufficient when synthesising code with side effects.
 
-For GPT-4 Turbo, the success rate improves from 33\% success rate to 44\% (last two rows of Table~\ref{tab:gpt-results}) when only considering benchmarks where code hints are present.
+%For GPT-4 Turbo, the success rate improves from 33\% success rate to 44\% (last two rows of Table~\ref{tab:gpt-results}) when only considering benchmarks where code hints are present.
 
 %{\bf (RQ2) How often does Chat GPT generate refactorings that preserve the semantics of the original code?}
 
