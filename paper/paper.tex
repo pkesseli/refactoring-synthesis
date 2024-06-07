@@ -717,7 +717,7 @@ enabling JQF to construct $P_2$ by weaving together instructions from the librar
 If the safety checker fails to find a $P_2$ for which the assertion fails, then the overall synthesis technique fails to generate a solution refactoring.
 There could be two reasons for this situation, which we cannot differentiate between.
 Firstly, there may indeed be no $P_2$ that can be constructed with the available components in the component library such that
-it is equivalent to $P_1$ on the given inputs. Secondly, this could be caused by the JQF's unsoundness.
+it is equivalent to $P_1$ on the given inputs. Secondly, this could be caused by JQF's unsoundness.
 Given that fuzzers rely on testing, they may fail to find inputs that trigger unsafe behaviours even when such inputs exist.
 Consequently, we cannot guarantee that we will always find a refactoring whenever one exists. We will provide more details about our decision to use fuzzing as the safety checker in 
 Section~\ref{sec:implementation}.
