@@ -1531,7 +1531,7 @@ were irrelevant to our refactorings.
   
  
 
-\subsection{Abstract classes and interfaces}
+\subsection{Abstract classes and interfaces}\label{sec:abstract}
 
 The programs that need to be checked for equivalence may refer to
 abstract classes and interfaces. These are by default instantiated
@@ -1541,10 +1541,10 @@ Alternatively, we also curate a
 list of explicit constructors
 of subclasses to be used in favour of Mockito mocks for certain types, and users
 have the option to extend this list with a custom configuration.
-This is particularly useful when the default behaviour of mocked objects under-approximates
-the behaviour of the explicit constructors of subclasses.
-In such situations, the use of mocked objects can lead to
-spurious refactorings (this will be further discussed in Section~\ref{}).
+%This is particularly useful when the default behaviour of mocked objects under-approximates
+%the behaviour of the explicit constructors of subclasses.
+%In such situations, the use of mocked objects can lead to
+%spurious refactorings (this will be further discussed in Section~\ref{}).
 %
 %This problem generally appears whenever methods are overriden in subclasses.
 %An example of this situation is the refactoring of the
@@ -1558,12 +1558,13 @@ spurious refactorings (this will be further discussed in Section~\ref{}).
 %fuzz against
 %all available subclasses of
 %\texttt{Component} on the classpath.
-
-We explicitly avoid constructors that are not amenable to fuzzing, such as
+This is particularly useful when attempting to avoid constructors that are not amenable to fuzzing, such as
 collection constructors that take an integer capacity argument, where an
 unlucky fuzzed input might lead to an out of memory error.
+%For instance, for \lstinline{ArrayList}, we use the constructors that don't mention an initial capacity.
 
 
+%We e.g. hard-coded that we should not generate an ArrayList using the constructor that takes a single int, since that is the capacity. But ArrayList has other constructors that we use.
 
 
 %\subsection{Using fuzz testing for synthesis} \label{sec:fuzzing}
@@ -2069,8 +2070,8 @@ Results are better for these benchmarks, with less missed refactorings. The reas
 
 {\bf (RQ1) How do the symbolic and the neural approach compare against each other?}
 When code hints are present, as shown in Table~\ref{tab:configuration-results-ch}, the symbolic approach does better than both \llma and \llmb. This supports the intuition that,
-if we manage to build a component library that contains all the required instructions (and we've been careful about not adding too many additional ones),
-then the symbolic approach works well and should be chosen over the neural one.
+if we have a good idea about the instructions required such that we can build a component library that contains them all (without many spurious ones),
+then the symbolic approach works well. % and should be chosen over the neural one.
 
 One example of a benchmark that was solved by \tool but where both \llma and \llmb failed to find a solution (at least when we run them) is the running
 example in Figure~\ref{ex:deprecated-method-other}. In all our runs, the LLMs failed to come up with \lstinline[breaklines=true]{calendar.setTime(date);}. 
@@ -2079,7 +2080,7 @@ When code hints are not present, both engines perform badly. In particular, they
 7/105 for \tool, 12/105 for \llma, and 10/105 for \llmb  (i.e. the difference between the first column of Table~\ref{tab:configuration-results} and
 Table~\ref{tab:configuration-results-ch}). 
 For the symbolic engine, this can be explained by the fact that the Types-library might miss
-critical components, and might contain spurious ones (see Section~\ref{sec:extend-library}). The neural engine does marginally better than the symbolic approach.
+critical components (see Section~\ref{sec:extend-library}). The neural engine does marginally better than the symbolic approach.
 
 
 %We observed that the neural engines are able to solve problems that access native code...?
@@ -2088,7 +2089,7 @@ critical components, and might contain spurious ones (see Section~\ref{sec:exten
 Compared to the symbolic engine, the neural one is able to provide correct refactoring for deprecated concurrency primitives
 (e.g. \lstinline{weakCompareAndSet} in \lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). These methods call native methods, for which we cannot observe side-effects (see Section~\ref{sec:observable}).
 Consequently, these are not captured by the  counterexamples returned by the fuzzer, and are thus not taken into consideration by the symbolic engine during the synthesis phase.
-For the neural approach, the counterexample are less critical, and the LLM can obviously generate the correct code even though they are incomplete.
+For the neural approach, the counterexamples are less critical, and the LLM can obviously generate the correct code even though they are incomplete.
 %
 The neural engine is also able to handle benchmarks that require special constants, such as \lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} described in the introduction.
 
@@ -2550,19 +2551,23 @@ range then a \lstinline{null} value is returned. However, the suggested replacem
 does not perform bound-checking. We noticed that \llm is able to generate the correct replacement, but
 it fails equivalence checking and hence misses this refactoring.
 
-
+====
 Some of the missed refactorings were caused by the fact that the return
 value was dependent on an external system state which changed frequently between
 invocations (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
 
-
+=====
 for our equivalence checking predicate implementation, we pick a single
 concrete subclass for deprecated abstract methods. This proved sufficient for
 all benchmarks in our set. However,
 there are classes in the JCL without any
 existing implementation (e.g. \lstinline{javax.swing.InputVerifier}),  and thus no concrete
 method against we can verify equivalence of candidates.
+
+====
+
+We e.g. hard-coded that we should not generate an ArrayList using the constructor that takes a single int, since that is the capacity. But ArrayList has other constructors that we use.
 
 \fi
 
