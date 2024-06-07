@@ -1947,9 +1947,9 @@ crashing rather than e.g. throwing an exception. %% Currently, this terminates o
 %% which is not part of the JVM state. We currently don't check
 %% that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 %
-In several cases, refactorings that are not equivalent to the original code managed to incorrectly pass our verifier.
-While we expected this behaviour due to the use of fuzzing (which may miss generating distinguishing inputs between the original and refactored code),
-we also encountered other problems, as follows:
+In several cases, refactorings that are not equivalent to the original code managed to incorrectly pass our verifier, as we discuss next.
+While we expected to run into this problem because of fuzzing (as the fuzzer may miss finding counterexamples that  distinguish between the behaviour of the original and the refactored code),
+we also encountered other problems:
 %One of the observations of our work is that it is actually very difficult to come up with a useful equivalence verifier 
 %While we already gave up soundness by relying on fuzzing, we were confrunted with the following additional
 %sources of unsoundness (which led to unsound refactorings passing the verification stage):
@@ -1960,28 +1960,31 @@ we also encountered other problems, as follows:
 %that a synthesised candidate is not equivalent to the original program. We
 %identified the following sources of unsoundness in our benchmark set:
 
-Unobservable state: I/O operations, static state in the boot class loader and
+Unobservable state (discussed in Section~\ref{sec:observable}): I/O operations, static state in the boot class loader and
 native methods are not observable to our equivalence predicate implementation,
 since we only rely on reflection to examine objects inside the Java runtime. As
 a consequence, we cannot distinguish programs that only differ in these aspects.
 %This is not a fundamental limitation, but instead just an implementation detail.
 
-Abstract methods While, as explained in Section~\ref{}, we pick ... for our equivalence checking predicate implementation, we pick a single
-concrete subclass for deprecated abstract methods. This proved sufficient for
-all benchmarks in our set. However, there are classes in the JCL without any
-existing implementation (e.g. \lstinline{javax.swing.InputVerifier}) and thus no concrete
-method against we can verify equivalence of candidates.
+Abstract methods: 
+There are classes in the JCL without any
+existing implementation (e.g. \lstinline{javax.swing.InputVerifier}), and thus no concrete
+method against which to verify the equivalence between the original and the refactored code. For those, the symbolic engine will
+generate a no-op. We've been very conservative here, and counted this situation as unsound because
+it doesn't obey the human intent for the deprecated method.
 
 Insufficient counterexamples: Our fuzzing-based equivalence check is inherently
-incomplete, and for some benchmarks we do not explore counterexamples in
-sufficient number or quality to identify unsound candidates. An example for this
-category is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only one value
+incomplete, and for some benchmarks we do not explore sufficient counterexamples
+%in sufficient number or quality
+to identify unsound candidates. An example 
+is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only one value
 out of the $2^32-1$ possible input values will trigger an alternate code path.
-On the other hand, the method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass} is an
-example where our counterexample does not produce counterexamples of sufficient
-quality. The method accepts a string as an input, but will throw for any string
-that is not a valid class name. Since our fuzzer does not consider such context,
-it is very unlikely to randomly produce a string which matches an valid class
+As another illustration, method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass}
+%is an example where our counterexample does not produce counterexamples of sufficient
+%quality. The method
+accepts a string as an input, but will throw for any string
+that is not a valid class name. %Since our fuzzer does not consider such context,
+It is very unlikely that our fuzzer will randomly produce a string which matches a valid class
 name.
 
 %% \todo{mention fuzzing}
@@ -2552,6 +2555,14 @@ Some of the missed refactorings were caused by the fact that the return
 value was dependent on an external system state which changed frequently between
 invocations (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
+
+
+for our equivalence checking predicate implementation, we pick a single
+concrete subclass for deprecated abstract methods. This proved sufficient for
+all benchmarks in our set. However,
+there are classes in the JCL without any
+existing implementation (e.g. \lstinline{javax.swing.InputVerifier}),  and thus no concrete
+method against we can verify equivalence of candidates.
 
 \fi
 
