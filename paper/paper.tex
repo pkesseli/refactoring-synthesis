@@ -379,7 +379,7 @@ based on the existing \texttt{date} object.
 
 As part of our investigation, we build two code generation engines, namely a symbolic and a neural one.
 In an attempt to make them follow the same general structure, we base them both on the CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, which 
-iteratively improves a candidate refactoring, until it obeys a given specification. In our case, the specification expresses the fact that the original and
+iteratively improves a candidate refactoring until it obeys a given specification. In our case, the specification expresses the fact that the original and
 the refactored code must behave indistinguishably.
 
 For the symbolic engine, the candidate refactorings are built using component-based synthesis~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}
