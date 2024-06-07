@@ -1250,7 +1250,7 @@ are considered during parsing.
 %% The issue is that code hints are not always expressed as well-formed Java.
 %% In some sense, the task of parsing code hints lies in between parsing Java code and interpreting natural language. 
 %
-In order to address challenge 3 related to the fact that code hints are not always expressed as well-formed Java,
+In order to address the challenge 3 that code hints are not always expressed as well-formed Java,
 we customised the
 GitHub Java parser
 to accept undeclared identifiers and type names
@@ -1588,7 +1588,7 @@ unlucky fuzzed input might lead to an out of memory error.
 %% guidance mode, which incorporates feedback from the test program in the form of
 %% semantic validity of test inputs and the code coverage achieved during test
 %% execution.
-\subsection{Observable state}
+\subsection{Observable state}\label{sec:observable}
 
 Our equivalence check uses the Java Reflection API to observe the side effects
 of programs, such as assigning new values to fields. As a consequence, we cannot
@@ -1903,7 +1903,7 @@ we next provide a discussion on missed and unsound refactorings.
 
 
 
-{\bf Missed refactorings.}
+\paragraph{Missed refactorings}
 %% Out of the refactorings missed both with and without code hints, 
 %% 2 were missed because the method return
 %
@@ -1927,7 +1927,7 @@ be added.
 %and iterating phases 2 and 3 of library seeding
 %a given number of times (potentially until fixed point).
 
-For the neural approach, the LLMs were unable to generate the refactoring from the provided prompt.
+For the neural approach, we could only observe that the LLMs were unable to generate the refactoring from the provided prompt.
 
 For methods that eventually run native code, we encountered crashes of the verifier, which, in order to be conservative, we counted as overall failures.
 % which we manually inspected.
@@ -1940,7 +1940,7 @@ crashing rather than e.g. throwing an exception. %% Currently, this terminates o
 %% as a regular type of outcome in the heap comparison.
 
 
-{\bf Unsound refactorings.}
+\paragraph{Unsound refactorings}
 %
 % Q: We do not consider I/O for synthesis, but consider it for verification?
 %% Firstly, unsoundness can be caused by I/O,
@@ -1960,13 +1960,13 @@ we also encountered other problems, as follows:
 %that a synthesised candidate is not equivalent to the original program. We
 %identified the following sources of unsoundness in our benchmark set:
 
-\paragraph{Unobservable state} I/O operations, static state in the boot class loader and
+Unobservable state: I/O operations, static state in the boot class loader and
 native methods are not observable to our equivalence predicate implementation,
 since we only rely on reflection to examine objects inside the Java runtime. As
 a consequence, we cannot distinguish programs that only differ in these aspects.
 %This is not a fundamental limitation, but instead just an implementation detail.
 
-\paragraph{Abstract methods} While, as explained in Section~\ref{}, we pick ... for our equivalence checking predicate implementation, we pick a single
+Abstract methods While, as explained in Section~\ref{}, we pick ... for our equivalence checking predicate implementation, we pick a single
 concrete subclass for deprecated abstract methods. This proved sufficient for
 all benchmarks in our set. However, there are classes in the JCL without any
 existing implementation (e.g. \lstinline{javax.swing.InputVerifier}) and thus no concrete
@@ -2026,13 +2026,13 @@ name.
 
 \subsection{Results when code hints are present}
 Many of the refactorings missed in Table~\ref{tab:configuration-results}
-are due to the fact that no code hints were provided by the Javadoc.
+happen for those benchmarks where no code hints were provided by the Javadoc.
 %% we actually couldn't find a Javadoc code hint,
 %% or we failed to parse it (see Section~\ref{sec:parse} for details).
 %
 %In such a situation, the symbolic approach exclusively uses the
 %Types-library.
-As we are interested in also comparing the symbolic and the neural approaches when code hints are available,
+As we are also interested in the effect of code hints for the engines, 
 %quantifying the benefit of
 %using code hints compared to simply relying on types,
 Table~\ref{tab:configuration-results-ch} shows the same evaluation as  
@@ -2058,44 +2058,56 @@ Config         & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s)
 \label{tab:configuration-results-ch}   
 \end{table}
 
-
+Results are better for these benchmarks, with less missed refactorings. The reasons for missed and unsound refactorings are the same as for the overall set of benchmarks in Section~\ref{sec:experimental-results}.
 
 %% As expected, the GPT-4 Turbo results with code hints are significantly better than those without code hints, which suggests that the language model is able to interpret the JavaDoc code hints and obtain context information from it.
 
 \subsection{Research questions}
 
 {\bf (RQ1) How do the symbolic and the neural approach compare against each other?}
-When considering all the benchmarks and using the code hints whenever possible, GPT-4 Turbo only refactors 33\% of the benchmarks, compared to ??\% for \tool (first row in Table~\ref{tab:gpt-results} and second row in Table~\ref{tab:configuration-results}, respectively).
-When considering only benchmarks that do have code hints, GPT-4 Turbo finds refactorings in 44\% of the cases (second row in Table~\ref{tab:gpt-results}), compared to
-??\% by \tool (third row in Table~\ref{tab:configuration-results-ch}). 
-% Regarding unsound refactorings ..
-%For this particular problem, GPT-4 Turbo only computes ? out refactorings, even when the JavaDoc code hints are being provided. A large number of possible
-%refactorings that it proposes are found to be unsound by our equility checker.
-This shows that, at least for specialised settings, symbolic code generation
-techniques such as \tool can still provide better results GPT-4 Turbo at a lower computational cost.
-With respect to the average runtime, that of GPT-4 Turbo is lower than that of \tool.
-As a future direction we want to combine the two approaches, by using GPT-4 Turbo as the synthesis engine that provides candidate refactorings to \tool.
+When code hints are present, as shown in Table~\ref{tab:configuration-results-ch}, the symbolic approach does better than both \llma and \llmb. This supports the intuition that,
+if we manage to build a component library that contains all the required instructions (and we've been careful about not adding too many additional ones),
+then the symbolic approach works well and should be chosen over the neural one.
 
-%{\bf Comparison of the symbolic and the neural approach.}
+One example of a benchmark that was solved by \tool but where both \llma and \llmb failed to find a solution (at least when we run them) is the running
+example in Figure~\ref{ex:deprecated-method-other}. In all our runs, the LLMs failed to come up with \lstinline[breaklines=true]{calendar.setTime(date);}. 
 
-We observed that the neural engines are able to solve problems that access native code...?
+When code hints are not present, both engines perform badly. In particular, they only solve:
+7/105 for \tool, 12/105 for \llma, and 10/105 for \llmb  (i.e. the difference between the first column of Table~\ref{tab:configuration-results} and
+Table~\ref{tab:configuration-results-ch}). 
+For the symbolic engine, this can be explained by the fact that the Types-library might miss
+critical components, and might contain spurious ones (see Section~\ref{sec:extend-library}). The neural engine does marginally better than the symbolic approach.
+
+
+%We observed that the neural engines are able to solve problems that access native code...?
 
 %\autoref{tab:gpt-results} show that our neural approach performs better than the symbolic approach.
-Compared to the symbolic engine, the neural one is able to provide correct refactoring for \emph{deprecated concurrency primitives}
-(e.g. \lstinline{weakCompareAndSet}). We have also found that \llm is more aggressive in refactoring methods
-of which return value is dependent on external system states. For example, the deprecated method \lstinline{java.net.URLEncoder#encode}
-translates a string using a platform-specific encoding scheme. A correct refactoring requires explicitly providing
-this scheme, and \llm chose "UTF-8" which works on our platform.
+Compared to the symbolic engine, the neural one is able to provide correct refactoring for deprecated concurrency primitives
+(e.g. \lstinline{weakCompareAndSet} in \lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). These methods call native methods, for which we cannot observe side-effects (see Section~\ref{sec:observable}).
+Consequently, these are not captured by the  counterexamples returned by the fuzzer, and are thus not taken into consideration by the symbolic engine during the synthesis phase.
+For the neural approach, the counterexample are less critical, and the LLM can obviously generate the correct code even though they are incomplete.
+%
+The neural engine is also able to handle benchmarks that require special constants, such as \lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} described in the introduction.
 
-\todo{use example here}
+
+
+%We have also found that \llm is more aggressive in refactoring methods
+%of which return value is dependent on external system states. For example, the deprecated method \lstinline{java.net.URLEncoder#encode}
+%translates a string using a platform-specific encoding scheme. A correct refactoring requires explicitly providing
+%this scheme, and \llm chose "UTF-8" which works on our platform.
+
+%\todo{use example here}
 
 
 {\bf (RQ2) Do code hints help the generation of refactorings?}
-The performance of both the symbolic and the neural engine improves considerable when code hints are present.
-Actually, both engines fail to solve most of the benchmarks where code hints are not present. In particular, they only solve:
-7/105 for \tool, 12/105 for \llma, and 10/105 for \llmb  (i.e. the difference between the first column of Table~\ref{tab:configuration-results} and
-Table~\ref{tab:configuration-results-ch}). Thus, it seems that the neural approach is doing marginally better in solving
-benchmarks where there are no code hints.
+The performance of \tool, \llma and \llmb improves considerable when code hints are present.
+Actually, as discussed under RQ1, all of them  barely manage to solve any benchmark without code hints. When code hints are present, all engines
+solve at least 70\% of benchmarks.
+
+%both engines fail to solve most of the benchmarks where code hints are not present. In particular, they only solve:
+%7/105 for \tool, 12/105 for \llma, and 10/105 for \llmb  (i.e. the difference between the first column of Table~\ref{tab:configuration-results} and
+%Table~\ref{tab:configuration-results-ch}). Thus, it seems that the neural approach is doing marginally better in solving
+%benchmarks where there are no code hints.
 
 
 %Using the CodeHints-library enables our technique to find more refactorings
