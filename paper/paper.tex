@@ -1579,7 +1579,18 @@ unlucky fuzzed input might lead to an out of memory error.
 %% guidance mode, which incorporates feedback from the test program in the form of
 %% semantic validity of test inputs and the code coverage achieved during test
 %% execution.
- 
+\subsection{Observable state}
+
+Our equivalence check uses the Java Reflection API to observe the side effects
+of programs, such as assigning new values to fields. As a consequence, we cannot
+observe effects that are not visible through this API, such as I/O operations or
+varibles maintained in native code only. I/O operations could be recorded using
+additional bytecode instrumentation in future work, but for the scope of our current
+implementation, if programs only differ in such for our current engine invisible
+side effects, our engine is prone to producing unsound results.
+
+
+
 
 
 \subsection{Checking aliasing}
