@@ -2424,16 +2424,27 @@ by enabling new interactions between parallel threads.
 
 %They also provide techniques to make such refactorings behavior-preserving.
 
-A related class of techniques aim to adapt APIs after library updates. Such techniques
-automatically identify change rules linking different library releases~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. Conversely to our work, a change rule describes a match between methods existing in the old release, but which have been removed or deprecated in the new
-one, and replacement methods in the new release. However, they do not provide the actual refactored code.
-In \cite{DBLP:journals/tse/LeeWCK21}, Lee et al. address the problem of outdated APIs in documentation references. Their insight is that API updates in documentation can be derived from API implementation changes between code revisions. Conversely, we are looking at code changes, rather than documentation.
-Other works focus on automatically updating API usages for Android apps based on
-examples of how other developers evolved their apps for the same changes \cite{DBLP:conf/issta/FazziniXO19,DBLP:conf/iwpc/HaryonoTKSML0J20}. 
-Furthermore, \cite{DBLP:journals/ese/HaryonoTLJLKSM22} improves on \cite{DBLP:conf/iwpc/HaryonoTKSML0J20} by using a data-flow analysis 
-to resolve the values used as API arguments and variable name denormalization to improve the
-readability of the updated code.
-As opposed to these works which rely on examples of similar fixes, our approach uses code hints from the Javadoc.
+A related class of techniques aim to adapt APIs after library updates.  Such
+techniques automatically identify change rules linking different library
+releases~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. 
+Conversely to our work, a change rule describes a match between methods
+existing in the old release, but which have been removed or deprecated in
+the new one, and replacement methods in the new release.  However, they do
+not provide the actual refactored code. 
+In~\cite{DBLP:journals/tse/LeeWCK21}, Lee et al.~address the problem of
+outdated APIs in documentation references.  Their insight is that API
+updates in documentation can be derived from API implementation changes
+between code revisions.  Conversely, we are looking at code changes, rather
+than documentation.  Other works focus on automatically updating API usages
+for Android apps based on examples of how other developers evolved their
+apps for the same
+changes~\cite{DBLP:conf/issta/FazziniXO19,DBLP:conf/iwpc/HaryonoTKSML0J20}. 
+Furthermore, \cite{DBLP:journals/ese/HaryonoTLJLKSM22} improves
+on~\cite{DBLP:conf/iwpc/HaryonoTKSML0J20} by using a data-flow analysis to
+resolve the values used as API arguments and variable name denormalization
+to improve the readability of the updated code.  As opposed to these works,
+which rely on examples of similar fixes, our approach uses Javadoc code
+hints.
 
 %% In~\cite{DBLP:conf/kbse/Huang0PW021}, Huang et al. automatically find replacements for missing APIs in library update (an API is considered as a public method in a public class). As new library versions are released, some APIs may get deprecated, removed or refactored.
 %% The focus in this work is on locating a replacement API through heuristics based on method signatures, rather than on finding an equivalent block of code.
