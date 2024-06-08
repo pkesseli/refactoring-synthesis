@@ -1918,7 +1918,7 @@ Table~\ref{tab:configuration-results} provides an overview of the number of
 sound refactorings (\checkmark), missed refactorings (\xmark), unsound
 refactorings (\lightning), the percentage of sound refactorings (\%)
 produced per configuration, as well as the average runtime per refactoring.
-For the symbolic engine, missed refactorings are those that failed our equivalence check, whereas, for the neural one,
+For the symbolic engine, missed refactorings are those that failed our equivalence check, whereas for the neural one,
 they may denote either that the generated refactoring didn't compile or that it failed the equivalence check.
 Unsound refactorings are
 those that passed the equivalence check, but were manually detected by us as not being equivalent to the original code.
@@ -2123,7 +2123,7 @@ refactoring very hard for both for the symbolic and neural engines.
 The performance of \tool, \llma and \llmb improves considerably when code hints are present.
 Actually, all of them  barely manage to solve any benchmark without code hints. When code hints are present, all engines
 solve at least 70\% of benchmarks, with the best virtual engine solving 83\%. For the symbolic engine,
-they enable the effective seeding of the instruction library, whereas, for the neural engine, they provide additional context to the LLM. 
+they enable the effective seeding of the instruction library, whereas for the neural engine, they provide additional context to the LLM. 
 
 {\bf (RQ3) How do the symbolic and the neural approach compare against each other?}
 There is only a small variation between the performance of the symbolic engine and that of the neural engine, as discussed next.
