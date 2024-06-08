@@ -1407,11 +1407,12 @@ public boolean inside(int X, int Y) {
 
 \paragraph{{\bf Phase 2: Add generators for $target\_types$}}
 
-By generators we refer to constructors and any other methods returning objects of that particular type.
-In the algorithm in Figure~\ref{alg:seeding-core},
-once we added a generator for a new type, we must add that type to $available\_types$.
-Additionally, if the new generator consumes any objects from $consumable\_objs$,
-we must remove them from the set.
+By generators we refer to constructors and any other methods returning
+objects of that particular type.  In the algorithm in
+Figure~\ref{alg:seeding-core}, once we added a generator for a new type, we
+must add that type to $\mathit{available\_types}$.  Additionally, if the new
+generator consumes any objects from $\mathit{consumable\_objs}$, we must
+remove them from the set.
 
 For our running example, we must seed our component library with generators for \texttt{Calendar}.
 %
@@ -1431,14 +1432,18 @@ for which we don't have a corresponding component in the library.
 The last two methods are in a similar situation as the second. Thus, we only add the first method to the CodeHints-library.
 
 \paragraph{{\bf Phase 3: Add transformers for $target\_types$}}
-The third and last phase adds  transformers for the target types.
-By transformers we refer to methods that modify the value of an instance variable.
-Given our objective to generate objects for the $target\_types$ while consuming objects from $consumable\_objs$,
-we prioritise transformers that consume such objects.
-For instance, for our running example there are 16 public transformers for the \texttt{Calendar} class.
-However, instead of adding all of them to the CodeHints-library, we prioritise those that
-consume the \texttt{date} object. There is only one such transformer \texttt{void setTime(Date date)}.
-Once we added any new transformers to the library, we remove the consumed objects from \texttt{consumable\_obj}.
+%
+The third and last phase adds  transformers for the target types.  By
+transformers we refer to methods that modify the value of an instance
+variable.  Given our objective to generate objects for the
+$\mathit{target\_types}$ while consuming objects from
+$\mathit{consumable\_objs}$, we prioritise transformers that consume such
+objects.  For instance, for our running example there are 16 public
+transformers for the \texttt{Calendar} class.  However, instead of adding
+all of them to the CodeHints-library, we prioritise those that consume the
+\texttt{date} object.  There is only one such transformer \texttt{void
+setTime(Date date)}.  Once we added any new transformers to the library, we
+remove the consumed objects from \texttt{consumable\_obj}.
 
 Notably, all the components that
 we add to the library must be accessible from the current location.
@@ -1459,7 +1464,7 @@ $\newline$
 \For{each $t \in target\_types$ for which there is no generator}{
   Add realisable generators for $t$ to library\;
   $available\_types = available\_types \cup \{t\}$\;
-  Remove consumed objs from $consumable\_objs$\;
+  Remove consumed objs from $\mathit{consumable\_objs}$\;
 }
 $\newline$
 // {\bf Phase 3: Add transformers for $target\_types$}\\
@@ -1472,9 +1477,13 @@ Remove consumed objs from $consumable\_objs$\;
 \label{alg:seeding-core}
 \end{figure}
 
-It may be the case that there is no realisable generator for a target type, or no transformers for the $target\_types$ that can consume all the
-$consumable\_objs$. When we finish exploring all the available methods, we exit the corresponding loops in phases 2 and 3.
-As a consequence, the synthesiser may fail to generate a valid refactoring from the CodeHints-library.
+It may be the case that there is no realisable generator for a target type,
+or no transformers for the $\mathit{target\_types}$ that can consume all the
+$\mathit{consumable\_objs}$.  When we finish exploring all the available
+methods, we exit the corresponding loops in phases~2 and~3.  As a
+consequence, the synthesiser may fail to generate a valid refactoring from
+the CodeHints-library.
+%
 %% For such a situation, we extend the component library as explained in Section~\ref{sec:extend-library}.
 A possible future direction is allowing unrealisable generators and transformers to be added to the library and iterating phases 2 and 3 a given number of times (potentially until reaching a fixed point).
 %% iterate phase 2 and 3 until fixed point to 
