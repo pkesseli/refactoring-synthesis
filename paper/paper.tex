@@ -2126,37 +2126,65 @@ evidenced by the 83\% success rate for those benchmarks.  Without code
 hints, Java's complexity makes these refactorings very hard for both for the
 symbolic and neural engines.
 
+\noindent
 {\bf (RQ2) Do code hints help the generation of refactorings?}
-The performance of \tool, \llma and \llmb improves considerably when code hints are present.
-Actually, all of them  barely manage to solve any benchmark without code hints. When code hints are present, all engines
-solve at least 70\% of benchmarks, with the best virtual engine solving 83\%. For the symbolic engine,
-they enable the effective seeding of the instruction library, whereas for the neural engine, they provide additional context to the LLM. 
+%
+The performance of \tool, \llma and \llmb improves considerably when code
+hints are present.  All of them barely manage to solve any benchmark without
+code hints.  When code hints are present, all engines solve at least 70\% of
+benchmarks, with the best virtual engine solving 83\%.  For the symbolic
+engine, they enable the effective seeding of the instruction library,
+whereas for the neural engine, they provide additional context to the LLM.
 
+\noindent
 {\bf (RQ3) How do the symbolic and the neural approach compare against each other?}
-There is only a small variation between the performance of the symbolic engine and that of the neural engine, as discussed next.
+%
+There is only a small difference between the performance of the symbolic
+engine and that of the neural engine.
+
 %they both do well when code hints
 %are present, and poorly when they are not.
 
 %The symbolic engine does slightly better than the neural one when code hints are present.
-When code hints are present, as shown in Table~\ref{tab:configuration-results}, the symbolic approach does slightly better than both \llma and \llmb. This supports the intuition that,
-if there is enough information about the solution to effectively prune the solution space (in our case, when code hints are present),
+
+When code hints are present, as shown in
+Table~\ref{tab:configuration-results}, the symbolic approach does slightly
+better than both \llma and \llmb.  This supports the intuition that, if
+there is enough information about the solution to effectively prune the
+solution space (in our case, when code hints are present),
+%
 %if we have a good idea about the instructions required such that we can build a component library that contains them all (without many spurious ones),
 then the symbolic approach works well. % and should be chosen over the neural one.
 
-One example of a benchmark that was solved by \tool but where both \llma and \llmb failed to find a solution (at least when we run them) is the running
-example in Figure~\ref{ex:deprecated-method-other}. In all our runs, the LLMs failed to come up with \lstinline[breaklines=true]{calendar.setTime(date)}. 
+One example of a benchmark that was solved by \tool but where both \llma and
+\llmb failed to find a solution is the running example in
+Figure~\ref{ex:deprecated-method-other}.  In all our runs, the LLMs failed
+to generate \lstinline[breaklines=true]{calendar.setTime(date)}.
 
-When code hints are not present, the neural engine does marginally better than the symbolic approach.
+When code hints are not present, the neural engine does marginally better
+than the symbolic approach.
+%
 %
 %We observed that the neural engines are able to solve problems that access native code...?
 %
 %\autoref{tab:gpt-results} show that our neural approach performs better than the symbolic approach.
-Compared to the symbolic engine, the neural one is able to provide correct refactoring for deprecated concurrency primitives
-(e.g. \lstinline{weakCompareAndSet} in \lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). These methods call native methods, for which we cannot observe side-effects (see Section~\ref{sec:observable}).
-Consequently, these are not captured by the  counterexamples returned by the fuzzer, and are thus not taken into consideration by the symbolic engine during the synthesis phase.
-For the neural approach, the counterexamples are less critical, and the LLM can obviously generate the correct code even though they are incomplete.
 %
-The neural engine is also able to handle benchmarks that require special constants, such as \lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} described in the introduction.
+Compared to the symbolic engine, the neural one is able to provide correct
+refactorings for deprecated concurrency primitives (e.g.,
+\lstinline{weakCompareAndSet} in
+\lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). 
+These methods call native methods, for which we cannot observe side-effects
+(Section~\ref{sec:observable}).  Consequently, these are not captured by
+the counterexamples returned by the fuzzer, and are thus not taken into
+consideration by the symbolic engine during the synthesis phase.  For the
+neural approach, the counterexamples are less critical, and the LLM can
+obviously generate the correct code even though they are incomplete.
+
+%
+The neural engine is also able to handle benchmarks that require special
+constants, such as
+\lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} described in the
+introduction.
 
 %{\bf (RQ2) What strategy should one use to achieve the best performance with the lowest budget?}
 %If we were to design a general strategy that, given the symbolic and the neural approach, is able to achieve the best possible results  with the lowest budget, then such a technique should
