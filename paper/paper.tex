@@ -2028,7 +2028,7 @@ incomplete, and for some benchmarks we do not explore sufficient counterexamples
 %in sufficient number or quality
 to identify unsound candidates. An example 
 is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only a single input
-out of the $2^32-1$ possible input values will trigger an alternate code path.
+out of the $2^{32}-1$ possible input values will trigger an alternate code path.
 As another illustration, method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass}
 %is an example where our counterexample does not produce counterexamples of sufficient
 %quality. The method
