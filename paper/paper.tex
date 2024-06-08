@@ -2243,6 +2243,7 @@ introduction.
 \section{Threats to validity}
 
 \paragraph{Selection of benchmarks}
+%
 All our benchmarks are Java methods deprecated in the Oracle JDK 15.
 The JDK is extremely well known to Java developers, and a lot
 of Java application code evolves similarly.
@@ -2257,7 +2258,9 @@ However, our claims may not extend to other programming languages.
 \paragraph{Quality of refactorings} Refactorings need to result in code that
 remains understandable and maintainable.  It is difficult to assess
 objectively how well our technique does with respect to this subjective
-goal.
+goal.  This threatens our claim that refactoring of deprecated Java APIs
+be automated.
+
 %
 %% In our experimental evaluation, we define acceptable
 %% solutions not just using the heap equivalence criterion, but also regular
