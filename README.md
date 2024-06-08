@@ -15,7 +15,16 @@ To run the JQF-Fuzz experiments, run:
 ```shell
 ./experiments.sh
 ```
-in the root directory of the repository. Warning: A full experimental run can
+in the root directory of the repository.
+
+To run the neural experiments, run:
+```shell
+./run.sh
+```
+in the root directory of the repository.
+For both experiments, results summaries can be found in `source/synthesis/target/surefire-reports`.
+
+Warning: A full experimental run can
 take multiple hours. The script also contains a commented out
 "Single example test run" which can be enabled to just run one benchmark.
 
