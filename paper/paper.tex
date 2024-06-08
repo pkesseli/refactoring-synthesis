@@ -189,20 +189,19 @@
 
 \begin{abstract}
 %
-As a project evolves, certain fields, methods or classes are marked as
-deprecated in a bid to discourage their future use.  When done manually,
-refactoring legacy code in order to eliminate uses of deprecated APIs is an
-error-prone and time-consuming process.  In this paper, we investigate to
-which degree refactorings for deprecated Java APIs can be automated, and
-quantify the benefit of Javadoc code hints for this task.  To this end, we
-build a symbolic and a neural engine for the automatic refactoring of
-deprecated APIs.  The former is based on type-directed and component-based
-program synthesis, whereas the latter uses LLMs.  We applied our engines to
-refactor the deprecated methods in the Oracle JDK 15.  Our experiments show
-that code hints are enabling for the automation of this task: even the wost
-engine correctly refactors 70\% of the tasks with code hints, which drops to
-less than 10\% on tasks without.  Adding more code hints to Javadoc can
-hence substantially help the refactoring of code that uses deprecated APIs.
+When done manually, refactoring legacy code in order to eliminate uses of
+deprecated APIs is an error-prone and time-consuming process.  In this
+paper, we investigate to which degree refactorings for deprecated Java APIs
+can be automated, and quantify the benefit of Javadoc code hints for this
+task.  To this end, we build a symbolic and a neural engine for the
+automatic refactoring of deprecated APIs.  The former is based on
+type-directed and component-based program synthesis, whereas the latter uses
+LLMs.  We applied our engines to refactor the deprecated methods in the
+Oracle JDK 15.  Our experiments show that code hints are enabling for the
+automation of this task: even the wost engine correctly refactors 70\% of
+the tasks with code hints, which drops to less than 10\% on tasks without. 
+Adding more code hints to Javadoc can hence boost the refactoring of code
+that uses deprecated APIs.
 %
 %Given the recent success of LLMs for code generation tasks, our goal was investigating whether, for specialised problems
 %such as the automatic refactoring of deprecated APIs, symbolic methods are still useful, or whether they were completely overtaken by LLM-based ones.
