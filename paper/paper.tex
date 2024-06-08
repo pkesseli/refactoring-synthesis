@@ -1997,8 +1997,8 @@ crashing rather than e.g. throwing an exception. %% Currently, this terminates o
 %% which is not part of the JVM state. We currently don't check
 %% that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 %
-In several cases, refactorings that are not equivalent to the original code managed to incorrectly pass our verifier.
-While we expected to run into this problem because of fuzzing (as the fuzzer may miss finding counterexamples that  distinguish between the behaviour of the original and the refactored code),
+In several cases, refactorings that are not equivalent to the original code managed to pass our verifier.
+While we expected to run into this problem because of the nature of fuzzing (the fuzzer may miss counterexamples that distinguish the behaviour of the original from the refactored code),
 we also encountered other problems:
 %One of the observations of our work is that it is actually very difficult to come up with a useful equivalence verifier 
 %While we already gave up soundness by relying on fuzzing, we were confrunted with the following additional
@@ -2011,8 +2011,8 @@ we also encountered other problems:
 %identified the following sources of unsoundness in our benchmark set:
 
 Unobservable state (discussed in Section~\ref{sec:observable}): I/O operations, static state in the boot class loader and
-native methods are not observable to our equivalence predicate implementation,
-since we only rely on reflection to examine objects inside the Java runtime. As
+native methods are not observable by our equivalence predicate implementation,
+since we rely on reflection to examine objects inside the Java runtime. As
 a consequence, we cannot distinguish programs that only differ in these aspects.
 %This is not a fundamental limitation, but instead just an implementation detail.
 
@@ -2020,14 +2020,14 @@ Abstract methods:
 There are classes in the JCL without any
 existing implementation (e.g. \lstinline{javax.swing.InputVerifier}), and thus no concrete
 method against which to verify the equivalence between the original and the refactored code. For those, the symbolic engine will
-generate a no-op. We've been very conservative here, and counted this situation as unsound because
-it doesn't obey the human intent for the deprecated method.
+generate a no-op. We've been very conservative here, and counted this scenario as ``unsound'' because
+it doesn't match human intent for the deprecated method.
 
 Insufficient counterexamples: Our fuzzing-based equivalence check is inherently
 incomplete, and for some benchmarks we do not explore sufficient counterexamples
 %in sufficient number or quality
 to identify unsound candidates. An example 
-is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only one value
+is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only a single input
 out of the $2^32-1$ possible input values will trigger an alternate code path.
 As another illustration, method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass}
 %is an example where our counterexample does not produce counterexamples of sufficient
