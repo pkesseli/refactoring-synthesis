@@ -40,12 +40,14 @@
 \usepackage{microtype}
 \usepackage{url}                  % format URLs
 \usepackage{listings}          % format code
+
+
 \lstset{
   mathescape, 
   language={Java},
   numbers=left,
   stepnumber=1,
-  basicstyle=\footnotesize,
+  basicstyle=\small,
   xleftmargin=5.0ex
 }
 \usepackage{enumitem}      % adjust spacing in enums
@@ -271,7 +273,7 @@ that the developers are discouraged from using in the future as
 they've been superseded and may cease to exist.
 However, removing them directly would break the backward compatibility
 of the project's API.  Instead, such elements can be tagged with the
-\texttt{@Deprecated} annotation in order to ease the transition.
+\lstinline[breaklines=true]{@Deprecated} annotation in order to ease the transition.
 
 %% In general, when deprecating a
 %% field/method/class, the \texttt{@deprecated} Javadoc tag is used in the
@@ -281,27 +283,27 @@ of the project's API.  Instead, such elements can be tagged with the
 The transformation of existing code such that it doesn't use
 deprecated APIs is not always straightforward, as illustrated in
 Fig.~\ref{ex:deprecated-method-other}. In the example, we make use of
-the \texttt{getHours} method of the \texttt{Date} class, which is
+the \lstinline[breaklines=true]{getHours} method of the \lstinline[breaklines=true]{Date} class, which is
 deprecated.  In this situation, in order to replace the use of the
-deprecated method, we must first obtain a \texttt{Calendar} object.
-However, we can't use the \texttt{Calendar} constructor as it is
-protected, and we must instead call \texttt{getInstance}.
-Furthermore, in order to be able to use this \texttt{Calendar} object
+deprecated method, we must first obtain a \lstinline[breaklines=true]{Calendar} object.
+However, we can't use the \lstinline[breaklines=true]{Calendar} constructor as it is
+protected, and we must instead call \lstinline[breaklines=true]{getInstance}.
+Furthermore, in order to be able to use this \lstinline[breaklines=true]{Calendar} object
 for our purpose, we must first set its time using the existing
-\texttt{date}.  We do this by calling \texttt{setTime} with
-\texttt{date} as argument.  Finally, we can retrieve the hour by
-calling \texttt{calendar.get(Calendar.HOUR\_OF\_DAY)}.
+\lstinline[breaklines=true]{date}.  We do this by calling \lstinline[breaklines=true]{setTime} with
+\lstinline[breaklines=true]{date} as argument.  Finally, we can retrieve the hour by
+calling \lstinline[breaklines=true]{calendar.get(Calendar.HOUR\_OF\_DAY)}.
 
 \begin{figure}[ht]
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
 void main(String[] args) {
   // Deprecated:
-  int hour = date.getHours();
+  int hour=date.getHours();
   
   // Should have been:
-  final Calendar calendar = Calendar.getInstance();
+  final Calendar calendar=Calendar.getInstance();
   calendar.setTime(date);
-  int hour = calendar.get(Calendar.HOUR_OF_DAY);
+  int hour=calendar.get(Calendar.HOUR_OF_DAY);
 }
 \end{lstlisting}
 \caption{Deprecated method example.}
@@ -332,35 +334,35 @@ In particular, we are interested in investigating the benefits of Javadoc code h
 
 %{\bf (1)} The original code and the refactoring must have {\em the same behaviour}, i.e., 
 %the generated refactoring needs to be semantically equivalent to the original.
-%One implication is that the orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e., the inputs), as well as the types of the objects that need to be produced (i.e., the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+%One implication is that the orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e., the inputs), as well as the types of the objects that need to be produced (i.e., the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \lstinline[breaklines=true]{date} object can be seen as an input with type \lstinline[breaklines=true]{Date}, whereas \texttt{hour} of type \lstinline[breaklines=true]{int} is considered an output.
 
 %{\bf (2)} The Javadoc comments may contain {\em code hints}.
 
-In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
+In general, when deprecating a field/method/class, the \lstinline[breaklines=true]{@Deprecated} Javadoc tag is used in the
 comment section to inform the developer of the reason for deprecation and, sometimes, what can be used in its place. We call such a suggestion a {\em code hint}.
 These hints don't provide the whole refactoring, but can be used to guide the search process.
 %
 For illustration, let's look at our running example in
 Figure~\ref{ex:deprecated-method-other}.  The source code for the
-\texttt{getHours} method in class \texttt{Date} is accompanied by the
-comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests
-replacing the deprecated \texttt{getHours} by
-\texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
+\lstinline[breaklines=true]{getHours} method in class \lstinline[breaklines=true]{Date} is accompanied by the
+comment in Figure~\ref{ex:code-hints}, where the \lstinline[breaklines=true]{@code} tag suggests
+replacing the deprecated \lstinline[breaklines=true]{getHours} by
+\lstinline[breaklines=true]{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
 %
 %It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
 Using this code hint is not straightforward.
 Although it may seem as if
-method \texttt{get} is static, allowing an immediate call,
+method \lstinline[breaklines=true]{get} is static, allowing an immediate call,
 it is actually an instance method, and requires an object of
-class \texttt{Calendar}. However, no such object is available in the
+class \lstinline[breaklines=true]{Calendar}. However, no such object is available in the
 original code, meaning that it must be created by the refactored code.
 Consequently, we must find the necessary
-instructions that consume existing objects and create a \texttt{Calendar} object.
+instructions that consume existing objects and create a \lstinline[breaklines=true]{Calendar} object.
 Besides generating the required objects, we also need to set their
 fields. For instance,
 in Figure~\ref{ex:deprecated-method-other}, we must call
-\texttt{calendar.setTime(date)} to set the calendar's date
-based on the existing \texttt{date} object.
+\lstinline[breaklines=true]{calendar.setTime(date)} to set the calendar's date
+based on the existing \lstinline[breaklines=true]{date} object.
 
 
 \begin{figure}
@@ -551,7 +553,7 @@ efficient pruning of the solution space is possible.
 %% %
 %% The vast search space is particularly a challenge in the current
 %% setting given that, in the absence of any additional guidance, the
-%% entire \texttt{java.lang} could be considered when synthesising the
+%% entire \lstinline[breaklines=true]{java.lang} could be considered when synthesising the
 %% refactoring.  In order to prune the search space, we make use of type information and Javadoc code hints.
 
 %% 2. {\em LLMs based refactoring:} 
@@ -589,7 +591,7 @@ efficient pruning of the solution space is possible.
 %Conversely, we do not require such example, and instead use type information and the Javadoc deprecation comments.
 
 
-%Another closely related class of works focus on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \texttt{getHours} from class \texttt{Date} must be replaced by method \texttt{get} from class \texttt{Calendar}. Notably, {\em change rules are different from refactorings} as they don't provide the actual replacement code. Instead, the programmer is still required to perform a lot of the work
+%Another closely related class of works focus on API adaptation after library updates~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. These works use techniques such as call dependency and text similarity analyses to automatically identify change rules linking different library releases. Essentially, a change rule describes a match between methods existing in the old release but which have been removed or deprecated in the new one, and replacement methods in the new release. For instance, for our running example in Figure~\ref{ex:deprecated-method-other}, a change rule would inform the programmer that  method \lstinline[breaklines=true]{getHours} from class \lstinline[breaklines=true]{Date} must be replaced by method \lstinline[breaklines=true]{get} from class \lstinline[breaklines=true]{Calendar}. Notably, {\em change rules are different from refactorings} as they don't provide the actual replacement code. Instead, the programmer is still required to perform a lot of the work
 %manually: for instance, she has to figure out lines 6--8 for the refactoring in Figure~\ref{ex:deprecated-method-other}. This is a time-consuming and error-prone process, especially as the
 %responsibility of guaranteeing that the refactored code maintains the original behaviour
 %is left to the programmer.
@@ -667,7 +669,7 @@ can substantially help automate the refactoring of deprecated APIs.
 %% For component-based synthesis, real-world
 %% APIs can quickly lead to very large component libraries. %, making synthesis infeasible.
 %% For illustration, in our setting, indiscriminately adding all members
-%% found in \texttt{java.lang} would make synthesis infeasible. % (see experimental results in Section~\ref{sec:experimental-results}).
+%% found in \lstinline[breaklines=true]{java.lang} would make synthesis infeasible. % (see experimental results in Section~\ref{sec:experimental-results}).
 %% %
 %% Previous works have used type information to make components-based synthesis
 %% feasible in the presence of large component
@@ -720,7 +722,7 @@ a finite set of input examples $\{\vec{i_1} \cdots \vec{i_n}\}$ and we attempt t
 that is observationally equivalent to the original code for the given inputs.
 
 \paragraph{The symbolic engine}
-We construct the following \texttt{Synthesise} method, which
+We construct the following \lstinline[breaklines=true]{Synthesise} method, which
 takes the refactored code $P_2$ as input.
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -731,15 +733,15 @@ Synthesise ($P_2$) {
 }
 \end{lstlisting}
 
-This method consists of only one conditional saying that if $P_1$ and $P_2$ are equivalent on all given inputs $\vec{i_1}, \cdots, \vec{i_n}$, then \texttt{assert(false)} is reached.
+This method consists of only one conditional saying that if $P_1$ and $P_2$ are equivalent on all given inputs $\vec{i_1}, \cdots, \vec{i_n}$, then \lstinline[breaklines=true]{assert(false)} is reached.
 Given that this assertion always fails if reached, it means that the method is unsafe when $P_1$ and $P_2$ are equivalent on the given inputs.
-Thus, we can reduce the synthesis problem to the problem of checking the safety of \texttt{Synthesise}. If a safety checker manages to
-find an input $P_2$ for which the assertion fails (meaning that \texttt{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs. This $P_2$ is the {\em refactoring candidate}
+Thus, we can reduce the synthesis problem to the problem of checking the safety of \lstinline[breaklines=true]{Synthesise}. If a safety checker manages to
+find an input $P_2$ for which the assertion fails (meaning that \lstinline[breaklines=true]{Synthesise} is unsafe), then this $P_2$ must be equivalent to $P_1$ on the given inputs. This $P_2$ is the {\em refactoring candidate}
 that the synthesis phase is supposed to generate.
 
 We use an existing fuzz testing platform for Java, JQF~\cite{DBLP:conf/issta/PadhyeLS19},
-as the safety checker. JQF is designed to handle structured inputs, where inputs of type \texttt{T}
-are generated by a backing \texttt{Generator<T>}. JQF provides a library of
+as the safety checker. JQF is designed to handle structured inputs, where inputs of type \lstinline[breaklines=true]{T}
+are generated by a backing \lstinline[breaklines=true]{Generator<T>}. JQF provides a library of
 generators for basic types such as primitive values. We implement custom
 JQF generators based on a library of instructions built as explained in Section~\ref{sec:components-seeding},
 enabling JQF to construct $P_2$ by weaving together instructions from the library.
@@ -845,7 +847,7 @@ We are provided with a candidate
 refactoring $P_2$ and we must check whether there exists any input
 $\vec{i}$ for which the original code and the candidate
 refactoring are not observationally equivalent.  To do this, we build
-the following \texttt{Verify} method, which given some input
+the following \lstinline[breaklines=true]{Verify} method, which given some input
 $\vec{i}$, asserts that the two programs are equivalent for
 $\vec{i}$.
 
@@ -855,16 +857,16 @@ Verify($\vec{i}$) { assert(equivalent($P_1(\vec{i})$, $P_2(\vec{i})$)); }
 
 In other words, answering the question posed by the verification
 phase is reduced to checking the safety of this method: if
-\texttt{Verify} is safe (i.e., the assertion is not violated) for any
+\lstinline[breaklines=true]{Verify} is safe (i.e., the assertion is not violated) for any
 input~$\vec{i}$, then there is no input that can distinguish
 between the original code and the candidate refactoring (this
-is indeed a sound refactoring). However, if \texttt{Verify} is not safe,
+is indeed a sound refactoring). However, if \lstinline[breaklines=true]{Verify} is not safe,
 then we want to be able to obtain a {\em counter\-example input}
 $\vec{i_{cex}}$ for which the assertion fails.
 %
 This counterexample will be provided back to the synthesis phase and
 used to refine the current candidate refactoring. Again, we check the
-safety of \texttt{Verify} with JQF.
+safety of \lstinline[breaklines=true]{Verify} with JQF.
 %which means that we may fail to find a distinguishing input even if one
 %exists.
 
@@ -910,12 +912,12 @@ at the end of $P$. %% Thus, \var{liveVars(P_1)} gives us the
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
   // $P_1$:
-  int hour = date.getHours();
+  int hour=date.getHours();
 
   // $P_2$:
-  final Calendar calendar = Calendar.getInstance();
+  final Calendar calendar=Calendar.getInstance();
   calendar.setTime(date);
-  int hour = calendar.get(Calendar.HOUR_OF_DAY);
+  int hour=calendar.get(Calendar.HOUR_OF_DAY);
 \end{lstlisting}
 %
 Then, we have:
@@ -995,13 +997,13 @@ and check that the initial state of that class is the same for both blocks of co
 Equality refers to value equality, which we
 check by recursively following attribute chains until we reach
 primitive types.
-We generally do not consider existing \texttt{equals} methods
+We generally do not consider existing \lstinline[breaklines=true]{equals} methods
 unless (i)~the method was not written by the user (i.e.,  JCL classes),
-(ii)~the type inherits from \texttt{java.lang.Object}, (iii)~the class
-implements \texttt{java.lang.Comparable} and (iv)~the type declares an
-\texttt{equals} implementation.  Examples of classes that satisfy these
-strict requirements are \texttt{java.lang.Integer} or
-\texttt{java.util.Date}.  All other implementations of \texttt{equals} are
+(ii)~the type inherits from \lstinline[breaklines=true]{java.lang.Object}, (iii)~the class
+implements \lstinline[breaklines=true]{java.lang.Comparable} and (iv)~the type declares an
+\lstinline[breaklines=true]{equals} implementation.  Examples of classes that satisfy these
+strict requirements are \lstinline[breaklines=true]{java.lang.Integer} or
+\lstinline[breaklines=true]{java.util.Date}.  All other implementations of \lstinline[breaklines=true]{equals} are
 considered unreliable and ignored.
 
 %Alternatively, if there is an explicit \texttt{equals} implemented for a given type, then we use it.
@@ -1047,10 +1049,10 @@ intentionally missed one important aspect, namely aliasing.  To understand
 the problem let's look a the following example, which makes use of
 java.awt.Container, where a generic Abstract Window Toolkit (AWT) container
 object is a component that can contain other AWT components.  Method
-\texttt{preferredSize} used by the original code below returns the preferred
+\lstinline[breaklines=true]{preferredSize} used by the original code below returns the preferred
 size of the calling container. Method
-\texttt{preferredSize} is deprecated, and, instead, the refactored version
-uses \texttt{getPreferredSize}.
+\lstinline[breaklines=true]{preferredSize} is deprecated, and, instead, the refactored version
+uses \lstinline[breaklines=true]{getPreferredSize}.
 
 %, which denotes a slightly
 %modified version of the running example.
@@ -1058,12 +1060,12 @@ uses \texttt{getPreferredSize}.
 \begin{example}\label{ex:aliasing}
 ~\begin{lstlisting}[mathescape=true,showstringspaces=false]
   // $P_3$:
-  Dimension dim1 = container.preferredSize();
-  Dimension dim2 = container.preferredSize();    
+  Dimension dim1=container.preferredSize();
+  Dimension dim2=container.preferredSize();    
 
   // $P_4$:
-  Dimension dim1 = container.getpreferredSize();  
-  Dimension dim2 = dim1;
+  Dimension dim1=container.getpreferredSize();  
+  Dimension dim2=dim1;
 \end{lstlisting}
 %\end{example}
 
@@ -1091,11 +1093,11 @@ uses \texttt{getPreferredSize}.
 %% refactored code, as \var{P_4}.
 
 We note that, the original code above defines two variables \var{dim1} and
-\var{dim2}, each assigned an object of type \texttt{Dimension} returned by calling
+\var{dim2}, each assigned an object of type \lstinline[breaklines=true]{Dimension} returned by calling
 \var{container.preferredSize()}.
 Conversely, in the refactored code, \var{dim1} and \var{dim2} are aliases,
 i.e., they point to the same
-object of type \texttt{Dimension}.
+object of type \lstinline[breaklines=true]{Dimension}.
 
 The original and the refactored code are equivalent according to Definition~\ref{def:prog-equiv}.
 Let's next assume that the following code
@@ -1116,7 +1118,7 @@ In the original code, \var{dim1} will have width 1 and height 2, whereas in the 
 \var{dim1} will have width 2 and height 3. This is due to the fact that,
 in the refactored code, \var{dim1} and \var{dim2} are aliases. %% Then, when the object referenced by
 %% \var{hour1} was changed to refer to the date denoting ``30/10/2020'', this also affected \var{date2}.
-Thus, when \var{dim2} has its size set to (2,3), this also affects \texttt{dim1}.
+Thus, when \var{dim2} has its size set to (2,3), this also affects \lstinline[breaklines=true]{dim1}.
 %\var{P_3} and \var{P_4} are not equivalent for input \var{d}.
 \end{example}  
 
@@ -1227,11 +1229,11 @@ As mentioned in Section~\ref{sec:intro}, when building the corresponding compone
 %original code meaning that it must be created by the refactored code.
 %Consequently,
 we must find the necessary
-components that consume existing objects and create a \texttt{Calendar} object, so that we can call method \texttt{get} as suggested by the code hint.
+components that consume existing objects and create a \lstinline[breaklines=true]{Calendar} object, so that we can call method \lstinline[breaklines=true]{get} as suggested by the code hint.
 Besides adding components that allow us to generate the required objects, we also need components for setting their
 fields. In our example, we must call
-\texttt{calendar.setTime(date)} to set the calendar's date
-based on the existing \texttt{date} object.
+\lstinline[breaklines=true]{calendar.setTime(date)} to set the calendar's date
+based on the existing \lstinline[breaklines=true]{date} object.
 
 Adding too many components to the library will
 make the code generation task infeasible. In particular, we should
@@ -1314,8 +1316,8 @@ During the first phase, the initialisation, we add all the constants and instruc
 For our running example, the hints in Figure~\ref{ex:code-hints} %% after the
 %% \texttt{@code} tag.
 %% These hints
-instruct us to add method \texttt{``int get(int field)''} from class
-\texttt{Calendar} and constant \texttt{``Calendar.HOUR\_OF\_DAY''} to our library.
+instruct us to add method \lstinline[breaklines=true]{``int get(int field)''} from class
+\lstinline[breaklines=true]{Calendar} and constant \lstinline[breaklines=true]{``Calendar.HOUR\_OF\_DAY''} to our library.
 %For the core library, we actually fix the \texttt{``Calendar.HOUR\_OF\_DAY''} constant
 %in place, thus adding \texttt{``int get(Calendar.HOUR\_OF\_DAY)''}.
 As a side note, finding the right constants is a well known
@@ -1329,9 +1331,9 @@ are realisable as captured by Definition~\ref{def:realizable}, where
 $required\_types(method)$ refers to the types of the objects required to call $method$ (i.e., the types corresponding to its arguments and current object).
 %for $instr$ to be realisable.
 In our running example, $required\_types(\texttt{get}) = \{\texttt{int, Calendar}\}$
-given that, in order to call \texttt{get}, we must provide an argument of type \texttt{int} and a current object of type \texttt{Calendar}.
-Method \texttt{get} is not realisable as the library doesn't contain any generator for \texttt{Calendar}.
-Consequently, \texttt{Calendar} is added to $\mathit{target\_types}$, resulting in:
+given that, in order to call \lstinline[breaklines=true]{get}, we must provide an argument of type \lstinline[breaklines=true]{int} and a current object of type \lstinline[breaklines=true]{Calendar}.
+Method \lstinline[breaklines=true]{get} is not realisable as the library doesn't contain any generator for \lstinline[breaklines=true]{Calendar}.
+Consequently, \lstinline[breaklines=true]{Calendar} is added to $\mathit{target\_types}$, resulting in:
 $$\mathit{target\_types} = \{\texttt{int, Calendar}\}$$
 
 \begin{definition}[Realisable method]\label{def:realizable}
@@ -1348,9 +1350,9 @@ t \in \mathit{available\_types} \vee t~is~a~\mathit{primitive}~\mathit{type}$.
 %As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
 %interpret Javadoc hints. 
 One challenge in this phase is interpreting the
-\texttt{@code} blocks inside \texttt{@deprecated} sections, which 
+\lstinline[breaklines=true]{@code} blocks inside \lstinline[breaklines=true]{@deprecated} sections, which 
 we attempt to parse as Java expressions. In particular, we parse each hint as if it were invoked in the context of
-the method to refactor, such that imports or the implicit \texttt{this} argument
+the method to refactor, such that imports or the implicit \lstinline[breaklines=true]{this} argument
 are considered during parsing.
 
 %\todo{needs some rewriting?}
@@ -1361,15 +1363,15 @@ In order to address the challenge 3 that code hints are not always expressed as 
 we customised the
 GitHub Java parser
 to accept undeclared identifiers and type names
-as arguments. For instance, the Javadoc hint for deprecating \texttt{boolean inside(int X, int Y)}
+as arguments. For instance, the Javadoc hint for deprecating \lstinline[breaklines=true]{boolean inside(int X, int Y)}
 %suggests using 
 in Figure~\ref{ex:javadoc-hint} suggests using
-\texttt{contains(int, int)}, which would normally cause a parsing error as the \texttt{int} type
+\lstinline[breaklines=true]{contains(int, int)}, which would normally cause a parsing error as the \lstinline[breaklines=true]{int} type
 appears in the place of argument names. In our setting, we accept this hint as valid.
 There are still situations where our parser is too strict and fails to accept
 some of the code hints. Additionally, there are scenarios where, while the Javadoc
 does contain a useful code hint, it is not tagged accordingly with
-the \texttt{@code} tag. %% These situations are reflected in the experimental results
+the \lstinline[breaklines=true]{@code} tag. %% These situations are reflected in the experimental results
 %% in Section~\ref{sec:experimental-results}
 %% as some of the benchmarks for which we failed to identify a code hint.
 %We will improve our technique for collecting code hints as future work.
@@ -1414,20 +1416,20 @@ must add that type to $\mathit{available\_types}$.  Additionally, if the new
 generator consumes any objects from $\mathit{consumable\_objs}$, we must
 remove them from the set.
 
-For our running example, we must seed our component library with generators for \texttt{Calendar}.
+For our running example, we must seed our component library with generators for \lstinline[breaklines=true]{Calendar}.
 %
-We first scan all the public constructors of class \texttt{Calendar}
-and all the public methods from class \texttt{Calendar} that return an object of type \texttt{Calendar}. We find the following four options:
+We first scan all the public constructors of class \lstinline[breaklines=true]{Calendar}
+and all the public methods from class \lstinline[breaklines=true]{Calendar} that return an object of type \lstinline[breaklines=true]{Calendar}. We find the following four options:
 
 \begin{enumerate}
-  \item \texttt{static Calendar	getInstance()} -- creates a \texttt{Calendar} object using the default time zone and locale.
-  \item \texttt{static Calendar getInstance(Locale aLocale)} -- creates a \texttt{Calendar} object using the default time zone and specified locale.
-  \item \texttt{static Calendar	getInstance(TimeZone zone)} -- creates a \texttt{Calendar} object using the specified time zone and default locale.
-  \item \texttt{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- creates a \texttt{Calendar} object with the specified time zone and locale.
+  \item \lstinline[breaklines=true]{static Calendar	getInstance()} -- creates a \lstinline[breaklines=true]{Calendar} object using the default time zone and locale.
+  \item \lstinline[breaklines=true]{static Calendar getInstance(Locale aLocale)} -- creates a \lstinline[breaklines=true]{Calendar} object using the default time zone and specified locale.
+  \item \lstinline[breaklines=true]{static Calendar	getInstance(TimeZone zone)} -- creates a \lstinline[breaklines=true]{Calendar} object using the specified time zone and default locale.
+  \item \lstinline[breaklines=true]{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- creates a \lstinline[breaklines=true]{Calendar} object with the specified time zone and locale.
 \end{enumerate}
 
 Out of the four methods,
-only the first one is realisable. Conversely, in order to call the second method, we would need to generate an object of type \texttt{Locale},
+only the first one is realisable. Conversely, in order to call the second method, we would need to generate an object of type \lstinline[breaklines=true]{Locale},
 for which we don't have a corresponding component in the library.
 The last two methods are in a similar situation as the second. Thus, we only add the first method to the CodeHints-library.
 
@@ -1439,11 +1441,10 @@ variable.  Given our objective to generate objects for the
 $\mathit{target\_types}$ while consuming objects from
 $\mathit{consumable\_objs}$, we prioritise transformers that consume such
 objects.  For instance, for our running example there are 16 public
-transformers for the \texttt{Calendar} class.  However, instead of adding
+transformers for the \lstinline[breaklines=true]{Calendar} class.  However, instead of adding
 all of them to the CodeHints-library, we prioritise those that consume the
-\texttt{date} object.  There is only one such transformer \texttt{void
-setTime(Date date)}.  Once we added any new transformers to the library, we
-remove the consumed objects from \texttt{consumable\_obj}.
+\lstinline[breaklines=true]{date} object.  There is only one such transformer \lstinline[breaklines=true]{void setTime(Date date)}.  Once we added any new transformers to the library, we
+remove the consumed objects from \lstinline[breaklines=true]{consumable\_obj}.
 
 Notably, all the components that
 we add to the library must be accessible from the current location.
@@ -1507,12 +1508,12 @@ where we attempt to add generators and transformers for the $target\_types$ to t
 
 %Given that both the CodeHints-library and the Types-library consider the output of the
 %original code as a target type, we expect some overlap between the two libraries.
-Compared to the CodeHints-library, the seeding process for the Types-library may end up missing critical types provided by the Javadoc code hints. For instance, in our running example, the \texttt{Calendar} class is only mentioned by the
+Compared to the CodeHints-library, the seeding process for the Types-library may end up missing critical types provided by the Javadoc code hints. For instance, in our running example, the \lstinline[breaklines=true]{Calendar} class is only mentioned by the
 code hints and would not be included in the seeding of the Types-library.
 One possibility for adding
-\texttt{Calendar} to the target types without considering
+\lstinline[breaklines=true]{Calendar} to the target types without considering
 the Javadoc hints, would be to add all the classes from the
-\texttt{java.util} package, which contains \texttt{Date}. However, doing so would result
+\lstinline[breaklines=true]{java.util} package, which contains \lstinline[breaklines=true]{Date}. However, doing so would result
 in a very large component library, most likely outside the capabilities of existing
 synthesis techniques.
 
@@ -1617,7 +1618,7 @@ Classes that do not maintain a static state are loaded in a shared
 parent class loader to improve performance.
 
 The OpenJDK Java virtual machine implementation does not allow us to load
-classes contained in the \texttt{java.lang} package in such an isolated class
+classes contained in the \lstinline[breaklines=true]{java.lang} package in such an isolated class
 loader. For such classes we cannot apply refactorings that depend on static
 fields, as they cannot be reset and will retain the state of previous
 executions. Instead of observing the effect of one isolated refactoring
@@ -1626,7 +1627,7 @@ candidate, we would observe their accumulated effect, which would be incorrect.
 %incompleteness and unsoundness depending on the context.
 For the scope of our
 experiments this did not pose a problem, since most of the affected classes in
-the \texttt{java.lang} package do not maintain a static state, and the ones who do
+the \lstinline[breaklines=true]{java.lang} package do not maintain a static state, and the ones who do
 were irrelevant to our refactorings.
 
 %Everything that is part of our comparison is in the isolated class loader.
@@ -1738,7 +1739,7 @@ Then, we enforce aliasing preservation (condition (4) in Definition~\ref{def:pro
 by checking that, for all variables defined by both the original and the refactored code,
 the objects they reference have the same symbolic id.
 
-For illustration, in the original code in Example~\ref{ex:aliasing}, the object of type \texttt{Dimension} referenced by variable \var{dim1}
+For illustration, in the original code in Example~\ref{ex:aliasing}, the object of type \lstinline[breaklines=true]{Dimension} referenced by variable \var{dim1}
 is assigned symbolic value \var{s_1}, whereas the object referenced by \var{dim2} is assigned symbolic value \var{s_2}.
 In a similar manner, the object referenced by both \var{dim1} and \var{dim2} in the refactored code is assigned value \var{s_1}.
 Then, the aliasing check fails as, in the original code, the object referenced by \var{dim2} has symbolic value \var{s_2},
@@ -2515,7 +2516,7 @@ form of semantic information.
 %With respect to automated program refactoring,
 %
 Khatchadourian et al.~use a type inference algorithm to automatically
-transform legacy Java code (pre Java 1.5) to use the \texttt{enum}
+transform legacy Java code (pre Java 1.5) to use the \lstinline[breaklines=true]{enum}
 construct~\cite{sawin}.
 %
 %\cite{sawin} by Sawin et al.,
@@ -2773,7 +2774,7 @@ it fails equivalence checking and hence misses this refactoring.
 ====
 Some of the missed refactorings were caused by the fact that the return
 value was dependent on an external system state which changed frequently between
-invocations (e.g. \texttt{getFreePhysicalMemorySize} in \texttt{OperatingSystemMXBean}),
+invocations (e.g. \lstinline[breaklines=true]{getFreePhysicalMemorySize} in \lstinline[breaklines=true]{OperatingSystemMXBean}),
 and thus appeared nondeterministic to our engine.
 
 =====
