@@ -2120,8 +2120,11 @@ our equivalence checker.
 \subsection{Research questions}
 
 {\bf (RQ1) Can the refactoring of deprecated Java APIs be automated?}
-Yes, it can be easily automated if code hints are added to the JDK. Without code hints, Java's complexity make this
-refactoring very hard for both for the symbolic and neural engines.
+%
+Yes, it can be easily automated if code hints are added to the JDK,
+evidenced by the 83\% success rate for those benchmarks.  Without code
+hints, Java's complexity make this refactoring very hard for both for the
+symbolic and neural engines.
 
 {\bf (RQ2) Do code hints help the generation of refactorings?}
 The performance of \tool, \llma and \llmb improves considerably when code hints are present.
