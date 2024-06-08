@@ -119,6 +119,7 @@
 \newcommand{\consumableobjs}{\mbox{$\mathit{consumable\_objs}$}\xspace}
 \newcommand{\availabletypes}{\mbox{$\mathit{available\_types}$}\xspace}
 \newcommand{\targettypes}{\mbox{$\mathit{target\_types}$}\xspace}
+\newcommand{\requiredtypes}{\mbox{$\mathit{required\_types}$}\xspace}
 
 \begin{document}
 
@@ -1414,20 +1415,22 @@ public boolean inside(int X, int Y) {
 
 
 
-\paragraph{{\bf Phase 2: Add generators for $target\_types$}}
+\paragraph{{\bf Phase 2: Add generators for \targettypes}}
 
 By generators we refer to constructors and any other methods returning
 objects of that particular type.  In the algorithm in
 Figure~\ref{alg:seeding-core}, once we added a generator for a new type, we
-must add that type to $\mathit{available\_types}$.  Additionally, if the new
-generator consumes any objects from $\mathit{consumable\_objs}$, we must
-remove them from the set.
+must add that type to \availabletypes.  Additionally, if the new generator
+consumes any objects from \consumableobjs, we must remove them from the set.
 
-For our running example, we must seed our component library with generators for \lstinline[breaklines=true]{Calendar}.
+For our running example, we must seed our component library with generators
+for \lstinline[breaklines=true]{Calendar}.
 %
-We first scan all the public constructors of class \lstinline[breaklines=true]{Calendar}
-and all the public methods from class \lstinline[breaklines=true]{Calendar} that return an object of type \lstinline[breaklines=true]{Calendar}. We find the following four options:
-
+We first scan all the public constructors of class
+\lstinline[breaklines=true]{Calendar} and all the public methods from class
+\lstinline[breaklines=true]{Calendar} that return an object of type
+\lstinline[breaklines=true]{Calendar}.  We find the following four options:
+%
 \begin{enumerate}
   \item \lstinline[breaklines=true]{static Calendar	getInstance()} -- creates a \lstinline[breaklines=true]{Calendar} object using the default time zone and locale.
   \item \lstinline[breaklines=true]{static Calendar getInstance(Locale aLocale)} -- creates a \lstinline[breaklines=true]{Calendar} object using the default time zone and specified locale.
@@ -1435,28 +1438,28 @@ and all the public methods from class \lstinline[breaklines=true]{Calendar} that
   \item \lstinline[breaklines=true]{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- creates a \lstinline[breaklines=true]{Calendar} object with the specified time zone and locale.
 \end{enumerate}
 
-Out of the four methods,
-only the first one is realisable. Conversely, in order to call the second method, we would need to generate an object of type \lstinline[breaklines=true]{Locale},
-for which we don't have a corresponding component in the library.
-The last two methods are in a similar situation as the second. Thus, we only add the first method to the CodeHints-library.
+Out of the four methods, only the first one is realisable.  Conversely, in
+order to call the second method, we would need to generate an object of type
+\lstinline[breaklines=true]{Locale}, for which we don't have a corresponding
+component in the library.  The last two methods are in a similar situation
+as the second.  Thus, we only add the first method to the CodeHints-library.
 
-\paragraph{{\bf Phase 3: Add transformers for $target\_types$}}
+\paragraph{{\bf Phase 3: Add transformers for \targettypes}}
 %
 The third and last phase adds  transformers for the target types.  By
 transformers we refer to methods that modify the value of an instance
-variable.  Given our objective to generate objects for the
-$\mathit{target\_types}$ while consuming objects from
-$\mathit{consumable\_objs}$, we prioritise transformers that consume such
-objects.  For instance, for our running example there are 16 public
-transformers for the \lstinline[breaklines=true]{Calendar} class.  However, instead of adding
-all of them to the CodeHints-library, we prioritise those that consume the
-\lstinline[breaklines=true]{date} object.  There is only one such
-transformer \lstinline[breaklines=true]{void setTime(Date date)}.  Once we
-added any new transformers to the library, we remove the consumed objects
-from $\mathit{consumable\_objs}$.
+variable.  Given our objective to generate objects for the \targettypes
+while consuming objects from \consumableobjs, we prioritise transformers
+that consume such objects.  For instance, for our running example there are
+16 public transformers for the \lstinline[breaklines=true]{Calendar} class. 
+However, instead of adding all of them to the CodeHints-library, we
+prioritise those that consume the \lstinline[breaklines=true]{date} object. 
+There is only one such transformer \lstinline[breaklines=true]{void setTime(Date date)}.
+Once we added any new transformers to the library, we
+remove the consumed objects from \consumableobjs.
 
-Notably, all the components that
-we add to the library must be accessible from the current location.
+Notably, all the components that we add to the library must be accessible
+from the current location.
 
 \begin{figure}
 \removelatexerror% Nullify \@latex@error
@@ -1467,20 +1470,21 @@ we add to the library must be accessible from the current location.
 // {\bf Phase 1: Initialise}\\
 Add constants and instructions from the code hints to the library\;
 \For{each unrealisable instruction $i$ in library}{
-  $target\_types$ = $target\_types \cup required\_types(i)$\;
+  $\targettypes = \targettypes \cup \requiredtypes(i)$\;
 }
 $\newline$
-// {\bf Phase 2: Add generators for $target\_types$}\\
-\For{each $t \in target\_types$ for which there is no generator}{
+// {\bf Phase 2: Add generators for \targettypes}\\
+\For{each $t \in \targettypes$ for which there is no generator}{
   Add realisable generators for $t$ to library\;
-  $available\_types = available\_types \cup \{t\}$\;
-  Remove consumed objs from $\mathit{consumable\_objs}$\;
+  $\availabletypes = \availabletypes \cup \{t\}$\;
+  Remove consumed objs from \consumableobjs\;
 }
 $\newline$
-// {\bf Phase 3: Add transformers for $target\_types$}\\
-\While{$consumable\_obj\neq\emptyset$}{
-Add realisable transformers to the library for types in $target\_types$ that consume objects from $consumable\_objs$\;
-Remove consumed objs from $consumable\_objs$\;
+// {\bf Phase 3: Add transformers for \targettypes}\\
+\While{$\consumableobjs\neq\emptyset$}{
+Add realisable transformers to the library for types in
+\targettypes that consume objects from \consumableobjs\;
+Remove consumed objs from \consumableobjs\;
 }
 \end{algorithm}
  \caption{Seeding algorithm for the CodeHints-library}
@@ -1488,45 +1492,55 @@ Remove consumed objs from $consumable\_objs$\;
 \end{figure}
 
 It may be the case that there is no realisable generator for a target type,
-or no transformers for the $\mathit{target\_types}$ that can consume all the
-$\mathit{consumable\_objs}$.  When we finish exploring all the available
+or no transformers for the \targettypes that can consume all the
+\consumableobjs.  When we finish exploring all the available
 methods, we exit the corresponding loops in phases~2 and~3.  As a
 consequence, the synthesiser may fail to generate a valid refactoring from
 the CodeHints-library.
 %
 %% For such a situation, we extend the component library as explained in Section~\ref{sec:extend-library}.
-A possible future direction is allowing unrealisable generators and transformers to be added to the library and iterating phases 2 and 3 a given number of times (potentially until reaching a fixed point).
+%
+A possible future direction is allowing unrealisable generators and
+transformers to be added to the library and iterating phases 2 and 3 a given
+number of times (potentially until reaching a fixed point).
+%
 %% iterate phase 2 and 3 until fixed point to 
 
 \subsection{Types-library} \label{sec:extend-library}
 
-For cases when code hints are not provided, in addition to the CodeHints-library, we also provide a component library that is populated based only on the type signature
-of the deprecated method. Next, we describe how this Types-library is being built.
+For cases when code hints are not provided, in addition to the
+CodeHints-library, we also provide a component library that is populated
+based only on the type signature of the deprecated method.  Next, we
+describe how this Types-library is being built.
 
 For the CodeHints-library, the Javadoc code hints guidance results in the code hints being
-used to collect the $target\_types$ set during the initialisation phase.
+used to collect the \targettypes set during the initialisation phase.
 If we don't have access to code hints and we are seeding solely
-based on types, we start with the $target\_types$ set containing
+based on types, we start with the \targettypes set containing
 %the class where the original code resides, as well as
 the types %of the inputs and outputs
 of the outputs of the original code. %(essentially using the signature of the original code).
 Phases 2 and 3 of the seeding algorithm are the same as those in Figure~\ref{alg:seeding-core},
-where we attempt to add generators and transformers for the $target\_types$ to the library.
+where we attempt to add generators and transformers for the \targettypes to the library.
 
 %For our running example, we would have $target\_types = \{\}$
 
 %Given that both the CodeHints-library and the Types-library consider the output of the
 %original code as a target type, we expect some overlap between the two libraries.
-Compared to the CodeHints-library, the seeding process for the Types-library may end up missing critical types provided by the Javadoc code hints. For instance, in our running example, the \lstinline[breaklines=true]{Calendar} class is only mentioned by the
-code hints and would not be included in the seeding of the Types-library.
-One possibility for adding
+%
+Compared to the CodeHints-library, the seeding process for the Types-library
+may end up missing critical types provided by the Javadoc code hints.  For
+instance, in our running example, the \lstinline[breaklines=true]{Calendar}
+class is only mentioned by the code hints and would not be included in the
+seeding of the Types-library.  One possibility for adding
 \lstinline[breaklines=true]{Calendar} to the target types without considering
 the Javadoc hints, would be to add all the classes from the
-\lstinline[breaklines=true]{java.util} package, which contains \lstinline[breaklines=true]{Date}. However, doing so would result
-in a very large component library, most likely outside the capabilities of existing
+\lstinline[breaklines=true]{java.util} package, which contains
+\lstinline[breaklines=true]{Date}.  However, doing so would result in a very
+large component library, most likely outside the capabilities of existing
 synthesis techniques.
 
-  \section{Design and implementation choices} \label{sec:implementation}
+\section{Design and implementation choices} \label{sec:implementation}
 
   %In the previous sections we presented our technique from a formal point of view.
   %Conversely, in this section we discuss details related to our implementation choices.  
