@@ -271,11 +271,12 @@ that the developers are discouraged from using in the future as
 they've been superseded and may cease to exist.
 However, removing them directly would break the backward compatibility
 of the project's API.  Instead, such elements can be tagged with the
-\texttt{@Deprecated} annotation.  %% In general, when deprecating a
+\texttt{@Deprecated} annotation in order to ease the transition.
+
+%% In general, when deprecating a
 %% field/method/class, the \texttt{@deprecated} Javadoc tag is used in the
 %% comment section to inform the developer the reason of deprecation and
 %% what can be used in place.
-
 
 The transformation of existing code such that it doesn't use
 deprecated APIs is not always straightforward, as illustrated in
