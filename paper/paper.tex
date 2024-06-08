@@ -2243,15 +2243,23 @@ introduction.
 \section{Threats to validity}
 
 \paragraph{Selection of benchmarks}
-All our benchmarks are Java methods deprecated in Oracle JDK 15. %% Also,
+All our benchmarks are Java methods deprecated in the Oracle JDK 15.
+The JDK is extremely well known to Java developers, and a lot
+of Java application code evolves similarly.
+%
+ %% Also,
 %% as explained at the beginning of Section~\ref{sec:experimental-results}, we excluded 
 %% certain methods from our experimental evaluation. 
-Thus, our claims may not extend to other scenarios or other programming languages.
+However, our claims may not extend to other programming languages.
 
 %\paragraph{Not handled}
-\paragraph{Quality of refactorings} Refactorings need to generate code that
-remains understandable and maintainable. It is difficult to assess how well our technique does with respect to
-this subjective goal.  %% In our experimental evaluation, we define acceptable
+
+\paragraph{Quality of refactorings} Refactorings need to result in code that
+remains understandable and maintainable.  It is difficult to assess
+objectively how well our technique does with respect to this subjective
+goal.
+%
+%% In our experimental evaluation, we define acceptable
 %% solutions not just using the heap equivalence criterion, but also regular
 %% expressions modelling what we consider sensible transformations after revewing
 %% the deprecated method's JavaDoc.  These patterns are subjective in nature and
@@ -2261,19 +2269,27 @@ We manually inspected the refactorings obtained with
 our tool and found them to represent sensible transformations.
 
 \paragraph{Efficiency and scalability of the program synthesiser}
-We apply program synthesis and fuzzing. 
-This implies that our broader claim is threatened by scalability limits of these techniques.
-While for the majority of our experiments the synthesiser was able to find a solution, there were a few cases
-where it timed out, either because it could not generate a candidate, or it could not verify it.
-Different sized component libraries may help mitigate this effect.
+%
+We apply program synthesis and fuzzing.  This implies that our broader claim
+is threatened by scalability limits of these techniques.  While for the
+majority of our experiments the synthesiser was able to find a solution,
+there were a few cases where it timed out, either because it could not
+generate a candidate, or it could not verify it.  Component libraries with a
+diverse range of component sizes may help mitigate this effect.
 
 \paragraph{Prompt engineering for Claude}
-In our current experiments, we only used prompt engineering for Claude.
-While we made best efforts to follow the official prompt engineering guidelines\footnote{https://docs.anthropic.com/en/docs/prompt-engineering}, which presents prompt design techniques to improve model performance, there might be better ways of composing it.
+%
+In our current experiments, we engineered prompts for the Claude LLMs. 
+While we made best efforts to follow the official prompt engineering
+guidelines\footnote{https://docs.anthropic.com/en/docs/prompt-engineering},
+which presents prompt design techniques to improve model performance, there
+might be better ways of composing it.  This might invalidate our claim that
+the symbolic and neural techniques deliver roughly the same performance.
+
+%
 %as future work, we plan on alos fine-tuning Claude 2.1 and Claude 3.
 % While we made efforts to provide a comprehensive prompt (e.g. we took inspiration from \cite{white2023chatgpt}, which
 % presents prompt design techniques for software engineering in the form of patterns), as future work, we plan on also fine-tuning GPT-4 Turbo. 
-
 
 %% \section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
@@ -2351,9 +2367,7 @@ While we made best efforts to follow the official prompt engineering guidelines\
 %%   infer a precondition over the domain of these three variables. For \texttt{year}, this should tell us that the expected year must be positive.
 %%   Consequently, the verifier won't attempt to find counterexamples involving negative years, thus eliminating the counterexample above.
 
-
-  
-\section{Conclusions and related Works}
+\section{Conclusions and Related Works}
 
 In this paper, we presented and contrasted a symbolic and a neural automatic program refactoring
 techniques that eliminate uses of deprecated methods. After implementing and testing them, we drew
