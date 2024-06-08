@@ -1331,11 +1331,15 @@ $required\_types(method)$ refers to the types of the objects required to call $m
 In our running example, $required\_types(\texttt{get}) = \{\texttt{int, Calendar}\}$
 given that, in order to call \texttt{get}, we must provide an argument of type \texttt{int} and a current object of type \texttt{Calendar}.
 Method \texttt{get} is not realisable as the library doesn't contain any generator for \texttt{Calendar}.
-Consequently, \texttt{Calendar} is added to $target\_types$, resulting in:
-$$target\_types = \{\texttt{int, Calendar}\}$$
+Consequently, \texttt{Calendar} is added to $\mathit{target\_types}$, resulting in:
+$$\mathit{target\_types} = \{\texttt{int, Calendar}\}$$
 
 \begin{definition}[Realisable method]\label{def:realizable}
-Method \var{i} is {\em realisable} iff $\forall t \in required\_types(i). t \in available\_types \vee t~is~a~primitive~type$.
+%
+Method \var{i} is {\em realisable} iff $\forall t \in
+\mathit{required\_types}(i).
+t \in \mathit{available\_types} \vee t~is~a~\mathit{primitive}~\mathit{type}$.
+%
 \end{definition}
 
 
