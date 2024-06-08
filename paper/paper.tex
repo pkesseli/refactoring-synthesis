@@ -344,8 +344,8 @@ replacing the deprecated \texttt{getHours} by
 %It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
 Using this code hint is not straightforward.
 Although it may seem as if
-method \texttt{get} is static allowing an immediate call,
-it is actually an instance method, requiring us to have an object of
+method \texttt{get} is static, allowing an immediate call,
+it is actually an instance method, and requires an object of
 class \texttt{Calendar}. However, no such object is available in the
 original code meaning that it must be created by the refactored code.
 Consequently, we must find the necessary
