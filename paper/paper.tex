@@ -192,18 +192,24 @@
   marked as deprecated in a bid to discourage their future
   use. When done manually, refactoring legacy code in order to eliminate uses of
   deprecated APIs is an error-prone and time-consuming process. In
-  this paper, we built a symbolic and a neural approach
+  this paper, we are interested in the automatic generation of
+refactorings for deprecated Java APIs, with a focus on the benefits of Javadoc code hints.
+For this purpose,  we build a symbolic and a neural approach
   for the automatic refactoring of deprecated APIs.
   The former is based on type-directed and component-based
   program synthesis, whereas the latter uses LLMs.
 We implemented our refactoring engines and used them to refactor the deprecated methods from the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
-Given the recent success of LLMs for code generation tasks, our goal was investigating whether, for specialised problems
-such as the automatic refactoring of deprecated APIs, symbolic methods are still useful, or whether they were completely overtaken by LLM-based ones.
-When comparing the abilities of the two engines, our results show 
-that the symbolic and neural engines complement each other,
-with the symbolic engine still winning for a certain category
-of benchmarks, at much lower computational cost.
+Our experiments show that code hints are critical for the per-
+formance of both the symbolic and the neural engines: adding more code hints to Javadoc can
+substantially help automate the refactoring of deprecated
+APIs.
+%Given the recent success of LLMs for code generation tasks, our goal was investigating whether, for specialised problems
+%such as the automatic refactoring of deprecated APIs, symbolic methods are still useful, or whether they were completely overtaken by LLM-based ones.
+%When comparing the abilities of the two engines, our results show 
+%that the symbolic and neural engines complement each other,
+%with the symbolic engine still winning for a certain category
+%of benchmarks, at much lower computational cost.
   
   %propose an automated program refactoring technique
   %that eliminates such uses of deprecated APIs by
@@ -378,7 +384,7 @@ we build two code generation engines, namely a symbolic and a neural one.
 %In an attempt to make them follow the same general structure, we base them both on the CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, which 
 %iteratively improves a candidate refactoring until it obeys a given specification. In our case, the specification expresses the fact that the original and
 %the refactored code must behave indistinguishably.
-
+%
 For the symbolic engine, we make use of component-based synthesis~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}
 and type-directed synthesis~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Essentially, we use types and code hints to populate
 a component library (i.e., a library of instructions), such that these components are then weaved together to generate the desired program.
