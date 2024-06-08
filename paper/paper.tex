@@ -129,7 +129,8 @@
                                   % (paid open-access papers, 
                                   % short abstracts)
 
-\title{Symbolic vs. Neural Refactoring of Deprecated APIs} % guided by types and code hints}
+\title{Quantifying the benefits of code hints in refactoring deprecated Java APIs }
+%\title{Symbolic vs. Neural Refactoring of Deprecated APIs} % guided by types and code hints}
 %\subtitle{Subtitle Text, if any}
 % double-blind submission
 % single-blind only for Technical Research: http://icse2017.gatech.edu/technical-research-cfp
@@ -315,25 +316,22 @@ string encoding scheme, which is very difficult for automatic code generation te
 
 Besides general challenges related to automatic code generation, there are other language-specific ones. For instance, the code to be refactored might be using abstract classes and abstract methods, and it may not be obvious how to subclass from the code to be refactored (e.g.~\lstinline[breaklines=true]{engineGetParameter} in \lstinline[breaklines=true]{java.security.SignatureSpi}); it might call methods that, while not abstract, need to be overridden by subclasses (e.g., method \lstinline[breaklines=true]{layout} in class \lstinline[breaklines=true]{java.awt.Component} has an empty body); or it might be calling native methods whose implementation is written in another programming language such as C/C++ (e.g., \lstinline[breaklines=true]{weakCompareAndSet} in \lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). In order to even understand the behaviour of the code to be refactored, one needs to know how to subclass the abstract classes, override methods, and to understand the behaviour of code written in other languages.
 
-In this paper, we are interested in the automatic generation of refactorings for deprecated APIs. In particular, we focus on the refactoring of deprecated methods, but the same
-techniques can be applied to deprecated fields and classes. In recent years, Large Language Models (LLMs) have gained a lot of popularity as they have been successfully applied to a wide range of tasks including code generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}. While they may seem like the panacea for all code generation problems, they come at a high computational cost as their  the efficacy hinges heavily on the parameter count. The other option when considering code generation are symbolic methods, which make use of hard coded rules~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/Gulwani11,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, the question we are trying to answer in the current paper is: for specialised problems, such as the automatic refactoring of deprecated APIs, are symbolic methods still useful, or were they completely overtaken by LLM-based ones? Answering this question is particularly important given the rise of architectures such as  Mixture-of-Experts~\cite{DBLP:conf/kdd/MaZYCHC18,DBLP:conf/iclr/Zuo00KHZGZ22,DBLP:conf/ppopp/HeZAWLSL22}, which adopt a conditional computation paradigm by only selecting parts of an ensemble of experts, based on the input data. In the context of such an architecture, one needs to consider the best option for each expert, e.g. the one responsible for the current deprecated refactoring problem.
-
+In this paper, we are interested in the automatic generation of refactorings for deprecated APIs (while we focus on the refactoring of deprecated methods, the same
+techniques can be applied to deprecated fields and classes). 
 %To answer this question, we design both a symbolic and a neural approach based on Large Language Models (LLMs). More than simply generating refactorings for deprecated APIs, given the recent focus on LLM based code generation, we are interested in investigating whether, for specialised problems such as the current one, symbolic approaches can still be of use at much lower computational costs compared to neural ones. An answer to this question is useful especially given that the efficacy of LLMs hinges heavily on their parameter count. Notably, as an answer to this problem, architectures such as
 %Mixture-of-Experts (MoE), which adopts a conditional computation paradigm by only selecting parts of an ensemble, referred to as experts, and activating them depending on the data at hand. In the context of such an architecture, one needs to consider what should play as an expert for the current deprecated refactoring problem.
+In particular, we are interested in investigating the benefits of Javadoc code hints when automating such a refactoring.
 
-In order to conduct our investigation, let us first  consider the information available when trying to find a refactoring:
-%When attempting to come up with a refactoring for deprecated APIs, one has access to the following information:
-%The information that we have about the current problem is that:
+%Let us first  consider the information available when trying to find a refactoring:
 
-{\bf (1)} The original code and the refactoring must have {\em the same behaviour}, i.e., 
-the generated refactoring needs to be semantically equivalent to the original.
-%To ensure this for the current setting, we come up with an equivalence check, which takes into consideration both the state of the stack and the heap (including the static fields).
-One implication is that the orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e., the inputs), as well as the types of the objects that need to be produced (i.e., the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+%{\bf (1)} The original code and the refactoring must have {\em the same behaviour}, i.e., 
+%the generated refactoring needs to be semantically equivalent to the original.
+%One implication is that the orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e., the inputs), as well as the types of the objects that need to be produced (i.e., the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
 
-%{\em type information} about the code to be generated. In particular, this consists of the types of the objects to be consumed (i.e. the inputs), as well as the types of the objects that need to be produced (i.e. the outputs). As mentioned above, types are commonly used to guide  program synthesis. In the example in Figure~\ref{ex:deprecated-method-other}, the \texttt{date} object can be seen as an input with type \texttt{Date}, whereas \texttt{hour} of type \texttt{int} is considered an output.
+%{\bf (2)} The Javadoc comments may contain {\em code hints}.
 
-{\bf (2)} The Javadoc comments may contain {\em code hints}. In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
-comment section to inform the developer of the reason for deprecation and what can be used in its place. 
+In general, when deprecating a field/method/class, the \texttt{@Deprecated} Javadoc tag is used in the
+comment section to inform the developer of the reason for deprecation and, sometimes, what can be used in its place. We call such a suggestion a {\em code hint}.
 These hints don't provide the whole refactoring, but can be used to guide the search process.
 %
 For illustration, let's look at our running example in Figure~\ref{ex:deprecated-method-other}. The source code for the \texttt{getHours} method in class \texttt{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests replacing the deprecated \texttt{getHours}
@@ -375,31 +373,36 @@ based on the existing \texttt{date} object.
 
 %{\bf Challenge 1.}
 
+In order to investigate the benefits of code hints when automating the deprecated refactoring,
+we build two code generation engines, namely a symbolic and a neural one.
+%In an attempt to make them follow the same general structure, we base them both on the CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, which 
+%iteratively improves a candidate refactoring until it obeys a given specification. In our case, the specification expresses the fact that the original and
+%the refactored code must behave indistinguishably.
 
-As part of our investigation, we build two code generation engines, namely a symbolic and a neural one.
-In an attempt to make them follow the same general structure, we base them both on the CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, which 
-iteratively improves a candidate refactoring until it obeys a given specification. In our case, the specification expresses the fact that the original and
-the refactored code must behave indistinguishably.
-
-For the symbolic engine, the candidate refactorings are built using component-based synthesis~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}
+For the symbolic engine, we make use of component-based synthesis~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}
 and type-directed synthesis~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Essentially, we use types and code hints to populate
 a component library (i.e., a library of instructions), such that these components are then weaved together to generate the desired program.
-For the neural engine, we generate candidate refactorings by querying an LLM -- we used Claude 2.1 and Claude 3~\cite{claude}.
+Given the recent success of Large Language Models (LLMs) for code generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}, the neural approach 
+generates candidate refactorings by querying an LLM -- we used Claude 2.1 and Claude 3~\cite{claude}.
+
+%In recent years, Large Language Models (LLMs) have gained a lot of popularity as they have been successfully applied to a wide range of tasks including code generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}. While they may seem like the panacea for all code generation problems, they come at a high computational cost as their  the efficacy hinges heavily on the parameter count. The other option when considering code generation are symbolic methods, which make use of hard coded rules~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/Gulwani11,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, the question we are trying to answer in the current paper is: for specialised problems, such as the automatic refactoring of deprecated APIs, are symbolic methods still useful, or were they completely overtaken by LLM-based ones? Answering this question is particularly important given the rise of architectures such as  Mixture-of-Experts~\cite{DBLP:conf/kdd/MaZYCHC18,DBLP:conf/iclr/Zuo00KHZGZ22,DBLP:conf/ppopp/HeZAWLSL22}, which adopt a conditional computation paradigm by only selecting parts of an ensemble of experts, based on the input data. In the context of such an architecture, one needs to consider the best option for each expert, e.g. the one responsible for the current deprecated refactoring problem.
+
+Our experiments show that code hints are critical for the performance of both the symbolic and the neural engines: when code hints are given, both engines perform well, making the automation of deprecated APIs refactorings feasible. Without code hints, the refactoring becomes much harder for both engines, such that the majority of benchmarks without code hints are failing. Thus, our conclusion is that, in order to facilitate
+the automation of the refactoring of deprecated APIs, code hints should be added to all deprecated methods that are expected to have a replacement.
+
+As a side observation, when looking at the comparison of the symbolic and the neural approaches, code hints help the symbolic approach to efficiently prune the solution space, resulting in a better performance than the neural one at a lower monetary cost. We believe this is important to note, especially as LLMs are often seen as a panacea for all tasks, including code generation. This work shows that symbolic methods can still be effective in specialised settings, where efficient pruning of the solution space is possible. 
 
 
-Our experiments show that, if the Javadoc contains code hints, thus allowing us to build an effective instruction library (as shown in Section~\ref{sec:components-seeding}), then the symbolic
-approach is preferable to the neural one.
-%(at much lower computational cost).
-In the absence of such code hints, when we can only use types to guide the code generation,
-both approaches perform worse, with the neural one
-slightly better. This makes sense as a general strategy: whenever there is enough information about
-the solution to effectively prune the solution space (in our case, when code hints are present), symbolic code generation can work effectively, at low computational cost.
-Otherwise, LLMs may have a better chance.
-%For the current problem, while, traditionally, types have been successfully used in generating functional programs (where the absence of side-effects
-%enables types to provide a comprehensive description of a program's behaviour~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}),
-%they are not as useful for Java programs. 
-Thus, one can envision a combined strategy, where symbolic and neural reasoning work together to
-provide the best results for a lower budget than a neural approach alone would require.
+
+%Our experiments show that, if the Javadoc contains code hints, thus allowing us to build an effective instruction library (as shown in Section~\ref{sec:components-seeding}), then the symbolic
+%approach is preferable to the neural one.
+%In the absence of such code hints, when we can only use types to guide the code generation,
+%both approaches perform worse, with the neural one
+%slightly better. This makes sense as a general strategy: whenever there is enough information about
+%the solution to effectively prune the solution space (in our case, when code hints are present), symbolic code generation can work effectively, at low computational cost.
+%Otherwise, LLMs may have a better chance.
+%Thus, one can envision a combined strategy, where symbolic and neural reasoning work together to
+%provide the best results for a lower budget than a neural approach alone would require.
 
 
 %While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach 
@@ -596,10 +599,15 @@ provide the best results for a lower budget than a neural approach alone would r
 \item We implemented our techniques and used them to refactor deprecated methods from the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 
-\item We investigated how the symbolic refactoring technique compares against the neural one. %In particular, we want to find out whether there is still space for specialised techniques
+\item We investigated the benefits of code hints for both the symbolic and neural approach. %In particular, we want to find out whether there is still space for specialised techniques
   %such as ours in a GPT-4 Turbo era.
   %\todo{come back to this after investigating experimental results}
-  Our results highlight the fact that the symbolic and neural methods can be used in a complementary fashion, which reduces the computational cost.
+  Our results show that code hints are critical for the performance of both the symbolic and the neural engines: adding more code hints to Javadoc
+can substantially help automate the refactoring of deprecated APIs.
+  %when code
+%hints are given, both engines perform well, making the automa-
+%tion of deprecated APIs refactorings feasible
+ % Our results highlight the fact that the symbolic and neural methods can be used in a complementary fashion, which reduces the computational cost.
 %symbolic code generation (which require much less compute) to outperform general-purpose LLMs in specialised settings, at a lower computational cost.
 
 
@@ -665,7 +673,7 @@ JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 
 %As it will be explained later in the section, for the neural engine, the CEGIS architecture is not followed exactly by the synthesis phase.
 In this section, we describe the two code generation engines.
-For both approaches, we make use of a CEGIS architecture, where we
+For both approaches, we make use of a CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, where we
 iteratively attempt to improve a candidate refactoring
 %(generated using a component library as built in Section~\ref{sec:components-seeding})
 until it behaves indistiguishably
