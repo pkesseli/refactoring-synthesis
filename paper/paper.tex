@@ -2169,8 +2169,9 @@ whereas for the neural engine, they provide additional context to the LLM.
 \noindent
 {\bf (RQ3) How do the symbolic and the neural approach compare against each other?}
 %
-There is only a small difference between the performance of the symbolic
-engine and that of the neural engine.
+The symbolic and the neural engines have very similar performance (where the symbolic engine has a smaller monetary cost).
+%There is only a small difference between the performance of the symbolic
+%engine and that of the neural engine.
 
 %they both do well when code hints
 %are present, and poorly when they are not.
@@ -2185,7 +2186,7 @@ solution space (in our case, when code hints are present),
 %
 %if we have a good idea about the instructions required such that we can build a component library that contains them all (without many spurious ones),
 then the symbolic approach works well. % and should be chosen over the neural one.
-
+%
 One example of a benchmark that was solved by \tool but where both \llma and
 \llmb failed to find a solution is the running example in
 Figure~\ref{ex:deprecated-method-other}.  In all our runs, the LLMs failed
