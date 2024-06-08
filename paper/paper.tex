@@ -1438,10 +1438,10 @@ We first scan all the public constructors of class
 \lstinline[breaklines=true]{Calendar}.  We find the following four options:
 %
 \begin{enumerate}
-  \item \lstinline[breaklines=true]{static Calendar	getInstance()} -- creates a \lstinline[breaklines=true]{Calendar} object using the default time zone and locale.
-  \item \lstinline[breaklines=true]{static Calendar getInstance(Locale aLocale)} -- creates a \lstinline[breaklines=true]{Calendar} object using the default time zone and specified locale.
-  \item \lstinline[breaklines=true]{static Calendar	getInstance(TimeZone zone)} -- creates a \lstinline[breaklines=true]{Calendar} object using the specified time zone and default locale.
-  \item \lstinline[breaklines=true]{static Calendar	getInstance(TimeZone zone, Locale aLocale)} -- creates a \lstinline[breaklines=true]{Calendar} object with the specified time zone and locale.
+  \item \lstinline[breaklines=true]{static Calendar getInstance()} -- creates the object using the default time zone and locale.
+  \item \lstinline[breaklines=true]{static Calendar getInstance(Locale)} -- creates the object using the default time zone and specified locale.
+  \item \lstinline[breaklines=true]{static Calendar getInstance(TimeZone)} -- creates the object using the specified time zone and default locale.
+  \item \lstinline[breaklines=true]{static Calendar getInstance(TimeZone, Locale)} -- creates the object with the specified time zone and locale.
 \end{enumerate}
 
 Out of the four methods, only the first one is realisable.  Conversely, in
