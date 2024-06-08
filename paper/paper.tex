@@ -698,8 +698,8 @@ In this section, we describe the two code generation engines.
 For both approaches, we make use of a CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, where we
 iteratively attempt to improve a candidate refactoring
 %(generated using a component library as built in Section~\ref{sec:components-seeding})
-until it behaves indistiguishably
-from the orignal code, i.e., the original and
+until it behaves indistinguishably
+from the original code, i.e., the original and
 the refactored blocks of code are observationally equivalent.
 %
 In the rest of the paper, we will use the predicate
@@ -1587,7 +1587,7 @@ unlucky fuzzed input might lead to an out of memory error.
 Our equivalence check uses the Java Reflection API to observe the side effects
 of programs, such as assigning new values to fields. As a consequence, we cannot
 observe effects that are not visible through this API, such as I/O operations or
-varibles maintained in native code only. I/O operations could be recorded using
+variables maintained in native code only. I/O operations could be recorded using
 additional bytecode instrumentation in future work, but for the scope of our current
 implementation, if programs only differ in such for our current engine invisible
 side effects, our engine is prone to producing a refactoring that it's not fully equivalent to the original.
@@ -1780,7 +1780,7 @@ testing in the synthesis phase, our technique may fail to find a
 refactoring even when one exists (i.e., it is {\em incomplete}),
 whereas using fuzz testing in the verification phase may result in
 finding a refactoring that is not equivalent to the original on all
-inputs (i.e., our technique is {\em unsond}).
+inputs (i.e., our technique is {\em unsound}).
 
 While we could attempt to swap fuzz testing with a formal verification technique,
 program verification is undecidable in general.
