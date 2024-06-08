@@ -1446,8 +1446,10 @@ $\mathit{consumable\_objs}$, we prioritise transformers that consume such
 objects.  For instance, for our running example there are 16 public
 transformers for the \lstinline[breaklines=true]{Calendar} class.  However, instead of adding
 all of them to the CodeHints-library, we prioritise those that consume the
-\lstinline[breaklines=true]{date} object.  There is only one such transformer \lstinline[breaklines=true]{void setTime(Date date)}.  Once we added any new transformers to the library, we
-remove the consumed objects from \lstinline[breaklines=true]{consumable\_obj}.
+\lstinline[breaklines=true]{date} object.  There is only one such
+transformer \lstinline[breaklines=true]{void setTime(Date date)}.  Once we
+added any new transformers to the library, we remove the consumed objects
+from $\mathit{consumable\_objs}$.
 
 Notably, all the components that
 we add to the library must be accessible from the current location.
