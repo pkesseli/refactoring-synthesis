@@ -2409,16 +2409,20 @@ automation of refactoring code that uses deprecated Java APIs.
 
 \paragraph{Program refactoring}
 
-With respect to works targeting the refactoring of deprecated instances, the work of Perkins directly replaces calls to deprecated methods by their bodies~\cite{DBLP:conf/paste/Perkins05}.
-As mentioned earlier in the paper, we believe that this solution does not follow the intention of the language designers. Moreover, it can
-introduce concurrency bugs as inlining calls to deprecated
-methods can cause undesirable effects if the original function was
-synchronised.  While it is not possible for two invocations on the
-same object of the synchronised original method to interleave, this is
-not guaranteed after inlining the method's body. Notably, the authors of \cite{10.1007/978-3-642-14107-2_11}
-show that it is very easy for a refactoring that works on concurrent
-programs to introduce concurrency bugs by enabling new interactions between
-parallel threads. %They also provide techniques to make such refactorings behavior-preserving.
+We first discuss works on the refactoring of deprecated instances.  The work
+of Perkins directly replaces calls to deprecated methods by their
+bodies~\cite{DBLP:conf/paste/Perkins05}.  As mentioned earlier in the paper,
+we believe that this solution does not follow the intention of the language
+designers.  Moreover, it can introduce concurrency bugs as inlining calls to
+deprecated methods can cause undesirable effects if the original function
+was synchronised.  While it is not possible for two invocations on the same
+object of the synchronised original method to interleave, this is not
+guaranteed after inlining the method's body.  Notably, the authors
+of~\cite{10.1007/978-3-642-14107-2_11} show that it is very easy for a
+refactoring that works on concurrent programs to introduce concurrency bugs
+by enabling new interactions between parallel threads.
+
+%They also provide techniques to make such refactorings behavior-preserving.
 
 A related class of techniques aim to adapt APIs after library updates. Such techniques
 automatically identify change rules linking different library releases~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. Conversely to our work, a change rule describes a match between methods existing in the old release, but which have been removed or deprecated in the new
