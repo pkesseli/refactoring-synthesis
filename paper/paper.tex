@@ -129,7 +129,7 @@
                                   % (paid open-access papers, 
                                   % short abstracts)
 
-\title{Quantifying the benefits of code hints in refactoring deprecated Java APIs }
+\title{Quantifying the benefits of code hints\\ for refactoring deprecated Java APIs }
 %\title{Symbolic vs. Neural Refactoring of Deprecated APIs} % guided by types and code hints}
 %\subtitle{Subtitle Text, if any}
 % double-blind submission
@@ -340,15 +340,20 @@ In general, when deprecating a field/method/class, the \texttt{@Deprecated} Java
 comment section to inform the developer of the reason for deprecation and, sometimes, what can be used in its place. We call such a suggestion a {\em code hint}.
 These hints don't provide the whole refactoring, but can be used to guide the search process.
 %
-For illustration, let's look at our running example in Figure~\ref{ex:deprecated-method-other}. The source code for the \texttt{getHours} method in class \texttt{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests replacing the deprecated \texttt{getHours}
-with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
+For illustration, let's look at our running example in
+Figure~\ref{ex:deprecated-method-other}.  The source code for the
+\texttt{getHours} method in class \texttt{Date} is accompanied by the
+comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests
+replacing the deprecated \texttt{getHours} by
+\texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
+%
 %It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
 Using this code hint is not straightforward.
 Although it may seem as if
-method \texttt{get} is static allowing an immediate call,
-it is actually an instance method, requiring us to have an object of
+method \texttt{get} is static, allowing an immediate call,
+it is actually an instance method, and requires an object of
 class \texttt{Calendar}. However, no such object is available in the
-original code meaning that it must be created by the refactored code.
+original code, meaning that it must be created by the refactored code.
 Consequently, we must find the necessary
 instructions that consume existing objects and create a \texttt{Calendar} object.
 Besides generating the required objects, we also need to set their
@@ -2175,7 +2180,7 @@ One example of a benchmark that was solved by \tool but where both \llma and
 Figure~\ref{ex:deprecated-method-other}.  In all our runs, the LLMs failed
 to generate \lstinline[breaklines=true]{calendar.setTime(date)}.
 
-When code hints are not present, the neural engine does marginally better
+When code hints are not present, the neural engine does mar\-gin\-al\-ly better
 than the symbolic approach.
 %
 %
@@ -2275,7 +2280,7 @@ be automated.
 %% may also lead us to reject correct refactorings which do not conform to our
 %% expectations.
 We manually inspected the refactorings obtained with
-our tool and found them to represent sensible transformations.
+both engines and found them to represent sensible transformations.
 
 \paragraph{Efficiency and scalability of the program synthesiser}
 %
