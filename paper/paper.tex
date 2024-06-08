@@ -2622,23 +2622,20 @@ component-based and counterexample-guided inductive synthesis.
 
 \paragraph{Symbolic program synthesis}
 
-
-CEGIS based approaches to program synthesis have been previously used
-for program transformations such as superoptimisation and
-deobfuscation~\cite{DBLP:conf/icse/JhaGST10}.  In
-\cite{DBLP:journals/corr/abs-1712-07388}, David et al.~present an
-automatic refactoring tool that transforms Java with external
-iteration over collections into code that uses Streams. Their approach
-is based on CEGIS and makes use of formal verification to check the
-correctness of a refactoring.  Cheung et al.~describe a system that
-automatically transforms fragments of application logic into SQL
-queries~\cite{DBLP:conf/pldi/CheungSM13} by using a CEGIS-based
-synthesiser to generate invariants and postconditions that validate
-their transformations (a~similar approach is presented
-in~\cite{DBLP:conf/cc/IuCZ10}).  While our approach is also based
-on CEGIS, we are guided by code hints and types in
-order to efficiently prune the search space. Without this guidance,
-the current refactoring would not be feasible.  
+CEGIS-based approaches to program synthesis have been previously used for
+program transformations such as superoptimisation and
+deobfuscation~\cite{DBLP:conf/icse/JhaGST10}. 
+In~\cite{DBLP:journals/corr/abs-1712-07388}, David et al.~present an
+automatic refactoring tool that transforms Java with external iteration over
+collections into code that uses Streams.  Their approach makes use of formal
+verification to check the correctness of a refactoring.  Cheung et
+al.~describe a system that automatically transforms fragments of application
+logic into SQL queries~\cite{DBLP:conf/pldi/CheungSM13} by using a
+CEGIS-based synthesiser to generate invariants and postconditions that
+validate their transformations (a~similar approach is presented
+in~\cite{DBLP:conf/cc/IuCZ10}).  While our approach is also based on CEGIS,
+we are guided by code hints and types in order to efficiently prune the
+search space.  Without this guidance, refactoring would not be feasible.
 
 % type-directed synthesis
 Type information has been extensively used in program synthesis to
