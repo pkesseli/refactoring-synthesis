@@ -408,16 +408,13 @@ facilitate the automation of the refactoring of client code that uses
 deprecated APIs, code hints should be added to all deprecated methods that
 have a replacement.
 
-As a side observation, when looking at the comparison of the symbolic and
-the neural approaches, code hints help the symbolic approach to efficiently
-prune the solution space, resulting in a better performance than the neural
-one at a lower monetary cost.  We believe this is important to note,
-especially as LLMs are often seen as a panacea for all tasks, including code
-generation.  This work shows that symbolic methods can still be effective in
-specialised settings, where efficient pruning of the solution space is
-possible.
-
-
+Comparing the symbolic and the neural approaches, code hints help the
+symbolic approach to efficiently prune the solution space, resulting in a
+better performance than the neural engine at a lower monetary cost.  We
+believe this is important to note, especially as LLMs are often seen as a
+panacea for all tasks, including code generation.  This work shows that
+symbolic methods can still be effective in specialised settings, where
+efficient pruning of the solution space is possible.
 
 %Our experiments show that, if the Javadoc contains code hints, thus allowing us to build an effective instruction library (as shown in Section~\ref{sec:components-seeding}), then the symbolic
 %approach is preferable to the neural one.
