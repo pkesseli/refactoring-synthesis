@@ -334,8 +334,13 @@ In general, when deprecating a field/method/class, the \texttt{@Deprecated} Java
 comment section to inform the developer of the reason for deprecation and, sometimes, what can be used in its place. We call such a suggestion a {\em code hint}.
 These hints don't provide the whole refactoring, but can be used to guide the search process.
 %
-For illustration, let's look at our running example in Figure~\ref{ex:deprecated-method-other}. The source code for the \texttt{getHours} method in class \texttt{Date} is accompanied by the comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests replacing the deprecated \texttt{getHours}
-with \texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
+For illustration, let's look at our running example in
+Figure~\ref{ex:deprecated-method-other}.  The source code for the
+\texttt{getHours} method in class \texttt{Date} is accompanied by the
+comment in Figure~\ref{ex:code-hints}, where the \texttt{@code} tag suggests
+replacing the deprecated \texttt{getHours} by
+\texttt{Calendar.get(Calendar.HOUR\_OF\_DAY)}.
+%
 %It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
 Using this code hint is not straightforward.
 Although it may seem as if
