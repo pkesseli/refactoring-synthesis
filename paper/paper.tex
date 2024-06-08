@@ -1984,7 +1984,7 @@ For both engines, when refactoring methods that eventually run native code, we e
 The reason for this is the fact that we use reflection to produce counterexamples,
 and some may violate internal invariants.
 % we may create some that violate internal invariants
-If they execute methods which eventually call native code, this can lead to the entire JVM
+If they execute methods that eventually call native code, this can lead to the entire JVM
 crashing rather than e.g. throwing an exception. %% Currently, this terminates our synthesis
 %% loop immediately, but in future versions we plan on treating our test VM crashing for a given input
 %% as a regular type of outcome in the heap comparison.
