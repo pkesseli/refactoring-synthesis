@@ -837,7 +837,7 @@ phase is reduced to checking the safety of this method: if
 input~$\vec{i}$, then there is no input that can distinguish
 between the original code and the candidate refactoring (this
 is indeed a sound refactoring). However, if \texttt{Verify} is not safe,
-then we want to be able to obtain a {\em counterexample input}
+then we want to be able to obtain a {\em counter\-example input}
 $\vec{i_{cex}}$ for which the assertion fails.
 %
 This counterexample will be provided back to the synthesis phase and
@@ -979,7 +979,7 @@ unless (i)~the method was not written by the user (i.e.,  JCL classes),
 implements \texttt{java.lang.Comparable} and (iv)~the type declares an
 \texttt{equals} implementation.  Examples of classes that satisfy these
 strict requirements are \texttt{java.lang.Integer} or
-\texttt{java.util.Date}.  All other \texttt{equals} implementations are
+\texttt{java.util.Date}.  All other implementations of \texttt{equals} are
 considered unreliable and ignored.
 
 %Alternatively, if there is an explicit \texttt{equals} implemented for a given type, then we use it.
@@ -1814,7 +1814,9 @@ under the ``Missed refactorings'' and ``Unsound refactorings'' paragraphs, respe
 \section{Experimental evaluation}\label{sec:experimental-results}
 
 We implemented the refactoring generation techniques in two tools called \tool and \llm, corresponding to the symbolic and the neural approach, respectively (available together with all the experiments at \url{https://anonymous.4open.science/r/resynth-artifact-43D6}).
-%
+
+\subsection{Experimental setup}
+
 Our benchmark suite contains 236 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 We included all the deprecated methods except those that were deprecated without a replacement (e.g. \lstinline[breaklines=true]{java.rmi.registry.RegistryHandler.registryImpl(int)}), 
@@ -1825,8 +1827,6 @@ methods that only perform I/O (as our equivalence check doesn't include I/O side
 and native methods.
 %methods with I/O side-effects and native methods, which are currently
 %unsupported by our implementation (see Sec.~\ref{sec:incompleteness}).
-
-\subsection{Experimental setup}
 
 For \llm, we use Claude 2.1 and Claude 3 (both accessed via Amazon Bedrock), denoted as \llma and \llmb, respectively. We set the model temperature to $0.2$.
 %
@@ -1926,12 +1926,12 @@ Table~\ref{tab:configuration-results} provides an overview of the number of
 sound refactorings (\checkmark), missed refactorings (\xmark), unsound
 refactorings (\lightning), the percentage of sound refactorings (\%)
 produced per configuration, as well as the average runtime per refactoring.
-For the symbolic engine, missed refactorings are those that failed our equivalence check, whereas, for the neural one,
+For the symbolic engine, missed refactorings are those that failed our equivalence check, whereas for the neural one,
 they may denote either that the generated refactoring didn't compile or that it failed the equivalence check.
 Unsound refactorings are
 those that passed the equivalence check, but were manually detected by us as not being equivalent to the original code.
-We describe the reasons this can happen later in this section.
-Regarding the average runtime, it includes both the time taken to generate a refactoring and to verify it.
+We describe the reasons why this can happen later in this section.
+The average runtime includes both the time taken to generate a refactoring and to verify it.
 %the equivalence check
 %(without the equivalence check, the average time the LLM takes to answer a query is 9.99\,s).
 
@@ -1992,7 +1992,7 @@ For both engines, when refactoring methods that eventually run native code, we e
 The reason for this is the fact that we use reflection to produce counterexamples,
 and some may violate internal invariants.
 % we may create some that violate internal invariants
-If they execute methods which eventually call native code, this can lead to the entire JVM
+If they execute methods that eventually call native code, this can lead to the entire JVM
 crashing rather than e.g. throwing an exception. %% Currently, this terminates our synthesis
 %% loop immediately, but in future versions we plan on treating our test VM crashing for a given input
 %% as a regular type of outcome in the heap comparison.
@@ -2005,8 +2005,8 @@ crashing rather than e.g. throwing an exception. %% Currently, this terminates o
 %% which is not part of the JVM state. We currently don't check
 %% that the original and refactored code perform the same I/O. While we exclude methods that only perform I/O, we attempt to refactor those that perform I/O alongside other core logic.
 %
-In several cases, refactorings that are not equivalent to the original code managed to incorrectly pass our verifier.
-While we expected to run into this problem because of fuzzing (as the fuzzer may miss finding counterexamples that  distinguish between the behaviour of the original and the refactored code),
+In several cases, refactorings that are not equivalent to the original code managed to pass our verifier.
+While we expected to run into this problem because of the nature of fuzzing (the fuzzer may miss counterexamples that distinguish the behaviour of the original from the refactored code),
 we also encountered other problems:
 %One of the observations of our work is that it is actually very difficult to come up with a useful equivalence verifier 
 %While we already gave up soundness by relying on fuzzing, we were confrunted with the following additional
@@ -2019,8 +2019,8 @@ we also encountered other problems:
 %identified the following sources of unsoundness in our benchmark set:
 
 Unobservable state (discussed in Section~\ref{sec:observable}): I/O operations, static state in the boot class loader and
-native methods are not observable to our equivalence predicate implementation,
-since we only rely on reflection to examine objects inside the Java runtime. As
+native methods are not observable by our equivalence predicate implementation,
+since we rely on reflection to examine objects inside the Java runtime. As
 a consequence, we cannot distinguish programs that only differ in these aspects.
 %This is not a fundamental limitation, but instead just an implementation detail.
 
@@ -2028,31 +2028,35 @@ Abstract methods:
 There are classes in the JCL without any
 existing implementation (e.g. \lstinline{javax.swing.InputVerifier}), and thus no concrete
 method against which to verify the equivalence between the original and the refactored code. For those, the symbolic engine will
-generate a no-op. We've been very conservative here, and counted this situation as unsound because
-it doesn't obey the human intent for the deprecated method.
+generate a no-op. We've been very conservative here, and counted this scenario as ``unsound'' because
+it doesn't match human intent for the deprecated method.
 
 Insufficient counterexamples: Our fuzzing-based equivalence check is inherently
 incomplete, and for some benchmarks we do not explore sufficient counterexamples
 %in sufficient number or quality
 to identify unsound candidates. An example 
-is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only one value
-out of the $2^32-1$ possible input values will trigger an alternate code path.
-As another illustration, method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass}
+is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only a single input
+out of the $2^{32}-1$ possible input values will trigger an alternate code path.
+As a second exemplar, method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass}
 %is an example where our counterexample does not produce counterexamples of sufficient
 %quality. The method
-accepts a string as an input, but will throw for any string
+accepts a string as an input, but will throw when given any string
 that is not a valid class name. %Since our fuzzer does not consider such context,
-It is very unlikely that our fuzzer will randomly produce a string which matches a valid class
+It is very unlikely that our fuzzer will randomly produce a string that matches a valid class
 name.
 
 \paragraph{Discussion}
-With respect to the symbolic engine, benchmarks with code hints tend to have less missed refactorings because hints are critical when
-seeding the component library, making it less likely that needed instructions are missing.
-For the neural engine, we hypothesise that, by providing additional context to the LLM, code hints are aiding the code generation task.
 
-Benchmarks with code hints also have less unsound results, and our hypothesis is that both engines are much likely to generate the expected refactoring
-before generating other candidate refactorings that may trick our equivalence checker.
+The symbolic engine benefits significantly from code hints, as hints seed
+the component library, making it less likely that needed instructions are
+missing.  For the neural engine, we hypothesise that, by providing
+additional context to the LLM, code hints are aiding the code generation
+task.
 
+Benchmarks with code hints also have fewer unsound results.  Our hypothesis
+is that both engines are much more likely to generate the expected
+refactoring before generating other candidate refactorings that may trick
+our equivalence checker.
 
 %% \todo{mention fuzzing}
 %% Firstly, our algorithm does currently not explore the entire classpath for
@@ -2124,40 +2128,71 @@ before generating other candidate refactorings that may trick our equivalence ch
 \subsection{Research questions}
 
 {\bf (RQ1) Can the refactoring of deprecated Java APIs be automated?}
-Yes, it can be easily automated if code hints are added to the JDK. Without code hints, Java's complexity make this
-refactoring very hard for both for the symbolic and neural engines.
+%
+Yes, it can be easily automated if code hints are added to the JDK,
+evidenced by the 83\% success rate for those benchmarks.  Without code
+hints, Java's complexity makes these refactorings very hard for both for the
+symbolic and neural engines.
 
+\noindent
 {\bf (RQ2) Do code hints help the generation of refactorings?}
-The performance of \tool, \llma and \llmb improves considerably when code hints are present.
-Actually, all of them  barely manage to solve any benchmark without code hints. When code hints are present, all engines
-solve at least 70\% of benchmarks, with the best virtual engine solving 83\%. For the symbolic engine,
-they enable the effective seeding of the instruction library, whereas, for the neural engine, they provide additional context to the LLM. 
+%
+The performance of \tool, \llma and \llmb improves considerably when code
+hints are present.  All of them barely manage to solve any benchmark without
+code hints.  When code hints are present, all engines solve at least 70\% of
+benchmarks, with the best virtual engine solving 83\%.  For the symbolic
+engine, they enable the effective seeding of the instruction library,
+whereas for the neural engine, they provide additional context to the LLM.
 
+\noindent
 {\bf (RQ3) How do the symbolic and the neural approach compare against each other?}
-There is only a small variation between the performance of the symbolic engine and that of the neural engine, as discussed next.
+%
+There is only a small difference between the performance of the symbolic
+engine and that of the neural engine.
+
 %they both do well when code hints
 %are present, and poorly when they are not.
 
 %The symbolic engine does slightly better than the neural one when code hints are present.
-When code hints are present, as shown in Table~\ref{tab:configuration-results}, the symbolic approach does slightly better than both \llma and \llmb. This supports the intuition that,
-if there is enough information about the solution to effectively prune the solution space (in our case, when code hints are present),
+
+When code hints are present, as shown in
+Table~\ref{tab:configuration-results}, the symbolic approach does slightly
+better than both \llma and \llmb.  This supports the intuition that, if
+there is enough information about the solution to effectively prune the
+solution space (in our case, when code hints are present),
+%
 %if we have a good idea about the instructions required such that we can build a component library that contains them all (without many spurious ones),
 then the symbolic approach works well. % and should be chosen over the neural one.
 
-One example of a benchmark that was solved by \tool but where both \llma and \llmb failed to find a solution (at least when we run them) is the running
-example in Figure~\ref{ex:deprecated-method-other}. In all our runs, the LLMs failed to come up with \lstinline[breaklines=true]{calendar.setTime(date)}. 
+One example of a benchmark that was solved by \tool but where both \llma and
+\llmb failed to find a solution is the running example in
+Figure~\ref{ex:deprecated-method-other}.  In all our runs, the LLMs failed
+to generate \lstinline[breaklines=true]{calendar.setTime(date)}.
 
-When code hints are not present, the neural engine does marginally better than the symbolic approach.
+When code hints are not present, the neural engine does marginally better
+than the symbolic approach.
+%
 %
 %We observed that the neural engines are able to solve problems that access native code...?
 %
 %\autoref{tab:gpt-results} show that our neural approach performs better than the symbolic approach.
-Compared to the symbolic engine, the neural one is able to provide correct refactoring for deprecated concurrency primitives
-(e.g. \lstinline{weakCompareAndSet} in \lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). These methods call native methods, for which we cannot observe side-effects (see Section~\ref{sec:observable}).
-Consequently, these are not captured by the  counterexamples returned by the fuzzer, and are thus not taken into consideration by the symbolic engine during the synthesis phase.
-For the neural approach, the counterexamples are less critical, and the LLM can obviously generate the correct code even though they are incomplete.
 %
-The neural engine is also able to handle benchmarks that require special constants, such as \lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} described in the introduction.
+Compared to the symbolic engine, the neural one is able to provide correct
+refactorings for deprecated concurrency primitives (e.g.,
+\lstinline{weakCompareAndSet} in
+\lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). 
+These methods call native methods, for which we cannot observe side-effects
+(Section~\ref{sec:observable}).  Consequently, these are not captured by
+the counterexamples returned by the fuzzer, and are thus not taken into
+consideration by the symbolic engine during the synthesis phase.  For the
+neural approach, the counterexamples are less critical, and the LLM can
+obviously generate the correct code even though they are incomplete.
+
+%
+The neural engine is also able to handle benchmarks that require special
+constants, such as
+\lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} described in the
+introduction.
 
 %{\bf (RQ2) What strategy should one use to achieve the best performance with the lowest budget?}
 %If we were to design a general strategy that, given the symbolic and the neural approach, is able to achieve the best possible results  with the lowest budget, then such a technique should
