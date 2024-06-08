@@ -968,17 +968,16 @@ We overload equality to work over sets (for live variables and loaded classes).
 %%   & \qquad equals(E[P_1(\vec{i})](f), E[P_2(\vec{i})](f))
 %%     \end{aligned}
 %%     \]
-
-
+%
 \[
 \begin{aligned}
-  & (1)~ exc(P_1, \vec{i})=\{e_1\} \wedge exc(P_2, \vec{i})=\{e_2\} \wedge equals(e_1,e_2) ~\vee\\
-  & \qquad exc(P_1, \vec{i})=exc(P_2, \vec{i}) =\emptyset \\ 
+  & (1)~ \var{exc}(P_1, \vec{i})=\{e_1\} \wedge \var{exc}(P_2, \vec{i})=\{e_2\} \wedge \var{equals}(e_1,e_2) ~\vee\\
+  & \qquad \var{exc}(P_1, \vec{i})=\var{exc}(P_2, \vec{i}) =\emptyset \\ 
       & (2)~ \var{liveVar}(P_1) = \var{liveVar}(P_2) \wedge \forall v\in \var{liveVar}(P_1). \\
-      & \qquad equals(E[P_1(\vec{i})](v), E[P_2(\vec{i})](v))\\
+      & \qquad \var{equals}(E[P_1(\vec{i})](v), E[P_2(\vec{i})](v))\\
   & (3)~  \var{loadedClasses}(P_1) = \var{loadedClasses}(P_2) ~\wedge\\
   & \qquad \forall C \in \var{loadedClasses}(P_1). \forall f {\in} \var{staticFields}(C).\\
-  & \qquad equals(E[P_1(\vec{i})](f), E[P_2(\vec{i})](f))
+  & \qquad \var{equals}(E[P_1(\vec{i})](f), E[P_2(\vec{i})](f))
     \end{aligned}
     \]
 
