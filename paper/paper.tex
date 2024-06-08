@@ -398,10 +398,23 @@ generates candidate refactorings by querying an LLM -- we used Claude 2.1 and Cl
 
 %In recent years, Large Language Models (LLMs) have gained a lot of popularity as they have been successfully applied to a wide range of tasks including code generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}. While they may seem like the panacea for all code generation problems, they come at a high computational cost as their  the efficacy hinges heavily on the parameter count. The other option when considering code generation are symbolic methods, which make use of hard coded rules~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/Gulwani11,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, the question we are trying to answer in the current paper is: for specialised problems, such as the automatic refactoring of deprecated APIs, are symbolic methods still useful, or were they completely overtaken by LLM-based ones? Answering this question is particularly important given the rise of architectures such as  Mixture-of-Experts~\cite{DBLP:conf/kdd/MaZYCHC18,DBLP:conf/iclr/Zuo00KHZGZ22,DBLP:conf/ppopp/HeZAWLSL22}, which adopt a conditional computation paradigm by only selecting parts of an ensemble of experts, based on the input data. In the context of such an architecture, one needs to consider the best option for each expert, e.g. the one responsible for the current deprecated refactoring problem.
 
-Our experiments show that code hints are critical for the performance of both the symbolic and the neural engines: when code hints are given, both engines perform well, making the automation of deprecated APIs refactorings feasible. Without code hints, the refactoring becomes much harder for both engines, such that the majority of benchmarks without code hints are failing. Thus, our conclusion is that, in order to facilitate
-the automation of the refactoring of deprecated APIs, code hints should be added to all deprecated methods that are expected to have a replacement.
+Our experiments show that code hints are critical for the performance of
+both the symbolic and the neural engines: when code hints are given, both
+engines perform well, making the automation of deprecated APIs refactorings
+feasible.  Without code hints, the refactoring becomes much harder for both
+engines, such that the majority of benchmarks without code hints are
+failing.  Thus, our conclusion is that, in order to facilitate the
+automation of the refactoring of deprecated APIs, code hints should be added
+to all deprecated methods that are expected to have a replacement.
 
-As a side observation, when looking at the comparison of the symbolic and the neural approaches, code hints help the symbolic approach to efficiently prune the solution space, resulting in a better performance than the neural one at a lower monetary cost. We believe this is important to note, especially as LLMs are often seen as a panacea for all tasks, including code generation. This work shows that symbolic methods can still be effective in specialised settings, where efficient pruning of the solution space is possible. 
+As a side observation, when looking at the comparison of the symbolic and
+the neural approaches, code hints help the symbolic approach to efficiently
+prune the solution space, resulting in a better performance than the neural
+one at a lower monetary cost.  We believe this is important to note,
+especially as LLMs are often seen as a panacea for all tasks, including code
+generation.  This work shows that symbolic methods can still be effective in
+specialised settings, where efficient pruning of the solution space is
+possible.
 
 
 
