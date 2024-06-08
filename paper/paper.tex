@@ -1159,9 +1159,10 @@ In \var{P_4}, the aliasing relation induces one equivalence class, namely \var{\
 Next, we complete Definition~\ref{def:prog-equiv} by capturing the aliasing aspect.
 
 \begin{definition}[Addition to Definition~\ref{def:prog-equiv}]\label{def:prog-equiv-add}
-   In addition to Definition~\ref{def:prog-equiv},
-  two programs \var{P_1} and \var{P_2} are equivalent
-  with respect to $\vec{i}$ iff:
+%
+In addition to Definition~\ref{def:prog-equiv},
+two programs \var{P_1} and \var{P_2} are equivalent
+with respect to $\vec{i}$ iff:
 \[
     \begin{aligned}
       & (4)~ \forall v_1,v_2 \in \mathit{liveVar}(P_1) \cup \mathit{staticFields}(loadedClasses(P_1)). \\
@@ -1173,12 +1174,12 @@ Next, we complete Definition~\ref{def:prog-equiv} by capturing the aliasing aspe
    %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
     \end{aligned}
     \]
-   
-  \end{definition}
-
+%
 where, given a program $P$, variables $v_1$ and $v_2$ are aliases, i.e., $aliases(P, v_1, v_2)$ holds
-if and only if they are in the same equivalence class induced by the aliasing relation,\\
-  i.e., $aliasEquivClass(\{v_1,v_2\}) = \{\{v_1,v_2\}\}$.
+if and only if they are in the same equivalence class induced by the aliasing relation,
+  i.e., $aliasEquivClass(\allowbreak \{v_1,v_2\}) = \{\{v_1,v_2\}\}$.
+%
+\end{definition}
 
   We abuse the notation to use \var{staticFields} over a set of classes, rather than just one class.
   The objective is to return the union of all static fields defined in all the classes in the set of classes taken as argument.
