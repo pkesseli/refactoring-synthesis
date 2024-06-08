@@ -2029,12 +2029,12 @@ incomplete, and for some benchmarks we do not explore sufficient counterexamples
 to identify unsound candidates. An example 
 is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only a single input
 out of the $2^{32}-1$ possible input values will trigger an alternate code path.
-As another illustration, method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass}
+As a second exemplar, method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass}
 %is an example where our counterexample does not produce counterexamples of sufficient
 %quality. The method
-accepts a string as an input, but will throw for any string
+accepts a string as an input, but will throw when given any string
 that is not a valid class name. %Since our fuzzer does not consider such context,
-It is very unlikely that our fuzzer will randomly produce a string which matches a valid class
+It is very unlikely that our fuzzer will randomly produce a string that matches a valid class
 name.
 
 \paragraph{Discussion}
