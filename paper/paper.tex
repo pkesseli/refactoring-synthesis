@@ -1331,7 +1331,7 @@ Intuitively, we need to make sure that the Javadoc suggestions
 are realisable as captured by Definition~\ref{def:realizable}, where 
 %We formally refer to such a component as {\em realisable} as captured by Definition~\ref{def:realizable}, where
 %$source\_types$ to refer to types for which we have the means to generate objects, and
-$required\_types(method)$ refers to the types of the objects required to call $method$ (i.e., the types corresponding to its arguments and current object).
+$required\_types(\allowbreak method)$ refers to the types of the objects required to call $method$ (i.e., the types corresponding to its arguments and current object).
 %for $instr$ to be realisable.
 In our running example, $required\_types(\texttt{get}) = \{\texttt{int, Calendar}\}$
 given that, in order to call \lstinline[breaklines=true]{get}, we must provide an argument of type \lstinline[breaklines=true]{int} and a current object of type \lstinline[breaklines=true]{Calendar}.
