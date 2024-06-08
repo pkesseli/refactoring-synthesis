@@ -1806,7 +1806,9 @@ under the ``Missed refactorings'' and ``Unsound refactorings'' paragraphs, respe
 \section{Experimental evaluation}\label{sec:experimental-results}
 
 We implemented the refactoring generation techniques in two tools called \tool and \llm, corresponding to the symbolic and the neural approach, respectively (available together with all the experiments at \url{https://anonymous.4open.science/r/resynth-artifact-43D6}).
-%
+
+\subsection{Experimental setup}
+
 Our benchmark suite contains 236 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 We included all the deprecated methods except those that were deprecated without a replacement (e.g. \lstinline[breaklines=true]{java.rmi.registry.RegistryHandler.registryImpl(int)}), 
@@ -1817,8 +1819,6 @@ methods that only perform I/O (as our equivalence check doesn't include I/O side
 and native methods.
 %methods with I/O side-effects and native methods, which are currently
 %unsupported by our implementation (see Sec.~\ref{sec:incompleteness}).
-
-\subsection{Experimental setup}
 
 For \llm, we use Claude 2.1 and Claude 3 (both accessed via Amazon Bedrock), denoted as \llma and \llmb, respectively. We set the model temperature to $0.2$.
 %
