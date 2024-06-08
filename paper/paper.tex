@@ -2039,9 +2039,8 @@ name.
 
 \paragraph{Discussion}
 
-With respect to the symbolic engine, benchmarks with code hints tend to have
-less missed refactorings because hints are critical when seeding the
-component library, making it less likely that needed instructions are
+The symbolic engine benefits significantly from code hints, as hints seed
+the component library, making it less likely that needed instructions are
 missing.  For the neural engine, we hypothesise that, by providing
 additional context to the LLM, code hints are aiding the code generation
 task.
@@ -2050,7 +2049,6 @@ Benchmarks with code hints also have less unsound results, and our
 hypothesis is that both engines are much likely to generate the expected
 refactoring before generating other candidate refactorings that may trick
 our equivalence checker.
-
 
 %% \todo{mention fuzzing}
 %% Firstly, our algorithm does currently not explore the entire classpath for
