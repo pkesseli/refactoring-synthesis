@@ -886,7 +886,7 @@ Verify($\vec{i}$) { assert(equivalent($P_1(\vec{i})$, $P_2(\vec{i})$)); }
 
 In other words, answering the question posed by the verification
 phase is reduced to checking the safety of this method: if
-\lstinline[breaklines=true]{Verify} is safe (i.e., the assertion is not violated) for any
+\lstinline{Verify} is safe (i.e., the assertion is not violated) for any
 input~$\vec{i}$, then there is no input that can distinguish
 between the original code and the candidate refactoring (this
 is indeed a sound refactoring). However, if \lstinline[breaklines=true]{Verify} is not safe,
