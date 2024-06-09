@@ -41,16 +41,24 @@
 \usepackage{url}                  % format URLs
 \usepackage{listings}          % format code
 
+% macro to select a scaled-down version of Bera Mono
+\makeatletter
+\newcommand\BeraMonottfamily{%
+  \def\fvm@Scale{0.75}% scales the font down
+  \fontfamily{fvm}\selectfont% selects the Bera Mono font
+}
+\makeatother
 
 \lstset{
   mathescape, 
   language={Java},
   numbers=left,
   stepnumber=1,
-  basicstyle=\small,
+  basicstyle=\BeraMonottfamily,
   numberstyle=\footnotesize,
   xleftmargin=5.0ex
 }
+
 \usepackage{enumitem}      % adjust spacing in enums
 %\usepackage[colorlinks=true,allcolors=blue,breaklinks,draft=false]{hyperref}   % hyperlinks, including DOIs and URLs in bibliography
 % known bug: http://tex.stackexchange.com/questions/1522/pdfendlink-ended-up-in-different-nesting-level-than-pdfstartlink
