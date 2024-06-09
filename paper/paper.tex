@@ -329,8 +329,8 @@ void main(String[] args) {
 Another example, which is easy for humans but difficult for automatic
 techniques, is the call to the static
 \lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} method, which
-should be refactored to
-\lstinline[breaklines=true]{java.net.URLDecoder.decode(s, "UTF-8")}. 
+should be refactored to the call
+\lstinline{decode(s,} \lstinline{"UTF-8")}. 
 However, this requires guessing the ``UTF-8'' constant denoting a
 platform-specific string encoding scheme, which is very difficult for
 automatic code generation techniques, especially those using symbolic
