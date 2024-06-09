@@ -785,12 +785,12 @@ Section~\ref{sec:implementation}.
 
 \paragraph{Neural engine}
 %
-For each deprecated method, we query the corresponding LLM by constructing a
+For each deprecated method, we query the LLM by constructing a
 prompt as given in \autoref{fig:prompt}.  The method definition and the
-JavaDoc comment (if present) are provided in the context.  Furthermore, we
-provide a code snippet of the deprecated method usage to be refactored (e.g. 
-\lstinline{this.minimumSize();}).  Finally, we attach a list of formatting
-constraints.
+JavaDoc comment (if present) are provided as context.  Furthermore, we
+provide a code snippet of the use of the deprecated method that is to be
+refactored (e.g., \lstinline{this.minimumSize();}).  Finally, we attach a
+list of formatting constraints.
 
 %As explained in Section~\ref{sec:overview},
 The code returned by the LLM is verified against the original code. 
