@@ -784,10 +784,13 @@ Section~\ref{sec:implementation}.
 %iterations. However, as opposed to the symbolic approach, the LLM doesn't give any guarantees that the counterexamples were taken into consideration.
 
 \paragraph{Neural engine}
-For each deprecated method, we query the corresponding LLM by constructing a prompt as shown in \autoref{fig:prompt}. The method
-definition and the JavaDoc comment (if present) are provided in the context. Furthermore, we
-provide a code snippet of the deprecated method usage to be refactored
-(e.g. \lstinline{this.minimumSize();}). Finally, we attach a list of formatting constraints.
+%
+For each deprecated method, we query the corresponding LLM by constructing a
+prompt as given in \autoref{fig:prompt}.  The method definition and the
+JavaDoc comment (if present) are provided in the context.  Furthermore, we
+provide a code snippet of the deprecated method usage to be refactored (e.g. 
+\lstinline{this.minimumSize();}).  Finally, we attach a list of formatting
+constraints.
 
 %As explained in Section~\ref{sec:overview},
 The code returned by the LLM is verified against the original code. 
