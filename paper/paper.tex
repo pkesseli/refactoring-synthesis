@@ -354,9 +354,12 @@ In particular, we are interested in investigating the benefits of Javadoc code h
 
 %{\bf (2)} The Javadoc comments may contain {\em code hints}.
 
-In general, when deprecating a field/method/class, the \lstinline[breaklines=true]{@Deprecated} Javadoc tag is used in the
-comment section to inform the developer of the reason for deprecation and, sometimes, what can be used in its place. We call such a suggestion a {\em code hint}.
-These hints don't provide the whole refactoring, but can be used to guide the search process.
+When deprecating a field/method/class, the
+\lstinline[breaklines=true]{@Deprecated} Javadoc tag is used in the comment
+section to inform the developer of the reason for deprecation and,
+sometimes, what can be used in its place.  We call such a suggestion a {\em
+code hint}.  These hints don't provide the entire refactoring, but can be
+used to guide the search process.
 %
 For illustration, let's look at our running example in
 Figure~\ref{ex:deprecated-method-other}.  The source code for the
