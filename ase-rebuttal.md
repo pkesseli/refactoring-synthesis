@@ -37,6 +37,11 @@ On the other hand, LLMs have shown great advances in code generation and general
 
 
 ## Comment 11 (Lacking detailed explanation for our experimental setup)
+### Model selection and hyper parameters
+We selected the Claude model family because these models are among the best performing models for code generation [1]. We set the model temperature to 0.2 following prior works on LLMs-based code generation [2]. We will provide more detailed descriptions of our model selection and hyperparameter choices in the final paper.
+
+### Experiments regarding removing code hints
+In our experiments, we did not remove code hints from the benchmarks. However, not all benchmarks were documented or contained usable code fragments.  As a result, we split our dataset into two groups: one containing benchmarks with code hints and the other without, as presented in Table 1.
 
 
 # Reviewer C
@@ -50,4 +55,9 @@ We logged all prompts and responses from LLMs, and we will enable our artifact t
 
 ## Q3 && Q4 (Were transformations applied to client code/Lacking description of client code)
 Please see our discussions in __Description of Client Programs__ above. 
+
+
+
+[1] Chen, Mark et al. “Evaluating Large Language Models Trained on Code.” ArXiv abs/2107.03374 (2021): n. pag.
+[2] Deligiannis, Pantazis & Lal, Akash & Mehrotra, Nikita & Rastogi, Aseem. (2023). Fixing Rust Compilation Errors using LLMs. 
 
