@@ -25,7 +25,7 @@ Our aim was to build a tool that works without context (see __Description of Cli
 
 # Reviewer B
 ## Comment 4 (Motivation for our approaches)
-We formulate the automatic deprecation refactoring problem as a program synthesis problem. In this context, the specification is the original call expression and the related deprecation comments. Component-based synthesis methods, particularly those inspired by Counterexample-Guided Inductive Synthesis (CEGIS), have achieved great success (...citations). We believe that those approaches are particularly relevant to our problem of quantifying the usefulness of deprecation comments, since the code hints in those comments can be used to construct a component library.
+We formulate the automatic deprecation refactoring problem as a program synthesis problem. In this context, the specification is the original call expression and the related deprecation comments. Component-based synthesis methods, particularly those inspired by Counterexample-Guided Inductive Synthesis (CEGIS), have achieved great success. We believe that those approaches are particularly relevant to our problem of quantifying the usefulness of deprecation comments, since the code hints in those comments can be used to construct a component library.
 
 On the other hand, LLMs have shown great advances in code generation and general software engineering tasks. Investigating the impact of including deprecation comments in the prompt is intriguing. We believe our exploration could provide insights into how these comments enhance or influence the performance of LLMs in generating appropriate code transformations.
 
@@ -43,7 +43,7 @@ Please see our discussions in __Novelty / Significance of Findings__ above.
 ## Q2 (Reproducibility of our prompt)
 While the paper reports on results from a single run of the experiments, we originally ran the experiments with Claude 2, Claude 3 multiple times and did not observe significant variance in the number of successful cases. We'll add all the results to the paper.
 
-We logged all prompts and responses from LLMs, and we will enable our artifact to "replay" these prompts and responses. This will enable other researchers to reproduce our results exactly, and without cost.
+We logged all prompts and responses from LLMs, and we will enable our artifact to "replay" these prompts and responses.
 
 ## Q3 (Did you issue pull requests to see if the transformations are acceptable by the developers?)
 No, we didn't, but that is a very good suggestion. Thank you!
