@@ -24,13 +24,17 @@
 %\usepackage[scaled]{helvet} % see www.ctan.org/get/macros/latex/required/psnfss/psnfss2e.pdf
 
 %% \BibTeX command to typeset BibTeX logo in the docs
-\documentclass[sigconf,review,anonymous]{acmart}
-%\documentclass[sigconf,review, anonymous]{acmart}
-%\acmConference[ISSTA 2024]{ACM SIGSOFT International Symposium on Software Testing and Analysis}{16-20 September, 2024}{Vienna, Austria}
+% \documentclass[sigconf,review,anonymous]{acmart}
 
-\AtBeginDocument{%
-  \providecommand\BibTeX{{%
-    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% \AtBeginDocument{%
+%   \providecommand\BibTeX{{%
+%     \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
 
 \makeatletter
 \newcommand{\removelatexerror}{\let\@latex@error\@gobble}
@@ -72,12 +76,13 @@
 \usepackage[ruled,vlined]{algorithm2e}
 
 \usepackage{amsthm}
-%\newtheorem{definition}{Definition}
-%\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
 
 %\usepackage{algorithm}
 \usepackage{amsfonts}
-\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{tikz}
