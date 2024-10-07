@@ -56,12 +56,13 @@
 \lstset{
   mathescape, 
   language={Java},
-  numbers=left,
+  %numbers=left,
   stepnumber=1,
   basicstyle=\footnotesize,
   %basicstyle=\BeraMonottfamily,
   numberstyle=\footnotesize,
-  xleftmargin=5.0ex
+  xleftmargin=5.0ex,
+  numbers=none
 }
 
 \usepackage{enumitem}      % adjust spacing in enums
@@ -754,11 +755,11 @@ In this phase, we have
 a finite set of input examples $\{\vec{i_1} \cdots \vec{i_n}\}$ and we attempt to find a candidate refactoring
 that is observationally equivalent to the original code for the given inputs.
 
-\paragraph{The symbolic engine}
+\paragraph{Symbolic engine}
 We construct the following \lstinline[breaklines=true]{Synthesise} method, which
 takes the refactored code $P_2$ as input.
 
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
+\begin{lstlisting}[mathescape=true,showstringspaces=false,numbers=none]
 Synthesise ($P_2$) {
   if (equivalent($P_1$($\vec{i_1}$), $P_2$($\vec{i_1}$)) && ...
       && equivalent($P_1$($\vec{i_n}$), $P_2$($\vec{i_n}$)))
@@ -812,7 +813,7 @@ Do note that, as opposed to the symbolic approach, the LLM doesn't give any guar
   \begin{tcolorbox}[
     colback=prompt_bg,
     colframe=prompt_title,
-    title=Prompt Template,
+    %title=Prompt Template,
     subtitle style={boxrule=0.4pt, colback=yellow!50!blue!25!white, colupper=black}
   ]
   \scriptsize
@@ -844,7 +845,7 @@ Do note that, as opposed to the symbolic approach, the LLM doesn't give any guar
 
   \textbf{Assistant:}\\
   \end{tcolorbox}
-  \caption{LLMs Prompt Template.}
+  \caption{LLM Prompt Template.}
   \label{fig:prompt}
 \end{figure}
 
@@ -887,7 +888,7 @@ the following \lstinline[breaklines=true]{Verify} method, which given some input
 $\vec{i}$, asserts that the two programs are equivalent for
 $\vec{i}$.
 
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
+\begin{lstlisting}[mathescape=true,showstringspaces=false,numbers=none]
 Verify($\vec{i}$) { assert(equivalent($P_1(\vec{i})$, $P_2(\vec{i})$)); }
 \end{lstlisting}
 
@@ -937,7 +938,7 @@ at the end of $P$. %% Thus, \var{liveVars(P_1)} gives us the
 %% variables that have been updated in the original code \var{P_1} and are
 %% live at the end of \var{P_1}.
 \item \var{staticFields(C)} returns
-  the set of static fields of a class \var{C}.
+  the set of static fields of class \var{C}.
 \item $exc(P, \vec{i})$ returns the exception thrown by $P$'s execution on input $\vec{i}$.  
 \end{itemize}  
 
@@ -1094,7 +1095,7 @@ uses \lstinline[breaklines=true]{getPreferredSize}.
 %modified version of the running example.
 
 \begin{example}\label{ex:aliasing}
-~\begin{lstlisting}[mathescape=true,showstringspaces=false]
+~\begin{lstlisting}[mathescape=true,showstringspaces=false,numbers=none]
   // $P_3$:
   Dimension dim1=container.preferredSize();
   Dimension dim2=container.preferredSize();    
@@ -1324,19 +1325,19 @@ For the running example, we start with:
 %considering the hints are given in Figure~\ref{ex:code-hints} after the
 %\texttt{@code} tag., at the beginning of the seeding algorithm, we have:
 %For the running example, after initialising the component library with the code hints, we have:
-\[
-\begin{aligned}
-  \consumableobjs &= \{\texttt{date}\}\\  
-  \availabletypes &= \{\texttt{Date}\}\\
-  \targettypes    &= \{\texttt{int}\}
-\end{aligned}
-\]
-
+%\[
+%\begin{aligned}
+  $\consumableobjs = \{\texttt{date}\},  
+  \availabletypes = \{\texttt{Date}\},
+  \targettypes    = \{\texttt{int}\}$.
+%\end{aligned}
+%\]
+%
 %% the library seeding algorithm must add components that are able to consume the
 %% inputs to the deprecated code and produce the objects required to make use
 %% of the Javadoc hints.
 %
-
+%
 %From a type-guided perspective,
 The objective of the seeding algorithm is to
 add components to the library that make use of the \availabletypes to generate objects
@@ -1377,7 +1378,7 @@ doesn't contain any generator for \lstinline[breaklines=true]{Calendar}.
 Consequently, \lstinline[breaklines=true]{Calendar} is added to
 \targettypes, resulting in:
 %
-$$\targettypes = \{\texttt{int, Calendar}\}$$
+$\targettypes = \{\texttt{int, Calendar}\}$.
 
 \begin{definition}[Realisable method]\label{def:realizable}
 %
@@ -1421,20 +1422,34 @@ the \lstinline[breaklines=true]{@code} tag. %% These situations are reflected in
 %% These benchmarks
 %% are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\ref{tab:configuration-results-ch} (some of the missing benchmarks from Table~\ref{tab:configuration-results-ch} do genuinely miss a code hint). 
  
+%\begin{figure}
+%\begin{lstlisting}[mathescape=true,showstringspaces=false]
+%/**
+%* Checks whether or not this {@code Rectangle}
+%* contains the point at the specified location
+%* {@code (X,Y)}.
+%*
+%* @param  X the specified X coordinate
+%* @param  Y the specified Y coordinate
+%* @return    {@code true} if the point
+%*            {@code (X,Y)} is inside this
+%*            {@code Rectangle};
+%*            {@code false} otherwise.
+%* @deprecated As of JDK version 1.1,
+%* replaced by {@code contains(int, int)}.
+%*/
+%@Deprecated
+%public boolean inside(int X, int Y) {
+%  // ...
+%}
+%\end{lstlisting}
+%\caption{Javadoc hint example.}
+%\label{ex:javadoc-hint}
+%\end{figure}
+
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
-/**
-* Checks whether or not this {@code Rectangle}
-* contains the point at the specified location
-* {@code (X,Y)}.
-*
-* @param  X the specified X coordinate
-* @param  Y the specified Y coordinate
-* @return    {@code true} if the point
-*            {@code (X,Y)} is inside this
-*            {@code Rectangle};
-*            {@code false} otherwise.
-* @deprecated As of JDK version 1.1,
+/* @deprecated As of JDK version 1.1,
 * replaced by {@code contains(int, int)}.
 */
 @Deprecated
@@ -1498,6 +1513,7 @@ from the current location.
 \begin{figure}
 \removelatexerror% Nullify \@latex@error
 \begin{algorithm}[H]
+  \small
 \SetAlgoLined
 \KwOut{CodeHints-library}
 %<<<<<<< HEAD
@@ -1587,7 +1603,7 @@ synthesis techniques.
 The programs that need to be checked for equivalence may refer to
 abstract classes and interfaces. These are by default instantiated
 using the mocking framework Mockito.
-
+%
 Alternatively, we also curate a
 list of explicit constructors
 of subclasses to be used in favour of Mockito mocks for certain types, and users
@@ -1647,7 +1663,7 @@ of programs, such as assigning new values to fields. As a consequence, we cannot
 observe effects that are not visible through this API, such as I/O operations or
 variables maintained in native code only. I/O operations could be recorded using
 additional bytecode instrumentation in future work, but for the scope of our current
-implementation, if programs only differ in such for our current engine invisible
+implementation, if programs only differ in such %for our current engine invisible
 side effects, our engine is prone to producing a refactoring that it's not fully equivalent to the original.
 
 
