@@ -58,7 +58,8 @@
   language={Java},
   numbers=left,
   stepnumber=1,
-  basicstyle=\BeraMonottfamily,
+  basicstyle=\footnotesize,
+  %basicstyle=\BeraMonottfamily,
   numberstyle=\footnotesize,
   xleftmargin=5.0ex
 }
@@ -294,7 +295,7 @@ As a project evolves, there are certain fields, methods or classes
 that the developers are discouraged from using in the future as
 they've been superseded and may cease to exist.
 However, removing them directly would break the backward compatibility
-of the project's API.  Instead, such elements can be tagged with the
+of the project's API.  Instead, in Java, such elements can be tagged with the
 \lstinline[breaklines=true]{@Deprecated} annotation in order to ease the transition.
 
 %% In general, when deprecating a
@@ -317,7 +318,7 @@ for our purpose, we must first set its time using the existing
 calling \lstinline[breaklines=true]{calendar.get(Calendar.HOUR_OF_DAY)}.
 
 \begin{figure}[ht]
-\begin{lstlisting}[mathescape=true,showstringspaces=false]
+\begin{lstlisting}[mathescape=true,showstringspaces=false,basicstyle=\footnotesize]
 void main(String[] args) {
   // Deprecated:
   int hour=date.getHours();
@@ -643,11 +644,11 @@ efficient pruning of the solution space is possible.
 
 
 
-\paragraph{Contributions:}
+\paragraph{Contributions}
 
 \begin{itemize}
 
-\item We proposed a symbolic and a neural refactoring technique for deprecated APIs. The former makes use of type-directed and component-based synthesis, whereas the latter is LLM based. In order to check the correctness of the refactorings, we designed an equivalence check, which takes into consideration both the state of the stack and the heap.
+\item We proposed a symbolic and a neural refactoring technique for deprecated APIs. The former makes use of type-directed and component-based synthesis, whereas the latter is LLM based. In order to check the correctness of the refactorings, we designed a symbolic equivalence check, which takes into consideration both the state of the stack and the heap.
   %The technique incorporates semantic information about the code and it is guided by Javadoc code hints and type information.
 
 %\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
