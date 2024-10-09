@@ -2378,16 +2378,15 @@ the symbolic and neural techniques deliver roughly the same performance.
 
 We first discuss works on the refactoring of deprecated instances.  The work
 of Perkins directly replaces calls to deprecated methods by their
-bodies~\cite{DBLP:conf/paste/Perkins05}.  As mentioned earlier in the paper,
-we believe that this solution does not follow the intention of the language
-designers.  Moreover, it can introduce concurrency bugs as inlining calls to
+bodies~\cite{DBLP:conf/paste/Perkins05}, but we argue this conflicts with the intent of language designers.
+%As mentioned earlier in the paper,
+%we believe that this solution does not follow the intention of the language
+%designers.
+Moreover, it can introduce concurrency bugs as inlining calls to
 deprecated methods can cause undesirable effects if the original function
 was synchronised.  While it is not possible for two invocations on the same
 object of the synchronised original method to interleave, this is not
-guaranteed after inlining the method's body.  Notably, the authors
-of~\cite{10.1007/978-3-642-14107-2_11} show that it is very easy for a
-refactoring that works on concurrent programs to introduce concurrency bugs
-by enabling new interactions between parallel threads.
+guaranteed after inlining the method's body.  Notably, the authors of~\cite{10.1007/978-3-642-14107-2_11} show how refactorings in concurrent programs can inadvertently introduce concurrency issues by enabling new interactions between parallel threads.
 
 %They also provide techniques to make such refactorings behavior-preserving.
 
@@ -2597,13 +2596,15 @@ In~\cite{DBLP:journals/corr/abs-1712-07388}, David et al.~present an
 automatic refactoring tool that transforms Java with external iteration over
 collections into code that uses Streams.  Their approach makes use of formal
 verification to check the correctness of a refactoring.  Cheung et
-al.~describe a system that automatically transforms fragments of application
+al.~describe a system that
+%automatically
+transforms fragments of application
 logic into SQL queries~\cite{DBLP:conf/pldi/CheungSM13} by using a
-CEGIS-based synthesiser to generate invariants and postconditions that
-validate their transformations (a~similar approach is presented
-in~\cite{DBLP:conf/cc/IuCZ10}).  While our approach is also based on CEGIS,
-we are guided by code hints and types in order to efficiently prune the
-search space.  Without this guidance, refactoring would not be feasible.
+CEGIS-based synthesiser to generate invariants and postconditions 
+validating their transformations (a~similar approach is presented
+in~\cite{DBLP:conf/cc/IuCZ10}).  While our approach is also CEGIS-based,
+we are guided by code hints and types to efficiently prune the
+search space.  %Without this guidance, refactoring would not be feasible.
 
 % type-directed synthesis
 %
@@ -2623,41 +2624,16 @@ our program generation approach.  However, our technique uses information
 about types and code hints to build the component library, which is specific
 to each refactoring.
 
-%% For the intro:
-% not correct-by-contruction, preserves the behaviour, refer to the paper
-% on refactoring concurrent programs.
-%% for equivalence checking:
-%% we use an explicit return variable ret, which is live. Also, we make "this explicit".
-%% Essentially, we must capture the whole program state, consisting of return values and heap. 
-%% Todo: related work, alising check, intro, equiv check.
-
-
-%% An approach to program synthesis very similar to ours is Syntax Guided
-%% Synthesis (SyGuS)~\cite{sygus}.  SyGuS synthesisers supplement the logical
-%% specification with a syntactic template that constrains the space of allowed
-%% implementations.  Thus, each semantic specification is accompanied by a
-%% syntactic specification in the form of a grammar.  Other second-order
-%% solvers are introduced in~\cite{DBLP:conf/pldi/GrebenshchikovLPR12,
-%% DBLP:conf/cav/BeyenePR13}.  As opposed to ours, these focus on
-%% Horn clauses.
-
-
-  %% The main difference (besides the actual
-%% goal of the work, which is different from ours) to our work is that the
-%% lists they operate on are immutable and do not support operations such as
-%% remove.  Capturing the potential side effects caused by such operations is
-%% one of our work's main challenges.
-
-Program synthesis generally implements the correct-by-con\-struc\-tion
-principle, meaning that it provides strong correctness guarantees about the
-generated code.  As opposed to that, our work is guided by program testing. 
-This is similar in nature with genetic programming~\cite{Koza92} and genetic
-improvement~\cite{DBLP:journals/dagstuhl-reports/PetkeGFL18,7911210}.  In
-particular, the latter has been used for program refactoring.  Genetic
-programming and genetic improvement obtain candidate programs by applying
-operations analogous to genetic processes to an existing population of
-programs.  Conversely, we pose the code generation problem as safety
-verification.
+%% Program synthesis generally implements the correct-by-con\-struc\-tion
+%% principle, meaning that it provides strong correctness guarantees about the
+%% generated code.  As opposed to that, our work is guided by program testing. 
+%% This is similar in nature with genetic programming~\cite{Koza92} and genetic
+%% improvement~\cite{DBLP:journals/dagstuhl-reports/PetkeGFL18,7911210}.  In
+%% particular, the latter has been used for program refactoring.  Genetic
+%% programming and genetic improvement obtain candidate programs by applying
+%% operations analogous to genetic processes to an existing population of
+%% programs.  Conversely, we pose the code generation problem as safety
+%% verification.
 
 %
 %% Often, genetic improvement
@@ -2685,16 +2661,15 @@ also models pre-trained/fine-tuned specifically for code generation and
 programming tasks, such as CodeLLaMa2~\cite{roziere2024code},
 StarCoder2~\cite{lozhkov2024starcoder},
 DeepSeek-Coder~\cite{guo2024deepseekcoder}, and GrammarT5~\cite{grammart5}.
-
 % Among them, GPT-4 Turbo~\cite{chatgpt} is a LLM trained using Reinforcement Learning from Human Feedback.
 % There are recent studies investigating GPT-4 Turbo's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and 
 % prompt pattern design for refactoring, requirements elicitation, and software design ~\cite{white2023chatgpt}.
-
+%
 In this work, we have applied the Claude family of LLMs to our refactoring
 task, with the goal of investigating how much it benefits from Javadoc code
-hints.  Our result shows that code hints are enabling, for all engines we
-have considered, for delivering a very high degree of automation in
-refactoring Java code that uses deprecated JDK APIs.
+hints.  %Our result shows that code hints are enabling, for all engines we
+%have considered, for delivering a very high degree of automation in
+%refactoring Java code that uses deprecated JDK APIs.
 
 %% \section{Conclusion}
 
