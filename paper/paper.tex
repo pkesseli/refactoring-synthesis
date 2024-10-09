@@ -319,7 +319,7 @@ of the project's API.  Instead, in Java, such elements can be tagged with the
 
 The transformation of existing code such that it doesn't use
 deprecated APIs is not always straightforward, as illustrated in
-Fig.~\ref{ex:deprecated-method-other}. In the example, we make use of
+Figure~\ref{ex:deprecated-method-other}. In the example, we make use of
 the \lstinline[breaklines=true]{getHours} method of the \lstinline[breaklines=true]{Date} class, which is
 deprecated.  In this situation, in order to replace the use of the
 deprecated method, we must first obtain a \lstinline[breaklines=true]{Calendar} object.
@@ -660,15 +660,15 @@ efficient pruning of the solution space is possible.
 
 \begin{itemize}
 
-\item We proposed a symbolic and a neural refactoring technique for deprecated APIs. The former makes use of type-directed and component-based synthesis, whereas the latter is LLM based. In order to check the correctness of the refactorings, we designed a symbolic equivalence check, which takes into consideration both the state of the stack and the heap.
+\item We propose a symbolic and a neural refactoring technique for deprecated APIs. The former makes use of type-directed and component-based synthesis, whereas the latter is LLM based. In order to check the correctness of the refactorings, we design a symbolic equivalence check, which takes into consideration both the state of the stack and the heap.
   %The technique incorporates semantic information about the code and it is guided by Javadoc code hints and type information.
 
 %\item We encode both the synthesis of refactoring candidates and their verification as program safety problems that we then solve with fuzz testing~\cite{DBLP:conf/issta/PadhyeLS19}.
 
-\item We implemented our techniques and used them to refactor deprecated methods from the Oracle
+\item We implement our techniques and use them to refactor deprecated methods from the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 
-\item We investigated the benefits of code hints for both the symbolic and neural approach. %In particular, we want to find out whether there is still space for specialised techniques
+\item We investigate the benefits of code hints for both the symbolic and neural approach. %In particular, we want to find out whether there is still space for specialised techniques
   %such as ours in a GPT-4 Turbo era.
   %\todo{come back to this after investigating experimental results}
   Our results show that code hints are critical for the performance of both the symbolic and the neural engines: adding more code hints to Javadoc
