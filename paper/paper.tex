@@ -1882,7 +1882,7 @@ For \llm, we use Claude 2.1 and Claude 3, denoted as \llma and \llmb, respective
 Claude 2.1 and Claude 3 are proprietary LLMs likely to be very
 large (1T+ parameters), which  have been shown to be among the highest performing on coding tasks~\cite{DBLP:journals/corr/abs-2405-11514,jiang2024surveylargelanguagemodels,hou2024comparinglargelanguagemodels,murr2023testingllmscodegeneration}.
 We accessed the LLMs via Amazon Bedrock.
-To make our results more deterministic, we use a lower temperature (i.e. less random) of $0.2$.
+To make our results more deterministic, we use a lower temperature (i.e. less random) of $0.2$. We also repeated the experiments three times, and the results are summarized as averages.
 %
 For all engines, we bound the search by at most 500 inputs and 5 minutes per verification phase, and at
 most 2 minutes per synthesis phase. 
@@ -1905,6 +1905,8 @@ For \tool, if code hints are present, we start with the CodeHints-library and fa
 %is based on the Types-library, whereas the one marked as ({\bf CodeHints}) uses the CodeHints-library.
 
 \begin{table}[h]
+
+\resizebox{\columnwidth}{!}{
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Configuration & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
@@ -1912,16 +1914,17 @@ Configuration & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) 
 %\tool w/ types      &         79 &    116 &         41 & 33 & 216.1 \\
 %\tool w/ code hints &        103 &    131 &          2 & 44 & 218.9 \\
 \tool       &        7 &    82 &         16 & 6 & 213.7 \\  
-\llma                     &        12 &     91 &         2  & 11 & 205.23 \\
-\llmb                     &        10 &     93 &         2  & 9 & 204.25 \\ 
-Best Virtual Engine    &        14  &         79 &      12 &  13 & 198.12 \\
+\llma                     &        12 &     91 &         2  & 11 & 197.14 \\
+\llmb                     &        10 &     93 &         2  & 9 & 203.32 \\ 
+Best Virtual Engine    &        15  &         77 &      13§ &  14 & 195.9 \\
 \hline\hline
-\tool  (CH)     &        104 &     19 &   8         & 79 & 217.7 \\
-\llma  (CH)  &             92 &     39  &  0         & 70 & 208.09 \\
-\llmb   (CH) &             95 &     35  &  1         & 73 & 205.27 \\
-Best Virtual Engine (CH) &           109 &     14  &  8         & 83 & 211.89 \\
+\tool  (CH)     &        104 &     19 &   8         & 79 & 220.8 \\
+\llma  (CH)  &             93.3 &     36.7  &  1         & 71 & 212.19 \\
+\llmb   (CH) &             94 &     36  &  1         & 72 & 217.9 \\
+Best Virtual Engine (CH) &           107 &     13  &  11         & 82 & 210.28 \\
 \hline\hline
-\end{tabular} 
+\end{tabular}
+}
 \caption{Experimental results for all benchmarks.}
 \label{tab:configuration-results}   
 \end{table}
