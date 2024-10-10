@@ -237,8 +237,8 @@ automatic refactoring of deprecated APIs.  The former is based on
 type-directed and component-based program synthesis, whereas the latter uses
 LLMs.  We applied our engines to refactor the deprecated methods in the
 Oracle JDK 15.  Our experiments show that code hints are enabling for the
-automation of this task: even the worst engine correctly refactors 70\% of
-the tasks with code hints, which drops to at best 13\% on tasks without. 
+automation of this task: even the worst engine correctly refactors 71\% of
+the tasks with code hints, which drops to at best 14\% on tasks without. 
 Adding more code hints to Javadoc can hence boost the refactoring of code
 that uses deprecated APIs.
 %
@@ -1949,7 +1949,7 @@ solved by at least one engine.
 
 The results support our hypothesis that code hints are very valuable for automating the refactoring process.
 For all engines, benchmarks with code hints have a considerably higher success rate than those without code hints, with the best virtual
-engine solving 83\% of the benchmarks with code hints. In the absence of code hints, all the engines are struggling, solving only a few benchmarks.
+engine solving 82\% of the benchmarks with code hints. In the absence of code hints, all the engines are struggling, solving only a few benchmarks.
 
 To understand the discrepancy between the number of missed/unsound refactorings with the without code hints,
 we next investigate the main reasons for such refactorings.
@@ -2138,7 +2138,7 @@ our equivalence checker.
 {\bf (RQ1) Can the refactoring of deprecated Java APIs be automated?}
 %
 Yes, it can be automated if code hints are added to the JDK,
-evidenced by the 83\% success rate for those benchmarks.  Without code
+evidenced by the 82\% success rate for those benchmarks.  Without code
 hints, Java's complexity makes these refactorings very hard for both for the
 symbolic and neural engines.
 
@@ -2147,8 +2147,8 @@ symbolic and neural engines.
 %
 The performance of \tool, \llma and \llmb improves considerably when code
 hints are present.  All of them barely manage to solve any benchmark without
-code hints.  When code hints are present, all engines solve at least 70\% of
-benchmarks, with the best virtual engine solving 83\%.  For the symbolic
+code hints.  When code hints are present, all engines solve at least 71\% of
+benchmarks, with the best virtual engine solving 82\%.  For the symbolic
 engine, they enable the effective seeding of the instruction library,
 whereas for the neural engine, they provide additional context to the LLM.
 
