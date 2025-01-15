@@ -76,7 +76,7 @@
 \makeatother
 
 \lstset{
-  mathescape, 
+  mathescape,
   language={Java},
   %numbers=left,
   stepnumber=1,
@@ -144,7 +144,7 @@
 \allowdisplaybreaks
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% uncomment for extended version 
+%% uncomment for extended version
 \newcommand*{\extended}{}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -162,17 +162,17 @@
 
 \begin{document}
 
-%\copyrightdata{978-1-nnnn-nnnn-n/yy/mm} 
+%\copyrightdata{978-1-nnnn-nnnn-n/yy/mm}
 %\doi{nnnnnnn.nnnnnnn}
 
-% Uncomment one of the following two, if you are not going for the 
+% Uncomment one of the following two, if you are not going for the
 % traditional copyright transfer agreement.
 
-%\exclusivelicense                % ACM gets exclusive license to publish, 
+%\exclusivelicense                % ACM gets exclusive license to publish,
                                   % you retain copyright
 
 %\permissiontopublish             % ACM gets nonexclusive license to publish
-                                  % (paid open-access papers, 
+                                  % (paid open-access papers,
                                   % short abstracts)
 
 %\title[Quantifying the benefits of code hints for refactoring deprecated Java APIs]
@@ -196,19 +196,19 @@
 %% \email{cristina.david@bristol.ac.uk}
 %% \orcid{0000-0002-9106-934X}
 %% \affiliation{
-%%   \institution{University of Bristol}  
-%%   \city{Bristol}  
+%%   \institution{University of Bristol}
+%%   \city{Bristol}
 %%   \country{UK}
 %%   \postcode{BS8 1TH}
 %% }
 %% \author{Pascal Kesseli}
 %% \affiliation{
-%%   \institution{Diffblue}  
+%%   \institution{Diffblue}
 %%   \country{UK}
 %% }
 %% \author{Daniel Kroening}
 %% \affiliation{
-%%   \institution{Amazon}  
+%%   \institution{Amazon}
 %%   \country{UK}
 %% }
 
@@ -240,7 +240,6 @@
   \country{UK}}
 
 
-
 % \author{\IEEEauthorblockN{1\textsuperscript{st} Cristina David}
 % \IEEEauthorblockA{\textit{University of Bristol} \\
 % Bristol, UK \\
@@ -260,6 +259,7 @@
 % \IEEEauthorblockA{\textit{University of Bristol} \\
 % Bristol, UK \\
 % hanliang.zhang@bristol.ac.uk}
+
 % \and
 % \IEEEauthorblockN{5\textsuperscript{th} Given Name Surname}
 % \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
@@ -278,7 +278,7 @@
 
 \begin{abstract}
 %
-When done manually, refactoring legacy code in order to eliminate uses of
+When done manually by engineers at Amazon and other companies, refactoring legacy code in order to eliminate uses of
 deprecated APIs is an error-prone and time-consuming process.  In this
 paper, we investigate to which degree refactorings for deprecated Java APIs
 can be automated, and quantify the benefit of Javadoc code hints for this
@@ -288,17 +288,17 @@ type-directed and component-based program synthesis, whereas the latter uses
 LLMs.  We applied our engines to refactor the deprecated methods in the
 Oracle JDK 15.  Our experiments show that code hints are enabling for the
 automation of this task: even the worst engine correctly refactors 71\% of
-the tasks with code hints, which drops to at best 14\% on tasks without. 
+the tasks with code hints, which drops to at best 14\% on tasks without.
 Adding more code hints to Javadoc can hence boost the refactoring of code
 that uses deprecated APIs.
 %
 %Given the recent success of LLMs for code generation tasks, our goal was investigating whether, for specialised problems
 %such as the automatic refactoring of deprecated APIs, symbolic methods are still useful, or whether they were completely overtaken by LLM-based ones.
-%When comparing the abilities of the two engines, our results show 
+%When comparing the abilities of the two engines, our results show
 %that the symbolic and neural engines complement each other,
 %with the symbolic engine still winning for a certain category
 %of benchmarks, at much lower computational cost.
-  
+
   %propose an automated program refactoring technique
   %that eliminates such uses of deprecated APIs by
   %performing semantic reasoning and search in the space of possible
@@ -311,7 +311,7 @@ that uses deprecated APIs.
   %
   %% Refactorings are structured changes to existing software that leave its
   %% externally observable behaviour unchanged.  Their intent is to improve
-  %% readability, performance or other non-behavioural properties. 
+  %% readability, performance or other non-behavioural properties.
   %% State-of-the-art automatic refactoring tools are {\em syntax}-driven and,
   %% therefore, overly conservative.  In this paper we explore {\em
   %% semantics}-driven refactoring, which enables much more sophisticated
@@ -334,7 +334,7 @@ that uses deprecated APIs.
 
 %\category{CR-number}{subcategory}{third-level}
 
-% general terms are not compulsory anymore, 
+% general terms are not compulsory anymore,
 % you may leave them out
 %\terms
 %term1, term2
@@ -356,8 +356,7 @@ that uses deprecated APIs.
 
 %Types: Type-directed synthesis has been particulary successful in functional programming. We want to investigate how successful is in imperative programming.
 
-As programming languages evolve, AWS engineers undertake the task of migrating code to newer versions of programming languages, a critical aspect of code modernisation. This process ensures access to new features, improved performance, and enhanced security while maintaining compatibility with modern tools and libraries. Java, for example, has frequent JDK releases, each introducing improvements and updates. However, migrating to newer JDK versions presents challenges, particularly due to deprecated APIs. Deprecation, intended to enhance security, performance, and maintainability, requires engineers to update existing code by replacing deprecated APIs with modern, more efficient alternatives, adding complexity to the migration process. Deprecated features are tagged with the
-\lstinline[breaklines=true]{@Deprecated} annotation in order to ease the transition.
+As programming languages evolve, engineers at companies such as Amazon and BEO IT take on the critical task of migrating code to newer versions, an important aspect of code modernisation. This process ensures access to new features, improved performance, and enhanced security while maintaining compatibility with modern tools and libraries. Java, for example, has frequent JDK releases, each introducing improvements and updates. However, migrating to newer JDK versions presents challenges, particularly due to deprecated APIs. Deprecation, intended to enhance security, performance, and maintainability, requires engineers to update existing code by replacing deprecated APIs with modern, more efficient alternatives, adding complexity to the migration process. %Deprecated features are tagged with the \lstinline[breaklines=true]{@Deprecated} annotation in order to ease the transition.
 
 
 
@@ -393,7 +392,7 @@ calling \lstinline[breaklines=true]{calendar.get(Calendar.HOUR_OF_DAY)}.
 void main(String[] args) {
   // Deprecated:
   int hour=date.getHours();
-  
+
   // Should have been:
   final Calendar calendar=Calendar.getInstance();
   calendar.setTime(date);
@@ -404,15 +403,10 @@ void main(String[] args) {
 \label{ex:deprecated-method-other}
 \end{figure}
 
-Another example, which is easy for humans but difficult for automatic
-techniques, is the call to the static
-\lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} method, which
-should be refactored to the call
-\lstinline{decode(s,} \lstinline{"UTF-8")}. 
-However, this requires guessing the ``UTF-8'' constant denoting a
-platform-specific string encoding scheme, which is very difficult for
-automatic code generation techniques, especially those using symbolic
-reasoning~\cite{DBLP:conf/cav/AbateDKKP18}.
+%%%-- taken out for the industrial task
+%Another example, which is easy for humans but difficult for automatic techniques, is the call to the static
+%\lstinline[breaklines=true]{java.net.URLDecoder.decode(s)} method, which should be refactored to the call \lstinline{decode(s,} \lstinline{"UTF-8")}.
+% However, this requires guessing the ``UTF-8'' constant denoting a platform-specific string encoding scheme, which is very difficult for automatic code generation techniques, especially those using symbolicreasoning~\cite{DBLP:conf/cav/AbateDKKP18}.
 %
 %While it is trivial for IDEs such as Eclipse or IntelliJ IDEA to
 %recognise the use of deprecated APIs and warn the programmer about it,
@@ -420,20 +414,23 @@ reasoning~\cite{DBLP:conf/cav/AbateDKKP18}.
 %complex. Indeed neither Eclipse 4.27.0 nor IntelliJ IDEA 2023.1.1 make
 %any attempt to suggest an alternative to the user.
 
-%Program synthesis is generally concerned with code generation via symbolic reasoning. 
+%Program synthesis is generally concerned with code generation via symbolic reasoning.
 %Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible.
 
-Besides general challenges related to automatic code generation, there are other language-specific ones. For instance, the code to be refactored might be using abstract classes and abstract methods, and it may not be obvious how to subclass from the code to be refactored (e.g.~\lstinline[breaklines=true]{engineGetParameter} in \lstinline[breaklines=true]{java.security.SignatureSpi}); it might call methods that, while not abstract, need to be overridden by subclasses (e.g., method \lstinline[breaklines=true]{layout} in class \lstinline[breaklines=true]{java.awt.Component} has an empty body); or it might be calling native methods whose implementation is written in another programming language such as C/C++ (e.g., \lstinline[breaklines=true]{weakCompareAndSet} in \lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). In order to even understand the behaviour of the code to be refactored, one needs to know how to subclass the abstract classes, override methods, and to understand the behaviour of code written in other languages.
+%Besides general challenges related to automatic code generation, there are other language-specific ones. For instance,
 
-In this paper, we are interested in the automatic generation of refactorings for deprecated APIs (while we focus on the refactoring of deprecated methods, the same
-techniques can be applied to deprecated fields and classes). 
+Refactoring code that relies on deprecated APIs presents additional challenges. For instance, the code to be refactored might be using abstract classes and abstract methods, and it may not be obvious how to subclass from the code to be refactored (e.g.~\lstinline[breaklines=true]{engineGetParameter} in \lstinline[breaklines=true]{java.security.SignatureSpi}). It may also call methods that, while not abstract, must be overridden by subclasses (e.g., the \lstinline[breaklines=true]{layout} method in \lstinline[breaklines=true]{java.awt.Component}, which has an empty body). Furthermore, the code might invoke native methods implemented in other programming languages, such as C or C++ (e.g., \lstinline[breaklines=true]{weakCompareAndSet} in \lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). Understanding the behavior of such code requires knowledge of how to subclass abstract classes, override methods appropriately, and understand the functionality of native code written in other languages.
+
+%Other challenges when refactoring code containing deprecated APIs: ; it might call methods that, while not abstract, need to be overridden by subclasses (e.g., method \lstinline[breaklines=true]{layout} in class \lstinline[breaklines=true]{java.awt.Component} has an empty body); or it might be calling native methods whose implementation is written in another programming language such as C/C++ (e.g., \lstinline[breaklines=true]{weakCompareAndSet} in \lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). In order to even understand the behaviour of the code to be refactored, one needs to know how to subclass the abstract classes, override methods, and to understand the behaviour of code written in other languages.
+
+Manual refactoring of deprecated APIs is a time-consuming and error-prone process. \emph{Therefore, in this paper, we investigate the automatic generation of refactorings for deprecated APIs.} While our primary emphasis is on refactoring deprecated methods, the same techniques can be extended to handle deprecated fields and classes.
 %To answer this question, we design both a symbolic and a neural approach based on Large Language Models (LLMs). More than simply generating refactorings for deprecated APIs, given the recent focus on LLM based code generation, we are interested in investigating whether, for specialised problems such as the current one, symbolic approaches can still be of use at much lower computational costs compared to neural ones. An answer to this question is useful especially given that the efficacy of LLMs hinges heavily on their parameter count. Notably, as an answer to this problem, architectures such as
 %Mixture-of-Experts (MoE), which adopts a conditional computation paradigm by only selecting parts of an ensemble, referred to as experts, and activating them depending on the data at hand. In the context of such an architecture, one needs to consider what should play as an expert for the current deprecated refactoring problem.
-In particular, we are interested in investigating the benefits of Javadoc code hints when automating such a refactoring.
+
 
 %Let us first  consider the information available when trying to find a refactoring:
 
-%{\bf (1)} The original code and the refactoring must have {\em the same behaviour}, i.e., 
+%{\bf (1)} The original code and the refactoring must have {\em the same behaviour}, i.e.,
 %the generated refactoring needs to be semantically equivalent to the original.
 %One implication is that the orginal code and the refactoring must have {\em the same types}. In particular, this consists of the types of the objects to be consumed (i.e., the inputs), as well as the types of the objects that need to be produced (i.e., the outputs). In the example in Figure~\ref{ex:deprecated-method-other}, the \lstinline[breaklines=true]{date} object can be seen as an input with type \lstinline[breaklines=true]{Date}, whereas \texttt{hour} of type \lstinline[breaklines=true]{int} is considered an output.
 
@@ -443,8 +440,10 @@ When deprecating a field, method, or class, the
 \lstinline[breaklines=true]{@Deprecated} Javadoc tag is used in the comment
 section to inform the developer of the reason for deprecation and,
 sometimes, what can be used in its place.  We call such a suggestion a {\em
-code hint}.  These hints don't provide the entire refactoring, but can be
-used to guide the search process.
+  code hint}. These hints are helpful for a human performing the refactoring.
+While they don’t offer a complete solution, they serve as valuable guidance, making the process more intuitive
+
+
 %
 For illustration, let's look at our running example in
 Figure~\ref{ex:deprecated-method-other}.  The source code for the
@@ -453,7 +452,7 @@ comment in Figure~\ref{ex:code-hints}, where the \lstinline[breaklines=true]{@co
 replacing the deprecated \lstinline[breaklines=true]{getHours} by
 \lstinline[breaklines=true]{Calendar.get(Calendar.HOUR_OF_DAY)}.
 %
-%It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows: 
+%It's not straightforward to use this code to generate the refactoring, with some of the challenges being as follows:
 Using this code hint is not straightforward.
 Although it may seem as if
 method \lstinline[breaklines=true]{get} is static, allowing an immediate call,
@@ -468,6 +467,8 @@ in Figure~\ref{ex:deprecated-method-other}, we must call
 \lstinline[breaklines=true]{calendar.setTime(date)} to set the calendar's date
 based on the existing \lstinline[breaklines=true]{date} object.
 
+Given that code hints are useful to humans, 
+\emph{in this paper, we are also interested in investigating the benefits of Javadoc code hints in the automation of the refactoring.}
 
 \begin{figure}
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
@@ -475,14 +476,14 @@ based on the existing \lstinline[breaklines=true]{date} object.
  * @deprecated As of JDK version 1.1,
  * replaced by {@code Calendar.get
  *              (Calendar.HOUR_OF_DAY)}.
- */  
+ */
 \end{lstlisting}
 \caption{Code hints for the running example.}
 \label{ex:code-hints}
 \end{figure}
 
 
-%While it might seem that this hint ma solve the entire problem, 
+%While it might seem that this hint ma solve the entire problem,
 
 %\todo{possible other challenges: parsing, abstract classes. remove challenge 3.}
 
@@ -490,19 +491,19 @@ based on the existing \lstinline[breaklines=true]{date} object.
 
 In order to investigate the benefits of code hints when automating the deprecated refactoring,
 we build two code generation engines, namely a symbolic and a neural one.  For each, we selected approaches with proven success in program synthesis, and that could also incorporate code hints.
-%In an attempt to make them follow the same general structure, we base them both on the CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, which 
+%In an attempt to make them follow the same general structure, we base them both on the CounterExample Guided Inductive Synthesis (CEGIS)~\cite{DBLP:conf/pldi/Solar-LezamaJB08} architecture, which
 %iteratively improves a candidate refactoring until it obeys a given specification. In our case, the specification expresses the fact that the original and
 %the refactored code must behave indistinguishably.
 %
 In particular, for the symbolic engine, we make use of component-based synthesis~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}
 and type-directed synthesis~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Essentially, we use types and code hints to populate
 a component library (i.e., a library of instructions), such that these components are then weaved together to generate the desired program.
-Given the recent success of Large Language Models (LLMs) for code generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}, the neural approach 
+Given the recent success of Large Language Models (LLMs) for code generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}, the neural approach
 generates candidate refactorings by iteratively querying an LLM -- we used Claude 2.1 and Claude 3~\cite{claude}.
 
 %In recent years, Large Language Models (LLMs) have gained a lot of popularity as they have been successfully applied to a wide range of tasks including code generation~\cite{chen2022codet,DBLP:journals/corr/abs-2108-07732,DBLP:journals/corr/abs-2302-05527,DBLP:journals/corr/abs-2202-13169,llmsforcodecompletion,codegenclasslevel,ni2023lever,zhang2023repocoder,lostintranslation,Ding2024cocomic,yang2024sweagent}. While they may seem like the panacea for all code generation problems, they come at a high computational cost as their  the efficacy hinges heavily on the parameter count. The other option when considering code generation are symbolic methods, which make use of hard coded rules~\cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/Gulwani11,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/YamaguchiMDW21}. Thus, the question we are trying to answer in the current paper is: for specialised problems, such as the automatic refactoring of deprecated APIs, are symbolic methods still useful, or were they completely overtaken by LLM-based ones? Answering this question is particularly important given the rise of architectures such as  Mixture-of-Experts~\cite{DBLP:conf/kdd/MaZYCHC18,DBLP:conf/iclr/Zuo00KHZGZ22,DBLP:conf/ppopp/HeZAWLSL22}, which adopt a conditional computation paradigm by only selecting parts of an ensemble of experts, based on the input data. In the context of such an architecture, one needs to consider the best option for each expert, e.g. the one responsible for the current deprecated refactoring problem.
 
-Our experiments show that code hints are critical for the performance of
+Our experiments show that code hints are important for the performance of
 both the symbolic and the neural engines: when code hints are given, both
 engines perform very well, making full automation of deprecated APIs
 refactorings feasible.  Without code hints, the refactoring becomes much
@@ -514,7 +515,7 @@ have a replacement.
 
 Comparing the symbolic and the neural approaches, code hints help the
 symbolic approach to efficiently prune the solution space, resulting in a
-better performance than the neural engine at a lower monetary cost.  We
+better performance than the neural engine at a lower computational cost.  We
 believe this is important to note, especially as LLMs are often seen as a
 panacea for all tasks, including code generation.  This work shows that
 symbolic methods can still be effective in specialised settings, where
@@ -531,9 +532,9 @@ efficient pruning of the solution space is possible.
 %provide the best results for a lower budget than a neural approach alone would require.
 
 
-%While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach 
+%While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach
 %we use them as the building blocks
-%of the new refactoring. 
+%of the new refactoring.
 %For this purpose, we take inspiration from component-based program synthesis,
 %which weaves together components from a library
 %(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
@@ -558,7 +559,7 @@ efficient pruning of the solution space is possible.
 
 %In this paper, we investigate two of the most common types pf program synthesis: type-directed synthesis and component-based synthesis. In particular, we want to see how a symbolic and a neural approach comapre against each other for for of these cases.
 
-%* Type-directed synthesis has been widely used for functional programs, but less so for procedural programming. The exception is using very sophisticates type systems such as graded linear type systems, or ... In this work, our focus is on Java so we rely on a traditional type system. On the side of the neural approach, we are not aware of any type-based investigation. 
+%* Type-directed synthesis has been widely used for functional programs, but less so for procedural programming. The exception is using very sophisticates type systems such as graded linear type systems, or ... In this work, our focus is on Java so we rely on a traditional type system. On the side of the neural approach, we are not aware of any type-based investigation.
 %* For component ... For the LLM-based approach, this translates into providing the daprecates message and allowing the LLM to make use of the corresponding code hints.
 
 
@@ -570,7 +571,7 @@ efficient pruning of the solution space is possible.
 
 %RQs:
 %* Can LLMs reason about type?
-%* Can LLMs follow component based synthesis? 
+%* Can LLMs follow component based synthesis?
 
 
 
@@ -580,7 +581,7 @@ efficient pruning of the solution space is possible.
 %\item[RQ1] How do the two approaches take advantage of type information?
 %\item[RQ2] How do the two approaches take advantage of the deprecation message?
 %\item[RQ3] How do the two approaches deal with qualitative requirements?
-%\end{itemize}  
+%\end{itemize}
 
 
 %* For the symbolic approach, we are interested in how type-directed synthesis works for Java. This has been effective mostly in functional programming, where the types provide a comprehensive description of the code. How does this extend to Java?
@@ -603,7 +604,7 @@ efficient pruning of the solution space is possible.
 %* we use a synthesiser (symbolic or neural) to get a solution
 %* we verify it for semantic equivalence to the deprecated function
 %* if equivalent, we return to the user
-%* if not true, than we provide the counterexample back to the synthesis engine. 
+%* if not true, than we provide the counterexample back to the synthesis engine.
 
 %For LLM, I want the following:
 %* results just with types
@@ -624,7 +625,7 @@ efficient pruning of the solution space is possible.
 %% There is also
 %% very limited support offered by the research community, mainly
 %% focusing on replacing calls to deprecated methods by their
-%% bodies~\cite{DBLP:conf/paste/Perkins05}. 
+%% bodies~\cite{DBLP:conf/paste/Perkins05}.
 
 
 
@@ -636,20 +637,20 @@ efficient pruning of the solution space is possible.
 %we want to investigate whether they completely subsume symbolic methods, or whether, for specialised tasks such as the current refactoring,
 %symbolic methods are still useful at lower computational costs.
 %We picked GPT-4 Turbo.
-%There are several studies of ChatGPT's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and 
+%There are several studies of ChatGPT's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and
 %prompt pattern design for refactoring, requirements elicitation, and software design ~\cite{white2023chatgpt}.
 %While, in this paper, we focus on the refactoring of deprecated methods, the same
 %technique can be applied to deprecated fields and classes.
 
 
-%The first one is a symbolic approach based on Counter-Example Guided Inductive Synthesis (CEGIS), whereas the second is neural approach based on Large 
+%The first one is a symbolic approach based on Counter-Example Guided Inductive Synthesis (CEGIS), whereas the second is neural approach based on Large
 %
 %propose an
 %automated refactoring technique for replacing uses of deprecated APIs that offers guarantees about the preservation of semantics.
-%Additionally, we investigate its abilities to those of LLMs from the perspective of 
+%Additionally, we investigate its abilities to those of LLMs from the perspective of
 
-%% 1. {\em Program synthesis based refactoring:} 
-%% We employ Counter-Example Guided Inductive Synthesis (CEGIS) to generate program refactorings. 
+%% 1. {\em Program synthesis based refactoring:}
+%% We employ Counter-Example Guided Inductive Synthesis (CEGIS) to generate program refactorings.
 %% %
 %% Although powerful, program synthesis is very hard due to the vast search space, i.e.~the space of possible programs that must be considered. Thus, its success is generally reliant on how efficiently it is guided towards a solution by discarding uninteresting programs as early as possible. Most commonly, the information used to guide the search is represented by input/output examples~\cite{DBLP:conf/pldi/FeserCD15}, type signatures~\cite{DBLP:conf/pldi/OseraZ15}, or full functional specifications of the expected code~\cite{DBLP:conf/ijcai/MannaW79}.
 %% %
@@ -658,8 +659,8 @@ efficient pruning of the solution space is possible.
 %% entire \lstinline[breaklines=true]{java.lang} could be considered when synthesising the
 %% refactoring.  In order to prune the search space, we make use of type information and Javadoc code hints.
 
-%% 2. {\em LLMs based refactoring:} 
-%% Recently, Large Language Models (LLMs) have made a lot of progress in code generation tasks. 
+%% 2. {\em LLMs based refactoring:}
+%% Recently, Large Language Models (LLMs) have made a lot of progress in code generation tasks.
 %% These models gain remarkable capabilities on a host of language tasks when prompted with just a problem description.
 %% Thus, we are interesting in investigating how the refactorings generated by such models compare to those generated by program synthesis,
 %% especially with respect to guaranteeing the preservation of semantics. In this work, we use
@@ -681,7 +682,7 @@ efficient pruning of the solution space is possible.
 %% symbolic code generation methods to outperform general-purpose LLMs at a much lower cost.
 
 %\paragraph{Existing approaches to automated program refactoring}
-%One of the existing directions is to 
+%One of the existing directions is to
 %replace calls
 %to deprecated methods by their
 %bodies~\cite{DBLP:conf/paste/Perkins05}.
@@ -728,7 +729,7 @@ JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
 \item We investigate the benefits of code hints for both the symbolic and neural approach. %In particular, we want to find out whether there is still space for specialised techniques
   %such as ours in a GPT-4 Turbo era.
   %\todo{come back to this after investigating experimental results}
-  Our results show that code hints are critical for the performance of both the symbolic and the neural engines: adding more code hints to Javadoc
+  Our results show that code hints are important for the performance of both the symbolic and the neural engines: adding more code hints to Javadoc
 can substantially help automate the refactoring of deprecated APIs.
   %when code
 %hints are given, both engines perform well, making the automa-
@@ -737,14 +738,14 @@ can substantially help automate the refactoring of deprecated APIs.
 %symbolic code generation (which require much less compute) to outperform general-purpose LLMs in specialised settings, at a lower computational cost.
 
 
-\end{itemize}  
+\end{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %The fourth challenge is addressed
 %by designing an equivalence relation, which we then check with fuzz testing.
 %While we can't provide full correctness guarantees,
 %given a large number of test inputs, we consider this a close approximation.
 %More details about the semantic equivalence check are given in Section~\ref{sec:equiv}.
-%Additionally, in Section~\ref{sec:encoding}, we provide technical details about the synthesis and fuzzing based refactoring procedure, 
+%Additionally, in Section~\ref{sec:encoding}, we provide technical details about the synthesis and fuzzing based refactoring procedure,
 %and in Section~\ref{sec:implementation} we discuss some implementation details.
 
 
@@ -756,14 +757,14 @@ can substantially help automate the refactoring of deprecated APIs.
 %% Once the component library is built, for the actual synthesis,
 %% we use a counterexample-guided iterative process that enables us
 %% to keep refining a candidate refactoring until we are happy with it.
-%% The refinement is based on the results provided by 
+%% The refinement is based on the results provided by
 %% fuzz testing.
 %% We provide more details about %
 %% the synthesis process in Section~\ref{sec:encoding}.
 
 
 %% At a high level, the new code is obtained by composing methods
-%% that are accessible from that respective location. 
+%% that are accessible from that respective location.
 %% Consequently, we take inspiration from component-based program synthesis,
 %% which weaves together components from a library
 %% (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
@@ -786,9 +787,9 @@ can substantially help automate the refactoring of deprecated APIs.
 
 %We make the symbolic and the neural approach as similar as possible. In particular, they are both iterative, such that, in each iteration, a candidate refactoring is being generated, which is then verified for semantic equivalence with the original code. If the verification succeeds, then the solution is returned to the user. Otherwise, the counterexample is used  to refine the current solution.
 
-%While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach 
+%While for the neural approach, the code hints become part of the prompt input to the LLM, in the symbolic approach
 %we use them as the building blocks
-%of the new refactoring. 
+%of the new refactoring.
 %For this purpose, we take inspiration from component-based program synthesis,
 %which weaves together components from a library
 %(typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
@@ -819,7 +820,7 @@ the original code on a finite set of inputs. Then, the verification phase tries 
 %We next show how we encode the problem corresponding to each of the two phases. This is done so that fuzz testing can be used as the safety checker.
 
 \subsection{Synthesis phase}\label{sec:synthesis}
-In this phase, we have 
+In this phase, we have
 a finite set of input examples $\{\vec{i_1} \cdots \vec{i_n}\}$ and we attempt to find a candidate refactoring
 that is observationally equivalent to the original code for the given inputs.
 
@@ -853,7 +854,7 @@ There could be two reasons for this situation, which we cannot differentiate bet
 Firstly, there may indeed be no $P_2$ that can be constructed with the available components in the component library such that
 it is equivalent to $P_1$ on the given inputs. Secondly, this could be caused by JQF's unsoundness.
 Given that fuzzers rely on testing, they may fail to find inputs that trigger unsafe behaviours even when such inputs exist.
-Consequently, we cannot guarantee that we will always find a refactoring whenever one exists. We will provide more details about our decision to use fuzzing as the safety checker in 
+Consequently, we cannot guarantee that we will always find a refactoring whenever one exists. We will provide more details about our decision to use fuzzing as the safety checker in
 Section~\ref{sec:implementation}.
 
 %For the neural approach, we query the LLM to obtain a candidate refactoring. Similarly to the symbolic approach, we use counterexamples found in prior verification
@@ -869,7 +870,7 @@ refactored (e.g., \lstinline{this.minimumSize();}).  Finally, we attach a
 list of formatting constraints.
 
 %As explained in Section~\ref{sec:overview},
-The code returned by the LLM is verified against the original code. 
+The code returned by the LLM is verified against the original code.
 If the verification fails, we attach the set of counterexamples generated by the fuzzing
 engine to subsequent prompts. We apply object serialisation to obtain structured-views of the input and output states.
 In addition to this, we followed the prompting guidelines provided by Anthropic Claude\footnote{https://docs.anthropic.com/en/docs/prompt-engineering} (e.g. using XML tags).
@@ -936,7 +937,7 @@ Do note that, as opposed to the symbolic approach, the LLM doesn't give any guar
 
 %% iterative process that enables us to keep refining a candidate refactoring until we are happy with it. This process consists of two phases, described next:
 %%   \begin{itemize}
-%%   \item[{\bf Phase 1:}] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode   
+%%   \item[{\bf Phase 1:}] Given a fixed set of inputs $In$, find a refactoring that works for $In$. For this purpose, we encode
 %%     the synthesis problem as a verification problem that can be solved by fuzzing. We discuss this problem encoding in
 %%     Section~\ref{sec:encoding}. The found refactoring is called a candidate.
 %%   \item[{\bf Phase 2:}] Given the candidate synthesised at the previous step, verify whether it is indeed a correct refactoring.
@@ -1007,8 +1008,8 @@ at the end of $P$. %% Thus, \var{liveVars(P_1)} gives us the
 %% live at the end of \var{P_1}.
 \item \var{staticFields(C)} returns
   the set of static fields of class \var{C}.
-\item $exc(P, \vec{i})$ returns the exception thrown by $P$'s execution on input $\vec{i}$.  
-\end{itemize}  
+\item $exc(P, \vec{i})$ returns the exception thrown by $P$'s execution on input $\vec{i}$.
+\end{itemize}
 
 \begin{example}\label{ex:defs}
 %
@@ -1028,12 +1029,12 @@ at the end of $P$. %% Thus, \var{liveVars(P_1)} gives us the
 %
 Then, we have:
 \[
-\footnotesize	
+\small
 \begin{aligned}[t]
   \var{liveVars(P_1)} &= \{date, hour\}\\
-  \var{liveVars(P_2)} &= \{calendar, date, hour\}\\  
+  \var{liveVars(P_2)} &= \{calendar, date, hour\}\\
   \var{loadedClasses(P_1)} &= \{Date\} \\
-  \var{loadedClasses(P_2)} &= \{Calendar, Date\} \\  
+  \var{loadedClasses(P_2)} &= \{Calendar, Date\} \\
   \var{staticFields(Date)} &= \emptyset\\
   \var{staticFields(Calendar)} &= \{DATE, YEAR, \cdots\}\\
   \var{exc(P_1, \_)}=\var{exc(P_2, \_)} &=\emptyset
@@ -1058,7 +1059,7 @@ We overload equality to work over sets (for live variables and loaded classes).
 %% \[
 %% \begin{aligned}
 %%   & (1)~ exc(P_1, \vec{i})=\{e_1\} \wedge exc(P_2, \vec{i})=\{e_2\} \wedge equals(e_1,e_2) ~\vee\\
-%%   & \qquad exc(P_1, \vec{i})=exc(P_2, \vec{i}) =\emptyset \\ 
+%%   & \qquad exc(P_1, \vec{i})=exc(P_2, \vec{i}) =\emptyset \\
 %%       & (2)~ \var{liveVar}(P_1) = \var{liveVar}(P_2) \wedge \forall v\in \var{liveVar}(P_1). \\
 %%       & \qquad equals(E[P_1(\vec{i})](v), E[P_2(\vec{i})](v))\\
 %%   & (3)~  \var{loadedClasses}(P_1) = \var{loadedClasses}(P_2) ~\wedge\\
@@ -1068,10 +1069,10 @@ We overload equality to work over sets (for live variables and loaded classes).
 %%     \]
 %
   \[
-\footnotesize	  
+\small
 \begin{aligned}
   & (1)~ \var{exc}(P_1, \vec{i})=\{e_1\} \wedge \var{exc}(P_2, \vec{i})=\{e_2\} \wedge \var{equals}(e_1,e_2) ~\vee\\
-  & \qquad \var{exc}(P_1, \vec{i})=\var{exc}(P_2, \vec{i}) =\emptyset \\ 
+  & \qquad \var{exc}(P_1, \vec{i})=\var{exc}(P_2, \vec{i}) =\emptyset \\
       & (2)~ \var{liveVar}(P_1) = \var{liveVar}(P_2) \wedge \forall v\in \var{liveVar}(P_1). \\
       & \qquad \var{equals}(E[P_1(\vec{i})](v), E[P_2(\vec{i})](v))\\
   & (3)~  \var{loadedClasses}(P_1) = \var{loadedClasses}(P_2) ~\wedge\\
@@ -1080,7 +1081,7 @@ We overload equality to work over sets (for live variables and loaded classes).
     \end{aligned}
     \]
 
- 
+
   \end{definition}
 
 
@@ -1095,7 +1096,7 @@ assigned equal objects by the executions of \var{P_1} and
 \var{P_2} on $\vec{i}$, respectively, and
 (3) the classes loaded by \var{P_1} must be the same as the classes loaded by \var{P_2}, and
 all the static fields in the classes loaded by both the class loaders of \var{P_1} and \var{P_2} must be assigned equal objects by the
-two executions, respectively.  
+two executions, respectively.
 %\todo{this may be mentioned in several places}
 In our implementation, if either the deprecated or the refactored code didn't load a class, we load it for it,
 and check that the initial state of that class is the same for both blocks of code.
@@ -1129,23 +1130,23 @@ considered unreliable and ignored.
   When applying Definition~\ref{def:prog-equiv} to \var{P_1} and \var{P_2} given in Example~\ref{ex:defs},
   the following conditions must hold (given that class \var{Date} has no static fields, the third condition is trivial):
   \[
-\footnotesize	  
+\small
 \begin{aligned}
       & (1)~ \var{exc(P_1)}=\var{exc(P_2)} =\emptyset\\
       & (2)~ equals(E[P_1(\vec{i})](hour), E[P_2(\vec{i})](hour)) ~ \wedge\\ %date\in \{date,calendar\} ~ \wedge \\
       & \qquad equals(E[P_1(\vec{i})](date), E[P_2(\vec{i})](date))\\
 & (3)~  \var{Date} \in \{\var{Date}, \var{Calendar}\}
-    %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
+    %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$.
   %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
    %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
     \end{aligned}
     \]
 
- 
+
     %% Then, in order for the two portions of code to be
     %% equivalent with respect to an input \var{x}, the objects assigned to variable \var{date} by the execution of  \var{P_1(x)} and \var{P_2(x)}
     %% must be equivalent. We will discuss checking equivalence of two objects in two distinct executions next.
-    
+
 \end{example}
 
 %%\todo{define $equivalent(E[P_1(x)](v), E[P_2(x)](v))$}.
@@ -1169,10 +1170,10 @@ uses \lstinline[breaklines=true]{getPreferredSize}.
 ~\begin{lstlisting}[mathescape=true,showstringspaces=false,numbers=none]
   // $P_3$:
   Dimension dim1=container.preferredSize();
-  Dimension dim2=container.preferredSize();    
+  Dimension dim2=container.preferredSize();
 
   // $P_4$:
-  Dimension dim1=container.getpreferredSize();  
+  Dimension dim1=container.getpreferredSize();
   Dimension dim2=dim1;
 \end{lstlisting}
 %\end{example}
@@ -1182,12 +1183,12 @@ uses \lstinline[breaklines=true]{getPreferredSize}.
 
 %% \begin{example}\label{ex:aliasing}
 %%   \begin{lstlisting}[mathescape=true,showstringspaces=false]
-    
-%%   // assume date refers to 2022-12-01 13:30:00    
+
+%%   // assume date refers to 2022-12-01 13:30:00
 
 %%   // $P_3$:
 %%   int hour1 = date.getHours();
-%%   int hour2 = date.getHours();    
+%%   int hour2 = date.getHours();
 
 %%   // $P_4$:
 %%   final Calendar calendar = Calendar.getInstance();
@@ -1213,13 +1214,13 @@ is used after both the original and the refactored code, respectively.
 
 \begin{lstlisting}[mathescape=true,showstringspaces=false]
   dim1.setSize(1,2);
-  dim2.setSize(2,3);  
+  dim2.setSize(2,3);
 \end{lstlisting}
 
 %Our intention is to execute both the original and the refactored code, respectively, plus the additional two lines.
 If the original and the refactored code were indeed equivalent,
 %with respect to input \var{d},
-then we would expect \var{dim1} and \var{dim2} to have the same value at the end of both blocks of code. 
+then we would expect \var{dim1} and \var{dim2} to have the same value at the end of both blocks of code.
 %executions, respectively.
 However, this is not the case.
 In the original code, \var{dim1} will have width 1 and height 2, whereas in the refactored code,
@@ -1228,41 +1229,41 @@ in the refactored code, \var{dim1} and \var{dim2} are aliases. %% Then, when the
 %% \var{hour1} was changed to refer to the date denoting ``30/10/2020'', this also affected \var{date2}.
 Thus, when \var{dim2} has its size set to (2,3), this also affects \lstinline[breaklines=true]{dim1}.
 %\var{P_3} and \var{P_4} are not equivalent for input \var{d}.
-\end{example}  
+\end{example}
 
 Intuitively, any aliases between live variables at the end of the original code should also
 be present at the end of the refactored code. For this purpose, we use the notation
 \var{aliasEquivClass(V)} which returns the set of all equivalence classes induced over the
-set of variables \var{V} by the aliasing relation.  
+set of variables \var{V} by the aliasing relation.
 Notably, the aliasing equivalence relation must also hold over the
 static fields of the classes loaded by both programs.
 
 
 \begin{example}
-For \var{P_1} and \var{P_2}, there are no aliases. 
+For \var{P_1} and \var{P_2}, there are no aliases.
 %% \[
 %% \begin{aligned}[t]
-%%   &\var{aliasEquivClass(liveVar(P_1)} {\cup} 
+%%   &\var{aliasEquivClass(liveVar(P_1)} {\cup}
 %%     \var{staticFields(loadedClasses(P_1))} {=} \emptyset\\
 %%   &\var{aliasEquivClass(liveVar(P_2)} {\cup}
-%%     \var{staticFields(loadedClasses(P_2))} {=} \emptyset 
+%%     \var{staticFields(loadedClasses(P_2))} {=} \emptyset
 %% \end{aligned}
 %% \]
 %
 However, for \var{P_3} and \var{P_4} we have:
 \[
-\footnotesize	
+\small
 \begin{aligned}[t]
   &\var{aliasEquivClass(liveVar(P_3)}~ \cup\\
   &\var{staticFields(loadedClasses(P_3))} = \emptyset\\
   &\var{aliasEquivClass(liveVar(P_4)} ~\cup\\
-  &\var{staticFields(loadedClasses(P_4))} = \{\{dim1, dim2\}\} 
+  &\var{staticFields(loadedClasses(P_4))} = \{\{dim1, dim2\}\}
 \end{aligned}
 \]
 In \var{P_4}, the aliasing relation induces one equivalence class, namely \var{\{dim1, dim2\}}.
 
 \end{example}
-  
+
 Next, we complete Definition~\ref{def:prog-equiv} by capturing the aliasing aspect.
 
 \begin{definition}[Addition to Definition~\ref{def:prog-equiv}]\label{def:prog-equiv-add}
@@ -1271,13 +1272,13 @@ In addition to Definition~\ref{def:prog-equiv},
 two programs \var{P_1} and \var{P_2} are equivalent
 with respect to $\vec{i}$ iff:
 \[
-\footnotesize	
+\small
     \begin{aligned}
       & (4)~ \forall v_1,v_2 \in \mathit{liveVar}(P_1) \cup \mathit{staticFields}(loadedClasses(P_1)). \\
-      & \qquad aliases(P_1, v_1, v_2) \Longleftrightarrow  aliases(P_2, v_1,v_2)      
+      & \qquad aliases(P_1, v_1, v_2) \Longleftrightarrow  aliases(P_2, v_1,v_2)
     %% & (5)~\forall f_1,f_2 \in staticFields(loadedClasses(P_1)).\\
     %%   & \qquad aliases(P_1, f_1, f_2) \Rightarrow aliases(P_2, f_1,f_2)
-    %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$. 
+    %%   throws an exception and   $equiv(exception(R_1), exception(R_1))$.
   %% \item \var{R_1} doesn't throw an exception and $equiv(R_1,R_2)$ and
    %% $\forall f_i \in getStatic(class(R_1)) \wedge g_i \in getStatic(class(R_2)). equiv(f_i,g_i)$.
     \end{aligned}
@@ -1294,7 +1295,7 @@ if and only if they are in the same equivalence class induced by the aliasing re
 
 
 %% At a high level, the new code is obtained by composing methods
-%% that are accessible from that respective location. 
+%% that are accessible from that respective location.
 %% Consequently, we take inspiration from component-based program synthesis,
 %% which weaves together components from a library
 %% (typically methods from an API) in order to generate the desired program \cite{DBLP:conf/icse/JhaGST10,DBLP:conf/pldi/GulwaniJTV11,DBLP:conf/popl/FengM0DR17}.
@@ -1310,8 +1311,8 @@ if and only if they are in the same equivalence class induced by the aliasing re
 %% refactoring.  In order to prune the search space, we start by
 %% investigating the information available to our refactoring procedure.
 
-  
-%As mentioned in Section~\ref{sec:intro}, for both approaches, we want to use  
+
+%As mentioned in Section~\ref{sec:intro}, for both approaches, we want to use
 %the code hints provided in the Javadoc. In particular, we use these code hints to build a library of components that we can then use to generate the refactoring.
 
 
@@ -1321,7 +1322,7 @@ if and only if they are in the same equivalence class induced by the aliasing re
 %% \item For the {\bf CodeHints-library} the seeding is guided
 %%   by both Javadoc code hints and types.
 %% \item For the {\bf Types-library} the seeding is only guided by types.
-%% \end{itemize}  
+%% \end{itemize}
 
 In this section, we describe how we populate the instruction library (also referred to as the component library)
 used by the symbolic approach starting from code hints. We'll refer to this library as the CodeHints-library.
@@ -1331,7 +1332,7 @@ for constructing the solution.
 
 For illustration, let's go back to the running example in Figure~\ref{ex:deprecated-method-other} (with the corresponding Javadoc comment in Figure~\ref{ex:code-hints}).
 %
-As mentioned in Section~\ref{sec:intro}, when building the corresponding component library for this example, 
+As mentioned in Section~\ref{sec:intro}, when building the corresponding component library for this example,
 %
 %{\bf Challenge 1.}  Although it may seem as if
 %method \texttt{get} is static allowing an immediate call,
@@ -1370,12 +1371,12 @@ such that it only contains components specific to that particular use case.
 %The third challenge is further discussed under ``Phase 1: Initialise with code hints'' in Section~\ref{sec:components-seeding}.
 
 %% In Section~\ref{sec:components-seeding}, we provide in-depth details about the
-%% seeding of the component library and how to tackle the above challenges. 
+%% seeding of the component library and how to tackle the above challenges.
 %% At a high level, the process is guided by types and code hints.
 
 %% \section{{\bf Seeding of the component library}}\label{sec:components-seeding}
 %% As mentioned in Section~\ref{sec:overview}, a critical aspect of our technique is the construction
-%% of the component library. 
+%% of the component library.
 %% If the component library is too small, meaning that it doesn't contain all
 %% the required components, then synthesis will fail to find a refactoring.
 %% Similarly, if it contains too many components, then synthesis quickly becomes infeasible
@@ -1388,8 +1389,8 @@ such that it only contains components specific to that particular use case.
 %In our running example in Figure~\ref{ex:deprecated-method-other}, we can view \texttt{date} of type \texttt{Date} as the input to the code to be refactored, and the integer \texttt{hour} as the output. Generally speaking, the refactoring technique will weave together components from the component library that consume the inputs and generate the required outputs.
 
 Throughout the seeding process, we keep track of the following sets:
-\consumableobjs (inputs to the code to be refactored, which need to be consumed by the refactoring),  
-\availabletypes (types for which we either have consumable objects or the corresponding generators to create them) and 
+\consumableobjs (inputs to the code to be refactored, which need to be consumed by the refactoring),
+\availabletypes (types for which we either have consumable objects or the corresponding generators to create them) and
 \targettypes (types for which we must be able to generate objects). To start with, the \targettypes set
 contains the types of the original code's outputs. %, as well as the types of the code hints' arguments (required in order to make use of the code hints).
 %(objects directly generated by the code hints or objects created by the generators added to make the code hints realisable)
@@ -1400,7 +1401,7 @@ For the running example, we start with:
 %For the running example, after initialising the component library with the code hints, we have:
 %\[
 %\begin{aligned}
-  $\consumableobjs = \{\texttt{date}\},  
+  $\consumableobjs = \{\texttt{date}\},
   \availabletypes = \{\texttt{Date}\},
   \targettypes    = \{\texttt{int}\}$.
 %\end{aligned}
@@ -1436,7 +1437,7 @@ challenge for program synthesis~\cite{DBLP:conf/cav/AbateDKKP18}, and thus the s
 synthesis process will always attempt to use the constants provided in the code hints before generating new ones.
 
 Intuitively, we need to make sure that the Javadoc suggestions
-are realisable as captured by Definition~\ref{def:realizable}, where 
+are realisable as captured by Definition~\ref{def:realizable}, where
 %We formally refer to such a component as {\em realisable} as captured by Definition~\ref{def:realizable}, where
 %$source\_types$ to refer to types for which we have the means to generate objects, and
 $\requiredtypes(\allowbreak method)$ refers to the types of the objects required to call $method$ (i.e., the types corresponding to its arguments and current object).
@@ -1447,7 +1448,7 @@ given that, in order to call \lstinline[breaklines=true]{get}, we must
 provide an argument of type \lstinline[breaklines=true]{int} and a current
 object of type \lstinline[breaklines=true]{Calendar}.
 Method \lstinline[breaklines=true]{get} is not realisable as the library
-doesn't contain any generator for \lstinline[breaklines=true]{Calendar}. 
+doesn't contain any generator for \lstinline[breaklines=true]{Calendar}.
 Consequently, \lstinline[breaklines=true]{Calendar} is added to
 \targettypes, resulting in:
 %
@@ -1464,23 +1465,23 @@ Method \var{i} is {\em realisable} iff $\forall t \in
 %\subsection{Parsing the @code hints} \label{sec:parse}
 
 %As explained in Section~\ref{sec:components-seeding}, when seeding the component library, our algorithm must
-%interpret Javadoc hints. 
+%interpret Javadoc hints.
 One challenge in this phase is interpreting the
-\lstinline[breaklines=true]{@code} blocks inside \lstinline[breaklines=true]{@deprecated} sections, which 
+\lstinline[breaklines=true]{@code} blocks inside \lstinline[breaklines=true]{@deprecated} sections, which
 we attempt to parse as Java expressions. In particular, we parse each hint as if it were invoked in the context of
 the method to refactor, such that imports or the implicit \lstinline[breaklines=true]{this} argument
 are considered during parsing.
 
 %\todo{needs some rewriting?}
 %% The issue is that code hints are not always expressed as well-formed Java.
-%% In some sense, the task of parsing code hints lies in between parsing Java code and interpreting natural language. 
+%% In some sense, the task of parsing code hints lies in between parsing Java code and interpreting natural language.
 %
 In order to address the challenge that code hints are not always expressed as well-formed Java,
 we customised the
 GitHub Java parser
 to accept undeclared identifiers and type names
 as arguments. For instance, the Javadoc hint for deprecating \lstinline[breaklines=true]{boolean inside(int X, int Y)}
-%suggests using 
+%suggests using
 in Figure~\ref{ex:javadoc-hint} suggests using
 \lstinline[breaklines=true]{contains(int, int)}, which would normally cause a parsing error as the \lstinline[breaklines=true]{int} type
 appears in the place of argument names. In our setting, we accept this hint as valid.
@@ -1493,8 +1494,8 @@ the \lstinline[breaklines=true]{@code} tag. %% These situations are reflected in
 %We will improve our technique for collecting code hints as future work.
 
 %% These benchmarks
-%% are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\ref{tab:configuration-results-ch} (some of the missing benchmarks from Table~\ref{tab:configuration-results-ch} do genuinely miss a code hint). 
- 
+%% are contained in Table~\ref{tab:configuration-results}, but omitted in Table~\ref{tab:configuration-results-ch} (some of the missing benchmarks from Table~\ref{tab:configuration-results-ch} do genuinely miss a code hint).
+
 %\begin{figure}
 %\begin{lstlisting}[mathescape=true,showstringspaces=false]
 %/**
@@ -1571,9 +1572,9 @@ transformers we refer to methods that modify the value of an instance
 variable.  Given our objective to generate objects for the \targettypes
 while consuming objects from \consumableobjs, we prioritise transformers
 that consume such objects.  For instance, for our running example there are
-16 public transformers for the \lstinline[breaklines=true]{Calendar} class. 
+16 public transformers for the \lstinline[breaklines=true]{Calendar} class.
 However, instead of adding all of them to the CodeHints-library, we
-prioritise those that consume the \lstinline[breaklines=true]{date} object. 
+prioritise those that consume the \lstinline[breaklines=true]{date} object.
 There is only one such transformer \lstinline[breaklines=true]{void setTime(Date date)}.
 Once we added any new transformers to the library, we
 remove the consumed objects from \consumableobjs.
@@ -1625,7 +1626,7 @@ A possible future direction is allowing unrealisable generators and
 transformers to be added to the library and iterating phases 2 and 3 a given
 number of times (potentially until reaching a fixed point).
 %
-%% iterate phase 2 and 3 until fixed point to 
+%% iterate phase 2 and 3 until fixed point to
 
 \subsection{Types-library} \label{sec:extend-library}
 
@@ -1664,9 +1665,9 @@ synthesis techniques.
 \section{Design and implementation choices} \label{sec:implementation}
 
   %In the previous sections we presented our technique from a formal point of view.
-  %Conversely, in this section we discuss details related to our implementation choices.  
-  
-%  In this section we discuss Java specific challenges 
+  %Conversely, in this section we discuss details related to our implementation choices.
+
+%  In this section we discuss Java specific challenges
  % and our solution, as well as some other design and implementation choices we made.
 
 \subsection{Abstract classes and interfaces}\label{sec:abstract}
@@ -1710,7 +1711,7 @@ unlucky fuzzed input might lead to an out of memory error.
 %In order to generate programs, we make use of JQF~\cite{DBLP:conf/issta/PadhyeLS19}, a  %coverage-guided property-based
 %fuzz testing platform for Java.
 %
-%As explained in Section~\ref{sec:encoding}, we use JQF for two tasks. Firstly, in the synthesis phase, 
+%As explained in Section~\ref{sec:encoding}, we use JQF for two tasks. Firstly, in the synthesis phase,
 %JQF is generating the candidate refactoring.
 %Secondly, in the verification phase, JQF generates
 %counterexample inputs that can differentiate between the original and refactored codes.
@@ -1739,7 +1740,7 @@ side effects, our engine is prone to producing a refactoring that it's not fully
 
 
 
-  
+
 \subsection{Instrumentation and isolation}
 
 We use reflection to invoke the original method to refactor with fuzzed inputs,
@@ -1803,7 +1804,7 @@ were irrelevant to our refactorings.
 %% \todo{So we don't need to load the exact same classes? What if static fields are changed? -
 %% PAK: We check that all static fields in classes that were loaded by either program are equivalent.
 %% That means that if one program didn't load a class, we load it for it, and check that the
-%% initial state of that class is the same as the other program's. 
+%% initial state of that class is the same as the other program's.
 
 
 
@@ -1822,7 +1823,7 @@ were irrelevant to our refactorings.
 %% // Redundant snippet:
 %% Date today;
 %% Date tomorrow;
-  
+
 %% void init(int year, int month, int day) {
 %%   // Original:
 %%   this.setDates(year, month, day);
@@ -1830,7 +1831,7 @@ were irrelevant to our refactorings.
 %%   // Instrumented:
 %%   Program.of(0xabcd).execute(year, month, day, this);
 %% }
-  
+
 %% @Deprecated
 %% private void setDates(int year, int month, int day) {
 %%   final Calendar calendar = Calendar.getInstance();
@@ -1863,8 +1864,8 @@ were irrelevant to our refactorings.
 %% \label{ex:date-instrumentation}
 %% \end{figure}
 
-  
- 
+
+
 
 
 
@@ -1926,10 +1927,10 @@ We implemented the refactoring generation techniques in two tools called \tool a
 
 Our benchmark suite contains 236 out of 392 deprecated methods in the Oracle
 JDK 15 Deprecated API documentation~\cite{OracleJdk15DeprecatedAPI}.
-We included all the deprecated methods except those that were deprecated without a replacement (e.g. \lstinline[breaklines=true]{java.rmi.registry.RegistryHandler.registryImpl(int)}), 
+We included all the deprecated methods except those that were deprecated without a replacement (e.g. \lstinline[breaklines=true]{java.rmi.registry.RegistryHandler.registryImpl(int)}),
 %methods that do not have a semantically equivalent refactoring
 %(see Section~\ref{sec:semantically-different-refactorings}),
-methods inaccessible by non-JCL classes (i.e., all the finalize methods, which are called by the garbage collector, not user code, meaning that we can't modify their calls), 
+methods inaccessible by non-JCL classes (i.e., all the finalize methods, which are called by the garbage collector, not user code, meaning that we can't modify their calls),
 methods that only perform I/O (as our equivalence check doesn't include I/O side effects),
 and native methods.
 %methods with I/O side-effects and native methods, which are currently
@@ -1942,7 +1943,7 @@ We accessed the LLMs via Amazon Bedrock.
 To make our results more deterministic, we use a lower temperature (i.e. less random) of $0.2$. We also repeated the experiments three times, and the results are summarized as averages.
 %
 For all engines, we bound the search by at most 500 inputs and 5 minutes per verification phase, and at
-most 2 minutes per synthesis phase. 
+most 2 minutes per synthesis phase.
 %For each refactoring found by GPT-4 Turbo, we use fuzzing to check program equivalence (according to the
 %description in Section~\ref{sec:equiv}), and bound the verification time to 5 minutes.
 
@@ -1967,12 +1968,12 @@ For \tool, if code hints are present, we start with the CodeHints-library and fa
 \begin{tabular} {|l|r|r|r|r|r|}
 \hline
 Configuration & \checkmark & \xmark & \lightning & \% & $\diameter$ runtime (s) \\ \hline
-%No code hints         &  &  &  &  & \\ 
+%No code hints         &  &  &  &  & \\
 %\tool w/ types      &         79 &    116 &         41 & 33 & 216.1 \\
 %\tool w/ code hints &        103 &    131 &          2 & 44 & 218.9 \\
-\tool       &        7 &    82 &         16 & 6 & 213.7 \\  
+\tool       &        7 &    82 &         16 & 6 & 213.7 \\
 \llma                     &        12 &     91 &         2  & 11 & 197.14 \\
-\llmb                     &        10 &     93 &         2  & 9 & 203.32 \\ 
+\llmb                     &        10 &     93 &         2  & 9 & 203.32 \\
 Best Virtual Engine    &        15  &         77 &      13 &  14 & 195.9 \\
 \hline\hline
 \tool  (CH)     &        104 &     19 &   8         & 79 & 220.8 \\
@@ -1983,7 +1984,7 @@ Best Virtual Engine (CH) &           107 &     13  &  11         & 82 & 210.28 \
 \end{tabular}
 }
 \caption{Experimental results for all benchmarks.}
-\label{tab:configuration-results}   
+\label{tab:configuration-results}
 \end{table}
 
 Table~\ref{tab:configuration-results} provides an overview of the number of
@@ -2012,7 +2013,7 @@ To understand the discrepancy between the number of missed/unsound refactorings 
 we next investigate the main reasons for such refactorings.
 
 
-%In order to make sure that the benchmarks with code hints are just not 
+%In order to make sure that the benchmarks with code hints are just not
 
 
 %The results in Table~\ref{tab:configuration-results} support our assumption that this is a difficult refactoring as both engines only
@@ -2027,7 +2028,7 @@ we next investigate the main reasons for such refactorings.
 
 
 \paragraph{Missed refactorings}
-%% Out of the refactorings missed both with and without code hints, 
+%% Out of the refactorings missed both with and without code hints,
 %% 2 were missed because the method return
 %
 %Another reason for missed refactorings is JVM crashes. We use reflection to produce counterexamples,
@@ -2040,11 +2041,11 @@ we next investigate the main reasons for such refactorings.
 %Additionally, since our neural engine shares the same verification approach with our symbolic engine, many missed/unsound refactorings
 %are due to the same reasons (i.e. JVM crashes).
 %
-For the symbolic engine, the majority of the missed refactorings were due to fuzzing timeouts, which are likely 
+For the symbolic engine, the majority of the missed refactorings were due to fuzzing timeouts, which are likely
 caused by the component libraries missing some
 instructions needed in the synthesis phase.
-As explained in Section~\ref{sec:components-seeding}, one option 
-for increasing the size of our libraries 
+As explained in Section~\ref{sec:components-seeding}, one option
+for increasing the size of our libraries
 is allowing unrealisable generators and transformers to
 be added.
 %and iterating phases 2 and 3 of library seeding
@@ -2073,11 +2074,11 @@ crashing rather than e.g. throwing an exception. %% Currently, this terminates o
 In several cases, refactorings that are not equivalent to the original code managed to pass our verifier.
 While we expected to run into this problem because of the nature of fuzzing (the fuzzer may miss counterexamples that distinguish the behaviour of the original from the refactored code),
 we also encountered other problems:
-%One of the observations of our work is that it is actually very difficult to come up with a useful equivalence verifier 
+%One of the observations of our work is that it is actually very difficult to come up with a useful equivalence verifier
 %While we already gave up soundness by relying on fuzzing, we were confrunted with the following additional
 %sources of unsoundness (which led to unsound refactorings passing the verification stage):
 
-%As particularly obvious for the symbolic engine's results, 
+%As particularly obvious for the symbolic engine's results,
 %there are multiple scenarios where the equivalence check
 %is insufficient to identify
 %that a synthesised candidate is not equivalent to the original program. We
@@ -2089,7 +2090,7 @@ since we rely on reflection to examine objects inside the Java runtime. As
 a consequence, we cannot distinguish programs that only differ in these aspects.
 %This is not a fundamental limitation, but instead just an implementation detail.
 
-Abstract methods: 
+Abstract methods:
 There are classes in the JCL without any
 existing implementation (e.g. \lstinline{javax.swing.InputVerifier}), and thus no concrete
 method against which to verify the equivalence between the original and the refactored code. For those, the symbolic engine will
@@ -2099,7 +2100,7 @@ it doesn't match human intent for the deprecated method.
 Insufficient counterexamples: Our fuzzing-based equivalence check is inherently
 incomplete, and for some benchmarks we do not explore sufficient counterexamples
 %in sufficient number or quality
-to identify unsound candidates. An example 
+to identify unsound candidates. An example
 is \lstinline[breaklines=true]{javax.swing.JViewport#isBackingStoreEnabled}, where only a single input
 out of the $2^{32}-1$ possible input values will trigger an alternate code path.
 As a second exemplar, method \lstinline[breaklines=true]{java.rmi.server.RMIClassLoader#loadClass}
@@ -2150,11 +2151,11 @@ our equivalence checker.
 %% because the method to refactor was a default method with an empty body, meant
 %% to be overridden by subclasses. To find a sound refactoring in these cases, our
 %% algorithm should expand its equivalence constraint to types that override the
-%% method to refactor. 
+%% method to refactor.
 
 
 %% In order to catch the unsound refactorings (for both the CodeHints-library and the
-%% Types-library), we can either  
+%% Types-library), we can either
 %% increase the fuzzing timeout for the verification phase (resulting in
 %% more counterexamples), or attempt to produce higher quality
 %% counterexamples. For the latter, one solution is to stop relying on libraries
@@ -2166,10 +2167,10 @@ our equivalence checker.
 %\subsection{Results when code hints are present}
 %Many of the refactorings missed in Table~\ref{tab:configuration-results}
 %happen for those benchmarks where no code hints were provided by the Javadoc.
-%As we are also interested in the effect of code hints for the engines, 
-%Table~\ref{tab:configuration-results-ch} shows the same evaluation as  
+%As we are also interested in the effect of code hints for the engines,
+%Table~\ref{tab:configuration-results-ch} shows the same evaluation as
 %Table~\ref{tab:configuration-results}, but excluding methods where
-%no hint is provided in the Javadoc (or, in a few cases, we were unable to parse it as it was too far from well-formed Java code). 
+%no hint is provided in the Javadoc (or, in a few cases, we were unable to parse it as it was too far from well-formed Java code).
 
 
 %\begin{table}[h]
@@ -2183,9 +2184,9 @@ our equivalence checker.
 %\llmb   &             95 &     35  &  1         & 73 & 205.27 \\
 %Best Virtual Engine &           109 &     14  &  8         & 83 & 211.89 \\
 %\hline\hline
-%\end{tabular} 
+%\end{tabular}
 %\caption{Results for benchmarks where code hints were present in the Javadoc.}
-%\label{tab:configuration-results-ch}   
+%\label{tab:configuration-results-ch}
 %\end{table}
 
 %Results are better for these benchmarks, with less missed refactorings. The reasons for missed and unsound refactorings are the same as for the overall set of benchmarks in Section~\ref{sec:experimental-results}.
@@ -2212,7 +2213,7 @@ whereas for the neural engine, they provide additional context to the LLM.
 \noindent
 {\bf (RQ3) How do the symbolic and the neural approach compare against each other?}
 %
-The symbolic and the neural engines have very similar performance (where the symbolic engine has a smaller monetary cost).
+The symbolic and the neural engines have very similar performance (where the symbolic engine has a smaller computational cost).
 %There is only a small difference between the performance of the symbolic
 %engine and that of the neural engine.
 
@@ -2246,7 +2247,7 @@ than the symbolic approach.
 Compared to the symbolic engine, the neural one is able to provide correct
 refactorings for deprecated concurrency primitives (e.g.,
 \lstinline{weakCompareAndSet} in
-\lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}). 
+\lstinline[breaklines=true]{java.util.concurrent.atomic.AtomicReference}).
 These methods call native methods, for which we cannot observe side-effects
 (Section~\ref{sec:observable}).  Consequently, these are not captured by
 the counterexamples returned by the fuzzer, and are thus not taken into
@@ -2285,7 +2286,7 @@ introduction.
 %than with the Type-library.
 %For the former, when code hints are present and used, the success rate goes from 52\% to 81\% (Table~\ref{tab:configuration-results-ch}).
 %The higher quality of the instructions in the CodeHints-library compared to the
-%Types-library leads to  a reduction in 
+%Types-library leads to  a reduction in
 %the number of both unsound and missed refactorings.
 %This also allows us to conclude that,
 %while useful, types are not sufficient when synthesising code with side effects.
@@ -2299,8 +2300,8 @@ introduction.
 %% \paragraph{Zest vs Rand guidance}
 %% Our experiments did not yield significant performance
 %% differences between using JQF's coverage-guided Zest guidance and its random
-%% guidance. 
-%% In general, Zest guidance is known to perform better at 
+%% guidance.
+%% In general, Zest guidance is known to perform better at
 %% generating inputs fitting precise bug-revealing conditions than random guidance.
 %% However, this better guidance comes at the price of lower performance than the
 %% in-memory PRNG guidance and thus may result in fewer counterexamples and more
@@ -2315,8 +2316,8 @@ The JDK is extremely well known to Java developers, and a lot
 of Java application code evolves similarly.
 %
  %% Also,
-%% as explained at the beginning of Section~\ref{sec:experimental-results}, we excluded 
-%% certain methods from our experimental evaluation. 
+%% as explained at the beginning of Section~\ref{sec:experimental-results}, we excluded
+%% certain methods from our experimental evaluation.
 However, our claims may not extend to other programming languages.
 
 %\paragraph{Not handled}
@@ -2348,7 +2349,7 @@ diverse range of component sizes may help mitigate this effect.
 
 \paragraph{Prompt engineering for Claude}
 %
-In our current experiments, we engineered prompts for the Claude LLMs. 
+In our current experiments, we engineered prompts for the Claude LLMs.
 While we made best efforts to follow the official prompt engineering
 guidelines\footnote{https://docs.anthropic.com/en/docs/prompt-engineering},
 which presents prompt design techniques to improve model performance, there
@@ -2358,7 +2359,7 @@ the symbolic and neural techniques deliver roughly the same performance.
 %
 %as future work, we plan on alos fine-tuning Claude 2.1 and Claude 3.
 % While we made efforts to provide a comprehensive prompt (e.g. we took inspiration from \cite{white2023chatgpt}, which
-% presents prompt design techniques for software engineering in the form of patterns), as future work, we plan on also fine-tuning GPT-4 Turbo. 
+% presents prompt design techniques for software engineering in the form of patterns), as future work, we plan on also fine-tuning GPT-4 Turbo.
 
 %% \section{Semantically different refactorings}\label{sec:semantically-different-refactorings}
 
@@ -2371,10 +2372,10 @@ the symbolic and neural techniques deliver roughly the same performance.
 %% feature may not be semantically equivalent on the entire input domain.
 
 %% For illustration, let's consider the example in Figure~\ref{ex:three-dates}.
-%% In the example, we make use of the constructor \texttt{new Date(year, month, day)}, 
-%% which is deprecated with the 
+%% In the example, we make use of the constructor \texttt{new Date(year, month, day)},
+%% which is deprecated with the
 %% recommendation to use the \texttt{Calendar} class instead.
-%% The refactoring is not trivial given that the 
+%% The refactoring is not trivial given that the
 %% \texttt{Date} constructor expects its year parameter to be an offset
 %% from 1900.  This needs to be
 %% transformed by adding 1900 when using \texttt{Calendar} API, as shown in the
@@ -2396,7 +2397,7 @@ the symbolic and neural techniques deliver roughly the same performance.
 %%   calendar.set(1900 + year, month, day, 0, 0, 0);
 %%   calendar.set(Calendar.MILLISECOND, 0);
 %%   Date date2 = calendar.getTime();
-    
+
 %%   // Or:
 %%   Date date3=new GregorianCalendar(1900+year,month,day).
 %%              getTime();
@@ -2456,11 +2457,11 @@ guaranteed after inlining the method's body.  Notably, the authors of~\cite{10.1
 
 A related class of techniques aim to adapt APIs after library updates.  Such
 techniques automatically identify change rules linking different library
-releases~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}. 
+releases~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}.
 Conversely to our work, a change rule describes a match between methods
 existing in the old release, but which have been removed or deprecated in
 the new one, and replacement methods in the new release.  However, they do
-not provide the actual refactored code. 
+not provide the actual refactored code.
 In~\cite{DBLP:journals/tse/LeeWCK21}, Lee et al.~address the problem of
 outdated APIs in documentation references.  Their insight is that API
 updates in documentation can be derived from API implementation changes
@@ -2468,7 +2469,7 @@ between code revisions.  Conversely, we are looking at code changes, rather
 than documentation.  Other works focus on automatically updating API usages
 for Android apps based on examples of how other developers evolved their
 apps for the same
-changes~\cite{DBLP:conf/issta/FazziniXO19,DBLP:conf/iwpc/HaryonoTKSML0J20}. 
+changes~\cite{DBLP:conf/issta/FazziniXO19,DBLP:conf/iwpc/HaryonoTKSML0J20}.
 Furthermore, \cite{DBLP:journals/ese/HaryonoTLJLKSM22} improves
 on~\cite{DBLP:conf/iwpc/HaryonoTKSML0J20} by using a data-flow analysis to
 resolve the values used as API arguments and variable name denormalization
@@ -2589,7 +2590,7 @@ contexts~\cite{DBLP:conf/icse/KiezunETF07}.
 % using semantic information limited to identifiers and comments,
 % which may differ from the actual semantics (e.g. due to bugs).
 %
-%Some of the closest to our refactoring from the point of considering program semantics are~\cite{Kataoka:2001:ASP:846228.848644}, 
+%Some of the closest to our refactoring from the point of considering program semantics are~\cite{Kataoka:2001:ASP:846228.848644},
 %
 Kataoka et al.~use program invariants (found by the dynamic tool Daikon) to
 infer
@@ -2603,7 +2604,7 @@ notoriously difficult.  Moreover, the technique is limited to a small number
 of refactorings and does not include the elimination of deprecated
 instances.  In~\cite{conf/sigsoft/GyoriFDL13}, Gyori et al.~present the tool
 {\sc LambdaFicator}, which automates two pattern-based refactorings.  The
-first refactoring converts anonymous inner classes to lambda expressions. 
+first refactoring converts anonymous inner classes to lambda expressions.
 The second refactoring converts {\tt for} loops that iterate over
 Collections to functional operations that use lambda expressions.  The {\sc
 LambdaFicator} tool~\cite{DBLP:conf/icse/FranklinGLD04} is available as a
@@ -2613,7 +2614,7 @@ NetBeans branch.
 %% approach it has yet to be established which search techniques are most suitable
 %% for the task. In this article we report the results of an empirical comparison of
 %% simulated annealing, genetic algorithms and multiple ascent hill-climbing in search-based
-%% refactoring. 
+%% refactoring.
 
 
 %% Kataoka et al. interpret program semantics to apply refactorings
@@ -2655,7 +2656,7 @@ component-based and counterexample-guided inductive synthesis.
 
 CEGIS-based approaches to program synthesis have been previously used for
 program transformations such as superoptimisation and
-deobfuscation~\cite{DBLP:conf/icse/JhaGST10}. 
+deobfuscation~\cite{DBLP:conf/icse/JhaGST10}.
 In~\cite{DBLP:journals/corr/abs-1712-07388}, David et al.~present an
 automatic refactoring tool that transforms Java with external iteration over
 collections into code that uses Streams.  Their approach makes use of formal
@@ -2664,7 +2665,7 @@ al.~describe a system that
 %automatically
 transforms fragments of application
 logic into SQL queries~\cite{DBLP:conf/pldi/CheungSM13} by using a
-CEGIS-based synthesiser to generate invariants and postconditions 
+CEGIS-based synthesiser to generate invariants and postconditions
 validating their transformations (a~similar approach is presented
 in~\cite{DBLP:conf/cc/IuCZ10}).  While our approach is also CEGIS-based,
 we are guided by code hints and types to efficiently prune the
@@ -2674,7 +2675,7 @@ search space.  %Without this guidance, refactoring would not be feasible.
 %
 Type information has been extensively used in program synthesis to guide the
 search for a
-solution~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/FeserCD15,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/LubinCOC20,DBLP:journals/pacmpl/YamaguchiMDW21}. 
+solution~\cite{DBLP:conf/sfp/Katayama05,DBLP:conf/pldi/FeserCD15,DBLP:conf/pldi/OseraZ15,DBLP:journals/pacmpl/LubinCOC20,DBLP:journals/pacmpl/YamaguchiMDW21}.
 In our work, we combine type information with code hints.
 %
 %
@@ -2690,7 +2691,7 @@ to each refactoring.
 
 %% Program synthesis generally implements the correct-by-con\-struc\-tion
 %% principle, meaning that it provides strong correctness guarantees about the
-%% generated code.  As opposed to that, our work is guided by program testing. 
+%% generated code.  As opposed to that, our work is guided by program testing.
 %% This is similar in nature with genetic programming~\cite{Koza92} and genetic
 %% improvement~\cite{DBLP:journals/dagstuhl-reports/PetkeGFL18,7911210}.  In
 %% particular, the latter has been used for program refactoring.  Genetic
@@ -2717,7 +2718,7 @@ translations~\cite{tang-etal-2023-explain,lostintranslation} to
 repository-level generation~\cite{zhang2023repocoder} and general software
 engineering tasks~\cite{yang2024sweagent}.  Those models are typically
 pre-trained on vast amounts of data, fine-tuned for specific tasks, and
-require advanced prompt engineering~\cite{jiang2024survey}. 
+require advanced prompt engineering~\cite{jiang2024survey}.
 Among the well-known LLMs, GPT-4~\cite{openai2024gpt4}, Claude2.1~\cite{claude},
 Claude3~\cite{claude}, LLaMa~\cite{touvron2023llama} are general-purpose
 models covering a diverse set of language-related applications; there are
@@ -2726,7 +2727,7 @@ programming tasks, such as CodeLLaMa2~\cite{roziere2024code},
 StarCoder2~\cite{lozhkov2024starcoder},
 DeepSeek-Coder~\cite{guo2024deepseekcoder}, and GrammarT5~\cite{grammart5}.
 % Among them, GPT-4 Turbo~\cite{chatgpt} is a LLM trained using Reinforcement Learning from Human Feedback.
-% There are recent studies investigating GPT-4 Turbo's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and 
+% There are recent studies investigating GPT-4 Turbo's abilities to solve software engineering problems such as bug fixing~\cite{sobania2023analysis,chatgptbugs} and
 % prompt pattern design for refactoring, requirements elicitation, and software design ~\cite{white2023chatgpt}.
 %
 In this work, we have applied the Claude family of LLMs to our refactoring
@@ -2749,9 +2750,9 @@ hints.  %Our result shows that code hints are enabling, for all engines we
 %\acks
 
 
-%\end{tabular} 
+%\end{tabular}
 %\caption{Results for benchmarks where code hints were present in the Javadoc.}
-%\label{tab:configuration-results-ch}   
+%\label{tab:configuration-results-ch}
 %\end{table}
 
 %Results are better for these benchmarks, with less missed refactorings. The reasons for missed and unsound refactorings are the same as for the overall set of benchmarks in Section~\ref{sec:experimental-results}.
@@ -2767,7 +2768,7 @@ automation of refactoring code that uses deprecated Java APIs.
 %Our
 %techniques are guided by types and Javadoc code hints, and
 %performs semantic reasoning and search in the space of possible
-%refactorings using automated program synthesis. 
+%refactorings using automated program synthesis.
 
 \bibliographystyle{ACM-Reference-Format}
 % We recommend abbrvnat bibliography style.
@@ -2813,4 +2814,3 @@ We e.g. hard-coded that we should not generate an ArrayList using the constructo
 %  ----         ------  ----    ------
 
 %  2013.06.29   TU      0.1--4  comments on permission/copyright notices
-
