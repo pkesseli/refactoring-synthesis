@@ -2195,10 +2195,9 @@ our equivalence checker.
 
 {\bf (RQ1) Can the refactoring of deprecated Java APIs be automated?}
 %
-Yes, it can be automated if code hints are added to the JDK,
-evidenced by the 82\% success rate for those benchmarks.  Without code
-hints, Java's complexity makes these refactorings very hard for both for the
-symbolic and neural engines.
+Yes, the refactoring of deprecated Java APIs can be automated if code hints are added to the JDK,
+evidenced by the 82\% success rate for those benchmarks.
+This automation could greatly assist engineers with the code migration task.
 
 \noindent
 {\bf (RQ2) Do code hints help the generation of refactorings?}
@@ -2209,6 +2208,9 @@ code hints.  When code hints are present, all engines solve at least 71\% of
 benchmarks, with the best virtual engine solving 82\%.  For the symbolic
 engine, they enable the effective seeding of the instruction library,
 whereas for the neural engine, they provide additional context to the LLM.
+In summary, without code hints, Java's complexity makes the refactoring
+of deprecated Java APIs very hard for both for the
+symbolic and neural engines.
 
 \noindent
 {\bf (RQ3) How do the symbolic and the neural approach compare against each other?}
