@@ -80,7 +80,7 @@
   language={Java},
   %numbers=left,
   stepnumber=1,
-  basicstyle=\footnotesize,
+  basicstyle=\small,
   %basicstyle=\BeraMonottfamily,
   numberstyle=\footnotesize,
   xleftmargin=5.0ex,
@@ -356,17 +356,23 @@ that uses deprecated APIs.
 
 %Types: Type-directed synthesis has been particulary successful in functional programming. We want to investigate how successful is in imperative programming.
 
-As a project evolves, there are certain fields, methods or classes
-that the developers are discouraged from using in the future as
-they've been superseded and may cease to exist.
-However, removing them directly would break the backward compatibility
-of the project's API.  Instead, in Java, such elements can be tagged with the
+As programming languages evolve, AWS engineers undertake the task of migrating code to newer versions of programming languages, a critical aspect of code modernisation. This process ensures access to new features, improved performance, and enhanced security while maintaining compatibility with modern tools and libraries. Java, for example, has frequent JDK releases, each introducing improvements and updates. However, migrating to newer JDK versions presents challenges, particularly due to deprecated APIs. Deprecation, intended to enhance security, performance, and maintainability, requires engineers to update existing code by replacing deprecated APIs with modern, more efficient alternatives, adding complexity to the migration process. Deprecated features are tagged with the
 \lstinline[breaklines=true]{@Deprecated} annotation in order to ease the transition.
+
+
+
+%Deprecation helps phase out obsolete or risky functionality, simplify the ecosystem, and align the language with current programming standards.
+
+%a frequent challenge in Java due to the regular release of new JDK versions.
+
+%As a project evolves, there are certain fields, methods or classes that the developers are discouraged from using in the future as they've been superseded and may cease to exist. However, removing them directly would break the backward compatibility of the project's API.
+
 
 %% In general, when deprecating a
 %% field/method/class, the \texttt{@deprecated} Javadoc tag is used in the
 %% comment section to inform the developer the reason of deprecation and
 %% what can be used in place.
+
 
 The transformation of existing code such that it doesn't use
 deprecated APIs is not always straightforward, as illustrated in
@@ -383,7 +389,7 @@ for our purpose, we must first set its time using the existing
 calling \lstinline[breaklines=true]{calendar.get(Calendar.HOUR_OF_DAY)}.
 
 \begin{figure}[ht]
-\begin{lstlisting}[mathescape=true,showstringspaces=false,basicstyle=\footnotesize]
+\begin{lstlisting}[mathescape=true,showstringspaces=false,basicstyle=\small]
 void main(String[] args) {
   // Deprecated:
   int hour=date.getHours();
