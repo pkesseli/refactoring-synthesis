@@ -26,15 +26,37 @@
 %% \BibTeX command to typeset BibTeX logo in the docs
 % \documentclass[sigconf,review,anonymous]{acmart}
 
-\documentclass[conference]{IEEEtran}
-\IEEEoverridecommandlockouts
+% \documentclass[conference]{IEEEtran}
+% \IEEEoverridecommandlockouts
 
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\documentclass[sigconf]{acmart}
+
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+% \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 % \AtBeginDocument{%
 %   \providecommand\BibTeX{{%
 %     \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+%% Rights management information.  This information is sent to you
+%% when you complete the rights form.  These commands have SAMPLE
+%% values in them; it is your responsibility as an author to replace
+%% the commands and values with those provided to you when you
+%% complete the rights form.
+\setcopyright{acmlicensed}
+\copyrightyear{2018}
+\acmYear{2018}
+\acmDOI{XXXXXXX.XXXXXXX}
+
+\acmConference[FSE '25]{Companion Proceedings of the 33rd ACM Symposium on the Foundations of Software Engineering}{June 23--27,
+  2025}{Trondheim, Norway}
+\acmBooktitle{Companion Proceedings of the 33rd ACM Symposium on the Foundations of Software Engineering (FSE '25), June 23--27, 2025, Trondheim, Norway}
+\acmISBN{978-1-4503-XXXX-X/2018/06}
 
 \makeatletter
 \newcommand{\removelatexerror}{\let\@latex@error\@gobble}
@@ -84,7 +106,7 @@
 %\usepackage{algorithm}
 \usepackage{amsfonts}
 \usepackage{hyperref}
-\usepackage{amsmath,amssymb,amsfonts}
+% \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{tikz}
@@ -99,6 +121,7 @@
 \usepackage{afterpage}
 \usepackage{wasysym}
 \usepackage{tcolorbox}
+\usepackage{float}
 \definecolor{prompt_bg}{RGB}{252,255,221}
 \definecolor{prompt_title}{RGB}{0,51,102}
 \newcommand{\templatevar}[1]{\$\{\textcolor{red}{#1}\}}
@@ -189,27 +212,54 @@
 %%   \country{UK}
 %% }
 
+\author{Cristina David}
+\affiliation{%
+  \institution{University of Bristol}
+  \city{Bristol}
+  \country{UK}}
+\email{larst@affiliation.org}
+
+\author{Pascal Kesseli}
+\affiliation{%
+  \institution{BEO IT}
+  \city{Zurich}
+  \country{Switzerland}
+}
+
+\author{Daniel Kroening}
+\affiliation{%
+ \institution{Amazon Inc.}
+ \city{Seattle}
+ \state{Washington}
+ \country{US}}
+
+\author{Hanliang Zhang}
+\affiliation{%
+  \institution{University of Bristol}
+  \city{Bristol}
+  \country{UK}}
 
 
-\author{\IEEEauthorblockN{1\textsuperscript{st} Cristina David}
-\IEEEauthorblockA{\textit{University of Bristol} \\
-Bristol, UK \\
-cristina.david@bristol.ac.uk}
-\and
-\IEEEauthorblockN{2\textsuperscript{nd} Pascal Kesseli}
-\IEEEauthorblockA{\textit{BEO IT} \\
-Zurich, Switzerland \\
-pk@beo-it.ch}
-\and
-\IEEEauthorblockN{3\textsuperscript{rd} Daniel Kroening}
-\IEEEauthorblockA{\textit{Amazon Inc.} \\
-Seattle, US \\
-dkr@amazon.com}
-\and
-\IEEEauthorblockN{4\textsuperscript{th} Hanliang Zhang}
-\IEEEauthorblockA{\textit{University of Bristol} \\
-Bristol, UK \\
-hanliang.zhang@bristol.ac.uk}
+
+% \author{\IEEEauthorblockN{1\textsuperscript{st} Cristina David}
+% \IEEEauthorblockA{\textit{University of Bristol} \\
+% Bristol, UK \\
+% cristina.david@bristol.ac.uk}
+% \and
+% \IEEEauthorblockN{2\textsuperscript{nd} Pascal Kesseli}
+% \IEEEauthorblockA{\textit{BEO IT} \\
+% Zurich, Switzerland \\
+% pk@beo-it.ch}
+% \and
+% \IEEEauthorblockN{3\textsuperscript{rd} Daniel Kroening}
+% \IEEEauthorblockA{\textit{Amazon Inc.} \\
+% Seattle, US \\
+% dkr@amazon.com}
+% \and
+% \IEEEauthorblockN{4\textsuperscript{th} Hanliang Zhang}
+% \IEEEauthorblockA{\textit{University of Bristol} \\
+% Bristol, UK \\
+% hanliang.zhang@bristol.ac.uk}
 % \and
 % \IEEEauthorblockN{5\textsuperscript{th} Given Name Surname}
 % \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
@@ -222,9 +272,9 @@ hanliang.zhang@bristol.ac.uk}
 % \textit{name of organization (of Aff.)}\\
 % City, Country \\
 % email address or ORCID}
-}
+% }
 
-\maketitle
+% \maketitle
 
 \begin{abstract}
 %
@@ -277,6 +327,7 @@ that uses deprecated APIs.
 %
 \end{abstract}
 
+\maketitle
 
 
 %\keywords{program refactoring, program synthesis, program verification}
@@ -2712,9 +2763,9 @@ automation of refactoring code that uses deprecated Java APIs.
 %performs semantic reasoning and search in the space of possible
 %refactorings using automated program synthesis. 
 
-
+\bibliographystyle{ACM-Reference-Format}
 % We recommend abbrvnat bibliography style.
-\bibliographystyle{ieeetr}
+% \bibliographystyle{ieeetr}
 %\bibliographystyle{abbrv}
 \bibliography{document}
 %\appendix
