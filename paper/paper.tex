@@ -220,7 +220,7 @@
 
 \author{Pascal Kesseli}
 \affiliation{%
-  \institution{BEO IT}
+  \institution{Meta}
   \city{Zurich}
   \country{Switzerland}
 }
@@ -355,7 +355,7 @@ that uses deprecated APIs.
 
 %Types: Type-directed synthesis has been particulary successful in functional programming. We want to investigate how successful is in imperative programming.
 
-As programming languages evolve, industry engineers take on the critical task of migrating code to newer versions, an important aspect of code modernisation. This challenge spans a wide range of companies, including Amazon and BEO IT, an electrical engineering and IT consultancy. Such migrations ensure access to new features, improved performance, and enhanced security while maintaining compatibility with modern tools and libraries. Java, for example, has frequent JDK releases, each introducing improvements and updates. However, migrating to newer JDK versions presents challenges, particularly due to deprecated APIs. Deprecation, intended to enhance security, performance, and maintainability, requires engineers to update existing code by replacing deprecated APIs with modern, more efficient alternatives, adding complexity to the migration process. %Deprecated features are tagged with the \lstinline[breaklines=true]{@Deprecated} annotation in order to ease the transition.
+As programming languages evolve, industry engineers take on the critical task of migrating code to newer versions, an important aspect of code modernisation. This challenge spans a wide range of companies, including Amazon. Such migrations ensure access to new features, improved performance, and enhanced security while maintaining compatibility with modern tools and libraries. Java, for example, has frequent JDK releases, each introducing improvements and updates. However, migrating to newer JDK versions presents challenges, particularly due to deprecated APIs. Deprecation, intended to enhance security, performance, and maintainability, requires engineers to update existing code by replacing deprecated APIs with modern, more efficient alternatives, adding complexity to the migration process. %Deprecated features are tagged with the \lstinline[breaklines=true]{@Deprecated} annotation in order to ease the transition.
 
 
 
@@ -466,7 +466,7 @@ in Figure~\ref{ex:deprecated-method-other}, we must call
 \lstinline[breaklines=true]{calendar.setTime(date)} to set the calendar's date
 based on the existing \lstinline[breaklines=true]{date} object.
 
-Given that code hints are useful to humans, 
+Given that code hints are useful to humans,
 \emph{in this paper, we are also interested in investigating the benefits of Javadoc code hints in the automation of the refactoring.}
 
 \begin{figure}
