@@ -1801,7 +1801,7 @@ In order to fully isolate the program state during the execution of the original
 class loaders. These class loaders are disposed immediately after the current set
 of fuzzed inputs are executed, and new class loaders are created for the next
 inputs. %(which will be used in the next iteration of the CEGIS loop).
-Classes that do not maintain a static state are loaded in a shared
+Classes that do not maintain static state are loaded in a shared
 parent class loader to improve performance.
 
 The OpenJDK Java virtual machine implementation does not allow us to load
@@ -1814,7 +1814,7 @@ candidate, we would observe their accumulated effect, which would be incorrect.
 %incompleteness and unsoundness depending on the context.
 For the scope of our
 experiments this did not pose a problem, since most of the affected classes in
-the \lstinline[breaklines=true]{java.lang} package do not maintain a static state, and the ones who do
+the \lstinline[breaklines=true]{java.lang} package do not maintain static state, and the ones who do
 were irrelevant to our refactorings.
 
 %Everything that is part of our comparison is in the isolated class loader.
