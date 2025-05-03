@@ -2397,7 +2397,7 @@ In our current experiments, we engineered prompts for the Claude LLMs.
 While we made best efforts to follow the official prompt engineering
 guidelines\footnote{https://docs.anthropic.com/en/docs/prompt-engineering},
 which presents prompt design techniques to improve model performance, there
-might be better ways of composing it.  This might invalidate our claim that
+might be better prompts.  This might invalidate our claim that
 the symbolic and neural techniques deliver roughly the same performance.
 
 %
@@ -2502,7 +2502,7 @@ guaranteed after inlining the method's body.  Notably, the authors of~\cite{10.1
 A related class of techniques aim to adapt APIs after library updates.  Such
 techniques automatically identify change rules linking different library
 releases~\cite{DBLP:conf/icse/WuGAK10,DBLP:conf/kbse/Huang0PW021}.
-Conversely to our work, a change rule describes a match between methods
+In contrast to our work, a change rule describes a match between methods
 existing in the old release, but which have been removed or deprecated in
 the new one, and replacement methods in the new release.  However, they do
 not provide the actual refactored code.
